@@ -31,6 +31,9 @@
     <string name="goto_menu">转到</string>
     <string name="navigation_menu">导航</string>
     <string name="javaapi_menu">Java Api</string>
+    <string name="permission_successful">权限修改成功</string>
+    <string name="find_project_error">检测到有工程配置文件错误，请尝试手动修复</string>
+    <string name="permission_menu">权限编辑器</string>
     <string name="icon_menu">图标助手</string>
     <string name="openFail">不支持打开的文件类型</string>
     <string name="createProjectSuccess">创建工程成功"</string>

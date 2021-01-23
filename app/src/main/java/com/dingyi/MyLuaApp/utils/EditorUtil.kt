@@ -10,25 +10,25 @@ import com.dingyi.MyLuaApp.activitys.EditorActivity
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import java.io.File
 
-class EditorUtil(private val context:AppCompatActivity) : IEditor {
+class EditorUtil(private val context: AppCompatActivity) : IEditor {
     private lateinit var editor: View;
     private lateinit var viewGroup: LinearLayout
     lateinit var projectPath: String;
-    lateinit var nowOpenPath:String;
-    private val listView= mutableMapOf<String,View>()
-    private var openFileListenerList= mutableListOf<OpenFileListener>();
+    lateinit var nowOpenPath: String;
+    private val listView = mutableMapOf<String, View>()
+    private var openFileListenerList = mutableListOf<OpenFileListener>();
 
 
-    fun initParentView(viewGroup: LinearLayout) :EditorUtil {
-        this.viewGroup=viewGroup
+    fun initParentView(viewGroup: LinearLayout): EditorUtil {
+        this.viewGroup = viewGroup
         return this;
     }
 
     private fun addEditor(view: View) {
-        if (view.layoutParams!=null) {
-            view.layoutParams=LinearLayout.LayoutParams(-1,-1)
+        if (view.layoutParams != null) {
+            view.layoutParams = LinearLayout.LayoutParams(-1, -1)
         }
-        editor=view
+        editor = view
         listView[getNowOpenPathName()] = view
         viewGroup.removeAllViewsInLayout()
         viewGroup.addView(view)
@@ -37,53 +37,60 @@ class EditorUtil(private val context:AppCompatActivity) : IEditor {
     private fun newEditor(path: String) {
 
         when (getSuffix(path)) {
-            "lua","aly"-> addEditor(MyLuaEditor(context))
+            "lua", "aly" -> addEditor(MyLuaEditor(context))
         }
     }
 
-    fun openProject(projectPath:String):EditorUtil {
-        this.projectPath=projectPath
+    fun openProject(projectPath: String): EditorUtil {
+        this.projectPath = projectPath
 
-        val defaultPath=getDefaultPath(projectPath)
-        val lastOpenPath= get(context,"editorPath",projectPath,defaultPath)
+        val defaultPath = getDefaultPath(projectPath)
+        val lastOpenPath = get(context, "editorPath", projectPath, defaultPath)
         if (lastOpenPath != null) {
-            openProject(projectPath,lastOpenPath)
+            openProject(projectPath, lastOpenPath)
         }
         return this
     }
 
-    fun openProject(projectInfo: ProjectInfo) :EditorUtil {
+    fun openProject(projectInfo: ProjectInfo): EditorUtil {
         projectInfo.path?.let { this.openProject(it) }
         return this;
     }
 
-    fun openProject(projectPath :String,allPath: String) {
+    fun openProject(projectPath: String, allPath: String) {
         openFile(allPath)
 
     }
 
     fun openFile(path: String) {
         when (getSuffix(path)) {
-            "lua","aly"->{}
+            "lua", "aly" -> {
+            }
             else -> {
                 kotlin.runCatching {
                     (context as EditorActivity).dialog.dismiss()
                 }
-                showSnackBar(viewGroup,R.string.openFail)
+                showSnackBar(viewGroup, R.string.openFail)
                 return
             }
         }
-        put(context,"editorPath",projectPath,path)
-        this.nowOpenPath=path
+        put(context, "editorPath", projectPath, path)
+        this.nowOpenPath = path
         newEditor(path)
-        if (path.toFile().isFile){
+        if (path.toFile().isFile) {
             text = readString(path)
             clickOpenFileListener(path)
         } else {
             text = readString(getDefaultPath(projectPath))
-           clickOpenFileListener(getDefaultPath(projectPath))
+            clickOpenFileListener(getDefaultPath(projectPath))
         }
 
+    }
+
+    fun refresh(string: String) {
+        if (listView[string] != null) {
+           setTextWithView(listView[string]!!, readString("$projectPath/$string"))
+        }
     }
 
     fun addOpenFileListener(openFileListener: OpenFileListener) {
@@ -96,14 +103,14 @@ class EditorUtil(private val context:AppCompatActivity) : IEditor {
         }
     }
 
-    fun getNowOpenPathName():String{
-        return nowOpenPath.substring(projectPath.length+1,nowOpenPath.length)
+    fun getNowOpenPathName(): String {
+        return nowOpenPath.substring(projectPath.length + 1, nowOpenPath.length)
     }
 
     fun select(position: String) {
-        val nowView=listView[position]
+        val nowView = listView[position]
 
-        nowOpenPath=projectPath+File.separator+position
+        nowOpenPath = projectPath + File.separator + position
 
         if (nowView != null) {
             addEditor(nowView)
@@ -111,24 +118,31 @@ class EditorUtil(private val context:AppCompatActivity) : IEditor {
     }
 
 
-    private fun getTextWithView(view: View) :String {
+    private fun getTextWithView(view: View): String {
         if (view is MyLuaEditor) {
             return view.text
         }
         return ""
     }
 
+    private fun setTextWithView(view: View, string: String) {
+        if (view is MyLuaEditor) {
+            view.text = string
+        }
+
+    }
+
     fun save() {
         listView.forEach {
-            writeString(projectPath+File.separator+it.key,getTextWithView(it.value))
+            writeString(projectPath + File.separator + it.key, getTextWithView(it.value))
         }
     }
 
     interface OpenFileListener {
-        fun openFile(file:String)
+        fun openFile(file: String)
     }
 
-    fun canCheckError() :Boolean {
+    fun canCheckError(): Boolean {
         if (editor is MyLuaEditor) {
             return true
         }
@@ -144,15 +158,15 @@ class EditorUtil(private val context:AppCompatActivity) : IEditor {
 
     override fun getText(): String {
         if (editor is MyLuaEditor) {
-           return (editor as MyLuaEditor).text.toString()
+            return (editor as MyLuaEditor).text.toString()
         }
         return ""
     }
 
     override fun setText(readString: String) {
-       if (editor is MyLuaEditor) {
-           (editor as MyLuaEditor).text=readString;
-       }
+        if (editor is MyLuaEditor) {
+            (editor as MyLuaEditor).text = readString;
+        }
     }
 
     override fun paste(it: String) {
@@ -174,9 +188,9 @@ class EditorUtil(private val context:AppCompatActivity) : IEditor {
     }
 
     override fun redo() {
-      if (editor is MyLuaEditor) {
-          (editor as MyLuaEditor).redo();
-      }
+        if (editor is MyLuaEditor) {
+            (editor as MyLuaEditor).redo();
+        }
     }
 
     override fun format() {

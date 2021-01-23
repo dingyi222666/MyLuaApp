@@ -61,6 +61,9 @@
            <item
                android:id="@+id/java_api"
                android:title="@string/javaapi_menu"/>
+           <item
+               android:id="@+id/permission"
+               android:title="@string/permission_menu"/>
        </menu>
     </item>
     <item

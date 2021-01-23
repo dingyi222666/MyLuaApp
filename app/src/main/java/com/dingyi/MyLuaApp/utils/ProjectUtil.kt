@@ -14,6 +14,7 @@ import java.io.FileNotFoundException
 import java.util.*
 
 
+
 const val LUA_PROJECT = 0xff
 
 const val GRADLE_PROJECT = 0x1f
@@ -49,6 +50,13 @@ fun getProjectTemplate(context: Activity): Array<CharSequence> {
 
     return result.toTypedArray();
 
+}
+
+fun getProjectInfoPath(projectInfo: ProjectInfo):String {
+    return when(projectInfo.type){
+        LUA_PROJECT -> projectInfo.path+"/init.lua"
+        else -> ""
+    }
 }
 
 fun formatProjectText(dir: String, file: String, name: String, packageName: String) {

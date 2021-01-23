@@ -68,7 +68,7 @@
             android:visibility="gone"
             app:cornerRadius="6dp"
             app:elevation="0dp"
-            app:rippleColor="?colorPrimary"
+            app:rippleColor="?theme_rippleColor"
             app:strokeColor="?colorPrimary"
             app:strokeWidth="1.5dp" />
 
@@ -88,7 +88,7 @@
             android:textColor="?theme_textColor"
             app:cornerRadius="6dp"
             app:elevation="0dp"
-            app:rippleColor="?colorPrimary"
+            app:rippleColor="?theme_rippleColor"
             app:strokeColor="?colorPrimary"
             app:strokeWidth="1.5dp" />
     </LinearLayout>

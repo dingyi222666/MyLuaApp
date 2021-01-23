@@ -1,5 +1,7 @@
 package com.dingyi.luaj;
 
+import android.util.Log;
+
 import com.luajava.LuaJLuaState;
 
 import org.luaj.vm2.Lua;
@@ -35,8 +37,9 @@ public class LuaJ {
         LuaTable table= LuaValue.tableOf();
         try {
             state.getGlobals().load(new FileInputStream(str), "@d", "bt", table).invoke();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.e("luaj error",e.toString());
+
         }
 
         return table;

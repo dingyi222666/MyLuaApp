@@ -1,8 +1,10 @@
 package com.dingyi.MyLuaApp.activitys;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import android.animation.LayoutTransition;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +28,7 @@ import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
 import com.dingyi.MyLuaApp.dialogs.FileListDialog;
 import com.dingyi.MyLuaApp.utils.EditorUtil;
 import com.dingyi.MyLuaApp.utils.LogUtilsKt;
+import com.dingyi.MyLuaApp.utils.PluginUtil;
 import com.dingyi.MyLuaApp.utils.ProjectUtilKt;
 import com.dingyi.MyLuaApp.utils.ReflectionUtilsKt;
 import com.dingyi.MyLuaApp.utils.TextUtilsKt;
@@ -42,6 +45,8 @@ public class EditorActivity extends BaseActivity {
     EditorUtil util;
 
     ProjectInfo info;
+
+    PluginUtil pluginUtil;
 
     public FileListDialog dialog = new FileListDialog();
 
@@ -60,6 +65,7 @@ public class EditorActivity extends BaseActivity {
         initListener();
         util.initParentView(binding.parent).openProject(info);
 
+        pluginUtil=new PluginUtil(this);
         LayoutTransition transition = new LayoutTransition();
         transition.enableTransitionType(LayoutTransition.CHANGING);
         binding.editorParent.setLayoutTransition(transition);
@@ -69,12 +75,16 @@ public class EditorActivity extends BaseActivity {
         getSupportActionBar().setSubtitle(util.getNowOpenPathName());
         startToolBarAnim();
 
-        new Thread(() -> {
+
+
+        /*new Thread(() -> {
             ITask task=new MergeAXMLTask()
                     .initActivity(EditorActivity.this);
 
                     task.doAction(new LuaBuilderCache(info),EditorActivity.this);
         }).start();
+
+         */
 
     }
 
@@ -183,6 +193,9 @@ public class EditorActivity extends BaseActivity {
             case R.id.goto_menu:
                 util.gotoLine();
                 break;
+            case R.id.permission:
+                pluginUtil.runPlugin("com.dingyi.plugin.built.permissionHelper",new Object[]{ProjectUtilKt.getProjectInfoPath(info)});
+                break;
             case R.id.run:
                 util.save();
                 ProjectUtilKt.runProject(this, info);
@@ -207,6 +220,15 @@ public class EditorActivity extends BaseActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==100) { //刷新显示init.lua
+            util.refresh("init.lua");
+            TextUtilsKt.showSnackBar(binding.getRoot(),R.string.permission_successful);
+        }
     }
 
     @Override

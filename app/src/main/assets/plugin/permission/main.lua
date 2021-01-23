@@ -11,74 +11,68 @@ import {
     "android.os.*",
     "android.widget.*",
     "android.view.*",
-    "bsh.Interpreter",
 }
 
 import "com.dingyi.MyLuaApp.R"
-activity.setTheme(R.style.MyLuaApp)
+import "com.dingyi.MyLuaApp.databinding.PluginPermisssionLayoutBinding"
+activity.setTheme(R.style.Theme_MyLuaApp)
 
 local path = tostring(...);
 
 local permission_info = {
-    ["GET_PACKAGE_SIZE"] = "¼ÆËãÓ¦ÓÃ´æ´¢¿Õ¼ä";
-    ["ACCESS_WIFI_STATE"] = "²é¿´WLANÁ¬½Ó";
-    ["WRITE_CONTACTS"] = "ĞŞ¸ÄÄúµÄÍ¨Ñ¶Â¼";
-    ["READ_PHONE_STATE"] = "¶ÁÈ¡ÊÖ»ú×´Ì¬ºÍÉí·İ";
+    ["GET_PACKAGE_SIZE"] = "è®¡ç®—åº”ç”¨å­˜å‚¨ç©ºé—´";
+    ["ACCESS_WIFI_STATE"] = "æŸ¥çœ‹WLANè¿æ¥";
+    ["WRITE_CONTACTS"] = "ä¿®æ”¹æ‚¨çš„é€šè®¯å½•";
+    ["READ_PHONE_STATE"] = "è¯»å–æ‰‹æœºçŠ¶æ€å’Œèº«ä»½";
     ["MANAGE_EXTERNAL_STORAGE"] = "android.permission.MANAGE_EXTERNAL_STORAGE";
-    ["WRITE_CALL_LOG"] = "ĞÂ½¨/ĞŞ¸Ä/É¾³ıÍ¨»°¼ÇÂ¼";
-    ["BLUETOOTH_ADMIN"] = "·ÃÎÊÀ¶ÑÀÉèÖÃ";
-    ["REQUEST_INSTALL_PACKAGES"] = "ÇëÇó°²×°ÎÄ¼ş°ü";
-    ["SYSTEM_ALERT_WINDOW"] = "´ËÓ¦ÓÃ¿ÉÏÔÊ¾ÔÚÆäËûÓ¦ÓÃÉÏ·½";
-    ["ACCESS_COARSE_LOCATION"] = "Ö»ÓĞÔÚÇ°Ì¨ÔËĞĞÊ±²ÅÄÜ»ñÈ¡´óÖÂÎ»ÖÃĞÅÏ¢";
-    ["READ_CONTACTS"] = "¶ÁÈ¡ÁªÏµÈË";
-    ["VIBRATE"] = "¿ØÖÆÕñ¶¯";
-    ["SEND_SMS"] = "·¢ËÍ¶ÌĞÅ";
-    ["ACCESS_FINE_LOCATION"] = "Ö»ÄÜÔÚÇ°Ì¨»ñÈ¡¾«È·µÄÎ»ÖÃĞÅÏ¢";
+    ["WRITE_CALL_LOG"] = "æ–°å»º/ä¿®æ”¹/åˆ é™¤é€šè¯è®°å½•";
+    ["BLUETOOTH_ADMIN"] = "è®¿é—®è“ç‰™è®¾ç½®";
+    ["REQUEST_INSTALL_PACKAGES"] = "è¯·æ±‚å®‰è£…æ–‡ä»¶åŒ…";
+    ["SYSTEM_ALERT_WINDOW"] = "æ­¤åº”ç”¨å¯æ˜¾ç¤ºåœ¨å…¶ä»–åº”ç”¨ä¸Šæ–¹";
+    ["ACCESS_COARSE_LOCATION"] = "åªæœ‰åœ¨å‰å°è¿è¡Œæ—¶æ‰èƒ½è·å–å¤§è‡´ä½ç½®ä¿¡æ¯";
+    ["READ_CONTACTS"] = "è¯»å–è”ç³»äºº";
+    ["VIBRATE"] = "æ§åˆ¶æŒ¯åŠ¨";
+    ["SEND_SMS"] = "å‘é€çŸ­ä¿¡";
+    ["ACCESS_FINE_LOCATION"] = "åªèƒ½åœ¨å‰å°è·å–ç²¾ç¡®çš„ä½ç½®ä¿¡æ¯";
     ["CLEAR_APP_CACHE"] = "android.permission.CLEAR_APP_CACHE";
-    ["WAKE_LOCK"] = "·ÀÖ¹ÊÖ»úĞİÃß";
-    ["ACCESS_MEDIA_LOCATION"] = "´ÓÄúµÄÃ½ÌåÊÕ²ØÖĞ¶ÁÈ¡Î»ÖÃĞÅÏ¢";
-    ["RECORD_AUDIO"] = "Â¼Òô";
-    ["ACCESS_BACKGROUND_LOCATION"] = "ÔÚºóÌ¨Ê¹ÓÃÎ»ÖÃĞÅÏ¢";
-    ["INTERNET"] = "ÓµÓĞÍêÈ«µÄÍøÂç·ÃÎÊÈ¨ÏŞ";
-    ["BIND_ACCESSIBILITY_SERVICE"] = "¸¨Öú¹¦ÄÜ";
+    ["WAKE_LOCK"] = "é˜²æ­¢æ‰‹æœºä¼‘çœ ";
+    ["ACCESS_MEDIA_LOCATION"] = "ä»æ‚¨çš„åª’ä½“æ”¶è—ä¸­è¯»å–ä½ç½®ä¿¡æ¯";
+    ["RECORD_AUDIO"] = "å½•éŸ³";
+    ["ACCESS_BACKGROUND_LOCATION"] = "åœ¨åå°ä½¿ç”¨ä½ç½®ä¿¡æ¯";
+    ["INTERNET"] = "æ‹¥æœ‰å®Œå…¨çš„ç½‘ç»œè®¿é—®æƒé™";
+    ["BIND_ACCESSIBILITY_SERVICE"] = "è¾…åŠ©åŠŸèƒ½";
     ["BATTERY_STATS"] = "android.permission.BATTERY_STATS";
-    ["CHANGE_NETWORK_STATE"] = "¸ü¸ÄÍøÂçÁ¬½ÓĞÔ";
-    ["ANSWER_PHONE_CALLS"] = "½ÓÌıÀ´µç";
-    ["SET_WALLPAPER"] = "ÉèÖÃ±ÚÖ½";
+    ["CHANGE_NETWORK_STATE"] = "æ›´æ”¹ç½‘ç»œè¿æ¥æ€§";
+    ["ANSWER_PHONE_CALLS"] = "æ¥å¬æ¥ç”µ";
+    ["SET_WALLPAPER"] = "è®¾ç½®å£çº¸";
     ["READ_LOGS"] = "android.permission.READ_LOGS";
-    ["DOWNLOAD_WITHOUT_NOTIFICATION"] = "Ö±½ÓÏÂÔØÎÄ¼ş¶ø²»ÏÔÊ¾Í¨Öª";
-    ["CHANGE_WIFI_STATE"] = "Á¬½ÓWLANÍøÂçºÍ¶Ï¿ªÁ¬½Ó";
-    ["KILL_BACKGROUND_PROCESSES"] = "¹Ø±ÕÆäËûÓ¦ÓÃ";
+    ["DOWNLOAD_WITHOUT_NOTIFICATION"] = "ç›´æ¥ä¸‹è½½æ–‡ä»¶è€Œä¸æ˜¾ç¤ºé€šçŸ¥";
+    ["CHANGE_WIFI_STATE"] = "è¿æ¥WLANç½‘ç»œå’Œæ–­å¼€è¿æ¥";
+    ["KILL_BACKGROUND_PROCESSES"] = "å…³é—­å…¶ä»–åº”ç”¨";
     ["READ_FRAME_BUFFER"] = "android.permission.READ_FRAME_BUFFER";
-    ["ACCESS_NETWORK_STATE"] = "²é¿´ÍøÂçÁ¬½Ó";
+    ["ACCESS_NETWORK_STATE"] = "æŸ¥çœ‹ç½‘ç»œè¿æ¥";
     ["WRITE_SMS"] = "android.permission.WRITE_SMS";
-    ["BLUETOOTH"] = "ÓëÀ¶ÑÀÉè±¸Åä¶Ô";
-    ["WRITE_EXTERNAL_STORAGE"] = "ĞŞ¸Ä»òÉ¾³ıÄú¹²Ïí´æ´¢¿Õ¼äÖĞµÄÄÚÈİ";
-    ["READ_EXTERNAL_STORAGE"] = "¶ÁÈ¡Äú¹²Ïí´æ´¢¿Õ¼äÖĞµÄÄÚÈİ";
-    ["CAMERA"] = "ÅÄÉãÕÕÆ¬ºÍÊÓÆµ";
-    ["READ_SMS"] = "¶ÁÈ¡¶ÌĞÅ";
-    ["INSTALL_SHORTCUT"] = "°²×°¿ì½İ·½Ê½";
-    ["READ_CALL_LOG"] = "¶ÁÈ¡Í¨»°¼ÇÂ¼";
-    ["FOREGROUND_SERVICE"] = "ÔËĞĞÇ°Ì¨·şÎñ";
-    ["WRITE_SETTINGS"] = "ĞŞ¸ÄÏµÍ³ÉèÖÃ";
+    ["BLUETOOTH"] = "ä¸è“ç‰™è®¾å¤‡é…å¯¹";
+    ["WRITE_EXTERNAL_STORAGE"] = "ä¿®æ”¹æˆ–åˆ é™¤æ‚¨å…±äº«å­˜å‚¨ç©ºé—´ä¸­çš„å†…å®¹";
+    ["READ_EXTERNAL_STORAGE"] = "è¯»å–æ‚¨å…±äº«å­˜å‚¨ç©ºé—´ä¸­çš„å†…å®¹";
+    ["CAMERA"] = "æ‹æ‘„ç…§ç‰‡å’Œè§†é¢‘";
+    ["READ_SMS"] = "è¯»å–çŸ­ä¿¡";
+    ["INSTALL_SHORTCUT"] = "å®‰è£…å¿«æ·æ–¹å¼";
+    ["READ_CALL_LOG"] = "è¯»å–é€šè¯è®°å½•";
+    ["FOREGROUND_SERVICE"] = "è¿è¡Œå‰å°æœåŠ¡";
+    ["WRITE_SETTINGS"] = "ä¿®æ”¹ç³»ç»Ÿè®¾ç½®";
 };
 
 local permission_tab = {
 };
 
-activity.setContentView(loadlayout({
-    LinearLayout,
-    orientation="vertical",
-    layout_width="fill",
-    layout_height="fill",
-    {
-        ListView,
-        layout_width="fill",
-        layout_height="fill",
-        id="list",
-    },
-}
-))
+local databinding=PluginPermisssionLayoutBinding.inflate(LayoutInflater.from(this));
+local list=databinding.list
+
+activity.setContentView(databinding.root)
+activity.setSupportActionBar(databinding.toolbar)
+activity.getSupportActionBar().setTitle("æƒé™ç¼–è¾‘å™¨")
+
 
 list.setAdapter(ArrayAdapter(activity,android.R.layout.simple_list_item_multiple_choice))
 
@@ -92,7 +86,7 @@ end)
 
 local function loadPermissionInLua()
     local app={}
-    load(io.readall(path),"","bt",app)
+    load(io.readall(path),"","bt",app)()
     local nowPermission=app.user_permission
     table.foreach(nowPermission,function(k,v)
         if table.find(permission_tab,v) then
@@ -109,19 +103,19 @@ local function dump(t)
 end
 
 local function getPermissions()
-    local result=table.clone(permission_tab)
+    local result={}
     table.foreach(permission_tab,function (k,v)
-        if list.isItemChecked(k) then
-            table.remove(result,table.find(result,v))
+        if list.isItemChecked(k-1) then--è¦-1é˜²æ­¢é—æ¼
+            table.insert(result,v)
         end
     end)
     return result
 end
 
 local function savePermissionInLua()
-    local str=io.read(path):match("(.+)user_permission")
-    local permissionText=string.format("user_permission=%s",dump(getPermissions()))
-    io.open(path,'w+'):write(str.."\n"..permissionText):close()
+    local str=io.readall(path):match("(.+)user_permission")
+    local permissionText=string.format("user_permission={\n  %s\n}",dump(getPermissions()))
+    io.open(path,'w+'):write(str..permissionText):close()
 end
 
 if path:match("%.lua$") then
@@ -129,12 +123,13 @@ if path:match("%.lua$") then
 end
 
 function onCreateOptionsMenu(menu)
-    menu.add(activity.getString(R.string.save)).setShowAsAction(1)
+    menu.add(activity.getString(R.string.save))
 end
 
 function onOptionsItemSelected()
     if path:match("%.lua$") then
         savePermissionInLua()
+        activity.setResult(100)
         activity.finish()
     end
 end
@@ -142,6 +137,7 @@ end
 function onDestroy()
     onOptionsItemSelected()
 end
+
 
 
 

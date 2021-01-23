@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +23,7 @@ import com.dingyi.MyLuaApp.adapters.MainFileListAdapter;
 import com.dingyi.MyLuaApp.bean.ProjectInfo;
 import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
 import com.dingyi.MyLuaApp.databinding.ActivityMainDialogNewProjectBinding;
-import com.dingyi.MyLuaApp.databinding.ActivityMainListProjectBinding;
+import com.dingyi.MyLuaApp.databinding.PluginPermisssionLayoutBinding;
 import com.dingyi.MyLuaApp.dialogs.MyDialog;
 import com.dingyi.MyLuaApp.impl.TextWatcherImpl;
 import com.dingyi.MyLuaApp.utils.CallBack;
@@ -139,11 +137,14 @@ public class MainActivity extends BaseActivity {
         FileUtilsKt.forEachDir(Objects.requireNonNull(FileUtilsKt.getUsePaths().get("projectPath")), file -> {
             if (ProjectUtilKt.getProjectType(file) == ProjectUtilKt.LUA_PROJECT) {
                 LuaTable infoTable = luaJ.loadFile(file.getPath() + "/init.lua");
-
-                ProjectInfo info = new ProjectInfo(file.getAbsolutePath(), ProjectUtilKt.LUA_PROJECT,
-                        infoTable.get("appname").tojstring(), infoTable.get("appver").tojstring(),
-                       infoTable.get("appcode").tojstring(), infoTable.get("packagename").tojstring());
-                adapter.add(info);
+                if (infoTable.keyCount()==0) {
+                     TextUtilsKt.showSnackBar(binding.getRoot(),R.string.find_project_error);
+                } else {
+                    ProjectInfo info = new ProjectInfo(file.getAbsolutePath(), ProjectUtilKt.LUA_PROJECT,
+                            infoTable.get("appname").tojstring(), infoTable.get("appver").tojstring(),
+                            infoTable.get("appcode").tojstring(), infoTable.get("packagename").tojstring());
+                    adapter.add(info);
+                }
 
             }
             return null;
@@ -213,6 +214,7 @@ public class MainActivity extends BaseActivity {
 
         binding.name.setText(ProjectUtilKt.smartGetProjectName());
         binding.packageName.setText("com.MyLuaApp.MyApplication");//todo 包名可设置
+
     }
 
 

@@ -38,4 +38,8 @@ public class BaseActivity extends AppCompatActivity {
     public int getWidth() {
         return mWidth;
     }
+
+    public String getAssetDir() {
+        return "/data/data/"+getPackageName()+"/assets";
+    }
 }
