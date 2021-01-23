@@ -16,22 +16,22 @@ class InitBuildCacheTask: LuaTask() {
         luaBuilderCache.cacheDir.toFile().mkdirs();
         luaBuilderCache.buildDir.toFile().mkdirs();
 
-        if (!luaBuilderCache.cacheLibDir.toFile().isDirectory) { //½âÑ¹lua lib
+        if (!luaBuilderCache.cacheLibDir.toFile().isDirectory) { //åŠ è½½lua lib
             val soPath="/data/data/${activity.packageName}/lib/"
             val toPath=luaBuilderCache.cacheLibDir+"/armebai-v7a/"
             toPath.toFile().mkdirs()
             LuaUtil.copyDir(soPath,toPath)
         }
 
-        if (!luaBuilderCache.cacheLuaDir.toFile().isDirectory) { //½âÑ¹lua
+        if (!luaBuilderCache.cacheLuaDir.toFile().isDirectory) { //åŠ è½½lua
             val soPath="/data/data/${activity.packageName}/app_lua/"
             val toPath=luaBuilderCache.cacheLuaDir
             toPath.toFile().mkdirs()
             LuaUtil.copyDir(soPath,toPath)
         }
 
-        //½âÑ¹Ä¬ÈÏµÄres
-        if (!luaBuilderCache.cacheResDir.toFile().isDirectory || !luaBuilderCache.cacheArscPath.toFile().isFile || !luaBuilderCache.cacheAxmlPath.toFile().isFile) { //½âÑ¹lua
+        //åŠ è½½res
+        if (!luaBuilderCache.cacheResDir.toFile().isDirectory || !luaBuilderCache.cacheArscPath.toFile().isFile || !luaBuilderCache.cacheAxmlPath.toFile().isFile) { //ï¿½ï¿½Ñ¹lua
             val defaultZipPath="/data/data/${activity.packageName}/assets/res/build/defaultRes.zip"
             LuaUtil.unZip(defaultZipPath,luaBuilderCache.cacheDir)
         }

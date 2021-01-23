@@ -18,6 +18,10 @@ class LuaBuilder :IBuilder {
 
     }
 
+    override fun stop() {
+        TODO("Not yet implemented")
+    }
+
     override fun initBuilderOut(builderOut: IBuilderOut): IBuilder {
 
         return this

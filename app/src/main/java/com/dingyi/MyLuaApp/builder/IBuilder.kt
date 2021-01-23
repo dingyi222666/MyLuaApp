@@ -4,9 +4,10 @@ import com.dingyi.MyLuaApp.activitys.BaseActivity
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 
 interface IBuilder {
-    fun getName():String;//获取builder的名字
+    fun getName():String;//鑾峰彇鍚嶅瓧
     fun initActivity(activity: BaseActivity):IBuilder;
-    fun run()//运行builder
+    fun run()//builder
+    fun stop();
     fun initBuilderOut(builderOut: IBuilderOut):IBuilder
     fun initProjectInfo(projectInfo: ProjectInfo):IBuilder;
 }

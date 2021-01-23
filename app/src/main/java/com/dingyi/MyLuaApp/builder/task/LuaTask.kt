@@ -27,4 +27,8 @@ abstract class LuaTask:ITask {
     override fun sendMessage(string: String) {
         builderOut?.hasMessage("Lua Builder: {$string}")
     }
+
+    override fun sendError(string: String) {
+        builderOut?.hasError(string)
+    }
  }

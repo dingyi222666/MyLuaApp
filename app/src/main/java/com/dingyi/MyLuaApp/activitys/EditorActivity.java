@@ -77,16 +77,17 @@ public class EditorActivity extends BaseActivity {
 
 
 
+        /*
         new Thread(() -> {
             new InitBuildCacheTask()
                     .initActivity(EditorActivity.this).doAction(new LuaBuilderCache(info),EditorActivity.this);
-
-
-            ITask task=new MergeAXMLTask()
-                    .initActivity(EditorActivity.this);
-
-                    task.doAction(new LuaBuilderCache(info),EditorActivity.this);
+            new MergeAXMLTask()
+                    .initActivity(EditorActivity.this).doAction(new LuaBuilderCache(info),EditorActivity.this);
+            new CompileLuaTask()
+                    .initActivity(EditorActivity.this).doAction(new LuaBuilderCache(info),EditorActivity.this);
         }).start();
+
+         */
 
 
 

@@ -9,4 +9,5 @@ interface ITask {
     fun initBuilderOut(builderOut:IBuilderOut):ITask;
     fun initActivity(activity:BaseActivity):ITask;
     fun sendMessage(string: String)
+    fun sendError(string: String)
 }

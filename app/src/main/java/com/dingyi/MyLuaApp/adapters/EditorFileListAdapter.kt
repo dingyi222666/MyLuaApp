@@ -38,7 +38,7 @@ class EditorFileListAdapter(val context: Context) : BaseAdapter() {
     }
 
     fun setOnItemClick(listView: ListView) {
-        listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView: AdapterView<*>, view: View, i: Int, l: Long ->
+        listView.onItemClickListener = AdapterView.OnItemClickListener { _: AdapterView<*>, view: View, i: Int, _: Long ->
             when ((view.tag as ViewHolder).title.text) {
                 "..." -> load(projectPath,nowOpenPath.toFile().parentFile.path)
                 else -> {

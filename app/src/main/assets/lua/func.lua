@@ -15,16 +15,19 @@ function build(path,toPath)
     path,toPath=tostring(path),tostring(toPath)
     local _,suffix=string.match(path,'/(.+)%.(.+)$')
     if (suffix=="lua") then
-        local ok,errorMsg=console.build(path)
-        if ok then
-            os.rename(path..'c',toPath)
+        local path,errorMsg=console.build(path)
+        if path then
+            os.rename(path,toPath)
+            os.remove(path)
         else
             return errorMsg
         end
     else
-        local ok,errorMsg=console.build_aly(path)
-        if ok then
-            os.rename(path..'c',toPath)
+        local path,errorMsg=console.build_aly(path)
+        if path then
+            os.rename(path,toPath:gsub("aly$","lua"))
+            os.remove(path)
+            os.remove(toPath)
         else
             return errorMsg
         end
