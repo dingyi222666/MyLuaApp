@@ -213,7 +213,7 @@ public class MainActivity extends BaseActivity {
         });
 
         binding.name.setText(ProjectUtilKt.smartGetProjectName());
-        binding.packageName.setText("com.MyLuaApp.MyApplication");//todo 包名可设置
+        binding.packageName.setText("com.MyLuaApp.MyApplication");//todo
 
     }
 

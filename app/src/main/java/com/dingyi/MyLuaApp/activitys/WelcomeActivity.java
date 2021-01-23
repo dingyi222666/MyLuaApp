@@ -101,11 +101,11 @@ public class WelcomeActivity extends BaseActivity {
 
 
     private void fastUpdate() {
-        step = 2;//ç›´æ¥è·³åˆ°ç¬¬2æ­¥
-        stepChange();//è¿è¡Œä¸€æ¬¡æ­¥éª¤æ›´æ¢
-        binding.previousBotton.setVisibility(View.GONE);//éšè—ä¸Šä¸€æ­¥
+        step = 2;//Ö±½ÓÌøµ½µÚ2²½
+        stepChange();//ÔËĞĞÒ»´Î²½Öè¸ü»»
+        binding.previousBotton.setVisibility(View.GONE);//Òş²ØÉÏÒ»²½
         binding.nextBotton.setText(R.string.complete);
-        binding.nextBotton.setOnClickListener(v -> startMain());//ç‚¹å‡»ä¸‹ä¸€æ­¥ç›´æ¥å¯åŠ¨
+        binding.nextBotton.setOnClickListener(v -> startMain());//µã»÷ÏÂÒ»²½Ö±½ÓÆô¶¯
     }
 
 
@@ -127,7 +127,7 @@ public class WelcomeActivity extends BaseActivity {
 
         binding.welcomePageview.setUserInputEnabled(false);
 
-        //æ„å»ºå¼€å§‹view
+        //¹¹½¨¿ªÊ¼view
         TextView startTextView = new TextView(this);
         ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(new LinearLayout.LayoutParams(-1, -1));
         marginLayoutParams.leftMargin = ViewUtilsKt.dp2px(this, 12);
@@ -161,7 +161,7 @@ public class WelcomeActivity extends BaseActivity {
         permissionAdapter.notifyDataSetChanged();
 
 
-        //æ„å»ºç»“æŸview
+        //¹¹½¨½áÊøview
         TextView endTextView = new TextView(this);
         endTextView.setLayoutParams(marginLayoutParams);
         endTextView.setTextColor(themeUtil.getTextColor());
@@ -217,13 +217,13 @@ public class WelcomeActivity extends BaseActivity {
         }
         SharedPreferencesUtilsKt.put(this, "isStart", "true");
         Intent intent=new Intent(this.getApplicationContext(), MainActivity.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//æ–°å»º
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//ĞÂ½¨
         startActivity(intent);
         new Handler(Looper.getMainLooper()).postDelayed(this::finish,200);
     }
 
     private void requestPermissions() {
-        binding.welcomePageview.setCurrentItem(3);//å…ˆè®¾ç½®å›3é¡µ
+        binding.welcomePageview.setCurrentItem(3);//ÏÈÉèÖÃ»Ø3Ò³
 
         List<String> permission = new ArrayList<>();
 
@@ -276,7 +276,7 @@ public class WelcomeActivity extends BaseActivity {
     private void readyAssets() {
         assetsBinding.getRoot().setVisibility(View.VISIBLE);
         assetsBinding.progressBar.setVisibility(View.VISIBLE);
-        binding.previousBotton.setVisibility(View.GONE); //è®¾ç½®è‚¯å®šä¸æ˜¾ç¤º
+        binding.previousBotton.setVisibility(View.GONE); //ÉèÖÃ¿Ï¶¨²»ÏÔÊ¾
         task = new unZipTask();
         task.onCallBack(s -> {
             binding.previousBotton.setVisibility(View.VISIBLE);
@@ -394,9 +394,9 @@ public class WelcomeActivity extends BaseActivity {
                 //unZipAssets("main.alp", extDir);
             } catch (IOException e) {
                 LogUtilsKt.e(e.getMessage());
-                return "å¤±è´¥";
+                return "Ê§°Ü";
             }
-            return "å®Œæˆ";
+            return "Íê³É";
         }
 
         @Override

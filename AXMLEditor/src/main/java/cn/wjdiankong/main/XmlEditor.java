@@ -397,9 +397,9 @@ public class XmlEditor {
 			}else{
 				result[1] = 3;
 			}
-		}else if(tagValue.equals("minSdkVersion") || tagValue.equals("versionCode")){
+		}else if(tagValue.equals("targetSdkVersion") || tagValue.equals("minSdkVersion") || tagValue.equals("versionCode")){
 			result[0] = result[0] | AttributeType.ATTR_FIRSTINT;
-			result[1] = Integer.valueOf(tagValue);
+			result[1] = Integer.parseInt(tagValue);
 		}else if(tagValue.startsWith("@")){//ÒýÓÃ
 			result[0] = result[0] | AttributeType.ATTR_REFERENCE;
 			result[1] = 0x7F000000;

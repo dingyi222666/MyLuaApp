@@ -63,6 +63,7 @@ fun readBytes(inputStream: InputStream):ByteArray{
 
 fun  writeBytes(path: String,byteArray: ByteArray) {
     path.toFile().let {
+        it.parentFile.mkdirs()
         it.createNewFile()
         it.outputStream().use {
             it.write(byteArray)

@@ -2,6 +2,8 @@ package com.dingyi.MyLuaApp.builder
 
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.luaj.LuaJ
+import org.luaj.vm2.LuaTable
+import org.luaj.vm2.LuaValue
 
 class LuaBuilderCache(projectInfo: ProjectInfo) : IBuilderCache(projectInfo) {
 
@@ -15,13 +17,13 @@ class LuaBuilderCache(projectInfo: ProjectInfo) : IBuilderCache(projectInfo) {
     val cacheArscPath = "$cacheDir/resources.arsc"
     val cacheAxmlPath = "$cacheDir/AndroidManifest.xml"
 
-    fun getLuaConfigs(): Map<String, String> {
+    fun getLuaConfigs(): Map<String, LuaValue> {
         val luaJ = LuaJ()
-        val result= mutableMapOf<String,String>()
+        val result= mutableMapOf<String,LuaValue>()
         val table = luaJ.loadFile(projectInfo.path + "/init.lua")
         table.keys().forEach {
             it?.let {
-                result.put(it.tojstring(),table[it].tojstring())
+                result.put(it.tojstring(),table[it])
             }
         }
 
