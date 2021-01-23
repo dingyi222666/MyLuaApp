@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dingyi.MyLuaApp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+
+    <application
+
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
+        android:name="com.androlua.LuaApplication"
+        android:theme="@style/Theme.MyLuaApp">
+        <activity android:configChanges="screenSize|keyboardHidden|orientation" android:windowSoftInputMode="adjustResize" android:name=".activitys.EditorActivity" />
+        <activity
+            android:name=".activitys.WelcomeActivity"
+            android:theme="@style/Theme.MyLuaApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activitys.MainActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MyLuaApp" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.dingyi.MyLuaApp"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/myluaapp_filepaths" />
+        </provider>
+    </application>
+
+</manifest>

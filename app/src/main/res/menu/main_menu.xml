@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/ic_twotone_search_24"
+        android:title="@string/searchTooltip"
+        app:showAsAction="always" />
+    <item
+        android:icon="@drawable/ic_twotone_add_24"
+        android:title="@string/addTooltip"
+        android:id="@+id/main_action_menu_newProject"
+        app:showAsAction="always" />
+    <item
+        android:title="@string/settings" />
+    <item
+        android:title="@string/imports"/>
+    <item
+        android:title="@string/help"/>
+    <item
+        android:id="@+id/main_action_menu_about"
+        android:title="@string/about"/>
+</menu>

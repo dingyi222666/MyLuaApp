@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activitys.EditorActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:elevation="2dp"
+        app:elevation="2dp"
+        android:layout_height="56dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/theme_backgroundColor"
+
+            app:subtitleTextAppearance="@style/BaseToolBarSubTitleStyle"
+            app:titleTextAppearance="@style/BaseToolBarTitleStyle" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:elevation="0dp"
+        android:id="@+id/editor_parent"
+        android:orientation="vertical">
+      <com.google.android.material.tabs.TabLayout
+          android:layout_width="match_parent"
+          android:id="@+id/tabLayout"
+          android:elevation="2dp"
+          app:tabGravity="start"
+          app:tabMaxWidth="0dp"
+          app:tabMode="scrollable"
+          app:tabRippleColor="?theme_rippleColor"
+          app:tabIndicatorColor="?colorPrimary"
+          app:tabSelectedTextColor="?theme_textColor"
+          app:tabTextColor="?theme_hintTextColor"
+          app:tabTextAppearance="@style/BaseTableLayoutStyle"
+          android:layout_height="29.5dp"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/parent"
+            android:layout_weight="1"
+            android:elevation="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+        <HorizontalScrollView
+
+            android:id="@+id/horizontalView"
+            android:elevation="2dp"
+            android:layout_weight="0"
+            android:layout_width="match_parent"
+            android:layout_height="36dp">
+        <com.dingyi.MyLuaApp.views.SymbolView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="?theme_backgroundColor"
+            android:orientation="horizontal"
+            android:id="@+id/symbolView"
+            android:elevation="3dp"/>
+        </HorizontalScrollView>
+    </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        app:fabSize="normal"
+        app:tint="?theme_backgroundColor"
+        app:elevation="3dp"
+        android:id="@+id/fab"
+        android:src="@drawable/ic_twotone_more_vert_24"
+        android:layout_marginBottom="48dp"
+        android:layout_marginRight="16dp"
+        app:layout_anchor="@id/symbolView"
+        app:layout_anchorGravity="right"
+        android:padding="-3dp"
+        app:backgroundTint="?colorPrimary"
+        android:background="?colorPrimary"
+        android:layout_height="wrap_content"
+        />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

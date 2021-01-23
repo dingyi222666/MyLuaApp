@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/run"
+        android:icon="@drawable/ic_twotone_play_arrow_24"
+        android:title="@string/run"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/undo"
+        android:icon="@drawable/ic_twotone_undo_24"
+        android:title="@string/undo"
+        app:showAsAction="always" />
+    <item android:id="@+id/save" android:title="@string/save" />
+    <item
+        android:id="@+id/redo"
+        android:title="@string/redo" />
+   <item
+       android:id="@+id/project"
+       android:title="@string/project_menu">
+       <menu>
+         <item
+             android:id="@+id/build"
+             android:title="@string/build_menu"/>
+           <item
+               android:id="@+id/asyc"
+               android:title="@string/asyc_menu"/>
+           <item
+               android:id="@+id/attr"
+               android:title="@string/info_menu"/>
+           <item
+               android:id="@+id/share"
+               android:title="@string/share_menu"/>
+       </menu>
+   </item>
+    <item
+        android:id="@+id/code"
+        android:title="@string/code_menu">
+        <menu>
+            <item
+                android:id="@+id/find"
+                android:title="@string/find_menu"/>
+            <item
+                android:id="@+id/format"
+                android:title="@string/format_menu"/>
+            <item
+                android:id="@+id/goto_menu"
+                android:title="@string/goto_menu"/>
+            <item
+                android:id="@+id/error"
+                android:title="@string/error_menu"/>
+            <item
+                android:id="@+id/import_code"
+                android:title="@string/import_menu"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/plugin"
+        android:title="@string/plugin_menu">
+       <menu>
+           <item
+               android:id="@+id/java_api"
+               android:title="@string/javaapi_menu"/>
+       </menu>
+    </item>
+    <item
+        android:id="@+id/more"
+        android:title="@string/more_menu">
+        <menu>
+
+        </menu>
+    </item>
+</menu>

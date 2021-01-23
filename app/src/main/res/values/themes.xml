@@ -1,0 +1,77 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/theme_default_colorPrimary</item>
+        <item name="toolbarStyle">@style/BaseToolBarStyle</item>
+        <item name="actionBarStyle">@style/BaseToolBarStyle</item>
+        <item name="android:actionBarStyle">@style/BaseToolBarTitleStyle</item>
+        <item name="colorAccent">@color/theme_default_colorPrimary</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="dialogCornerRadius">8dp</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="textInputStyle">@style/BaseTextInputLayoutStyle</item>
+        <item name="popupMenuStyle">@style/BasePopMenuStyle</item>
+        <item name="actionOverflowMenuStyle">@style/BaseOverflowMenuStyle</item>
+        <item name="theme_backgroundColor">@color/theme_default_backgroundColor</item>
+        <item name="theme_rippleColor">@color/theme_default_rippleColor</item>
+        <item name="theme_cardBackgroundColor">@color/theme_default_cardBackgroundColor</item>
+        <item name="theme_textColor">@color/theme_default_textColor</item>
+        <item name="theme_hintTextColor">@color/theme_default_hintTextColor</item>
+        <!-- Customize your theme here. -->
+    </style>
+    <!--Base BaseTableLayout Style -->
+    <style name="BaseTableLayoutStyle" parent="TextAppearance.AppCompat.Button">
+        <item name="textAllCaps">false</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textScaleX">1</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+    </style>
+    <!--Base TextInputLayout Style -->
+    <style name="BaseTextInputLayoutStyle" parent="Widget.Design.TextInputLayout">
+        <!-- Use Design Style ,no to do anything -->
+    </style>
+    <!--Base OverflowMenu Style -->
+    <style name="BaseOverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/popup_menu_background</item>
+    </style>
+    <!--Base PopMenu Style -->
+    <style name="BasePopMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_menu_background</item>
+    </style>
+    <!--Base ToolBar Style -->
+    <style name="BaseToolBarStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="colorPrimary">@color/theme_default_backgroundColor</item>
+        <item name="titleTextColor">@color/theme_default_colorPrimary</item>
+        <item name="background">@color/white</item>
+
+        <item name="subtitleTextStyle">@style/BaseToolBarSubTitleStyle</item>
+        <item name="titleTextStyle">@style/BaseToolBarTitleStyle</item>
+        <item name="android:textColorSecondary">@color/theme_default_hintTextColor</item>
+        <item name="elevation">2dp</item>
+        <item name="android:titleTextColor" tools:targetApi="m">@color/theme_default_colorPrimary</item>
+    </style>
+
+    <!--Base ToolBar Title Style -->
+    <style name="BaseToolBarTitleStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <!--Base ToolBar SubTitle Style -->
+    <style name="BaseToolBarSubTitleStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:state_selected">true</item>
+    </style>
+    <!--Base and final Dialog Window Anim -->
+    <style name="BaseDialogAnim" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit_anim</item>
+    </style>
+
+    <style name="Theme.MyLuaApp" parent="Theme.BaseTheme">
+
+    </style>
+</resources>
