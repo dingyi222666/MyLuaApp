@@ -15,7 +15,11 @@ class LuaBuilderCache(projectInfo: ProjectInfo) : IBuilderCache(projectInfo) {
     val cacheLibDir = "$cacheDir/lib"
     val cacheResDir = "$cacheDir/res"
     val cacheArscPath = "$cacheDir/resources.arsc"
+    val cacheDexPath ="$cacheDir/dex"
     val cacheAxmlPath = "$cacheDir/AndroidManifest.xml"
+    val buildUnSignedWithResApkPath ="$buildDir/resources.ap_"
+    val buildUnSignedPath="$buildDir/unsigned.apk"
+    val buildSignedPath="$buildDir/signed.apk"
 
     fun getLuaConfigs(): Map<String, LuaValue> {
         val luaJ = LuaJ()

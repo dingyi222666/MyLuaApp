@@ -11,16 +11,17 @@ class InitBuildCacheTask: LuaTask() {
 
     override fun doAction(vararg arg: Any) {
         val luaBuilderCache=arg[0] as LuaBuilderCache;
-        val activity=arg[1] as BaseActivity;
+        val activity=activity!!
 
         luaBuilderCache.cacheDir.toFile().mkdirs();
         luaBuilderCache.buildDir.toFile().mkdirs();
 
         if (!luaBuilderCache.cacheLibDir.toFile().isDirectory) { //加载lua lib
             val soPath="/data/data/${activity.packageName}/lib/"
-            val toPath=luaBuilderCache.cacheLibDir+"/armebai-v7a/"
+            val toPath=luaBuilderCache.cacheLibDir+"/armeabi-v7a/"
             toPath.toFile().mkdirs()
             LuaUtil.copyDir(soPath,toPath)
+            sendMessage("init lua lib")
         }
 
         if (!luaBuilderCache.cacheLuaDir.toFile().isDirectory) { //加载lua
@@ -28,12 +29,14 @@ class InitBuildCacheTask: LuaTask() {
             val toPath=luaBuilderCache.cacheLuaDir
             toPath.toFile().mkdirs()
             LuaUtil.copyDir(soPath,toPath)
+            sendMessage("init lua lib")
         }
 
         //加载res
         if (!luaBuilderCache.cacheResDir.toFile().isDirectory || !luaBuilderCache.cacheArscPath.toFile().isFile || !luaBuilderCache.cacheAxmlPath.toFile().isFile) { //��ѹlua
             val defaultZipPath="/data/data/${activity.packageName}/assets/res/build/defaultRes.zip"
             LuaUtil.unZip(defaultZipPath,luaBuilderCache.cacheDir)
+            sendMessage("init res")
         }
 
 

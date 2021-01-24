@@ -19,9 +19,12 @@ import android.widget.TextView;
 
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.bean.ProjectInfo;
+import com.dingyi.MyLuaApp.builder.LuaBuilder;
 import com.dingyi.MyLuaApp.builder.LuaBuilderCache;
+import com.dingyi.MyLuaApp.builder.ProgressBarBuilderOut;
 import com.dingyi.MyLuaApp.builder.task.ITask;
 import com.dingyi.MyLuaApp.builder.task.lua.CompileLuaTask;
+import com.dingyi.MyLuaApp.builder.task.lua.CreateApkTask;
 import com.dingyi.MyLuaApp.builder.task.lua.InitBuildCacheTask;
 import com.dingyi.MyLuaApp.builder.task.lua.MergeAXMLTask;
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
@@ -75,19 +78,6 @@ public class EditorActivity extends BaseActivity {
         getSupportActionBar().setSubtitle(util.getNowOpenPathName());
         startToolBarAnim();
 
-
-
-        /*
-        new Thread(() -> {
-            new InitBuildCacheTask()
-                    .initActivity(EditorActivity.this).doAction(new LuaBuilderCache(info),EditorActivity.this);
-            new MergeAXMLTask()
-                    .initActivity(EditorActivity.this).doAction(new LuaBuilderCache(info),EditorActivity.this);
-            new CompileLuaTask()
-                    .initActivity(EditorActivity.this).doAction(new LuaBuilderCache(info),EditorActivity.this);
-        }).start();
-
-         */
 
 
 
@@ -169,6 +159,9 @@ public class EditorActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.editor_menu, menu);
         ViewUtilsKt.foreachSetMenuIconColor(menu, themeUtil.getImageColorFilter());
+        if (!(info.getType()==ProjectUtilKt.GRADLE_PROJECT)) {
+            menu.findItem(R.id.asyc).setEnabled(false);
+        }
         return true;
     }
 
@@ -205,6 +198,9 @@ public class EditorActivity extends BaseActivity {
                 util.save();
                 ProjectUtilKt.runProject(this, info);
                 break;
+            case R.id.build:
+                ProjectUtilKt.build(info,this);
+                break;
             case R.id.error:
                 if (!util.canCheckError()) {
                     TextUtilsKt.showSnackBar(binding.getRoot(),R.string.no_check_error);
@@ -223,6 +219,8 @@ public class EditorActivity extends BaseActivity {
             case R.id.format:
                 util.format();
                 break;
+            default:
+                TextUtilsKt.showSnackBar(binding.getRoot(),R.string.code_ing);
         }
         return true;
     }
@@ -245,6 +243,7 @@ public class EditorActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override

@@ -234,6 +234,13 @@ public class MainActivity extends BaseActivity {
         luaJ.close();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initProjectListView();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 

@@ -14,18 +14,18 @@ abstract class LuaTask:ITask {
         //Task action in it
     }
 
-    override fun initActivity(activity: BaseActivity): ITask {
+    override fun initActivity(activity: BaseActivity): LuaTask {
         this.activity=activity;
         return this
     }
 
-    override fun initBuilderOut(builderOut: IBuilderOut): ITask {
+    override fun initBuilderOut(builderOut: IBuilderOut):  LuaTask {
         this.builderOut=builderOut;
         return this;
     }
 
     override fun sendMessage(string: String) {
-        builderOut?.hasMessage("Lua Builder: {$string}")
+        builderOut?.hasMessage("lua build: $string")
     }
 
     override fun sendError(string: String) {

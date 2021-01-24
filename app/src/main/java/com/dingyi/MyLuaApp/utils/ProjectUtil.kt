@@ -7,7 +7,10 @@ import android.net.Uri
 import com.androlua.LuaActivity
 import com.androlua.LuaUtil
 import com.dingyi.MyLuaApp.R
+import com.dingyi.MyLuaApp.activitys.BaseActivity
 import com.dingyi.MyLuaApp.bean.ProjectInfo
+import com.dingyi.MyLuaApp.builder.LuaBuilder
+import com.dingyi.MyLuaApp.builder.ProgressBarBuilderOut
 import org.json.JSONArray
 import java.io.File
 import java.io.FileNotFoundException
@@ -54,7 +57,7 @@ fun getProjectTemplate(context: Activity): Array<CharSequence> {
 
 fun getProjectInfoPath(projectInfo: ProjectInfo):String {
     return when(projectInfo.type){
-        LUA_PROJECT -> projectInfo.path+"/init.lua"
+        LUA_PROJECT -> projectInfo.path + "/init.lua"
         else -> ""
     }
 }
@@ -81,6 +84,29 @@ fun createProject(context: Activity, i: Int, toPath: String, name: String, packa
     LuaUtil.copyDir(templatePath, toPath)
     LuaUtil.rmDir(templatePath.toFile())
 
+}
+
+fun buildLuaProject(info: ProjectInfo,activity: BaseActivity) {
+    with(activity) {
+        val out = ProgressBarBuilderOut()
+                .init(this)
+
+        out.title = getString(R.string.build_title)
+
+
+        val builder = LuaBuilder()
+                .initBuilderOut(out)
+                .initActivity(this)
+                .initProjectInfo(info)
+
+        builder.start()
+    }
+}
+
+fun build(info: ProjectInfo,activity: BaseActivity) {
+    when (info.type) {
+        LUA_PROJECT -> buildLuaProject(info,activity)
+    }
 }
 
 fun getDefaultPath(path: String): String {
@@ -118,7 +144,7 @@ fun runProject(context: Activity, info: ProjectInfo) {
     when (info.type) {
         LUA_PROJECT -> {
             val intent = Intent(context, LuaActivity::class.java)
-            intent.putExtra("name", info.path+"/main.lua")
+            intent.putExtra("name", info.path + "/main.lua")
             var path = info.path + "/main.lua"
 
             if (path[0] != '/') {

@@ -232,7 +232,7 @@ public class WelcomeActivity extends BaseActivity {
        // } else {
             permission.addAll(Arrays.asList(Permission.Group.STORAGE));
        // }
-
+       // permission.add(Permission.REQUEST_INSTALL_PACKAGES);
         permission.add(Permission.READ_PHONE_STATE);
 
         XXPermissions.with(this)

@@ -58,4 +58,12 @@ public class LuaJ {
     public void close() {
         state.close();
     }
+
+    public void runFunc(String name,Object... array) {
+        LuaValue[] values=new LuaValue[array.length];
+        for (int i=0;i<array.length;i++) {
+            values[i]=LuaValue.valueOf(array[i].toString());
+        }
+        state.getGlobals().get(name).invoke(values);
+    }
 }

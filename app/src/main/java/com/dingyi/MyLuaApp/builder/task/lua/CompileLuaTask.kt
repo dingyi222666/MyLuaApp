@@ -22,18 +22,13 @@ class CompileLuaTask: LuaTask() {
 
         cache?.let { cache ->
             cache.buildAssetsDir.toFile().mkdirs()
-            val path = cache.projectInfo.path
-            if (path != null) {
-                doCompile(path)
-            }
+            doCompile(cache.projectInfo.path!!)
         }
-
     }
 
 
     private fun getOutPath(string: String): String {
         if (cache!=null){
-
             return cache!!.buildAssetsDir+"/"+(string.substring((cache!!.projectInfo.path?.length)!! +1))
         }
         return ""
@@ -41,13 +36,14 @@ class CompileLuaTask: LuaTask() {
 
     fun doCompile(path: String) {
         path.toFile().listFiles().forEach {
-            if (it.name.substring(0,1)==".")
-                return
-
-            if (it.isDirectory) {
-                doCompile(it.path)
-            }else if (it.name.endsWith("lua") || it.name.endsWith("aly")) {
-                compileLua(it.path,getOutPath(it.path))
+            if (it.name.substring(0,1)!=".") {
+                if (it.isDirectory) {
+                    doCompile(it.path)
+                } else if (it.name.endsWith("lua") || it.name.endsWith("aly")) {
+                    getOutPath(it.path).toFile().parentFile.mkdirs()
+                    sendMessage("compile lua $it.path")
+                    compileLua(it.path, getOutPath(it.path))
+                }
             }
         }
     }
@@ -55,15 +51,15 @@ class CompileLuaTask: LuaTask() {
     fun initLua() {
         activity?.let {
             state=SimpleLuaState(it)
-            state?.runFunc("sendClassToLua", File::class.java,"File")
             state?.doFile("/data/data/${it.packageName}/assets/lua/func.lua");//lua
         }
     }
 
     fun compileLua(path: String, outPath: String):Boolean?  {
         val any=state?.runFunc("build", path, outPath)
+
         if (any is String) {
-            sendError("Lua Build Error$any")
+            sendError("Lua Build Error:$any")
             throw BuilderException(Throwable(any));
         }
         return true

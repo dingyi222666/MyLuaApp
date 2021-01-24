@@ -10,31 +10,34 @@ import com.androlua.LuaPrint;
 import java.io.File;
 
 public class SimpleLuaState {
-    private LuaState state;
-    private final LuaState L;
+    private static LuaState state = null;
+    private LuaState L;
 
     public SimpleLuaState(Activity activity){
-        state=LuaStateFactory.newLuaState();
-        state.openLibs();
-        L=state;
+
+        if (state==null) {
+            state = LuaStateFactory.newLuaState();
+
+            state.openLibs();
+            L = state;
 
 
-        String localDir = activity.getFilesDir().getAbsolutePath();
-        String odexDir = activity.getDir("odex", Context.MODE_PRIVATE).getAbsolutePath();
-        String libDir = activity.getDir("lib", Context.MODE_PRIVATE).getAbsolutePath();
-        String luaMdDir = activity.getDir("lua", Context.MODE_PRIVATE).getAbsolutePath();
-        String luaCpath = activity.getApplicationInfo().nativeLibraryDir + "/lib?.so" + ";" + libDir + "/lib?.so";
-        //luaDir = extDir;
-        String luaLpath = luaMdDir + "/?.lua;" + luaMdDir + "/lua/?.lua;" + luaMdDir + "/?/init.lua;";
-        L.pushJavaObject(Class.class);
-        L.setGlobal("class");
-        L.getGlobal("package");
-        L.pushString(luaLpath);
-        L.setField(-2, "path");
-        L.pushString(luaCpath);
-        L.setField(-2, "cpath");
-        L.pop(1);
-
+            String localDir = activity.getFilesDir().getAbsolutePath();
+            String odexDir = activity.getDir("odex", Context.MODE_PRIVATE).getAbsolutePath();
+            String libDir = activity.getDir("lib", Context.MODE_PRIVATE).getAbsolutePath();
+            String luaMdDir = activity.getDir("lua", Context.MODE_PRIVATE).getAbsolutePath();
+            String luaCpath = activity.getApplicationInfo().nativeLibraryDir + "/lib?.so" + ";" + libDir + "/lib?.so";
+            //luaDir = extDir;
+            String luaLpath = luaMdDir + "/?.lua;" + luaMdDir + "/lua/?.lua;" + luaMdDir + "/?/init.lua;";
+            L.pushJavaObject(Class.class);
+            L.setGlobal("class");
+            L.getGlobal("package");
+            L.pushString(luaLpath);
+            L.setField(-2, "path");
+            L.pushString(luaCpath);
+            L.setField(-2, "cpath");
+            L.pop(1);
+        }
 
     }
 
@@ -163,6 +166,7 @@ public class SimpleLuaState {
 
 
     public void close(){
-        state.close();
+        System.gc();
+        //LuaStateFactory.removeLuaState(state.getPointer());
     }
 }
