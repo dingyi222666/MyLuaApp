@@ -138,6 +138,22 @@ class EditorUtil(private val context: AppCompatActivity) : IEditor {
         }
     }
 
+    fun save(name:String) {
+        listView[name]?.let {
+            writeString(projectPath + File.separator + name, getTextWithView(it))
+        }
+    }
+
+    fun remove(name: String) {
+        listView[name]?.let {
+            if (it==editor) {
+                save(name)
+                viewGroup.removeAllViews()
+            }
+            listView.remove(name)
+        }
+    }
+
     interface OpenFileListener {
         fun openFile(file: String)
     }

@@ -52,7 +52,27 @@ fun getProjectTemplate(context: Activity): Array<CharSequence> {
     }
 
     return result.toTypedArray();
+}
 
+fun getFileTemplateSuffix(name: String):String {
+    if (name.indexOf("Lua")!=-1) {
+        return ".lua"
+    }
+    return ""
+}
+
+fun getFileTemplate(context: Activity):Map<CharSequence,String> {
+    val result= mutableMapOf<CharSequence,String>()
+
+    val jsonString = context.getAssetString("res/template/fileTemplate.json")
+    val jsonArray = JSONArray(jsonString)
+
+    for (i in 0 until jsonArray.length()) {
+
+        result[jsonArray.getJSONObject(i).getString("templateName")] = jsonArray.getJSONObject(i).getString("templateString")
+    }
+
+    return result
 }
 
 fun getProjectInfoPath(projectInfo: ProjectInfo):String {

@@ -26,7 +26,7 @@ function build(path,toPath)
         if path then
             os.rename(path,toPath:gsub("aly$","lua"))
             os.remove(path)
-            os.rename(toPath)
+            os.remove(toPath)
         else
             return errorMsg
         end

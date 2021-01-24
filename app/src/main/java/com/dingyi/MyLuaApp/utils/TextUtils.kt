@@ -1,5 +1,7 @@
 package com.dingyi.MyLuaApp.utils
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.view.KeyEvent
 import android.view.View
@@ -44,6 +46,14 @@ fun showToast(context: Context,resId: Int) {
 
 fun showToast(context: Context,string: String) {
     Toast.makeText(context,string,Toast.LENGTH_LONG).show()
+}
+
+fun Context.copyText(text:String) {
+    val service=this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+    service.setPrimaryClip(ClipData.newPlainText("copyText",text))
+
+
 }
 
 

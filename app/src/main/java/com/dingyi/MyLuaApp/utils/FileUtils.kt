@@ -51,6 +51,8 @@ fun readString(s: String): String {
 }
 
 fun writeString(s: String,string: String) {
+    s.toFile().parentFile.mkdirs()
+    s.toFile().createNewFile()
     s.toFile().writeText(string)
 }
 

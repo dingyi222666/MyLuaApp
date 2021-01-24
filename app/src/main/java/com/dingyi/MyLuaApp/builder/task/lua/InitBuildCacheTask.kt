@@ -40,6 +40,13 @@ class InitBuildCacheTask: LuaTask() {
         }
 
 
+        if (luaBuilderCache.projectIconPath.toFile().isFile) {
+            LuaUtil.copyFile(luaBuilderCache.projectIconPath,luaBuilderCache.cacheResDir+"/drawable/"+luaBuilderCache.projectIconPath.toFile().name)
+        }
+
+        if (luaBuilderCache.projectWelcomePath.toFile().isFile) {
+            LuaUtil.copyFile(luaBuilderCache.projectIconPath,luaBuilderCache.cacheResDir+"/drawable/"+luaBuilderCache.projectWelcomePath.toFile().name)
+        }
 
     }
 }

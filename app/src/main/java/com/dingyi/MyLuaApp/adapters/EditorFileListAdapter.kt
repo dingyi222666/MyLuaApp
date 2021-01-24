@@ -7,18 +7,24 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.dingyi.MyLuaApp.R
+import com.dingyi.MyLuaApp.databinding.DialogEditorFabBinding
 import com.dingyi.MyLuaApp.databinding.DialogFlieListBinding
+import com.dingyi.MyLuaApp.dialogs.FileListDialog
 import com.dingyi.MyLuaApp.utils.EditorUtil
 import com.dingyi.MyLuaApp.utils.getSuffix
 import com.dingyi.MyLuaApp.utils.toFile
 import java.io.File
+import java.io.FileFilter
 
 class EditorFileListAdapter(val context: Context) : BaseAdapter() {
 
     private val data = mutableListOf<File>()
-    private var projectPath = ""
+    var projectPath = ""
     private var nowOpenPath = ""
     var editorUtil:EditorUtil?=null;
+
+    var dialog:FileListDialog?=null;
+
     private fun getImageType(file: File): Int {
         val data = mapOf("lua,java,aly,gradle,xml,py" to R.drawable.ic_twotone_code_24,
                 "default" to R.drawable.ic_twotone_insert_drive_file_24,
@@ -56,12 +62,16 @@ class EditorFileListAdapter(val context: Context) : BaseAdapter() {
     }
 
     fun load(projectPath: String, path: String) {
+        dialog?.binding?.title?.text=path
+
         this.projectPath = projectPath
         nowOpenPath = path
         data.clear();
         notifyDataSetChanged()
-        data.addAll(path.toFile().listFiles()!!)
+        data.addAll(path.toFile().listFiles(FileFilter {!it.isHidden})!!)
+
         data.sortDescending()
+
         if (projectPath!=path) {
             data.add(0,File("..."))
         }

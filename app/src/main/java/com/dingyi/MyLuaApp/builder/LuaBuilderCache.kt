@@ -20,6 +20,8 @@ class LuaBuilderCache(projectInfo: ProjectInfo) : IBuilderCache(projectInfo) {
     val buildUnSignedWithResApkPath ="$buildDir/resources.ap_"
     val buildUnSignedPath="$buildDir/unsigned.apk"
     val buildSignedPath="$buildDir/signed.apk"
+    val projectIconPath= projectInfo.path+"/icon.png"
+    val projectWelcomePath= projectInfo.path+"/welcome.png"
 
     fun getLuaConfigs(): Map<String, LuaValue> {
         val luaJ = LuaJ()

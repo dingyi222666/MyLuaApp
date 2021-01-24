@@ -20,28 +20,10 @@
             android:layout_height="wrap_content"
             android:lines="1"
             android:singleLine="true"
-            android:id="@+id/name"
-            android:hint="@string/projectName" />
+            android:id="@+id/file"
+            android:hint="@string/new_file_hint" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        style="?textInputStyle"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="8dp"
 
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="8dp"
-        app:boxBackgroundColor="?theme_backgroundColor">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/packageName"
-            android:singleLine="true"
-            android:hint="@string/projectPackage" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

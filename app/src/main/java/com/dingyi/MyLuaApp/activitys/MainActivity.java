@@ -2,6 +2,7 @@ package com.dingyi.MyLuaApp.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.animation.LayoutTransition;
 import android.app.ProgressDialog;
@@ -65,6 +66,21 @@ public class MainActivity extends BaseActivity {
 
         startToolBarAnim();
         FileUtilsKt.init();
+
+        initView();
+    }
+
+    private void initView() {
+
+        binding.refresh.setColorSchemeColors(themeUtil.getColorPrimary());
+
+        binding.refresh.setProgressViewEndTarget(true, (int) (getHeight()*0.1));
+
+        binding.refresh.setOnRefreshListener(() -> {
+            ((MainFileListAdapter) binding.mainListview.getAdapter()).clear();
+            new Handler(Looper.getMainLooper()).postDelayed(()->{  initProjectListView(); binding.refresh.setRefreshing(false);},200);
+        });
+
         initProjectListView();
     }
 
@@ -159,8 +175,8 @@ public class MainActivity extends BaseActivity {
         new MyDialog(this, themeUtil)
                 .setTitle(R.string.newProject)
                 .setSingleChoiceItems(projectTemplateNames, 0, (dialog, which) -> nowChooseProject.set(which))
-                .setPositiveButton(android.R.string.yes, (w, s) -> showCreateProjectDialog(projectTemplateNames[nowChooseProject.get()].toString(),nowChooseProject.get()))
-                .setNeutralButton(android.R.string.no,null)
+                .setPositiveButton(android.R.string.ok, (w, s) -> showCreateProjectDialog(projectTemplateNames[nowChooseProject.get()].toString(),nowChooseProject.get()))
+                .setNeutralButton(android.R.string.cancel,null)
                 .show();
 
 
@@ -175,7 +191,7 @@ public class MainActivity extends BaseActivity {
         AlertDialog newProject=new MyDialog(this,themeUtil)
                 .setTitle(getString(R.string.newProjectSub,name))
                 .setView(binding.getRoot())
-                .setPositiveButton(android.R.string.yes,(a,which)-> {
+                .setPositiveButton(android.R.string.ok,(a,which)-> {
                     dialog.show();
                     new Thread(()->{
                        ProjectUtilKt.createProject(MainActivity.this,choose,FileUtilsKt.getUsePaths().get("projectPath")+"/"+
@@ -256,7 +272,7 @@ public class MainActivity extends BaseActivity {
                 new MyDialog(this, themeUtil)
                         .setTitle(this.getString(R.string.about))
                         .setMessage(FileUtilsKt.getAssetString(this, "res/txt/updateLog.txt"))
-                        .setPositiveButton(android.R.string.yes, null)
+                        .setPositiveButton(android.R.string.ok, null)
                         .show();
                 break;
             case R.id.main_action_menu_newProject:

@@ -39,6 +39,7 @@
     </style>
     <!--Base PopMenu Style -->
     <style name="BasePopMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="elevation">1dp</item>
         <item name="android:popupBackground">@drawable/popup_menu_background</item>
     </style>
     <!--Base ToolBar Style -->
