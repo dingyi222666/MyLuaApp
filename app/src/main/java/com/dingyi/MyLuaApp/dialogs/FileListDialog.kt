@@ -67,6 +67,7 @@ class FileListDialog {
                         val path=(this@FileListDialog.binding?.title?.text?.toString()!! + "/" + binding.file.text.toString()+getFileTemplateSuffix(name.toString()))
                         map[name]?.let { writeString(path, it) }
                         this@FileListDialog.util?.openFile(path)
+                        refreshList()
                         showSnackBar((activity as EditorActivity).binding.root,R.string.create_file_success)
                     }
                     .setNeutralButton(android.R.string.cancel, null)
@@ -112,7 +113,10 @@ class FileListDialog {
                     .setView(binding!!.root)
                     .setPositiveButton(android.R.string.ok) { a: DialogInterface?, which: Int ->
                         (this@FileListDialog.binding?.title?.text?.toString()!! + "/" + binding.folder.text.toString()).toFile().mkdirs()
-                         refreshList()
+                        this@FileListDialog.binding?.let {
+                            val adapter = it.list.adapter as EditorFileListAdapter
+                            adapter.load(adapter.projectPath,(this@FileListDialog.binding?.title?.text?.toString()!! + "/" + binding.folder.text.toString()))
+                        }
                     }
                     .show()
 
