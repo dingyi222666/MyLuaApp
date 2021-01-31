@@ -57,19 +57,25 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(LayoutInflater.from(this));
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+
         setSupportActionBar(binding.toolbar);
+
         setContentView(binding.getRoot());
-        getSupportActionBar().setTitle(R.string.app_name);
-        getSupportActionBar().setSubtitle("test");//
 
         startToolBarAnim();
+
         FileUtilsKt.init();
 
         initView();
     }
 
     private void initView() {
+
+        getSupportActionBar().setTitle(R.string.app_name);
+        getSupportActionBar().setSubtitle("test");//
+
 
         binding.refresh.setColorSchemeColors(themeUtil.getColorPrimary());
 
@@ -88,9 +94,9 @@ public class MainActivity extends BaseActivity {
             TextView titleView = (TextView) ReflectionUtilsKt.getPrivateField(binding.toolbar, "mTitleTextView");
             TextView subTitleView = (TextView) ReflectionUtilsKt.getPrivateField(binding.toolbar, "mSubtitleTextView");
             subTitleView.setVisibility(View.GONE);
-            LayoutTransition transition = new LayoutTransition();
-            transition.enableTransitionType(LayoutTransition.CHANGING);
-            ((ViewGroup) titleView.getParent()).setLayoutTransition(transition);
+
+            ((ViewGroup) titleView.getParent()).setLayoutTransition(ViewUtilsKt.getLayoutTransition());
+
             setSubTitlePoems(subTitleView);
         } catch (Exception e) {
             LogUtilsKt.e(e.toString());

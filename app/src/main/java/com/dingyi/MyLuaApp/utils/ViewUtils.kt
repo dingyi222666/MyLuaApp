@@ -1,5 +1,6 @@
 package com.dingyi.MyLuaApp.utils
 
+import android.animation.LayoutTransition
 import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
@@ -33,6 +34,12 @@ fun radius(v: View, context: BaseActivity, int: Int) {
     v.setBackgroundDrawable(drawable)
 }
 
+fun getLayoutTransition(): LayoutTransition {
+    val transition = LayoutTransition()
+    transition.enableTransitionType(LayoutTransition.CHANGING)
+    return transition
+}
+
 fun createProgressBarDialog(context: BaseActivity, title: String, message: String):ProgressDialog {
     val dialog = ProgressDialog(context)
 
@@ -52,7 +59,7 @@ fun createProgressBarDialog(context: BaseActivity, title: String, message: Strin
             it.setElevation(0f)//阴影
         }
         it.decorView.setBackgroundColor(0)
-        radius((it.decorView as ViewGroup).getChildAt(0),context,8)
+        radius((it.decorView as ViewGroup).getChildAt(0), context, 8)
 
     }
     //dialog.show()

@@ -57,6 +57,13 @@ public class EditorActivity extends BaseActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
 
+
+
+
+    }
+
+    private void initView() {
+
         info = getIntent().getParcelableExtra("info");
 
         util = new EditorHelper(this);
@@ -64,17 +71,18 @@ public class EditorActivity extends BaseActivity {
         util.initParentView(binding.parent).openProject(info);
 
         pluginUtil=new PluginHelper(this);
-        LayoutTransition transition = new LayoutTransition();
-        transition.enableTransitionType(LayoutTransition.CHANGING);
-        binding.editorParent.setLayoutTransition(transition);
+
+
+        binding.editorParent.setLayoutTransition(ViewUtilsKt.getLayoutTransition());
+
         binding.symbolView.setUtil(util);
+
         binding.horizontalView.setHorizontalScrollBarEnabled(false);
+
         getSupportActionBar().setTitle(info.getName());
         getSupportActionBar().setSubtitle(util.getNowOpenPathName());
+
         startToolBarAnim();
-
-
-
 
     }
 

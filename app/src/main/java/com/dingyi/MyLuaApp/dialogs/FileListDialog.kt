@@ -110,7 +110,7 @@ class FileListDialog {
 
             val newProject = MyDialog(this, themeUtil)
                     .setTitle(getString(R.string.new_dir))
-                    .setView(binding!!.root)
+                    .setView(binding.root)
                     .setPositiveButton(android.R.string.ok) { a: DialogInterface?, which: Int ->
                         (this@FileListDialog.binding?.title?.text?.toString()!! + "/" + binding.folder.text.toString()).toFile().mkdirs()
                         this@FileListDialog.binding?.let {
