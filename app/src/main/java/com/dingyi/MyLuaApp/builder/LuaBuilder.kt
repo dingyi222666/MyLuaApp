@@ -1,6 +1,6 @@
 package com.dingyi.MyLuaApp.builder
 
-import com.dingyi.MyLuaApp.activitys.BaseActivity
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.builder.task.lua.CompileLuaTask
 import com.dingyi.MyLuaApp.builder.task.lua.CreateApkTask
@@ -8,9 +8,7 @@ import com.dingyi.MyLuaApp.builder.task.lua.InitBuildCacheTask
 import com.dingyi.MyLuaApp.builder.task.lua.MergeAXMLTask
 import com.dingyi.MyLuaApp.utils.e
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlin.concurrent.thread
 
 class LuaBuilder : IBuilder {
 

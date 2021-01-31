@@ -3,17 +3,17 @@ package com.dingyi.MyLuaApp.dialogs
 import android.content.DialogInterface
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import com.androlua.LuaUtil
 import com.dingyi.MyLuaApp.R
-import com.dingyi.MyLuaApp.activitys.BaseActivity
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.activitys.EditorActivity
 import com.dingyi.MyLuaApp.adapters.EditorFileListAdapter
 import com.dingyi.MyLuaApp.databinding.ActivityEditorDialogNewFileBinding
 import com.dingyi.MyLuaApp.databinding.ActivityEditorDialogNewFolderBinding
 import com.dingyi.MyLuaApp.databinding.DialogEditorFabBinding
+import com.dingyi.MyLuaApp.helper.EditorHelper
 import com.dingyi.MyLuaApp.impl.TextWatcherImpl
 import com.dingyi.MyLuaApp.utils.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -24,9 +24,9 @@ class FileListDialog {
     private var bottomSheetDialog: BottomDialog? = null;
     private var context: BaseActivity? = null;
     var binding: DialogEditorFabBinding? = null;
-    private var util: EditorUtil? = null;
+    private var util: EditorHelper? = null;
 
-    fun init(context: BaseActivity, util: EditorUtil): FileListDialog {
+    fun init(context: BaseActivity, util: EditorHelper): FileListDialog {
         if (bottomSheetDialog == null) {
             bottomSheetDialog = BottomDialog(context)
             binding = DialogEditorFabBinding.inflate(LayoutInflater.from(context))
@@ -57,7 +57,7 @@ class FileListDialog {
 
     }
 
-    private fun showChooseTemplateDialog(activity: BaseActivity,name:CharSequence,map: Map<CharSequence,String>) {
+    private fun showChooseTemplateDialog(activity: BaseActivity, name:CharSequence, map: Map<CharSequence,String>) {
         with(activity) {
             val binding=ActivityEditorDialogNewFileBinding.inflate(LayoutInflater.from(this))
             val newProject = MyDialog(this, themeUtil)

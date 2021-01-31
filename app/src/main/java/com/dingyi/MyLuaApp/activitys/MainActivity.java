@@ -2,7 +2,6 @@ package com.dingyi.MyLuaApp.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.animation.LayoutTransition;
 import android.app.ProgressDialog;
@@ -21,10 +20,10 @@ import android.widget.TextView;
 
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.adapters.MainFileListAdapter;
+import com.dingyi.MyLuaApp.base.BaseActivity;
 import com.dingyi.MyLuaApp.bean.ProjectInfo;
 import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
 import com.dingyi.MyLuaApp.databinding.ActivityMainDialogNewProjectBinding;
-import com.dingyi.MyLuaApp.databinding.PluginPermisssionLayoutBinding;
 import com.dingyi.MyLuaApp.dialogs.MyDialog;
 import com.dingyi.MyLuaApp.impl.TextWatcherImpl;
 import com.dingyi.MyLuaApp.utils.CallBack;
@@ -178,7 +177,6 @@ public class MainActivity extends BaseActivity {
                 .setPositiveButton(android.R.string.ok, (w, s) -> showCreateProjectDialog(projectTemplateNames[nowChooseProject.get()].toString(),nowChooseProject.get()))
                 .setNeutralButton(android.R.string.cancel,null)
                 .show();
-
 
     }
 

@@ -6,11 +6,9 @@ import android.graphics.drawable.GradientDrawable
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.core.view.children
 import com.dingyi.MyLuaApp.R
-import com.dingyi.MyLuaApp.activitys.BaseActivity
-import com.dingyi.MyLuaApp.dialogs.MyDialog
+import com.dingyi.MyLuaApp.base.BaseActivity
 
 fun foreachSetMenuIconColor(menu: Menu, color: Int) {
     val array = menu.children
@@ -27,13 +25,12 @@ fun Context.dp2px(int: Int):Int {
     return (int*scale+0.5f).toInt()
 }
 
-fun radius(v: View,context: BaseActivity,int: Int) {
+fun radius(v: View, context: BaseActivity, int: Int) {
     val drawable=GradientDrawable()
     drawable.shape=GradientDrawable.RECTANGLE
     drawable.setColor(context.themeUtil.colorBackgroundColor)
     drawable.cornerRadius=context.dp2px(int).toFloat()
     v.setBackgroundDrawable(drawable)
-
 }
 
 fun createProgressBarDialog(context: BaseActivity, title: String, message: String):ProgressDialog {

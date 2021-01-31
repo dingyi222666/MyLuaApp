@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.dingyi.MyLuaApp.R
-import com.dingyi.MyLuaApp.databinding.DialogEditorFabBinding
 import com.dingyi.MyLuaApp.databinding.DialogFlieListBinding
 import com.dingyi.MyLuaApp.dialogs.FileListDialog
-import com.dingyi.MyLuaApp.utils.EditorUtil
+import com.dingyi.MyLuaApp.helper.EditorHelper
 import com.dingyi.MyLuaApp.utils.getSuffix
 import com.dingyi.MyLuaApp.utils.toFile
 import java.io.File
@@ -21,7 +20,7 @@ class EditorFileListAdapter(val context: Context) : BaseAdapter() {
     private val data = mutableListOf<File>()
     var projectPath = ""
     private var nowOpenPath = ""
-    var editorUtil:EditorUtil?=null;
+    var editorUtil: EditorHelper?=null;
 
     var dialog:FileListDialog?=null;
 

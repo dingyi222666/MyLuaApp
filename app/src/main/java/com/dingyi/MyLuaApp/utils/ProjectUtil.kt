@@ -7,7 +7,7 @@ import android.net.Uri
 import com.androlua.LuaActivity
 import com.androlua.LuaUtil
 import com.dingyi.MyLuaApp.R
-import com.dingyi.MyLuaApp.activitys.BaseActivity
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.builder.LuaBuilder
 import com.dingyi.MyLuaApp.builder.ProgressBarBuilderOut

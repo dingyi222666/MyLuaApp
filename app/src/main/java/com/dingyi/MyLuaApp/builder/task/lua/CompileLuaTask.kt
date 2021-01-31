@@ -1,15 +1,11 @@
 package com.dingyi.MyLuaApp.builder.task.lua
 
-import android.util.Log
-import com.dingyi.MyLuaApp.activitys.BaseActivity
 import com.dingyi.MyLuaApp.builder.BuilderException
 import com.dingyi.MyLuaApp.builder.LuaBuilderCache
 import com.dingyi.MyLuaApp.builder.task.LuaTask
-import com.dingyi.MyLuaApp.utils.e
 import com.dingyi.MyLuaApp.utils.toFile
 import com.luajava.SimpleLuaState
-import org.luaj.vm2.LuaTable
-import java.io.File
+
 class CompileLuaTask: LuaTask() {
 
     private var state:SimpleLuaState? = null;

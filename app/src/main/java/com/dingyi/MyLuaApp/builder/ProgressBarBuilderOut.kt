@@ -3,7 +3,7 @@ package com.dingyi.MyLuaApp.builder
 import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.dingyi.MyLuaApp.R
-import com.dingyi.MyLuaApp.activitys.BaseActivity
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.dialogs.MyDialog
 import com.dingyi.MyLuaApp.utils.createProgressBarDialog
 

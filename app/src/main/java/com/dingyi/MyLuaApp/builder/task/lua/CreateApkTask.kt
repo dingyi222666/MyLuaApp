@@ -3,11 +3,10 @@ package com.dingyi.MyLuaApp.builder.task.lua
 import apksigner.Signer
 import com.android.sdklib.build.ApkBuilder
 import com.androlua.LuaUtil
-import com.dingyi.MyLuaApp.activitys.BaseActivity
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.builder.BuilderException
 import com.dingyi.MyLuaApp.builder.LuaBuilderCache
 import com.dingyi.MyLuaApp.builder.task.LuaTask
-import com.dingyi.MyLuaApp.utils.e
 import com.dingyi.MyLuaApp.utils.toFile
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream

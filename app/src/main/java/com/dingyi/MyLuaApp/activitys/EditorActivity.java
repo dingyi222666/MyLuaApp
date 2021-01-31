@@ -20,20 +20,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dingyi.MyLuaApp.R;
+import com.dingyi.MyLuaApp.base.BaseActivity;
 import com.dingyi.MyLuaApp.bean.ProjectInfo;
-import com.dingyi.MyLuaApp.builder.LuaBuilder;
-import com.dingyi.MyLuaApp.builder.LuaBuilderCache;
-import com.dingyi.MyLuaApp.builder.ProgressBarBuilderOut;
-import com.dingyi.MyLuaApp.builder.task.ITask;
-import com.dingyi.MyLuaApp.builder.task.lua.CompileLuaTask;
-import com.dingyi.MyLuaApp.builder.task.lua.CreateApkTask;
-import com.dingyi.MyLuaApp.builder.task.lua.InitBuildCacheTask;
-import com.dingyi.MyLuaApp.builder.task.lua.MergeAXMLTask;
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
 import com.dingyi.MyLuaApp.dialogs.FileListDialog;
-import com.dingyi.MyLuaApp.utils.EditorUtil;
+import com.dingyi.MyLuaApp.helper.EditorHelper;
 import com.dingyi.MyLuaApp.utils.LogUtilsKt;
-import com.dingyi.MyLuaApp.utils.PluginUtil;
+import com.dingyi.MyLuaApp.helper.PluginHelper;
 import com.dingyi.MyLuaApp.utils.ProjectUtilKt;
 import com.dingyi.MyLuaApp.utils.ReflectionUtilsKt;
 import com.dingyi.MyLuaApp.utils.TextUtilsKt;
@@ -47,11 +40,11 @@ public class EditorActivity extends BaseActivity {
 
     public ActivityEditorBinding binding;
 
-    EditorUtil util;
+    EditorHelper util;
 
     ProjectInfo info;
 
-    PluginUtil pluginUtil;
+    PluginHelper pluginUtil;
 
     public FileListDialog dialog = new FileListDialog();
 
@@ -66,11 +59,11 @@ public class EditorActivity extends BaseActivity {
 
         info = getIntent().getParcelableExtra("info");
 
-        util = new EditorUtil(this);
+        util = new EditorHelper(this);
         initListener();
         util.initParentView(binding.parent).openProject(info);
 
-        pluginUtil=new PluginUtil(this);
+        pluginUtil=new PluginHelper(this);
         LayoutTransition transition = new LayoutTransition();
         transition.enableTransitionType(LayoutTransition.CHANGING);
         binding.editorParent.setLayoutTransition(transition);

@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.utils
+package com.dingyi.MyLuaApp.helper
 
 import android.view.View
 import android.widget.LinearLayout
@@ -8,9 +8,10 @@ import com.androlua.MyLuaEditor
 import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.activitys.EditorActivity
 import com.dingyi.MyLuaApp.bean.ProjectInfo
+import com.dingyi.MyLuaApp.utils.*
 import java.io.File
 
-class EditorUtil(private val context: AppCompatActivity) : IEditor {
+class EditorHelper(private val context: AppCompatActivity) : IEditor {
     private lateinit var editor: View;
     private lateinit var viewGroup: LinearLayout
     lateinit var projectPath: String;
@@ -19,7 +20,7 @@ class EditorUtil(private val context: AppCompatActivity) : IEditor {
     private var openFileListenerList = mutableListOf<OpenFileListener>();
 
 
-    fun initParentView(viewGroup: LinearLayout): EditorUtil {
+    fun initParentView(viewGroup: LinearLayout): EditorHelper {
         this.viewGroup = viewGroup
         return this;
     }
@@ -41,7 +42,7 @@ class EditorUtil(private val context: AppCompatActivity) : IEditor {
         }
     }
 
-    fun openProject(projectPath: String): EditorUtil {
+    fun openProject(projectPath: String): EditorHelper {
         this.projectPath = projectPath
 
         val defaultPath = getDefaultPath(projectPath)
@@ -52,7 +53,7 @@ class EditorUtil(private val context: AppCompatActivity) : IEditor {
         return this
     }
 
-    fun openProject(projectInfo: ProjectInfo): EditorUtil {
+    fun openProject(projectInfo: ProjectInfo): EditorHelper {
         projectInfo.path?.let { this.openProject(it) }
         return this;
     }

@@ -2,7 +2,6 @@ package com.dingyi.MyLuaApp.utils
 
 import android.app.Activity
 import android.os.Environment
-import com.dingyi.MyLuaApp.activitys.BaseActivity
 import java.io.File
 import java.io.InputStream
 

@@ -4,34 +4,26 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.androlua.LuaUtil;
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.adapters.BaseViewPager2Adapter;
 import com.dingyi.MyLuaApp.adapters.WelcomePermissionAdapter;
-import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
+import com.dingyi.MyLuaApp.base.BaseActivity;
 import com.dingyi.MyLuaApp.databinding.ActivityWelcomeBinding;
 import com.dingyi.MyLuaApp.databinding.ActivityWelcomePermissionBinding;
 import com.dingyi.MyLuaApp.databinding.ActivityWelcomePrivacyBinding;
 import com.dingyi.MyLuaApp.databinding.ActivityWelcomeReadyassetsBinding;
-import com.dingyi.MyLuaApp.utils.FileUtilsKt;
 import com.dingyi.MyLuaApp.utils.LogUtilsKt;
 import com.dingyi.MyLuaApp.utils.SharedPreferencesUtilsKt;
 import com.dingyi.MyLuaApp.utils.TextUtilsKt;
@@ -54,8 +46,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import kotlin.Function;
-import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
 
 public class WelcomeActivity extends BaseActivity {

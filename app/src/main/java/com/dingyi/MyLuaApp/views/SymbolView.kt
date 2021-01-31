@@ -8,12 +8,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.dingyi.MyLuaApp.R
 
-import com.dingyi.MyLuaApp.utils.EditorUtil
+import com.dingyi.MyLuaApp.helper.EditorHelper
 import com.dingyi.MyLuaApp.utils.get
 
 class SymbolView(context: Context,attributeSet: AttributeSet): LinearLayout(context,attributeSet) {
 
-    lateinit var util:EditorUtil;
+    lateinit var util: EditorHelper;
 
     init {
         val symbols=get(context,"symbol","symbol","( ) [ ] { } = \" : . , _ + - * / \\ % # ^ \$ ? & | < > ~ ; '\n")?.split(" ");

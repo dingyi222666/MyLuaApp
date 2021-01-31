@@ -1,6 +1,6 @@
 package com.dingyi.MyLuaApp.builder
 
-import com.dingyi.MyLuaApp.activitys.BaseActivity
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 
 interface IBuilder {

@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.utils
+package com.dingyi.MyLuaApp.theme
 
 import android.annotation.SuppressLint
 import android.app.Activity

@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.activitys;
+package com.dingyi.MyLuaApp.base;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.dingyi.MyLuaApp.utils.ThemeUtil;
-
-import org.jetbrains.annotations.NotNull;
+import com.dingyi.MyLuaApp.theme.ThemeUtil;
 
 import java.io.File;
 

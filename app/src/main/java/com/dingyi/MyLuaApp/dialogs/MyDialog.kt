@@ -3,7 +3,7 @@ package com.dingyi.MyLuaApp.dialogs
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import com.dingyi.MyLuaApp.R
-import com.dingyi.MyLuaApp.utils.ThemeUtil
+import com.dingyi.MyLuaApp.theme.ThemeUtil
 
 class MyDialog(activity: Activity) : AlertDialog.Builder(activity) {
     private var themeBackground=0xffffffff

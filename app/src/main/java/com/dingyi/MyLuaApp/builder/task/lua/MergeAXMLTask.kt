@@ -3,21 +3,14 @@ package com.dingyi.MyLuaApp.builder.task.lua
 
 import cn.wjdiankong.main.ParserChunkUtils
 import cn.wjdiankong.main.XmlEditor
-import com.androlua.LuaUtil
-import com.dingyi.MyLuaApp.activitys.BaseActivity
 import com.dingyi.MyLuaApp.builder.LuaBuilderCache
 import com.dingyi.MyLuaApp.builder.task.LuaTask
-import com.dingyi.MyLuaApp.utils.e
 import com.dingyi.MyLuaApp.utils.readBytes
-import com.dingyi.MyLuaApp.utils.toFile
 import com.dingyi.MyLuaApp.utils.writeBytes
 import com.dingyi.luaj.LuaJ
-import com.luajava.SimpleLuaState
 import mao.res.AXmlDecoder
-import org.luaj.vm2.LuaValue
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
-import java.util.*
 
 class MergeAXMLTask: LuaTask() {
     override fun doAction(vararg arg: Any) {

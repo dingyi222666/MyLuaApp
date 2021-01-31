@@ -1,15 +1,15 @@
-package com.dingyi.MyLuaApp.utils
+package com.dingyi.MyLuaApp.helper
 
 import android.content.Intent
 import android.net.Uri
 import com.androlua.LuaActivity
-import com.dingyi.MyLuaApp.activitys.BaseActivity
+import com.dingyi.MyLuaApp.base.BaseActivity
+import com.dingyi.MyLuaApp.utils.forEachDir
 import com.dingyi.luaj.LuaJ
-import com.luajava.LuaJLuaState
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 
-class PluginUtil(val activity: BaseActivity) {
+class PluginHelper(val activity: BaseActivity) {
 
     private val luaJ = LuaJ();
 

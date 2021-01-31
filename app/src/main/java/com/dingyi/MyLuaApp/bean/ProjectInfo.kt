@@ -16,7 +16,6 @@ data class ProjectInfo(val path: String?, val type:Int, val name: String?, val v
 
     }
 
-
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(path)
         parcel.writeInt(type)

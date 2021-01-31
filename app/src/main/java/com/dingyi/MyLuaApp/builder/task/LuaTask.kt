@@ -1,13 +1,13 @@
 package com.dingyi.MyLuaApp.builder.task
 
-import com.dingyi.MyLuaApp.activitys.BaseActivity
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.builder.IBuilderOut
 
 abstract class LuaTask:ITask {
 
     var builderOut:IBuilderOut?=null;
 
-    var activity:BaseActivity?=null;
+    var activity: BaseActivity?=null;
 
     //The Task Is Use To Compile Lua Task
     override fun doAction(vararg arg: Any) {

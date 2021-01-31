@@ -1,8 +1,6 @@
 package com.dingyi.MyLuaApp.builder.task.lua
 
-import com.androlua.LuaApplication
 import com.androlua.LuaUtil
-import com.dingyi.MyLuaApp.activitys.BaseActivity
 import com.dingyi.MyLuaApp.builder.LuaBuilderCache
 import com.dingyi.MyLuaApp.builder.task.LuaTask
 import com.dingyi.MyLuaApp.utils.toFile
