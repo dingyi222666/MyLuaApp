@@ -8,6 +8,7 @@ import com.androlua.LuaActivity
 import com.androlua.LuaUtil
 import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.base.BaseActivity
+import com.dingyi.MyLuaApp.base.BaseViewManager
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.builder.LuaBuilder
 import com.dingyi.MyLuaApp.builder.ProgressBarBuilderOut
@@ -55,8 +56,11 @@ fun getProjectTemplate(context: Activity): Array<CharSequence> {
 }
 
 fun getFileTemplateSuffix(name: String):String {
-    if (name.indexOf("Lua")!=-1) {
-        return ".lua"
+    val map=mapOf(".aly" to "Lua(.*)Layout",".lua" to "Lua(.*)$")
+    map.entries.forEach {
+        if (name.matches(it.value.toRegex())) {
+            return it.key
+        }
     }
     return ""
 }
@@ -106,7 +110,7 @@ fun createProject(context: Activity, i: Int, toPath: String, name: String, packa
 
 }
 
-fun buildLuaProject(info: ProjectInfo,activity: BaseActivity) {
+fun buildLuaProject(info: ProjectInfo,activity: BaseActivity<*>) {
     with(activity) {
         val out = ProgressBarBuilderOut()
                 .init(this)
@@ -123,7 +127,7 @@ fun buildLuaProject(info: ProjectInfo,activity: BaseActivity) {
     }
 }
 
-fun build(info: ProjectInfo,activity: BaseActivity) {
+fun build(info: ProjectInfo,activity: BaseActivity<*>) {
     when (info.type) {
         LUA_PROJECT -> buildLuaProject(info,activity)
     }

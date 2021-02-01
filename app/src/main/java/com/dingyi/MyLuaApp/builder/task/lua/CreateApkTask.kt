@@ -53,7 +53,7 @@ class CreateApkTask:LuaTask() {
 
     }
 
-    private fun signApk(luaBuilderCache: LuaBuilderCache,activity: BaseActivity) {
+    private fun signApk(luaBuilderCache: LuaBuilderCache,activity: BaseActivity<*>) {
         sendMessage("sign apk")
         Signer.sign(luaBuilderCache.buildUnSignedPath,luaBuilderCache.buildSignedPath)
         sendMessage("install apk")

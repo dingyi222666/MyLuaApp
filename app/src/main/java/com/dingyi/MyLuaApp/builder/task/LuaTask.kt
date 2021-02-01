@@ -7,14 +7,14 @@ abstract class LuaTask:ITask {
 
     var builderOut:IBuilderOut?=null;
 
-    var activity: BaseActivity?=null;
+    var activity: BaseActivity<*>?=null;
 
     //The Task Is Use To Compile Lua Task
     override fun doAction(vararg arg: Any) {
         //Task action in it
     }
 
-    override fun initActivity(activity: BaseActivity): LuaTask {
+    override fun initActivity(activity: BaseActivity<*>): LuaTask {
         this.activity=activity;
         return this
     }

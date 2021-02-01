@@ -26,7 +26,7 @@ fun Context.dp2px(int: Int):Int {
     return (int*scale+0.5f).toInt()
 }
 
-fun radius(v: View, context: BaseActivity, int: Int) {
+fun radius(v: View, context: BaseActivity<*>, int: Int) {
     val drawable=GradientDrawable()
     drawable.shape=GradientDrawable.RECTANGLE
     drawable.setColor(context.themeUtil.colorBackgroundColor)
@@ -40,7 +40,7 @@ fun getLayoutTransition(): LayoutTransition {
     return transition
 }
 
-fun createProgressBarDialog(context: BaseActivity, title: String, message: String):ProgressDialog {
+fun createProgressBarDialog(context: BaseActivity<*>, title: String, message: String):ProgressDialog {
     val dialog = ProgressDialog(context)
 
     dialog.setTitle(title)

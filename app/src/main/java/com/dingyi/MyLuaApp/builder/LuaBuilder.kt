@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class LuaBuilder : IBuilder {
 
-    private var activity: BaseActivity? = null;
+    private var activity: BaseActivity<*>? = null;
 
     private var iBuilderOut: IBuilderOut? = null;
 
@@ -24,7 +24,7 @@ class LuaBuilder : IBuilder {
         return "LuaBuilder"
     }
 
-    override fun initActivity(activity: BaseActivity): LuaBuilder {
+    override fun initActivity(activity: BaseActivity<*>): LuaBuilder {
         this.activity = activity;
         return this
     }

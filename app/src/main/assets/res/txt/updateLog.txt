@@ -1,5 +1,9 @@
 MyLuaApp by dingyi
-当前版本 0.0.12(alpha)
+当前版本 0.0.13(alpha)
+
+0.0.13 alpha
+修复 一些小bug
+优化 不知道优化了啥
 
 0.0.12 alpha
 新增 lua打包

@@ -64,11 +64,13 @@ public class MainActivity extends BaseActivity {
 
         setContentView(binding.getRoot());
 
-        startToolBarAnim();
+
 
         FileUtilsKt.init();
 
         initView();
+
+        startToolBarAnim();
     }
 
     private void initView() {
@@ -87,6 +89,7 @@ public class MainActivity extends BaseActivity {
         });
 
         initProjectListView();
+
     }
 
     private void startToolBarAnim() {

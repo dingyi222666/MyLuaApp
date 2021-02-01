@@ -21,10 +21,12 @@ import android.widget.TextView;
 
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.base.BaseActivity;
+import com.dingyi.MyLuaApp.base.BaseViewManager;
 import com.dingyi.MyLuaApp.bean.ProjectInfo;
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
 import com.dingyi.MyLuaApp.dialogs.FileListDialog;
 import com.dingyi.MyLuaApp.helper.EditorHelper;
+import com.dingyi.MyLuaApp.manager.activity.EditorViewManager;
 import com.dingyi.MyLuaApp.utils.LogUtilsKt;
 import com.dingyi.MyLuaApp.helper.PluginHelper;
 import com.dingyi.MyLuaApp.utils.ProjectUtilKt;
@@ -36,15 +38,15 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class EditorActivity extends BaseActivity {
+public class EditorActivity extends BaseActivity<EditorViewManager> {
 
     public ActivityEditorBinding binding;
 
-    EditorHelper util;
+    public EditorHelper util;
 
-    ProjectInfo info;
+    public ProjectInfo info;
 
-    PluginHelper pluginUtil;
+    public PluginHelper pluginUtil;
 
     public FileListDialog dialog = new FileListDialog();
 
@@ -57,7 +59,11 @@ public class EditorActivity extends BaseActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
 
+        initView();
+        initListener();
 
+
+        setViewManager(new EditorViewManager(this,binding));
 
 
     }
@@ -87,8 +93,6 @@ public class EditorActivity extends BaseActivity {
     }
 
     private void initTableLayoutLongClick() {
-
-
         for (int i=0;i<=binding.tabLayout.getTabCount();i++) {
             int finalI = i;
             if (binding.tabLayout.getTabAt(i)!=null) {
@@ -100,27 +104,12 @@ public class EditorActivity extends BaseActivity {
         }
     }
 
-    private void deleteTab(TabLayout.Tab tab) {
-        String text=binding.tabLayout.getTabAt(binding.tabLayout.getSelectedTabPosition()).getText().toString();
-        int pos=binding.tabLayout.getSelectedTabPosition(); //这里需要对pos计算下
 
-        if (tab.getPosition()<pos) { //不需要等于判断 等于就不会走select的if了
-            pos=pos-1;
-        }
-
-        binding.tabLayout.removeTab(tab);
-
-        if (binding.tabLayout.getTabAt(binding.tabLayout.getSelectedTabPosition()).getText().toString().equals(text)) {
-            binding.tabLayout.getTabAt(pos).select();//如果删除的不是选择的标签 就重新选择已经选择的标签
-        }
-
-        if (binding.tabLayout.getTabCount()==0) {
-            util.openFile(ProjectUtilKt.getDefaultPath(info.getPath()));
-        }
-        TextUtilsKt.showSnackBar(binding.getRoot(), getString(R.string.delete_tag));
-    }
 
     private void longClickTableLayout(TabLayout.Tab tab) {
+        if (tab == null) {
+            return;
+        }
         PopupMenu menu=new PopupMenu(this,tab.view, Gravity.NO_GRAVITY,R.attr.popupMenuStyle,R.style.BasePopMenuStyle);
 
         menu.getMenuInflater().inflate(R.menu.editor_tab_menu,menu.getMenu());
@@ -138,8 +127,10 @@ public class EditorActivity extends BaseActivity {
                         TextUtilsKt.showSnackBar(binding.getRoot(),R.string.copy_succeesful);
                         break;
                     case R.id.close:
+
                         util.remove(tab.getText().toString());
-                        deleteTab(tab);
+                        getViewManager().deleteTab(tab);
+                        initTableLayoutLongClick();
                         break;
                 }
                 return false;

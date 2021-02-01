@@ -24,6 +24,7 @@ import com.dingyi.MyLuaApp.databinding.ActivityWelcomeBinding;
 import com.dingyi.MyLuaApp.databinding.ActivityWelcomePermissionBinding;
 import com.dingyi.MyLuaApp.databinding.ActivityWelcomePrivacyBinding;
 import com.dingyi.MyLuaApp.databinding.ActivityWelcomeReadyassetsBinding;
+
 import com.dingyi.MyLuaApp.utils.LogUtilsKt;
 import com.dingyi.MyLuaApp.utils.SharedPreferencesUtilsKt;
 import com.dingyi.MyLuaApp.utils.TextUtilsKt;
@@ -73,16 +74,15 @@ public class WelcomeActivity extends BaseActivity {
         String isStart=SharedPreferencesUtilsKt.get(this, "isStart", "");
         String versionName=SharedPreferencesUtilsKt.get(this, "versionName", "");
         try {
-            if (isStart.equals("true") && !versionName.equals(getPackageManager().getPackageInfo(getPackageName(), 0).versionName)) {
+            if (isStart.equals("true") && versionName.equals(getPackageManager().getPackageInfo(getPackageName(), 0).versionName)) {
+                startMain();
+            }else if (isStart.equals("true") && !versionName.equals(getPackageManager().getPackageInfo(getPackageName(), 0).versionName)) {
                 initView();
                 initClick();
                 fastUpdate();
                 return;
-            } else if (isStart.equals("true") && versionName.equals(getPackageManager().getPackageInfo(getPackageName(), 0).versionName)) {
-                startMain();
             }
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
             startMain();
         }
         initView();
@@ -96,11 +96,15 @@ public class WelcomeActivity extends BaseActivity {
         binding.previousBotton.setVisibility(View.GONE);//隐藏上一步
         binding.nextBotton.setText(R.string.complete);
         binding.nextBotton.setOnClickListener(v -> startMain());//点击下一步直接启动
+
     }
 
 
     private void initView() {
-        binding = ActivityWelcomeBinding.inflate(LayoutInflater.from(this));
+
+
+
+        binding = ActivityWelcomeBinding.inflate(getLayoutInflater());
 
         setSupportActionBar(binding.toolbar);
 
@@ -108,6 +112,7 @@ public class WelcomeActivity extends BaseActivity {
         binding.collapsingToolbar.setCollapsedTitleTextColor(themeUtil.getColorPrimary());
 
         setContentView(binding.getRoot());
+
 
         binding.scrollView.setFillViewport(true);
 

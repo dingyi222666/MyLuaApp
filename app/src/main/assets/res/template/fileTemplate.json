@@ -5,7 +5,7 @@
   },
   {
     "templateName":"Lua Module",
-    "templateString": "require \"import\"\n\nlocal base={}\n\nbase.test=function(a,b)\n  return a+b\nend\n\nlocal function test(a.b)\n  return a*b\nedn\n\nreturn base"
+    "templateString": "require \"import\"\n\nlocal base={}\n\nbase.test=function(a,b)\n  return a+b\nend\n\nlocal function test(a,b)\n  return a*b\nend\n\nreturn base"
   },
   {
     "templateName":"Lua Empty Layout",

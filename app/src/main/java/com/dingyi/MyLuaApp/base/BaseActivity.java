@@ -17,8 +17,10 @@ import com.dingyi.MyLuaApp.theme.ThemeUtil;
 
 import java.io.File;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity<T extends BaseViewManager> extends AppCompatActivity {
     public ThemeUtil themeUtil;
+
+    private T viewManager;
 
     private int mWidth,mHeight;
 
@@ -57,6 +59,13 @@ public class BaseActivity extends AppCompatActivity {
         return FileProvider.getUriForFile(this, getPackageName(), path);
     }
 
+    public T getViewManager() {
+        return viewManager;
+    }
+
+    public void setViewManager(T viewManager) {
+        this.viewManager=viewManager;
+    }
 
     private String getType(@NonNull File file) {
         int lastDot = file.getName().lastIndexOf(46);

@@ -29,7 +29,7 @@ class ProgressBarBuilderOut : IBuilderOut {
     override fun hasError(string: String) {
         activity?.runOnUiThread {
             progressDialog?.dismiss()
-            MyDialog(activity!!,(activity!! as BaseActivity).themeUtil)
+            MyDialog(activity!!,(activity!! as BaseActivity<*>).themeUtil)
                     .setTitle(R.string.build_error_title)
                     .setMessage(string)
                     .setPositiveButton(android.R.string.ok,null)
@@ -40,7 +40,7 @@ class ProgressBarBuilderOut : IBuilderOut {
     override fun init(activity: AppCompatActivity):ProgressBarBuilderOut {
         this.activity = activity
         activity.runOnUiThread {
-            progressDialog = createProgressBarDialog(activity as BaseActivity, title, "");
+            progressDialog = createProgressBarDialog(activity as BaseActivity<*>, title, "");
             progressDialog?.show();
         }
         return this
