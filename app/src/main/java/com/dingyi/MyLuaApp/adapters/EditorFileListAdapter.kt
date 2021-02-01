@@ -7,22 +7,26 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.dingyi.MyLuaApp.R
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.databinding.DialogFlieListBinding
 import com.dingyi.MyLuaApp.dialogs.FileListDialog
 import com.dingyi.MyLuaApp.helper.EditorHelper
+import com.dingyi.MyLuaApp.manager.activity.EditorViewManager
 import com.dingyi.MyLuaApp.utils.getSuffix
 import com.dingyi.MyLuaApp.utils.toFile
 import java.io.File
 import java.io.FileFilter
 
-class EditorFileListAdapter(val context: Context) : BaseAdapter() {
+class EditorFileListAdapter(val context:BaseActivity<*>) : BaseAdapter() {
 
     private val data = mutableListOf<File>()
     var projectPath = ""
     private var nowOpenPath = ""
     var editorUtil: EditorHelper?=null;
 
-    var dialog:FileListDialog?=null;
+    var onLoadDirListener:(String)->Unit={
+
+    }
 
     private fun getImageType(file: File): Int {
         val data = mapOf("lua,java,aly,gradle,xml,py" to R.drawable.ic_twotone_code_24,
@@ -61,7 +65,9 @@ class EditorFileListAdapter(val context: Context) : BaseAdapter() {
     }
 
     fun load(projectPath: String, path: String) {
-        dialog?.binding?.title?.text=path
+
+
+        onLoadDirListener(path)
 
         this.projectPath = projectPath
         nowOpenPath = path

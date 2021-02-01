@@ -24,11 +24,11 @@ import kotlin.concurrent.thread
 class FileListDialog {
 
     private var bottomSheetDialog: BottomDialog? = null;
-    private var context: BaseActivity<EditorViewManager>? = null;
+    private var context: EditorActivity? = null;
     var binding: DialogEditorFabBinding? = null;
     private var util: EditorHelper? = null;
 
-    fun init(context:  BaseActivity<EditorViewManager>, util: EditorHelper): FileListDialog {
+    fun init(context:  EditorActivity, util: EditorHelper): FileListDialog {
         if (bottomSheetDialog == null) {
             bottomSheetDialog = BottomDialog(context)
             binding = DialogEditorFabBinding.inflate(LayoutInflater.from(context))
@@ -61,7 +61,7 @@ class FileListDialog {
 
     private fun showChooseTemplateDialog(activity:BaseActivity<EditorViewManager>, name:CharSequence, map: Map<CharSequence,String>) {
         with(activity) {
-            val binding=ActivityEditorDialogNewFileBinding.inflate(LayoutInflater.from(this))
+            val binding=ActivityEditorDialogNewFileBinding.inflate(layoutInflater)
             val newProject = MyDialog(this, themeUtil)
                     .setTitle(getString(R.string.new_file_title,name))
                     .setView(binding.root)
@@ -96,7 +96,7 @@ class FileListDialog {
             MyDialog(this, themeUtil)
                     .setTitle(R.string.new_file)
                     .setSingleChoiceItems(fileTemplateMaps.keys.toTypedArray(), 0) { dialog: DialogInterface?, which: Int -> nowChooseProject.set(which) }
-                    .setPositiveButton(android.R.string.ok) { w: DialogInterface?, s: Int ->
+                    .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int ->
                         //showCreateProjectDialog(projectTemplateNames[nowChooseProject.get()].toString(), nowChooseProject.get())
                         showChooseTemplateDialog(this,fileTemplateMaps.keys.toTypedArray()[nowChooseProject.get()],fileTemplateMaps)
                     }
@@ -113,7 +113,7 @@ class FileListDialog {
             val newProject = MyDialog(this, themeUtil)
                     .setTitle(getString(R.string.new_dir))
                     .setView(binding.root)
-                    .setPositiveButton(android.R.string.ok) { a: DialogInterface?, which: Int ->
+                    .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int ->
                         (this@FileListDialog.binding?.title?.text?.toString()!! + "/" + binding.folder.text.toString()).toFile().mkdirs()
                         this@FileListDialog.binding?.let {
                             val adapter = it.list.adapter as EditorFileListAdapter
@@ -131,8 +131,6 @@ class FileListDialog {
 
                 }
             })
-
-
 
         }
 
@@ -158,7 +156,8 @@ class FileListDialog {
                         context!!.runOnUiThread {
                             dialog.dismiss()
                             refreshList()
-                            showSnackBar((context as EditorActivity).binding.root,R.string.delete_file_success)
+                            context!!.viewManager.deleteTabWithName(path.substring(context!!.info.path!!.length+1))
+                            showSnackBar(context!!.viewManager.binding.root,R.string.delete_file_success)
                         }
                     }
                 }.show()
@@ -166,10 +165,15 @@ class FileListDialog {
 
     private fun initFileListView() {
         binding?.let {
-            val adapter = context?.let { EditorFileListAdapter(it) };
+            val adapter =EditorFileListAdapter(context!!)
+
             it.list.adapter = adapter
-            adapter!!.dialog=this
-            adapter!!.setOnItemClick(it.list)
+
+            adapter.onLoadDirListener={
+                binding?.title?.text=it
+            }
+            adapter.setOnItemClick(it.list)
+
             adapter.editorUtil=util
             it.close.setOnClickListener {
                 bottomSheetDialog?.dismiss()

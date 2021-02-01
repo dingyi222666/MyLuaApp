@@ -8,7 +8,7 @@ import com.dingyi.MyLuaApp.utils.getDefaultPath
 import com.dingyi.MyLuaApp.utils.showSnackBar
 import com.google.android.material.tabs.TabLayout
 
-class EditorViewManager(val activity: EditorActivity,val binding: ActivityEditorBinding) : BaseViewManager() {
+class EditorViewManager(val activity: EditorActivity, val binding: ActivityEditorBinding) : BaseViewManager() {
 
      fun deleteTab(tab: TabLayout.Tab) {
         val text: String = binding.tabLayout.getTabAt(binding.tabLayout.selectedTabPosition)!!.text.toString()
@@ -26,7 +26,21 @@ class EditorViewManager(val activity: EditorActivity,val binding: ActivityEditor
             binding.tabLayout.getTabAt(pos)!!.select() //如果删除的不是选择的标签 就重新选择已经选择的标签
         }
 
-        showSnackBar(binding.getRoot(), activity.getString(R.string.delete_tag))
+        showSnackBar(binding.root, activity.getString(R.string.delete_tag))
+    }
+
+    fun deleteTabWithName(string: String) {
+
+        for (i in 0 until binding.tabLayout.tabCount) {
+            val tab=binding.tabLayout.getTabAt(i)
+
+            if (tab!=null && tab.text==string) {
+                activity.util.remove(tab.text.toString())
+                deleteTab(tab)
+                activity.initTableLayoutLongClick()
+            }
+
+        }
     }
 
 }

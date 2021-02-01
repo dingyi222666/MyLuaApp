@@ -92,7 +92,7 @@ public class EditorActivity extends BaseActivity<EditorViewManager> {
 
     }
 
-    private void initTableLayoutLongClick() {
+    public void initTableLayoutLongClick() {
         for (int i=0;i<=binding.tabLayout.getTabCount();i++) {
             int finalI = i;
             if (binding.tabLayout.getTabAt(i)!=null) {
@@ -127,7 +127,6 @@ public class EditorActivity extends BaseActivity<EditorViewManager> {
                         TextUtilsKt.showSnackBar(binding.getRoot(),R.string.copy_succeesful);
                         break;
                     case R.id.close:
-
                         util.remove(tab.getText().toString());
                         getViewManager().deleteTab(tab);
                         initTableLayoutLongClick();
