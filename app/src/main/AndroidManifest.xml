@@ -19,19 +19,6 @@
         android:supportsRtl="true"
         android:name="com.androlua.LuaApplication"
         android:theme="@style/Theme.MyLuaApp">
-        <activity android:configChanges="screenSize|keyboardHidden|orientation" android:windowSoftInputMode="adjustResize" android:name=".activitys.EditorActivity" />
-        <activity
-            android:name=".activitys.WelcomeActivity"
-            android:theme="@style/Theme.MyLuaApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activitys.MainActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.MyLuaApp" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
