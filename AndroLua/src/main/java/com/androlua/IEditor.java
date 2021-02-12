@@ -14,7 +14,6 @@ public interface IEditor {
     void gotoLine();
     void gotoLine(int i);
     void search();
-
     default String getError() {
         return null;
     }

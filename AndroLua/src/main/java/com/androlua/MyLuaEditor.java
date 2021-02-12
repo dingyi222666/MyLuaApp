@@ -103,7 +103,6 @@ public class MyLuaEditor extends LinearLayout implements IEditor {
         Field field= null;
         try {
             field = clazz.getDeclaredField("h");
-            Log.e("test",field.toString());
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
