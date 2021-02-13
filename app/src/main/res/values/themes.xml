@@ -45,14 +45,14 @@
     <!--Base ToolBar Style -->
     <style name="BaseToolBarStyle" parent="Widget.MaterialComponents.Toolbar">
         <item name="colorPrimary">@color/theme_default_backgroundColor</item>
-        <item name="titleTextColor">@color/theme_default_colorPrimary</item>
+        <item name="titleTextColor">?colorPrimary</item>
         <item name="background">@color/white</item>
 
         <item name="subtitleTextStyle">@style/BaseToolBarSubTitleStyle</item>
         <item name="titleTextStyle">@style/BaseToolBarTitleStyle</item>
         <item name="android:textColorSecondary">@color/theme_default_hintTextColor</item>
         <item name="elevation">2dp</item>
-        <item name="android:titleTextColor" tools:targetApi="m">@color/theme_default_colorPrimary</item>
+        <item name="android:titleTextColor" tools:targetApi="m">?colorPrimary</item>
     </style>
 
     <!--Base ToolBar Title Style -->
@@ -75,5 +75,10 @@
 
     <style name="Theme.MyLuaApp" parent="Theme.BaseTheme">
 
+    </style>
+
+    <style name="Theme.MyLuaApp_Blue" parent="Theme.BaseTheme">
+         <item name="colorPrimary">@color/theme_blue_colorPrimary</item>
+        <item name="colorAccent">@color/theme_blue_colorPrimary</item>
     </style>
 </resources>

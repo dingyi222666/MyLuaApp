@@ -44,12 +44,12 @@ android {
 
 dependencies {
 
-    api project(":AndroLua") //androlua libs
-    api project(":LuaJ") //luaj
-    api project(":AXMLEditor")
+    implementation project(":AndroLua") //androlua libs
+    implementation project(":LuaJ") //luaj
+    implementation project(":AXMLEditor")
 
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])//libs jar
-
+    implementation fileTree(dir: "../AndroLua/libs", include: ["*.jar", "*.aar"])//androlua libs jar
     //androidx and more
     // https://mvnrepository.com/artifact/androidx.swiperefreshlayout/swiperefreshlayout
     implementation group: 'androidx.swiperefreshlayout', name: 'swiperefreshlayout', version: '1.2.0-alpha01'
