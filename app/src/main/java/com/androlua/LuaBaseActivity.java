@@ -52,8 +52,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewbinding.ViewBinding;
 
 import com.dingyi.MyLuaApp.base.BaseActivity;
+import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
 import com.luajava.JavaFunction;
 import com.luajava.LuaException;
 import com.luajava.LuaObject;
@@ -83,7 +85,7 @@ import java.util.zip.ZipInputStream;
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
 
-public abstract class LuaBaseActivity extends BaseActivity implements LuaBroadcastReceiver.OnReceiveListener, LuaContext {
+public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivity<T> implements LuaBroadcastReceiver.OnReceiveListener, LuaContext {
 
     private final static String ARG = "arg";
     private final static String DATA = "data";
@@ -107,10 +109,7 @@ public abstract class LuaBaseActivity extends BaseActivity implements LuaBroadca
     private boolean isSetViewed;
     private long lastShow;
     private Menu optionsMenu;
-    private LuaObject mOnKeyDown;
-    private LuaObject mOnKeyUp;
-    private LuaObject mOnKeyLongPress;
-    private LuaObject mOnTouchEvent;
+
     private String localDir;
 
     private String odexDir;
@@ -390,7 +389,7 @@ public abstract class LuaBaseActivity extends BaseActivity implements LuaBroadca
         Uri uri = intent.getData();
         String path = null;
         if (uri == null)
-            return null;
+            return "data/data/"+getPackageName()+"/files/main.lua";
 
         path = uri.getPath();
         if (!new File(path).exists() && new File(getLuaPath(path)).exists())
@@ -861,61 +860,8 @@ public abstract class LuaBaseActivity extends BaseActivity implements LuaBroadca
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (mOnKeyDown != null) {
-            try {
-                Object ret = mOnKeyDown.call(keyCode, event);
-                if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
-                    return true;
-            } catch (Exception e) {
-                sendError("onKeyDown", e);
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (mOnKeyUp != null) {
-            try {
-                Object ret = mOnKeyUp.call(keyCode, event);
-                if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
-                    return true;
-            } catch (Exception e) {
-                sendError("onKeyUp", e);
-            }
-        }
-        return super.onKeyUp(keyCode, event);
-    }
-
-    @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (mOnKeyLongPress != null) {
-            try {
-                Object ret = mOnKeyLongPress.call(keyCode, event);
-                if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
-                    return true;
-            } catch (Exception e) {
-                sendError("onKeyLongPress", e);
-            }
-        }
-        return super.onKeyLongPress(keyCode, event);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (mOnTouchEvent != null) {
-            try {
-                Object ret = mOnTouchEvent.call(event);
-                if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
-                    return true;
-            } catch (Exception e) {
-                sendError("onTouchEvent", e);
-            }
-        }
-        return super.onTouchEvent(event);
-    }
+    protected abstract void initView(ActivityMainBinding binding);
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

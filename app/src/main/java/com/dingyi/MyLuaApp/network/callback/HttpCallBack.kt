@@ -4,5 +4,5 @@ import okhttp3.Response
 import java.lang.Exception
 
 interface HttpCallBack {
-    fun callback(response: Response?,exception: Exception?)
+    fun callback(response: Response?, exception: Exception?)
 }

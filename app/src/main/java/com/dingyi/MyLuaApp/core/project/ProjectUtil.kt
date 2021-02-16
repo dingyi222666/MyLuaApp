@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import com.androlua.LuaUtil
 import com.dingyi.MyLuaApp.R
+import com.dingyi.MyLuaApp.core.task.SimpleAsyncTask
 import com.dingyi.MyLuaApp.utils.*
 import org.json.JSONArray
 import java.io.File
@@ -22,7 +23,7 @@ val PROJECT_TEMPLATE_LIST = mutableListOf<String>()
 fun getProjectType(file: File): Int {
     if ("${file.absolutePath}/init.lua".toFile().isFile) {
         return LUA_PROJECT
-    } else if ("${file.absolutePath}/app/build.gradle".toFile().isFile) {
+    } else if ("${file.absolutePath}/build.gradle".toFile().isFile) {
         return GRADLE_PROJECT
     }
     return 0
@@ -37,7 +38,7 @@ fun getProjectTypeText(context: Context, int: Int): String {
 
 fun getProjectTemplate(context: Activity): Array<CharSequence> {
     val result = mutableListOf<String>()
-    val jsonString = context.getAssetString("res/template/template.json")
+    val jsonString = context.readAssetString("res/template/template.json")
     val jsonArray = JSONArray(jsonString)
 
     for (i in 0 until jsonArray.length()) {
@@ -56,12 +57,13 @@ fun formatProjectText(dir: String, file: String, name: String, packageName: Stri
 }
 
 fun createProject(context: Activity, i: Int, toPath: String, name: String, packageName: String) {
-    val path = "data/data/${context.packageName}/assets/res/template/" + PROJECT_TEMPLATE_LIST[i]
+    val path = "data/data/${context.packageName}/files/res/template/" + PROJECT_TEMPLATE_LIST[i]
     val formatText = LuaUtil.readZip(path, "format.json").decodeToString()
     val templatePath = "$toPath/template"
     val jsonArray = JSONArray(formatText)
 
     templatePath.toFile().mkdirs()
+    toPath.toFile().parentFile.mkdirs()
     LuaUtil.unZip(path, toPath, "template")
 
     for (i in 0 until jsonArray.length()) {
@@ -73,7 +75,9 @@ fun createProject(context: Activity, i: Int, toPath: String, name: String, packa
 
 }
 
-fun smartGetProjectName(): String {
+
+
+fun getProjectName(): String {
     val list = mutableListOf<File>()
     var len = "MyApplication".length
     usePaths["projectPath"]?.let {

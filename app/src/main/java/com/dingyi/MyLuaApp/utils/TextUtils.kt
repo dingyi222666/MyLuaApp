@@ -5,7 +5,7 @@ package com.dingyi.MyLuaApp.utils
 import android.util.Log
 import java.lang.Exception
 
-val TAG = "showDebug"
+const val TAG = "showDebug"
 
 fun printDebug(text: String) {
     Log.d(TAG, text)
@@ -22,3 +22,5 @@ fun printError(text: String) {
 fun printError(exception: Throwable) {
     printError(exception.toString())
 }
+
+

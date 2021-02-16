@@ -4,6 +4,7 @@
     <item
         android:icon="@drawable/ic_twotone_search_24"
         android:title="@string/searchTooltip"
+        android:id="@+id/main_action_menu_searchProject"
         app:showAsAction="always" />
     <item
         android:icon="@drawable/ic_twotone_add_24"

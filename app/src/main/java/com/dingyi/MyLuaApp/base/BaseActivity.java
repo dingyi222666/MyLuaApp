@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import androidx.viewbinding.ViewBinding;
 import com.dingyi.MyLuaApp.core.theme.ThemeManager;
 import com.dingyi.MyLuaApp.utils.ReflectionUtils;
 import com.dingyi.MyLuaApp.utils.TextUtils;
+import com.dingyi.MyLuaApp.utils.ViewUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -40,6 +42,10 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     }
 
 
+    protected Handler getHandler() {
+        return handler;
+    }
+
     protected void initToolBar() {
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setSubtitle("test");
@@ -47,14 +53,25 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
     }
 
+    public ThemeManager getThemeManager() {
+        return themeManager;
+    }
+
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        ViewUtils.menuIconColor(menu,themeManager.getColors().getImageColorFilter());
+        return super.onCreateOptionsMenu(menu);
+    }
+
     protected abstract String getToolBarTitle();
 
     protected abstract Class<T> getViewBindingClass();
+
 
     protected T getViewBinding() {
         if (binding == null) {

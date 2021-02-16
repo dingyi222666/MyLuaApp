@@ -57,6 +57,7 @@
 
     <!--Base ToolBar Title Style -->
     <style name="BaseToolBarTitleStyle">
+        <item name="android:textColor">?colorPrimary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
     </style>
@@ -74,7 +75,6 @@
     </style>
 
     <style name="Theme.MyLuaApp" parent="Theme.BaseTheme">
-
     </style>
 
     <style name="Theme.MyLuaApp_Blue" parent="Theme.BaseTheme">

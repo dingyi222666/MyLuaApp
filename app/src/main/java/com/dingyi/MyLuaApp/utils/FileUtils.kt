@@ -5,6 +5,7 @@ import android.app.Activity
 
 import java.io.File
 
+
 val usePaths= mapOf("buildPath" to "/sdcard/MyLuaApp/build",
         "projectPath" to "/sdcard/MyLuaApp/project"
 )
@@ -15,7 +16,7 @@ fun String.toFile() :File {
     return File(this)
 }
 
-fun Activity.getAssetString(path: String):String {
+fun Activity.readAssetString(path: String):String {
     val stream=this.assets.open(path)
     stream.use {
         return it.readBytes().decodeToString()

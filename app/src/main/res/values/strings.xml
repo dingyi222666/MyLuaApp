@@ -11,7 +11,7 @@
     <string name="complete">完成</string>
     <string name="next">下一步</string>
     <string name="tips">提示</string>
-    <string name="copy_succeesful">复制名称成功</string>
+   <string name="copy_succeesful">复制名称成功</string>
     <string name="close_file">关闭标签</string>
     <string name="copy_name">复制名称</string>
     <string name="run">运行</string>
@@ -40,13 +40,13 @@
     <string name="navigation_menu">导航</string>
     <string name="javaapi_menu">Java Api</string>
     <string name="permission_successful">权限修改成功</string>
-    <string name="find_project_error">检测到有工程配置文件错误，请尝试手动修复</string>
+    <string name="find_project_error">检测到有项目配置文件错误，请尝试手动修复</string>
     <string name="permission_menu">权限编辑器</string>
     <string name="icon_menu">图标助手</string>
     <string name="openFail">不支持打开的文件类型</string>
-    <string name="createProjectSuccess">创建工程成功"</string>
-    <string name="createProject">正在创建工程中</string>
-    <string name="newProject">新建工程</string>
+    <string name="createProjectSuccess">创建项目成功"</string>
+    <string name="createProject">正在创建项目中</string>
+    <string name="newProject">新建项目</string>
     <string name="undo">撤销</string>
     <string name="save">保存</string>
     <string name="create_file_success">新建文件成功</string>
@@ -65,17 +65,7 @@
     <string name="readPrivacyTitle">应用与隐私协议</string>
     <string name="projectName">程序名称</string>
     <string name="projectPackage">程序包名</string>
-    <string name="readPrivacy">我已阅读并同意应用与隐私协议</string>
-    <string name="welcomeTitle">欢迎</string>
-    <string name="readyAssetsTitle">准备基础环境</string>
-    <string name="readyAssetsUnZipTitle">正在解压 </string>
-    <string name="readyAssetsUnZipOkTitle">解压基础环境完成 按下一步进行最后配置</string>
-    <string name="requestPermissionTitle">请求权限</string>
-    <string name="requestPermission">以下权限为程序运行必须的权限，点击下一步以请求以下权限</string>
-    <string name="requestPhonePermissionTitle">手机权限</string>
-    <string name="requestPhonePermission">用于百度sdk统计</string>
-    <string name="requestSdcardPermissionTitle">存储权限</string>
-    <string name="exitMessage">您已永久拒绝软件权限 正在退出</string>
+
     <string-array name="main_poem_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>

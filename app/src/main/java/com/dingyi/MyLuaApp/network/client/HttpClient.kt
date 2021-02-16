@@ -5,6 +5,7 @@ package com.dingyi.MyLuaApp.network.client
 import com.dingyi.MyLuaApp.network.callback.HttpCallBack
 import okhttp3.*
 import okio.IOException
+import java.lang.Exception
 
 
 fun get(url: String, callback: HttpCallBack) {

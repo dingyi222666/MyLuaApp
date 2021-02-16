@@ -6,7 +6,7 @@ import com.dingyi.MyLuaApp.base.BaseActivity
 import java.lang.reflect.Type
 import kotlin.reflect.KType
 
-class SharedPreferencesUtil(private val name:String,private val activity: BaseActivity<*>) {
+class SharedPreferencesUtil(private val name:String,private val activity: Context) {
 
     private var sharedPreferences: SharedPreferences = activity.getSharedPreferences(name, Context.MODE_PRIVATE);
 
@@ -28,7 +28,7 @@ class SharedPreferencesUtil(private val name:String,private val activity: BaseAc
     }
 
     companion object {
-        fun getDefaultSharedPreferencesUtil(activity:BaseActivity<*>): SharedPreferencesUtil {
+        fun getDefaultSharedPreferencesUtil(activity:Context): SharedPreferencesUtil {
             return SharedPreferencesUtil("default",activity);
         }
     }
