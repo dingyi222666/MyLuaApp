@@ -165,6 +165,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             case R.id.main_action_menu_newProject:
                 createChooseProjectDialog();
                 break;
+            case R.id.main_action_menu_about:
+                new BaseDialog(this)
+                        .setTitle(this.getString(R.string.about))
+                        .setMessage(FileUtils.readAssetString(this, "res/txt/updateLog.txt"))
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }

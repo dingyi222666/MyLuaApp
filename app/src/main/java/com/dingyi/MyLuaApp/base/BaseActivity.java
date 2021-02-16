@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewbinding.ViewBinding;
 
+import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.core.theme.ThemeManager;
 import com.dingyi.MyLuaApp.utils.ReflectionUtils;
 import com.dingyi.MyLuaApp.utils.TextUtils;
@@ -32,6 +34,9 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     private T binding;
 
     protected ThemeManager themeManager;
+
+    private long lastListenerTime = System.currentTimeMillis();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,5 +94,32 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     protected void initView(T binding) {
 
     }
+
+
+    private boolean checkCanExit(int code) {
+        if (code == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis() - lastListenerTime < 1500) {
+               finishAndRemoveTask();
+            } else {
+                ViewUtils.showSnackbar(binding.getRoot(), R.string.toast_exit);
+            }
+
+            lastListenerTime = System.currentTimeMillis();
+            return true;
+
+        }
+        lastListenerTime = System.currentTimeMillis();
+        return false;
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (!checkCanExit(keyCode)) {
+            return super.onKeyDown(keyCode, event);
+        }
+        return true;
+    }
+
 
 }

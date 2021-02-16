@@ -63,7 +63,7 @@ fun createProgressBarDialog(context: BaseActivity<*>, title: String, message: St
 fun showSnackbar(view: View,resId:Int) {
     Snackbar.make(view,resId,Snackbar.LENGTH_LONG)
             .setText(resId)
-            .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
             .show()
 }
 
