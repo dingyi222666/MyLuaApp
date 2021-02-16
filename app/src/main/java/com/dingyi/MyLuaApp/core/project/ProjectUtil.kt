@@ -1,6 +1,9 @@
 @file:JvmName("ProjectUtil")
 package com.dingyi.MyLuaApp.core.project
 
+/** 工程的辅助类，提供各种辅助方法
+ *
+ */
 
 import android.app.Activity
 import android.content.Context

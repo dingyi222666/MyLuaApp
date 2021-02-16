@@ -4,11 +4,15 @@ import android.app.Activity
 import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.core.task.SimpleAsyncTask
 
+/** 创建项目的帮助类，帮助创建工程
+ *
+ */
 class ProjectCreateHelper(private val activity: BaseActivity<*>) {
     private var choosePos=0
     private var toPath=""
     private var name=""
     private var packageName=""
+
 
     fun setProjectName(name: String):ProjectCreateHelper {
         this.name = name
