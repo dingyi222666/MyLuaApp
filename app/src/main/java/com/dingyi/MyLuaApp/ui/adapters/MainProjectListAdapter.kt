@@ -22,7 +22,7 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
         return data.size
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): ProjectInfo {
         return data[position]
     }
 

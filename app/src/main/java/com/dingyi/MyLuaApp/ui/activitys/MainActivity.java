@@ -2,6 +2,7 @@ package com.dingyi.MyLuaApp.ui.activitys;
 
 import android.animation.LayoutTransition;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -133,6 +134,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         MainProjectListAdapter adapter = (MainProjectListAdapter) binding.mainListview.getAdapter();
 
         adapter.clear();
+
+        binding.mainListview.setOnItemClickListener((parent, view, position, id) -> {
+            ProjectInfo info=adapter.getItem(position);
+            Intent intent=new Intent(this,EditorActivity.class);
+            intent.putExtra("projectInfo",info);
+            startActivity(intent);
+        });
 
         FileUtils.forEachDir(Objects.requireNonNull(FileUtils.getUsePaths().get("projectPath")), file -> {
             if (ProjectUtil.getProjectType(file) == ProjectUtil.LUA_PROJECT) {
