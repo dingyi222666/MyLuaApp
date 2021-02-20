@@ -60,7 +60,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     protected void initView(ActivityMainBinding binding) {
-        super.initView(binding);
         setSupportActionBar(binding.toolbar);
         binding.refresh.setColorSchemeColors(themeManager.getColors().getColorPrimary());
 
@@ -74,6 +73,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         refreshList(binding);
         initToolBar();
         showPoem();
+
+
     }
 
     @Override
@@ -135,12 +136,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
         adapter.clear();
 
-        binding.mainListview.setOnItemClickListener((parent, view, position, id) -> {
-            ProjectInfo info=adapter.getItem(position);
-            Intent intent=new Intent(this,EditorActivity.class);
-            intent.putExtra("projectInfo",info);
-            startActivity(intent);
-        });
+
 
         FileUtils.forEachDir(Objects.requireNonNull(FileUtils.getUsePaths().get("projectPath")), file -> {
             if (ProjectUtil.getProjectType(file) == ProjectUtil.LUA_PROJECT) {

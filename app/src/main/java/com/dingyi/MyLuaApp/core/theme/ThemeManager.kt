@@ -20,7 +20,6 @@ class ThemeManager(activity: BaseActivity<*>) {
         nowThemeResourcesId = themes[sharedPreferencesUtil.get("主题", "默认")]!!
 
         activity.setTheme(nowThemeResourcesId)
-
         colors = ThemeColors(activity);
 
     }

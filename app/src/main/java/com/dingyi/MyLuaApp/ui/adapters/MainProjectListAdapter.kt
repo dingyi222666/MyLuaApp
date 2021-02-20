@@ -1,6 +1,7 @@
 package com.dingyi.MyLuaApp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +11,12 @@ import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.core.project.getProjectTypeText
 import com.dingyi.MyLuaApp.databinding.ActivityMainListProjectBinding
+import com.dingyi.MyLuaApp.ui.activitys.EditorActivity
 
 
 class MainProjectListAdapter(private val context: Context): BaseAdapter() {
     private val data= mutableListOf<ProjectInfo>()
-    constructor(context: Context, data:List<ProjectInfo>) :this(context) {
+    constructor(context: Context, data: List<ProjectInfo>) :this(context) {
        this.data.addAll(data)
     }
 
@@ -38,15 +40,22 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
         val info=data[position]
 
         if (convertView==null) {
-            view=ActivityMainListProjectBinding.inflate(LayoutInflater.from(context),parent,false).root
+            view=ActivityMainListProjectBinding.inflate(LayoutInflater.from(context), parent, false).root
             holder=ViewHolder(view)
             view.tag=holder
         } else {
            holder=(view?.tag as ViewHolder)
         }
 
+        (holder.itemView as ViewGroup).getChildAt(0).setOnClickListener {
+            val intent = Intent(holder.itemView.context, EditorActivity::class.java)
+            intent.putExtra("projectInfo", info)
+            holder.itemView.context.startActivity(intent)
+        }
+
+
         holder.title.text=info.name
-        holder.type.text=getProjectTypeText(context,info.type)
+        holder.type.text=getProjectTypeText(context, info.type)
         return view
     }
 
@@ -60,7 +69,7 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
         notifyDataSetChanged()
     }
 
-    class ViewHolder(itemView:View) {
+    class ViewHolder(val itemView: View) {
         var title=itemView.findViewById<TextView>(R.id.main_listview_title)
         var type=itemView.findViewById<TextView>(R.id.main_listview_type)
     }

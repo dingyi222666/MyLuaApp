@@ -7,7 +7,6 @@
       app:cardCornerRadius="8dp"
       android:elevation="0dp"
       app:cardElevation="0dp"
-      android:clickable="true"
       android:id="@+id/card"
       app:cardBackgroundColor="?theme_cardBackgroundColor"
       app:rippleColor="?theme_rippleColor"

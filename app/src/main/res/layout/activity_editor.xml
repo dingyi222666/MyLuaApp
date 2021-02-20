@@ -5,13 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activitys.EditorActivity">
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:elevation="2dp"
         app:elevation="2dp"
         android:layout_height="56dp">
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -23,13 +21,15 @@
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
+        android:id="@+id/drawerLayout"
+        android:layout_marginTop="56dp"
         android:layout_height="match_parent">
         <include
-            layout="@layout/activity_editor_sliderlayout"/>
+            android:id="@+id/slide"
+            layout="@layout/activity_editor_slide" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
         android:elevation="0dp"
         android:id="@+id/editor_parent"
         android:orientation="vertical">

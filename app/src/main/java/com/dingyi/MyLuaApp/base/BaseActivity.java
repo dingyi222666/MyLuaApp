@@ -91,9 +91,7 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         return binding;
     }
 
-    protected void initView(T binding) {
-
-    }
+    protected abstract void initView(T binding);
 
 
     private boolean checkCanExit(int code) {

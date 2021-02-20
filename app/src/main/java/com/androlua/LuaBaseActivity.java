@@ -159,9 +159,6 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setTheme(android.R.style.Theme_Holo_Light_NoActionBar);
-
-
         super.onCreate(savedInstanceState);
 
         WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -225,51 +222,6 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
         }
 
 
-    }
-
-    private void chcek1() {
-        try {
-            throw new Exception("");
-        } catch (Exception localException) {
-            StackTraceElement[] arrayOfStackTraceElement = localException.getStackTrace();
-            // 遍历整个堆栈查询xposed相关信息
-            for (StackTraceElement stackTraceElement : arrayOfStackTraceElement) {
-                String name = stackTraceElement.getClassName();
-                if (name.equals("de.robv.android.xposed.XposedBridge") || name.contains("xposed") || name.contains("xposed")) {
-                    LuaDialog d = new LuaDialog(this);
-                    d.setTitle("提示2");
-                    d.setMessage("你的手机运行环境不安全");
-                    d.setPosButton("确定");
-                    d.show();
-                    return;
-                }
-            }
-        }
-    }
-
-    private void check2() {
-        try {
-            Field v0_1 = ClassLoader.getSystemClassLoader()
-                    .loadClass("de.robv.android.xposed.XposedBridge")
-                    .getDeclaredField("disableHooks");
-            v0_1.setAccessible(true);
-            v0_1.set(null, true);
-        } catch (Exception e) {
-            // e.printStackTrace();
-           /* StackTraceElement[] arrayOfStackTraceElement = e.getStackTrace();
-            // 遍历整个堆栈查询xposed相关信息
-            for (StackTraceElement stackTraceElement : arrayOfStackTraceElement) {
-                String name = stackTraceElement.getClassName();
-                if (name.equals("de.robv.android.xposed.XposedBridge") || name.contains("xposed") || name.contains("xposed")) {
-                    LuaDialog d = new LuaDialog(this);
-                    d.setTitle("提示2");
-                    d.setMessage("你的手机运行环境不安全");
-                    d.setPosButton("确定");
-                    d.show();
-                    return;
-                }
-            }*/
-        }
     }
 
     private void check3() {
@@ -861,7 +813,6 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
     }
 
 
-    protected abstract void initView(ActivityMainBinding binding);
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -870,6 +821,8 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
         runFunc("onCreateOptionsMenu", menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

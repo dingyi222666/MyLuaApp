@@ -48,6 +48,8 @@
     <string name="createProject">正在创建项目中</string>
     <string name="newProject">新建项目</string>
     <string name="undo">撤销</string>
+    <string name="draw_open">开启</string>
+    <string name="draw_close">关闭</string>
     <string name="save">保存</string>
     <string name="create_file_success">新建文件成功</string>
     <string name="create_dir_success">新建文件夹成功</string>
