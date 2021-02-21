@@ -2,6 +2,7 @@
 package com.dingyi.MyLuaApp.utils
 
 import android.app.Activity
+import android.text.TextUtils.substring
 
 import java.io.File
 
@@ -31,7 +32,7 @@ fun init() {
     }
 }
 
-fun forEachDir(string: String,callback:(File)->Unit) {
+fun forEachDir(string: String, callback: (File) -> Unit) {
     string.toFile().listFiles()?.forEach {
         it?.let{callback(it)}
     }
@@ -45,7 +46,15 @@ fun readString(s: String): String {
     return s.toFile().readBytes().decodeToString()
 }
 
-fun writeString(s: String,string: String) {
+fun writeString(s: String, string: String) {
     s.toFile().writeText(string)
+}
+
+fun File.getSuffix(): String {
+    return name.substring(name.lastIndexOf(".") + 1)
+}
+
+fun String.getSuffix(): String {
+    return substring(lastIndexOf(".") + 1)
 }
 

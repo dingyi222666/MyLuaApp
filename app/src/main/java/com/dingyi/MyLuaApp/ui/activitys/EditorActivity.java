@@ -13,6 +13,7 @@ import com.androlua.LuaBaseActivity;
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.base.BaseActivity;
 import com.dingyi.MyLuaApp.bean.ProjectInfo;
+import com.dingyi.MyLuaApp.core.edtior.EditorManager;
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
 import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
 import com.dingyi.MyLuaApp.utils.ReflectionUtils;
@@ -21,6 +22,7 @@ import com.dingyi.MyLuaApp.utils.TextUtils;
 public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
 
 
+    EditorManager manager;
 
     @Override
     protected void initToolBar() {
@@ -62,7 +64,11 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
         toggle.syncState();
         binding.drawerLayout.addDrawerListener(toggle);
         initToolBar();
+        manager=new EditorManager(this,getIntent().getParcelableExtra("projectInfo"),binding.editorParent);
+        manager.openLast();
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,4 +1,6 @@
-package com.androlua;
+package com.dingyi.editor;
+
+import android.view.View;
 
 import org.jetbrains.annotations.NotNull;
 

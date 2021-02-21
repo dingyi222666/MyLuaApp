@@ -1,12 +1,14 @@
-package com.androlua;
+package com.dingyi.editor.lua;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 
+import com.androlua.LuaActivity;
+import com.dingyi.editor.IEditor;
+import com.dingyi.editor.IEditorView;
 import com.luajava.LuaJLuaState;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,24 +19,24 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 
-public class MyLuaEditor extends LinearLayout implements IEditor {
+public class LuaEditor extends IEditorView {
 
-    private LuaEditor editor;
+    private com.androlua.LuaEditor editor;
 
     private int selection;
 
-    public MyLuaEditor(Context context) {
+    public LuaEditor(Context context) {
         super(context);
         initLuaEditor();
     }
 
-    public MyLuaEditor(Context context, AttributeSet attributeSet) {
+    public LuaEditor(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         initLuaEditor();
     }
 
     private void initLuaEditor() {
-        editor = new LuaEditor(getContext());
+        editor = new com.androlua.LuaEditor(getContext());
         editor.setLayoutParams(new LinearLayout.LayoutParams(-1, -1));
         addView(editor);
         editor.requestFocus();
@@ -63,7 +65,6 @@ public class MyLuaEditor extends LinearLayout implements IEditor {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String str = null;
                 String[] resultStr;
                 try {
                     LuaJLuaState state = new LuaJLuaState();
@@ -82,11 +83,11 @@ public class MyLuaEditor extends LinearLayout implements IEditor {
 
             }
 
-            private String formatJavaString(String jstring) {
-                if (jstring.contains("$")) {
-                    return jstring.substring(jstring.lastIndexOf("$")+1);
+            private String formatJavaString(String string) {
+                if (string.contains("$")) {
+                    return string.substring(string.lastIndexOf("$")+1);
                 }
-                return jstring.substring(jstring.lastIndexOf(".")+1);
+                return string.substring(string.lastIndexOf(".")+1);
             }
         }).start();
 

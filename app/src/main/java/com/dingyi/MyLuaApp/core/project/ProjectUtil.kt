@@ -32,6 +32,14 @@ fun getProjectType(file: File): Int {
     return 0
 }
 
+fun getDefaultPath(path: String): String {
+    return when (getProjectType(path.toFile())) {
+        LUA_PROJECT -> "$path/main.lua"
+        GRADLE_PROJECT -> "$path/build.gradle"
+        else -> "$path/main.lua"
+    }
+}
+
 fun getProjectTypeText(context: Context, int: Int): String {
     return when (int) {
         LUA_PROJECT -> context.getString(R.string.projectTypeLua)
