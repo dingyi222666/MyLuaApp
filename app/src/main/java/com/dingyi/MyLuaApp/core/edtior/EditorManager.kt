@@ -4,37 +4,59 @@ import android.widget.LinearLayout
 import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.core.project.ProjectManager
+import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding
 import com.dingyi.MyLuaApp.utils.getSuffix
+import com.dingyi.MyLuaApp.utils.printDebug
 import com.dingyi.MyLuaApp.utils.readString
 import com.dingyi.editor.IEditor
 import com.dingyi.editor.IEditorView
 import com.dingyi.editor.lua.LuaEditor
 import java.util.*
 
-class EditorManager(private val activity: BaseActivity<*>,
+class EditorManager(activity: BaseActivity<*>,
                     private val info: ProjectInfo,
-                    private val layout: LinearLayout) {
+                    binding: ActivityEditorBinding) {
 
 
 
-    private val editors: MutableList<IEditorView> =mutableListOf()
+    private val editors: MutableMap<String,IEditorView> =mutableMapOf()
 
+    private val layout=binding.editorParent
     private val projectManager= ProjectManager(activity,info)
 
+    private val tableManager=EditorTableManager(binding.tabLayout)
+
     private lateinit var nowEditor:IEditorView;
+
+    init {
+        tableManager.selectedTabCallBack={
+            select(it)
+        }
+    }
 
     fun open(path:String) {
         val view=getEditorByPath(path)
         view.text = readString(path)
         nowEditor=view
         addView(nowEditor)
-        editors.add(nowEditor)
+        editors[projectManager.getShortPath(path)]=nowEditor
+        printDebug(projectManager.getShortPath(path))
         projectManager.putOpenPath(path)
+        tableManager.addTab(path.substring(info.path.length + 1))
     }
 
+    fun select(name: String) {
+        editors[name]?.let { addView(it) }
+    }
 
     fun openLast() {
         projectManager.getLastOpenPath()?.let { open(it) }
+    }
+
+    fun remove(str:String) {
+        if (editors.containsKey(str)) {
+            editors.remove(str)
+        }
     }
 
     private fun addView(view:IEditorView) {
@@ -43,9 +65,9 @@ class EditorManager(private val activity: BaseActivity<*>,
     }
 
     private fun getEditorByPath(path: String): IEditorView {
-        return when (path.getSuffix()) {
-            "Lua" -> LuaEditor(layout.context)
-            else -> LuaEditor(layout.context)
+        return when (path.getSuffix().toLowerCase()) {
+            "lua" -> LuaEditor(layout.context)
+             else -> LuaEditor(layout.context)
         }
     }
 }

@@ -24,22 +24,21 @@
         android:id="@+id/drawerLayout"
         android:layout_marginTop="56dp"
         android:layout_height="match_parent">
-        <include
-            android:id="@+id/slide"
-            layout="@layout/activity_editor_slide" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="0dp"
-        android:id="@+id/parent"
+        android:id="@+id/root"
         android:orientation="vertical">
       <com.google.android.material.tabs.TabLayout
           android:layout_width="match_parent"
           android:id="@+id/tabLayout"
           android:elevation="2dp"
           app:tabGravity="start"
+          app:tabIndicator="@drawable/default_tab_indicator"
           app:tabMaxWidth="0dp"
           app:tabMode="scrollable"
+          app:tabIndicatorFullWidth="false"
           app:tabRippleColor="?theme_rippleColor"
           app:tabIndicatorColor="?colorPrimary"
           app:tabSelectedTextColor="?theme_textColor"
@@ -68,6 +67,9 @@
             android:elevation="3dp"/>
         </HorizontalScrollView>
     </LinearLayout>
+        <include
+            android:id="@+id/slide"
+            layout="@layout/activity_editor_slide" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

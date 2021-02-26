@@ -19,19 +19,6 @@
         android:layout_gravity="left|center"
         android:orientation="horizontal">
 
-      <LinearLayout
-          android:id="@+id/close"
-          android:layout_width="48dp"
-          android:layout_height="match_parent"
-          android:background="@drawable/ripple"
-          android:gravity="center">
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:padding="6dp"
-            android:src="@drawable/ic_twotone_keyboard_arrow_down_24"
-            app:tint="?theme_hintTextColor" />
-      </LinearLayout>
 
       <TextView
           android:id="@+id/title"
@@ -67,8 +54,7 @@
         android:layout_height="1.5dp"
         android:background="?theme_cardBackgroundColor" />
 
-    <ListView
-        android:divider="@null"
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

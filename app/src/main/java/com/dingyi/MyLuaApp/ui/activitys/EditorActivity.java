@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.androlua.LuaBaseActivity;
 import com.dingyi.MyLuaApp.R;
@@ -21,9 +22,9 @@ import com.dingyi.MyLuaApp.utils.TextUtils;
 
 public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
 
-
     EditorManager manager;
 
+    ProjectInfo info;
     @Override
     protected void initToolBar() {
         super.initToolBar();
@@ -37,6 +38,8 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
         } catch (Exception e) {
             TextUtils.printError(e.toString());
         }
+
+
 
     }
 
@@ -54,18 +57,27 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
     @Override
     protected void initView(ActivityEditorBinding binding) {
         setSupportActionBar(binding.toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,binding.drawerLayout,binding.toolbar,R.string.draw_open,R.string.draw_close){
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
+        ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(this,binding.drawerLayout,binding.toolbar,
+                0,0);
         toggle.syncState();
+        binding.drawerLayout.setScrimColor(0);
         binding.drawerLayout.addDrawerListener(toggle);
+
         initToolBar();
-        manager=new EditorManager(this,getIntent().getParcelableExtra("projectInfo"),binding.editorParent);
-        manager.openLast();
+        binding.drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener(){
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+                    binding.drawerLayout.getChildAt(0).setTranslationX(binding.drawerLayout.getChildAt(1).getWidth() * slideOffset);
+                }
+        });
+
+        info=getIntent().getParcelableExtra("projectInfo");
+
+        manager=new EditorManager(this,info,binding);
+        manager.open(info.getPath()+"/main.lua");
+        manager.open(info.getPath()+"/layout.aly");
     }
 
 

@@ -16,4 +16,8 @@ class ProjectManager(private val activity: BaseActivity<*>, private val info: Pr
         sharedPreferencesUtil.put(info.path, path);
     }
 
+    fun getShortPath(path:String):String {
+        return path.substring(info.path.length+1)
+    }
+
 }
