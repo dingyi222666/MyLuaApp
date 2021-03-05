@@ -155,7 +155,6 @@ public class WelcomeActivity extends AppCompatActivity {
     private class UpdateTask extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String[] p1) {
-            // TODO: Implement this method
             onUpdate(mLastTime, mOldLastTime);
             return null;
         }
@@ -183,7 +182,6 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         private void sendMsg(String message) {
-            // TODO: Implement this method
 
         }
 
