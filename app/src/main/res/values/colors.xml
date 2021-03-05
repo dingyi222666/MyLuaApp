@@ -14,6 +14,7 @@
     <color name="theme_default_imageColorFilter">#FF888888</color>
     <color name="theme_default_cardBackgroundColor">#FFF0F0F0</color>
     <color name="theme_default_errorMessageTextColor">#FFFFFFFF</color>
+    <color name="theme_default_listDividerLineColor">#FFEDEDED</color>
     <color name="theme_default_errorMessageBackgroundColor">#FFE53935</color>
     <color name="theme_default_rippleColor">#3f000000</color>
     <color name="theme_blue_colorPrimary">#1E88E5</color>

@@ -18,13 +18,15 @@ class EditorManager(activity: BaseActivity<*>,
                     binding: ActivityEditorBinding) {
 
 
-
     private val editors: MutableMap<String,IEditorView> =mutableMapOf()
 
     private val layout=binding.editorParent
-    private val projectManager= ProjectManager(activity,info)
+    val projectManager= ProjectManager(activity,info)
 
     private val tableManager=EditorTableManager(binding.tabLayout)
+
+    var openCallBack:(String)->Unit={}
+
 
     private lateinit var nowEditor:IEditorView;
 
@@ -35,18 +37,24 @@ class EditorManager(activity: BaseActivity<*>,
     }
 
     fun open(path:String) {
-        val view=getEditorByPath(path)
-        view.text = readString(path)
-        nowEditor=view
-        addView(nowEditor)
+        val view=getEditorByPath(path)//拿到编辑器
+        view.text = readString(path)//设置编辑器文字
+        nowEditor=view//设置为现在的编辑器
+        addView(nowEditor)//添加布局
         editors[projectManager.getShortPath(path)]=nowEditor
-        printDebug(projectManager.getShortPath(path))
+
+        openCallBack.invoke(projectManager.getShortPath(path))//打开回调
+
         projectManager.putOpenPath(path)
-        tableManager.addTab(path.substring(info.path.length + 1))
+        tableManager.addTab(path.substring(info.path.length + 1))//添加tab
     }
 
     fun select(name: String) {
-        editors[name]?.let { addView(it) }
+        editors[name]?.let {
+            nowEditor=it//设置为现在的编辑器
+            addView(it)
+            openCallBack.invoke(name)
+        }
     }
 
     fun openLast() {
