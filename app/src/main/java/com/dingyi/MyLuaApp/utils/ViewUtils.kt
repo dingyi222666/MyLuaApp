@@ -31,7 +31,6 @@ fun radius(v: View, context: BaseActivity<*>, int: Int) {
     drawable.setColor(context.themeManager.colors!!.colorBackground)
     drawable.cornerRadius=context.dp2px(int).toFloat()
     v.setBackgroundDrawable(drawable)
-
 }
 
 fun createProgressBarDialog(context: BaseActivity<*>, title: String, message: String):ProgressDialog {

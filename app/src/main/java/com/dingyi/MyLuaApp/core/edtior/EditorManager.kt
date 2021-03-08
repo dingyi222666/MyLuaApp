@@ -37,14 +37,16 @@ class EditorManager(activity: BaseActivity<*>,
     }
 
     fun open(path:String) {
+        if (editors[projectManager.getShortPath(path)]!=null) {
+            select(projectManager.getShortPath(path))
+            return
+        }
         val view=getEditorByPath(path)//拿到编辑器
         view.text = readString(path)//设置编辑器文字
         nowEditor=view//设置为现在的编辑器
         addView(nowEditor)//添加布局
         editors[projectManager.getShortPath(path)]=nowEditor
-
         openCallBack.invoke(projectManager.getShortPath(path))//打开回调
-
         projectManager.putOpenPath(path)
         tableManager.addTab(path.substring(info.path.length + 1))//添加tab
     }
@@ -54,6 +56,7 @@ class EditorManager(activity: BaseActivity<*>,
             nowEditor=it//设置为现在的编辑器
             addView(it)
             openCallBack.invoke(name)
+            tableManager.selectTab(name)
         }
     }
 

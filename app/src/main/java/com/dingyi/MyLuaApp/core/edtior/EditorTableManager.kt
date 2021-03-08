@@ -8,6 +8,7 @@ class EditorTableManager(private val tabLayout: TabLayout) {
 
     }
 
+
     init {
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -32,8 +33,26 @@ class EditorTableManager(private val tabLayout: TabLayout) {
         tabLayout.selectTab(tabLayout.getTabAt(tabLayout.tabCount-1))
     }
 
-    fun removeTab(name: String) {
+    fun selectTab(name:String) {
+        for (i in 0 until tabLayout.tabCount) {
+            tabLayout.getTabAt(i)?.let { tab->
+                if (tab.text.toString()==name) {
+                    tab.select()
+                }
+            }
 
+        }
+    }
+
+    fun removeTab(name: String) {
+        for (i in 0 until tabLayout.tabCount) {
+            tabLayout.getTabAt(i)?.let { tab->
+                if (tab.text.toString()==name) {
+                    tab.select()
+                }
+            }
+
+        }
     }
 
 }
