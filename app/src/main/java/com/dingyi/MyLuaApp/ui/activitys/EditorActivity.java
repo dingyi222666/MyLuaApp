@@ -1,7 +1,6 @@
 package com.dingyi.MyLuaApp.ui.activitys;
 
 import android.animation.LayoutTransition;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -15,10 +14,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.androlua.LuaBaseActivity;
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.bean.ProjectInfo;
-import com.dingyi.MyLuaApp.core.edtior.EditorManager;
+import com.dingyi.MyLuaApp.core.editor.EditorManager;
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
 import com.dingyi.MyLuaApp.ui.adapters.BaseViewPager2Adapter;
-import com.dingyi.MyLuaApp.ui.fragment.FileListFragment;
+import com.dingyi.MyLuaApp.ui.fragments.FileListFragment;
 import com.dingyi.MyLuaApp.utils.ReflectionUtils;
 import com.dingyi.MyLuaApp.utils.TextUtils;
 

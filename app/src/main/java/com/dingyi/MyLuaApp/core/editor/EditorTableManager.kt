@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.core.edtior
+package com.dingyi.MyLuaApp.core.editor
 
 import com.google.android.material.tabs.TabLayout
 
@@ -48,7 +48,13 @@ class EditorTableManager(private val tabLayout: TabLayout) {
         for (i in 0 until tabLayout.tabCount) {
             tabLayout.getTabAt(i)?.let { tab->
                 if (tab.text.toString()==name) {
-                    tab.select()
+                    if (i==1) {
+                        tabLayout.getTabAt(2)?.select()
+                    }else if (tabLayout.tabCount>1) {
+                        tabLayout.getTabAt(i-1)?.select()
+                    }
+                    tabLayout.removeTabAt(i)
+
                 }
             }
 

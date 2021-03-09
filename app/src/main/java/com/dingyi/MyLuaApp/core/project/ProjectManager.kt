@@ -4,7 +4,7 @@ import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.utils.SharedPreferencesUtil
 
-class ProjectManager(private val activity: BaseActivity<*>, private val info: ProjectInfo) {
+class ProjectManager(activity: BaseActivity<*>, private val info: ProjectInfo) {
 
     private val sharedPreferencesUtil=SharedPreferencesUtil("editor",activity);
 

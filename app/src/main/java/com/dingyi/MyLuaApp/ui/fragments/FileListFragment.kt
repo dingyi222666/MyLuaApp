@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.ui.fragment
+package com.dingyi.MyLuaApp.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.MyLuaApp.bean.ProjectInfo
-import com.dingyi.MyLuaApp.core.edtior.EditorManager
-import com.dingyi.MyLuaApp.core.project.ProjectManager
+import com.dingyi.MyLuaApp.core.editor.EditorManager
 import com.dingyi.MyLuaApp.databinding.FragmentFileListBinding
 import com.dingyi.MyLuaApp.ui.adapters.FileListAdapter
 import com.dingyi.MyLuaApp.utils.toFile
+import kotlin.properties.Delegates
 
 object FileListFragment: Fragment() {
 
@@ -20,7 +20,7 @@ object FileListFragment: Fragment() {
     var binding:FragmentFileListBinding?=null;
 
     private var info: ProjectInfo?=null;
-    private var fileListAdapter= FileListAdapter()
+    private var fileListAdapter by Delegates.notNull<FileListAdapter>()
     private var lastFilePath=""
     var onCreateViewFunction:()->Unit={
 
@@ -35,12 +35,13 @@ object FileListFragment: Fragment() {
 
     fun initView(editorManager: EditorManager, info: ProjectInfo) {
         binding?.let { it ->
+            fileListAdapter= FileListAdapter(info)
             it.list.adapter = fileListAdapter
             it.list.layoutManager= LinearLayoutManager(this.context,LinearLayoutManager.VERTICAL,false)
             fileListAdapter.onClickListener={ path->
-                val file=(info.path+"/"+path).toFile()
+                val file=("$lastFilePath/$path").toFile()
                 if (path=="...") {
-                    loadFileListData(info,lastFilePath.toFile().parentFile.parentFile.path)
+                    loadFileListData(info,lastFilePath.toFile().parentFile.path)
                 }else if(file.isDirectory){
                     loadFileListData(info,file.path)
                 }else {
@@ -55,11 +56,20 @@ object FileListFragment: Fragment() {
 
     private fun loadFileListData(info:ProjectInfo,path:String) {
         lastFilePath=path
-
         val fileList=mutableListOf<String>()
-
-        path.toFile().listFiles().mapTo(fileList) {
-            it.path.substring(info.path.length+1)
+        binding?.let { binding ->
+            binding.title.text=path
+            path.toFile().listFiles().sortedWith{ a,b->
+                if (a.isDirectory) {
+                    return@sortedWith -1
+                }else if (b.isDirectory) {
+                    return@sortedWith 1
+                }else {
+                    return@sortedWith a.name.compareTo(b.name)
+                }
+            }.forEach {
+                fileList.add(it.path)
+            }
         }
 
         if (info.path!=path) {

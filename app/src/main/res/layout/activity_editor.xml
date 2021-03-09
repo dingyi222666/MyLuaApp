@@ -36,7 +36,7 @@
           android:elevation="2dp"
           app:tabGravity="start"
           app:tabIndicator="@drawable/default_tab_indicator"
-          app:tabMaxWidth="0dp"
+          app:tabIndicatorAnimationMode="linear"
           app:tabMode="scrollable"
           app:tabIndicatorFullWidth="false"
           app:tabRippleColor="?theme_rippleColor"

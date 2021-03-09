@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.core.edtior
+package com.dingyi.MyLuaApp.core.editor
 
 import android.widget.LinearLayout
 import com.dingyi.MyLuaApp.base.BaseActivity
@@ -6,12 +6,9 @@ import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.core.project.ProjectManager
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding
 import com.dingyi.MyLuaApp.utils.getSuffix
-import com.dingyi.MyLuaApp.utils.printDebug
 import com.dingyi.MyLuaApp.utils.readString
-import com.dingyi.editor.IEditor
 import com.dingyi.editor.IEditorView
 import com.dingyi.editor.lua.LuaEditor
-import java.util.*
 
 class EditorManager(activity: BaseActivity<*>,
                     private val info: ProjectInfo,
@@ -22,7 +19,6 @@ class EditorManager(activity: BaseActivity<*>,
 
     private val layout=binding.editorParent
     val projectManager= ProjectManager(activity,info)
-
     private val tableManager=EditorTableManager(binding.tabLayout)
 
     var openCallBack:(String)->Unit={}
