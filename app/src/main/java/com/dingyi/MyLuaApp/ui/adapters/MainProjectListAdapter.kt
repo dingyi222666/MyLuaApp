@@ -12,6 +12,7 @@ import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.core.project.getProjectTypeText
 import com.dingyi.MyLuaApp.databinding.ActivityMainListProjectBinding
 import com.dingyi.MyLuaApp.ui.activitys.EditorActivity
+import kotlin.properties.Delegates
 
 
 class MainProjectListAdapter(private val context: Context): BaseAdapter() {
@@ -36,7 +37,7 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view=convertView
-        val holder :ViewHolder?
+        var holder by Delegates.notNull<ViewHolder>()
         val info=data[position]
 
         if (convertView==null) {

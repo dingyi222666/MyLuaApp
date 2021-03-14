@@ -1,6 +1,7 @@
 @file:JvmName("ViewUtils")
 package com.dingyi.MyLuaApp.utils
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
@@ -18,6 +19,11 @@ fun menuIconColor(menu: Menu, color: Int) {
         val drawable = item.icon
         drawable?.setTint(color)
     }
+}
+
+fun <T:View> Activity.getDecorView():T {
+    return this.window.decorView as T
+
 }
 
 fun Context.dp2px(int: Int):Int {

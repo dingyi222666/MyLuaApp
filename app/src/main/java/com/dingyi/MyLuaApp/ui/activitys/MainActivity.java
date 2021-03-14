@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 .get()
                 .url("https://v1.jinrishici.com/shuqing/aiqing.json")
                 .execute((r,e)->{
-                    if (e==null) {
+                    if (e!=null) {
                         String[] array = MainActivity.this.getResources().getStringArray(R.array.main_poem_array);
                         int random = new Random().nextInt(array.length);
                         runOnUiThread(()->subTitleView.setText(array[random]));

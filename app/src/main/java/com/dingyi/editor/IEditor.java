@@ -16,6 +16,7 @@ public interface IEditor {
     void gotoLine();
     void gotoLine(int i);
     void search();
+    boolean isSelected();
     default String getError() {
         return null;
     }

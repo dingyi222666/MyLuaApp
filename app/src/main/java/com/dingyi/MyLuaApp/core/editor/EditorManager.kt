@@ -7,8 +7,11 @@ import com.dingyi.MyLuaApp.core.project.ProjectManager
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding
 import com.dingyi.MyLuaApp.utils.getSuffix
 import com.dingyi.MyLuaApp.utils.readString
+import com.dingyi.MyLuaApp.utils.showSnackbar
+import com.dingyi.MyLuaApp.utils.toFile
 import com.dingyi.editor.IEditorView
 import com.dingyi.editor.lua.LuaEditor
+import com.dingyi.MyLuaApp.R
 
 class EditorManager(activity: BaseActivity<*>,
                     private val info: ProjectInfo,
@@ -25,7 +28,7 @@ class EditorManager(activity: BaseActivity<*>,
 
 
     private lateinit var nowEditor:IEditorView;
-
+    private val suffixList=arrayListOf("lua","java","gradle","xml")
     init {
         tableManager.selectedTabCallBack={
             select(it)
@@ -33,6 +36,10 @@ class EditorManager(activity: BaseActivity<*>,
     }
 
     fun open(path:String) {
+        if (!suffixList.contains(path.toFile().getSuffix())) {
+            showSnackbar(layout,R.string.openFail)
+            return
+        }
         if (editors[projectManager.getShortPath(path)]!=null) {
             select(projectManager.getShortPath(path))
             return
