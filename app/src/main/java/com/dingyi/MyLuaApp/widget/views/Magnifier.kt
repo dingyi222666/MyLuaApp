@@ -79,6 +79,10 @@ class Magnifier(private val activity: Activity, private val view: View) {
         )
     }
 
+    fun unbinding() {
+        activity.getDecorView<ViewGroup>().removeView(binding.getRoot())
+    }
+
     fun close() {
         closeWindow()
         recycle()
