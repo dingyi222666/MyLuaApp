@@ -23,7 +23,7 @@ class Magnifier(private val activity: Activity, private val view: View) {
     val point = Point(0, 0)
 
 
-    var scale = 2f
+    var scale = 1.5f
 
     init {
 
@@ -73,7 +73,7 @@ class Magnifier(private val activity: Activity, private val view: View) {
         binding.root.x= x.toFloat()-activity.dp2px(86/2)
         binding.root.y= y.toFloat()
         binding.image.setImageBitmap(scaleAndCropViewBitmap(
-                x-activity.dp2px(86/2), y-activity.dp2px((38/scale).toInt()),
+                x-activity.dp2px(86/2), y-activity.dp2px((38-4)),
                 activity.dp2px(86), activity.dp2px(38),
                 scale, scale)
         )
