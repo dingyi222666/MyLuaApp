@@ -10,7 +10,6 @@
     <padding
         android:left="3dp"
         android:right="3dp"/>
-
     <size
         android:height="3dp"/>
     <solid

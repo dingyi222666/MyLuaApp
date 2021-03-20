@@ -34,11 +34,10 @@
           android:layout_width="match_parent"
           android:id="@+id/tabLayout"
           android:elevation="2dp"
-          app:tabGravity="start"
           app:tabIndicator="@drawable/default_tab_indicator"
-          app:tabIndicatorAnimationMode="linear"
+          app:tabGravity="start"
+          app:tabMaxWidth="0dp"
           app:tabMode="scrollable"
-          app:tabIndicatorFullWidth="false"
           app:tabRippleColor="?theme_rippleColor"
           app:tabIndicatorColor="?colorPrimary"
           app:tabSelectedTextColor="?theme_textColor"
@@ -54,17 +53,18 @@
             android:layout_height="0dp" />
         <HorizontalScrollView
             android:id="@+id/horizontalView"
-            android:elevation="2dp"
-            android:layout_weight="0"
+            android:background="?theme_backgroundColor"
             android:layout_width="match_parent"
+            android:elevation="4dp"
             android:layout_height="36dp">
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.dingyi.MyLuaApp.widget.views.SymbolView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="?theme_backgroundColor"
             android:orientation="horizontal"
             android:id="@+id/symbolView"
-            android:elevation="3dp"/>
+
+            android:elevation="4dp"/>
         </HorizontalScrollView>
     </LinearLayout>
         <include

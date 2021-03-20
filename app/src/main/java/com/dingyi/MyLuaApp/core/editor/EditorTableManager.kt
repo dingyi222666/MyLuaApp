@@ -29,15 +29,15 @@ class EditorTableManager(private val tabLayout: TabLayout) {
     }
 
     fun addTab(name: String) {
-        tabLayout.addTab(tabLayout.newTab().setText(name))
-        tabLayout.selectTab(tabLayout.getTabAt(tabLayout.tabCount-1))
+        tabLayout.addTab(tabLayout.newTab().setText(name),true)
+
     }
 
     fun selectTab(name:String) {
         for (i in 0 until tabLayout.tabCount) {
             tabLayout.getTabAt(i)?.let { tab->
                 if (tab.text.toString()==name) {
-                    tab.select()
+                    tabLayout.selectTab(tab)
                 }
             }
 

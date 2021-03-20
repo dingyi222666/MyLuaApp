@@ -2,18 +2,15 @@ package com.dingyi.MyLuaApp.widget.views
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.view.ViewGroup
-import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.databinding.ViewMaginfierLayoutBinding
 import com.dingyi.MyLuaApp.utils.dp2px
 import com.dingyi.MyLuaApp.utils.getDecorView
 import com.dingyi.MyLuaApp.utils.printError
-import kotlin.properties.Delegates
 
 class Magnifier(private val activity: Activity, private val view: View) {
 
@@ -53,7 +50,7 @@ class Magnifier(private val activity: Activity, private val view: View) {
 
     private fun showWindow() {
         binding.root.visibility = View.VISIBLE
-        //TODO 显示动画
+
     }
 
     private fun recycle() {
@@ -64,17 +61,25 @@ class Magnifier(private val activity: Activity, private val view: View) {
         }
     }
 
+    private fun abs(i:Float):Float{
+        if (i<0) {
+            return 0f;
+        }
+        return i
+    }
+
     fun show(x: Int, y: Int) {
         if (binding.root.visibility == View.GONE) {
             return
         }
         point.set(x, y)
         recycle()
-        binding.root.x= x.toFloat()-activity.dp2px(86/2)
-        binding.root.y= y.toFloat()
+        binding.root.x= abs(x.toFloat()-activity.dp2px(86/2))
+        binding.root.y= abs(y.toFloat()+activity.dp2px(56/2))
+
         binding.image.setImageBitmap(scaleAndCropViewBitmap(
-                x-activity.dp2px(86/2), y-activity.dp2px((38-4)),
-                activity.dp2px(86), activity.dp2px(38),
+                x-activity.dp2px(86/2), y-activity.dp2px((56-12)),
+                activity.dp2px(86), activity.dp2px(56),
                 scale, scale)
         )
     }
@@ -90,7 +95,7 @@ class Magnifier(private val activity: Activity, private val view: View) {
 
     private fun closeWindow() {
         binding.root.visibility = View.GONE
-        //TODO 关闭动画
+
     }
 
     fun preShow() {

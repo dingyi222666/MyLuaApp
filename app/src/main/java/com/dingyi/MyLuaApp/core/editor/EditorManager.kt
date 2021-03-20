@@ -12,10 +12,11 @@ import com.dingyi.MyLuaApp.utils.toFile
 import com.dingyi.editor.IEditorView
 import com.dingyi.editor.lua.LuaEditor
 import com.dingyi.MyLuaApp.R
+import com.dingyi.editor.IEditor
 
 class EditorManager(activity: BaseActivity<*>,
                     private val info: ProjectInfo,
-                    binding: ActivityEditorBinding) {
+                    binding: ActivityEditorBinding) :IEditor{
 
 
     private val editors: MutableMap<String,IEditorView> =mutableMapOf()
@@ -27,8 +28,9 @@ class EditorManager(activity: BaseActivity<*>,
     var openCallBack:(String)->Unit={}
 
 
-    private lateinit var nowEditor:IEditorView;
-    private val suffixList=arrayListOf("lua","java","gradle","xml")
+    private lateinit var nowEditor:IEditorView
+
+    private val suffixList=arrayListOf("lua","java","gradle","xml","aly")
     init {
         tableManager.selectedTabCallBack={
             select(it)
@@ -83,5 +85,49 @@ class EditorManager(activity: BaseActivity<*>,
             "lua" -> LuaEditor(layout.context)
              else -> LuaEditor(layout.context)
         }
+    }
+
+    override fun getText(): String {
+       return nowEditor.text
+    }
+
+    override fun setText(str: String?) {
+       nowEditor.text=str
+    }
+
+    override fun paste(it: String) {
+       nowEditor.paste(it)
+    }
+
+    override fun paste() {
+       nowEditor.paste()
+    }
+
+    override fun undo() {
+        nowEditor.undo()
+    }
+
+    override fun redo() {
+        nowEditor.redo()
+    }
+
+    override fun format() {
+        nowEditor.format()
+    }
+
+    override fun gotoLine() {
+        nowEditor.gotoLine()
+    }
+
+    override fun gotoLine(i: Int) {
+        nowEditor.gotoLine(i)
+    }
+
+    override fun search() {
+       nowEditor.search()
+    }
+
+    override fun isSelected(): Boolean {
+        return nowEditor.isSelected
     }
 }

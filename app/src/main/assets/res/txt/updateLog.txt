@@ -5,7 +5,7 @@ MyLuaApp by dingyi
 更改 优化版本号命名方式
 新增 编辑器放大镜
 新增 树型选择文件
-
+回归 符号栏
 
 0.0.14 alpha
 重构 as重写apk架构

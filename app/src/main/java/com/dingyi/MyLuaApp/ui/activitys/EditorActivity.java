@@ -93,8 +93,12 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
             return null;
         });
 
+
+        binding.symbolView.setView(manager);
+
         manager.open(info.getPath()+"/main.lua");
         manager.open(info.getPath()+"/layout.aly");
+
 
         initFragment();
 
