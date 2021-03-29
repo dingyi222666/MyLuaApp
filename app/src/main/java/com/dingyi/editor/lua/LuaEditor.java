@@ -6,14 +6,14 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.LinearLayout;
 
 
 import com.androlua.LuaActivity;
 import com.dingyi.MyLuaApp.utils.ReflectionUtils;
+import com.dingyi.MyLuaApp.utils.TextUtils;
+import com.dingyi.MyLuaApp.utils.ViewUtils;
 import com.dingyi.MyLuaApp.widget.views.Magnifier;
-import com.dingyi.editor.IEditor;
 import com.dingyi.editor.IEditorView;
 import com.luajava.LuaJLuaState;
 
@@ -37,11 +37,15 @@ public class LuaEditor extends IEditorView  {
 
     private boolean isSelected=false;
 
-    private GestureDetector detector=new GestureDetector(new GestureDetectorListener());
-
     public LuaEditor(Context context) {
         super(context);
         initLuaEditor();
+    }
+
+    public LuaEditor(Context context,Magnifier magnifier) {
+        super(context);
+        initLuaEditor();
+        this.magnifier=magnifier;
     }
 
     public LuaEditor(Context context, AttributeSet attributeSet) {
@@ -49,32 +53,13 @@ public class LuaEditor extends IEditorView  {
         initLuaEditor();
     }
 
-    private class GestureDetectorListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public void onLongPress(MotionEvent e) {
-            LuaEditor.this.magnifier.preShow();
-            super.onLongPress(e);
+    private  float preZoom(float zoom) {
+        if (zoom>1) {
+            return zoom-1f;
+        }else if (zoom<1) {
+            return zoom+1f;
         }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            magnifier.close();
-            return super.onSingleTapUp(e);
-        }
-
-
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            magnifier.show((int)e2.getX(),(int)e2.getY());
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            magnifier.show((int)e2.getX(),(int)e2.getY());
-            return super.onScroll(e1, e2, distanceX, distanceY);
-        }
+        return  zoom;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -85,34 +70,42 @@ public class LuaEditor extends IEditorView  {
         editor.requestFocus();
         initAndroidClass();
 
-        magnifier=new Magnifier((Activity)getContext(),editor);
+
         b.b.a.a.t oldListener= (t) ReflectionUtils.getPrivateField(b.b.a.a.q.class,editor,"y");
 
         editor.setOnSelectionChangedListener((b, i, i1) -> {
             isSelected=b;
-            if (b) {
-                magnifier.preShow();
-            }else {
-                magnifier.close();
-            }
             oldListener.a(b,i,i1);
         });
 
-        editor.setOnTouchListener((v,e)-> {
+        editor.setOnTouchListener((v,e)->{
+            if (magnifier==null) {
+                return false;
+            }
+            TextUtils.printDebug(e.toString());
             switch (e.getAction()) {
+                case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_MOVE:
+                    magnifier.preShow();
                     if (isSelected) {
-                        magnifier.preShow();
-                        magnifier.show((int)e.getX(),(int)e.getY());
+                        magnifier.show(editor.getCaretX(), editor.getCaretY(),
+                                Math.abs(editor.getCaretX() - ViewUtils.dp2px(getContext(),86 / 2)),
+                                Math.abs(editor.getCaretY()- ViewUtils.dp2px(getContext(),
+                                        16))
+
+                        );
                         return false;
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    magnifier.close();
-                    return false;
+                    magnifier.dismiss();
+                    break;
             }
             return false;
         });
+
+
+
 
     }
 
@@ -167,6 +160,8 @@ public class LuaEditor extends IEditorView  {
 
     }
 
+
+    @Override
     public String getError(){
         Class<?> clazz= null;
         try {
@@ -188,6 +183,7 @@ public class LuaEditor extends IEditorView  {
             e.printStackTrace();
         }
         return errorMsg;
+
     }
 
     @Override

@@ -15,9 +15,7 @@ class ThemeManager(activity: BaseActivity<*>) {
     init {
         themes["默认"] = R.style.Theme_MyLuaApp
         themes["深蓝"] = R.style.Theme_MyLuaApp_Blue
-
         nowThemeResourcesId = themes[sharedPreferencesUtil.get("主题", "默认")]!!
-
         activity.setTheme(nowThemeResourcesId)
         colors = ThemeColors(activity);
 

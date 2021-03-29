@@ -84,6 +84,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             TextView titleView = (TextView) ReflectionUtils.getPrivateField(getViewBinding().toolbar, "mTitleTextView");
             TextView subTitleView = (TextView) ReflectionUtils.getPrivateField(getViewBinding().toolbar, "mSubtitleTextView");
             subTitleView.setVisibility(View.GONE);
+            subTitleView.setEllipsize(android.text.TextUtils.TruncateAt.MARQUEE);
             LayoutTransition transition = new LayoutTransition();
             transition.enableTransitionType(LayoutTransition.CHANGING);
             ((ViewGroup) titleView.getParent()).setLayoutTransition(transition);

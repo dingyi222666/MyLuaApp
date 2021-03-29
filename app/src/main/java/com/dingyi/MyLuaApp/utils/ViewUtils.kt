@@ -4,7 +4,9 @@ package com.dingyi.MyLuaApp.utils
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.drawable.GradientDrawable
+import android.util.TypedValue
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,7 @@ import androidx.core.view.children
 import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.base.BaseActivity
 import com.google.android.material.snackbar.Snackbar
+
 
 fun menuIconColor(menu: Menu, color: Int) {
     val array = menu.children
@@ -21,7 +24,7 @@ fun menuIconColor(menu: Menu, color: Int) {
     }
 }
 
-fun <T:View> Activity.getDecorView():T {
+fun <T : View> Activity.getDecorView():T {
     return this.window.decorView as T
 
 }
@@ -29,6 +32,10 @@ fun <T:View> Activity.getDecorView():T {
 fun Context.dp2px(int: Int):Int {
     val scale=this.resources.displayMetrics.density
     return (int*scale+0.5f).toInt()
+}
+
+fun Context.sp2px(sp: Float): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().getDisplayMetrics())
 }
 
 fun radius(v: View, context: BaseActivity<*>, int: Int) {
@@ -58,15 +65,15 @@ fun createProgressBarDialog(context: BaseActivity<*>, title: String, message: St
             it.setElevation(0f)//阴影
         }
         it.decorView.setBackgroundColor(0)
-        radius((it.decorView as ViewGroup).getChildAt(0),context,8)
+        radius((it.decorView as ViewGroup).getChildAt(0), context, 8)
 
     }
     //dialog.show()
     return dialog
 }
 
-fun showSnackbar(view: View,resId:Int) {
-    Snackbar.make(view,resId,Snackbar.LENGTH_LONG)
+fun showSnackbar(view: View, resId: Int) {
+    Snackbar.make(view, resId, Snackbar.LENGTH_LONG)
             .setText(resId)
             .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
             .show()

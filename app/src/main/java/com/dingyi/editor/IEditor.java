@@ -20,4 +20,5 @@ public interface IEditor {
     default String getError() {
         return null;
     }
+
 }
