@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.androlua.LuaBaseActivity;
 import com.dingyi.MyLuaApp.R;
+import com.dingyi.MyLuaApp.base.BaseFragment;
 import com.dingyi.MyLuaApp.bean.ProjectInfo;
 import com.dingyi.MyLuaApp.core.editor.EditorManager;
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
@@ -109,9 +110,11 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
     private void initFragment() {
         getViewBinding().slide.page.setAdapter(slideAdapter);
         slideAdapter.add(FileListFragment.INSTANCE);
-        FileListFragment.INSTANCE.setOnCreateViewFunction(()->{
-            FileListFragment.INSTANCE.initView(manager,info);
-            return null;
+        FileListFragment.INSTANCE.setEvent(new BaseFragment.Event() {
+            @Override
+            public void onCreateView() {
+                FileListFragment.INSTANCE.initView(manager,info);
+            }
         });
     }
 

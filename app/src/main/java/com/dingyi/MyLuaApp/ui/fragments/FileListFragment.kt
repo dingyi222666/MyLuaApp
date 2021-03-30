@@ -1,12 +1,8 @@
 package com.dingyi.MyLuaApp.ui.fragments
 
-import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dingyi.MyLuaApp.base.BaseFragment
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.core.editor.EditorManager
 import com.dingyi.MyLuaApp.databinding.FragmentFileListBinding
@@ -14,27 +10,15 @@ import com.dingyi.MyLuaApp.ui.adapters.FileListAdapter
 import com.dingyi.MyLuaApp.utils.toFile
 import kotlin.properties.Delegates
 
-object FileListFragment: Fragment() {
+object FileListFragment: BaseFragment<FragmentFileListBinding>() {
 
-    @SuppressLint("StaticFieldLeak")
-    var binding:FragmentFileListBinding?=null;
 
-    private var info: ProjectInfo?=null;
     private var fileListAdapter by Delegates.notNull<FileListAdapter>()
     private var lastFilePath=""
-    var onCreateViewFunction:()->Unit={
-
-    }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding=FragmentFileListBinding.inflate(inflater,container,false);
-        onCreateViewFunction();
-        return binding?.root
-    }
 
 
     fun initView(editorManager: EditorManager, info: ProjectInfo) {
-        binding?.let { it ->
+        viewBinding.let { it ->
             fileListAdapter= FileListAdapter(info)
             it.list.adapter = fileListAdapter
             it.list.layoutManager= LinearLayoutManager(this.context,LinearLayoutManager.VERTICAL,false)
@@ -57,7 +41,7 @@ object FileListFragment: Fragment() {
     private fun loadFileListData(info:ProjectInfo,path:String) {
         lastFilePath=path
         val fileList=mutableListOf<String>()
-        binding?.let { binding ->
+        viewBinding?.let { binding ->
             binding.title.text=path
             path.toFile().listFiles().sortedWith{ a,b->
                 if (a.isDirectory) {
@@ -77,6 +61,14 @@ object FileListFragment: Fragment() {
         }
 
         fileListAdapter.addAll(fileList)
+
+    }
+
+    override fun getViewBindingClass(): Class<FragmentFileListBinding> {
+       return FragmentFileListBinding::class.java
+    }
+
+    override fun initView(binding: FragmentFileListBinding?) {
 
     }
 

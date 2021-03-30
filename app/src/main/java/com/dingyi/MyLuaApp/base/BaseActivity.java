@@ -37,7 +37,6 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
     private long lastListenerTime = System.currentTimeMillis();
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +76,6 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
     protected abstract Class<T> getViewBindingClass();
 
-
     protected T getViewBinding() {
         if (binding == null) {
             try {
@@ -92,7 +90,6 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     }
 
     protected abstract void initView(T binding);
-
 
     private boolean checkCanExit(int code) {
         if (code == KeyEvent.KEYCODE_BACK) {

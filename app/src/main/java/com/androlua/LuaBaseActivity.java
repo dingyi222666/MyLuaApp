@@ -1227,7 +1227,6 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
     }
 
     public void setContentView(String layout, LuaObject env) throws Exception {
-
         LuaObject loadlayout = L.getLuaObject("loadlayout");
         View view = (View) loadlayout.call(layout, env);
         super.setContentView(view);
