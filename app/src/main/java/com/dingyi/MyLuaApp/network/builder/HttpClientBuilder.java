@@ -6,7 +6,7 @@ import com.dingyi.MyLuaApp.network.client.HttpClient;
 public class HttpClientBuilder {
     private Mode mode;
     private String url;
-    private static enum Mode {
+    private enum Mode {
         GET,POST,PUT,DELETE
     }
 

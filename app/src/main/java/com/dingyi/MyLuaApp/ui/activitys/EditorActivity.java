@@ -110,12 +110,7 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
     private void initFragment() {
         getViewBinding().slide.page.setAdapter(slideAdapter);
         slideAdapter.add(FileListFragment.INSTANCE);
-        FileListFragment.INSTANCE.setEvent(new BaseFragment.Event() {
-            @Override
-            public void onCreateView() {
-                FileListFragment.INSTANCE.initView(manager,info);
-            }
-        });
+        FileListFragment.INSTANCE.setEvent(() -> FileListFragment.INSTANCE.initView(manager,info));
     }
 
     @Override

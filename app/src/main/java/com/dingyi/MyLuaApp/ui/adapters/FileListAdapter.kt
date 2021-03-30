@@ -19,22 +19,22 @@ class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<File
     var onClickListener: (String) -> Unit = {
 
     }
+    private var imageData = mapOf("lua,java,aly,gradle,xml,py" to R.drawable.ic_twotone_code_24,
+            "default" to R.drawable.ic_twotone_insert_drive_file_24,
+            "png,jpg,bmp" to R.drawable.ic_twotone_image_24,
+            "dir" to R.drawable.ic_twotone_folder_24)
 
     private fun getImageType(file: File): Int {
-        val data = mapOf("lua,java,aly,gradle,xml,py" to R.drawable.ic_twotone_code_24,
-                "default" to R.drawable.ic_twotone_insert_drive_file_24,
-                "png,jpg,bmp" to R.drawable.ic_twotone_image_24,
-                "dir" to R.drawable.ic_twotone_folder_24)
 
-        if (file.isDirectory) return data["dir"]!!
+        if (file.isDirectory) return imageData["dir"]!!
         if (file.path == "...") return R.drawable.ic_twotone_undo_24
-        data.forEach {
+        imageData.forEach {
             if (it.key.lastIndexOf(file.getSuffix()) != -1) {
                 return it.value
             }
         }
 
-        return data["default"]!!
+        return imageData["default"]!!
 
     }
 

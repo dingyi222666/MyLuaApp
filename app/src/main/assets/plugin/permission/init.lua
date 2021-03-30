@@ -1,21 +1,21 @@
 pluginType="Activity"
---²å¼şÀàĞÍ (Editor »òActivity)
-pluginName="È¨ÏŞ°ïÖú"
---²å¼şÃû×Ö
+--æ’ä»¶ç±»å‹ (Editor æˆ–Activity)
+pluginName="æƒé™å¸®åŠ©"
+--æ’ä»¶åå­—
 pluginId="com.dingyi.plugin.built.permissionHelper"
---²å¼şid ÓÃÓÚÇø·Ö
+--æ’ä»¶id ç”¨äºåŒºåˆ†
 pluginVersion="1.0"
---²å¼ş°æ±¾
+--æ’ä»¶ç‰ˆæœ¬
 pluginVersionCode=1
---²å¼ş´úÂë°æ±¾
+--æ’ä»¶ä»£ç ç‰ˆæœ¬
 isAutoRun=false
---×Ô¶¯ÔËĞĞ Ä¬ÈÏfalse(Ö»ÓĞÀàĞÍÎªEditor²Å¿ÉÒÔÎªtrue)
+--è‡ªåŠ¨è¿è¡Œ é»˜è®¤false(åªæœ‰ç±»å‹ä¸ºEditoræ‰å¯ä»¥ä¸ºtrue)
 isShowInPluginList=false
---ÊÇ·ñÔÚ²å¼şÁĞ±í¿É¼û Ä¬ÈÏtrue
+--æ˜¯å¦åœ¨æ’ä»¶åˆ—è¡¨å¯è§ é»˜è®¤true
 isAdminPlugin=true
---ÊÇ·ñ¹ÜÀí²å¼ş ÓÃ»§¶Ô²å¼şµÄ°²È«ĞÔÉèÖÃÎŞĞ§
+--æ˜¯å¦ç®¡ç†æ’ä»¶ ç”¨æˆ·å¯¹æ’ä»¶çš„å®‰å…¨æ€§è®¾ç½®æ— æ•ˆ
 --[[runCodeList={
   SimpleCodeFind="find.lua"
 }]]
---²å¼ş¿ÉÑ¡µÄÔËĞĞÁĞ±í ÎŞmain.luaÊ±½¨ÒéÉèÖÃ
+--æ’ä»¶å¯é€‰çš„è¿è¡Œåˆ—è¡¨ æ— main.luaæ—¶å»ºè®®è®¾ç½®
 
