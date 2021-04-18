@@ -10,7 +10,7 @@ import com.dingyi.MyLuaApp.ui.adapters.FileListAdapter
 import com.dingyi.MyLuaApp.utils.toFile
 import kotlin.properties.Delegates
 
-object FileListFragment: BaseFragment<FragmentFileListBinding>() {
+class FileListFragment: BaseFragment<FragmentFileListBinding>() {
 
 
     private var fileListAdapter by Delegates.notNull<FileListAdapter>()

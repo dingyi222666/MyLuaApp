@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.databinding.FragmentFileListAdapterBinding
+import com.dingyi.MyLuaApp.utils.getImageType
 import com.dingyi.MyLuaApp.utils.getSuffix
 import com.dingyi.MyLuaApp.utils.toFile
 import java.io.File
@@ -19,24 +20,7 @@ class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<File
     var onClickListener: (String) -> Unit = {
 
     }
-    private var imageData = mapOf("lua,java,aly,gradle,xml,py" to R.drawable.ic_twotone_code_24,
-            "default" to R.drawable.ic_twotone_insert_drive_file_24,
-            "png,jpg,bmp" to R.drawable.ic_twotone_image_24,
-            "dir" to R.drawable.ic_twotone_folder_24)
 
-    private fun getImageType(file: File): Int {
-
-        if (file.isDirectory) return imageData["dir"]!!
-        if (file.path == "...") return R.drawable.ic_twotone_undo_24
-        imageData.forEach {
-            if (it.key.lastIndexOf(file.getSuffix()) != -1) {
-                return it.value
-            }
-        }
-
-        return imageData["default"]!!
-
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(FragmentFileListAdapterBinding.inflate(LayoutInflater.from(parent.context), parent, false))

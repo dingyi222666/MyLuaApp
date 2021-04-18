@@ -5,20 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activitys.MainActivity">
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        app:elevation="2dp"
-        android:layout_height="56dp">
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-
-            app:titleTextAppearance="@style/BaseToolBarTitleStyle"
-            app:subtitleTextAppearance="@style/BaseToolBarSubTitleStyle"
-            android:background="?attr/theme_backgroundColor"
-            android:layout_height="match_parent"
-            android:id="@+id/toolbar"/>
-    </com.google.android.material.appbar.AppBarLayout>
-
+    <include
+        android:id="@+id/toolbarParent"
+        layout="@layout/layout_include_toolbar"/>
     <LinearLayout
         android:layout_marginTop="56dp"
         android:layout_width="match_parent"

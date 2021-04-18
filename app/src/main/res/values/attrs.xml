@@ -5,4 +5,5 @@
    <attr name="theme_cardBackgroundColor" format="color|reference" />
    <attr name="theme_textColor" format="color|reference"/>
    <attr name="theme_hintTextColor" format="reference|color" />
+
 </resources>

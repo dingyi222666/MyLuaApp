@@ -4,6 +4,9 @@
     <string name="searchTooltip">搜索</string>
     <string name="addTooltip">添加</string>
     <string name="settings">设置</string>
+    <string name="settings_editor">编辑器</string>
+    <string name="settings_magnifier">放大镜</string>
+    <string name="settings_magnifier_summary">选择代码时放大当前所选区域(bug)</string>
     <string name="help">帮助</string>
     <string name="imports">导入</string>
     <string name="about">关于</string>

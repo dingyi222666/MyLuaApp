@@ -1,6 +1,7 @@
 package com.dingyi.MyLuaApp.base;
 
 import android.animation.LayoutTransition;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -64,7 +65,14 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        //横屏适配
+        binding=null;//置空当前binding
+        //重新获取binding
+        initView(getViewBinding());
+        setContentView(getViewBinding().getRoot());
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,5 +124,8 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         return true;
     }
 
+    public void newActivity(Class<?> clazz) {
+        startActivity(new Intent(this,clazz));
+    }
 
 }

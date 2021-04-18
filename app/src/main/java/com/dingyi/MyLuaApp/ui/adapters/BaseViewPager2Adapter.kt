@@ -29,7 +29,7 @@ class BaseViewPager2Adapter(val activity: BaseActivity<*>): FragmentStateAdapter
     }
 
     fun <T> getFragment(index:Int):T {
-        var fragment=views[index]
+        val fragment=views[index]
         return fragment as T
     }
 }

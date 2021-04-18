@@ -67,7 +67,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (checkInfo()) {
             if (Build.VERSION.SDK_INT >= 23) {
                 try {
-                    permissions = new ArrayList<String>();
+                    permissions = new ArrayList<>();
                     String[] ps2 = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_PERMISSIONS).requestedPermissions;
                     for (String p : ps2) {
                         try {

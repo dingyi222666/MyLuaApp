@@ -14,6 +14,8 @@ import androidx.core.view.children
 import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.base.BaseActivity
 import com.google.android.material.snackbar.Snackbar
+import java.io.File
+
 
 
 fun menuIconColor(menu: Menu, color: Int) {
@@ -38,6 +40,10 @@ fun Context.sp2px(sp: Float): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().getDisplayMetrics())
 }
 
+fun Context.sp2px(sp: Float): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().displayMetrics)
+}
+
 fun radius(v: View, context: BaseActivity<*>, int: Int) {
     val drawable= GradientDrawable()
     drawable.shape=GradientDrawable.RECTANGLE
@@ -56,7 +62,6 @@ fun createProgressBarDialog(context: BaseActivity<*>, title: String, message: St
         setProgressStyle(ProgressDialog.STYLE_SPINNER)
         setCancelable(false)
         setCanceledOnTouchOutside(false)
-
     }
 
     dialog.window?.let {
@@ -77,5 +82,24 @@ fun showSnackbar(view: View, resId: Int) {
             .setText(resId)
             .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
             .show()
+}
+
+private var imageData = mapOf("lua,java,aly,gradle,xml,py" to R.drawable.ic_twotone_code_24,
+        "default" to R.drawable.ic_twotone_insert_drive_file_24,
+        "png,jpg,bmp" to R.drawable.ic_twotone_image_24,
+        "dir" to R.drawable.ic_twotone_folder_24)
+
+ fun getImageType(file: File): Int {
+
+    if (file.isDirectory) return imageData["dir"]!!
+    if (file.path == "...") return R.drawable.ic_twotone_undo_24
+    imageData.forEach {
+        if (it.key.lastIndexOf(file.getSuffix()) != -1) {
+            return it.value
+        }
+    }
+
+    return imageData["default"]!!
+
 }
 

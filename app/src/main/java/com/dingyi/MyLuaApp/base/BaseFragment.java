@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.viewbinding.ViewBinding;
 
 import com.dingyi.MyLuaApp.R;
@@ -29,8 +30,6 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     private T binding;
 
-    protected ThemeManager themeManager;
-
     private Event events;
 
     public void setEvent(Event event) {
@@ -40,6 +39,7 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
     }
 
@@ -64,7 +64,7 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     protected abstract Class<T> getViewBindingClass();
 
-    protected T getViewBinding(LayoutInflater inflater,ViewGroup root) {
+    public T getViewBinding(LayoutInflater inflater,ViewGroup root) {
         if (binding == null) {
             try {
                 Method method=getViewBindingClass().getDeclaredMethod("inflate", LayoutInflater.class,ViewGroup.class,Boolean.TYPE);
@@ -77,7 +77,7 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         return binding;
     }
 
-    protected T getViewBinding() {
+    public  T getViewBinding() {
         return binding;
     }
 

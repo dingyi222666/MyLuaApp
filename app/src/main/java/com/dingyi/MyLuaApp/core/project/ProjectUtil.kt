@@ -1,4 +1,5 @@
 @file:JvmName("ProjectUtil")
+
 package com.dingyi.MyLuaApp.core.project
 
 /** 工程的辅助类，提供各种辅助方法
@@ -7,8 +8,10 @@ package com.dingyi.MyLuaApp.core.project
 
 import android.app.Activity
 import android.content.Context
+import com.androlua.LuaRunActivity
 import com.androlua.LuaUtil
 import com.dingyi.MyLuaApp.R
+import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.core.task.SimpleAsyncTask
 import com.dingyi.MyLuaApp.utils.*
 import org.json.JSONArray
@@ -86,7 +89,13 @@ fun createProject(context: Activity, i: Int, toPath: String, name: String, packa
 
 }
 
-
+fun runProject(context: Context, info: ProjectInfo) {
+    when (info.type) {
+        LUA_PROJECT -> LuaRunActivity.newActivity(
+                context, getDefaultPath(info.path), null
+        )
+    }
+}
 
 fun getProjectName(): String {
     val list = mutableListOf<File>()
@@ -107,5 +116,5 @@ fun getProjectName(): String {
     if (len == 0)
         return "MyApplication"
 
-    return "MyApplication${len+1}"
+    return "MyApplication${len + 1}"
 }

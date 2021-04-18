@@ -985,9 +985,11 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
         newActivity(req, path, null);
     }
 
-    public void newActivity(Class<Activity> activityClass) {
+    /*public void newActivity(Class<Activity> activityClass) {
         startActivity(new Intent(this, activityClass));
     }
+
+     */
 
     public void newActivity(int req, Class<Activity> activityClass) {
         startActivityForResult(new Intent(this, activityClass), req);

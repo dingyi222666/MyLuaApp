@@ -14,6 +14,7 @@ import com.dingyi.MyLuaApp.widget.views.Magnifier
 import com.dingyi.editor.IEditor
 import com.dingyi.editor.IEditorView
 import com.dingyi.editor.lua.LuaEditor
+import java.util.*
 import kotlin.math.abs
 
 @SuppressLint("ClickableViewAccessibility")
@@ -93,7 +94,7 @@ class EditorManager(private val activity: BaseActivity<*>,
     }
 
     private fun getEditorByPath(path: String): IEditorView {
-        return when (path.getSuffix().toLowerCase()) {
+        return when (path.getSuffix().toLowerCase(Locale.ROOT)) {
             "lua","aly" -> LuaEditor(layout.context,magnifier)
              else -> LuaEditor(layout.context,magnifier)
         }
