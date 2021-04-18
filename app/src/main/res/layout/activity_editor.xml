@@ -5,20 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activitys.EditorActivity">
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:elevation="2dp"
-        app:elevation="2dp"
-        android:layout_height="56dp">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/theme_backgroundColor"
-
-            app:subtitleTextAppearance="@style/BaseToolBarSubTitleStyle"
-            app:titleTextAppearance="@style/BaseToolBarTitleStyle" />
-    </com.google.android.material.appbar.AppBarLayout>
+   <include
+       android:id="@+id/toolbarParent"
+       layout="@layout/layout_include_toolbar"/>
     <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
         android:id="@+id/drawerLayout"
@@ -68,6 +57,7 @@
         </HorizontalScrollView>
     </LinearLayout>
         <include
+
             android:id="@+id/slide"
             layout="@layout/activity_editor_slide" />
 

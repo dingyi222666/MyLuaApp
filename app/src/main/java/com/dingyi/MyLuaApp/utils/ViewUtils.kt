@@ -17,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar
 import java.io.File
 
 
-
 fun menuIconColor(menu: Menu, color: Int) {
     val array = menu.children
     array.forEach { item ->
@@ -34,10 +33,6 @@ fun <T : View> Activity.getDecorView():T {
 fun Context.dp2px(int: Int):Int {
     val scale=this.resources.displayMetrics.density
     return (int*scale+0.5f).toInt()
-}
-
-fun Context.sp2px(sp: Float): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().getDisplayMetrics())
 }
 
 fun Context.sp2px(sp: Float): Float {

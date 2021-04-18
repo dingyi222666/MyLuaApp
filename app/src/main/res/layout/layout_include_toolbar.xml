@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:elevation="2dp"
+    app:elevation="2dp"
+    android:layout_height="56dp">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/theme_backgroundColor"
+        app:subtitleTextAppearance="@style/BaseToolBarSubTitleStyle"
+        app:titleTextAppearance="@style/BaseToolBarTitleStyle" />
+</com.google.android.material.appbar.AppBarLayout>

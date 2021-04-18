@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+ <PreferenceCategory
+
+     android:title="@string/settings_editor">
+     <SwitchPreference
+         android:title="@string/settings_magnifier"
+         android:summary="@string/settings_magnifier_summary"
+         android:key="editor_magnifier"
+         android:defaultValue="false"
+         android:icon="@drawable/ic_twotone_search_24"/>
+ </PreferenceCategory>
+</PreferenceScreen>

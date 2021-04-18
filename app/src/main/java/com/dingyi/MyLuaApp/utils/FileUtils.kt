@@ -58,3 +58,10 @@ fun String.getSuffix(): String {
     return substring(lastIndexOf(".") + 1)
 }
 
+fun File.hasChildFile(): Boolean {
+    if (this.isFile) {
+        return false
+    }
+    return this.list().isEmpty()
+}
+

@@ -46,7 +46,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
 
-
     @Override
     protected String getToolBarTitle() {
         return "MyLuaApp";
@@ -60,7 +59,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
     protected void initView(ActivityMainBinding binding) {
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.toolbarParent.toolbar);
+
         binding.refresh.setColorSchemeColors(themeManager.getColors().getColorPrimary());
 
         binding.refresh.setOnRefreshListener(()->{
@@ -81,9 +81,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void initToolBar() {
         super.initToolBar();
         try {
-            TextView titleView = (TextView) ReflectionUtils.getPrivateField(getViewBinding().toolbar, "mTitleTextView");
-            TextView subTitleView = (TextView) ReflectionUtils.getPrivateField(getViewBinding().toolbar, "mSubtitleTextView");
+            TextView titleView = (TextView) ReflectionUtils.getPrivateField(getViewBinding().toolbarParent.toolbar, "mTitleTextView");
+            TextView subTitleView = (TextView) ReflectionUtils.getPrivateField(getViewBinding().toolbarParent.toolbar, "mSubtitleTextView");
             subTitleView.setVisibility(View.GONE);
+            subTitleView.setSingleLine(false);
             subTitleView.setEllipsize(android.text.TextUtils.TruncateAt.MARQUEE);
             LayoutTransition transition = new LayoutTransition();
             transition.enableTransitionType(LayoutTransition.CHANGING);
@@ -95,7 +96,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     private TextView getSubTitleView() {
-        return (TextView) ReflectionUtils.getPrivateField(getViewBinding().toolbar, "mSubtitleTextView");
+        return (TextView) ReflectionUtils.getPrivateField(getViewBinding().toolbarParent.toolbar, "mSubtitleTextView");
     }
 
     private void showPoem() {
@@ -137,8 +138,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
         adapter.clear();
 
-
-
         FileUtils.forEachDir(Objects.requireNonNull(FileUtils.getUsePaths().get("projectPath")), file -> {
             if (ProjectUtil.getProjectType(file) == ProjectUtil.LUA_PROJECT) {
                 LuaTable infoTable = luaJ.loadFile(file.getPath() + "/init.lua");
@@ -167,6 +166,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.main_action_menu_settings:
+                newActivity(SettingsActivity.class);
+                break;
             case R.id.main_action_menu_newProject:
                 createChooseProjectDialog();
                 break;
