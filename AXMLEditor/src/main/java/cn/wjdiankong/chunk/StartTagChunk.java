@@ -22,14 +22,14 @@ public class StartTagChunk implements Chunk{
 	public int offset;
 	
 	public StartTagChunk(){
-		//³õÊ¼»¯ÒÔÏÂÃ»ÓĞÌ«´óÓÃÍ¾µÄ×Ö¶Î
+		//åˆå§‹åŒ–ä»¥ä¸‹æ²¡æœ‰å¤ªå¤§ç”¨é€”çš„å­—æ®µ
 		type = Utils.int2Byte(ChunkTypeNumber.CHUNK_STARTTAG);
 		lineNumber = new byte[4];
 		unknown = new byte[4];
 		flag = new byte[4];
 		classAttr = new byte[4];
 		
-		//flag±ØĞëÎª0x00140014
+		//flagå¿…é¡»ä¸º0x00140014
 		int flatInt = 0;
 		flatInt = flatInt | 0x00140014;
 		flag = Utils.int2Byte(flatInt);
@@ -70,28 +70,28 @@ public class StartTagChunk implements Chunk{
 		
 		chunk.offset = offset;
 		
-		//½âÎöChunkTag
+		//è§£æChunkTag
 		chunk.type = Utils.copyByte(byteSrc, 0, 4);
 
-		//½âÎöChunkSize
+		//è§£æChunkSize
 		chunk.size = Utils.copyByte(byteSrc, 4, 4);
 
-		//½âÎöĞĞºÅ
+		//è§£æè¡Œå·
 		chunk.lineNumber = Utils.copyByte(byteSrc, 8, 4);
 
-		//½âÎöunknown
+		//è§£æunknown
 		chunk.unknown = Utils.copyByte(byteSrc, 12, 4);
 
-		//½âÎöUri
+		//è§£æUri
 		chunk.uri = Utils.copyByte(byteSrc, 16, 4);
 
-		//½âÎöTagName
+		//è§£æTagName
 		chunk.name = Utils.copyByte(byteSrc, 20, 4);
 		
-		//½âÎöflag
+		//è§£æflag
 		chunk.flag = Utils.copyByte(byteSrc, 24, 4);
 
-		//½âÎöÊôĞÔ¸öÊı(ÕâÀïĞèÒª¹ıÂËËÄ¸ö×Ö½Ú:14001400)
+		//è§£æå±æ€§ä¸ªæ•°(è¿™é‡Œéœ€è¦è¿‡æ»¤å››ä¸ªå­—èŠ‚:14001400)
 		chunk.attCount = Utils.copyByte(byteSrc, 28, 4);
 		int attrCount = Utils.byte2int(chunk.attCount);
 		
@@ -100,9 +100,9 @@ public class StartTagChunk implements Chunk{
 		
 		chunk.attrList = new ArrayList<AttributeData>(attrCount);
 		
-		//½âÎöÊôĞÔ
-		//ÕâÀïĞèÒª×¢ÒâµÄÊÇÃ¿¸öÊôĞÔµ¥Ôª¶¼ÊÇÓÉÎå¸öÔªËØ×é³É£¬Ã¿¸öÔªËØÕ¼ÓÃËÄ¸ö×Ö½Ú£ºnamespaceuri, name, valuestring, type, data
-		//ÔÚ»ñÈ¡µ½typeÖµµÄÊ±ºòĞèÒªÓÒÒÆ24Î»
+		//è§£æå±æ€§
+		//è¿™é‡Œéœ€è¦æ³¨æ„çš„æ˜¯æ¯ä¸ªå±æ€§å•å…ƒéƒ½æ˜¯ç”±äº”ä¸ªå…ƒç´ ç»„æˆï¼Œæ¯ä¸ªå…ƒç´ å ç”¨å››ä¸ªå­—èŠ‚ï¼šnamespaceuri, name, valuestring, type, data
+		//åœ¨è·å–åˆ°typeå€¼çš„æ—¶å€™éœ€è¦å³ç§»24ä½
 		for(int i=0;i<attrCount;i++){
 			Integer[] values = new Integer[5];
 			AttributeData attrData = new AttributeData();

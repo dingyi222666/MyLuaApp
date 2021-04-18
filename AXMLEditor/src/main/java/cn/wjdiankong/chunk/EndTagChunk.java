@@ -16,7 +16,7 @@ public class EndTagChunk implements Chunk{
 	public String tagValue;
 	
 	public EndTagChunk(){
-		//初始化以下没有太大用途的字段
+		//鍒濆鍖栦互涓嬫病鏈夊お澶х敤閫旂殑瀛楁
 		type = Utils.int2Byte(ChunkTypeNumber.CHUNK_ENDTAG);
 		size = Utils.int2Byte(24);
 		lineNumber = new byte[4];
@@ -51,22 +51,22 @@ public class EndTagChunk implements Chunk{
 		
 		chunk.offset = offset;
 		
-		//解析type
+		//瑙ｆ瀽type
 		chunk.type = Utils.copyByte(byteSrc, 0, 4);
 		
-		//解析size
+		//瑙ｆ瀽size
 		chunk.size = Utils.copyByte(byteSrc, 4, 4);
 		
-		//解析行号
+		//瑙ｆ瀽琛屽彿
 		chunk.lineNumber = Utils.copyByte(byteSrc, 8, 4);
 
-		//解析unknown
+		//瑙ｆ瀽unknown
 		chunk.unknown = Utils.copyByte(byteSrc, 12, 4);
 
-		//解析Uri
+		//瑙ｆ瀽Uri
 		chunk.uri = Utils.copyByte(byteSrc, 16, 4);
 
-		//解析TagName
+		//瑙ｆ瀽TagName
 		chunk.name = Utils.copyByte(byteSrc, 20, 4);
 		
 		return chunk;

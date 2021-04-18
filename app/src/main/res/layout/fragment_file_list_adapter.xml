@@ -28,7 +28,6 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_width="0dp">
-
             <android.widget.TextView
                 android:id="@+id/title"
                 android:textColor="?theme_textColor"

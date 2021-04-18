@@ -15,22 +15,22 @@ public class EndNameSpaceChunk {
 
 		EndNameSpaceChunk chunk = new EndNameSpaceChunk();
 
-		//解析type
+		//瑙ｆ瀽type
 		chunk.type = Utils.copyByte(byteSrc, 0, 4);
 		
-		//解析size
+		//瑙ｆ瀽size
 		chunk.size = Utils.copyByte(byteSrc, 4, 4);
 
-		//解析行号
+		//瑙ｆ瀽琛屽彿
 		chunk.lineNumber = Utils.copyByte(byteSrc, 8, 4);
 
-		//解析unknown
+		//瑙ｆ瀽unknown
 		chunk.unknown = Utils.copyByte(byteSrc, 12, 4);
 		
-		//解析prefix(这里需要注意的是行号后面的四个字节为FFFF,过滤)
+		//瑙ｆ瀽prefix(杩欓噷闇�瑕佹敞鎰忕殑鏄鍙峰悗闈㈢殑鍥涗釜瀛楄妭涓篎FFF,杩囨护)
 		chunk.prefix = Utils.copyByte(byteSrc, 16, 4);
 
-		//解析Uri
+		//瑙ｆ瀽Uri
 		chunk.uri = Utils.copyByte(byteSrc, 20, 4);
 
 		return chunk;

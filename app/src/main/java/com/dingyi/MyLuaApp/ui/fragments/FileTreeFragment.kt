@@ -12,6 +12,6 @@ class FileTreeFragment: BaseFragment<FragmentFileTreeBinding>() {
     }
 
     override fun initView(binding: FragmentFileTreeBinding?) {
-        TODO("Not yet implemented")
+
     }
 }

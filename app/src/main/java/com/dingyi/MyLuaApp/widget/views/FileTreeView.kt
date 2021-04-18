@@ -24,7 +24,7 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
             startShowTree()
         }
 
-    private val adapter = FileTreeViewAdapter()
+    private val adapter = FileTreeViewAdapter(context)
 
 
     init {
@@ -33,10 +33,12 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
     }
 
     private fun startShowTree() {
+        val list=mutableListOf<Node>()
         rootPath.toFile().listFiles().forEach {
             val node=Node(0,it.path,it.name,it.isDirectory,false)
-            adapter.add(node)
+            list.add(node)
         }
+        adapter.addAll(list)
     }
 
     data class Node(val deep: Int,
@@ -45,18 +47,22 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
                     val isDir: Boolean = false,
                     val isOpen: Boolean = false)
 
-    class FileTreeViewAdapter : RecyclerView.Adapter<FileTreeViewAdapter.ViewHolder>() {
+    class FileTreeViewAdapter(val context:Context) : RecyclerView.Adapter<FileTreeViewAdapter.ViewHolder>() {
+
+
 
         private var data = mutableListOf<Node>()
 
-        inner class ViewHolder(val binding: FragmentFileTreeAdapterBinding) : RecyclerView.ViewHolder(binding.root) {
+        class ViewHolder(val binding: FragmentFileTreeAdapterBinding) : RecyclerView.ViewHolder(binding.root) {
 
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(FragmentFileTreeAdapterBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
-            ))
+            val binding=FragmentFileTreeAdapterBinding.inflate(LayoutInflater.from(context),parent,false)
+            if (binding.root.parent!=null && binding.root.parent is ViewGroup) {
+                (binding.root.parent as ViewGroup).removeView(binding.root)
+            }
+            return ViewHolder(binding)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -78,7 +84,14 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
 
         fun add(node: Node) {
             data.add(node)
-            notifyItemInserted(data.size - 1)
+            notifyDataSetChanged()
+            //notifyItemInserted(data.size - 1)
+        }
+
+        fun addAll(node: List<Node>) {
+            val old=data.size
+            data.addAll(node)
+            notifyItemRangeInserted(old,data.size-old)
         }
 
 
