@@ -62,6 +62,17 @@ fun File.hasChildFile(): Boolean {
     if (this.isFile) {
         return false
     }
-    return this.list().isEmpty()
+    return this.list().isNotEmpty()
 }
 
+fun File.listSortFiles():List<File>{
+    return this.listFiles().sortedWith { a, b ->
+        if (a.isDirectory) {
+            return@sortedWith -1
+        } else if (b.isDirectory) {
+            return@sortedWith 1
+        } else {
+            return@sortedWith a.name.compareTo(b.name)
+        }
+    }
+}

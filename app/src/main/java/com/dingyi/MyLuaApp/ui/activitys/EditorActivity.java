@@ -127,9 +127,7 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
         slideAdapter.add(fileTreeFragment);
         //fileListFragment.setEvent(() -> fileListFragment.initView(manager,info));
         fileTreeFragment.setEvent(()->{
-            FragmentFileTreeBinding binding=fileTreeFragment.getViewBinding();
-            FileTreeView treeView=binding.tree;
-            treeView.setRootPath(info.getPath());
+           fileTreeFragment.initView(manager,info);
         });
     }
 

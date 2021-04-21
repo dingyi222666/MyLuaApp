@@ -7,6 +7,7 @@ import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.core.editor.EditorManager
 import com.dingyi.MyLuaApp.databinding.FragmentFileListBinding
 import com.dingyi.MyLuaApp.ui.adapters.FileListAdapter
+import com.dingyi.MyLuaApp.utils.listSortFiles
 import com.dingyi.MyLuaApp.utils.toFile
 import kotlin.properties.Delegates
 
@@ -43,15 +44,7 @@ class FileListFragment: BaseFragment<FragmentFileListBinding>() {
         val fileList=mutableListOf<String>()
         viewBinding?.let { binding ->
             binding.title.text=path
-            path.toFile().listFiles().sortedWith{ a,b->
-                if (a.isDirectory) {
-                    return@sortedWith -1
-                }else if (b.isDirectory) {
-                    return@sortedWith 1
-                }else {
-                    return@sortedWith a.name.compareTo(b.name)
-                }
-            }.forEach {
+            path.toFile().listSortFiles().forEach {
                 fileList.add(it.path)
             }
         }

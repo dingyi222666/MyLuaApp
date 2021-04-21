@@ -85,7 +85,7 @@ import java.util.zip.ZipInputStream;
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
 
-public abstract class LuaRunActivity extends AppCompatActivity implements LuaBroadcastReceiver.OnReceiveListener, LuaContext {
+public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastReceiver.OnReceiveListener, LuaContext {
 
     private final static String ARG = "arg";
     private final static String DATA = "data";

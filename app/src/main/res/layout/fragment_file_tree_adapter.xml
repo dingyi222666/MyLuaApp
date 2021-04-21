@@ -4,11 +4,14 @@
 
         <android.widget.LinearLayout
             android:id="@+id/root"
+            android:clickable="true"
+            android:background="@drawable/ripple_mask"
             android:layout_width="match_parent"
             android:layout_height="32dp">
             <android.widget.ImageView
                 android:layout_width="32dp"
-                android:padding="4dp"
+                android:padding="4.5dp"
+                android:layout_marginRight="-3dp"
                 android:src="@drawable/ic_twotone_chevron_right_24"
                 android:tint="@color/theme_default_imageColorFilter"
                 android:layout_height="32dp"
@@ -19,6 +22,7 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:id="@+id/now"
+                android:padding="1.5dp"
                 android:layout_gravity="center"/>
             <android.widget.TextView
                 android:layout_gravity="center"
@@ -26,7 +30,9 @@
                 android:layout_marginLeft="8dp"
                 android:id="@+id/title"
                 android:layout_marginRight="8dp"
-                android:text="NULL"
+
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content" />
         </android.widget.LinearLayout>
