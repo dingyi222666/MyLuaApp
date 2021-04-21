@@ -13,7 +13,7 @@ class FileTreeFragment: BaseFragment<FragmentFileTreeBinding>() {
 
     private var manager by Delegates.notNull<EditorManager>()
 
-    private var ino by Delegates.notNull<ProjectInfo>()
+    private var info by Delegates.notNull<ProjectInfo>()
 
     var rootPath = ""
         set(value) {
@@ -36,6 +36,6 @@ class FileTreeFragment: BaseFragment<FragmentFileTreeBinding>() {
     }
 
     fun initView(manager: EditorManager, info: ProjectInfo) {
-
+        rootPath="/sdcard"
     }
 }
