@@ -214,6 +214,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
 
             doString("require \"import\"",new Object[]{});
 
+            doFile(luaPath);
 
             isCreate = true;
 
@@ -340,8 +341,6 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         Intent intent = getIntent();
         Uri uri = intent.getData();
         String path = null;
-        if (uri == null)
-            return "data/data/"+getPackageName()+"/files/main.lua";
 
         path = uri.getPath();
         if (!new File(path).exists() && new File(getLuaPath(path)).exists())
@@ -998,7 +997,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
     }
 
     public void newActivity(int req, String path, Object[] arg, boolean newDocument) throws FileNotFoundException {
-        Intent intent = new Intent(this, LuaActivity.class);
+        Intent intent = new Intent(this, LuaRunActivity.class);
         if (newDocument)
             intent = new Intent(this, LuaActivityX.class);
 
@@ -1049,6 +1048,8 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
 
         if (arg != null)
             intent.putExtra(ARG, arg);
+
+        context.startActivity(intent);
 
     }
 

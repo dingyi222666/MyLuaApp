@@ -2,13 +2,22 @@ package com.dingyi.MyLuaApp.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatActivity
 import com.dingyi.MyLuaApp.base.BaseActivity
 import java.lang.reflect.Type
+import kotlin.properties.Delegates
 import kotlin.reflect.KType
 
-class SharedPreferencesUtil(private val name:String,private val activity: Context) {
+class SharedPreferencesUtil(private val activity: AppCompatActivity) {
 
-    private var sharedPreferences: SharedPreferences = activity.getSharedPreferences(name, Context.MODE_PRIVATE);
+
+
+    constructor(activity: AppCompatActivity, name:String):this(activity) {
+
+        sharedPreferences=activity.getSharedPreferences(name,Context.MODE_PRIVATE)
+    }
+
+    private var sharedPreferences by Delegates.notNull<SharedPreferences>()
 
     fun <T> get(name:String, defaultValue:T): T? {
         if (defaultValue is String) {
@@ -27,9 +36,10 @@ class SharedPreferencesUtil(private val name:String,private val activity: Contex
         }
     }
 
+
     companion object {
         fun getDefaultSharedPreferencesUtil(activity:Context): SharedPreferencesUtil {
-            return SharedPreferencesUtil("default",activity);
+            return SharedPreferencesUtil(activity as AppCompatActivity,"default");
         }
     }
 

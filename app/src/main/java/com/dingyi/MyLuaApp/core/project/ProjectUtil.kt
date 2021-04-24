@@ -94,6 +94,7 @@ fun runProject(context: Context, info: ProjectInfo) {
         LUA_PROJECT -> LuaRunActivity.newActivity(
                 context, getDefaultPath(info.path), null
         )
+
     }
 }
 

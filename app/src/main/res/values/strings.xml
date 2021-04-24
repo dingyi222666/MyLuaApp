@@ -14,6 +14,9 @@
     <string name="complete">完成</string>
     <string name="next">下一步</string>
     <string name="tips">提示</string>
+    <string name="requestPermissionsTitle">权限申请</string>
+    <string name="cancelRequestPermissionsMessage">您拒绝了权限申请，程序即将退出</string>
+    <string name="requestPermissionsMessage">程序需要以下必要的权限以保障程序运行:存储权限，用于工程的新建与编辑</string>
    <string name="copy_succeesful">复制名称成功</string>
     <string name="close_file">关闭标签</string>
     <string name="copy_name">复制名称</string>
@@ -32,6 +35,9 @@
     <string name="format_menu">格式化</string>
     <string name="find_menu">查找</string>
     <string name="import_menu">分析</string>
+    <string name="settings_explorer">文件浏览</string>
+    <string name="settings_file_tree">文件树列表</string>
+    <string name="settings_file_tree_summary">更直观，易懂的文件列表设计</string>
     <string name="redo">重做</string>
     <string name="build_error_title">打包出错</string>
     <string name="build_title">正在打包</string>

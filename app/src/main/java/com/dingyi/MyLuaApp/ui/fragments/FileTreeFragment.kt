@@ -5,6 +5,7 @@ import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.core.editor.EditorManager
 import com.dingyi.MyLuaApp.databinding.FragmentFileListBinding
 import com.dingyi.MyLuaApp.databinding.FragmentFileTreeBinding
+import com.dingyi.MyLuaApp.widget.views.FileTreeView
 import kotlin.properties.Delegates
 
 class FileTreeFragment: BaseFragment<FragmentFileTreeBinding>() {
@@ -36,6 +37,12 @@ class FileTreeFragment: BaseFragment<FragmentFileTreeBinding>() {
     }
 
     fun initView(manager: EditorManager, info: ProjectInfo) {
-        rootPath="/sdcard"
+        rootPath=info.path
+        binding.tree.defaultOpenFileCallback=object : FileTreeView.OpenFileCallback {
+            override fun onOpenFile(path: String) {
+                manager.open(path)
+            }
+
+        }
     }
 }

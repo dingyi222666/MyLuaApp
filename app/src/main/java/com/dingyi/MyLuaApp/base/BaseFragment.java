@@ -59,7 +59,8 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+            super.onConfigurationChanged(newConfig);
+
     }
 
     protected abstract Class<T> getViewBindingClass();

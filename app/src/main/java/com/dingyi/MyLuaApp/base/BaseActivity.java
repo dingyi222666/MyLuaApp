@@ -52,7 +52,7 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     }
 
     protected void initToolBar() {
-        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setElevation(ViewUtils.dp2px(this,2));
         getSupportActionBar().setSubtitle("test");
         getSupportActionBar().setTitle(getToolBarTitle());
 

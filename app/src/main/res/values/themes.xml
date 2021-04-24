@@ -13,8 +13,8 @@
 
         <item name="windowActionModeOverlay">true</item>
         <item name="textInputStyle">@style/BaseTextInputLayoutStyle</item>
-        <item name="popupMenuStyle">@style/BasePopMenuStyle</item>
-        <item name="actionOverflowMenuStyle">@style/BaseOverflowMenuStyle</item>
+<!--        <item name="popupMenuStyle">@style/BasePopMenuStyle</item>-->
+<!--        <item name="actionOverflowMenuStyle">@style/BaseOverflowMenuStyle</item>-->
         <item name="theme_backgroundColor">@color/theme_default_backgroundColor</item>
         <item name="theme_rippleColor">@color/theme_default_rippleColor</item>
         <item name="theme_cardBackgroundColor">@color/theme_default_cardBackgroundColor</item>
@@ -35,12 +35,12 @@
     </style>
     <!--Base OverflowMenu Style -->
     <style name="BaseOverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
-        <item name="android:popupBackground">@drawable/popup_menu_background</item>
+       <!-- <item name="android:popupBackground">@drawable/popup_menu_background</item> -->
     </style>
     <!--Base PopMenu Style -->
     <style name="BasePopMenuStyle" parent="Widget.AppCompat.PopupMenu">
         <item name="elevation">1dp</item>
-        <item name="android:popupBackground">@drawable/popup_menu_background</item>
+        <!-- <item name="android:popupBackground">@drawable/popup_menu_background</item> -->
     </style>
     <!--Base ToolBar Style -->
     <style name="BaseToolBarStyle" parent="Widget.MaterialComponents.Toolbar">
@@ -52,6 +52,7 @@
         <item name="titleTextStyle">@style/BaseToolBarTitleStyle</item>
         <item name="android:textColorSecondary">@color/theme_default_hintTextColor</item>
         <item name="elevation">2dp</item>
+        <item name="android:elevation">2dp</item>
         <item name="android:titleTextColor" tools:targetApi="m">?colorPrimary</item>
     </style>
 
@@ -79,6 +80,6 @@
 
     <style name="Theme.MyLuaApp_Blue" parent="Theme.BaseTheme">
          <item name="colorPrimary">@color/theme_blue_colorPrimary</item>
-        <item name="colorAccent">@color/theme_blue_colorPrimary</item>
+         <item name="colorAccent">@color/theme_blue_colorPrimary</item>
     </style>
 </resources>

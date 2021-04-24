@@ -8,7 +8,7 @@ import kotlin.properties.Delegates
 
 class ThemeManager(activity: BaseActivity<*>) {
     private val themes = mutableMapOf<String, Int>()
-    private val sharedPreferencesUtil = SharedPreferencesUtil("theme", activity)
+    private val sharedPreferencesUtil = SharedPreferencesUtil(activity,"theme")
     var nowThemeResourcesId: Int = 0;
     var colors: ThemeColors? = null;
 

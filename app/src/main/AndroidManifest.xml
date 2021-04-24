@@ -42,6 +42,7 @@
             android:configChanges="keyboard|orientation|screenSize"/>
 
         <activity android:name="com.androlua.LuaRunActivity"
+            android:theme="@style/Theme.MyLuaApp"
             android:windowSoftInputMode="adjustPan|adjustResize"
             android:configChanges="keyboard|orientation|screenSize"/>
 

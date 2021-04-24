@@ -5,24 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activitys.MainActivity">
-    <include
-        android:id="@+id/toolbarParent"
-        layout="@layout/layout_include_toolbar"/>
-    <LinearLayout
-        android:layout_marginTop="56dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:layout_width="match_parent"
-            android:id="@+id/refresh"
-            android:layout_height="match_parent">
-        <ListView
-            android:layout_width="match_parent"
-            android:id="@+id/main_listview"
-            android:divider="@null"
-            android:listSelector="#00000000"
-            android:layout_height="match_parent"/>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </LinearLayout>
 
+    <include
+        android:elevation="2dp"
+        app:elevation="2dp"
+        android:id="@+id/toolbarParent"
+        layout="@layout/layout_include_toolbar" />
+
+      <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
+          android:layout_marginTop="56dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ListView
+                android:id="@+id/main_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:listSelector="#00000000" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

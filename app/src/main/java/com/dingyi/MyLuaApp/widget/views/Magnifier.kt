@@ -1,13 +1,16 @@
 package com.dingyi.MyLuaApp.widget.views
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.view.ViewGroup
+import androidx.preference.PreferenceManager
 import com.dingyi.MyLuaApp.databinding.ViewMaginfierLayoutBinding
+import com.dingyi.MyLuaApp.utils.SharedPreferencesUtil
 import com.dingyi.MyLuaApp.utils.dp2px
 import com.dingyi.MyLuaApp.utils.getDecorView
 import com.dingyi.MyLuaApp.utils.printError
@@ -73,7 +76,7 @@ class Magnifier(private val activity: Activity, private val view: View?) {
     }
 
     fun show(x: Int, y: Int,scaleX:Int,scaleY:Int) {
-        if (binding.root.visibility == View.GONE) {
+        if (binding.root.visibility == View.GONE || !PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("editor_magnifier",true)) {
             return
         }
         point.set(x, y)

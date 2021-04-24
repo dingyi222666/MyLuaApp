@@ -23,6 +23,12 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
 
     private val adapter = FileTreeViewAdapter(this, context)
 
+    var defaultOpenFileCallback=object : OpenFileCallback {
+        override fun onOpenFile(path: String) {
+
+        }
+
+    }
 
     init {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -80,6 +86,8 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
             node = getNodeByPath(path)
             val paddingLeft = binding.root.context.dp2px(if (node.deep > 10) 10 * 12 + (node.deep - 10) * 4 else node.deep * 12).toFloat()
 
+
+
             if (binding.root.layoutParams is LinearLayout.LayoutParams) {
                 (binding.root.layoutParams as LinearLayout.LayoutParams).leftMargin = paddingLeft.toInt()
             } else if (binding.root.layoutParams is LayoutParams) {
@@ -106,6 +114,8 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
                             .rotation(if (node.isOpen) 90f else 0f)
                             .setDuration(150)
                             .start()
+                }else if (!node.isDir) {
+                    treeView.defaultOpenFileCallback.onOpenFile(node.path)
                 }
             }
         }
@@ -196,7 +206,7 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
         return range
     }
 
-    interface OnFileOpenCallBack {
+    interface OpenFileCallback {
         fun onOpenFile(path: String)
     }
 

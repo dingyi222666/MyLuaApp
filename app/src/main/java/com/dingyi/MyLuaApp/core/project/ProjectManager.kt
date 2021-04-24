@@ -6,7 +6,7 @@ import com.dingyi.MyLuaApp.utils.SharedPreferencesUtil
 
 class ProjectManager(activity: BaseActivity<*>, private val info: ProjectInfo) {
 
-    private val sharedPreferencesUtil=SharedPreferencesUtil("editor",activity);
+    private val sharedPreferencesUtil=SharedPreferencesUtil(activity,"editor");
 
     fun getLastOpenPath(): String? {
         return sharedPreferencesUtil.get(info.path, getDefaultPath(info.path));
