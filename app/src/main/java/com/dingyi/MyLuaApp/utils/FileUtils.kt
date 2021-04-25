@@ -42,12 +42,12 @@ fun readString(file: File) :String {
     return file.readBytes().decodeToString()
 }
 
-fun readString(s: String): String {
-    return s.toFile().readBytes().decodeToString()
+fun readString(path: String): String {
+    return path.toFile().readBytes().decodeToString()
 }
 
-fun writeString(s: String, string: String) {
-    s.toFile().writeText(string)
+fun writeString(path: String, content: String) {
+    path.toFile().writeText(content)
 }
 
 fun File.getSuffix(): String {

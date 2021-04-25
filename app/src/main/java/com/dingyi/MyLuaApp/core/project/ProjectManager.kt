@@ -6,18 +6,23 @@ import com.dingyi.MyLuaApp.utils.SharedPreferencesUtil
 
 class ProjectManager(activity: BaseActivity<*>, private val info: ProjectInfo) {
 
-    private val sharedPreferencesUtil=SharedPreferencesUtil(activity,"editor");
+    private val mSharedPreferencesUtil=SharedPreferencesUtil(activity,"editor");
 
     fun getLastOpenPath(): String? {
-        return sharedPreferencesUtil.get(info.path, getDefaultPath(info.path));
+        return mSharedPreferencesUtil.get(info.projectPath, getDefaultPath(info.projectPath));
     }
 
     fun putOpenPath(path: String) {
-        sharedPreferencesUtil.put(info.path, path);
+        mSharedPreferencesUtil.put(info.projectPath, path);
     }
 
     fun getShortPath(path:String):String {
-        return path.substring(info.path.length+1)
+        return path.substring(info.projectPath.length+1)
     }
+
+    fun getAllPath(path: String):String {
+        return info.projectPath+'/'+path
+    }
+
 
 }

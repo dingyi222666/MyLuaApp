@@ -1,8 +1,6 @@
 package com.dingyi.MyLuaApp.core.editor
 
 import android.annotation.SuppressLint
-import android.view.MotionEvent
-import android.view.View
 import android.widget.LinearLayout
 import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.base.BaseActivity
@@ -15,132 +13,141 @@ import com.dingyi.editor.IEditor
 import com.dingyi.editor.IEditorView
 import com.dingyi.editor.lua.LuaEditor
 import java.util.*
-import kotlin.math.abs
 
 @SuppressLint("ClickableViewAccessibility")
-class EditorManager(private val activity: BaseActivity<*>,
-                    private val info: ProjectInfo,
+class EditorManager(private val mActivity: BaseActivity<*>,
+                    private val mProjectInfo: ProjectInfo,
                     binding: ActivityEditorBinding) :IEditor{
 
 
-    private val editors: MutableMap<String, IEditorView> =mutableMapOf()
+    private val mEditors: MutableMap<String, IEditorView> =mutableMapOf()
 
-    private val layout=binding.editorParent
-    val projectManager= ProjectManager(activity, info)
-    private val tableManager=EditorTableManager(binding.tabLayout)
+    private val mLayout=binding.editorParent
+    val mProjectManager= ProjectManager(mActivity, mProjectInfo)
+    private val mEditorTableManager=EditorTableLayoutManager(binding.tabLayout)
 
-    var openCallBack: (String)->Unit={}
+    var openFileCallBack: (String)->Unit={}
 
-    private val magnifier=Magnifier(activity,layout)
+    private val mMagnifier=Magnifier(mActivity,mLayout)
 
-    private lateinit var nowEditor:IEditorView
+    private lateinit var mNowEditor:IEditorView
 
-    private val suffixList=arrayListOf("lua", "java", "gradle", "xml", "aly")
+    private val mSuffixList=arrayListOf("lua", "java", "gradle", "xml", "aly")
+
     init {
-        tableManager.selectedTabCallBack={
+        mEditorTableManager.selectedTabCallBack={
             select(it)
         }
-
 
     }
 
     fun open(path: String) {
-        if (!suffixList.contains(path.toFile().getSuffix())) {
-            showSnackbar(layout, R.string.openFail)
+        if (!mSuffixList.contains(path.toFile().getSuffix())) {
+            showSnackbar(mLayout, R.string.openFail)
             return
         }
-        if (editors[projectManager.getShortPath(path)]!=null) {
-            select(projectManager.getShortPath(path))
+        if (mEditors[mProjectManager.getShortPath(path)]!=null) {
+            select(mProjectManager.getShortPath(path))
             return
         }
         val view=getEditorByPath(path)//拿到编辑器
         view.text = readString(path)//设置编辑器文字
-        nowEditor=view//设置为现在的编辑器
+        mNowEditor=view//设置为现在的编辑器
         addView(view)//添加布局
-        editors[projectManager.getShortPath(path)]=view
-        openCallBack.invoke(projectManager.getShortPath(path))//打开回调
-        projectManager.putOpenPath(path)
-        tableManager.addTab(path.substring(info.path.length + 1))//添加tab
+        mEditors[mProjectManager.getShortPath(path)]=view
+        openFileCallBack.invoke(mProjectManager.getShortPath(path))//打开回调
+        mProjectManager.putOpenPath(path)
+        mEditorTableManager.addTab(path.substring(mProjectInfo.projectPath.length + 1))//添加tab
     }
 
     fun select(name: String) {
-        editors[name]?.let {
-            nowEditor=it//设置为现在的编辑器
-            magnifier.nowView=it
+        mEditors[name]?.let {
+            mNowEditor=it//设置为现在的编辑器
+            mMagnifier.nowView=it
             addView(it)
-            openCallBack.invoke(name)
-            tableManager.selectTab(name)
+            openFileCallBack.invoke(name)
+            mEditorTableManager.selectTab(name)
         }
     }
 
     fun openLast() {
-        projectManager.getLastOpenPath()?.let { open(it) }
+        mProjectManager.getLastOpenPath()?.let { open(it) }
+    }
+
+    fun saveAll() {
+        mEditors.forEach {
+            save(it.key)
+        }
+    }
+
+    fun save(path: String) {
+        mEditors[path]?.let { writeString(path, it.text) }
     }
 
     fun remove(str: String) {
-        if (editors.containsKey(str)) {
-            editors.remove(str)
+        if (mEditors.containsKey(str)) {
+            mEditors.remove(str)
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun addView(view: IEditorView) {
 
-        layout.removeAllViewsInLayout()
-        layout.addView(view, LinearLayout.LayoutParams(-1, -1))
-        magnifier.nowView=view
-        magnifier.scale=1.25f
+        mLayout.removeAllViewsInLayout()
+        mLayout.addView(view, LinearLayout.LayoutParams(-1, -1))
+        mMagnifier.nowView=view
+        mMagnifier.scale=1.25f
 
     }
 
     private fun getEditorByPath(path: String): IEditorView {
         return when (path.getSuffix().toLowerCase(Locale.ROOT)) {
-            "lua","aly" -> LuaEditor(layout.context,magnifier)
-             else -> LuaEditor(layout.context,magnifier)
+            "lua","aly" -> LuaEditor(mLayout.context,mMagnifier)
+             else -> LuaEditor(mLayout.context,mMagnifier)
         }
     }
 
     override fun getText(): String {
-        return nowEditor.text
+        return mNowEditor.text
     }
 
     override fun setText(str: String?) {
-       nowEditor.text =str
+       mNowEditor.text =str
     }
 
     override fun paste(it: String) {
-        nowEditor.paste(it)
+        mNowEditor.paste(it)
     }
 
     override fun paste() {
-        nowEditor.paste()
+        mNowEditor.paste()
     }
 
     override fun undo() {
-        nowEditor.undo()
+        mNowEditor.undo()
     }
 
     override fun redo() {
-        nowEditor.redo()
+        mNowEditor.redo()
     }
 
     override fun format() {
-        nowEditor.format()
+        mNowEditor.format()
     }
 
     override fun gotoLine() {
-        nowEditor.gotoLine()
+        mNowEditor.gotoLine()
     }
 
     override fun gotoLine(i: Int) {
-        nowEditor.gotoLine(i)
+        mNowEditor.gotoLine(i)
     }
 
     override fun search() {
-        nowEditor.search()
+        mNowEditor.search()
     }
 
     override fun isSelected(): Boolean {
-        return nowEditor.isSelected
+        return mNowEditor.isSelected
     }
 }

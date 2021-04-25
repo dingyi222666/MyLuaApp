@@ -1,7 +1,6 @@
 package com.dingyi.MyLuaApp.widget.dialogs
 
 import android.annotation.SuppressLint
-import android.renderscript.ScriptGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.viewbinding.ViewBinding
 import com.dingyi.MyLuaApp.base.BaseActivity
@@ -12,17 +11,13 @@ import com.google.android.material.textfield.TextInputEditText
 
 class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
 
-    private var alertDialog:AlertDialog?=null;
+    private var mAlertDialog:AlertDialog?=null;
     private val mode=Mode.INPUT_1
 
-    private var binding:ViewBinding?=null;
-
-    @SuppressLint("RestrictedApi")
-    var listener:TextWatcherAdapter=object: TextWatcherAdapter() {
-    }
+    private var mBinding:ViewBinding?=null;
 
     fun setMode(mode:Mode) :InputDialog{
-        binding = when (mode) {
+        mBinding = when (mode) {
             Mode.INPUT_1 -> {
                 DialogLayoutInput1Binding.inflate(activity.layoutInflater);
             }
@@ -46,8 +41,8 @@ class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
 
     fun <T:ViewBinding> getBinding():T {
         return when(mode) {
-            Mode.INPUT_1 -> binding!! as T
-            Mode.INPUT_2 -> binding!! as T
+            Mode.INPUT_1 -> mBinding!! as T
+            Mode.INPUT_2 -> mBinding!! as T
         }
     }
 
@@ -57,7 +52,7 @@ class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 super.onTextChanged(s, start, before, count)
                 val isEnabled=listener.isEnabled(s.toString())
-                alertDialog?.getButton(button)?.isEnabled=isEnabled
+                mAlertDialog?.getButton(button)?.isEnabled=isEnabled
             }
         })
         return this;
@@ -65,9 +60,9 @@ class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
 
 
     override fun show(): AlertDialog {
-        setView(binding?.root)
-        alertDialog=super.show()
-        return alertDialog as AlertDialog
+        setView(mBinding?.root)
+        mAlertDialog=super.show()
+        return mAlertDialog as AlertDialog
     }
 
     enum class Mode {

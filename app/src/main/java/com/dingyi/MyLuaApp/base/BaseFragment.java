@@ -4,36 +4,29 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Layout;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.viewbinding.ViewBinding;
 
-import com.dingyi.MyLuaApp.R;
-import com.dingyi.MyLuaApp.core.theme.ThemeManager;
 import com.dingyi.MyLuaApp.utils.TextUtils;
-import com.dingyi.MyLuaApp.utils.ViewUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
-    protected Handler handler=new Handler(Looper.getMainLooper());
+    protected Handler mHandler =new Handler(Looper.getMainLooper());
 
-    private T binding;
+    private T mBinding;
 
-    private Event events;
+    private Event mEvents;
 
     public void setEvent(Event event) {
-        this.events=event;
+        this.mEvents =event;
     }
 
     @Override
@@ -46,14 +39,14 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         initView(getViewBinding(inflater,container));
-        if (events!=null) {
-            events.onCreateView();
+        if (mEvents !=null) {
+            mEvents.onCreateView();
         }
         return getViewBinding(inflater,container).getRoot();
     }
 
     protected Handler getHandler() {
-        return handler;
+        return mHandler;
     }
 
 
@@ -66,20 +59,20 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
     protected abstract Class<T> getViewBindingClass();
 
     public T getViewBinding(LayoutInflater inflater,ViewGroup root) {
-        if (binding == null) {
+        if (mBinding == null) {
             try {
                 Method method=getViewBindingClass().getDeclaredMethod("inflate", LayoutInflater.class,ViewGroup.class,Boolean.TYPE);
                 method.setAccessible(true);
-                binding= (T) method.invoke(null,inflater,root,false);
+                mBinding = (T) method.invoke(null,inflater,root,false);
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 TextUtils.printError(e.toString());
             }
         }
-        return binding;
+        return mBinding;
     }
 
     public  T getViewBinding() {
-        return binding;
+        return mBinding;
     }
 
     protected abstract void initView(T binding);

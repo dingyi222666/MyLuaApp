@@ -1,6 +1,5 @@
 package com.dingyi.MyLuaApp.base;
 
-import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -9,19 +8,14 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.viewbinding.ViewBinding;
 
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.core.theme.ThemeManager;
-import com.dingyi.MyLuaApp.utils.ReflectionUtils;
 import com.dingyi.MyLuaApp.utils.TextUtils;
 import com.dingyi.MyLuaApp.utils.ViewUtils;
 
@@ -30,25 +24,25 @@ import java.lang.reflect.Method;
 
 public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
 
-    protected Handler handler=new Handler(Looper.getMainLooper());
+    protected Handler mHandler=new Handler(Looper.getMainLooper());
 
-    private T binding;
+    private T mBinding;
 
-    protected ThemeManager themeManager;
+    protected ThemeManager mThemeManager;
 
-    private long lastListenerTime = System.currentTimeMillis();
+    private long mLastExitTime = System.currentTimeMillis();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        themeManager=new ThemeManager(this);
+        mThemeManager =new ThemeManager(this);
         initView(getViewBinding());
         setContentView(getViewBinding().getRoot());
     }
 
 
     protected Handler getHandler() {
-        return handler;
+        return mHandler;
     }
 
     protected void initToolBar() {
@@ -59,14 +53,14 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     }
 
     public ThemeManager getThemeManager() {
-        return themeManager;
+        return mThemeManager;
     }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //横屏适配
-        binding=null;//置空当前binding
+        mBinding =null;//置空当前binding
         //重新获取binding
         initView(getViewBinding());
         setContentView(getViewBinding().getRoot());
@@ -76,7 +70,7 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        ViewUtils.menuIconColor(menu,themeManager.getColors().getImageColorFilter());
+        ViewUtils.menuIconColor(menu, mThemeManager.getColors().getImageColorFilter());
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -85,35 +79,36 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     protected abstract Class<T> getViewBindingClass();
 
     protected T getViewBinding() {
-        if (binding == null) {
+        if (mBinding == null) {
             try {
                 Method method=getViewBindingClass().getDeclaredMethod("inflate", LayoutInflater.class);
                 method.setAccessible(true);
-                binding= (T) method.invoke(null,getLayoutInflater());
+                mBinding = (T) method.invoke(null,getLayoutInflater());
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 TextUtils.printError(e.toString());
             }
         }
-        return binding;
+        return mBinding;
     }
 
     protected abstract void initView(T binding);
 
     private boolean checkCanExit(int code) {
         if (code == KeyEvent.KEYCODE_BACK) {
-            if (System.currentTimeMillis() - lastListenerTime < 1500) {
+            if (System.currentTimeMillis() - mLastExitTime < 1500) {
                finishAndRemoveTask();
             } else {
-                ViewUtils.showSnackbar(binding.getRoot(), R.string.toast_exit);
+                ViewUtils.showSnackbar(mBinding.getRoot(), R.string.toast_exit);
             }
 
-            lastListenerTime = System.currentTimeMillis();
+            mLastExitTime = System.currentTimeMillis();
             return true;
 
         }
-        lastListenerTime = System.currentTimeMillis();
+        mLastExitTime = System.currentTimeMillis();
         return false;
     }
+
 
 
     @Override

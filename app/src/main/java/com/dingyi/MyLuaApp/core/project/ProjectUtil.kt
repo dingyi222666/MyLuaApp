@@ -12,7 +12,6 @@ import com.androlua.LuaRunActivity
 import com.androlua.LuaUtil
 import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.bean.ProjectInfo
-import com.dingyi.MyLuaApp.core.task.SimpleAsyncTask
 import com.dingyi.MyLuaApp.utils.*
 import org.json.JSONArray
 import java.io.File
@@ -90,9 +89,9 @@ fun createProject(context: Activity, i: Int, toPath: String, name: String, packa
 }
 
 fun runProject(context: Context, info: ProjectInfo) {
-    when (info.type) {
+    when (info.projectType) {
         LUA_PROJECT -> LuaRunActivity.newActivity(
-                context, getDefaultPath(info.path), null
+                context, getDefaultPath(info.projectPath), null
         )
 
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  android:layout_height="46dp"
+<LinearLayout  android:layout_height="38dp"
     android:layout_width="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
 
         <android.widget.LinearLayout
@@ -7,10 +7,10 @@
             android:clickable="true"
             android:background="@drawable/ripple_mask"
             android:layout_width="match_parent"
-            android:layout_height="46dp">
+            android:layout_height="38dp">
             <android.widget.ImageView
                 android:layout_width="32dp"
-                android:padding="4.5dp"
+                android:padding="3.5dp"
                 android:layout_marginRight="-3dp"
                 android:src="@drawable/ic_twotone_chevron_right_24"
                 android:tint="@color/theme_default_imageColorFilter"
@@ -22,11 +22,11 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:id="@+id/now"
-                android:padding="1.5dp"
+                android:padding="1dp"
                 android:layout_gravity="center"/>
             <android.widget.TextView
                 android:layout_gravity="center"
-                android:textSize="13sp"
+                android:textSize="14sp"
                 android:layout_marginLeft="8dp"
                 android:id="@+id/title"
                 android:layout_marginRight="8dp"

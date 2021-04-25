@@ -2,7 +2,7 @@ package com.dingyi.MyLuaApp.core.editor
 
 import com.google.android.material.tabs.TabLayout
 
-class EditorTableManager(private val tabLayout: TabLayout) {
+class EditorTableLayoutManager(private val tabLayout: TabLayout) {
 
     var selectedTabCallBack:(String)->Unit={
 

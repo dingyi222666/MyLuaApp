@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
@@ -29,11 +28,10 @@ import b.b.a.a.t;
 
 public class LuaEditor extends IEditorView  {
 
-    private com.androlua.LuaEditor editor;
+    private com.androlua.LuaEditor mEditor;
 
-    private int selection;
 
-    private Magnifier magnifier;
+    private Magnifier mMagnifier;
 
     private boolean isSelected=false;
 
@@ -45,7 +43,7 @@ public class LuaEditor extends IEditorView  {
     public LuaEditor(Context context,Magnifier magnifier) {
         super(context);
         initLuaEditor();
-        this.magnifier=magnifier;
+        this.mMagnifier =magnifier;
     }
 
     public LuaEditor(Context context, AttributeSet attributeSet) {
@@ -64,33 +62,33 @@ public class LuaEditor extends IEditorView  {
 
     @SuppressLint("ClickableViewAccessibility")
     private void initLuaEditor() {
-        editor = new com.androlua.LuaEditor(getContext());
-        editor.setLayoutParams(new LinearLayout.LayoutParams(-1, -1));
-        addView(editor);
-        editor.requestFocus();
+        mEditor = new com.androlua.LuaEditor(getContext());
+        mEditor.setLayoutParams(new LinearLayout.LayoutParams(-1, -1));
+        addView(mEditor);
+        mEditor.requestFocus();
         initAndroidClass();
 
 
-        b.b.a.a.t oldListener= (t) ReflectionUtils.getPrivateField(b.b.a.a.q.class,editor,"y");
+        b.b.a.a.t oldListener= (t) ReflectionUtils.getPrivateField(b.b.a.a.q.class, mEditor,"y");
 
-        editor.setOnSelectionChangedListener((b, i, i1) -> {
+        mEditor.setOnSelectionChangedListener((b, i, i1) -> {
             isSelected=b;
             oldListener.a(b,i,i1);
         });
 
-        editor.setOnTouchListener((v,e)->{
-            if (magnifier==null) {
+        mEditor.setOnTouchListener((v, e)->{
+            if (mMagnifier ==null) {
                 return false;
             }
             TextUtils.printDebug(e.toString());
             switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_MOVE:
-                    magnifier.preShow();
+                    mMagnifier.preShow();
                     if (isSelected) {
-                        magnifier.show(editor.getCaretX(), editor.getCaretY(),
-                                Math.abs(editor.getCaretX() - ViewUtils.dp2px(getContext(),86 / 2)),
-                                Math.abs(editor.getCaretY()- ViewUtils.dp2px(getContext(),
+                        mMagnifier.show(mEditor.getCaretX(), mEditor.getCaretY(),
+                                Math.abs(mEditor.getCaretX() - ViewUtils.dp2px(getContext(),86 / 2)),
+                                Math.abs(mEditor.getCaretY()- ViewUtils.dp2px(getContext(),
                                         16))
 
                         );
@@ -98,7 +96,7 @@ public class LuaEditor extends IEditorView  {
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    magnifier.dismiss();
+                    mMagnifier.dismiss();
                     break;
             }
             return false;
@@ -120,7 +118,7 @@ public class LuaEditor extends IEditorView  {
                 strings[i] = methods[i].getName();
             }
             if (getContext() instanceof Activity) {
-                ((Activity) getContext()).runOnUiThread(() -> editor.addPackage("activity", strings));
+                ((Activity) getContext()).runOnUiThread(() -> mEditor.addPackage("activity", strings));
             }
         }).start();
 
@@ -141,7 +139,7 @@ public class LuaEditor extends IEditorView  {
                     }
                     state.close();//
                     if (getContext() instanceof Activity) {
-                        ((Activity) getContext()).runOnUiThread(() -> editor.addNames(resultStr));
+                        ((Activity) getContext()).runOnUiThread(() -> mEditor.addNames(resultStr));
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -177,7 +175,7 @@ public class LuaEditor extends IEditorView  {
         }
         String errorMsg= "";
         try {
-            errorMsg = (String) field.get(editor);
+            errorMsg = (String) field.get(mEditor);
             errorMsg = errorMsg==null ? "" :errorMsg;
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,17 +186,17 @@ public class LuaEditor extends IEditorView  {
 
     @Override
     public String getText() {
-        return editor.getText().toString();
+        return mEditor.getText().toString();
     }
 
     @Override
     public void setText(String str) {
-        editor.setText(str);
+        mEditor.setText(str);
     }
 
     @Override
     public void paste(@NotNull String it) {
-        editor.paste(it);
+        mEditor.paste(it);
     }
 
     @Override
@@ -208,36 +206,36 @@ public class LuaEditor extends IEditorView  {
 
     @Override
     public void paste() {
-        editor.paste();
+        mEditor.paste();
     }
 
     @Override
     public void undo() {
-        editor.undo();
+        mEditor.undo();
     }
 
     @Override
     public void redo() {
-        editor.redo();
+        mEditor.redo();
     }
 
     @Override
     public void format() {
-        editor.format();
+        mEditor.format();
     }
 
     @Override
     public void gotoLine() {
-        editor.gotoLine();
+        mEditor.gotoLine();
     }
 
     @Override
     public void gotoLine(int i) {
-        editor.gotoLine(i);
+        mEditor.gotoLine(i);
     }
 
     @Override
     public void search() {
-        editor.search();
+        mEditor.search();
     }
 }

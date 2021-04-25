@@ -3,9 +3,9 @@ package com.dingyi.MyLuaApp.bean
 import android.os.Parcel
 import android.os.Parcelable
 
-data class ProjectInfo(val path:String,val type:Int,
-                       val name:String,val versionName:String,
-                       val versionCode:String,val packageName:String): Parcelable {
+data class ProjectInfo(val projectPath:String, val projectType:Int,
+                       val projectName:String, val projectVersionName:String,
+                       val projectVersionCode:String, val projectPackageName:String): Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString()!!,
             parcel.readInt(),
@@ -16,12 +16,12 @@ data class ProjectInfo(val path:String,val type:Int,
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(path)
-        parcel.writeInt(type)
-        parcel.writeString(name)
-        parcel.writeString(versionName)
-        parcel.writeString(versionCode)
-        parcel.writeString(packageName)
+        parcel.writeString(projectPath)
+        parcel.writeInt(projectType)
+        parcel.writeString(projectName)
+        parcel.writeString(projectVersionName)
+        parcel.writeString(projectVersionCode)
+        parcel.writeString(projectPackageName)
     }
 
     override fun describeContents(): Int {

@@ -55,8 +55,8 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
         }
 
 
-        holder.title.text=info.name
-        holder.type.text=getProjectTypeText(context, info.type)
+        holder.title.text=info.projectName
+        holder.type.text=getProjectTypeText(context, info.projectType)
         return view
     }
 

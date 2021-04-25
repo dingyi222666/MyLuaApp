@@ -14,33 +14,33 @@ import kotlin.properties.Delegates
 class FileListFragment: BaseFragment<FragmentFileListBinding>() {
 
 
-    private var fileListAdapter by Delegates.notNull<FileListAdapter>()
-    private var lastFilePath=""
+    private var mFileListAdapter by Delegates.notNull<FileListAdapter>()
+    private var mLastDirPath=""
 
 
     fun initView(editorManager: EditorManager, info: ProjectInfo) {
         viewBinding.let { it ->
-            fileListAdapter= FileListAdapter(info)
-            it.list.adapter = fileListAdapter
+            mFileListAdapter= FileListAdapter(info)
+            it.list.adapter = mFileListAdapter
             it.list.layoutManager= LinearLayoutManager(this.context,LinearLayoutManager.VERTICAL,false)
-            fileListAdapter.onClickListener={ path->
-                val file=("$lastFilePath/$path").toFile()
+            mFileListAdapter.onClickListener={ path->
+                val file=("$mLastDirPath/$path").toFile()
                 if (path=="...") {
-                    loadFileListData(info,lastFilePath.toFile().parentFile.path)
+                    loadFileListData(info,mLastDirPath.toFile().parentFile.path)
                 }else if(file.isDirectory){
                     loadFileListData(info,file.path)
                 }else {
                     editorManager.open(file.path)
                 }
             }
-            loadFileListData(info,editorManager.projectManager.getLastOpenPath()!!.toFile().parentFile.path)
+            loadFileListData(info,editorManager.mProjectManager.getLastOpenPath()!!.toFile().parentFile.path)
         }
 
     }
 
 
     private fun loadFileListData(info:ProjectInfo,path:String) {
-        lastFilePath=path
+        mLastDirPath=path
         val fileList=mutableListOf<String>()
         viewBinding?.let { binding ->
             binding.title.text=path
@@ -49,11 +49,11 @@ class FileListFragment: BaseFragment<FragmentFileListBinding>() {
             }
         }
 
-        if (info.path!=path) {
+        if (info.projectPath!=path) {
             fileList.add(0,"...")
         }
 
-        fileListAdapter.addAll(fileList)
+        mFileListAdapter.addAll(fileList)
 
     }
 

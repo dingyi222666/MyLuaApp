@@ -3,24 +3,23 @@ package com.dingyi.MyLuaApp.ui.fragments
 import com.dingyi.MyLuaApp.base.BaseFragment
 import com.dingyi.MyLuaApp.bean.ProjectInfo
 import com.dingyi.MyLuaApp.core.editor.EditorManager
-import com.dingyi.MyLuaApp.databinding.FragmentFileListBinding
 import com.dingyi.MyLuaApp.databinding.FragmentFileTreeBinding
 import com.dingyi.MyLuaApp.widget.views.FileTreeView
 import kotlin.properties.Delegates
 
 class FileTreeFragment: BaseFragment<FragmentFileTreeBinding>() {
 
-    private var binding by Delegates.notNull<FragmentFileTreeBinding>()
+    private var mBinding by Delegates.notNull<FragmentFileTreeBinding>()
 
-    private var manager by Delegates.notNull<EditorManager>()
+    private var mEditManager by Delegates.notNull<EditorManager>()
 
-    private var info by Delegates.notNull<ProjectInfo>()
+    private var mProjectInfo by Delegates.notNull<ProjectInfo>()
 
     var rootPath = ""
         set(value) {
             field = value
-            binding.tree.rootPath=value
-            binding.title.text=value
+            mBinding.tree.rootPath=value
+            mBinding.title.text=value
         }
 
     override fun getViewBindingClass(): Class<FragmentFileTreeBinding> {
@@ -29,16 +28,15 @@ class FileTreeFragment: BaseFragment<FragmentFileTreeBinding>() {
 
     override fun initView(binding: FragmentFileTreeBinding?) {
         binding?.let {
-            this.binding=it
+            this.mBinding=it
         }
-
 
 
     }
 
     fun initView(manager: EditorManager, info: ProjectInfo) {
-        rootPath=info.path
-        binding.tree.defaultOpenFileCallback=object : FileTreeView.OpenFileCallback {
+        rootPath=info.projectPath
+        mBinding.tree.defaultOpenFileCallback=object : FileTreeView.OpenFileCallback {
             override fun onOpenFile(path: String) {
                 manager.open(path)
             }

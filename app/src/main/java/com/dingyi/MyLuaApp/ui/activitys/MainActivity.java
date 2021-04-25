@@ -2,8 +2,6 @@ package com.dingyi.MyLuaApp.ui.activitys;
 
 import android.animation.LayoutTransition;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,9 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 
-import com.androlua.LuaBaseActivity;
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.adapters.MainProjectListAdapter;
 import com.dingyi.MyLuaApp.base.BaseActivity;
@@ -28,7 +24,6 @@ import com.dingyi.MyLuaApp.core.project.ProjectUtil;
 import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
 import com.dingyi.MyLuaApp.databinding.DialogLayoutInput2Binding;
 import com.dingyi.MyLuaApp.network.builder.HttpClientBuilder;
-import com.dingyi.MyLuaApp.network.client.HttpClient;
 import com.dingyi.MyLuaApp.utils.FileUtils;
 import com.dingyi.MyLuaApp.utils.ReflectionUtils;
 import com.dingyi.MyLuaApp.utils.TextUtils;
@@ -43,7 +38,6 @@ import org.json.JSONObject;
 import org.luaj.vm2.LuaTable;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -66,7 +60,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void initView(ActivityMainBinding binding) {
         setSupportActionBar(binding.toolbarParent.toolbar);
 
-        binding.refresh.setColorSchemeColors(themeManager.getColors().getColorPrimary());
+        binding.refresh.setColorSchemeColors(mThemeManager.getColors().getColorPrimary());
 
         binding.refresh.setOnRefreshListener(() -> {
             ((MainProjectListAdapter) binding.mainListview.getAdapter()).clear();
@@ -255,7 +249,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                         progressDialog.show();
 
                         new ProjectCreateHelper(this)
-                                .setChoosePos(pos)
+                                .setProjectType(pos)
                                 .setProjectPath(FileUtils.getUsePaths().get("projectPath") + "/" + binding.name.getText().toString())
                                 .setProjectPackageName(binding.packageName.getText().toString())
                                 .setProjectName(binding.name.getText().toString())

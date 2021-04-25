@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 public interface IEditor {
     String getText();
     void setText(String str);
-
     void paste(@NotNull String it);
     void paste();
     void undo();
