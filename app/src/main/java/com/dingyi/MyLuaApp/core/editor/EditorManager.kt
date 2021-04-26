@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.widget.LinearLayout
 import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.base.BaseActivity
-import com.dingyi.MyLuaApp.bean.ProjectInfo
-import com.dingyi.MyLuaApp.core.project.ProjectManager
+import com.dingyi.MyLuaApp.beans.ProjectInfo
+import com.dingyi.MyLuaApp.core.project.manager.ProjectManager
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding
 import com.dingyi.MyLuaApp.utils.*
 import com.dingyi.MyLuaApp.widget.views.Magnifier
@@ -15,7 +15,7 @@ import com.dingyi.editor.lua.LuaEditor
 import java.util.*
 
 @SuppressLint("ClickableViewAccessibility")
-class EditorManager(private val mActivity: BaseActivity<*>,
+class EditorManager(mActivity: BaseActivity<*>,
                     private val mProjectInfo: ProjectInfo,
                     binding: ActivityEditorBinding) :IEditor{
 
@@ -24,7 +24,7 @@ class EditorManager(private val mActivity: BaseActivity<*>,
 
     private val mLayout=binding.editorParent
     val mProjectManager= ProjectManager(mActivity, mProjectInfo)
-    private val mEditorTableManager=EditorTableLayoutManager(binding.tabLayout)
+    private val mEditorTableManager= EditorTableLayoutManager(binding.tabLayout)
 
     var openFileCallBack: (String)->Unit={}
 
@@ -80,8 +80,8 @@ class EditorManager(private val mActivity: BaseActivity<*>,
         }
     }
 
-    fun save(path: String) {
-        mEditors[path]?.let { writeString(path, it.text) }
+    private fun save(path: String) {
+        mEditors[path]?.let { writeString(mProjectManager.getAllPath(path), it.text) }
     }
 
     fun remove(str: String) {

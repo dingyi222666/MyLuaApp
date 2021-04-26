@@ -11,22 +11,24 @@ import com.google.android.material.textfield.TextInputEditText
 
 class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
 
-    private var mAlertDialog:AlertDialog?=null;
+    private var mAlertDialog:AlertDialog?=null
     private val mode=Mode.INPUT_1
 
-    private var mBinding:ViewBinding?=null;
+    private var mBinding:ViewBinding?=null
 
     fun setMode(mode:Mode) :InputDialog{
         mBinding = when (mode) {
             Mode.INPUT_1 -> {
-                DialogLayoutInput1Binding.inflate(activity.layoutInflater);
+                DialogLayoutInput1Binding.inflate(activity.layoutInflater)
             }
             Mode.INPUT_2 -> {
-                DialogLayoutInput2Binding.inflate(activity.layoutInflater);
+                DialogLayoutInput2Binding.inflate(activity.layoutInflater)
             }
         }
-        return this;
+        return this
     }
+
+
 
     fun with(block: (self:InputDialog)->Unit):InputDialog {
         block(this)
@@ -36,7 +38,7 @@ class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
 
     fun setTitle(title:String):InputDialog {
         super.setTitle(title)
-        return this;
+        return this
     }
 
     fun <T:ViewBinding> getBinding():T {
@@ -55,7 +57,7 @@ class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
                 mAlertDialog?.getButton(button)?.isEnabled=isEnabled
             }
         })
-        return this;
+        return this
     }
 
 

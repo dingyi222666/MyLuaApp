@@ -42,7 +42,7 @@ fun Context.sp2px(sp: Float): Float {
 fun radius(v: View, context: BaseActivity<*>, int: Int) {
     val drawable= GradientDrawable()
     drawable.shape=GradientDrawable.RECTANGLE
-    drawable.setColor(context.themeManager.colors!!.colorBackground)
+    drawable.setColor(context.themeManager.themeColors.colorBackground)
     drawable.cornerRadius=context.dp2px(int).toFloat()
     v.setBackgroundDrawable(drawable)
 }
@@ -84,8 +84,7 @@ private var imageData = mapOf("lua,java,aly,gradle,xml,py" to R.drawable.ic_twot
         "png,jpg,bmp" to R.drawable.ic_twotone_image_24,
         "dir" to R.drawable.ic_twotone_folder_24)
 
- fun getImageType(file: File): Int {
-
+fun getImageType(file: File): Int {
     if (file.isDirectory) return imageData["dir"]!!
     if (file.path == "...") return R.drawable.ic_twotone_undo_24
     imageData.forEach {
@@ -93,7 +92,6 @@ private var imageData = mapOf("lua,java,aly,gradle,xml,py" to R.drawable.ic_twot
             return it.value
         }
     }
-
     return imageData["default"]!!
 
 }

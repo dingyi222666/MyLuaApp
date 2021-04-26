@@ -39,6 +39,7 @@
     <string name="settings_file_tree">文件树列表</string>
     <string name="settings_file_tree_summary">更直观，易懂的文件列表设计</string>
     <string name="redo">重做</string>
+    <string name="rename_file">重命名</string>
     <string name="build_error_title">打包出错</string>
     <string name="build_title">正在打包</string>
     <string name="no_error">未发现语法错误</string>

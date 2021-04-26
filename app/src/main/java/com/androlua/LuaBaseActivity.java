@@ -335,6 +335,7 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
         prjCache.add(getLocalDir());
     }
 
+    @Override
     public String getLuaPath() {
 
         Intent intent = getIntent();
@@ -873,10 +874,12 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
         runFunc("onConfigurationChanged", newConfig);
     }
 
+    @Override
     public int getWidth() {
         return mWidth;
     }
 
+    @Override
     public int getHeight() {
         return mHeight;
     }
@@ -1353,6 +1356,7 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
         return doFile(filePath, new Object[0]);
     }
 
+    @Override
     public Object doFile(String filePath, Object[] args) {
         int ok = 0;
         try {
@@ -1560,6 +1564,7 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
     }
 
     //显示信息
+    @Override
     public void sendMsg(String msg) {
         Message message = new Message();
         Bundle bundle = new Bundle();
@@ -1613,6 +1618,7 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
 
     }
 
+    @Override
     public void call(String func, Object[] args) {
         if (args.length == 0)
             push(2, func);
@@ -1620,6 +1626,7 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
             push(3, func, args);
     }
 
+    @Override
     public void set(String key, Object value) {
         push(1, key, new Object[]{value});
     }

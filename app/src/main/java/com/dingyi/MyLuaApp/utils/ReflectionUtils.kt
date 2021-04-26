@@ -29,6 +29,22 @@ fun getPrivateField(clazz: Class<*>,objects: Any, fieldName: String): Any? {
     return null
 }
 
+fun getPrivateMethod(objects: Any,methodName:String,methodArg:Array<Class<*>>,methodRunArg:Array<Any>?):Any? {
+    runCatching {
+        val field = objects.javaClass.getDeclaredMethod(methodName, *methodArg)
+        field.isAccessible = true
+        methodRunArg?.let {
+           return field.invoke(objects,*it)
+        }
+        return field.invoke(objects,null)
+    }.onFailure {
+        printError(it.message.toString())
+        return null
+    }
+    return null
+}
+
+
 fun KType.isClass(cls: KClass<*>): Boolean {
     return this.classifier == cls
 }

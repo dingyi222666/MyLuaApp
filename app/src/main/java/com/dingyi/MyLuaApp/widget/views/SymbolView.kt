@@ -17,7 +17,7 @@ class SymbolView(context: Context?, attrs: AttributeSet?) : LinearLayout(context
     var view by Delegates.notNull<IEditor>()
 
     init {
-        val symbols = SharedPreferencesUtil.getDefaultSharedPreferencesUtil(context!!).get( "symbol", "( ) [ ] { } = \" : . , _ + - * / \\ % # ^ \$ ? & | < > ~ ; '\n")?.split(" ");
+        val symbols = SharedPreferencesUtil.getDefaultSharedPreferencesUtil(context!!).get( "symbol", "( ) [ ] { } = \" : . , _ + - * / \\ % # ^ \$ ? & | < > ~ ; '\n")?.split(" ")
 
 
         kotlin.runCatching {

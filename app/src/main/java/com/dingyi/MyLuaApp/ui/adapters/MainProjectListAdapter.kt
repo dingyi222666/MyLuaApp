@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.adapters
+package com.dingyi.MyLuaApp.ui.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.dingyi.MyLuaApp.R
-import com.dingyi.MyLuaApp.bean.ProjectInfo
+import com.dingyi.MyLuaApp.beans.ProjectInfo
 import com.dingyi.MyLuaApp.core.project.getProjectTypeText
 import com.dingyi.MyLuaApp.databinding.ActivityMainListProjectBinding
 import com.dingyi.MyLuaApp.ui.activitys.EditorActivity
@@ -17,6 +17,7 @@ import kotlin.properties.Delegates
 
 class MainProjectListAdapter(private val context: Context): BaseAdapter() {
     private val data= mutableListOf<ProjectInfo>()
+
     constructor(context: Context, data: List<ProjectInfo>) :this(context) {
        this.data.addAll(data)
     }
@@ -42,7 +43,7 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
 
         if (convertView==null) {
             view=ActivityMainListProjectBinding.inflate(LayoutInflater.from(context), parent, false).root
-            holder=ViewHolder(view)
+            holder= ViewHolder(view)
             view.tag=holder
         } else {
            holder=(view?.tag as ViewHolder)

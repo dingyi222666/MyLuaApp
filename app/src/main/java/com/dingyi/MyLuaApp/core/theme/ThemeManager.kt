@@ -7,17 +7,17 @@ import com.dingyi.MyLuaApp.utils.SharedPreferencesUtil
 import kotlin.properties.Delegates
 
 class ThemeManager(activity: BaseActivity<*>) {
-    private val themes = mutableMapOf<String, Int>()
-    private val sharedPreferencesUtil = SharedPreferencesUtil(activity,"theme")
-    var nowThemeResourcesId: Int = 0;
-    var colors: ThemeColors? = null;
+    private val mThemes = mutableMapOf<String, Int>()
+    private val mSharedPreferencesUtil = SharedPreferencesUtil(activity,"theme")
+    var nowThemeResourcesId: Int = 0
+    var themeColors by Delegates.notNull<ThemeColors>()
 
     init {
-        themes["默认"] = R.style.Theme_MyLuaApp
-        themes["深蓝"] = R.style.Theme_MyLuaApp_Blue
-        nowThemeResourcesId = themes[sharedPreferencesUtil.get("主题", "默认")]!!
+        mThemes["默认"] = R.style.Theme_MyLuaApp
+        mThemes["深蓝"] = R.style.Theme_MyLuaApp_Blue
+        nowThemeResourcesId = mThemes[mSharedPreferencesUtil.get("主题", "默认")]!!
         activity.setTheme(nowThemeResourcesId)
-        colors = ThemeColors(activity);
+        themeColors = ThemeColors(activity)
 
     }
 

@@ -2,24 +2,28 @@ package com.dingyi.MyLuaApp.ui.fragments
 
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.base.BaseFragment
-import com.dingyi.MyLuaApp.bean.ProjectInfo
-import com.dingyi.MyLuaApp.core.editor.EditorManager
+import com.dingyi.MyLuaApp.beans.ProjectInfo
+import com.dingyi.MyLuaApp.core.editor.manager.EditorManager
 import com.dingyi.MyLuaApp.databinding.FragmentFileListBinding
+import com.dingyi.MyLuaApp.core.project.helper.ProjectFileHelper
 import com.dingyi.MyLuaApp.ui.adapters.FileListAdapter
 import com.dingyi.MyLuaApp.utils.listSortFiles
 import com.dingyi.MyLuaApp.utils.toFile
 import kotlin.properties.Delegates
 
-class FileListFragment: BaseFragment<FragmentFileListBinding>() {
+class FileListFragment(mActivity: BaseActivity<*>): BaseFragment<FragmentFileListBinding>(mActivity), ProjectFileHelper.RefreshCallBack {
 
 
     private var mFileListAdapter by Delegates.notNull<FileListAdapter>()
     private var mLastDirPath=""
-
-
+    private val mProjectFileHelper= ProjectFileHelper(mActivity,this)
+    private var mProjectInfo by Delegates.notNull<ProjectInfo>()
     fun initView(editorManager: EditorManager, info: ProjectInfo) {
         viewBinding.let { it ->
+
+            mProjectInfo=info
             mFileListAdapter= FileListAdapter(info)
             it.list.adapter = mFileListAdapter
             it.list.layoutManager= LinearLayoutManager(this.context,LinearLayoutManager.VERTICAL,false)
@@ -39,7 +43,7 @@ class FileListFragment: BaseFragment<FragmentFileListBinding>() {
     }
 
 
-    private fun loadFileListData(info:ProjectInfo,path:String) {
+    private fun loadFileListData(info: ProjectInfo, path:String) {
         mLastDirPath=path
         val fileList=mutableListOf<String>()
         viewBinding?.let { binding ->
@@ -57,12 +61,26 @@ class FileListFragment: BaseFragment<FragmentFileListBinding>() {
 
     }
 
+
+
     override fun getViewBindingClass(): Class<FragmentFileListBinding> {
        return FragmentFileListBinding::class.java
     }
 
     override fun initView(binding: FragmentFileListBinding?) {
+        binding?.let {
+            it.more.setOnClickListener { clickView->
+                mProjectFileHelper.showFileMorePopupMenu(clickView, it.title.text.toString())
+            }
+        }
+    }
 
+    override fun onRefresh(path: String) {
+        if (path.toFile().isDirectory) {
+            loadFileListData(mProjectInfo,path)
+        }else {
+            loadFileListData(mProjectInfo, mLastDirPath)
+        }
     }
 
 }

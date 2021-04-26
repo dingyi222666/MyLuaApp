@@ -159,23 +159,53 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        //设置print界面
+        super.onCreate(null);
+
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
         mWidth = outMetrics.widthPixels;
         mHeight = outMetrics.heightPixels;
 
+        layout = new LinearLayout(this);
+        //layout.setBackgroundColor(Color.WHITE);
+        ScrollView scroll = new ScrollView(this);
+        scroll.setFillViewport(true);
+        status = new TextView(this);
+
+        status.setTextColor(Color.BLACK);
+        scroll.addView(status, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        //layout.addView(scroll, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        status.setText("");
+        status.setTextIsSelectable(true);
+        list = new ListView(this);
+        list.setFastScrollEnabled(true);
+        adapter = new ArrayListAdapter<String>(this, android.R.layout.simple_list_item_1) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView view = (TextView) super.getView(position, convertView, parent);
+                if (convertView == null)
+                    view.setTextIsSelectable(true);
+                return view;
+            }
+        };
+        list.setAdapter(adapter);
+        layout.addView(list, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         //定义文件夹
         LuaApplication app = (LuaApplication) getApplication();
-        if (app.getClass() != LuaApplication.class) {
+        if(app.getClass()!=LuaApplication.class) {
             while (true) {
                 if (app.getClass() == LuaApplication.class)
                     break;
             }
         }
+
         localDir = app.getLocalDir();
         odexDir = app.getOdexDir();
         libDir = app.getLibDir();
@@ -336,6 +366,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         prjCache.add(getLocalDir());
     }
 
+    @Override
     public String getLuaPath() {
 
         Intent intent = getIntent();
@@ -872,10 +903,12 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         runFunc("onConfigurationChanged", newConfig);
     }
 
+    @Override
     public int getWidth() {
         return mWidth;
     }
 
+    @Override
     public int getHeight() {
         return mHeight;
     }
@@ -1375,6 +1408,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         return doFile(filePath, new Object[0]);
     }
 
+    @Override
     public Object doFile(String filePath, Object[] args) {
         int ok = 0;
         try {
@@ -1582,6 +1616,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
     }
 
     //显示信息
+    @Override
     public void sendMsg(String msg) {
         Message message = new Message();
         Bundle bundle = new Bundle();
@@ -1635,6 +1670,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
 
     }
 
+    @Override
     public void call(String func, Object[] args) {
         if (args.length == 0)
             push(2, func);
@@ -1642,6 +1678,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
             push(3, func, args);
     }
 
+    @Override
     public void set(String key, Object value) {
         push(1, key, new Object[]{value});
     }

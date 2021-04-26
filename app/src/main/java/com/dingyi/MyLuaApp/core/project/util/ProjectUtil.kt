@@ -11,7 +11,7 @@ import android.content.Context
 import com.androlua.LuaRunActivity
 import com.androlua.LuaUtil
 import com.dingyi.MyLuaApp.R
-import com.dingyi.MyLuaApp.bean.ProjectInfo
+import com.dingyi.MyLuaApp.beans.ProjectInfo
 import com.dingyi.MyLuaApp.utils.*
 import org.json.JSONArray
 import java.io.File
@@ -59,7 +59,7 @@ fun getProjectTemplate(context: Activity): Array<CharSequence> {
         PROJECT_TEMPLATE_LIST.add(jsonArray.getJSONObject(i).getString("templatePath"))
     }
 
-    return result.toTypedArray();
+    return result.toTypedArray()
 
 }
 

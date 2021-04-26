@@ -1,13 +1,14 @@
 package com.dingyi.MyLuaApp.ui.fragments
 
+import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.base.BaseFragment
-import com.dingyi.MyLuaApp.bean.ProjectInfo
-import com.dingyi.MyLuaApp.core.editor.EditorManager
+import com.dingyi.MyLuaApp.beans.ProjectInfo
+import com.dingyi.MyLuaApp.core.editor.manager.EditorManager
+import com.dingyi.MyLuaApp.core.project.helper.ProjectFileHelper
 import com.dingyi.MyLuaApp.databinding.FragmentFileTreeBinding
-import com.dingyi.MyLuaApp.widget.views.FileTreeView
 import kotlin.properties.Delegates
 
-class FileTreeFragment: BaseFragment<FragmentFileTreeBinding>() {
+class FileTreeFragment(mActivity: BaseActivity<*>): BaseFragment<FragmentFileTreeBinding>(mActivity), ProjectFileHelper.RefreshCallBack {
 
     private var mBinding by Delegates.notNull<FragmentFileTreeBinding>()
 
@@ -36,11 +37,10 @@ class FileTreeFragment: BaseFragment<FragmentFileTreeBinding>() {
 
     fun initView(manager: EditorManager, info: ProjectInfo) {
         rootPath=info.projectPath
-        mBinding.tree.defaultOpenFileCallback=object : FileTreeView.OpenFileCallback {
-            override fun onOpenFile(path: String) {
-                manager.open(path)
-            }
 
-        }
+    }
+
+    override fun onRefresh(path: String) {
+
     }
 }

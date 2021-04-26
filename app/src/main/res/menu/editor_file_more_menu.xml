@@ -6,5 +6,4 @@
     <item
         android:id="@+id/new_dir"
         android:title="@string/new_dir"/>
-
 </menu>

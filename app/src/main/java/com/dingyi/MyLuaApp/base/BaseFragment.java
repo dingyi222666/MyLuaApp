@@ -23,7 +23,14 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     private T mBinding;
 
+    private BaseActivity<?> mActivity;
+
     private Event mEvents;
+
+
+    public BaseFragment(BaseActivity<?> activity) {
+        mActivity=activity;
+    }
 
     public void setEvent(Event event) {
         this.mEvents =event;
@@ -32,7 +39,6 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 

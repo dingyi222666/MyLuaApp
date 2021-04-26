@@ -3,19 +3,16 @@ package com.dingyi.MyLuaApp.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dingyi.MyLuaApp.R
-import com.dingyi.MyLuaApp.bean.ProjectInfo
+import com.dingyi.MyLuaApp.beans.ProjectInfo
 import com.dingyi.MyLuaApp.databinding.FragmentFileListAdapterBinding
 import com.dingyi.MyLuaApp.utils.getImageType
-import com.dingyi.MyLuaApp.utils.getSuffix
 import com.dingyi.MyLuaApp.utils.toFile
-import java.io.File
 
 class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<FileListAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: FragmentFileListAdapterBinding) : RecyclerView.ViewHolder(binding.root)
 
-    private val data = mutableListOf<String>()
+    private val mData = mutableListOf<String>()
 
     var onClickListener: (String) -> Unit = {
 
@@ -28,15 +25,15 @@ class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<File
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val text= {
-            if (data[position] != "...") {
-                data[position].toFile().name
+            if (mData[position] != "...") {
+                mData[position].toFile().name
             } else {
-                data[position]
+                mData[position]
             }
         }.invoke().toString()
 
         holder.binding.title.text =text
-        holder.binding.icon.setImageResource(getImageType(data[position].toFile()))
+        holder.binding.icon.setImageResource(getImageType(mData[position].toFile()))
         holder.binding.root.setOnClickListener {
             onClickListener(holder.binding.title.text.toString())
         }
@@ -44,14 +41,14 @@ class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<File
     }
 
     fun addAll(list: List<String>) {
-        data.clear()
+        mData.clear()
         notifyDataSetChanged()
-        data.addAll(list)
+        mData.addAll(list)
         notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return mData.size
     }
 
 }

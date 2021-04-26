@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.bean
+package com.dingyi.MyLuaApp.beans
 
 import android.os.Parcel
 import android.os.Parcelable

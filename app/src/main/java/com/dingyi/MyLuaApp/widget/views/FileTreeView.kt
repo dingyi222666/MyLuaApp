@@ -177,21 +177,21 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
     }
 
     private fun getNodeRange(node: Node, position: Int, data: MutableList<Node>): Int {
-        var range = 0;
+        var range = 0
         var tmp by Delegates.notNull<Node>()
         while (true) {
             tmp = data[position + 1]
             if (tmp.deep > node.deep) {
                 range++
             } else {
-                break;
+                break
             }
         }
         return range
     }
 
     private fun removeFileDir(node: Node, position: Int, data: MutableList<Node>): Int {
-        var range = 0;
+        var range = 0
         var tmp by Delegates.notNull<Node>()
         while (true) {
             tmp = data[position + 1]
@@ -199,7 +199,7 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
                 data.removeAt(position + 1)
                 range++
             } else {
-                break;
+                break
             }
         }
 

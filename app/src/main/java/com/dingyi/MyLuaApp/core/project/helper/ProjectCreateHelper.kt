@@ -1,6 +1,7 @@
-package com.dingyi.MyLuaApp.core.project
+package com.dingyi.MyLuaApp.core.project.helper
 
 import com.dingyi.MyLuaApp.base.BaseActivity
+import com.dingyi.MyLuaApp.core.project.createProject
 import com.dingyi.MyLuaApp.core.task.SimpleAsyncTask
 
 /** 创建项目的帮助类，帮助创建工程
@@ -13,24 +14,24 @@ class ProjectCreateHelper(private val activity: BaseActivity<*>) {
     private var mProjectPackageName=""
 
 
-    fun setProjectName(name: String):ProjectCreateHelper {
+    fun setProjectName(name: String): ProjectCreateHelper {
         this.mProjectName = name
-        return this;
+        return this
     }
 
-    fun setProjectPackageName(name: String):ProjectCreateHelper {
+    fun setProjectPackageName(name: String): ProjectCreateHelper {
         this.mProjectPackageName = name
-        return this;
+        return this
     }
 
-    fun setProjectPath(name: String):ProjectCreateHelper {
+    fun setProjectPath(name: String): ProjectCreateHelper {
         this.mProjectPath = name
-        return this;
+        return this
     }
 
-    fun setProjectType(name: Int):ProjectCreateHelper {
+    fun setProjectType(name: Int): ProjectCreateHelper {
         this.mProjectType = name
-        return this;
+        return this
     }
 
     fun execute(callback: Runnable) {

@@ -12,6 +12,7 @@ import android.view.Menu;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewbinding.ViewBinding;
 
 import com.dingyi.MyLuaApp.R;
@@ -70,7 +71,7 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        ViewUtils.menuIconColor(menu, mThemeManager.getColors().getImageColorFilter());
+        ViewUtils.menuIconColor(menu, mThemeManager.getThemeColors().getImageColorFilter());
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -78,7 +79,9 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
 
     protected abstract Class<T> getViewBindingClass();
 
-    protected T getViewBinding() {
+    public abstract CoordinatorLayout getCoordinatorLayout();
+
+    public T getViewBinding() {
         if (mBinding == null) {
             try {
                 Method method=getViewBindingClass().getDeclaredMethod("inflate", LayoutInflater.class);

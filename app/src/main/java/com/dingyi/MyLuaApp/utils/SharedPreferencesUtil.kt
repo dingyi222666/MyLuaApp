@@ -34,7 +34,7 @@ class SharedPreferencesUtil(private val activity: AppCompatActivity) {
 
     companion object {
         fun getDefaultSharedPreferencesUtil(activity:Context): SharedPreferencesUtil {
-            return SharedPreferencesUtil(activity as AppCompatActivity,"default");
+            return SharedPreferencesUtil(activity as AppCompatActivity,"default")
         }
     }
 

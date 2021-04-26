@@ -10,14 +10,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.preference.PreferenceManager;
 
 import com.androlua.LuaBaseActivity;
 import com.dingyi.MyLuaApp.R;
-import com.dingyi.MyLuaApp.bean.ProjectInfo;
-import com.dingyi.MyLuaApp.core.editor.EditorManager;
+import com.dingyi.MyLuaApp.beans.ProjectInfo;
+import com.dingyi.MyLuaApp.core.editor.manager.EditorManager;
 import com.dingyi.MyLuaApp.core.project.ProjectUtil;
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
 import com.dingyi.MyLuaApp.ui.adapters.BaseViewPager2Adapter;
@@ -25,16 +26,17 @@ import com.dingyi.MyLuaApp.ui.fragments.FileListFragment;
 import com.dingyi.MyLuaApp.ui.fragments.FileTreeFragment;
 import com.dingyi.MyLuaApp.utils.ReflectionUtils;
 import com.dingyi.MyLuaApp.utils.TextUtils;
+import com.dingyi.MyLuaApp.utils.ViewUtils;
 
 import java.util.Objects;
 
 public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
 
-    EditorManager editorManager;
+    private  EditorManager mEditorManager;
 
-    ProjectInfo mProjectInfo;
+    private  ProjectInfo mProjectInfo;
 
-    BaseViewPager2Adapter mSlideAdapter;
+    private  BaseViewPager2Adapter mSlideAdapter;
 
 
     @Override
@@ -66,17 +68,22 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
     }
 
     @Override
+    public CoordinatorLayout getCoordinatorLayout() {
+        return getViewBinding().getRoot();
+    }
+
+    @Override
     protected void initView(ActivityEditorBinding binding) {
         setSupportActionBar(binding.toolbarParent.toolbar);
 
         mSlideAdapter = new BaseViewPager2Adapter(this);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        //drawLayout
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, binding.toolbarParent.toolbar,
                 0, 0);
         toggle.syncState();
         binding.drawerLayout.setScrimColor(0);
         binding.drawerLayout.addDrawerListener(toggle);
-
         initToolBar();
         binding.drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
@@ -85,13 +92,15 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
             }
         });
 
+        //ProjectInfo
         mProjectInfo = getIntent().getParcelableExtra("projectInfo");
 
         TextView subTitleView = (TextView) ReflectionUtils.getPrivateField(getViewBinding().toolbarParent.toolbar, "mSubtitleTextView");
 
-        editorManager = new EditorManager(this, mProjectInfo, binding);
+        //EditorManager
+        mEditorManager = new EditorManager(this, mProjectInfo, binding);
 
-        editorManager.setOpenFileCallBack((str) -> {
+        mEditorManager.setOpenFileCallBack((str) -> {
             getSupportActionBar().setSubtitle(str);
             assert subTitleView != null;
             if (subTitleView.getVisibility() == View.GONE) {
@@ -101,10 +110,12 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
         });
 
 
-        binding.symbolView.setView(editorManager);
+        //symbolView
+        binding.symbolView.setView(mEditorManager);
 
-        editorManager.open(mProjectInfo.getProjectPath() + "/main.lua");
-        editorManager.open(mProjectInfo.getProjectPath() + "/layout.aly");
+        //open file(debug)
+        mEditorManager.open(mProjectInfo.getProjectPath() + "/main.lua");
+        mEditorManager.open(mProjectInfo.getProjectPath() + "/layout.aly");
 
 
         initFragment();
@@ -117,16 +128,16 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
         getViewBinding().slide.page.setAdapter(mSlideAdapter);
         getViewBinding().slide.page.setUserInputEnabled(true);
 
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("editor_file_tree", false)) {
-            FileTreeFragment fileTreeFragment = new FileTreeFragment();
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("editor_file_tree", false)) {//File Tree
+            FileTreeFragment fileTreeFragment = new FileTreeFragment(this);
             mSlideAdapter.add(fileTreeFragment);
             fileTreeFragment.setEvent(() -> {
-                fileTreeFragment.initView(editorManager, mProjectInfo);
+                fileTreeFragment.initView(mEditorManager, mProjectInfo);
             });
         } else {
-            FileListFragment fileListFragment = new FileListFragment();
+            FileListFragment fileListFragment = new FileListFragment(this);
             mSlideAdapter.add(fileListFragment);
-            fileListFragment.setEvent(() -> fileListFragment.initView(editorManager, mProjectInfo));
+            fileListFragment.setEvent(() -> fileListFragment.initView(mEditorManager, mProjectInfo));
 
         }
 
@@ -137,14 +148,17 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.run:
-                editorManager.saveAll();
+                mEditorManager.saveAll();
                 ProjectUtil.runProject(this, mProjectInfo);
                 break;
             case R.id.undo:
-                editorManager.undo();
+                mEditorManager.undo();
                 break;
+            case R.id.save:
+                mEditorManager.saveAll();
+                ViewUtils.showSnackbar(getViewBinding().getRoot(),R.string.save_toast);
             case R.id.redo:
-                editorManager.redo();
+                mEditorManager.redo();
                 break;
         }
         return super.onOptionsItemSelected(item);

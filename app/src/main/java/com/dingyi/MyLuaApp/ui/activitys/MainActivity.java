@@ -14,12 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.dingyi.MyLuaApp.R;
-import com.dingyi.MyLuaApp.adapters.MainProjectListAdapter;
+import com.dingyi.MyLuaApp.ui.adapters.MainProjectListAdapter;
 import com.dingyi.MyLuaApp.base.BaseActivity;
-import com.dingyi.MyLuaApp.bean.ProjectInfo;
-import com.dingyi.MyLuaApp.core.project.ProjectCreateHelper;
+import com.dingyi.MyLuaApp.beans.ProjectInfo;
+import com.dingyi.MyLuaApp.core.project.helper.ProjectCreateHelper;
 import com.dingyi.MyLuaApp.core.project.ProjectUtil;
 import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
 import com.dingyi.MyLuaApp.databinding.DialogLayoutInput2Binding;
@@ -60,7 +61,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void initView(ActivityMainBinding binding) {
         setSupportActionBar(binding.toolbarParent.toolbar);
 
-        binding.refresh.setColorSchemeColors(mThemeManager.getColors().getColorPrimary());
+        binding.refresh.setColorSchemeColors(mThemeManager.getThemeColors().getColorPrimary());
 
         binding.refresh.setOnRefreshListener(() -> {
             ((MainProjectListAdapter) binding.mainListview.getAdapter()).clear();
@@ -96,7 +97,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                         }
                     })
                     .setNegativeButton(android.R.string.no, (dialog, which) -> {
-
+                        onCancelRequestPermissions();
                     })
                     .show();
 
@@ -235,6 +236,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             ViewUtils.showSnackbar(getViewBinding().getRoot(), R.string.createProjectSuccess);
             refreshList(getViewBinding());
         }, 400);
+    }
+
+
+    @Override
+    public CoordinatorLayout getCoordinatorLayout() {
+        return getViewBinding().getRoot();
     }
 
     private void createProjectDialog(String type, int pos) {

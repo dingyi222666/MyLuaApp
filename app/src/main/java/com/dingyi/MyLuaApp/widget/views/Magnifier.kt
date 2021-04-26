@@ -17,7 +17,7 @@ import com.dingyi.MyLuaApp.utils.printError
 import kotlin.properties.Delegates
 
 //部分参数需要自己调整呢
-class Magnifier(private val activity: Activity, private val view: View?) {
+class Magnifier(private val activity: Activity, view: View?) {
 
 
 
@@ -26,14 +26,14 @@ class Magnifier(private val activity: Activity, private val view: View?) {
 
     private val point = Point(0, 0)
 
-    var nowView by Delegates.notNull<View>();
+    var nowView by Delegates.notNull<View>()
 
     var scale = 1.5f
 
     init {
         if (view != null) {
             nowView=view
-        };
+        }
         activity.getDecorView<ViewGroup>().addView(binding.root, -2, -2)
     }
 
@@ -70,7 +70,7 @@ class Magnifier(private val activity: Activity, private val view: View?) {
 
     private fun abs(i:Float):Float{
         if (i<0) {
-            return 0f;
+            return 0f
         }
         return i
     }
