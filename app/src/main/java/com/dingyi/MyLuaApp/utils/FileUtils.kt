@@ -5,6 +5,8 @@ import android.app.Activity
 import android.text.TextUtils.substring
 
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 
 val usePaths= mapOf("buildPath" to "/sdcard/MyLuaApp/build",
@@ -49,6 +51,39 @@ fun readString(path: String): String {
 fun writeString(path: String, content: String) {
     path.toFile().writeText(content)
 }
+
+fun copyFile(oldFile: File,toFile: File) {
+    FileInputStream(oldFile).use { inputStream ->
+        FileOutputStream(toFile).use { outputStream ->
+            val bytes=ByteArray(1024)
+            var len=inputStream.read(bytes)
+            while (len!=-1) {
+                outputStream.write(bytes,0,len)
+                len=inputStream.read(bytes)
+            }
+        }
+    }
+
+}
+
+fun renameTo(oldPath:String,toPath:String) {
+    val oldFile=oldPath.toFile()
+    if (oldFile.isFile) {
+        copyFile(oldFile,toPath.toFile())
+        oldFile.delete()
+    }else if(oldFile.isDirectory) {
+
+        oldFile.listFiles().forEach {
+            if (it.isFile) {
+                copyFile(it,"toPath/${it.name}".toFile())
+                it.delete()
+            }else if(it.isDirectory)
+                renameTo(it.path,"toPath/${it.name}")
+        }
+    }
+}
+
+
 
 fun File.getSuffix(): String {
     return name.substring(name.lastIndexOf(".") + 1)

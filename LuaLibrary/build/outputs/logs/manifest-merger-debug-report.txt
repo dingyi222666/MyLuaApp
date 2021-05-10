@@ -3,21 +3,9 @@ manifest
 ADDED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:1-5:12
 INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:1-5:12
 INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:1-5:12
-INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:1-5:12
-INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:1-5:12
-INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:1-5:12
-INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:1-5:12
 	package
 		ADDED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:3:5-37
 		INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml
-		INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml
-	android:versionName
-		INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml
-		ADDED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:1-5:12
-		INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml
-	android:versionCode
-		INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml
-		ADDED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:1-5:12
 		INJECTED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from D:\android studio project\MyLuaApp2\LuaLibrary\src\main\AndroidManifest.xml:2:11-69

@@ -82,12 +82,15 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
             binding.next.visibility = if (node.isDir && node.path.toFile().hasChildFile()) View.VISIBLE else View.INVISIBLE
 
             node = getNodeByPath(path)
-            var paddingLeft = binding.root.context.dp2px(if (node.deep > 10) 10 * 8 + (node.deep - 10) * 4 else node.deep * 8).toFloat()
+            var paddingLeft = binding.root.context.dp2px(if (node.deep > 10) 10 * 7 + (node.deep - 10) * 4 else node.deep * 7).toFloat()
 
             if(!node.isDir) {
-                paddingLeft -= binding.root.context.dp2px(4)
+                paddingLeft +=binding.root.context.dp2px(4)
             }
 
+            if (!node.isDir&&node.deep==0) {
+                paddingLeft -=binding.root.context.dp2px(22)
+            }
 
             binding.root.apply {
                 setPadding(paddingLeft.toInt(),paddingTop,paddingRight,paddingBottom)

@@ -3,7 +3,8 @@ package com.dingyi.MyLuaApp.ui.fragments
 import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.base.BaseFragment
 import com.dingyi.MyLuaApp.beans.ProjectInfo
-import com.dingyi.MyLuaApp.core.editor.manager.EditorManager
+import com.dingyi.MyLuaApp.core.editor.EditorManager
+
 import com.dingyi.MyLuaApp.core.project.helper.ProjectFileHelper
 import com.dingyi.MyLuaApp.databinding.FragmentFileTreeBinding
 import kotlin.properties.Delegates

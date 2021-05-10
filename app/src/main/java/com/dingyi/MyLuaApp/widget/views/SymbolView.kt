@@ -23,6 +23,7 @@ class SymbolView(context: Context?, attrs: AttributeSet?) : LinearLayout(context
         kotlin.runCatching {
             (this.parent as HorizontalScrollView).isHorizontalFadingEdgeEnabled = false
         }
+
         symbols?.forEach {
             val root = LayoutInflater.from(context).inflate(R.layout.view_symbol_layout, this, false)
             val text = root.findViewById<TextView>(R.id.text)

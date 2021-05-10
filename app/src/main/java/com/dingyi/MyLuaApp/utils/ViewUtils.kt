@@ -39,6 +39,10 @@ fun Context.sp2px(sp: Float): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().displayMetrics)
 }
 
+fun <T:View> View.getViewParent():T{
+    return this.parent as T
+}
+
 fun radius(v: View, context: BaseActivity<*>, int: Int) {
     val drawable= GradientDrawable()
     drawable.shape=GradientDrawable.RECTANGLE

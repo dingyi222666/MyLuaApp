@@ -18,7 +18,8 @@ import androidx.preference.PreferenceManager;
 import com.androlua.LuaBaseActivity;
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.beans.ProjectInfo;
-import com.dingyi.MyLuaApp.core.editor.manager.EditorManager;
+import com.dingyi.MyLuaApp.core.editor.EditorManager;
+
 import com.dingyi.MyLuaApp.core.project.ProjectUtil;
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
 import com.dingyi.MyLuaApp.ui.adapters.BaseViewPager2Adapter;
@@ -32,7 +33,7 @@ import java.util.Objects;
 
 public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
 
-    private  EditorManager mEditorManager;
+    private EditorManager mEditorManager;
 
     private  ProjectInfo mProjectInfo;
 

@@ -72,8 +72,8 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
     }
 
     class ViewHolder(val itemView: View) {
-        var title=itemView.findViewById<TextView>(R.id.main_listview_title)
-        var type=itemView.findViewById<TextView>(R.id.main_listview_type)
+        var title: TextView =itemView.findViewById(R.id.main_listview_title)
+        var type: TextView =itemView.findViewById(R.id.main_listview_type)
     }
 
 }

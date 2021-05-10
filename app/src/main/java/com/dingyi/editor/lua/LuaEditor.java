@@ -80,7 +80,7 @@ public class LuaEditor extends IEditorView  {
             if (mMagnifier ==null) {
                 return false;
             }
-            TextUtils.printDebug(e.toString());
+
             switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_MOVE:

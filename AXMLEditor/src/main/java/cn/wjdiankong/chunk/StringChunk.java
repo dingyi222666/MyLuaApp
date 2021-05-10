@@ -28,7 +28,7 @@ public class StringChunk {
 		
 		src = Utils.addByte(src, type);
 		src = Utils.addByte(src, size);
-		src = Utils.addByte(src, Utils.int2Byte(strList.size()));//×Ö·û¸öÊı
+		src = Utils.addByte(src, Utils.int2Byte(strList.size()));//å­—ç¬¦ä¸ªæ•°
 		src = Utils.addByte(src, styleCount);
 		src = Utils.addByte(src, unknown);
 		src = Utils.addByte(src, strPoolOffset);
@@ -40,36 +40,36 @@ public class StringChunk {
 		int len = 0;
 		for(int i=0;i<convertList.size();i++){
 			strOffsets = Utils.addByte(strOffsets, Utils.int2Byte(len));
-			len += (convertList.get(i).length()+4);//ÕâÀïµÄ4°üÀ¨×Ö·û´®Í·²¿µÄ×Ö·û´®³¤¶È2¸ö×Ö½Ú£¬ºÍ×Ö·û´®½áÎ²µÄ2¸ö×Ö½Ú
+			len += (convertList.get(i).length()+4);//è¿™é‡Œçš„4åŒ…æ‹¬å­—ç¬¦ä¸²å¤´éƒ¨çš„å­—ç¬¦ä¸²é•¿åº¦2ä¸ªå­—èŠ‚ï¼Œå’Œå­—ç¬¦ä¸²ç»“å°¾çš„2ä¸ªå­—èŠ‚
 		}
 		
-		src = Utils.addByte(src, strOffsets);//Ğ´Èëstring offsetsÖµ
+		src = Utils.addByte(src, strOffsets);//å†™å…¥string offsetså€¼
 		
-		int newStyleOffsets = src.length;//Ğ´ÍêstrOffsetsÖ®ºó¾ÍÊÇstyleOffsetsµÄÖµ
+		int newStyleOffsets = src.length;//å†™å®ŒstrOffsetsä¹‹åå°±æ˜¯styleOffsetsçš„å€¼
 		
-		src = Utils.addByte(src, styleOffsets);//Ğ´Èëstyle offsetsÖµ
+		src = Utils.addByte(src, styleOffsets);//å†™å…¥style offsetså€¼
 		
 		int newStringPools = src.length;
 		
-		src = Utils.addByte(src, strB);//Ğ´Èëstring pools
+		src = Utils.addByte(src, strB);//å†™å…¥string pools
 		
-		src = Utils.addByte(src, stylePool); //Ğ´Èëstyle pools
+		src = Utils.addByte(src, stylePool); //å†™å…¥style pools
 		
-		//ÒòÎªstrOffsets´óĞ¡µÄ¸Ä±ä£¬ÕâÀïµÄstyleOffsetsÒ²ĞèÒª±ä¶¯
+		//å› ä¸ºstrOffsetså¤§å°çš„æ”¹å˜ï¼Œè¿™é‡Œçš„styleOffsetsä¹Ÿéœ€è¦å˜åŠ¨
 		if(styleOffsets != null && styleOffsets.length > 0){
-			//Ö»ÓĞstyleÓĞĞ§²ÅÄÜĞ´Èë
+			//åªæœ‰styleæœ‰æ•ˆæ‰èƒ½å†™å…¥
 			src = Utils.replaceBytes(src, Utils.int2Byte(newStyleOffsets), 28+strList.size()*4);
 		}
 		
-		//ÒòÎªstrOffsets´óĞ¡¸Ä±ä£¬ÕâÀïµÄstrPoolOffsetsºÍstylePoolOffsetÒ²Òª±ä¶¯
-		src = Utils.replaceBytes(src, Utils.int2Byte(newStringPools), 20);//ĞŞ¸ÄstrPoolOffsetsÆ«ÒÆÖµ
+		//å› ä¸ºstrOffsetså¤§å°æ”¹å˜ï¼Œè¿™é‡Œçš„strPoolOffsetså’ŒstylePoolOffsetä¹Ÿè¦å˜åŠ¨
+		src = Utils.replaceBytes(src, Utils.int2Byte(newStringPools), 20);//ä¿®æ”¹strPoolOffsetsåç§»å€¼
 		
-		//¶ÔÓÚString ChunkµÄ´óĞ¡±ØĞëÊÇ4µÄ±¶Êı£¬Èç¹û²»ÊÇ²¹Æë£¬ÒòÎªChunkÒ»¶¨ÊÇ2µÄ±¶Êı£¬ËùÒÔÖ»ĞèÒª²¹Æë2¸ö×Ö½Ú¼´¿É
+		//å¯¹äºString Chunkçš„å¤§å°å¿…é¡»æ˜¯4çš„å€æ•°ï¼Œå¦‚æœä¸æ˜¯è¡¥é½ï¼Œå› ä¸ºChunkä¸€å®šæ˜¯2çš„å€æ•°ï¼Œæ‰€ä»¥åªéœ€è¦è¡¥é½2ä¸ªå­—èŠ‚å³å¯
 		if(src.length %4 != 0){
 			src = Utils.addByte(src, new byte[]{0,0});
 		}
 		
-		//ĞŞ¸Ächunk×îÖÕµÄ´óĞ¡
+		//ä¿®æ”¹chunkæœ€ç»ˆçš„å¤§å°
 		src = Utils.replaceBytes(src, Utils.int2Byte(src.length), 4);
 		
 		return src;
@@ -85,7 +85,7 @@ public class StringChunk {
 
 		StringChunk chunk = new StringChunk();
 
-		//String ChunkµÄ±êÊ¾
+		//String Chunkçš„æ ‡ç¤º
 		chunk.type = Utils.copyByte(byteSrc, 0+stringChunkOffset, 4);
 
 		//String Size
@@ -105,8 +105,8 @@ public class StringChunk {
 		//unknown
 		chunk.unknown = Utils.copyByte(byteSrc, 16+stringChunkOffset, 4);
 
-		//ÕâÀïĞèÒª×¢ÒâµÄÊÇ£¬ºóÃæµÄËÄ¸ö×Ö½ÚÊÇStyleµÄÄÚÈİ£¬È»ºó½ô½Ó×ÅµÄËÄ¸ö×Ö½ÚÊ¼ÖÕÊÇ0£¬ËùÒÔÎÒÃÇĞèÒªÖ±½Ó¹ıÂËÕâ8¸ö×Ö½Ú
-		//String Offset Ïà¶ÔÓÚString ChunkµÄÆğÊ¼Î»ÖÃ0x00000008
+		//è¿™é‡Œéœ€è¦æ³¨æ„çš„æ˜¯ï¼Œåé¢çš„å››ä¸ªå­—èŠ‚æ˜¯Styleçš„å†…å®¹ï¼Œç„¶åç´§æ¥ç€çš„å››ä¸ªå­—èŠ‚å§‹ç»ˆæ˜¯0ï¼Œæ‰€ä»¥æˆ‘ä»¬éœ€è¦ç›´æ¥è¿‡æ»¤è¿™8ä¸ªå­—èŠ‚
+		//String Offset ç›¸å¯¹äºString Chunkçš„èµ·å§‹ä½ç½®0x00000008
 		chunk.strPoolOffset = Utils.copyByte(byteSrc, 20+stringChunkOffset, 4);
 
 		//Style Offset
@@ -124,21 +124,21 @@ public class StringChunk {
 		byte[] chunkStringContentByte = Utils.copyByte(byteSrc, stringContentStart, chunkSize);
 
 		/**
-		 * ÔÚ½âÎö×Ö·û´®µÄÊ±ºòÓĞ¸öÎÊÌâ£¬¾ÍÊÇ±àÂë£ºUTF-8ºÍUTF-16,Èç¹ûÊÇUTF-8µÄ»°ÊÇÒÔ00½áÎ²µÄ£¬Èç¹ûÊÇUTF-16µÄ»°ÒÔ00 00½áÎ²µÄ
+		 * åœ¨è§£æå­—ç¬¦ä¸²çš„æ—¶å€™æœ‰ä¸ªé—®é¢˜ï¼Œå°±æ˜¯ç¼–ç ï¼šUTF-8å’ŒUTF-16,å¦‚æœæ˜¯UTF-8çš„è¯æ˜¯ä»¥00ç»“å°¾çš„ï¼Œå¦‚æœæ˜¯UTF-16çš„è¯ä»¥00 00ç»“å°¾çš„
 		 */
-		//ÕâÀïµÄ¸ñÊ½ÊÇ£ºÆ«ÒÆÖµ¿ªÊ¼µÄÁ½¸ö×Ö½ÚÊÇ×Ö·û´®µÄ³¤¶È£¬½Ó×ÅÊÇ×Ö·û´®µÄÄÚÈİ£¬ºóÃæ¸ú×ÅÁ½¸ö×Ö·û´®µÄ½áÊø·û00
+		//è¿™é‡Œçš„æ ¼å¼æ˜¯ï¼šåç§»å€¼å¼€å§‹çš„ä¸¤ä¸ªå­—èŠ‚æ˜¯å­—ç¬¦ä¸²çš„é•¿åº¦ï¼Œæ¥ç€æ˜¯å­—ç¬¦ä¸²çš„å†…å®¹ï¼Œåé¢è·Ÿç€ä¸¤ä¸ªå­—ç¬¦ä¸²çš„ç»“æŸç¬¦00
 		byte[] firstStringSizeByte = Utils.copyByte(chunkStringContentByte, 0, 2);
-		//Ò»¸ö×Ö·û¶ÔÓ¦Á½¸ö×Ö½Ú
+		//ä¸€ä¸ªå­—ç¬¦å¯¹åº”ä¸¤ä¸ªå­—èŠ‚
 		int firstStringSize = Utils.byte2Short(firstStringSizeByte)*2;
 		byte[] firstStringContentByte = Utils.copyByte(chunkStringContentByte, 2, firstStringSize+2);
 		
 		String firstStringContent = new String(firstStringContentByte);
 		
 		chunk.stringContentList.add(Utils.filterStringNull(firstStringContent));
-		//½«×Ö·û´®¶¼·Åµ½ArrayListÖĞ
+		//å°†å­—ç¬¦ä¸²éƒ½æ”¾åˆ°ArrayListä¸­
 		int endStringIndex = 2+firstStringSize+2;
 		while(chunk.stringContentList.size() < chunkStringCount){
-			//Ò»¸ö×Ö·û¶ÔÓ¦Á½¸ö×Ö½Ú£¬ËùÒÔÒª³ËÒÔ2
+			//ä¸€ä¸ªå­—ç¬¦å¯¹åº”ä¸¤ä¸ªå­—èŠ‚ï¼Œæ‰€ä»¥è¦ä¹˜ä»¥2
 			int stringSize = Utils.byte2Short(Utils.copyByte(chunkStringContentByte, endStringIndex, 2))*2;
 			byte[] temp = Utils.copyByte(chunkStringContentByte, endStringIndex+2, stringSize+2);
 			String str = new String(temp);

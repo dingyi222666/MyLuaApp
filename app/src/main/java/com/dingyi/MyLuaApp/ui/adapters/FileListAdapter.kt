@@ -1,6 +1,7 @@
 package com.dingyi.MyLuaApp.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dingyi.MyLuaApp.beans.ProjectInfo
@@ -12,6 +13,9 @@ class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<File
 
     class ViewHolder(val binding: FragmentFileListAdapterBinding) : RecyclerView.ViewHolder(binding.root)
 
+    var onLongClickListener: (String, View)->Unit={_,_->
+
+    }
     private val mData = mutableListOf<String>()
 
     var onClickListener: (String) -> Unit = {
@@ -36,6 +40,10 @@ class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<File
         holder.binding.icon.setImageResource(getImageType(mData[position].toFile()))
         holder.binding.root.setOnClickListener {
             onClickListener(holder.binding.title.text.toString())
+        }
+        holder.binding.root.setOnLongClickListener {
+            onLongClickListener(holder.binding.title.text.toString(),it)
+            return@setOnLongClickListener  true
         }
 
     }
