@@ -21,7 +21,7 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
 
     private val mAdapter = FileTreeViewAdapter(this, context)
 
-    var defaultOpenFileCallback=object : OpenFileCallback {
+    var defaultOpenFileCallback = object : OpenFileCallback {
         override fun onOpenFile(path: String) {
 
         }
@@ -43,24 +43,29 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
         mAdapter.addAll(list)
     }
 
-    data class Node(val deep: Int,
-                    val path: String,
-                    val name: String,
-                    val isDir: Boolean = false,
-                    var isOpen: Boolean = false) {
+    data class Node(
+        val deep: Int,
+        val path: String,
+        val name: String,
+        val isDir: Boolean = false,
+        var isOpen: Boolean = false
+    ) {
         override fun toString(): String {
             return "Node(deep=$deep, path='$path', name='$name', isDir=$isDir, isOpen=$isOpen)"
         }
     }
 
-    class FileTreeViewAdapter(private val treeView: FileTreeView, private val context: Context) : RecyclerView.Adapter<FileTreeViewAdapter.ViewHolder>() {
+    class FileTreeViewAdapter(private val treeView: FileTreeView, private val context: Context) :
+        RecyclerView.Adapter<FileTreeViewAdapter.ViewHolder>() {
 
         private val mData = mutableListOf<Node>()
 
-        class ViewHolder(val binding: FragmentFileTreeAdapterBinding) : RecyclerView.ViewHolder(binding.root)
+        class ViewHolder(val binding: FragmentFileTreeAdapterBinding) :
+            RecyclerView.ViewHolder(binding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val binding = FragmentFileTreeAdapterBinding.inflate(LayoutInflater.from(context), parent, false)
+            val binding =
+                FragmentFileTreeAdapterBinding.inflate(LayoutInflater.from(context), parent, false)
             if (binding.root.parent != null && binding.root.parent is ViewGroup) {//不知道为啥初始化出来的一定有parent，那就删掉吧
                 (binding.root.parent as ViewGroup).removeView(binding.root)
             }
@@ -75,25 +80,29 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
             binding.now.setImageResource(getImageType(node.path.toFile()))
 
             binding.next.animate()
-                    .rotation(if (node.isOpen) 90f else 0f)
-                    .setDuration(150)
-                    .start()
+                .rotation(if (node.isOpen) 90f else 0f)
+                .setDuration(150)
+                .start()
 
-            binding.next.visibility = if (node.isDir && node.path.toFile().hasChildFile()) View.VISIBLE else View.INVISIBLE
+            binding.next.visibility = if (node.isDir && node.path.toFile()
+                    .hasChildFile()
+            ) View.VISIBLE else View.INVISIBLE
 
             node = getNodeByPath(path)
-            var paddingLeft = binding.root.context.dp2px(if (node.deep > 10) 10 * 7 + (node.deep - 10) * 4 else node.deep * 7).toFloat()
+            var paddingLeft =
+                binding.root.context.dp2px(if (node.deep > 10) 10 * 7 + (node.deep - 10) * 4 else node.deep * 7)
+                    .toFloat()
 
-            if(!node.isDir) {
-                paddingLeft +=binding.root.context.dp2px(4)
+            if (!node.isDir) {
+                paddingLeft += binding.root.context.dp2px(4)
             }
 
-            if (!node.isDir&&node.deep==0) {
-                paddingLeft -=binding.root.context.dp2px(22)
+            if (!node.isDir && node.deep == 0) {
+                paddingLeft -= binding.root.context.dp2px(22)
             }
 
             binding.root.apply {
-                setPadding(paddingLeft.toInt(),paddingTop,paddingRight,paddingBottom)
+                setPadding(paddingLeft.toInt(), paddingTop, paddingRight, paddingBottom)
             }
 
 
@@ -103,9 +112,9 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
                 if (node.isDir && !node.isOpen) {
                     treeView.openFileDir(node, pos)
                     binding.next.animate()
-                            .rotation(if (node.isOpen) 90f else 0f)
-                            .setDuration(150)
-                            .start()
+                        .rotation(if (node.isOpen) 90f else 0f)
+                        .setDuration(150)
+                        .start()
                 } else if (node.isDir && node.isOpen) {
                     val range = treeView.removeFileDir(node, pos, mData)
                     if (range > 0) {
@@ -114,10 +123,10 @@ class FileTreeView(context: Context, attrs: AttributeSet?) : RecyclerView(contex
                     notifyItemRangeChanged(pos, mData.size - pos)
                     node.isOpen = false
                     binding.next.animate()
-                            .rotation(if (node.isOpen) 90f else 0f)
-                            .setDuration(150)
-                            .start()
-                }else if (!node.isDir) {
+                        .rotation(if (node.isOpen) 90f else 0f)
+                        .setDuration(150)
+                        .start()
+                } else if (!node.isDir) {
                     treeView.defaultOpenFileCallback.onOpenFile(node.path)
                 }
             }

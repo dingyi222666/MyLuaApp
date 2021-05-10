@@ -17,14 +17,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.dingyi.MyLuaApp.R;
-import com.dingyi.MyLuaApp.ui.adapters.MainProjectListAdapter;
 import com.dingyi.MyLuaApp.base.BaseActivity;
 import com.dingyi.MyLuaApp.beans.ProjectInfo;
-import com.dingyi.MyLuaApp.core.project.helper.ProjectCreateHelper;
 import com.dingyi.MyLuaApp.core.project.ProjectUtil;
+import com.dingyi.MyLuaApp.core.project.helper.ProjectCreateHelper;
 import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
 import com.dingyi.MyLuaApp.databinding.DialogLayoutInput2Binding;
 import com.dingyi.MyLuaApp.network.builder.HttpClientBuilder;
+import com.dingyi.MyLuaApp.ui.adapters.MainProjectListAdapter;
 import com.dingyi.MyLuaApp.utils.FileUtils;
 import com.dingyi.MyLuaApp.utils.ReflectionUtils;
 import com.dingyi.MyLuaApp.utils.TextUtils;
@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 .request((permissions, all) -> {
                     if (!all) {
                         onCancelRequestPermissions();
-                    }else {
+                    } else {
                         runnable.run();
                     }
                 });

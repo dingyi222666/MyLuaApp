@@ -6,22 +6,22 @@
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/root"
+        style="?textInputStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/root"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="24dp"
-        style="?textInputStyle"
         app:boxBackgroundColor="?theme_backgroundColor">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/folder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/new_folder_hint"
             android:lines="1"
-            android:singleLine="true"
-            android:id="@+id/folder"
-            android:hint="@string/new_folder_hint" />
+            android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

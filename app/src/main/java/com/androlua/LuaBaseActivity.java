@@ -15,11 +15,9 @@ import android.content.pm.ShortcutManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
@@ -28,36 +26,27 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
 
 import com.dingyi.MyLuaApp.base.BaseActivity;
-import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
 import com.luajava.JavaFunction;
-import com.luajava.LuaException;
 import com.luajava.LuaObject;
 import com.luajava.LuaState;
 import com.luajava.LuaStateFactory;
@@ -69,21 +58,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import dalvik.system.DexClassLoader;
-import dalvik.system.DexFile;
 
 public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivity<T> implements LuaBroadcastReceiver.OnReceiveListener, LuaContext {
 
@@ -91,6 +74,7 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
     private final static String DATA = "data";
     private final static String NAME = "name";
     private static ArrayList<String> prjCache = new ArrayList<String>();
+    private static String sKey;
     private String luaDir;
     private Handler handler;
     private TextView status;
@@ -109,29 +93,19 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
     private boolean isSetViewed;
     private long lastShow;
     private Menu optionsMenu;
-
     private String localDir;
-
     private String odexDir;
-
     private String libDir;
-
     private String luaExtDir;
-
     private LuaBroadcastReceiver mReceiver;
-
     private String luaLpath;
-
     private String luaMdDir;
-
     private boolean isUpdata;
-
     private boolean mDebug = true;
     private LuaResources mResources;
     private Resources.Theme mTheme;
     private ArrayList<LuaGcable> gclist = new ArrayList<LuaGcable>();
     private String pageName = "main";
-    private static String sKey;
     private LuaObject mOnKeyShortcut;
 
 
@@ -212,7 +186,7 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
             //MultiDex.installLibs(this);
 
 
-            doString("require \"import\"",new Object[]{});
+            doString("require \"import\"", new Object[]{});
 
 
             isCreate = true;
@@ -342,7 +316,7 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
         Uri uri = intent.getData();
         String path = null;
         if (uri == null)
-            return "data/data/"+getPackageName()+"/files/main.lua";
+            return "data/data/" + getPackageName() + "/files/main.lua";
 
         path = uri.getPath();
         if (!new File(path).exists() && new File(getLuaPath(path)).exists())
@@ -814,7 +788,6 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -822,7 +795,6 @@ public abstract class LuaBaseActivity<T extends ViewBinding> extends BaseActivit
         runFunc("onCreateOptionsMenu", menu);
         return super.onCreateOptionsMenu(menu);
     }
-
 
 
     @Override

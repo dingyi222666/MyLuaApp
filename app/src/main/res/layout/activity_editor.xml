@@ -5,57 +5,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activitys.EditorActivity">
-   <include
-       android:id="@+id/toolbarParent"
-       layout="@layout/layout_include_toolbar"/>
+
+    <include
+        android:id="@+id/toolbarParent"
+        layout="@layout/layout_include_toolbar" />
+
     <androidx.drawerlayout.widget.DrawerLayout
-        android:layout_width="match_parent"
         android:id="@+id/drawerLayout"
-        android:layout_marginTop="56dp"
-        android:layout_height="match_parent">
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="0dp"
-        android:id="@+id/root"
-        android:orientation="vertical">
-      <com.google.android.material.tabs.TabLayout
-          android:layout_width="match_parent"
-          android:id="@+id/tabLayout"
-          android:elevation="2dp"
-          app:tabIndicator="@drawable/default_tab_indicator"
-          app:tabGravity="start"
-          app:tabMaxWidth="0dp"
-          app:tabMode="scrollable"
-          app:tabRippleColor="?theme_rippleColor"
-          app:tabIndicatorColor="?colorPrimary"
-          app:tabSelectedTextColor="?theme_textColor"
-          app:tabTextColor="?theme_hintTextColor"
-          app:tabTextAppearance="@style/BaseTableLayoutStyle"
-          android:layout_height="29.5dp"/>
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@+id/editor_parent"
-            android:layout_weight="1"
-            android:elevation="0dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp" />
-        <HorizontalScrollView
-            android:id="@+id/horizontalView"
-            android:background="?theme_backgroundColor"
-            android:layout_width="match_parent"
-            android:elevation="4dp"
-            android:layout_height="36dp">
-        <com.dingyi.MyLuaApp.widget.views.SymbolView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="?theme_backgroundColor"
-            android:orientation="horizontal"
-            android:id="@+id/symbolView"
+        android:layout_marginTop="56dp">
 
-            android:elevation="4dp"/>
-        </HorizontalScrollView>
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="0dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="29.5dp"
+                android:elevation="2dp"
+                app:tabGravity="start"
+                app:tabIndicator="@drawable/default_tab_indicator"
+                app:tabIndicatorColor="?colorPrimary"
+                app:tabMaxWidth="0dp"
+                app:tabMode="scrollable"
+                app:tabRippleColor="?theme_rippleColor"
+                app:tabSelectedTextColor="?theme_textColor"
+                app:tabTextAppearance="@style/BaseTableLayoutStyle"
+                app:tabTextColor="?theme_hintTextColor" />
+
+            <LinearLayout
+                android:id="@+id/editor_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:elevation="0dp"
+                android:orientation="vertical" />
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalView"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="?theme_backgroundColor"
+                android:elevation="4dp">
+
+                <com.dingyi.MyLuaApp.widget.views.SymbolView
+                    android:id="@+id/symbolView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?theme_backgroundColor"
+                    android:elevation="4dp"
+
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+        </LinearLayout>
+
         <include
 
             android:id="@+id/slide"

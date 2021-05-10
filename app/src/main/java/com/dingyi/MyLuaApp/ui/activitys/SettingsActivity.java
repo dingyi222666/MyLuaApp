@@ -27,7 +27,7 @@ public class SettingsActivity extends BasePreferenceActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle(R.string.settings);
-        getSupportActionBar().setElevation(ViewUtils.dp2px(this,6));
+        getSupportActionBar().setElevation(ViewUtils.dp2px(this, 6));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

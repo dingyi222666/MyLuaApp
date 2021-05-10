@@ -9,14 +9,14 @@ import com.dingyi.MyLuaApp.databinding.DialogLayoutInput2Binding
 import com.google.android.material.internal.TextWatcherAdapter
 import com.google.android.material.textfield.TextInputEditText
 
-class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
+class InputDialog(private val activity: BaseActivity<*>) : BaseDialog(activity) {
 
-    private var mAlertDialog:AlertDialog?=null
-    private val mode=Mode.INPUT_1
+    private var mAlertDialog: AlertDialog? = null
+    private val mode = Mode.INPUT_1
 
-    private var mBinding:ViewBinding?=null
+    private var mBinding: ViewBinding? = null
 
-    fun setMode(mode:Mode) :InputDialog{
+    fun setMode(mode: Mode): InputDialog {
         mBinding = when (mode) {
             Mode.INPUT_1 -> {
                 DialogLayoutInput1Binding.inflate(activity.layoutInflater)
@@ -29,32 +29,31 @@ class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
     }
 
 
-
-    fun with(block: (self:InputDialog)->Unit):InputDialog {
+    fun with(block: (self: InputDialog) -> Unit): InputDialog {
         block(this)
         return this
     }
 
 
-    fun setTitle(title:String):InputDialog {
+    fun setTitle(title: String): InputDialog {
         super.setTitle(title)
         return this
     }
 
-    fun <T:ViewBinding> getBinding():T {
-        return when(mode) {
+    fun <T : ViewBinding> getBinding(): T {
+        return when (mode) {
             Mode.INPUT_1 -> mBinding!! as T
             Mode.INPUT_2 -> mBinding!! as T
         }
     }
 
     @SuppressLint("RestrictedApi")
-    fun addListener(button:Int, listener:Listener, edit:TextInputEditText):InputDialog {
+    fun addListener(button: Int, listener: Listener, edit: TextInputEditText): InputDialog {
         edit.addTextChangedListener(object : TextWatcherAdapter() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 super.onTextChanged(s, start, before, count)
-                val isEnabled=listener.isEnabled(s.toString())
-                mAlertDialog?.getButton(button)?.isEnabled=isEnabled
+                val isEnabled = listener.isEnabled(s.toString())
+                mAlertDialog?.getButton(button)?.isEnabled = isEnabled
             }
         })
         return this
@@ -63,16 +62,16 @@ class InputDialog(private val activity: BaseActivity<*>):BaseDialog(activity) {
 
     override fun show(): AlertDialog {
         setView(mBinding?.root)
-        mAlertDialog=super.show()
+        mAlertDialog = super.show()
         return mAlertDialog as AlertDialog
     }
 
     enum class Mode {
-        INPUT_1,INPUT_2
+        INPUT_1, INPUT_2
     }
 
     interface Listener {
-        fun isEnabled(text:String):Boolean
+        fun isEnabled(text: String): Boolean
     }
 
 }

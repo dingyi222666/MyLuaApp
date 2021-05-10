@@ -4,14 +4,14 @@ import android.os.AsyncTask;
 
 public class SimpleAsyncTask {
 
-    public static void postTask(Runnable run,Runnable callback) {
+    public static void postTask(Runnable run, Runnable callback) {
         new BaseAsyncTask()
                 .setAsyncTask(run)
                 .setCallback(callback)
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "");
     }
 
-    static class BaseAsyncTask extends AsyncTask<String,String,String> {
+    static class BaseAsyncTask extends AsyncTask<String, String, String> {
 
         private Runnable runCode;
 
@@ -30,7 +30,7 @@ public class SimpleAsyncTask {
         }
 
         public BaseAsyncTask setAsyncTask(Runnable run) {
-            runCode=run;
+            runCode = run;
             return this;
         }
 

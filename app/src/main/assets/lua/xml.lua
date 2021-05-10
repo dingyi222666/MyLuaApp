@@ -6,26 +6,26 @@
 
 
 function touint32(i)
-    local code = string.format("%08x", i)
-    local uint = {}
-    for n in code:gmatch("..") do
-        table.insert(uint, 1, string.char(tonumber(n, 16)))
-    end
-    return table.concat(uint)
+  local code = string.format("%08x", i)
+  local uint = {}
+  for n in code:gmatch("..") do
+    table.insert(uint, 1, string.char(tonumber(n, 16)))
+  end
+  return table.concat(uint)
 end
 
-function setXmlAppCode(pt,start,ends,a)
-    pt,start,ends,a=tostring(pt),tostring(start),tostring(ends),tostring(a)
-    local f = io.open(pt)
-    local s = f:read("a")
-    f:close()
+function setXmlAppCode(pt, start, ends, a)
+  pt, start, ends, a = tostring(pt), tostring(start), tostring(ends), tostring(a)
+  local f = io.open(pt)
+  local s = f:read("a")
+  f:close()
 
-    s = string.gsub(s, touint32(23), touint32(tointeger(ends) or 23),1)
-    s = string.gsub(s, touint32(18), touint32(tointeger(start) or 18),1)
-    s = string.gsub(s, touint32(58), touint32(tointeger(a) or 1),1)
+  s = string.gsub(s, touint32(23), touint32(tointeger(ends) or 23), 1)
+  s = string.gsub(s, touint32(18), touint32(tointeger(start) or 18), 1)
+  s = string.gsub(s, touint32(58), touint32(tointeger(a) or 1), 1)
 
-    local f = io.open(pt, "w")
-    f:write(s)
-    f:close()
+  local f = io.open(pt, "w")
+  f:write(s)
+  f:close()
 end
 

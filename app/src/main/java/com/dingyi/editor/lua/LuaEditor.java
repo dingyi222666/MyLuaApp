@@ -7,10 +7,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
-
 import com.androlua.LuaActivity;
 import com.dingyi.MyLuaApp.utils.ReflectionUtils;
-import com.dingyi.MyLuaApp.utils.TextUtils;
 import com.dingyi.MyLuaApp.utils.ViewUtils;
 import com.dingyi.MyLuaApp.widget.views.Magnifier;
 import com.dingyi.editor.IEditorView;
@@ -26,24 +24,24 @@ import java.lang.reflect.Method;
 import b.b.a.a.t;
 
 
-public class LuaEditor extends IEditorView  {
+public class LuaEditor extends IEditorView {
 
     private com.androlua.LuaEditor mEditor;
 
 
     private Magnifier mMagnifier;
 
-    private boolean isSelected=false;
+    private boolean isSelected = false;
 
     public LuaEditor(Context context) {
         super(context);
         initLuaEditor();
     }
 
-    public LuaEditor(Context context,Magnifier magnifier) {
+    public LuaEditor(Context context, Magnifier magnifier) {
         super(context);
         initLuaEditor();
-        this.mMagnifier =magnifier;
+        this.mMagnifier = magnifier;
     }
 
     public LuaEditor(Context context, AttributeSet attributeSet) {
@@ -51,13 +49,13 @@ public class LuaEditor extends IEditorView  {
         initLuaEditor();
     }
 
-    private  float preZoom(float zoom) {
-        if (zoom>1) {
-            return zoom-1f;
-        }else if (zoom<1) {
-            return zoom+1f;
+    private float preZoom(float zoom) {
+        if (zoom > 1) {
+            return zoom - 1f;
+        } else if (zoom < 1) {
+            return zoom + 1f;
         }
-        return  zoom;
+        return zoom;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -69,15 +67,15 @@ public class LuaEditor extends IEditorView  {
         initAndroidClass();
 
 
-        b.b.a.a.t oldListener= (t) ReflectionUtils.getPrivateField(b.b.a.a.q.class, mEditor,"y");
+        b.b.a.a.t oldListener = (t) ReflectionUtils.getPrivateField(b.b.a.a.q.class, mEditor, "y");
 
         mEditor.setOnSelectionChangedListener((b, i, i1) -> {
-            isSelected=b;
-            oldListener.a(b,i,i1);
+            isSelected = b;
+            oldListener.a(b, i, i1);
         });
 
-        mEditor.setOnTouchListener((v, e)->{
-            if (mMagnifier ==null) {
+        mEditor.setOnTouchListener((v, e) -> {
+            if (mMagnifier == null) {
                 return false;
             }
 
@@ -87,8 +85,8 @@ public class LuaEditor extends IEditorView  {
                     mMagnifier.preShow();
                     if (isSelected) {
                         mMagnifier.show(mEditor.getCaretX(), mEditor.getCaretY(),
-                                Math.abs(mEditor.getCaretX() - ViewUtils.dp2px(getContext(),86 / 2)),
-                                Math.abs(mEditor.getCaretY()- ViewUtils.dp2px(getContext(),
+                                Math.abs(mEditor.getCaretX() - ViewUtils.dp2px(getContext(), 86 / 2)),
+                                Math.abs(mEditor.getCaretY() - ViewUtils.dp2px(getContext(),
                                         16))
 
                         );
@@ -101,8 +99,6 @@ public class LuaEditor extends IEditorView  {
             }
             return false;
         });
-
-
 
 
     }
@@ -133,9 +129,9 @@ public class LuaEditor extends IEditorView  {
                 try {
                     LuaJLuaState state = new LuaJLuaState();
                     LuaValue result = state.getGlobals().load(getContext().getAssets().open("plugin/javaApi/android.lua"), "", "bt", null).call();
-                    resultStr=new String[result.length()];
-                    for (int i=1;i<=result.length();i++) {
-                        resultStr[i-1]=formatJavaString(result.get(i).tojstring());
+                    resultStr = new String[result.length()];
+                    for (int i = 1; i <= result.length(); i++) {
+                        resultStr[i - 1] = formatJavaString(result.get(i).tojstring());
                     }
                     state.close();//
                     if (getContext() instanceof Activity) {
@@ -149,9 +145,9 @@ public class LuaEditor extends IEditorView  {
 
             private String formatJavaString(String string) {
                 if (string.contains("$")) {
-                    return string.substring(string.lastIndexOf("$")+1);
+                    return string.substring(string.lastIndexOf("$") + 1);
                 }
-                return string.substring(string.lastIndexOf(".")+1);
+                return string.substring(string.lastIndexOf(".") + 1);
             }
         }).start();
 
@@ -160,23 +156,23 @@ public class LuaEditor extends IEditorView  {
 
 
     @Override
-    public String getError(){
-        Class<?> clazz= null;
+    public String getError() {
+        Class<?> clazz = null;
         try {
             clazz = Class.forName("c.a.a.a.f");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        Field field= null;
+        Field field = null;
         try {
             field = clazz.getDeclaredField("h");
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-        String errorMsg= "";
+        String errorMsg = "";
         try {
             errorMsg = (String) field.get(mEditor);
-            errorMsg = errorMsg==null ? "" :errorMsg;
+            errorMsg = errorMsg == null ? "" : errorMsg;
         } catch (Exception e) {
             e.printStackTrace();
         }

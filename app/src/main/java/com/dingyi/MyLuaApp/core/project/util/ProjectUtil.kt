@@ -42,8 +42,8 @@ fun getDefaultPath(path: String): String {
     }
 }
 
-fun getFileTemplateSuffix(name: String):String {
-    val map=mapOf(".aly" to "Lua(.*)Layout",".lua" to "Lua(.*)$")
+fun getFileTemplateSuffix(name: String): String {
+    val map = mapOf(".aly" to "Lua(.*)Layout", ".lua" to "Lua(.*)$")
     map.entries.forEach {
         if (name.matches(it.value.toRegex())) {
             return it.key
@@ -52,14 +52,15 @@ fun getFileTemplateSuffix(name: String):String {
     return ""
 }
 
-fun getFileTemplate(context: Activity):Map<CharSequence,String> {
-    val result= mutableMapOf<CharSequence,String>()
+fun getFileTemplate(context: Activity): Map<CharSequence, String> {
+    val result = mutableMapOf<CharSequence, String>()
 
     val jsonString = context.readAssetString("res/template/fileTemplate.json")
     val jsonArray = JSONArray(jsonString)
 
     for (i in 0 until jsonArray.length()) {
-        result[jsonArray.getJSONObject(i).getString("templateName")] = jsonArray.getJSONObject(i).getString("templateString")
+        result[jsonArray.getJSONObject(i).getString("templateName")] =
+            jsonArray.getJSONObject(i).getString("templateString")
     }
 
     return result
@@ -114,7 +115,7 @@ fun createProject(context: Activity, i: Int, toPath: String, name: String, packa
 fun runProject(context: Context, info: ProjectInfo) {
     when (info.projectType) {
         LUA_PROJECT -> LuaRunActivity.newActivity(
-                context, getDefaultPath(info.projectPath), null
+            context, getDefaultPath(info.projectPath), null
         )
 
     }

@@ -15,7 +15,6 @@ import android.content.pm.ShortcutManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,14 +29,12 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -52,12 +49,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewbinding.ViewBinding;
 
-import com.dingyi.MyLuaApp.base.BaseActivity;
-import com.dingyi.MyLuaApp.databinding.ActivityMainBinding;
 import com.luajava.JavaFunction;
-import com.luajava.LuaException;
 import com.luajava.LuaObject;
 import com.luajava.LuaState;
 import com.luajava.LuaStateFactory;
@@ -69,21 +62,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import dalvik.system.DexClassLoader;
-import dalvik.system.DexFile;
 
 public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastReceiver.OnReceiveListener, LuaContext {
 
@@ -91,6 +78,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
     private final static String DATA = "data";
     private final static String NAME = "name";
     private static ArrayList<String> prjCache = new ArrayList<String>();
+    private static String sKey;
     private String luaDir;
     private Handler handler;
     private TextView status;
@@ -109,29 +97,19 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
     private boolean isSetViewed;
     private long lastShow;
     private Menu optionsMenu;
-
     private String localDir;
-
     private String odexDir;
-
     private String libDir;
-
     private String luaExtDir;
-
     private LuaBroadcastReceiver mReceiver;
-
     private String luaLpath;
-
     private String luaMdDir;
-
     private boolean isUpdata;
-
     private boolean mDebug = true;
     private LuaResources mResources;
     private Resources.Theme mTheme;
     private ArrayList<LuaGcable> gclist = new ArrayList<LuaGcable>();
     private String pageName = "main";
-    private static String sKey;
     private LuaObject mOnKeyShortcut;
 
 
@@ -145,6 +123,29 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         byte[] ret = output.toByteArray();
         output.close();
         return ret;
+    }
+
+    public static void newActivity(Context context, String path, Object[] arg) throws FileNotFoundException {
+        Intent intent = new Intent(context, LuaRunActivity.class);
+        intent.putExtra(NAME, path);
+        if (path.charAt(0) != '/')
+            path = LuaApplication.getInstance().getLuaDir() + "/" + path;
+        File f = new File(path);
+        if (f.isDirectory() && new File(path + "/main.lua").exists())
+            path += "/main.lua";
+        else if ((f.isDirectory() || !f.exists()) && !path.endsWith(".lua"))
+            path += ".lua";
+        if (!new File(path).exists())
+            throw new FileNotFoundException(path);
+
+
+        intent.setData(Uri.parse("file://" + path));
+
+        if (arg != null)
+            intent.putExtra(ARG, arg);
+
+        context.startActivity(intent);
+
     }
 
     @Override
@@ -199,7 +200,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
 
         //定义文件夹
         LuaApplication app = (LuaApplication) getApplication();
-        if(app.getClass()!=LuaApplication.class) {
+        if (app.getClass() != LuaApplication.class) {
             while (true) {
                 if (app.getClass() == LuaApplication.class)
                     break;
@@ -242,7 +243,7 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
             //MultiDex.installLibs(this);
 
 
-            doString("require \"import\"",new Object[]{});
+            doString("require \"import\"", new Object[]{});
 
             doFile(luaPath);
 
@@ -360,7 +361,6 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         }
         return path;
     }
-
 
     public void initMain() {
         prjCache.add(getLocalDir());
@@ -801,7 +801,6 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         runFunc("onStop");
     }
 
-
     @Override
     protected void onDestroy() {
         if (mReceiver != null)
@@ -842,8 +841,6 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -851,8 +848,6 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         runFunc("onCreateOptionsMenu", menu);
         return super.onCreateOptionsMenu(menu);
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -874,7 +869,6 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         runFunc("onRequestPermissionsResult", requestCode, permissions, grantResults);
     }
-
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -1063,29 +1057,6 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
         //overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
-    public static void newActivity(Context context,String path, Object[] arg) throws FileNotFoundException {
-        Intent intent = new Intent(context, LuaRunActivity.class);
-        intent.putExtra(NAME, path);
-        if (path.charAt(0) != '/')
-            path = LuaApplication.getInstance().getLuaDir() + "/" + path;
-        File f = new File(path);
-        if (f.isDirectory() && new File(path + "/main.lua").exists())
-            path += "/main.lua";
-        else if ((f.isDirectory() || !f.exists()) && !path.endsWith(".lua"))
-            path += ".lua";
-        if (!new File(path).exists())
-            throw new FileNotFoundException(path);
-
-
-        intent.setData(Uri.parse("file://" + path));
-
-        if (arg != null)
-            intent.putExtra(ARG, arg);
-
-        context.startActivity(intent);
-
-    }
-
     public void newActivity(String path, int in, int out, boolean newDocument) throws FileNotFoundException {
         newActivity(1, path, in, out, null, newDocument);
     }
@@ -1113,7 +1084,6 @@ public class LuaRunActivity extends AppCompatActivity implements LuaBroadcastRec
     public void newActivity(int req, String path, int in, int out, Object[] arg) throws FileNotFoundException {
         newActivity(req, path, in, out, arg, false);
     }
-
 
 
     public void newActivity(int req, String path, int in, int out, Object[] arg, boolean newDocument) throws FileNotFoundException {

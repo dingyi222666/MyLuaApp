@@ -1,9 +1,9 @@
 @file:JvmName("TextUtils")
+
 package com.dingyi.MyLuaApp.utils
 
 
 import android.util.Log
-import java.lang.Exception
 
 const val TAG = "showDebug"
 
@@ -16,7 +16,7 @@ fun printDebug(vararg text: Any) {
     text.forEach {
         builder.append(it.toString()).append(" ")
     }
-    Log.d(TAG,builder.toString())
+    Log.d(TAG, builder.toString())
 }
 
 fun printDebug(exception: Throwable) {

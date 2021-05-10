@@ -1,14 +1,14 @@
 [
   {
-    "templateName":"Lua Empty Activity",
+    "templateName": "Lua Empty Activity",
     "templateString": "require \"import\"\nimport \"android.app.*\"\nimport \"android.os.*\"\nimport \"android.widget.*\"\nimport \"android.view.*\"\n\n\n--activity.setTitle('MyLuaApp')\nactivity.setTheme(require \"autotheme\"())\n\nactivity.setContentView(loadlayout(\"layout\"))\n\n--write your lua code in it"
   },
   {
-    "templateName":"Lua Module",
+    "templateName": "Lua Module",
     "templateString": "require \"import\"\n\nlocal base={}\n\nbase.test=function(a,b)\n  return a+b\nend\n\nlocal function test(a,b)\n  return a*b\nend\n\nreturn base"
   },
   {
-    "templateName":"Lua Empty Layout",
+    "templateName": "Lua Empty Layout",
     "templateString": "{\n  LinearLayout,\n  orientation=\"vertical\",\n  layout_width=\"fill\",\n  layout_height=\"fill\",\n  {\n    TextView,\n    text=\"hello MyLuaApp\",\n    layout_width=\"fill\",\n  },\n}"
   }
 ]

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <attr name="theme_backgroundColor" format="reference|color"/>
-   <attr name="theme_rippleColor" format="color|reference"/>
-   <attr name="theme_cardBackgroundColor" format="color|reference" />
-   <attr name="theme_textColor" format="color|reference"/>
-   <attr name="theme_hintTextColor" format="reference|color" />
+    <attr name="theme_backgroundColor" format="reference|color" />
+    <attr name="theme_rippleColor" format="color|reference" />
+    <attr name="theme_cardBackgroundColor" format="color|reference" />
+    <attr name="theme_textColor" format="color|reference" />
+    <attr name="theme_hintTextColor" format="reference|color" />
 
 </resources>

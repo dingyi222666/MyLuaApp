@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 
-public abstract class IEditorView extends LinearLayout implements IEditor{
+public abstract class IEditorView extends LinearLayout implements IEditor {
     public IEditorView(Context context) {
         super(context);
     }

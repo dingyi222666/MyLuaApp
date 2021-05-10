@@ -9,11 +9,13 @@ import com.dingyi.MyLuaApp.databinding.FragmentFileListAdapterBinding
 import com.dingyi.MyLuaApp.utils.getImageType
 import com.dingyi.MyLuaApp.utils.toFile
 
-class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<FileListAdapter.ViewHolder>() {
+class FileListAdapter(private val info: ProjectInfo) :
+    RecyclerView.Adapter<FileListAdapter.ViewHolder>() {
 
-    class ViewHolder(val binding: FragmentFileListAdapterBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: FragmentFileListAdapterBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
-    var onLongClickListener: (String, View)->Unit={_,_->
+    var onLongClickListener: (String, View) -> Unit = { _, _ ->
 
     }
     private val mData = mutableListOf<String>()
@@ -24,11 +26,17 @@ class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<File
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(FragmentFileListAdapterBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            FragmentFileListAdapterBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val text= {
+        val text = {
             if (mData[position] != "...") {
                 mData[position].toFile().name
             } else {
@@ -36,14 +44,14 @@ class FileListAdapter(private val info: ProjectInfo) : RecyclerView.Adapter<File
             }
         }.invoke().toString()
 
-        holder.binding.title.text =text
+        holder.binding.title.text = text
         holder.binding.icon.setImageResource(getImageType(mData[position].toFile()))
         holder.binding.root.setOnClickListener {
             onClickListener(holder.binding.title.text.toString())
         }
         holder.binding.root.setOnLongClickListener {
-            onLongClickListener(holder.binding.title.text.toString(),it)
-            return@setOnLongClickListener  true
+            onLongClickListener(holder.binding.title.text.toString(), it)
+            return@setOnLongClickListener true
         }
 
     }

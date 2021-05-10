@@ -1,26 +1,25 @@
 @file:JvmName("FileUtils")
+
 package com.dingyi.MyLuaApp.utils
 
 import android.app.Activity
-import android.text.TextUtils.substring
-
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
 
-val usePaths= mapOf("buildPath" to "/sdcard/MyLuaApp/build",
-        "projectPath" to "/sdcard/MyLuaApp/project"
+val usePaths = mapOf(
+    "buildPath" to "/sdcard/MyLuaApp/build",
+    "projectPath" to "/sdcard/MyLuaApp/project"
 )
 
 
-
-fun String.toFile() :File {
+fun String.toFile(): File {
     return File(this)
 }
 
-fun Activity.readAssetString(path: String):String {
-    val stream=this.assets.open(path)
+fun Activity.readAssetString(path: String): String {
+    val stream = this.assets.open(path)
     stream.use {
         return it.readBytes().decodeToString()
     }
@@ -28,7 +27,7 @@ fun Activity.readAssetString(path: String):String {
 
 fun init() {
     usePaths.forEach {
-        val file=it.value.toFile()
+        val file = it.value.toFile()
         if (!file.isDirectory)
             file.mkdirs()
     }
@@ -36,11 +35,11 @@ fun init() {
 
 fun forEachDir(string: String, callback: (File) -> Unit) {
     string.toFile().listFiles()?.forEach {
-        it?.let{callback(it)}
+        it?.let { callback(it) }
     }
 }
 
-fun readString(file: File) :String {
+fun readString(file: File): String {
     return file.readBytes().decodeToString()
 }
 
@@ -52,37 +51,36 @@ fun writeString(path: String, content: String) {
     path.toFile().writeText(content)
 }
 
-fun copyFile(oldFile: File,toFile: File) {
+fun copyFile(oldFile: File, toFile: File) {
     FileInputStream(oldFile).use { inputStream ->
         FileOutputStream(toFile).use { outputStream ->
-            val bytes=ByteArray(1024)
-            var len=inputStream.read(bytes)
-            while (len!=-1) {
-                outputStream.write(bytes,0,len)
-                len=inputStream.read(bytes)
+            val bytes = ByteArray(1024)
+            var len = inputStream.read(bytes)
+            while (len != -1) {
+                outputStream.write(bytes, 0, len)
+                len = inputStream.read(bytes)
             }
         }
     }
 
 }
 
-fun renameTo(oldPath:String,toPath:String) {
-    val oldFile=oldPath.toFile()
+fun renameTo(oldPath: String, toPath: String) {
+    val oldFile = oldPath.toFile()
     if (oldFile.isFile) {
-        copyFile(oldFile,toPath.toFile())
+        copyFile(oldFile, toPath.toFile())
         oldFile.delete()
-    }else if(oldFile.isDirectory) {
+    } else if (oldFile.isDirectory) {
 
         oldFile.listFiles().forEach {
             if (it.isFile) {
-                copyFile(it,"toPath/${it.name}".toFile())
+                copyFile(it, "toPath/${it.name}".toFile())
                 it.delete()
-            }else if(it.isDirectory)
-                renameTo(it.path,"toPath/${it.name}")
+            } else if (it.isDirectory)
+                renameTo(it.path, "toPath/${it.name}")
         }
     }
 }
-
 
 
 fun File.getSuffix(): String {
@@ -100,7 +98,7 @@ fun File.hasChildFile(): Boolean {
     return this.list().isNotEmpty()
 }
 
-fun File.listSortFiles():List<File>{
+fun File.listSortFiles(): List<File> {
     return this.listFiles().sortedWith { a, b ->
         if (a.isDirectory) {
             return@sortedWith -1

@@ -1,19 +1,13 @@
 package com.dingyi.MyLuaApp.ui.activitys;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-
-import android.view.Gravity;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -144,7 +138,6 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         private void onUpdate(long lastTime, long oldLastTime) {
-
 
 
             try {

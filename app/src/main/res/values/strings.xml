@@ -17,7 +17,7 @@
     <string name="requestPermissionsTitle">权限申请</string>
     <string name="cancelRequestPermissionsMessage">您拒绝了权限申请，程序即将退出</string>
     <string name="requestPermissionsMessage">程序需要以下必要的权限以保障程序运行:存储权限，用于工程的新建与编辑</string>
-   <string name="copy_succeesful">复制名称成功</string>
+    <string name="copy_succeesful">复制名称成功</string>
     <string name="close_file">关闭标签</string>
     <string name="copy_name">复制名称</string>
     <string name="run">运行</string>

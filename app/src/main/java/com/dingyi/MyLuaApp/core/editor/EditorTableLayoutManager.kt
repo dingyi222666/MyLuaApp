@@ -4,7 +4,7 @@ import com.google.android.material.tabs.TabLayout
 
 class EditorTableLayoutManager(private val tabLayout: TabLayout) {
 
-    var selectedTabCallBack:(String)->Unit={
+    var selectedTabCallBack: (String) -> Unit = {
 
     }
 
@@ -13,7 +13,7 @@ class EditorTableLayoutManager(private val tabLayout: TabLayout) {
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.let{
+                tab?.let {
                     selectedTabCallBack(it.text.toString())
                 }
             }
@@ -29,14 +29,14 @@ class EditorTableLayoutManager(private val tabLayout: TabLayout) {
     }
 
     fun addTab(name: String) {
-        tabLayout.addTab(tabLayout.newTab().setText(name),true)
+        tabLayout.addTab(tabLayout.newTab().setText(name), true)
 
     }
 
-    fun selectTab(name:String) {
+    fun selectTab(name: String) {
         for (i in 0 until tabLayout.tabCount) {
-            tabLayout.getTabAt(i)?.let { tab->
-                if (tab.text.toString()==name) {
+            tabLayout.getTabAt(i)?.let { tab ->
+                if (tab.text.toString() == name) {
                     tabLayout.selectTab(tab)
                 }
             }
@@ -46,12 +46,12 @@ class EditorTableLayoutManager(private val tabLayout: TabLayout) {
 
     fun removeTab(name: String) {
         for (i in 0 until tabLayout.tabCount) {
-            tabLayout.getTabAt(i)?.let { tab->
-                if (tab.text.toString()==name) {
-                    if (i==1) {
+            tabLayout.getTabAt(i)?.let { tab ->
+                if (tab.text.toString() == name) {
+                    if (i == 1) {
                         tabLayout.getTabAt(2)?.select()
-                    }else if (tabLayout.tabCount>1) {
-                        tabLayout.getTabAt(i-1)?.select()
+                    } else if (tabLayout.tabCount > 1) {
+                        tabLayout.getTabAt(i - 1)?.select()
                     }
                     tabLayout.removeTabAt(i)
 

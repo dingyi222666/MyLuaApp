@@ -3,16 +3,19 @@ package com.dingyi.MyLuaApp.beans
 import android.os.Parcel
 import android.os.Parcelable
 
-data class ProjectInfo(val projectPath:String, val projectType:Int,
-                       val projectName:String, val projectVersionName:String,
-                       val projectVersionCode:String, val projectPackageName:String): Parcelable {
+data class ProjectInfo(
+    val projectPath: String, val projectType: Int,
+    val projectName: String, val projectVersionName: String,
+    val projectVersionCode: String, val projectPackageName: String
+) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.readString()!!,
-            parcel.readInt(),
-            parcel.readString()!!,
-            parcel.readString()!!,
-            parcel.readString()!!,
-            parcel.readString()!!) {
+        parcel.readString()!!,
+        parcel.readInt(),
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

@@ -1,4 +1,5 @@
 @file:JvmName("ViewUtils")
+
 package com.dingyi.MyLuaApp.utils
 
 import android.app.Activity
@@ -25,33 +26,41 @@ fun menuIconColor(menu: Menu, color: Int) {
     }
 }
 
-fun <T : View> Activity.getDecorView():T {
+fun <T : View> Activity.getDecorView(): T {
     return this.window.decorView as T
 
 }
 
-fun Context.dp2px(int: Int):Int {
-    val scale=this.resources.displayMetrics.density
-    return (int*scale+0.5f).toInt()
+fun Context.dp2px(int: Int): Int {
+    val scale = this.resources.displayMetrics.density
+    return (int * scale + 0.5f).toInt()
 }
 
 fun Context.sp2px(sp: Float): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().displayMetrics)
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP,
+        sp,
+        Resources.getSystem().displayMetrics
+    )
 }
 
-fun <T:View> View.getViewParent():T{
+fun <T : View> View.getViewParent(): T {
     return this.parent as T
 }
 
 fun radius(v: View, context: BaseActivity<*>, int: Int) {
-    val drawable= GradientDrawable()
-    drawable.shape=GradientDrawable.RECTANGLE
+    val drawable = GradientDrawable()
+    drawable.shape = GradientDrawable.RECTANGLE
     drawable.setColor(context.themeManager.themeColors.colorBackground)
-    drawable.cornerRadius=context.dp2px(int).toFloat()
+    drawable.cornerRadius = context.dp2px(int).toFloat()
     v.setBackgroundDrawable(drawable)
 }
 
-fun createProgressBarDialog(context: BaseActivity<*>, title: String, message: String):ProgressDialog {
+fun createProgressBarDialog(
+    context: BaseActivity<*>,
+    title: String,
+    message: String
+): ProgressDialog {
     val dialog = ProgressDialog(context)
 
     dialog.setTitle(title)
@@ -78,15 +87,17 @@ fun createProgressBarDialog(context: BaseActivity<*>, title: String, message: St
 
 fun showSnackbar(view: View, resId: Int) {
     Snackbar.make(view, resId, Snackbar.LENGTH_LONG)
-            .setText(resId)
-            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-            .show()
+        .setText(resId)
+        .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+        .show()
 }
 
-private var imageData = mapOf("lua,java,aly,gradle,xml,py" to R.drawable.ic_twotone_code_24,
-        "default" to R.drawable.ic_twotone_insert_drive_file_24,
-        "png,jpg,bmp" to R.drawable.ic_twotone_image_24,
-        "dir" to R.drawable.ic_twotone_folder_24)
+private var imageData = mapOf(
+    "lua,java,aly,gradle,xml,py" to R.drawable.ic_twotone_code_24,
+    "default" to R.drawable.ic_twotone_insert_drive_file_24,
+    "png,jpg,bmp" to R.drawable.ic_twotone_image_24,
+    "dir" to R.drawable.ic_twotone_folder_24
+)
 
 fun getImageType(file: File): Int {
     if (file.isDirectory) return imageData["dir"]!!

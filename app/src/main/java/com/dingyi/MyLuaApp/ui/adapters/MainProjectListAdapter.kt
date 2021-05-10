@@ -15,14 +15,14 @@ import com.dingyi.MyLuaApp.ui.activitys.EditorActivity
 import kotlin.properties.Delegates
 
 
-class MainProjectListAdapter(private val context: Context): BaseAdapter() {
-    private val data= mutableListOf<ProjectInfo>()
+class MainProjectListAdapter(private val context: Context) : BaseAdapter() {
+    private val data = mutableListOf<ProjectInfo>()
 
-    constructor(context: Context, data: List<ProjectInfo>) :this(context) {
-       this.data.addAll(data)
+    constructor(context: Context, data: List<ProjectInfo>) : this(context) {
+        this.data.addAll(data)
     }
 
-    override fun getCount(): Int{
+    override fun getCount(): Int {
         return data.size
     }
 
@@ -35,18 +35,21 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
     }
 
 
-
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var view=convertView
+        var view = convertView
         var holder by Delegates.notNull<ViewHolder>()
-        val info=data[position]
+        val info = data[position]
 
-        if (convertView==null) {
-            view=ActivityMainListProjectBinding.inflate(LayoutInflater.from(context), parent, false).root
-            holder= ViewHolder(view)
-            view.tag=holder
+        if (convertView == null) {
+            view = ActivityMainListProjectBinding.inflate(
+                LayoutInflater.from(context),
+                parent,
+                false
+            ).root
+            holder = ViewHolder(view)
+            view.tag = holder
         } else {
-           holder=(view?.tag as ViewHolder)
+            holder = (view?.tag as ViewHolder)
         }
 
         (holder.itemView as ViewGroup).getChildAt(0).setOnClickListener {
@@ -56,8 +59,8 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
         }
 
 
-        holder.title.text=info.projectName
-        holder.type.text=getProjectTypeText(context, info.projectType)
+        holder.title.text = info.projectName
+        holder.type.text = getProjectTypeText(context, info.projectType)
         return view
     }
 
@@ -72,8 +75,8 @@ class MainProjectListAdapter(private val context: Context): BaseAdapter() {
     }
 
     class ViewHolder(val itemView: View) {
-        var title: TextView =itemView.findViewById(R.id.main_listview_title)
-        var type: TextView =itemView.findViewById(R.id.main_listview_type)
+        var title: TextView = itemView.findViewById(R.id.main_listview_title)
+        var type: TextView = itemView.findViewById(R.id.main_listview_type)
     }
 
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-  <item
-      android:id="@+id/new_dir"
-      android:title="@string/new_dir"/>
-  <item
-      android:id="@+id/new_file"
-      android:title="@string/new_file"/>
-  <item
-      android:id="@+id/rename"
-      android:title="@string/rename_file"/>
-  <item
-      android:id="@+id/delete"
-      android:title="@string/delete_file"/>
+    <item
+        android:id="@+id/new_dir"
+        android:title="@string/new_dir" />
+    <item
+        android:id="@+id/new_file"
+        android:title="@string/new_file" />
+    <item
+        android:id="@+id/rename"
+        android:title="@string/rename_file" />
+    <item
+        android:id="@+id/delete"
+        android:title="@string/delete_file" />
 </menu>

@@ -19,7 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
-    protected Handler mHandler =new Handler(Looper.getMainLooper());
+    protected Handler mHandler = new Handler(Looper.getMainLooper());
 
     private T mBinding;
 
@@ -29,11 +29,11 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
 
     public BaseFragment(BaseActivity<?> activity) {
-        mActivity=activity;
+        mActivity = activity;
     }
 
     public void setEvent(Event event) {
-        this.mEvents =event;
+        this.mEvents = event;
     }
 
     @Override
@@ -44,11 +44,11 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        initView(getViewBinding(inflater,container));
-        if (mEvents !=null) {
+        initView(getViewBinding(inflater, container));
+        if (mEvents != null) {
             mEvents.onCreateView();
         }
-        return getViewBinding(inflater,container).getRoot();
+        return getViewBinding(inflater, container).getRoot();
     }
 
     protected Handler getHandler() {
@@ -58,18 +58,18 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
-            super.onConfigurationChanged(newConfig);
+        super.onConfigurationChanged(newConfig);
 
     }
 
     protected abstract Class<T> getViewBindingClass();
 
-    public T getViewBinding(LayoutInflater inflater,ViewGroup root) {
+    public T getViewBinding(LayoutInflater inflater, ViewGroup root) {
         if (mBinding == null) {
             try {
-                Method method=getViewBindingClass().getDeclaredMethod("inflate", LayoutInflater.class,ViewGroup.class,Boolean.TYPE);
+                Method method = getViewBindingClass().getDeclaredMethod("inflate", LayoutInflater.class, ViewGroup.class, Boolean.TYPE);
                 method.setAccessible(true);
-                mBinding = (T) method.invoke(null,inflater,root,false);
+                mBinding = (T) method.invoke(null, inflater, root, false);
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 TextUtils.printError(e.toString());
             }
@@ -77,7 +77,7 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         return mBinding;
     }
 
-    public  T getViewBinding() {
+    public T getViewBinding() {
         return mBinding;
     }
 

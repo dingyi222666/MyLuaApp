@@ -25,18 +25,15 @@ import java.lang.reflect.Method;
 
 public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
 
-    protected Handler mHandler=new Handler(Looper.getMainLooper());
-
-    private T mBinding;
-
+    protected Handler mHandler = new Handler(Looper.getMainLooper());
     protected ThemeManager mThemeManager;
-
+    private T mBinding;
     private long mLastExitTime = System.currentTimeMillis();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mThemeManager =new ThemeManager(this);
+        mThemeManager = new ThemeManager(this);
         initView(getViewBinding());
         setContentView(getViewBinding().getRoot());
     }
@@ -47,7 +44,7 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     }
 
     protected void initToolBar() {
-        getSupportActionBar().setElevation(ViewUtils.dp2px(this,2));
+        getSupportActionBar().setElevation(ViewUtils.dp2px(this, 2));
         getSupportActionBar().setSubtitle("test");
         getSupportActionBar().setTitle(getToolBarTitle());
 
@@ -61,12 +58,11 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //横屏适配
-        mBinding =null;//置空当前binding
+        mBinding = null;//置空当前binding
         //重新获取binding
         initView(getViewBinding());
         setContentView(getViewBinding().getRoot());
     }
-
 
 
     @Override
@@ -84,9 +80,9 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     public T getViewBinding() {
         if (mBinding == null) {
             try {
-                Method method=getViewBindingClass().getDeclaredMethod("inflate", LayoutInflater.class);
+                Method method = getViewBindingClass().getDeclaredMethod("inflate", LayoutInflater.class);
                 method.setAccessible(true);
-                mBinding = (T) method.invoke(null,getLayoutInflater());
+                mBinding = (T) method.invoke(null, getLayoutInflater());
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 TextUtils.printError(e.toString());
             }
@@ -99,7 +95,7 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     private boolean checkCanExit(int code) {
         if (code == KeyEvent.KEYCODE_BACK) {
             if (System.currentTimeMillis() - mLastExitTime < 1500) {
-               finishAndRemoveTask();
+                finishAndRemoveTask();
             } else {
                 ViewUtils.showSnackbar(mBinding.getRoot(), R.string.toast_exit);
             }
@@ -113,7 +109,6 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     }
 
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (!checkCanExit(keyCode)) {
@@ -123,7 +118,7 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     }
 
     public void newActivity(Class<?> clazz) {
-        startActivity(new Intent(this,clazz));
+        startActivity(new Intent(this, clazz));
     }
 
 }

@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  android:layout_height="42dp"
-    android:layout_width="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
-        <android.widget.LinearLayout
-            android:id="@+id/root"
-            android:clickable="true"
-            android:background="@drawable/ripple_mask"
-            android:layout_width="match_parent"
-            android:layout_height="42dp">
-            <android.widget.ImageView
-                android:layout_width="42dp"
-                android:padding="7.5dp"
-                android:layout_marginRight="-3dp"
-                android:src="@drawable/ic_twotone_chevron_right_24"
-                android:tint="@color/theme_default_imageColorFilter"
-                android:layout_height="42dp"
-                android:layout_gravity="center"
-                android:id="@+id/next"/>
-            <android.widget.ImageView
-                android:tint="@color/theme_default_imageColorFilter"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:id="@+id/now"
-                android:padding="1dp"
-                android:layout_gravity="center"/>
-            <android.widget.TextView
-                android:layout_gravity="center"
-                android:textSize="15sp"
-                android:layout_marginLeft="8dp"
-                android:id="@+id/title"
-                android:layout_marginRight="8dp"
-                android:textColor="?theme_textColor"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content" />
-        </android.widget.LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="42dp">
+
+    <android.widget.LinearLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/ripple_mask"
+        android:clickable="true">
+
+        <android.widget.ImageView
+            android:id="@+id/next"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="-3dp"
+            android:padding="7.5dp"
+            android:src="@drawable/ic_twotone_chevron_right_24"
+            android:tint="@color/theme_default_imageColorFilter" />
+
+        <android.widget.ImageView
+            android:id="@+id/now"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="center"
+            android:padding="1dp"
+            android:tint="@color/theme_default_imageColorFilter" />
+
+        <android.widget.TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="?theme_textColor"
+            android:textSize="15sp" />
+    </android.widget.LinearLayout>
 
 </LinearLayout>

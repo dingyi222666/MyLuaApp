@@ -15,27 +15,29 @@ import com.dingyi.editor.lua.LuaEditor
 import java.util.*
 
 @SuppressLint("ClickableViewAccessibility")
-class EditorManager(mActivity: BaseActivity<*>,
-                    private val mProjectInfo: ProjectInfo,
-                    binding: ActivityEditorBinding) :IEditor{
+class EditorManager(
+    mActivity: BaseActivity<*>,
+    private val mProjectInfo: ProjectInfo,
+    binding: ActivityEditorBinding
+) : IEditor {
 
 
-    private val mEditors: MutableMap<String, IEditorView> =mutableMapOf()
+    private val mEditors: MutableMap<String, IEditorView> = mutableMapOf()
 
-    private val mLayout=binding.editorParent
-    val mProjectManager= ProjectManager(mActivity, mProjectInfo)
-    private val mEditorTableManager= EditorTableLayoutManager(binding.tabLayout)
+    private val mLayout = binding.editorParent
+    val mProjectManager = ProjectManager(mActivity, mProjectInfo)
+    private val mEditorTableManager = EditorTableLayoutManager(binding.tabLayout)
 
-    var openFileCallBack: (String)->Unit={}
+    var openFileCallBack: (String) -> Unit = {}
 
-    private val mMagnifier=Magnifier(mActivity,mLayout)
+    private val mMagnifier = Magnifier(mActivity, mLayout)
 
-    private lateinit var mNowEditor:IEditorView
+    private lateinit var mNowEditor: IEditorView
 
-    private val mSuffixList=arrayListOf("lua", "java", "gradle", "xml", "aly")
+    private val mSuffixList = arrayListOf("lua", "java", "gradle", "xml", "aly")
 
     init {
-        mEditorTableManager.selectedTabCallBack={
+        mEditorTableManager.selectedTabCallBack = {
             select(it)
         }
 
@@ -46,15 +48,15 @@ class EditorManager(mActivity: BaseActivity<*>,
             showSnackbar(mLayout, R.string.openFail)
             return
         }
-        if (mEditors[mProjectManager.getShortPath(path)]!=null) {
+        if (mEditors[mProjectManager.getShortPath(path)] != null) {
             select(mProjectManager.getShortPath(path))
             return
         }
-        val view=getEditorByPath(path)//拿到编辑器
+        val view = getEditorByPath(path)//拿到编辑器
         view.text = readString(path)//设置编辑器文字
-        mNowEditor=view//设置为现在的编辑器
+        mNowEditor = view//设置为现在的编辑器
         addView(view)//添加布局
-        mEditors[mProjectManager.getShortPath(path)]=view
+        mEditors[mProjectManager.getShortPath(path)] = view
         openFileCallBack.invoke(mProjectManager.getShortPath(path))//打开回调
         mProjectManager.putOpenPath(path)
         mEditorTableManager.addTab(path.substring(mProjectInfo.projectPath.length + 1))//添加tab
@@ -62,8 +64,8 @@ class EditorManager(mActivity: BaseActivity<*>,
 
     fun select(name: String) {
         mEditors[name]?.let {
-            mNowEditor=it//设置为现在的编辑器
-            mMagnifier.nowView=it
+            mNowEditor = it//设置为现在的编辑器
+            mMagnifier.nowView = it
             addView(it)
             openFileCallBack.invoke(name)
             mEditorTableManager.selectTab(name)
@@ -95,15 +97,15 @@ class EditorManager(mActivity: BaseActivity<*>,
 
         mLayout.removeAllViewsInLayout()
         mLayout.addView(view, LinearLayout.LayoutParams(-1, -1))
-        mMagnifier.nowView=view
-        mMagnifier.scale=1.25f
+        mMagnifier.nowView = view
+        mMagnifier.scale = 1.25f
 
     }
 
     private fun getEditorByPath(path: String): IEditorView {
         return when (path.getSuffix().toLowerCase(Locale.ROOT)) {
-            "lua","aly" -> LuaEditor(mLayout.context,mMagnifier)
-             else -> LuaEditor(mLayout.context,mMagnifier)
+            "lua", "aly" -> LuaEditor(mLayout.context, mMagnifier)
+            else -> LuaEditor(mLayout.context, mMagnifier)
         }
     }
 
@@ -112,7 +114,7 @@ class EditorManager(mActivity: BaseActivity<*>,
     }
 
     override fun setText(str: String?) {
-       mNowEditor.text =str
+        mNowEditor.text = str
     }
 
     override fun paste(it: String) {

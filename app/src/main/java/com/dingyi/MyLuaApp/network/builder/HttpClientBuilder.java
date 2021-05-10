@@ -7,10 +7,6 @@ public class HttpClientBuilder {
     private Mode mode;
     private String url;
 
-    private enum Mode {
-        GET,POST,PUT,DELETE
-    }
-
     public HttpClientBuilder get() {
         mode = Mode.GET;
         return this;
@@ -22,7 +18,11 @@ public class HttpClientBuilder {
     }
 
     public void execute(HttpCallBack callBack) {
-        HttpClient.get(url,callBack);
+        HttpClient.get(url, callBack);
+    }
+
+    private enum Mode {
+        GET, POST, PUT, DELETE
     }
 
 }

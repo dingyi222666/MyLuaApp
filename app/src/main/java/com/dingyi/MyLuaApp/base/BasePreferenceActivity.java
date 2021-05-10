@@ -12,17 +12,15 @@ import com.dingyi.MyLuaApp.databinding.ActivityPreferenceBinding;
 
 public abstract class BasePreferenceActivity extends AppCompatActivity {
 
-    public abstract int getPreferenceId();
-
-
     protected SharedPreferences mPreference;
 
+    public abstract int getPreferenceId();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActivityPreferenceBinding mBinding=ActivityPreferenceBinding.inflate(getLayoutInflater());
+        ActivityPreferenceBinding mBinding = ActivityPreferenceBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
         setSupportActionBar(mBinding.toolbarParent.toolbar);
 

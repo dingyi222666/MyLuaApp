@@ -7,15 +7,15 @@ import com.dingyi.MyLuaApp.base.BaseActivity
 import com.dingyi.MyLuaApp.base.BaseFragment
 import com.dingyi.MyLuaApp.beans.ProjectInfo
 import com.dingyi.MyLuaApp.core.editor.EditorManager
-
-import com.dingyi.MyLuaApp.databinding.FragmentFileListBinding
 import com.dingyi.MyLuaApp.core.project.helper.ProjectFileHelper
+import com.dingyi.MyLuaApp.databinding.FragmentFileListBinding
 import com.dingyi.MyLuaApp.ui.adapters.FileListAdapter
 import com.dingyi.MyLuaApp.utils.listSortFiles
 import com.dingyi.MyLuaApp.utils.toFile
 import kotlin.properties.Delegates
 
-class FileListFragment(mActivity: BaseActivity<*>) : BaseFragment<FragmentFileListBinding>(mActivity), ProjectFileHelper.RefreshCallBack {
+class FileListFragment(mActivity: BaseActivity<*>) :
+    BaseFragment<FragmentFileListBinding>(mActivity), ProjectFileHelper.RefreshCallBack {
 
 
     private var mFileListAdapter by Delegates.notNull<FileListAdapter>()
@@ -28,10 +28,11 @@ class FileListFragment(mActivity: BaseActivity<*>) : BaseFragment<FragmentFileLi
             mProjectInfo = info
             mFileListAdapter = FileListAdapter(info)
             it.list.adapter = mFileListAdapter
-            it.list.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+            it.list.layoutManager =
+                LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
 
             mFileListAdapter.onLongClickListener = { path: String, view: View ->
-                mProjectFileHelper.showFileSelectPopupMenu(path, view,true)
+                mProjectFileHelper.showFileSelectPopupMenu(path, view, true)
             }
 
             mFileListAdapter.onClickListener = { path ->
@@ -44,7 +45,10 @@ class FileListFragment(mActivity: BaseActivity<*>) : BaseFragment<FragmentFileLi
                     editorManager.open(file.path)
                 }
             }
-            loadFileListData(info, editorManager.mProjectManager.getLastOpenPath()!!.toFile().parentFile.path)
+            loadFileListData(
+                info,
+                editorManager.mProjectManager.getLastOpenPath()!!.toFile().parentFile.path
+            )
         }
 
     }

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory
-        android:title="@string/settings_editor">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings_editor">
         <SwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_twotone_search_24"
@@ -10,8 +8,7 @@
             android:summary="@string/settings_magnifier_summary"
             android:title="@string/settings_magnifier" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/settings_explorer">
+    <PreferenceCategory android:title="@string/settings_explorer">
         <SwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_twotone_account_tree_24"

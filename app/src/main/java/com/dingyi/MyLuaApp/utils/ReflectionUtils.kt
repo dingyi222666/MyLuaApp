@@ -1,4 +1,5 @@
 @file:JvmName("ReflectionUtils")
+
 package com.dingyi.MyLuaApp.utils
 
 import kotlin.reflect.KClass
@@ -17,7 +18,7 @@ fun getPrivateField(objects: Any, fieldName: String): Any? {
     return null
 }
 
-fun getPrivateField(clazz: Class<*>,objects: Any, fieldName: String): Any? {
+fun getPrivateField(clazz: Class<*>, objects: Any, fieldName: String): Any? {
     runCatching {
         val field = clazz.getDeclaredField(fieldName)
         field.isAccessible = true
@@ -29,14 +30,19 @@ fun getPrivateField(clazz: Class<*>,objects: Any, fieldName: String): Any? {
     return null
 }
 
-fun getPrivateMethod(objects: Any,methodName:String,methodArg:Array<Class<*>>,methodRunArg:Array<Any>?):Any? {
+fun getPrivateMethod(
+    objects: Any,
+    methodName: String,
+    methodArg: Array<Class<*>>,
+    methodRunArg: Array<Any>?
+): Any? {
     runCatching {
         val field = objects.javaClass.getDeclaredMethod(methodName, *methodArg)
         field.isAccessible = true
         methodRunArg?.let {
-           return field.invoke(objects,*it)
+            return field.invoke(objects, *it)
         }
-        return field.invoke(objects,null)
+        return field.invoke(objects, null)
     }.onFailure {
         printError(it.message.toString())
         return null

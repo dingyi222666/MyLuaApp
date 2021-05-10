@@ -19,7 +19,6 @@ import com.androlua.LuaBaseActivity;
 import com.dingyi.MyLuaApp.R;
 import com.dingyi.MyLuaApp.beans.ProjectInfo;
 import com.dingyi.MyLuaApp.core.editor.EditorManager;
-
 import com.dingyi.MyLuaApp.core.project.ProjectUtil;
 import com.dingyi.MyLuaApp.databinding.ActivityEditorBinding;
 import com.dingyi.MyLuaApp.ui.adapters.BaseViewPager2Adapter;
@@ -35,9 +34,9 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
 
     private EditorManager mEditorManager;
 
-    private  ProjectInfo mProjectInfo;
+    private ProjectInfo mProjectInfo;
 
-    private  BaseViewPager2Adapter mSlideAdapter;
+    private BaseViewPager2Adapter mSlideAdapter;
 
 
     @Override
@@ -157,7 +156,7 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
                 break;
             case R.id.save:
                 mEditorManager.saveAll();
-                ViewUtils.showSnackbar(getViewBinding().getRoot(),R.string.save_toast);
+                ViewUtils.showSnackbar(getViewBinding().getRoot(), R.string.save_toast);
             case R.id.redo:
                 mEditorManager.redo();
                 break;

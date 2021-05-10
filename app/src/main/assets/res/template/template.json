@@ -1,4 +1,6 @@
-[{
-  "templateName":"Lua Empty Project",
-  "templatePath": "LuaProjectTemplate.zip"
-}]
+[
+  {
+    "templateName": "Lua Empty Project",
+    "templatePath": "LuaProjectTemplate.zip"
+  }
+]

@@ -1,7 +1,6 @@
 package com.dingyi.MyLuaApp.widget.views
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Point
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.preference.PreferenceManager
 import com.dingyi.MyLuaApp.databinding.ViewMaginfierLayoutBinding
-import com.dingyi.MyLuaApp.utils.SharedPreferencesUtil
 import com.dingyi.MyLuaApp.utils.dp2px
 import com.dingyi.MyLuaApp.utils.getDecorView
 import com.dingyi.MyLuaApp.utils.printError
@@ -20,9 +18,8 @@ import kotlin.properties.Delegates
 class Magnifier(private val activity: Activity, view: View?) {
 
 
-
-
-    private val binding = ViewMaginfierLayoutBinding.inflate(activity.layoutInflater, activity.getDecorView(), false)
+    private val binding =
+        ViewMaginfierLayoutBinding.inflate(activity.layoutInflater, activity.getDecorView(), false)
 
     private val point = Point(0, 0)
 
@@ -32,19 +29,27 @@ class Magnifier(private val activity: Activity, view: View?) {
 
     init {
         if (view != null) {
-            nowView=view
+            nowView = view
         }
         activity.getDecorView<ViewGroup>().addView(binding.root, -2, -2)
     }
 
-    private fun scaleAndCropViewBitmap(x: Int, y: Int, w: Int, h: Int, sx: Float, sy: Float): Bitmap? {
+    private fun scaleAndCropViewBitmap(
+        x: Int,
+        y: Int,
+        w: Int,
+        h: Int,
+        sx: Float,
+        sy: Float
+    ): Bitmap? {
         runCatching {
             nowView.isDrawingCacheEnabled = true
             nowView.buildDrawingCache(true)
             val bitmap = nowView.getDrawingCache(true)
 
             val oldBitmap = Bitmap.createBitmap(bitmap,
-                    x, y, (w /sx).toInt(), (h / sy).toInt(), Matrix().apply { setScale(sx, sy) }, false)
+                x, y, (w / sx).toInt(), (h / sy).toInt(), Matrix().apply { setScale(sx, sy) }, false
+            )
 
             nowView.isDrawingCacheEnabled = false
             nowView.destroyDrawingCache()
@@ -63,31 +68,36 @@ class Magnifier(private val activity: Activity, view: View?) {
     private fun recycle() {
         if (binding.image.drawable is BitmapDrawable) {
             (binding.image.drawable as BitmapDrawable).bitmap?.let {
-               binding.image.setImageBitmap(null)
+                binding.image.setImageBitmap(null)
             }
         }
     }
 
-    private fun abs(i:Float):Float{
-        if (i<0) {
+    private fun abs(i: Float): Float {
+        if (i < 0) {
             return 0f
         }
         return i
     }
 
-    fun show(x: Int, y: Int,scaleX:Int,scaleY:Int) {
-        if (binding.root.visibility == View.GONE || !PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("editor_magnifier",true)) {
+    fun show(x: Int, y: Int, scaleX: Int, scaleY: Int) {
+        if (binding.root.visibility == View.GONE || !PreferenceManager.getDefaultSharedPreferences(
+                activity
+            ).getBoolean("editor_magnifier", true)
+        ) {
             return
         }
         point.set(x, y)
         recycle()
-        binding.root.x= abs(x.toFloat()-activity.dp2px(86/2))
-        binding.root.y= abs(y.toFloat()+activity.dp2px(56/2))
+        binding.root.x = abs(x.toFloat() - activity.dp2px(86 / 2))
+        binding.root.y = abs(y.toFloat() + activity.dp2px(56 / 2))
 
-        binding.image.setImageBitmap(scaleAndCropViewBitmap(
+        binding.image.setImageBitmap(
+            scaleAndCropViewBitmap(
                 scaleX, scaleY,
                 activity.dp2px(86), activity.dp2px(56),
-                scale, scale)
+                scale, scale
+            )
         )
     }
 

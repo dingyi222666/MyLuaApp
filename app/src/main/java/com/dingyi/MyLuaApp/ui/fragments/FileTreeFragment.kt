@@ -9,7 +9,8 @@ import com.dingyi.MyLuaApp.core.project.helper.ProjectFileHelper
 import com.dingyi.MyLuaApp.databinding.FragmentFileTreeBinding
 import kotlin.properties.Delegates
 
-class FileTreeFragment(mActivity: BaseActivity<*>): BaseFragment<FragmentFileTreeBinding>(mActivity), ProjectFileHelper.RefreshCallBack {
+class FileTreeFragment(mActivity: BaseActivity<*>) :
+    BaseFragment<FragmentFileTreeBinding>(mActivity), ProjectFileHelper.RefreshCallBack {
 
     private var mBinding by Delegates.notNull<FragmentFileTreeBinding>()
 
@@ -20,24 +21,24 @@ class FileTreeFragment(mActivity: BaseActivity<*>): BaseFragment<FragmentFileTre
     var rootPath = ""
         set(value) {
             field = value
-            mBinding.tree.rootPath=value
-            mBinding.title.text=value
+            mBinding.tree.rootPath = value
+            mBinding.title.text = value
         }
 
     override fun getViewBindingClass(): Class<FragmentFileTreeBinding> {
-       return FragmentFileTreeBinding::class.java
+        return FragmentFileTreeBinding::class.java
     }
 
     override fun initView(binding: FragmentFileTreeBinding?) {
         binding?.let {
-            this.mBinding=it
+            this.mBinding = it
         }
 
 
     }
 
     fun initView(manager: EditorManager, info: ProjectInfo) {
-        rootPath=info.projectPath
+        rootPath = info.projectPath
 
     }
 

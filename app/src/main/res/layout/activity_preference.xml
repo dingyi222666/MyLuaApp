@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include
-        android:elevation="2dp"
-        app:elevation="2dp"
-        android:id="@+id/toolbarParent"
-        layout="@layout/layout_include_toolbar"/>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:id="@+id/contents"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-        android:layout_height="match_parent"/>
+    <include
+        android:id="@+id/toolbarParent"
+        layout="@layout/layout_include_toolbar"
+        android:elevation="2dp"
+        app:elevation="2dp" />
+
+    <FrameLayout
+        android:id="@+id/contents"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent" />
 </LinearLayout>

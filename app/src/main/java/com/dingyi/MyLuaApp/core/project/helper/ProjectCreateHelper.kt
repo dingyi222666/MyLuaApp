@@ -8,10 +8,10 @@ import com.dingyi.MyLuaApp.core.task.SimpleAsyncTask
  *
  */
 class ProjectCreateHelper(private val activity: BaseActivity<*>) {
-    private var mProjectType=0
-    private var mProjectPath=""
-    private var mProjectName=""
-    private var mProjectPackageName=""
+    private var mProjectType = 0
+    private var mProjectPath = ""
+    private var mProjectName = ""
+    private var mProjectPackageName = ""
 
 
     fun setProjectName(name: String): ProjectCreateHelper {
@@ -36,8 +36,8 @@ class ProjectCreateHelper(private val activity: BaseActivity<*>) {
 
     fun execute(callback: Runnable) {
         SimpleAsyncTask.postTask({
-            createProject(activity,mProjectType,mProjectPath,mProjectName,mProjectPackageName)
-        },callback)
+            createProject(activity, mProjectType, mProjectPath, mProjectName, mProjectPackageName)
+        }, callback)
     }
 
 }

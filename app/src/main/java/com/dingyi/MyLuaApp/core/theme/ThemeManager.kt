@@ -8,7 +8,7 @@ import kotlin.properties.Delegates
 
 class ThemeManager(activity: BaseActivity<*>) {
     private val mThemes = mutableMapOf<String, Int>()
-    private val mSharedPreferencesUtil = SharedPreferencesUtil(activity,"theme")
+    private val mSharedPreferencesUtil = SharedPreferencesUtil(activity, "theme")
     var nowThemeResourcesId: Int = 0
     var themeColors by Delegates.notNull<ThemeColors>()
 
@@ -26,11 +26,17 @@ class ThemeManager(activity: BaseActivity<*>) {
 
         var colorBackground by Delegates.notNull<Int>()
         var colorPrimary by Delegates.notNull<Int>()
+
         //获取固定颜色
         val imageColorFilter = activity.resources.getColor(R.color.theme_default_imageColorFilter)
 
         init {
-            val typedArray = activity.obtainStyledAttributes(intArrayOf(android.R.attr.colorPrimary, R.attr.theme_backgroundColor))
+            val typedArray = activity.obtainStyledAttributes(
+                intArrayOf(
+                    android.R.attr.colorPrimary,
+                    R.attr.theme_backgroundColor
+                )
+            )
 
             colorPrimary = typedArray.getColor(0, 0)
             colorBackground = typedArray.getColor(1, 0)

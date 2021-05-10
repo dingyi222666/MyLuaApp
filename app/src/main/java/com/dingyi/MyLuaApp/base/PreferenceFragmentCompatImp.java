@@ -11,7 +11,7 @@ public class PreferenceFragmentCompatImp extends PreferenceFragmentCompat {
 
 
     public PreferenceFragmentCompatImp bindActivity(BasePreferenceActivity activity) {
-        mBasePreferenceActivity=activity;
+        mBasePreferenceActivity = activity;
         return this;
     }
 
