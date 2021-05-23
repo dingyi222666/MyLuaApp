@@ -12,6 +12,7 @@ android {
         applicationId "com.dingyi.MyLuaApp"
         minSdkVersion 21
         //noinspection OldTargetApi
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 26
         versionCode 15
         versionName "0.15 (alpna)"
