@@ -14,17 +14,19 @@ import com.dingyi.MyLuaApp.utils.listSortFiles
 import com.dingyi.MyLuaApp.utils.toFile
 import kotlin.properties.Delegates
 
-class FileListFragment(mActivity: BaseActivity<*>) :
+class FileListFragment(val mActivity: BaseActivity<*>) :
     BaseFragment<FragmentFileListBinding>(mActivity), ProjectFileHelper.RefreshCallBack {
 
 
     private var mFileListAdapter by Delegates.notNull<FileListAdapter>()
     private var mLastDirPath = ""
+    private var mLastSelectPath = ""
     private val mProjectFileHelper = ProjectFileHelper(mActivity, this)
+    private var mEditorManager by Delegates.notNull<EditorManager>()
     private var mProjectInfo by Delegates.notNull<ProjectInfo>()
     fun initView(editorManager: EditorManager, info: ProjectInfo) {
-        viewBinding.let { it ->
-
+        viewBinding.let {
+            mEditorManager = editorManager
             mProjectInfo = info
             mFileListAdapter = FileListAdapter(info)
             it.list.adapter = mFileListAdapter
@@ -32,7 +34,8 @@ class FileListFragment(mActivity: BaseActivity<*>) :
                 LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
 
             mFileListAdapter.onLongClickListener = { path: String, view: View ->
-                mProjectFileHelper.showFileSelectPopupMenu(path, view, true)
+                mLastSelectPath = "$mLastDirPath/$path"
+                mProjectFileHelper.showFileSelectPopupMenu("$mLastDirPath/$path", view, true)
             }
 
             mFileListAdapter.onClickListener = { path ->
@@ -85,11 +88,20 @@ class FileListFragment(mActivity: BaseActivity<*>) :
         }
     }
 
+
     override fun onRefresh(path: String) {
         if (path.toFile().isDirectory) {
             loadFileListData(mProjectInfo, path)
         } else {
             loadFileListData(mProjectInfo, mLastDirPath)
+
+            //判断是否还存在
+
+            if (mLastSelectPath.toFile().isFile && mLastSelectPath != path) {
+                mEditorManager.replace(mLastSelectPath, path)
+            } else if (!path.toFile().exists()) {
+                mEditorManager.remove(mEditorManager.mProjectManager.getShortPath(path))
+            }
         }
     }
 

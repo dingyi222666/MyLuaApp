@@ -52,6 +52,7 @@ class EditorManager(
             select(mProjectManager.getShortPath(path))
             return
         }
+
         val view = getEditorByPath(path)//拿到编辑器
         view.text = readString(path)//设置编辑器文字
         mNowEditor = view//设置为现在的编辑器
@@ -82,14 +83,28 @@ class EditorManager(
         }
     }
 
-    private fun save(path: String) {
+    fun save(path: String) {
         mEditors[path]?.let { writeString(mProjectManager.getAllPath(path), it.text) }
     }
 
+    fun reLoad(path:String) {
+        mEditors[path]?.text= readString(path)
+    }
+
     fun remove(str: String) {
+
         if (mEditors.containsKey(str)) {
             mEditors.remove(str)
+            mEditorTableManager.removeTab(str)
         }
+    }
+
+
+    fun replace(lastSelectPath: String, path: String) {
+        val targetView=mEditors[mProjectManager.getShortPath(lastSelectPath)]
+        mEditorTableManager.renameTab(mProjectManager.getShortPath(lastSelectPath),mProjectManager.getShortPath(path))
+        mEditors[mProjectManager.getShortPath(path)]=targetView!!
+        mEditors.remove(mProjectManager.getShortPath(lastSelectPath))
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -152,4 +167,5 @@ class EditorManager(
     override fun isSelected(): Boolean {
         return mNowEditor.isSelected
     }
+
 }

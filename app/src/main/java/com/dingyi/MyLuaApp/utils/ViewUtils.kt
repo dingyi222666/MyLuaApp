@@ -58,12 +58,11 @@ fun radius(v: View, context: BaseActivity<*>, int: Int) {
 
 fun createProgressBarDialog(
     context: BaseActivity<*>,
-    title: String,
-    message: String
+    title: String?,
+    message: String?
 ): ProgressDialog {
     val dialog = ProgressDialog(context)
 
-    dialog.setTitle(title)
     with(dialog) {
         setTitle(title)
         setMessage(message)

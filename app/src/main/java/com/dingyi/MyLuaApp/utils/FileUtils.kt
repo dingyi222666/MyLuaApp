@@ -3,6 +3,7 @@
 package com.dingyi.MyLuaApp.utils
 
 import android.app.Activity
+import kotlinx.coroutines.Dispatchers
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -51,7 +52,7 @@ fun writeString(path: String, content: String) {
     path.toFile().writeText(content)
 }
 
-fun copyFile(oldFile: File, toFile: File) {
+suspend fun copyFile(oldFile: File, toFile: File) {
     FileInputStream(oldFile).use { inputStream ->
         FileOutputStream(toFile).use { outputStream ->
             val bytes = ByteArray(1024)
@@ -65,23 +66,42 @@ fun copyFile(oldFile: File, toFile: File) {
 
 }
 
-fun renameTo(oldPath: String, toPath: String) {
+suspend fun renameTo(oldPath: String, toPath: String) {
     val oldFile = oldPath.toFile()
     if (oldFile.isFile) {
         copyFile(oldFile, toPath.toFile())
         oldFile.delete()
     } else if (oldFile.isDirectory) {
-
+        toPath.toFile().mkdirs()
         oldFile.listFiles().forEach {
             if (it.isFile) {
-                copyFile(it, "toPath/${it.name}".toFile())
+                copyFile(it, "$toPath/${it.name}".toFile())
                 it.delete()
             } else if (it.isDirectory)
-                renameTo(it.path, "toPath/${it.name}")
+                renameTo(it.path, "$toPath/${it.name}")
         }
+        delete(oldFile)
+
     }
 }
 
+suspend fun delete(path:String) {
+    delete(path.toFile())
+}
+
+suspend fun delete(path:File) {
+    if (path.isFile) {
+        path.delete()
+    } else if (path.isDirectory) {
+        path.listFiles().forEach {
+            if (it.isFile) {
+                it.delete()
+            } else if (it.isDirectory)
+                delete(it)
+        }
+        path.delete()
+    }
+}
 
 fun File.getSuffix(): String {
     return name.substring(name.lastIndexOf(".") + 1)

@@ -16,12 +16,18 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewbinding.ViewBinding;
 
 import com.dingyi.MyLuaApp.R;
+import com.dingyi.MyLuaApp.core.task.SimpleCoroutineManager;
 import com.dingyi.MyLuaApp.core.theme.ThemeManager;
 import com.dingyi.MyLuaApp.utils.TextUtils;
 import com.dingyi.MyLuaApp.utils.ViewUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import kotlin.coroutines.CoroutineContext;
+import kotlin.jvm.functions.Function2;
 
 public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActivity {
 
@@ -29,6 +35,10 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
     protected ThemeManager mThemeManager;
     private T mBinding;
     private long mLastExitTime = System.currentTimeMillis();
+
+
+
+    private SimpleCoroutineManager coroutineManager=new SimpleCoroutineManager(this);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +58,10 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         getSupportActionBar().setSubtitle("test");
         getSupportActionBar().setTitle(getToolBarTitle());
 
+    }
+
+    public SimpleCoroutineManager getCoroutineManager() {
+        return coroutineManager;
     }
 
     public ThemeManager getThemeManager() {
@@ -121,4 +135,12 @@ public abstract class BaseActivity<T extends ViewBinding> extends AppCompatActiv
         startActivity(new Intent(this, clazz));
     }
 
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        coroutineManager.cancelAllTask();
+        coroutineManager=null;
+    }
 }

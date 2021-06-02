@@ -15,6 +15,11 @@ import com.dingyi.MyLuaApp.databinding.DialogLayoutInput1Binding
 import com.dingyi.MyLuaApp.utils.*
 import com.dingyi.MyLuaApp.widget.dialogs.InputDialog
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 
 class ProjectFileHelper(
     private val mActivity: BaseActivity<*>,
@@ -54,7 +59,7 @@ class ProjectFileHelper(
     fun showFileSelectPopupMenu(filePath: String, showView: View, isHide: Boolean = false) {
         val popupMenu = PopupMenu(mActivity, showView)
         popupMenu.inflate(R.menu.editor_file_list_menu)
-
+        printDebug(filePath)
         if (filePath.toFile().isFile || isHide) {
             popupMenu.menu.findItem(R.id.new_dir).isVisible = false
             popupMenu.menu.findItem(R.id.new_file).isVisible = false
@@ -65,6 +70,7 @@ class ProjectFileHelper(
                 R.id.new_file -> showNewFileDialog(filePath)
                 R.id.new_dir -> showNewDirDialog(filePath)
                 R.id.rename -> showFileRenameDialog(filePath)
+                R.id.delete -> showFileDeleteDialog(filePath)
             }
             return@setOnMenuItemClickListener true
         }
@@ -80,6 +86,32 @@ class ProjectFileHelper(
                 ), arrayOf(mActivity.dp2px(16), -showView.height, true, true)
             )
         }
+    }
+
+    private fun showFileDeleteDialog(filePath: String) {
+
+        InputDialog(mActivity)
+            .setTitle(R.string.delete_title)
+            .setMessage(mActivity.getString(R.string.delete_title_message, filePath.toFile().name))
+
+            .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int ->
+                val dialog = createProgressBarDialog(
+                    mActivity,
+                    mActivity.getString(R.string.delete_progress_title),
+                    mActivity.getString(R.string.delete_progress_message)
+                )
+                dialog.show()
+                mActivity.coroutineManager.postTask {
+                    withContext(Dispatchers.IO) {
+                        delete(filePath)
+                    }
+                    showSnackbar(mActivity.coordinatorLayout,R.string.delete_file_success)
+                    mCallBack.onRefresh(filePath)
+                    dialog.dismiss()
+                }
+            }
+            .setNeutralButton(android.R.string.cancel, null)
+            .show()
     }
 
     private fun showNewFileDialog(path: String) {
@@ -116,11 +148,16 @@ class ProjectFileHelper(
                 }
             }, mInputDialog.getBinding<DialogLayoutInput1Binding>().folder)
             .setPositiveButton(android.R.string.ok) { _: DialogInterface?, _: Int ->
-                val renamePath =
-                    "$mParentPath/${mInputDialog.getBinding<DialogLayoutInput1Binding>().folder.text}"
-                renameTo(path, renamePath)
-                showSnackbar(mActivity.coordinatorLayout, R.string.rename_file_success)
-                mCallBack.onRefresh(path)
+               mActivity.coroutineManager.postTask {
+                    val renamePath =
+                        "$mParentPath/${mInputDialog.getBinding<DialogLayoutInput1Binding>().folder.text}"
+                    withContext(Dispatchers.IO) {
+                        renameTo(path, renamePath)
+                    }//切到一个新线程
+                    showSnackbar(mActivity.coordinatorLayout, R.string.rename_file_success)
+                    mCallBack.onRefresh(path)
+
+                }
             }
             .setNeutralButton(android.R.string.cancel, null)
             .show()

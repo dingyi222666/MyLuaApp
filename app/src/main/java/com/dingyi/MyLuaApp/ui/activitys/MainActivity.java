@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     private void onCancelRequestPermissions() {
         Toast.makeText(this, R.string.cancelRequestPermissionsMessage, Toast.LENGTH_LONG).show();
-        getHandler().postDelayed(() -> MainActivity.this.finish(), 1000);
+        getHandler().postDelayed(MainActivity.this::finish, 1000);
     }
 
     private void requestPermissions(Runnable runnable) throws PackageManager.NameNotFoundException {

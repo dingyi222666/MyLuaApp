@@ -21,7 +21,7 @@ class SymbolView(context: Context?, attrs: AttributeSet?) : LinearLayout(context
             ?.split(" ")
 
 
-        kotlin.runCatching {
+        runCatching {
             (this.parent as HorizontalScrollView).isHorizontalFadingEdgeEnabled = false
         }
 

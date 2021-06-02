@@ -44,17 +44,27 @@ class EditorTableLayoutManager(private val tabLayout: TabLayout) {
         }
     }
 
+    fun renameTab(oldName:String,newName:String) {
+        for (i in 0 until tabLayout.tabCount) {
+            tabLayout.getTabAt(i)?.let { tab ->
+                if (tab.text.toString() == oldName) {
+                    tab.text = newName
+                }
+            }
+
+        }
+    }
+
     fun removeTab(name: String) {
         for (i in 0 until tabLayout.tabCount) {
             tabLayout.getTabAt(i)?.let { tab ->
                 if (tab.text.toString() == name) {
-                    if (i == 1) {
+                    if (i == 1&&tabLayout.tabCount>=2) {
                         tabLayout.getTabAt(2)?.select()
                     } else if (tabLayout.tabCount > 1) {
                         tabLayout.getTabAt(i - 1)?.select()
                     }
                     tabLayout.removeTabAt(i)
-
                 }
             }
 

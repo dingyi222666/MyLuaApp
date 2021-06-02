@@ -128,7 +128,8 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
         getViewBinding().slide.page.setAdapter(mSlideAdapter);
         getViewBinding().slide.page.setUserInputEnabled(true);
 
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("editor_file_tree", false)) {//File Tree
+        //File Tree
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("editor_file_tree", false)) {
             FileTreeFragment fileTreeFragment = new FileTreeFragment(this);
             mSlideAdapter.add(fileTreeFragment);
             fileTreeFragment.setEvent(() -> {
@@ -159,6 +160,8 @@ public class EditorActivity extends LuaBaseActivity<ActivityEditorBinding> {
                 ViewUtils.showSnackbar(getViewBinding().getRoot(), R.string.save_toast);
             case R.id.redo:
                 mEditorManager.redo();
+                break;
+            default:
                 break;
         }
         return super.onOptionsItemSelected(item);

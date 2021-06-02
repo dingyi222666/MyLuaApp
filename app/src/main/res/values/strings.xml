@@ -67,7 +67,8 @@
     <string name="delete_file">删除</string>
     <string name="delete_file_success">删除文件/文件夹成功</string>
     <string name="delete_title">删除文件/文件夹</string>
-    <string name="delete_progress_title">正在删除文件/文件夹</string>
+    <string name="delete_progress_title">Loading....</string>
+    <string name="delete_progress_message">正在删除文件/文件夹</string>
     <string name="delete_title_message">是否要删除 %1$s ？该操作不可撤销，请谨慎操作</string>
     <string name="new_file_hint">输入文件名称</string>
     <string name="new_file_title">新建 %1$s </string>

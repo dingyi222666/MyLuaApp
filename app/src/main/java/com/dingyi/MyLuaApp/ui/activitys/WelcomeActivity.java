@@ -66,18 +66,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    private void checkPermission(String permission) {
-        if (checkCallingOrSelfPermission(permission)
-                != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(permission);
-        }
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        new UpdateTask().execute();
-    }
 
     public void startActivity() {
         Intent intent = new Intent(this, MainActivity.class);

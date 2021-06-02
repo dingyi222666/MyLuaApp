@@ -72,6 +72,7 @@ public class WeakTable implements Metatable {
 		return weakkeys;
 	}
 
+	@Override
 	public boolean useWeakValues() {
 		return weakvalues;
 	}
