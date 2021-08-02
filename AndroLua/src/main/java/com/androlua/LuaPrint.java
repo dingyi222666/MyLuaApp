@@ -15,7 +15,7 @@ public class LuaPrint extends JavaFunction {
     }
 
     @Override
-    public int execute() {
+    public int execute() throws LuaException {
         if (L.getTop() < 2) {
             mLuaContext.sendMsg("");
             return 0;
@@ -46,5 +46,4 @@ public class LuaPrint extends JavaFunction {
 
 
 }
-
 

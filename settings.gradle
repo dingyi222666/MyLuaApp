@@ -1,5 +1,3 @@
-include ':AXMLEditor'
-include ':LuaJ'
 include ':AndroLua'
 include ':app'
 include ':LuaLibrary'
