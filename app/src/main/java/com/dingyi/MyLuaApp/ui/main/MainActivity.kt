@@ -53,6 +53,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel, MainPresen
     }
 
     override fun getPresenterImp(): MainPresenter {
+        //test
         return MainPresenter(viewModel, this)
     }
 }
