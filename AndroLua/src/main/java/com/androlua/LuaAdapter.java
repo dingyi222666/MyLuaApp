@@ -72,15 +72,10 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
             if (msg.what == 0) {
                 notifyDataSetChanged();
             } else {
-                try {
-                    LuaTable<Integer, LuaTable<String, Object>> newValues = new LuaTable<Integer, LuaTable<String, Object>>(mData.getLuaState());
-                    mLuaFilter.call(mBaseData, newValues, mPrefix);
-                    mData = newValues;
-                    notifyDataSetChanged();
-                } catch (LuaException e) {
-                    e.printStackTrace();
-                    mContext.sendError("performFiltering", e);
-                }
+                LuaTable<Integer, LuaTable<String, Object>> newValues = new LuaTable<Integer, LuaTable<String, Object>>(mData.getLuaState());
+                mLuaFilter.call(mBaseData, newValues, mPrefix);
+                mData = newValues;
+                notifyDataSetChanged();
             }
         }
 
@@ -209,15 +204,11 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
         View view = null;
         LuaObject holder = null;
         if (convertView == null) {
-            try {
-                L.newTable();
-                holder = L.getLuaObject(-1);
-                L.pop(1);
-                view = loadlayout.call(mLayout, holder, AbsListView.class);
-                view.setTag(holder);
-            } catch (LuaException e) {
-                return new View(mContext.getContext());
-            }
+            L.newTable();
+            holder = L.getLuaObject(-1);
+            L.pop(1);
+            view = loadlayout.call(mLayout, holder, AbsListView.class);
+            view.setTag(holder);
         } else {
             view = convertView;
             holder = (LuaObject) view.getTag();

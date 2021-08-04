@@ -46,7 +46,6 @@
     <style name="BaseToolBarStyle" parent="Widget.MaterialComponents.Toolbar">
         <item name="colorPrimary">@color/theme_default_backgroundColor</item>
         <item name="titleTextColor">?colorPrimary</item>
-        <item name="background">@color/white</item>
 
         <item name="subtitleTextStyle">@style/BaseToolBarSubTitleStyle</item>
         <item name="titleTextStyle">@style/BaseToolBarTitleStyle</item>

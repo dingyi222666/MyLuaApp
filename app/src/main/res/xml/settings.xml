@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/settings_editor">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:icon="@drawable/ic_twotone_search_24"
-            android:key="editor_magnifier"
-            android:summary="@string/settings_magnifier_summary"
-            android:title="@string/settings_magnifier" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/settings_explorer">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:icon="@drawable/ic_twotone_account_tree_24"
-            android:key="editor_file_tree"
-            android:summary="@string/settings_file_tree_summary"
-            android:title="@string/settings_file_tree" />
-    </PreferenceCategory>
+
 </PreferenceScreen>

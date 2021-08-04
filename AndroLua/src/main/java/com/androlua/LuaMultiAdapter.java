@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -92,7 +93,7 @@ public class LuaMultiAdapter extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
         try{
-            int t = mData.get(position + 1).get("__type",Integer.class) - 1;
+            int t = (int) mData.get(position + 1).get("__type")- 1;
             return t < 0 ? 0 : t;
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,21 +197,17 @@ public class LuaMultiAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO: Implement this method
         View view = null;
-        LuaObject holder = null;
-        int t = mData.get(position + 1).get("__type", Integer.class);
-        t = t < 1 ? 1 : t;
+        LuaObject holder;
+        int t = (int) mData.get(position + 1).get("__type");
+        t = Math.max(t, 1);
         if (convertView == null) {
-            try {
-                LuaTable layout = mLayout.get(t);
-                L.newTable();
-                holder = L.getLuaObject(-1);
-                L.pop(1);
-                view = loadLayout.call(layout, holder, AbsListView.class);
-                view.setTag(holder);
-                //mHolderCache.put(view,holder);
-            } catch (LuaException e) {
-                return new View(mContext.getContext());
-            }
+            LuaTable layout = mLayout.get(t);
+            L.newTable();
+            holder = L.getLuaObject(-1);
+            L.pop(1);
+            view = loadLayout.call(layout, holder, AbsListView.class);
+            view.setTag(holder);
+            //mHolderCache.put(view,holder);
         } else {
             view = convertView;
             holder = (LuaObject) view.getTag();

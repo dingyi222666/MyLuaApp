@@ -154,30 +154,10 @@ public class LuaApplication extends Application implements LuaContext {
     public void onCreate() {
         super.onCreate();
         mApp = this;
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        // 注册crashHandler
-        crashHandler.init(getApplicationContext());
-        mSharedPreferences = getSharedPreferences(this);
-        //初始化AndroLua工作目录
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            String sdDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-            luaExtDir = sdDir + "/AndroLua";
-        } else {
-            File[] fs = new File("/storage").listFiles();
-            for (File f : fs) {
-                String[] ls = f.list();
-                if (ls == null)
-                    continue;
-                if (ls.length > 5)
-                    luaExtDir = f.getAbsolutePath() + "/AndroLua";
-            }
-            if (luaExtDir == null)
-                luaExtDir = getDir("AndroLua", Context.MODE_PRIVATE).getAbsolutePath();
-        }
 
-        File destDir = new File(luaExtDir);
-        if (!destDir.exists())
-            destDir.mkdirs();
+        mSharedPreferences = getSharedPreferences(this);
+
+
 
         //定义文件夹
         localDir = getFilesDir().getAbsolutePath();

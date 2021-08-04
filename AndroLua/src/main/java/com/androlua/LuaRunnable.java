@@ -260,7 +260,7 @@ public class LuaRunnable extends Thread implements Runnable,LuaMetaTable,LuaGcab
 
 		JavaFunction set = new JavaFunction(L) {
 			@Override
-			public int execute() throws LuaException {
+			public int execute() {
 
 				mLuaContext.set(L.toString(2), L.toJavaObject(3));
 				return 0;
@@ -270,7 +270,7 @@ public class LuaRunnable extends Thread implements Runnable,LuaMetaTable,LuaGcab
 
 		JavaFunction call = new JavaFunction(L) {
 			@Override
-			public int execute() throws LuaException {
+			public int execute() {
 
 				int top=L.getTop();
 				if (top > 2) {
@@ -443,13 +443,8 @@ public class LuaRunnable extends Thread implements Runnable,LuaMetaTable,LuaGcab
 	}
 
 	private void setField(String key, Object value) {
-		try {
-			L.pushObjectValue(value);
-			L.setGlobal(key);
-		}
-		catch (LuaException e) {
-			mLuaContext.sendMsg(e.getMessage());
-		}
+		L.pushObjectValue(value);
+		L.setGlobal(key);
 	}
 
 	private class ThreadHandler extends Handler {

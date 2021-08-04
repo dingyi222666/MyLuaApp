@@ -440,12 +440,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 		timer.setOnTickListener(new Ticker.OnTickListener() {
 			@Override
 			public void onTick() {
-				try {
-					func.call();
-				} catch (LuaException e) {
-					e.printStackTrace();
-					sendError("onTick",e);
-				}
+				func.call();
 			}
 		});
 		timer.setPeriod(period);
@@ -514,7 +509,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 		JavaFunction print=new JavaFunction(L) {
 
 			@Override
-			public int execute() throws LuaException {
+			public int execute() {
 				if (L.getTop() < 2) {
 					sendMsg("");
 					return 0;
@@ -553,7 +548,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 		print.register("print");
 		JavaFunction set = new JavaFunction(L) {
 			@Override
-			public int execute() throws LuaException {
+			public int execute() {
 				LuaThread thread = (LuaThread) L.toJavaObject(2);
 
 				thread.set(L.toString(3), L.toJavaObject(4));
@@ -564,7 +559,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 
 		JavaFunction call = new JavaFunction(L) {
 			@Override
-			public int execute() throws LuaException {
+			public int execute() {
 				LuaThread thread = (LuaThread) L.toJavaObject(2);
 
 				int top=L.getTop();
@@ -835,13 +830,8 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
     }
 
 	private void setField(String key, Object value) {
-		try {
-			L.pushObjectValue(value);
-			L.setGlobal(key);
-		}
-		catch (LuaException e) {
-			sendMsg(e.getMessage());
-		}
+		L.pushObjectValue(value);
+		L.setGlobal(key);
 	}
 
 	public void call(String func) {

@@ -90,13 +90,9 @@ public class LuaWebView extends WebView implements LuaGcable {
         setWebViewClient(new WebViewClient() {
                              public boolean shouldOverrideUrlLoading(WebView view, String url) {
                                  if (mAdsFilter != null) {
-                                     try {
-                                         Boolean ret = mAdsFilter.call(url);
-                                         if (ret!=null&&ret)
-                                             return true;
-                                     } catch (LuaException e) {
-                                         e.printStackTrace();
-                                     }
+                                     Boolean ret = mAdsFilter.call(url);
+                                     if (ret!=null&&ret)
+                                         return true;
                                  }
 
                                  if (url.startsWith("http") || url.startsWith("file")) {
@@ -115,13 +111,9 @@ public class LuaWebView extends WebView implements LuaGcable {
                              @SuppressWarnings("deprecation")
                              public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
                                  if (mAdsFilter != null) {
-                                     try {
-                                         Boolean ret = mAdsFilter.call(url);
-                                         if (ret!=null&&ret)
-                                             return new WebResourceResponse(null, null, null);
-                                     } catch (LuaException e) {
-                                         e.printStackTrace();
-                                     }
+                                     Boolean ret = mAdsFilter.call(url);
+                                     if (ret!=null&&ret)
+                                         return new WebResourceResponse(null, null, null);
                                  }
                                  return null;
                              }
@@ -648,12 +640,8 @@ public class LuaWebView extends WebView implements LuaGcable {
         @SuppressWarnings("deprecation")
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             if (mAdsFilter != null) {
-                try {
-                    if (mAdsFilter.call(url))
-                        return new WebResourceResponse(null, null, null);
-                } catch (LuaException e) {
-                    e.printStackTrace();
-                }
+                if (mAdsFilter.call(url))
+                    return new WebResourceResponse(null, null, null);
             }
             return mLuaWebViewClient.shouldInterceptRequest(view, url);
         }

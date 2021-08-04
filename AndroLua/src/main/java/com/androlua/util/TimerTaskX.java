@@ -17,6 +17,8 @@
 
 package com.androlua.util;
 
+import java.util.Timer;
+
 /**
  * The {@code TimerTask} class represents a task to run at a specified time. The task
  * may be run once or repeatedly.

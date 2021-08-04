@@ -70,11 +70,7 @@ public class LuaArrayAdapter extends ArrayListAdapter {
             L.newTable();
             holder = L.getLuaObject(-1);
             L.pop(1);
-            try {
-                view = (View) loadlayout.call(mResource, holder, AbsListView.class);
-            } catch (LuaException e) {
-                return new View(mContext.getContext());
-            }
+            view = (View) loadlayout.call(mResource, holder, AbsListView.class);
         } else {
             view = convertView;
         }

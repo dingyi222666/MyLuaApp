@@ -22,17 +22,13 @@ public class LuaDrawable extends Drawable {
 
     @Override
     public void draw(Canvas p1) {
-        try {
-            if (mOnDraw == null) {
-                Object r = mDraw.call(p1, mPaint, this);
-                if (r != null && r instanceof LuaFunction)
-                    mOnDraw = (LuaFunction) r;
-            }
-            if (mOnDraw != null) {
-                mOnDraw.call(p1);
-            }
-        } catch (LuaException e) {
-            mContext.sendError("onDraw", e);
+        if (mOnDraw == null) {
+            Object r = mDraw.call(p1, mPaint, this);
+            if (r != null && r instanceof LuaFunction)
+                mOnDraw = (LuaFunction) r;
+        }
+        if (mOnDraw != null) {
+            mOnDraw.call(p1);
         }
         // TODO: Implement this method
     }

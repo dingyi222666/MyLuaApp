@@ -501,15 +501,7 @@ public class Http {
             // TODO: Implement this method
             if (isCancelled())
                 return;
-            try {
-                mCallback.call((Object[]) result);
-            } catch (LuaException e) {
-                try {
-                    mCallback.getLuaState().getLuaObject("print").call(e.getMessage());
-                } catch (LuaException e2) {
-                }
-                android.util.Log.i("lua", e.getMessage());
-            }
+            mCallback.call((Object[]) result);
         }
 
     }

@@ -14,8 +14,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -23,6 +22,9 @@ import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.luajava.LuaException;
 import com.luajava.LuaMetaTable;
@@ -144,7 +146,7 @@ public class LuaResources extends Resources implements LuaMetaTable {
     }
 
     @Override
-    public Object __call(Object... arg) throws LuaException {
+    public Object __call(Object... arg) {
         return null;
     }
 

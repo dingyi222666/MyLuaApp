@@ -30,7 +30,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+
 import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -51,6 +51,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.androlua.R;
 import com.luajava.JavaFunction;
 import com.luajava.LuaException;
 import com.luajava.LuaObject;
@@ -282,9 +285,6 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
         mOnTouchEvent = L.getLuaObject("onTouchEvent");
         if (mOnTouchEvent.isNil())
             mOnTouchEvent = null;
-        LuaObject onAccessibilityEvent = L.getLuaObject("onAccessibilityEvent");
-        if (onAccessibilityEvent.isFunction())
-            LuaAccessibilityService.onAccessibilityEvent = onAccessibilityEvent.getFunction();
 
         check2();
         check3();
@@ -397,13 +397,9 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
     @Override
     public boolean onKeyShortcut(int keyCode, KeyEvent event) {
         if (mOnKeyShortcut != null) {
-            try {
-                Object ret = mOnKeyShortcut.call(keyCode, event);
-                if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
-                    return true;
-            } catch (LuaException e) {
-                sendError("onKeyShortcut", e);
-            }
+            Object ret = mOnKeyShortcut.call(keyCode, event);
+            if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
+                return true;
         }
         return super.onKeyShortcut(keyCode, event);
     }
@@ -950,13 +946,9 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mOnKeyDown != null) {
-            try {
-                Object ret = mOnKeyDown.call(keyCode, event);
-                if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
-                    return true;
-            } catch (LuaException e) {
-                sendError("onKeyDown", e);
-            }
+            Object ret = mOnKeyDown.call(keyCode, event);
+            if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
+                return true;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -964,13 +956,9 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (mOnKeyUp != null) {
-            try {
-                Object ret = mOnKeyUp.call(keyCode, event);
-                if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
-                    return true;
-            } catch (LuaException e) {
-                sendError("onKeyUp", e);
-            }
+            Object ret = mOnKeyUp.call(keyCode, event);
+            if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
+                return true;
         }
         return super.onKeyUp(keyCode, event);
     }
@@ -978,13 +966,9 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
     @Override
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
         if (mOnKeyLongPress != null) {
-            try {
-                Object ret = mOnKeyLongPress.call(keyCode, event);
-                if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
-                    return true;
-            } catch (LuaException e) {
-                sendError("onKeyLongPress", e);
-            }
+            Object ret = mOnKeyLongPress.call(keyCode, event);
+            if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
+                return true;
         }
         return super.onKeyLongPress(keyCode, event);
     }
@@ -992,13 +976,9 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (mOnTouchEvent != null) {
-            try {
-                Object ret = mOnTouchEvent.call(event);
-                if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
-                    return true;
-            } catch (LuaException e) {
-                sendError("onTouchEvent", e);
-            }
+            Object ret = mOnTouchEvent.call(event);
+            if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
+                return true;
         }
         return super.onTouchEvent(event);
     }
@@ -1385,12 +1365,7 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
         timer.setOnTickListener(new Ticker.OnTickListener() {
             @Override
             public void onTick() {
-                try {
-                    func.call();
-                } catch (LuaException e) {
-                    e.printStackTrace();
-                    sendError("onTick", e);
-                }
+                func.call();
             }
         });
         timer.start();
@@ -1469,7 +1444,7 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
 
         JavaFunction set = new JavaFunction(L) {
             @Override
-            public int execute() throws LuaException {
+            public int execute() {
                 LuaThread thread = (LuaThread) L.toJavaObject(2);
 
                 thread.set(L.toString(3), L.toJavaObject(4));
@@ -1480,7 +1455,7 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
 
         JavaFunction call = new JavaFunction(L) {
             @Override
-            public int execute() throws LuaException {
+            public int execute() {
                 LuaThread thread = (LuaThread) L.toJavaObject(2);
 
                 int top = L.getTop();
@@ -1815,12 +1790,8 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
 
     private void setField(String key, Object value) {
         synchronized (L) {
-            try {
-                L.pushObjectValue(value);
-                L.setGlobal(key);
-            } catch (LuaException e) {
-                sendError("setField", e);
-            }
+            L.pushObjectValue(value);
+            L.setGlobal(key);
         }
     }
 

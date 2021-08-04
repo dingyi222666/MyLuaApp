@@ -55,11 +55,7 @@ public class LuaPreferenceFragment extends PreferenceFragment implements Prefere
                 for(LuaTable.LuaEntry et:set){
                     Object key = et.getKey();
                     if(key instanceof String){
-                        try {
-                            LuaJavaAPI.javaSetter(L,pf,(String) key,et.getValue());
-                        } catch (LuaException e) {
-                            e.printStackTrace();
-                        }
+                        LuaJavaAPI.javaSetter(L,pf,(String) key,et.getValue());
                     }
                 }
                 pf.setOnPreferenceChangeListener(this);

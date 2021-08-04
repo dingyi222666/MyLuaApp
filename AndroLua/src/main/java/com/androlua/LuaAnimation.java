@@ -24,18 +24,14 @@ public class LuaAnimation extends Animation {
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation t) {
         super.applyTransformation(interpolatedTime, t);
-        try {
-            mAnimation.call(interpolatedTime, t);
-            if (mApplyTransformation == null) {
-                Object r = mAnimation.call(interpolatedTime, t, this);
-                if (r != null && r instanceof LuaFunction)
-                    mApplyTransformation = (LuaFunction) r;
-            }
-            if (mApplyTransformation != null) {
-                mApplyTransformation.call(interpolatedTime, t);
-            }
-        } catch (LuaException e) {
-            mContext.sendError("applyTransformation", e);
+        mAnimation.call(interpolatedTime, t);
+        if (mApplyTransformation == null) {
+            Object r = mAnimation.call(interpolatedTime, t, this);
+            if (r != null && r instanceof LuaFunction)
+                mApplyTransformation = (LuaFunction) r;
+        }
+        if (mApplyTransformation != null) {
+            mApplyTransformation.call(interpolatedTime, t);
         }
     }
 

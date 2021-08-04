@@ -20,8 +20,7 @@ public class LuaAssetLoader extends JavaFunction
 	}
 
 	@Override
-	public int execute() throws LuaException
-	{
+	public int execute() {
 		String name = L.toString(-1);
 		name = name.replace('.', '/') + ".lua";
 		try

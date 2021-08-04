@@ -14,8 +14,8 @@ android {
         //noinspection OldTargetApi
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 26
-        versionCode 15
-        versionName "0.15 (alpna)"
+        versionCode 16
+        versionName "0.1.16 (alpna)"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,9 +50,14 @@ dependencies {
 
     //androidx and more
     // https://mvnrepository.com/artifact/androidx.swiperefreshlayout/swiperefreshlayout
-    implementation group: 'androidx.swiperefreshlayout', name: 'swiperefreshlayout', version: '1.2.0-alpha01'
-    implementation group: 'com.google.android.material', name: 'material', version: '1.4.0-alpha02'
-    implementation group: 'androidx.appcompat', name: 'appcompat', version: '1.3.0-rc1'
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
+    implementation 'com.google.android.material:material:1.5.0-alpha01'
+    implementation 'androidx.appcompat:appcompat:1.4.0-alpha03'
+
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.preference:preference-ktx:1.1.1'
 
@@ -62,6 +67,16 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" //kt
 
-    implementation 'com.github.getActivity:XXPermissions:10.8'//权限适配框架
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.7'
+    // 权限请求
+    implementation 'com.permissionx.guolindev:permissionx:1.4.0'
+    // 网络请求框架：https://github.com/getActivity/EasyHttp
+    implementation 'com.github.getActivity:EasyHttp:9.6'
+    // OkHttp 框架：https://github.com/square/okhttp
+    // noinspection GradleDependency
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
+
     implementation "com.squareup.okhttp3:okhttp:4.9.0" //okhttp
 }

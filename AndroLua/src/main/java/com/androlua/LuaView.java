@@ -28,14 +28,10 @@ public class LuaView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if(mTable!=null){
-            try {
-                mOnMeasure = mTable.getField("onMeasure");
-                if(mOnMeasure.isFunction()){
-                    mOnMeasure.call(widthMeasureSpec,heightMeasureSpec,this);
-                    return;
-                }
-            } catch (LuaException e) {
-                e.printStackTrace();
+            mOnMeasure = mTable.getField("onMeasure");
+            if(mOnMeasure.isFunction()){
+                mOnMeasure.call(widthMeasureSpec,heightMeasureSpec,this);
+                return;
             }
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

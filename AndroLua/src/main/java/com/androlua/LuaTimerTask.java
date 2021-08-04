@@ -178,8 +178,7 @@ public class LuaTimerTask extends TimerTaskX
 
 		JavaFunction set = new JavaFunction(L) {
 			@Override
-			public int execute() throws LuaException
-			{
+			public int execute() {
 
 				mLuaContext.set(L.toString(2), L.toJavaObject(3));
 				return 0;
@@ -189,8 +188,7 @@ public class LuaTimerTask extends TimerTaskX
 
 		JavaFunction call = new JavaFunction(L) {
 			@Override
-			public int execute() throws LuaException
-			{
+			public int execute() {
 
 				int top=L.getTop();
 				if (top > 2)
@@ -388,15 +386,8 @@ public class LuaTimerTask extends TimerTaskX
 
 	private void setField(String key, Object value)
 	{
-		try
-		{
-			L.pushObjectValue(value);
-			L.setGlobal(key);
-		}
-		catch (LuaException e)
-		{
-			mLuaContext.sendError(this.toString(), e);
-		}
+		L.pushObjectValue(value);
+		L.setGlobal(key);
 	}
 
 };

@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.20555555555555555" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/progressbar_indeterminate.xml" value="0.26614583333333336" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/progressbar_radius.xml" value="0.11481481481481481" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/progressbar_scale.xml" value="0.1" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/ripple.xml" value="0.20555555555555555" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/ripple_mask.xml" value="0.20555555555555555" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/vector_drawable_progress_indeterminate_horizontal.xml" value="0.1" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/activity_welcome.xml" value="0.2" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_include_toolbar.xml" value="0.1" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu/main_toolbar.xml" value="0.1" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/xml/settings.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

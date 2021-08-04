@@ -7,9 +7,11 @@ import android.graphics.Path;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.RequiresApi;
+
 import android.util.Log;
 import android.view.ViewConfiguration;
+
+import androidx.annotation.RequiresApi;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class GlobalActionAutomator {

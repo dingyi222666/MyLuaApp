@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.dingyi.androlua.library">
+    package="com.androlua">
     <application>
 
         <activity
             android:name="com.androlua.Main"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="AndroLua+"
+            android:label="MyLuaApp"
             android:launchMode="singleTask"
             android:theme="@style/app_theme">
             <intent-filter>
@@ -68,7 +68,7 @@
         <activity
             android:name="com.androlua.LuaActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="AndroLua+"
+            android:label="MyLuaApp"
             android:theme="@style/app_theme"
             tools:targetApi="lollipop">
             <intent-filter>

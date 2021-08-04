@@ -186,14 +186,9 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 		View view = null;
 		LuaTable<String,View> holder = null;
 		if (convertView == null) {
-			try {
-				holder = new LuaTable<String,View>(L);
-				view = loadlayout.call(mGroupLayout, holder, AbsListView.class);
-				view.setTag(holder);
-			}
-			catch (LuaException e) {
-				return new View(mContext.getContext());
-			}
+			holder = new LuaTable<String,View>(L);
+			view = loadlayout.call(mGroupLayout, holder, AbsListView.class);
+			view.setTag(holder);
 		}
 		else {
 			view = convertView;
@@ -253,14 +248,9 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 		View view = null;
 		LuaTable<String,View> holder = null;
 		if (convertView == null) {
-			try {
-				holder = new LuaTable<String,View>(L);
-				view = loadlayout.call(mChildLayout, holder, AbsListView.class);
-				view.setTag(holder);
-			}
-			catch (LuaException e) {
-				return new View(mContext.getContext());
-			}
+			holder = new LuaTable<String,View>(L);
+			view = loadlayout.call(mChildLayout, holder, AbsListView.class);
+			view.setTag(holder);
 		}
 		else {
 			view = convertView;

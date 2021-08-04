@@ -121,45 +121,35 @@ public class LuaAsyncTask extends AsyncTaskX implements LuaGcable {
 		L.setField(-2, "luadir"); 
 		L.pop(1);
 
-		try {
-			JavaFunction print = new LuaPrint(mLuaContext, L);
-			print.register("print");
+		JavaFunction print = new LuaPrint(mLuaContext, L);
+		print.register("print");
 
-			JavaFunction update = new JavaFunction(L){
+		JavaFunction update = new JavaFunction(L){
 
-				@Override
-				public int execute() throws LuaException {
-					// TODO: Implement this method
-					update(L.toJavaObject(2));
-					return 0;
-				}
-			};
+			@Override
+			public int execute() {
+				// TODO: Implement this method
+				update(L.toJavaObject(2));
+				return 0;
+			}
+		};
 
-			update.register("update");
+		update.register("update");
 
-			L.getGlobal("package");       
+		L.getGlobal("package");
 
-			L.pushString(mLuaContext.getLuaLpath());
-			L.setField(-2, "path");
-			L.pushString(mLuaContext.getLuaCpath());
-			L.setField(-2, "cpath");
-			L.pop(1); 
-		}
-		catch (LuaException e) {
-			mLuaContext.sendError("AsyncTask", e);
-		}
-		
+		L.pushString(mLuaContext.getLuaLpath());
+		L.setField(-2, "path");
+		L.pushString(mLuaContext.getLuaCpath());
+		L.setField(-2, "cpath");
+		L.pop(1);
+
 		if(loadeds!=null){
 			LuaObject require=L.getLuaObject("require");
-			try {
-				require.call("import");
-				LuaObject _import=L.getLuaObject("import");
-				for(Object s:loadeds)
-					_import.call(s.toString());
-			}
-			catch (LuaException e) {
-				
-			}
+			require.call("import");
+			LuaObject _import=L.getLuaObject("import");
+			for(Object s:loadeds)
+				_import.call(s.toString());
 		}
 
 		try {
@@ -200,13 +190,8 @@ public class LuaAsyncTask extends AsyncTaskX implements LuaGcable {
 
 		if(isCancelled())
 			return;
-		try {
-			if (mCallback != null)
-				mCallback.call((Object[])result);
-		}
-		catch (LuaException e) {
-			mLuaContext.sendError("onPostExecute", e);
-		}
+		if (mCallback != null)
+			mCallback.call((Object[])result);
 		if(L!=null)
 			L.gc(LuaState.LUA_GCCOLLECT, 1);
 		System.gc();
@@ -216,13 +201,8 @@ public class LuaAsyncTask extends AsyncTaskX implements LuaGcable {
 	@Override
 	protected void onProgressUpdate(Object[] values) {
 		// TODO: Implement this method
-		try {
-			if (mUpdate != null)
-				mUpdate.call(values);
-		}
-		catch (LuaException e) {
-			mLuaContext.sendError("onProgressUpdate", e);
-		}
+		if (mUpdate != null)
+			mUpdate.call(values);
 		super.onProgressUpdate(values);
 	}
 
