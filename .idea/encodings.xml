@@ -14,9 +14,9 @@
     <file url="file://$PROJECT_DIR$/app/src/main/assets/plugin/javaApi/android.lua" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/assets/plugin/permission/init.lua" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/assets/plugin/permission/main.lua" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/dingyi/MyLuaApp/activitys/EditorActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/dingyi/MyLuaApp/activitys/MainActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/dingyi/MyLuaApp/activitys/WelcomeActivity.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/dingyi/myluaapp/activitys/EditorActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/dingyi/myluaapp/activitys/MainActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/dingyi/myluaapp/activitys/WelcomeActivity.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/raw/android.json" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>

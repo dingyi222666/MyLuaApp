@@ -159,7 +159,9 @@ public class LuaApplication extends Application implements LuaContext {
 
 
 
+
         //定义文件夹
+        luaExtDir=Environment.getExternalStorageDirectory().getAbsolutePath()+"/MyLuaApp";
         localDir = getFilesDir().getAbsolutePath();
         odexDir = getDir("odex", Context.MODE_PRIVATE).getAbsolutePath();
         libDir = getDir("lib", Context.MODE_PRIVATE).getAbsolutePath();

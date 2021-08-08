@@ -31,7 +31,10 @@
     		<mapping class="com.test.model.Magazine" />
     	</list>
     -->
-    <list></list>
+    <list>
+        <mapping class="com.dingyi.myluaapp.database.bean.CodeFile" />
+        <mapping class="com.dingyi.myluaapp.database.bean.ProjectConfig" />
+    </list>
 
 
     <storage value="external" />
