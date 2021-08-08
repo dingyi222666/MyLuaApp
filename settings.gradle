@@ -2,3 +2,4 @@ include ':AndroLua'
 include ':app'
 include ':LuaLibrary'
 rootProject.name = "MyLuaApp"
+include ':editor'

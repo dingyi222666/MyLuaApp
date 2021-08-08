@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/appbar_layout"
+
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="56dp">
 
-    app:elevation="2dp">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.CollapsingToolbarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/collapsingToolbar"
+        app:titleEnabled="false"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:titleTextColor="?colorPrimary"
+            app:subtitleTextAppearance="@style/BaseToolBarSubTitleStyle"
+            android:background="?theme_backgroundColor" />
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        app:elevation="2dp"
-        android:background="?theme_backgroundColor"
-        app:subtitleTextAppearance="@style/BaseToolBarSubTitleStyle"
-        app:titleTextAppearance="@style/BaseToolBarTitleStyle" />
 </com.google.android.material.appbar.AppBarLayout>

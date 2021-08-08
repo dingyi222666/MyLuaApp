@@ -52,6 +52,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.androlua.R;
 import com.luajava.JavaFunction;
@@ -83,7 +84,7 @@ import java.util.zip.ZipInputStream;
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
 
-public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnReceiveListener, LuaContext {
+public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiver.OnReceiveListener, LuaContext {
 
     private final static String ARG = "arg";
     private final static String DATA = "data";
@@ -1006,13 +1007,7 @@ public class LuaActivity extends Activity implements LuaBroadcastReceiver.OnRece
         return optionsMenu;
     }
 
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        // TODO: Implement this method
-        if (!item.hasSubMenu())
-            runFunc("onMenuItemSelected", featureId, item);
-        return super.onMenuItemSelected(featureId, item);
-    }
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

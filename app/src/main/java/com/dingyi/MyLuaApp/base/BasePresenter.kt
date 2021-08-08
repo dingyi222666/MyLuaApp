@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
  **/
 abstract class BasePresenter<T : ViewModel>(
    viewModel: ViewModel,
-   activity: AppCompatActivity
+   activity: LifecycleOwner
 ) {
 
 }

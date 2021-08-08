@@ -1,0 +1,12 @@
+{
+  "templates": [
+    {
+      "name": "空模板",
+      "path": "zip/empty_project.zip",
+      "replaces": [
+        "xml",
+        "lua"
+      ]
+    }
+  ]
+}

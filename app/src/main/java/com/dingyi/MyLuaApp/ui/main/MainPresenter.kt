@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.MyLuaApp.R
 import com.dingyi.MyLuaApp.base.BasePresenter
-import com.dingyi.MyLuaApp.common.kts.getStringArray
+import com.dingyi.MyLuaApp.bean.ProjectInfo
+import com.dingyi.MyLuaApp.common.kts.*
 import com.dingyi.MyLuaApp.network.service.MainService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
+import org.luaj.vm2.LuajVm
+import java.io.File
 
 /**
  * @author: dingyi
@@ -23,7 +27,7 @@ class MainPresenter(
 
 
     fun requestPoetry() {
-        activity.lifecycleScope.launchWhenResumed {
+        activity.lifecycleScope.launch {
             MainService.getPoetry(activity)
                 .flowOn(Dispatchers.IO)
                 .catch {
@@ -35,6 +39,43 @@ class MainPresenter(
                     viewModel.title.postValue(it)
                 }
         }
+
+    }
+
+    fun refreshProjectList() {
+        val projectList = (Paths.projectDir.toFile().listFiles() ?: arrayOf<File>())
+            .sortedByDescending {
+                it.lastModified()
+            }
+            .filter {
+                "${it.absolutePath}/build.gradle.lua".toFile()
+                    .exists() && "${it.absolutePath}/.MyLuaApp/.config.lua".toFile().exists()
+            }
+            .map { it.path }
+
+
+        val luaVm = LuajVm()
+        val result = mutableListOf<ProjectInfo>()
+
+
+        projectList.forEach {
+            runCatching {
+                val table = luaVm.loadFile("$it/.MyLuaApp/.config.lua")
+                val info = ProjectInfo(
+                    appName = table["appName"].tojstring(),
+                    appPackageName = table["appPackageName"].tojstring(),
+                    iconPath = it + "/" + table["iconPath"].tojstring(),
+                )
+                result.add(info)
+            }.onFailure {
+                R.string.main_project_list_config_error.getString().showToast()
+            }
+        }
+
+        luaVm.close()
+        System.gc()//clear lua vm
+        viewModel.mainProjectList.value = result
+
     }
 
 }

@@ -3,13 +3,11 @@ package com.dingyi.MyLuaApp.ui.welcome
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.dingyi.MyLuaApp.common.kts.startActivity
 import com.dingyi.MyLuaApp.core.welcome.PrepareAssets
 import com.dingyi.MyLuaApp.databinding.ActivityWelcomeBinding
 import com.dingyi.MyLuaApp.ui.main.MainActivity
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlin.time.ExperimentalTime
 
 /**
  * @author: dingyi
@@ -18,6 +16,7 @@ import kotlinx.coroutines.launch
  **/
 class WelcomeActivity : AppCompatActivity() {
 
+    @ExperimentalTime
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,7 +24,6 @@ class WelcomeActivity : AppCompatActivity() {
 
 
         val version = getSharedPreferences("default", Context.MODE_PRIVATE).getInt("version", 0)
-
 
         PrepareAssets(this).start {
             startToMainActivity()
@@ -43,12 +41,8 @@ class WelcomeActivity : AppCompatActivity() {
     }
 
     private fun startToMainActivity() {
-
-        lifecycleScope.launch {
-            delay(1200)
-            startActivity<MainActivity>()
-            finish()
-        }
+        startActivity<MainActivity>()
+        finish()
     }
 
 }

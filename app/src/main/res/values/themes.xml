@@ -3,9 +3,6 @@
     <style name="Theme.BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/theme_default_colorPrimary</item>
-        <item name="toolbarStyle">@style/BaseToolBarStyle</item>
-        <item name="actionBarStyle">@style/BaseToolBarStyle</item>
-        <item name="android:actionBarStyle">@style/BaseToolBarTitleStyle</item>
         <item name="colorAccent">@color/theme_default_colorPrimary</item>
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
@@ -20,6 +17,7 @@
         <item name="theme_cardBackgroundColor">@color/theme_default_cardBackgroundColor</item>
         <item name="theme_textColor">@color/theme_default_textColor</item>
         <item name="theme_hintTextColor">@color/theme_default_hintTextColor</item>
+
         <!-- Customize your theme here. -->
     </style>
     <!--Base BaseTableLayout Style -->
@@ -43,15 +41,13 @@
         <!-- <item name="android:popupBackground">@drawable/popup_menu_background</item> -->
     </style>
     <!--Base ToolBar Style -->
-    <style name="BaseToolBarStyle" parent="Widget.MaterialComponents.Toolbar">
-        <item name="colorPrimary">@color/theme_default_backgroundColor</item>
+    <style name="BaseToolBarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="backgroundColor">@color/theme_default_backgroundColor</item>
         <item name="titleTextColor">?colorPrimary</item>
-
+        <item name="subtitleTextColor">?theme_hintTextColor</item>
         <item name="subtitleTextStyle">@style/BaseToolBarSubTitleStyle</item>
         <item name="titleTextStyle">@style/BaseToolBarTitleStyle</item>
         <item name="android:textColorSecondary">@color/theme_default_hintTextColor</item>
-        <item name="elevation">2dp</item>
-        <item name="android:elevation">2dp</item>
         <item name="android:titleTextColor" tools:targetApi="m">?colorPrimary</item>
     </style>
 
@@ -63,10 +59,12 @@
     </style>
     <!--Base ToolBar SubTitle Style -->
     <style name="BaseToolBarSubTitleStyle">
+
         <item name="android:textSize">14sp</item>
         <item name="android:ellipsize">marquee</item>
         <item name="android:singleLine">true</item>
-        <item name="android:state_selected">true</item>
+        <item name="android:textIsSelectable">true</item>
+
     </style>
     <!--Base and final Dialog Window Anim -->
     <style name="BaseDialogAnim" parent="Theme.AppCompat.Light.Dialog">
@@ -74,7 +72,7 @@
         <item name="android:windowExitAnimation">@anim/dialog_exit_anim</item>
     </style>
 
-    <style name="Theme.MyLuaApp" parent="Theme.BaseTheme"></style>
+    <style name="Theme.MyLuaApp" parent="Theme.BaseTheme"/>
 
     <style name="Theme.MyLuaApp_Blue" parent="Theme.BaseTheme">
         <item name="colorPrimary">@color/theme_blue_colorPrimary</item>

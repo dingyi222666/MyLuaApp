@@ -1,6 +1,7 @@
 package com.dingyi.MyLuaApp.base
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +15,8 @@ import androidx.viewbinding.ViewBinding
 abstract class BaseActivity<V : ViewBinding, T : ViewModel,R:BasePresenter<T>> : AppCompatActivity() {
 
 
+    protected  var optionsMenu: Menu? = null
+
     protected lateinit var viewBinding: V
 
     protected lateinit var viewModel: T
@@ -26,7 +29,6 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel,R:BasePresenter<T>> :
         setContentView(getViewBindingImp().root)
 
 
-
         viewModel = ViewModelProvider(this)[getViewModelClass()]
 
         presenter = getPresenterImp()
@@ -35,6 +37,11 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel,R:BasePresenter<T>> :
 
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        this.optionsMenu=menu
+        return super.onCreateOptionsMenu(menu)
+    }
 
     private fun getViewBindingImp(): V {
 

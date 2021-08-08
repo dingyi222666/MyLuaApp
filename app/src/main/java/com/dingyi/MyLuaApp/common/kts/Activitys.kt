@@ -15,11 +15,11 @@ inline val Activity.versionCode: Int
     get() = packageManager.getPackageInfo(packageName, 0).versionCode
 
 
-inline fun <reified T> Activity.startActivity() {
-    startActivity(Intent(this, T::class.java))
+inline fun <reified T> Activity.startActivity(block: Intent.() -> Unit = {}) {
+    startActivity(Intent(this, T::class.java).apply(block))
 }
 
-fun Context.getStringArray(resId: Int):Array<String> {
+fun Context.getStringArray(resId: Int): Array<String> {
     return this.resources.getStringArray(resId)
 }
 

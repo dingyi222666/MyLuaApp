@@ -43,10 +43,9 @@ android {
 }
 
 dependencies {
-    implementation project(":AndroLua") //androlua libs
+    api project(":AndroLua") //androlua libs
     implementation project(":LuaLibrary")//lua library
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])//libs jar
-    implementation fileTree(dir: "../AndroLua/libs", include: ["*.jar", "*.aar"])//androlua libs jar
 
     //androidx and more
     // https://mvnrepository.com/artifact/androidx.swiperefreshlayout/swiperefreshlayout
@@ -55,9 +54,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.5.0-alpha01'
     implementation 'androidx.appcompat:appcompat:1.4.0-alpha03'
 
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha01"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-alpha01"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha01"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.preference:preference-ktx:1.1.1'
 
@@ -66,6 +65,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" //kt
+
+    //litepal
+
+    implementation 'org.litepal.guolindev:core:3.2.3'
+
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     //gson
     implementation 'com.google.code.gson:gson:2.8.7'
@@ -77,6 +84,4 @@ dependencies {
     // noinspection GradleDependency
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
-
-    implementation "com.squareup.okhttp3:okhttp:4.9.0" //okhttp
 }

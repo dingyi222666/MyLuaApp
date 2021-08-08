@@ -18,4 +18,12 @@ inline fun <reified T> Class<T>.getPrivateField(obj:Any?,name:String):T {
     field.isAccessible=true
     return field.get(obj) as T
 }
+/**
+ * Throws an [IllegalStateException] if the [value] is null. Otherwise
+ * returns the not null value.
+ *
+ */
+fun <T> T?.checkNotNull():T {
+    return checkNotNull(this)
+}
 

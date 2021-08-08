@@ -1,11 +1,26 @@
 <resources>
     <string name="app_name">MyLuaApp</string>
     <string name="welcome_description">MyLuaApp by dingyi</string>
-    <string name="main_menu_add">创建工程</string>
+    <string name="main_menu_add">创建项目</string>
+    <string name="main_project_list_config_error">发现有项目文件配置错误，请尝试手动修复</string>
     <string name="settings">设置</string>
     <string name="help">帮助</string>
     <string name="about">关于</string>
     <string name="imports">导入</string>
+    <string name="new_project_base_info">基本信息</string>
+    <string name="new_project_app_name_hint">应用名</string>
+    <string name="new_project_title">创建项目</string>
+    <string name="new_project_app_package_hint">包名</string>
+    <string name="new_project_base_template_title">项目模板</string>
+    <string name="new_project_app_name_error">项目已存在</string>
+    <string name="new_project_app_name_error_empty">应用名不得为空</string>
+    <string name="new_project_app_package_error_empty">包名不得为空</string>
+    <string name="new_project_base_other_title">其他</string>
+    <string name="new_project_use_androidx">启用AndroidX</string>
+    <string name="new_project_app_package_text">com.MyLuaApp.application</string>
+
+    <string name="permission_request_sdcard">MyLuaApp需要存储权限，用于打开，编辑项目</string>
+    <string name="permission_request_sdcard_denied">存储权限是必须权限，否则将无法使用</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>

@@ -5,6 +5,7 @@ import com.dingyi.MyLuaApp.common.handler.RequestHandler
 
 import com.hjq.http.EasyConfig
 import okhttp3.OkHttpClient
+import org.litepal.LitePal
 import kotlin.properties.Delegates
 
 /**
@@ -12,7 +13,7 @@ import kotlin.properties.Delegates
  * @date: 2021/8/4 13:02
  * @description:
  **/
-class MainApplication: LuaApplication() {
+class MainApplication : LuaApplication() {
 
     override fun onCreate() {
 
@@ -34,6 +35,10 @@ class MainApplication: LuaApplication() {
             .setRetryCount(2) // 添加全局请求参数
             // 启用配置
             .into()
+
+
+        LitePal.initialize(this);
+
 
     }
 
