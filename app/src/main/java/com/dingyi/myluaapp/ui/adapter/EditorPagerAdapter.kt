@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.dingyi.myluaapp.ui.editor.EditorPagerFragment
+import com.dingyi.myluaapp.ui.editor.fragment.EditorPagerFragment
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 
 /**
@@ -13,7 +13,7 @@ import com.dingyi.myluaapp.ui.editor.MainViewModel
  * @description:
  **/
 class EditorPagerAdapter(
-    private val context: FragmentActivity,
+    context: FragmentActivity,
     private val viewModel: MainViewModel
 ) : FragmentStateAdapter(context) {
 

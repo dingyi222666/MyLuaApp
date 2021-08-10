@@ -12,4 +12,10 @@ class ProjectConfig: LitePalSupport() {
     var id by Delegates.notNull<Int>()
     var openFiles:MutableList<CodeFile> =mutableListOf()
     lateinit var path:String
+
+    override fun toString(): String {
+        return "ProjectConfig(openFiles=$openFiles, path='$path')"
+    }
+
+
 }

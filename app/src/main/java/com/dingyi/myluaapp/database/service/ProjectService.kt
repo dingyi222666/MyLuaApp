@@ -41,13 +41,11 @@ object ProjectService {
                         id = 0
                         projectConfig = config
                         selection = 0
-
                         this.path = "$path/app/src/main/assets/main.lua"
                     }
-
+                    config.openFiles.add(file)
                     withContext(Dispatchers.IO) {
                         file.save()
-                        config.openFiles.add(file)
                         config.apply { save() }
                     }
                 }

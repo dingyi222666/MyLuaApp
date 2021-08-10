@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.ui.editor
 
 
-import androidx.databinding.ObservableArrayList
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dingyi.myluaapp.bean.ProjectInfo
@@ -16,5 +16,8 @@ class MainViewModel: ViewModel() {
 
     val projectInfo=MutableLiveData<ProjectInfo>()
     val projectConfig=MutableLiveData<ProjectConfig>()
-    val editPagerTabText= ObservableArrayList<MutableLiveData<String>>()
+    val editPagerTabText= mutableListOf<MutableLiveData<String>?>()
+
+
+
 }

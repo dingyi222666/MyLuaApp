@@ -2,24 +2,24 @@ package com.dingyi.myluaapp.ui.editor
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableList
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
+import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.bean.ProjectInfo
-import com.dingyi.myluaapp.common.kts.addDrawerListener
-import com.dingyi.myluaapp.common.kts.addLayoutTransition
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.ui.adapter.EditorPagerAdapter
+import com.dingyi.myluaapp.ui.editor.presenter.MainPresenter
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
@@ -44,7 +44,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
             viewModel.projectInfo.value = it
         }
 
-        setSupportActionBar(viewBinding.toolbarInclude.toolbar)
+        setSupportActionBar(viewBinding.toolbar)
 
         supportActionBar?.apply {
             title = projectInfo.appName
@@ -88,73 +88,35 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                 it.addLayoutTransition()
             }
 
+
             TabLayoutMediator(
                 editorTab,
                 editorPage, true, true
             ) { tab, position ->
-                viewModel.projectConfig.value?.run {
-                    val name = openFiles.run {
-                        get(position).path.toFile().name
-                    }.toString()
-                    tab.text = name
-
+                if (viewModel.editPagerTabText.size<position+1) {
+                    viewModel.projectConfig.value?.run {
+                        val name = openFiles.run {
+                            get(position).path.toFile().name
+                        }.toString()
+                        viewModel.editPagerTabText.add(position, MutableLiveData(name))
+                    }
                 }
+
+                viewModel.editPagerTabText[position]?.let { liveData ->
+                    if (tab.text != liveData.value) {
+                        tab.text = liveData.value
+                    }
+                    liveData.removeObservers(this@EditorActivity)
+                    liveData.observe(this@EditorActivity) {
+                        tab.text = it
+                    }
+                }
+
             }.attach()
 
-
-            viewModel.editPagerTabText.addOnListChangedCallback(object :
-                ObservableList.OnListChangedCallback<ObservableArrayList<MutableLiveData<String>>>() {
-                override fun onChanged(sender: ObservableArrayList<MutableLiveData<String>>?) {
-
-                }
-
-                override fun onItemRangeChanged(
-                    sender: ObservableArrayList<MutableLiveData<String>>?,
-                    positionStart: Int,
-                    itemCount: Int
-                ) {
-
-                }
-
-                override fun onItemRangeInserted(
-                    sender: ObservableArrayList<MutableLiveData<String>>?,
-                    positionStart: Int,
-                    itemCount: Int
-                ) {
-                    (positionStart..(positionStart + itemCount)).forEach {
-                        sender?.get(it)?.observe(this@EditorActivity) { name ->
-                            editorTab.getTabAt(it)?.text = name
-                        }
-                    }
-                }
-
-                override fun onItemRangeMoved(
-                    sender: ObservableArrayList<MutableLiveData<String>>?,
-                    fromPosition: Int,
-                    toPosition: Int,
-                    itemCount: Int
-                ) {
-
-                }
-
-                override fun onItemRangeRemoved(
-                    sender: ObservableArrayList<MutableLiveData<String>>?,
-                    positionStart: Int,
-                    itemCount: Int
-                ) {
-                    (positionStart..(positionStart + itemCount)).forEach {
-                        sender?.get(it)?.removeObservers(this@EditorActivity)
-                    }
-
-                }
-
-
-            })
         }
 
-
         presenter.openProject(projectInfo)
-
 
     }
 
@@ -163,19 +125,27 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
         viewModel.apply {
             projectConfig.observe(this@EditorActivity) {
                 lifecycleScope.launch {
+                    delay(400)
                     viewBinding.let {
                         if (it.progress.visibility == View.VISIBLE) {
                             it.progress.visibility = View.GONE
-                            it.editorTab.visibility = View.VISIBLE
                             it.editorPage.visibility = View.VISIBLE
+
                         }
                     }
+                    println(it)
                     (viewBinding.editorPage.adapter as EditorPagerAdapter)
                         .notifyDataSetChanged()
                 }
 
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.editor_toolbar,menu)
+        menu?.iconColor(getAttributeColor(R.attr.theme_hintTextColor))
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

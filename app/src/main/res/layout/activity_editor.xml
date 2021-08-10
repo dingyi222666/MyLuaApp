@@ -1,76 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
 
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <include
-        android:id="@+id/toolbar_include"
-        layout="@layout/layout_include_toolbar" />
-    <androidx.drawerlayout.widget.DrawerLayout
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_marginTop="56dp"
-        android:id="@+id/drawer"
-        android:elevation="6dp"
         android:layout_height="match_parent">
-      <androidx.constraintlayout.widget.ConstraintLayout
-          android:layout_width="match_parent"
-          android:elevation="6dp"
-          android:id="@+id/main"
-          android:layout_height="match_parent">
 
-          <com.google.android.material.tabs.TabLayout
-              android:id="@+id/editorTab"
-              android:layout_width="match_parent"
-              android:layout_height="32dp"
-              android:elevation="6dp"
-              app:tabMode="scrollable"
-              android:visibility="gone"
-              app:tabIndicator="@drawable/default_tab_indicator"
-              app:layout_constraintLeft_toLeftOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              app:tabTextAppearance="@style/BaseTableLayoutStyle"
-              tools:ignore="SpeakableTextPresentCheck" />
-          <ProgressBar
-              android:id="@+id/progress"
-              android:visibility="visible"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              app:layout_constraintLeft_toLeftOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/editorTab"
-              app:layout_constraintRight_toRightOf="parent"
-              app:layout_constraintBottom_toBottomOf="parent"/>
-          <androidx.viewpager2.widget.ViewPager2
-              android:visibility="gone"
-              app:layout_constraintLeft_toLeftOf="parent"
-              app:layout_constraintRight_toRightOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/editorTab"
-              android:layout_width="0dp"
-              android:id="@+id/editor_page"
-              app:layout_constraintBottom_toBottomOf="parent"
-              android:layout_height="0dp"/>
-
-          <com.dingyi.myluaapp.widget.view.SymbolView
-              android:layout_width="match_parent"
-              android:layout_height="36dp"
-              android:background="?theme_backgroundColor"
-              android:elevation="6dp"
-              android:scrollbars="none"
-              app:layout_constraintBottom_toBottomOf="parent"
-              tools:ignore="SpeakableTextPresentCheck" />
-      </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_layout"
             android:layout_width="match_parent"
-            android:layout_gravity="start"
-            android:background="?theme_backgroundColor"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            app:elevation="0dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:layout_width="0dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintWidth_percent="0.8"
-                android:layout_height="match_parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.drawerlayout.widget.DrawerLayout>
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:titleEnabled="false">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="?theme_backgroundColor"
+                    app:subtitleTextAppearance="@style/BaseToolBarSubTitleStyle"
+                    app:titleTextColor="?colorPrimary" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/editorTab"
+                    android:background="?theme_backgroundColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="56dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tabIndicator="@drawable/default_tab_indicator"
+                    app:tabMode="scrollable"
+                    app:tabTextAppearance="@style/BaseTableLayoutStyle"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <androidx.drawerlayout.widget.DrawerLayout
+            android:id="@+id/drawer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appbar_layout">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+               >
+
+                <ProgressBar
+                    android:id="@+id/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/editor_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <com.dingyi.myluaapp.widget.view.SymbolView
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:background="?theme_backgroundColor"
+                    android:elevation="6dp"
+                    android:id="@+id/symbolView"
+                    android:scrollbars="none"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="@android:color/transparent">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="?theme_backgroundColor"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintWidth_percent="0.8" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,6 +1,8 @@
 package com.dingyi.editor;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -27,6 +29,71 @@ public abstract class BaseEditor extends View {
 
     }
 
+
+    public static class MySavedState extends BaseSavedState {
+
+        private String code;
+
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public MySavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags)
+        {
+            super.writeToParcel(out, flags);
+            out.writeString(code);
+
+        }
+
+        public static final Parcelable.Creator<MySavedState> CREATOR = new Parcelable.Creator<MySavedState>()
+        {
+            public MySavedState[] newArray(int size)
+            {
+                return new MySavedState[size];
+            }
+
+            @Override
+            public MySavedState createFromParcel(Parcel in)
+            {
+                return new MySavedState(in);
+            }
+        };
+
+        @SuppressWarnings("unused")
+        public MySavedState(Parcel in)
+        {
+            super(in);
+            this.code= in.readString();
+        }
+
+    }
+
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superParcelable=super.onSaveInstanceState();
+        MySavedState childParcelable=new MySavedState(superParcelable);
+        childParcelable.setCode(getText().toString());
+        return childParcelable;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        super.onRestoreInstanceState(state);
+        if (state instanceof MySavedState) {
+            setText(((MySavedState) state).getCode());
+        }
+    }
 
     public abstract boolean findNext(String keyword);
     public abstract void undo();

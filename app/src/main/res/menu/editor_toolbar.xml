@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/editor_action_run"
+        android:icon="@drawable/ic_twotone_play_arrow_24"
+        android:title="@string/editor_menu_run"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/edtior_action_undo"
+        android:icon="@drawable/ic_twotone_undo_24"
+        android:title="@string/editor_menu_undo"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/editor_action_save"
+        android:title="@string/editor_action_save" />
+    <item
+        android:id="@+id/editor_action_redo"
+        android:title="@string/editor_menu_redo" />
+    <item
+        android:id="@+id/editor_action_project"
+        android:title="@string/editor_menu_project">
+        <menu>
+
+        </menu>
+    </item>
+    <item
+        android:id="@+id/code"
+        android:title="@string/editor_menu_code">
+        <menu>
+            <item
+                android:id="@+id/find"
+                android:title="@string/editor_menu_find" />
+            <item
+                android:id="@+id/format"
+                android:title="@string/editor_menu_format" />
+            <item
+                android:id="@+id/goto_menu"
+                android:title="@string/editor_menu_goto" />
+            <item
+                android:id="@+id/error"
+                android:title="@string/editor_menu_error" />
+            <item
+                android:id="@+id/import_code"
+                android:title="@string/editor_menu_import_fix" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/editor_action_plugin"
+        android:title="@string/editor_menu_plugin">
+    </item>
+    <item
+        android:id="@+id/editor_action_more"
+        android:title="@string/editor_menu_more">
+        <menu>
+
+        </menu>
+    </item>
+</menu>

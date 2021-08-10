@@ -1,13 +1,12 @@
-package com.dingyi.myluaapp.ui.editor
+package com.dingyi.myluaapp.ui.editor.presenter
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.base.BasePresenter
 import com.dingyi.myluaapp.bean.ProjectInfo
 import com.dingyi.myluaapp.database.service.ProjectService
-import kotlinx.coroutines.Dispatchers
+import com.dingyi.myluaapp.ui.editor.MainViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author: dingyi
@@ -18,8 +17,6 @@ class MainPresenter(
     private val viewModel: MainViewModel,
     private val activity: AppCompatActivity
 ) : BasePresenter<MainViewModel>(viewModel, activity) {
-
-
 
 
     fun openProject(projectInfo: ProjectInfo) {

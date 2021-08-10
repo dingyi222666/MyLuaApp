@@ -479,10 +479,9 @@ public abstract class FreeScrollingTextField extends BaseEditor
                     event.setAddedCount(1);
                     sendAccessibilityEventUnchecked(event);
                 }
-                if (changerListener!=null) {
-                    changerListener.onTextChanger(c);
-                }
+
                 _autoCompletePanel.dismiss();
+
             }
 
 
@@ -497,7 +496,7 @@ public abstract class FreeScrollingTextField extends BaseEditor
                 }
                 _autoCompletePanel.dismiss();
                 if (changerListener!=null) {
-                    changerListener.onTextChanger(text);
+                    changerListener.onTextChanger(null);
                 }
             }
 
@@ -524,7 +523,7 @@ public abstract class FreeScrollingTextField extends BaseEditor
                     _autoCompletePanel.dismiss();
 
                 if (changerListener!=null) {
-                    changerListener.onTextChanger(text);
+                    changerListener.onTextChanger(null);
                 }
             }
         };
