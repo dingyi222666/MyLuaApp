@@ -11,8 +11,8 @@ import com.dingyi.myluaapp.common.kts.getAttributeColor
 import com.dingyi.myluaapp.common.kts.iconColor
 import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
-import com.dingyi.myluaapp.ui.adapter.MainProjectListAdapter
 import com.dingyi.myluaapp.ui.editor.EditorActivity
+import com.dingyi.myluaapp.ui.main.adapter.ProjectListAdapter
 import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
 
 /**
@@ -22,7 +22,7 @@ import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
  **/
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel, MainPresenter>() {
 
-    private val mainProjectAdapter = MainProjectListAdapter()
+    private val mainProjectAdapter = ProjectListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

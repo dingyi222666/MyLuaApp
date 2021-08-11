@@ -16,6 +16,33 @@ fun String.toFile() = File(this)
 
 fun String.toZipFile() = ZipFile(this)
 
+val File.suffix: String
+    get() = name.substring(name.lastIndexOf(".") + 1)
+
+inline fun File.isDirectory(block: File.() -> Unit) {
+    if (this.isDirectory) {
+        block()
+    }
+}
+
+fun List<File>.sortBySelf(): List<File> {
+    return this.sortedWith { a, b ->
+        when {
+            a.isDirectory && b.isDirectory -> {
+                a.name.compareTo(b.name)
+            }
+            a.isDirectory && b.isFile -> {
+                -1
+            }
+            a.isFile && b.isDirectory -> {
+                1
+            }
+            else -> a.name.compareTo(b.name)
+        }
+
+    }
+}
+
 object Paths {
     val mainDir = Environment.getExternalStorageDirectory().absolutePath + "/MyLuaApp"
     val projectDir = "$mainDir/project"

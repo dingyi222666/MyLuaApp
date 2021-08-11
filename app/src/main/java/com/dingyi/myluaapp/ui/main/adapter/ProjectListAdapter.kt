@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.ui.adapter
+package com.dingyi.myluaapp.ui.main.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -17,8 +17,8 @@ import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
  * @date: 2021/8/7 17:00
  * @description:
  **/
-class MainProjectListAdapter :
-    ListAdapter<ProjectInfo, MainProjectListAdapter.ViewHolder>(DiffItemCallback) {
+class ProjectListAdapter :
+    ListAdapter<ProjectInfo, ProjectListAdapter.ViewHolder>(DiffItemCallback) {
 
     private var onClickListener: (ProjectInfo) -> Unit = {}
 

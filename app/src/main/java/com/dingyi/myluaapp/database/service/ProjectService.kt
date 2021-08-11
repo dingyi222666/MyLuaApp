@@ -16,7 +16,7 @@ import org.litepal.extension.find
 object ProjectService {
 
     suspend fun queryCodeFile(path: String) = withContext(Dispatchers.IO) {
-         LitePal.where("path = ?", path)
+        LitePal.where("filePath = ?", path)
             .find<CodeFile>()
             .run {
                 getOrNull(0)
@@ -26,7 +26,7 @@ object ProjectService {
 
     suspend fun queryProjectConfig(info: ProjectInfo) = withContext(Dispatchers.IO) {
         val path = info.path
-         LitePal.where("path = ?", path)
+        LitePal.where("projectPath = ?", path)
             .find<ProjectConfig>(true)
             .run {
                 if (size > 0) {
@@ -35,13 +35,14 @@ object ProjectService {
                     val config = ProjectConfig()
                     config.apply {
                         id = 0
-                        this.path = path
+                        this.lastOpenDir = path
+                        this.projectPath = path
                     }
                     val file = CodeFile().apply {
                         id = 0
                         projectConfig = config
-                        selection = 0
-                        this.path = "$path/app/src/main/assets/main.lua"
+                        openSelection = 0
+                        this.filePath = "$path/app/src/main/assets/main.lua"
                     }
                     config.openFiles.add(file)
                     withContext(Dispatchers.IO) {
@@ -50,6 +51,12 @@ object ProjectService {
                     }
                 }
             }
+    }
+
+
+    suspend fun queryProjectConfig(path: String) = withContext(Dispatchers.IO) {
+        LitePal.where("projectPath = ?", path)
+            .find<ProjectConfig>(true)[0]
     }
 
 }

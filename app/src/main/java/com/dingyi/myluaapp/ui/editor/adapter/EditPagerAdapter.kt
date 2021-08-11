@@ -1,18 +1,18 @@
-package com.dingyi.myluaapp.ui.adapter
+package com.dingyi.myluaapp.ui.editor.adapter
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.dingyi.myluaapp.ui.editor.fragment.EditorPagerFragment
 import com.dingyi.myluaapp.ui.editor.MainViewModel
+import com.dingyi.myluaapp.ui.editor.fragment.EditPagerFragment
 
 /**
  * @author: dingyi
  * @date: 2021/8/8 21:50
  * @description:
  **/
-class EditorPagerAdapter(
+class EditPagerAdapter(
     context: FragmentActivity,
     private val viewModel: MainViewModel
 ) : FragmentStateAdapter(context) {
@@ -25,12 +25,11 @@ class EditorPagerAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return EditorPagerFragment.newInstance(Bundle().apply {
+        return EditPagerFragment.newInstance(Bundle().apply {
             putString(
                 "path",
-                viewModel.projectConfig.value?.run { openFiles[position].path }.toString()
+                viewModel.projectConfig.value?.run { openFiles[position].filePath }.toString()
             )
-            putInt("position",position)
         })
     }
 }

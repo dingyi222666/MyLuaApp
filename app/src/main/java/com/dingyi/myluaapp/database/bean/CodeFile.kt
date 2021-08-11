@@ -7,15 +7,15 @@ import org.litepal.crud.LitePalSupport
  * @date: 2021/8/8 18:30
  * @description:
  **/
- class CodeFile: LitePalSupport() {
+class CodeFile : LitePalSupport() {
 
     var id: Int = 0
     lateinit var projectConfig: ProjectConfig
-    var selection: Int = 0
-    lateinit var path: String
+    var openSelection: Int = 0
+    lateinit var filePath: String
 
     override fun toString(): String {
-        return "File(id=$id,  selection=$selection, path='$path')"
+        return "File(id=$id,  selection=$openSelection, path='$filePath')"
     }
 
 }

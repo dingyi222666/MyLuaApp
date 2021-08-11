@@ -4,18 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
 import com.dingyi.editor.BaseEditor
 import com.dingyi.editor.lua.LuaEditor
 import com.dingyi.myluaapp.base.BaseFragment
-import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.database.bean.CodeFile
-import com.dingyi.myluaapp.databinding.FragmentEditorPagerBinding
+import com.dingyi.myluaapp.databinding.FragmentEditorEditPagerBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
-import com.dingyi.myluaapp.ui.editor.presenter.EditorPagerPresenter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.dingyi.myluaapp.ui.editor.presenter.EditPagerPresenter
 import kotlin.properties.Delegates
 
 /**
@@ -23,7 +18,7 @@ import kotlin.properties.Delegates
  * @date: 2021/8/8 22:57
  * @description:
  **/
-class EditorPagerFragment : BaseFragment<FragmentEditorPagerBinding, MainViewModel>() {
+class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewModel>() {
 
     var openPath = ""
 
@@ -31,11 +26,11 @@ class EditorPagerFragment : BaseFragment<FragmentEditorPagerBinding, MainViewMod
 
     var editorView by Delegates.notNull<BaseEditor>()
 
-    private val presenter by lazy {
-        EditorPagerPresenter(this, viewModel)
-    }
-
     val fileIsInitialized = ::codeFile.isInitialized
+
+    private val presenter by lazy {
+        EditPagerPresenter(this, viewModel)
+    }
 
     override fun getViewModelClass(): Class<MainViewModel> {
         return MainViewModel::class.java
@@ -43,8 +38,8 @@ class EditorPagerFragment : BaseFragment<FragmentEditorPagerBinding, MainViewMod
 
 
     companion object {
-        fun newInstance(bundle: Bundle?): EditorPagerFragment {
-            return EditorPagerFragment().apply {
+        fun newInstance(bundle: Bundle?): EditPagerFragment {
+            return EditPagerFragment().apply {
                 arguments = bundle
             }
         }
@@ -59,8 +54,6 @@ class EditorPagerFragment : BaseFragment<FragmentEditorPagerBinding, MainViewMod
         viewBinding.root.addView(editorView, -1, -1)
 
     }
-
-
 
 
     private fun initEditor() {
@@ -81,7 +74,6 @@ class EditorPagerFragment : BaseFragment<FragmentEditorPagerBinding, MainViewMod
     }
 
 
-
     override fun onResume() {
         super.onResume()
         presenter.readCodeFile()
@@ -92,12 +84,12 @@ class EditorPagerFragment : BaseFragment<FragmentEditorPagerBinding, MainViewMod
         presenter.saveCodeFile()
     }
 
-
     override fun getViewBindingInstance(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentEditorPagerBinding {
-        return FragmentEditorPagerBinding.inflate(inflater, container, false)
+    ): FragmentEditorEditPagerBinding {
+        return FragmentEditorEditPagerBinding.inflate(inflater, container, false)
     }
+
 
 }

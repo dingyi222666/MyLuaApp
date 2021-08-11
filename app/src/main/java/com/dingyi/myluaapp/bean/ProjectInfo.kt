@@ -11,9 +11,9 @@ import android.os.Parcelable
 data class ProjectInfo(
     val iconPath: String,
     val appName: String,
-    val path:String,
+    val path: String,
     val appPackageName: String
-) :Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString().toString(),
         parcel.readString().toString(),

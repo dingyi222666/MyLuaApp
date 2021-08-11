@@ -33,7 +33,6 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[getViewModelClass()]
 
 
-
     }
 
     override fun onCreateView(
@@ -54,14 +53,13 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
     }
 
 
-
     abstract fun getViewModelClass(): Class<T>
 
     abstract fun getViewBindingInstance(inflater: LayoutInflater, container: ViewGroup?): V
 
 
     companion object {
-        fun newInstance(bundle: Bundle):Fragment? {
+        fun newInstance(bundle: Bundle): Fragment? {
             return null
         }
     }

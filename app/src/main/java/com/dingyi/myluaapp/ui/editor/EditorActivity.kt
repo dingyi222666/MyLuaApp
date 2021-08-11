@@ -16,11 +16,13 @@ import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.bean.ProjectInfo
 import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
-import com.dingyi.myluaapp.ui.adapter.EditorPagerAdapter
+import com.dingyi.myluaapp.ui.editor.adapter.DrawerPagerAdapter
+import com.dingyi.myluaapp.ui.editor.adapter.EditPagerAdapter
+import com.dingyi.myluaapp.ui.editor.fragment.FileListFragment
 import com.dingyi.myluaapp.ui.editor.presenter.MainPresenter
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import livedatabus.LiveDataBus
 import kotlin.properties.Delegates
 
 /**
@@ -70,19 +72,21 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
             actionBarDrawerToggle.syncState()
 
             editorPage.apply {
-                adapter = EditorPagerAdapter(this@EditorActivity, viewModel)
+                adapter = EditPagerAdapter(this@EditorActivity, viewModel)
                 isUserInputEnabled = false
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
                         viewModel.projectConfig.value?.run {
                             val name = openFiles.run {
-                                get(position).path.toFile().name
+                                get(position).filePath.toFile().name
                             }.toString()
                             supportActionBar?.subtitle = name
                         }
                     }
                 })
             }
+
+
 
             arrayOf(main).forEach {
                 it.addLayoutTransition()
@@ -93,10 +97,10 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                 editorTab,
                 editorPage, true, true
             ) { tab, position ->
-                if (viewModel.editPagerTabText.size<position+1) {
+                if (viewModel.editPagerTabText.size < position + 1) {
                     viewModel.projectConfig.value?.run {
                         val name = openFiles.run {
-                            get(position).path.toFile().name
+                            get(position).filePath.toFile().name
                         }.toString()
                         viewModel.editPagerTabText.add(position, MutableLiveData(name))
                     }
@@ -125,25 +129,48 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
         viewModel.apply {
             projectConfig.observe(this@EditorActivity) {
                 lifecycleScope.launch {
-                    delay(400)
-                    viewBinding.let {
-                        if (it.progress.visibility == View.VISIBLE) {
-                            it.progress.visibility = View.GONE
-                            it.editorPage.visibility = View.VISIBLE
+                    viewBinding.run {
+                        if (progress.visibility == View.VISIBLE) {
+                            progress.visibility = View.GONE
+                            editorPage.visibility = View.VISIBLE
 
+                            drawerPage.apply {
+                                adapter = DrawerPagerAdapter(this@EditorActivity).apply {
+                                    add(FileListFragment::class.java)
+                                }
+                            }
                         }
-                    }
-                    println(it)
-                    (viewBinding.editorPage.adapter as EditorPagerAdapter)
-                        .notifyDataSetChanged()
-                }
 
+                        (editorPage.adapter as EditPagerAdapter)
+                            .notifyDataSetChanged()
+                    }
+                }
             }
         }
+
+        LiveDataBus.getDefault()
+            .with("openPath", String::class.java)
+            .observe(this) {
+                when (it.toFile().suffix) {
+                    "lua" -> {
+                        viewModel.projectConfig.value?.let { config ->
+                            var position = config.findCodeFileByPath(it)
+                            if (position == null) {
+                                presenter.openFile(it)
+                                position = config.findCodeFileByPath(it)
+                            }
+                            if (position != null) {
+                                viewBinding.editorPage.currentItem = position
+                            }
+                        }
+
+                    }
+                }
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.editor_toolbar,menu)
+        menuInflater.inflate(R.menu.editor_toolbar, menu)
         menu?.iconColor(getAttributeColor(R.attr.theme_hintTextColor))
         return super.onCreateOptionsMenu(menu)
     }

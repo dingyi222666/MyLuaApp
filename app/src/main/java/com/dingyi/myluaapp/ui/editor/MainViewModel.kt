@@ -1,7 +1,6 @@
 package com.dingyi.myluaapp.ui.editor
 
 
-
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dingyi.myluaapp.bean.ProjectInfo
@@ -12,12 +11,12 @@ import com.dingyi.myluaapp.database.bean.ProjectConfig
  * @date: 2021/8/8 15:25
  * @description:
  **/
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
-    val projectInfo=MutableLiveData<ProjectInfo>()
-    val projectConfig=MutableLiveData<ProjectConfig>()
-    val editPagerTabText= mutableListOf<MutableLiveData<String>?>()
+    val projectInfo = MutableLiveData<ProjectInfo>()
+    val projectConfig = MutableLiveData<ProjectConfig>()
+    val editPagerTabText = mutableListOf<MutableLiveData<String>?>()
 
-
-
+    val fileList = MutableLiveData<List<String>>()
+    val fileListTitle = MutableLiveData<String>()
 }

@@ -9,5 +9,5 @@ data class NewProjectInfo(
     var appName: String,
     var appPackageName: String,
     var template: ProjectTemplates.Template?,
-    var useAndroidX:Boolean=false
+    var useAndroidX: Boolean = false
 )

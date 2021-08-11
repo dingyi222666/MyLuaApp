@@ -32,10 +32,10 @@ class GeneralActivity : AppCompatActivity() {
 
             val method = classStatic.getMethod("newInstance", Bundle::class.java)
 
-            method.invoke(null,bundle) as Fragment
+            method.invoke(null, bundle) as Fragment
 
         }?.let {
-            supportFragmentManager.beginTransaction().add(R.id.container,it)
+            supportFragmentManager.beginTransaction().add(R.id.container, it)
                 .commit()
         }
     }

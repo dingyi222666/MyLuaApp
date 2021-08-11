@@ -1,8 +1,8 @@
 package com.dingyi.myluaapp.bean
 
 
-import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 
 @Keep
 data class ProjectTemplates(

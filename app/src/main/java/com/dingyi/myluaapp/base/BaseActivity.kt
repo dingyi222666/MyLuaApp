@@ -12,10 +12,11 @@ import androidx.viewbinding.ViewBinding
  * @date: 2021/8/4 12:36
  * @description:
  **/
-abstract class BaseActivity<V : ViewBinding, T : ViewModel,R:BasePresenter<T>> : AppCompatActivity() {
+abstract class BaseActivity<V : ViewBinding, T : ViewModel, R : BasePresenter<T>> :
+    AppCompatActivity() {
 
 
-    protected  var optionsMenu: Menu? = null
+    protected var optionsMenu: Menu? = null
 
     protected lateinit var viewBinding: V
 
@@ -39,7 +40,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel,R:BasePresenter<T>> :
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        this.optionsMenu=menu
+        this.optionsMenu = menu
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -51,7 +52,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel,R:BasePresenter<T>> :
         return viewBinding
     }
 
-    abstract fun getPresenterImp():R
+    abstract fun getPresenterImp(): R
 
     open fun observeViewModel() {}
 

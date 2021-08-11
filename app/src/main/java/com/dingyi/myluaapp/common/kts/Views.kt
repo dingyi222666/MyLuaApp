@@ -52,7 +52,7 @@ fun TextView.bindTextChangedToLiveData(data: MutableLiveData<String>) {
 }
 
 inline val View.layoutInflater: LayoutInflater
-    get() = android.view.LayoutInflater.from(context)
+    get() = LayoutInflater.from(context)
 
 inline fun DrawerLayout.addDrawerListener(
     crossinline onDrawerSlide: (View, Float) -> Unit = { _, _ -> },

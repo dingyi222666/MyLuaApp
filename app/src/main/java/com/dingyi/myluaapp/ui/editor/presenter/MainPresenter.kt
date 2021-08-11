@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.base.BasePresenter
 import com.dingyi.myluaapp.bean.ProjectInfo
+import com.dingyi.myluaapp.database.bean.CodeFile
 import com.dingyi.myluaapp.database.service.ProjectService
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import kotlinx.coroutines.launch
@@ -21,10 +22,25 @@ class MainPresenter(
 
     fun openProject(projectInfo: ProjectInfo) {
         activity.lifecycleScope.launch {
-            val projectConfig= ProjectService.queryProjectConfig(projectInfo)
-
-            viewModel.projectConfig.value=projectConfig
+            val projectConfig = ProjectService.queryProjectConfig(projectInfo)
+            viewModel.projectConfig.value = projectConfig
         }
     }
+
+    fun openFile(path: String) {
+        viewModel.projectConfig.value?.let {
+            CodeFile().apply {
+                projectConfig = it
+                filePath = path
+                openSelection = 0
+                save()
+            }
+            it.update(it.id.toLong())
+            println(it.openFiles)
+            viewModel.projectConfig.value = it.copy()
+        }
+
+    }
+
 
 }

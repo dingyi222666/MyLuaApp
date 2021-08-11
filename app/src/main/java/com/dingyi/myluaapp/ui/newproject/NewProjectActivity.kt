@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.ui.newproject
 
-import android.animation.LayoutTransition
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -18,8 +17,6 @@ import com.google.android.material.chip.Chip
  * @description:
  **/
 class NewProjectActivity : BaseActivity<ActivityNewProjectBinding, MainViewModel, MainPresenter>() {
-
-
 
 
     override fun getPresenterImp(): MainPresenter {
@@ -50,7 +47,7 @@ class NewProjectActivity : BaseActivity<ActivityNewProjectBinding, MainViewModel
             showProgressBar.observe(this@NewProjectActivity) {
                 viewBinding.progress.visibility = if (it) View.VISIBLE else View.GONE
                 optionsMenu?.let { menu ->
-                    menu.findItem(R.id.new_project_action_menu_success).isEnabled=!it
+                    menu.findItem(R.id.new_project_action_menu_success).isEnabled = !it
                 }
             }
 
@@ -109,8 +106,8 @@ class NewProjectActivity : BaseActivity<ActivityNewProjectBinding, MainViewModel
                 }
             };
 
-            arrayOf(root,chipGroup).forEach {
-              it.addLayoutTransition()
+            arrayOf(root, chipGroup).forEach {
+                it.addLayoutTransition()
             }
 
             appName.bindTextChangedToLiveData(viewModel.appName)

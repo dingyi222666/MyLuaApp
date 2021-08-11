@@ -7,9 +7,9 @@ package com.dingyi.myluaapp.common.kts
  **/
 
 
-fun String.endsWith(vararg prefix: String):Boolean {
+fun String.endsWith(vararg prefix: String): Boolean {
     for (it in prefix) {
-        val result=this.endsWith(it,false)
+        val result = this.endsWith(it, false)
         if (result) {
             return true
         }

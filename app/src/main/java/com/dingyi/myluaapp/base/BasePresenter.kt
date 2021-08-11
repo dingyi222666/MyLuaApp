@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel
  * @description:
  **/
 abstract class BasePresenter<T : ViewModel>(
-   viewModel: ViewModel,
-   activity: LifecycleOwner
+    viewModel: ViewModel,
+    activity: LifecycleOwner
 ) {
 
 }

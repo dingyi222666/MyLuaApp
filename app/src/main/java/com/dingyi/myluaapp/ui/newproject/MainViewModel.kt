@@ -10,20 +10,18 @@ import com.dingyi.myluaapp.bean.ProjectTemplates
  * @date: 2021/8/4 22:08
  * @description:
  **/
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
-    val templates= MutableLiveData<ProjectTemplates>()
+    val templates = MutableLiveData<ProjectTemplates>()
 
-    val appName=MutableLiveData<String>()
-    val appPackageName=MutableLiveData<String>()
+    val appName = MutableLiveData<String>()
+    val appPackageName = MutableLiveData<String>()
 
 
     val showProgressBar = MutableLiveData(false)
 
 
-    val info=NewProjectInfo("","",null)
-
-
+    val info = NewProjectInfo("", "", null)
 
 
 }
