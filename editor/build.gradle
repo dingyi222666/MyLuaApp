@@ -33,7 +33,7 @@ android {
 
 dependencies {
     api project(":AndroLua")
-    api project(":LuaAnalysis")
+    api project(':LuaAnalyzer')
 
     //editor
     implementation 'com.github.Rosemoe.CodeEditor:editor:0.5.4'

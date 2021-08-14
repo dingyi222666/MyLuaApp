@@ -1,12 +1,15 @@
 package com.dingyi.editor.language.lua
 
+import android.util.Log
 import com.dingyi.editor.language.lua.LuaTokenTypes.*
+import com.dingyi.editor.scheme.SchemeLua
 import io.github.rosemoe.editor.interfaces.CodeAnalyzer
+import io.github.rosemoe.editor.struct.BlockLine
 import io.github.rosemoe.editor.text.TextAnalyzeResult
 import io.github.rosemoe.editor.text.TextAnalyzer
 import io.github.rosemoe.editor.widget.EditorColorScheme
 
-class LuaCodeAnalyzer : CodeAnalyzer {
+class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
 
 
     override fun analyze(
@@ -15,29 +18,126 @@ class LuaCodeAnalyzer : CodeAnalyzer {
         delegate: TextAnalyzer.AnalyzeThread.Delegate
     ) {
 
-        LuaLanguage.clearUserWord()
         val lexer = LuaLexer(content)
+        val blockStack = ArrayDeque<BlockLine>()
         var token: LuaTokenTypes? = lexer.advance()
+        var maxSwitch = 1
+        var currSwitch = 0
+
+
+        val removeBlock = {
+            if (!blockStack.isEmpty()) {
+                val block: BlockLine = blockStack.removeFirst()
+                block.endLine = lexer.yyline()
+                block.endColumn =lexer.yycolumn()
+                if (block.startLine != block.endLine) {//行数不一样在添加区块
+                    colors.addBlockLine(block)
+                }
+            }
+        }
+        val addBlock= {
+            val block=colors.obtainNewBlock()
+            block.startLine=lexer.yyline()
+            block.endColumn=lexer.yycolumn()
+
+            //反正有用 加了吧
+            if (blockStack.isEmpty()) {
+                if (currSwitch > maxSwitch) {
+                    maxSwitch = currSwitch;
+                }
+                currSwitch = 0;
+            }
+            currSwitch++;
+
+            blockStack.addFirst(block)
+        }
+
         while (delegate.shouldAnalyze()) {
+
             if (token == null) {
                 break
             }
 
+            val line=lexer.yyline()
+            val column=lexer.yycolumn()
+            
+            
             when (token) {
-                //关键字
-                GOTO, FOR, FUNCTION, DO, END, IF, THEN, ELSEIF, ELSE, RETURN, REPEAT,
-                    TRUE,FALSE,BREAK,LOCAL,CASE,SWITCH,LAMBDA,DEFAULT,WHEN,NIL,AND,OR,CONTINUE -> {
-                        colors.addIfNeeded(lexer.yyline(),lexer.yycolumn(),EditorColorScheme.KEYWORD)
-                    }
 
-                LCURLY,RCURLY -> {
-                    colors.addIfNeeded(lexer.yyline(),lexer.yycolumn(),EditorColorScheme.OPERATOR)
+                //空白符号
+                WHITE_SPACE,NEW_LINE -> {
+                    colors.addNormalIfNull()
+                }
+
+                //关键字 并且添加区块
+                DO,FUNCTION,IF,WHILE,SWITCH,FOR -> {
+                    addBlock()
+                    colors.addIfNeeded(line,column,EditorColorScheme.KEYWORD)
+
+                }
+
+                END -> {
+                    colors.addIfNeeded(line,column,EditorColorScheme.KEYWORD)
+                }
+
+                //关键字
+                LOCAL,LAMBDA,WHEN,NOT,FALSE,TRUE,NIL,AND,OR,THEN,ELSE,ELSEIF,RETURN,REPEAT,UNTIL,
+                CASE,DEFAULT,DEFER-> {
+                    colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD)
+                }
+                //字符串
+                STRING,LONG_STRING -> {
+                    colors.addIfNeeded(line,column,SchemeLua.STRING)
+                }
+                //注释
+                SHORT_COMMENT,BLOCK_COMMENT,DOC_COMMENT -> {
+                    colors.addIfNeeded(line,column,EditorColorScheme.COMMENT)
+                }
+                //符号
+                LPAREN,RPAREN,LBRACK,RBRACK,COMMA,DOT -> {
+                    colors.addIfNeeded(line, column, EditorColorScheme.OPERATOR)
+                }
+                RCURLY -> {
+                    removeBlock()
+                    colors.addIfNeeded(line, column, EditorColorScheme.OPERATOR)
+                }
+                LCURLY -> {
+                    addBlock()
+                    colors.addIfNeeded(line, column, EditorColorScheme.OPERATOR)
+                }
+                //数字
+                NUMBER -> {
+                    colors.addIfNeeded(line,column,EditorColorScheme.LITERAL)
+                }
+                //名字
+                NAME -> {
+                    val text=lexer.yytext()
+
+                    when {
+                        language.isName(text) -> colors.addIfNeeded(line,column,SchemeLua.NAME)
+                        else ->  colors.addIfNeeded(line,column,EditorColorScheme.TEXT_NORMAL)
+                    }
+                }
+                else -> {
+                    colors.addIfNeeded(line,column,EditorColorScheme.TEXT_NORMAL)
                 }
             }
 
             token = lexer.advance()
 
         }
+
+
+        colors.determine(lexer.yyline())
+
+        if (blockStack.isEmpty()) {
+            if (currSwitch > maxSwitch) {
+                maxSwitch = currSwitch;
+            }
+        }
+
+        colors.suppressSwitch = maxSwitch + 10;
+
         lexer.yyclose()
 
     }

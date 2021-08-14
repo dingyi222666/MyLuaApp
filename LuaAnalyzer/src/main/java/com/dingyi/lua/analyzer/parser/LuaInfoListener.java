@@ -1,13 +1,13 @@
-package com.dingyi.lua.analysis.parser;
+package com.dingyi.lua.analyzer.parser;
 
-import com.dingyi.lua.analysis.info.BaseInfo;
-import com.dingyi.lua.analysis.info.FunctionCallInfo;
-import com.dingyi.lua.analysis.info.InfoTable;
-import com.dingyi.lua.analysis.info.Range;
-import com.dingyi.lua.analysis.info.TableInfo;
-import com.dingyi.lua.analysis.info.TokenInfo;
-import com.dingyi.lua.analysis.info.Type;
-import com.dingyi.lua.analysis.info.VarInfo;
+import com.dingyi.lua.analyzer.info.BaseInfo;
+import com.dingyi.lua.analyzer.info.FunctionCallInfo;
+import com.dingyi.lua.analyzer.info.InfoTable;
+import com.dingyi.lua.analyzer.info.Range;
+import com.dingyi.lua.analyzer.info.TableInfo;
+import com.dingyi.lua.analyzer.info.TokenInfo;
+import com.dingyi.lua.analyzer.info.Type;
+import com.dingyi.lua.analyzer.info.VarInfo;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;

@@ -2,6 +2,7 @@ package com.dingyi.editor
 
 import android.content.Context
 import android.graphics.Typeface
+import android.util.AttributeSet
 
 
 /**
@@ -10,10 +11,11 @@ import android.graphics.Typeface
  * @description:
  **/
 
-class CodeEditor(context: Context) :
-    io.github.rosemoe.editor.widget.CodeEditor(context) {
+class CodeEditor(context: Context,attributeSet: AttributeSet) :
+    io.github.rosemoe.editor.widget.CodeEditor(context,attributeSet) {
 
     init {
+        Typeface.BOLD
         typefaceText = Typeface.MONOSPACE;
         typefaceLineNumber = typefaceText
     }

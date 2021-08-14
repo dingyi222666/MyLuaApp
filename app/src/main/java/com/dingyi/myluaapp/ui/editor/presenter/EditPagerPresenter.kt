@@ -29,7 +29,7 @@ class EditPagerPresenter(
                         config.openFiles[position] = it
                     }
                 }
-                fragment.editorView.apply {
+                fragment.codeEditor.apply {
                     setText(if (useDataBase) {
                         it.code
                     } else {
@@ -48,11 +48,11 @@ class EditPagerPresenter(
 
     fun saveCodeFile(useDataBase: Boolean = false, block: () -> Unit = {}) {
         fragment.apply {
-            val saveText = editorView.text.toString()
+            val saveText = codeEditor.text.toString()
 
             codeFile.apply {
-                openSelectionLine = editorView.cursor.leftLine
-                openSelectionLine = editorView.cursor.leftColumn
+                openSelectionLine = codeEditor.cursor.leftLine
+                openSelectionLine = codeEditor.cursor.leftColumn
                 code = saveText
                 update(codeFile.id.toLong())
             }
@@ -75,7 +75,7 @@ class EditPagerPresenter(
                 val name = file.name
                 val text = file.readText()
 
-                val tmp = if (text == editorView.text.toString())
+                val tmp = if (text == codeEditor.text.toString())
                     name
                 else
                     "*$name"

@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.dingyi.editor.CodeEditor
 import com.dingyi.editor.language.lua.LuaLanguage
+import com.dingyi.editor.scheme.SchemeLua
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.endsWith
 import com.dingyi.myluaapp.common.kts.javaClass
@@ -16,11 +16,10 @@ import com.dingyi.myluaapp.database.bean.CodeFile
 import com.dingyi.myluaapp.databinding.FragmentEditorEditPagerBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.presenter.EditPagerPresenter
-import io.github.rosemoe.editor.widget.schemes.SchemeVS2019
+import io.github.rosemoe.editor.widget.schemes.SchemeEclipse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import livedatabus.LiveDataBus
-import kotlin.properties.Delegates
 
 /**
  * @author: dingyi
@@ -33,7 +32,9 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
 
     lateinit var codeFile: CodeFile
 
-    var editorView by Delegates.notNull<CodeEditor>()
+    val codeEditor by lazy {
+        viewBinding.codeEditor
+    }
 
 
     private val presenter by lazy {
@@ -57,9 +58,8 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
         super.onViewCreated(view, savedInstanceState)
         openPath = arguments?.getString("path").toString()
 
-        initEditor()
 
-        viewBinding.root.addView(editorView, -1, -1)
+        initEditor()
         presenter.readCodeFile()
         initLiveDataBus()
     }
@@ -81,7 +81,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
                 viewModel.projectConfig.value?.let { config ->
                     val position = config.findCodeFileByPath(openPath)
                     if (position == it.first) {
-                        editorView.cursor.onCommitText(it.second)
+                        codeEditor.cursor.onCommitText(it.second)
                     }
                 }
             }
@@ -90,19 +90,14 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
 
 
     private fun initEditor() {
-        editorView = when {
-            openPath.endsWith(".lua",".aly") -> {
-                CodeEditor(requireContext()).apply {
-                    cursor.setLanguage(LuaLanguage)
+        codeEditor.apply {
+            when {
+                openPath.endsWith(".lua", ".aly") -> {
+                    setEditorLanguage(LuaLanguage())
                 }
             }
-            else -> {
-                CodeEditor(requireContext())
-            }
-        }.apply {
-
+            colorScheme=SchemeLua
         }
-
 
 
         lifecycleScope.launch {

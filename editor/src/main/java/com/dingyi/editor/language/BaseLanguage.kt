@@ -14,78 +14,44 @@ abstract class BaseLanguage {
     )
 
 
-    private var _keywords = mutableListOf<String>()
-    private var _names = mutableListOf<String>()
-    private var _bases = HashMap<String, Array<String>>(0)
-    private var _users = mutableListOf<String>()
-    private var _operators = generateOperators(BASIC_C_OPERATORS)
-
-    private val _userCache = ArrayList<String>()
-    private var _userWords = arrayOf<String>()
-    private lateinit var _keyword: Array<String>
-    private lateinit var _name: Array<String>
-
-    fun updateUserWord() {
-        val uw = Array(_userCache.size){""}
-        _userWords = _userCache.toArray(uw)
-    }
-
-    fun getUserWord(): Array<String> {
-        return _userWords
-    }
+    private val names=mutableListOf<String>()
+    private val basePackages= mutableMapOf<String,Array<String>>()
+    private val keywords=mutableListOf<String>()
+    private var operators= arrayOf<Char>()
 
     fun getNames(): Array<String> {
-        return _name
+        return names.toTypedArray()
     }
 
     fun getBasePackage(name: String): Array<String>? {
-        return _bases[name]
+        return basePackages[name]
     }
 
     fun getKeywords(): Array<String> {
-        return _keyword
+        return keywords.toTypedArray()
     }
 
     fun setKeywords(keywords: Array<String>) {
-        _keyword = keywords
-        _keywords = ArrayList(keywords.size)
-        _keywords.addAll(_keyword)
+        this.keywords.clear()
+        this.keywords.addAll(keywords)
     }
 
     fun setNames(names: Array<String>) {
-        _name = names
-        val buf = ArrayList<String>()
-        _names =ArrayList(names.size)
-        for (i in names.indices) {
-            if (!buf.contains(names[i]))
-                buf.add(names[i])
-            _names.add(names[i])
-        }
-        _name= Array(buf.size) {""}
-        buf.toArray(_name)
+        this.names.clear()
+        this.names.addAll(names)
     }
 
     fun addBasePackage(name: String, names: Array<String>) {
-        _bases[name] = names
+        basePackages[name] = names
     }
 
     fun removeBasePackage(name: String) {
-        _bases.remove(name)
+        basePackages.remove(name)
     }
 
-    fun clearUserWord() {
-        _userCache.clear()
-        _users.clear()
-    }
-
-    fun addUserWord(name: String) {
-        if (!_userCache.contains(name) && !_names.contains(name))
-            _userCache.add(name)
-        _users.add(name)
-    }
 
     protected fun setOperators(operators: CharArray) {
-        _operators = generateOperators(operators)
+        this.operators = generateOperators(operators)
     }
 
     private fun generateOperators(operators: CharArray): Array<Char> {
@@ -97,32 +63,29 @@ abstract class BaseLanguage {
     }
 
     fun isOperator(c: Char): Boolean {
-        return _operators.contains(Character.valueOf(c))
+        return operators.contains(Character.valueOf(c))
     }
 
     fun isKeyword(s: String): Boolean {
-        return _keywords.contains(s)
+        return keywords.contains(s)
     }
 
-    fun isName(s: String?): Boolean {
-        return _names.contains(s)
+    fun isName(s: String): Boolean {
+        return names.contains(s)
     }
 
     fun isBasePackage(s: String): Boolean {
-        return _bases.containsKey(s)
+        return basePackages.containsKey(s)
     }
 
     fun isBaseWord(p: String, s: String): Boolean {
-        val pkg = _bases[p]!!
+        val pkg = basePackages[p]!!
         for (n in pkg) {
             if (n == s) return true
         }
         return false
     }
 
-    fun isUserWord(s: String): Boolean {
-        return _users.contains(s)
-    }
 
 
 }

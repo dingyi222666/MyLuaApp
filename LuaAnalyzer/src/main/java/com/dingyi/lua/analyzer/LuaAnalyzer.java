@@ -1,9 +1,9 @@
-package com.dingyi.lua.analysis;
+package com.dingyi.lua.analyzer;
 
-import com.dingyi.lua.analysis.info.InfoTable;
-import com.dingyi.lua.analysis.parser.LuaInfoListener;
-import com.dingyi.lua.analysis.parser.LuaLexer;
-import com.dingyi.lua.analysis.parser.LuaParser;
+import com.dingyi.lua.analyzer.info.InfoTable;
+import com.dingyi.lua.analyzer.parser.LuaInfoListener;
+import com.dingyi.lua.analyzer.parser.LuaLexer;
+import com.dingyi.lua.analyzer.parser.LuaParser;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.CharStreams;
@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.BitSet;
 
-public class LuaAnalysis {
+public class LuaAnalyzer {
 
     private final LuaInfoListener walk = new LuaInfoListener();
 
@@ -27,7 +27,7 @@ public class LuaAnalysis {
     private ErrorListener listener;
 
 
-    public LuaAnalysis setErrorListener(ErrorListener listener) {
+    public LuaAnalyzer setErrorListener(ErrorListener listener) {
         this.listener = listener;
         return this;
     }

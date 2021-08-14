@@ -115,7 +115,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                     }
                     liveData.removeObservers(this@EditorActivity)
                     liveData.observe(this@EditorActivity) {
-                        tab.text = it
+                        if (tab.text.toString()!=it) {
+                            tab.text = it
+                        }
                     }
                 }
 

@@ -1,4 +1,4 @@
-package com.dingyi.lua.analysis.info;
+package com.dingyi.lua.analyzer.info;
 
 public class Range {
     private int startLine=0;
