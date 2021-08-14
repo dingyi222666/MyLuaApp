@@ -6,9 +6,7 @@ import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.database.service.ProjectService
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.fragment.EditPagerFragment
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author: dingyi
@@ -21,52 +19,65 @@ class EditPagerPresenter(
 ) : BasePresenter<MainViewModel>(viewModel, fragment.viewLifecycleOwner) {
 
 
-    fun readCodeFile() {
-        if (!fragment.fileIsInitialized) {
-            fragment.lifecycleScope.launch {
-                ProjectService.queryCodeFile(fragment.openPath)?.let {
-                    fragment.codeFile = it
-                    fragment.editorView.apply {
-                        text = it.filePath.toFile().readText()
-                        setSelection(it.openSelection)
+    fun readCodeFile(useDataBase: Boolean = false) {
+
+        fragment.lifecycleScope.launch {
+            ProjectService.queryCodeFile(fragment.openPath)?.let {
+                fragment.codeFile = it
+                viewModel.projectConfig.value?.let { config ->
+                    config.findCodeFileByPath(it.filePath)?.let { position ->
+                        config.openFiles[position] = it
                     }
                 }
+                fragment.editorView.apply {
+                    text = if (useDataBase) {
+                        it.code
+                    } else {
+                        it.filePath.toFile().readText()
+                    }
+                    it.code= text.toString()
+                    setSelection(it.openSelection)
+                }
             }
+
+            saveCodeFile(true)
         }
+
 
     }
 
-    fun saveCodeFile() {
+    fun saveCodeFile(useDataBase: Boolean = false, block: () -> Unit = {}) {
         fragment.apply {
             val saveText = editorView.text.toString()
-            lifecycleScope.launch {
-                codeFile.apply {
-                    openSelection = editorView.selectionEnd
-                }
-                withContext(Dispatchers.IO) {
-                    codeFile.filePath.toFile().writeText(saveText)
-                    codeFile.update(codeFile.id.toLong())
-                }
 
+            codeFile.apply {
+                openSelection = editorView.selectionEnd
+                code = saveText
+                update(codeFile.id.toLong())
             }
+
+            if (!useDataBase) {
+                codeFile.filePath.toFile().writeText(saveText)
+            }
+
+            block()
+
         }
 
     }
+
 
     fun checkFile() {
         fragment.apply {
             lifecycleScope.launch {
                 val file = openPath.toFile()
                 val name = file.name
-                val text = withContext(Dispatchers.Default) { file.readText() }
+                val text = file.readText()
 
-                val tmp = withContext(Dispatchers.Default) {
-                    if (text == editorView.text.toString())
-                        name
-                    else
-                        "*$name"
-                }
-
+                val tmp = if (text == editorView.text.toString())
+                    name
+                else
+                    "*$name"
 
                 viewModel.projectConfig.value?.run {
                     findCodeFileByPath(openPath)?.let {

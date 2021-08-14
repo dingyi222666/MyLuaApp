@@ -8,7 +8,7 @@ import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.helper.PermissionHelper
 import com.dingyi.myluaapp.common.kts.getAttributeColor
-import com.dingyi.myluaapp.common.kts.iconColor
+import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.ui.editor.EditorActivity
@@ -93,7 +93,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel, MainPresen
     }
 
     override fun getViewModelClass(): Class<MainViewModel> {
-        return MainViewModel::class.java
+        return javaClass()
 
     }
 

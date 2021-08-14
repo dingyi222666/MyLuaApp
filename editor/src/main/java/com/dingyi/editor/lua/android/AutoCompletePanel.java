@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -17,11 +19,17 @@ import android.widget.Filterable;
 import android.widget.ListPopupWindow;
 import android.widget.TextView;
 
+import com.androlua.LuaApplication;
 import com.dingyi.editor.lua.common.Flag;
+import com.dingyi.editor.lua.common.Lexer;
 import com.dingyi.editor.lua.common.language.base.Language;
 import com.dingyi.editor.lua.common.language.base.LanguageNonProg;
+import com.dingyi.lua.analysis.info.InfoTable;
+import com.dingyi.lua.analysis.info.TableInfo;
+import com.dingyi.lua.analysis.info.VarInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AutoCompletePanel {
 
@@ -84,7 +92,7 @@ public class AutoCompletePanel {
         _autoCompletePanel.setAdapter(_adapter);
         //_autoCompletePanel.setDropDownGravity(Gravity.BOTTOM | Gravity.LEFT);
         _filter = _adapter.getFilter();
-        setHeight(300);
+        setHeight((int) (LuaApplication.getInstance().getHeight() * 0.7));
 
         TypedArray array = _context.getTheme().obtainStyledAttributes(new int[]{
                 android.R.attr.colorBackground,
@@ -103,7 +111,7 @@ public class AutoCompletePanel {
 
             @Override
             public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-                // TODO: Implement this method
+
                 _textField.replaceText(_textField.getCaretPosition() - _constraint.length(), _constraint.length(), ((TextView) p2).getText().toString());
                 _adapter.abort();
                 dismiss();
@@ -113,12 +121,12 @@ public class AutoCompletePanel {
     }
 
     public void setWidth(int width) {
-        // TODO: Implement this method
+
         _autoCompletePanel.setWidth(width);
     }
 
     private void setHeight(int height) {
-        // TODO: Implement this method
+
 
         if (_height != height) {
             _height = height;
@@ -127,7 +135,7 @@ public class AutoCompletePanel {
     }
 
     private void setHorizontalOffset(int horizontal) {
-        // TODO: Implement this method
+
         horizontal = Math.min(horizontal, _textField.getWidth() / 2);
         if (_horizontal != horizontal) {
             _horizontal = horizontal;
@@ -136,7 +144,7 @@ public class AutoCompletePanel {
     }
 
     private void setVerticalOffset(int verticalOffset) {
-        // TODO: Implement this method
+
         //verticalOffset=Math.min(verticalOffset,_textField.getWidth()/2);
         int max = 0 - _autoCompletePanel.getHeight();
         if (verticalOffset > max) {
@@ -169,7 +177,7 @@ public class AutoCompletePanel {
     /**
      * Adapter定义
      */
-    class MyAdapter extends ArrayAdapter<String> implements Filterable {
+    class MyAdapter extends ArrayAdapter<CharSequence> implements Filterable {
 
         private int _h;
         private final Flag _abort;
@@ -190,13 +198,13 @@ public class AutoCompletePanel {
 
 
         private int dp(float n) {
-            // TODO: Implement this method
+
             return (int) TypedValue.applyDimension(1, n, dm);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO: Implement this method
+
             TextView view = (TextView) super.getView(position, convertView, parent);
 			/*TextView view=null;
 			if(convertView==null){
@@ -214,7 +222,7 @@ public class AutoCompletePanel {
 
 
         public void restart() {
-            // TODO: Implement this method
+
             _abort.clear();
         }
 
@@ -236,6 +244,24 @@ public class AutoCompletePanel {
         public Filter getFilter() {
             Filter filter = new Filter() {
 
+
+                private void searchAdd(VarInfo[] infoArray, String keyword, List<CharSequence> buf) {
+
+                    for (VarInfo info : infoArray) {
+                        System.out.println(info);
+                        if (info.getName().toLowerCase().startsWith(keyword)) {
+                            String type = getType(info);
+                            int color = 0;
+                            if (info.isLocal()) {
+                                color = _textField.getColorScheme().getTokenColor(Lexer.LOCAL);
+                            } else {
+                                color = _textField.getColorScheme().getTokenColor(Lexer.GLOBAL);
+                            }
+                            buf.add(getColorText(info.getName() + " :" + type, color));
+                        }
+                    }
+                }
+
                 /**
                  * 本方法在后台线程执行，定义过滤算法
                  */
@@ -253,9 +279,15 @@ public class AutoCompletePanel {
 
                     // 此处实现过滤
                     // 过滤后利用FilterResults将过滤结果返回
-                    ArrayList<String> buf = new ArrayList<String>();
+                    ArrayList<CharSequence> buf = new ArrayList<>();
+                    InfoTable table = _textField.getAnalysis().analysisTmp().copy();
+                    int line = _textField.getCaretRow() + 1;
+                    int column = _textField.getColumn(_textField.getCaretPosition());
+
+
                     String keyword = String.valueOf(constraint).toLowerCase();
                     String[] ss = keyword.split("\\.");
+
                     if (ss.length == 2) {
                         String pkg = ss[0];
                         keyword = ss[1];
@@ -266,6 +298,21 @@ public class AutoCompletePanel {
                                     buf.add(k);
                             }
                         }
+
+                        VarInfo[] infoArray = table.getVarInfoByRange(line);
+
+                        for (VarInfo info : infoArray) {
+                            if (info.getName().toLowerCase().startsWith(pkg)) {
+                                if (info.getValue() == null) {
+                                    continue;
+                                }
+                                if (info.getValue() instanceof TableInfo) {
+                                    infoArray = ((TableInfo) info.getValue()).getMembers();
+                                    searchAdd(infoArray, keyword, buf);
+                                }
+                            }
+                        }
+
                     } else if (ss.length == 1) {
                         if (keyword.charAt(keyword.length() - 1) == '.') {
                             String pkg = keyword.substring(0, keyword.length() - 1);
@@ -276,7 +323,26 @@ public class AutoCompletePanel {
                                     buf.add(k);
                                 }
                             }
+                            VarInfo[] infoArray = table.getVarInfoByRange(line);
+
+                            for (VarInfo info : infoArray) {
+                             
+                                if (info.getValue() == null) {
+                                    continue;
+                                }
+                                if (info.getValue() instanceof TableInfo) {
+                                    infoArray = ((TableInfo) info.getValue()).getMembers();
+                                    searchAdd(infoArray, keyword, buf);
+                                }
+
+                            }
+
                         } else {
+
+                            VarInfo[] infoArray = table.getVarInfoByRange(line);
+
+                            searchAdd(infoArray, keyword, buf);
+
                             String[] keywords = _globalLanguage.getUserWord();
                             for (String k : keywords) {
                                 if (k.toLowerCase().startsWith(keyword))
@@ -292,6 +358,7 @@ public class AutoCompletePanel {
                                 if (k.toLowerCase().startsWith(keyword))
                                     buf.add(k);
                             }
+
                         }
                     }
                     _constraint = keyword;
@@ -301,6 +368,24 @@ public class AutoCompletePanel {
                     return filterResults;
                 }
 
+                private String getType(VarInfo value) {
+                    switch (value.getType()) {
+                        case UNKNOWN:
+                        case FUNCTIONCALL:
+                            return value.isLocal() ? "local" : "global";
+                        default:
+                            return value.getType().toString().toLowerCase();
+                    }
+                }
+
+
+                private CharSequence getColorText(String text, int color) {
+                    SpannableString ss = new SpannableString(text);
+                    ss.setSpan(new ForegroundColorSpan(color), 0, text.length(), 0);
+                    return ss;
+                }
+
+
                 /**
                  * 本方法在UI线程执行，用于更新自动完成列表
                  */
@@ -309,11 +394,12 @@ public class AutoCompletePanel {
                     if (results != null && results.count > 0 && !_abort.isSet()) {
                         // 有过滤结果，显示自动完成列表
                         MyAdapter.this.clear();   // 清空旧列表
-                        MyAdapter.this.addAll((ArrayList<String>) results.values);
+
+                        MyAdapter.this.addAll((ArrayList<CharSequence>) results.values);
                         //int y = _textField.getPaintBaseline(_textField.getCaretRow()) - _textField.getScrollY();
                         int y = _textField.getCaretY() + _textField.rowHeight() / 2 - _textField.getScrollY();
-                        setHeight(getItemHeight() * Math.min(2, results.count));
-                        //setHeight((int)(Math.min(_textField.getContentHeight()*0.4,getItemHeight() * Math.min(6, results.count))));
+                        setHeight(getItemHeight() * Math.min(4, results.count));
+                        //setHeight((int)(Math.min(_textField.getContentHeight()*0.6,getItemHeight() * Math.min(6, results.count))));
 
                         setHorizontalOffset(_textField.getCaretX() - _textField.getScrollX());
                         setVerticalOffset(y - _textField.getHeight());//_textField.getCaretY()-_textField.getScrollY()-_textField.getHeight());

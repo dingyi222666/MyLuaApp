@@ -4,13 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.dingyi.editor.BaseEditor
 import com.dingyi.editor.lua.LuaEditor
 import com.dingyi.myluaapp.base.BaseFragment
+import com.dingyi.myluaapp.common.kts.javaClass
 import com.dingyi.myluaapp.database.bean.CodeFile
 import com.dingyi.myluaapp.databinding.FragmentEditorEditPagerBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.presenter.EditPagerPresenter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import livedatabus.LiveDataBus
 import kotlin.properties.Delegates
 
 /**
@@ -26,7 +33,6 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
 
     var editorView by Delegates.notNull<BaseEditor>()
 
-    val fileIsInitialized = ::codeFile.isInitialized
 
     private val presenter by lazy {
         EditPagerPresenter(this, viewModel)
@@ -52,6 +58,31 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
         initEditor()
 
         viewBinding.root.addView(editorView, -1, -1)
+        presenter.readCodeFile()
+        initLiveDataBus()
+    }
+
+    private fun initLiveDataBus() {
+        LiveDataBus
+            .getDefault()
+            .with("saveAllFile", String::class.java)
+            .observe(viewLifecycleOwner) {
+                if (::codeFile.isInitialized) {
+                    presenter.checkFile()
+                }
+            }
+
+        LiveDataBus
+            .getDefault()
+            .with("addSymbol", javaClass<Pair<Int, String>>())
+            .observe(viewLifecycleOwner) {
+                viewModel.projectConfig.value?.let { config ->
+                    val position = config.findCodeFileByPath(openPath)
+                    if (position == it.first) {
+                        editorView.paste(it.second)
+                    }
+                }
+            }
 
     }
 
@@ -67,21 +98,44 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
         }
 
 
-        editorView.setOnTextChangeListener {
-            presenter.checkFile()
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                while (true) {
+                    delay(150)
+                    presenter.saveCodeFile(true)
+                    presenter.checkFile()
+                }
+            }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        presenter.saveCodeFile(true)
+        presenter.checkFile()
 
     }
 
 
     override fun onResume() {
         super.onResume()
-        presenter.readCodeFile()
+
+
+        if (!::codeFile.isInitialized) {
+            presenter.readCodeFile()
+        } else {
+            presenter.readCodeFile(true)
+        }
+        presenter.checkFile()
+
     }
 
-    override fun onPause() {
-        super.onPause()
-        presenter.saveCodeFile()
+    override fun onDestroyView() {
+        presenter.saveCodeFile(true)
+        presenter.checkFile()
+        super.onDestroyView()
     }
 
     override fun getViewBindingInstance(
@@ -93,3 +147,4 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
 
 
 }
+

@@ -23,7 +23,7 @@ class ProjectListAdapter :
     private var onClickListener: (ProjectInfo) -> Unit = {}
 
     fun setOnClickListener(block: (ProjectInfo) -> Unit) {
-        this.onClickListener = block;
+        this.onClickListener = block
     }
 
     companion object DiffItemCallback : DiffUtil.ItemCallback<ProjectInfo>() {
@@ -39,7 +39,7 @@ class ProjectListAdapter :
     }
 
     inner class ViewHolder(val binding: LayoutItemMainProjectBinding) :
-        RecyclerView.ViewHolder(binding.root) {}
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

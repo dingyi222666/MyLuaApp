@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/AndroLua" />
+            <option value="$PROJECT_DIR$/LuaAnalysis" />
             <option value="$PROJECT_DIR$/LuaLibrary" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/editor" />

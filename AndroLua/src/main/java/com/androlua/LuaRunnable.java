@@ -21,7 +21,7 @@ public class LuaRunnable extends Thread implements Runnable,LuaMetaTable,LuaGcab
 
 	@Override
 	public void gc() {
-		// TODO: Implement this method
+
 		quit();
 		mGc=true;
 	}
@@ -34,46 +34,46 @@ public class LuaRunnable extends Thread implements Runnable,LuaMetaTable,LuaGcab
 
 	@Override
 	public Object __call(Object[] arg) {
-		// TODO: Implement this method
+
 		return null;
 	}
 
 	@Override
 	public Object __index(final String key) {
-		// TODO: Implement this method
+
 		return new LuaMetaTable(){
 			@Override
 			public Object __call(Object[] arg) {
-				// TODO: Implement this method
+
 				call(key, arg);
 				return null;
 			}
 
 			@Override
 			public Object __index(String key) {
-				// TODO: Implement this method
+
 				return null;
 			}
 
 			@Override
 			public void __newIndex(String key, Object value) {
-				// TODO: Implement this method
+
 			}
 		};
 	}
 
 	@Override
 	public void __newIndex(String key, Object value) {
-		// TODO: Implement this method
+
 		set(key, value);
 	}
 
 	private LuaState L;
 	private Handler thandler;
 	public boolean isRun = false;
-	private LuaContext mLuaContext;
+	private final LuaContext mLuaContext;
 
-	private boolean mIsLoop;
+	private final boolean mIsLoop;
 
 	private String mSrc;
 
@@ -470,6 +470,6 @@ public class LuaRunnable extends Thread implements Runnable,LuaMetaTable,LuaGcab
 					break;
 			}
 		}
-	};
+	}
 
-};
+}

@@ -23,7 +23,7 @@ import java.util.Set;
 public class LuaApplication extends Application implements LuaContext {
 
     private static LuaApplication mApp;
-    static private HashMap<String, Object> data = new HashMap<String, Object>();
+    static private final HashMap<String, Object> data = new HashMap<String, Object>();
     protected String localDir;
     protected String odexDir;
     protected String libDir;
@@ -82,18 +82,18 @@ public class LuaApplication extends Application implements LuaContext {
 
     @Override
     public ArrayList<ClassLoader> getClassLoaders() {
-        // TODO: Implement this method
+
         return null;
     }
 
     @Override
     public void regGc(LuaGcable obj) {
-        // TODO: Implement this method
+
     }
 
     @Override
     public String getLuaPath() {
-        // TODO: Implement this method
+
         return null;
     }
 
@@ -127,7 +127,7 @@ public class LuaApplication extends Application implements LuaContext {
 
     @Override
     public String getLuaDir(String dir) {
-        // TODO: Implement this method
+
         return localDir;
     }
 
@@ -141,12 +141,12 @@ public class LuaApplication extends Application implements LuaContext {
     }
 
     public String getLibDir() {
-        // TODO: Implement this method
+
         return libDir;
     }
 
     public String getOdexDir() {
-        // TODO: Implement this method
+
         return odexDir;
     }
 
@@ -186,18 +186,18 @@ public class LuaApplication extends Application implements LuaContext {
 
     @Override
     public String getLuaDir() {
-        // TODO: Implement this method
+
         return localDir;
     }
 
     @Override
     public void call(String name, Object[] args) {
-        // TODO: Implement this method
+
     }
 
     @Override
     public void set(String name, Object object) {
-        // TODO: Implement this method
+
         data.put(name, object);
     }
 
@@ -246,30 +246,30 @@ public class LuaApplication extends Application implements LuaContext {
     }
 
     public Object get(String name) {
-        // TODO: Implement this method
+
         return data.get(name);
     }
 
     public String getLocalDir() {
-        // TODO: Implement this method
+
         return localDir;
     }
 
 
     public String getMdDir() {
-        // TODO: Implement this method
+
         return luaMdDir;
     }
 
     @Override
     public String getLuaExtDir() {
-        // TODO: Implement this method
+
         return luaExtDir;
     }
 
     @Override
     public void setLuaExtDir(String dir) {
-        // TODO: Implement this method
+
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String sdDir = Environment.getExternalStorageDirectory().getAbsolutePath();
             luaExtDir = new File(sdDir , dir).getAbsolutePath();
@@ -289,37 +289,37 @@ public class LuaApplication extends Application implements LuaContext {
 
     @Override
     public String getLuaLpath() {
-        // TODO: Implement this method
+
         return luaLpath;
     }
 
     @Override
     public String getLuaCpath() {
-        // TODO: Implement this method
+
         return luaCpath;
     }
 
     @Override
     public Context getContext() {
-        // TODO: Implement this method
+
         return this;
     }
 
     @Override
     public LuaState getLuaState() {
-        // TODO: Implement this method
+
         return null;
     }
 
     @Override
     public Object doFile(String path, Object[] arg) {
-        // TODO: Implement this method
+
         return null;
     }
 
     @Override
     public void sendMsg(String msg) {
-        // TODO: Implement this method
+
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
     }

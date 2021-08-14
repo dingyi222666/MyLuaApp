@@ -8,9 +8,9 @@ import com.luajava.*;
 public class LuaDrawable extends Drawable {
 
     private final LuaContext mContext;
-    private LuaObject mDraw;
+    private final LuaObject mDraw;
 
-    private Paint mPaint;
+    private final Paint mPaint;
     private LuaFunction mOnDraw;
 
 
@@ -30,24 +30,24 @@ public class LuaDrawable extends Drawable {
         if (mOnDraw != null) {
             mOnDraw.call(p1);
         }
-        // TODO: Implement this method
+
     }
 
     @Override
     public void setAlpha(int p1) {
         mPaint.setAlpha(p1);
-        // TODO: Implement this method
+
     }
 
     @Override
     public void setColorFilter(ColorFilter p1) {
         mPaint.setColorFilter(p1);
-        // TODO: Implement this method
+
     }
 
     @Override
     public int getOpacity() {
-        // TODO: Implement this method
+
         return PixelFormat.UNKNOWN;
     }
 

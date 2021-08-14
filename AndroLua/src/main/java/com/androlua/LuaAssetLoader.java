@@ -8,9 +8,9 @@ import java.io.*;
 public class LuaAssetLoader extends JavaFunction
 {
 
-	private LuaState L;
+	private final LuaState L;
 
-	private Context mContext;
+	private final Context mContext;
 
 	public LuaAssetLoader(LuaContext luaContext,LuaState L)
 	{
@@ -33,7 +33,7 @@ public class LuaAssetLoader extends JavaFunction
 		}
 		catch (IOException e)
 		{
-			L.pushString("\n\tno file \'/assets/" + name + "\'");
+			L.pushString("\n\tno file '/assets/" + name + "'");
 			return 1;
 		}
 	}

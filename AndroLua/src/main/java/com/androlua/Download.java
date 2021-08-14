@@ -24,7 +24,7 @@ public class Download {
     private EditText file_input_field;
     private String mUrl;
     private DownloadBroadcastReceiver mDownloadBroadcastReceiver;
-    private HashMap<Long, String[]> mDownload = new HashMap<Long, String[]>();
+    private final HashMap<Long, String[]> mDownload = new HashMap<Long, String[]>();
     private OnDownloadCompleteListener mOnDownloadCompleteListener;
     private String mMessage;
 
@@ -99,7 +99,7 @@ public class Download {
     }
 
     public void start(String url, String destinationDir, String filename, String message) {
-        // TODO: Implement this method
+
         mUrl = url;
         mMessage = message;
         Uri uri = Uri.parse(mUrl);
@@ -121,7 +121,7 @@ public class Download {
                 .setPositiveButton("Download", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface p1, int p2) {
-                        // TODO: Implement this method
+
                         mFilename = file_input_field.getText().toString();
                         start(false);
                     }
@@ -131,7 +131,7 @@ public class Download {
 
                     @Override
                     public void onClick(DialogInterface p1, int p2) {
-                        // TODO: Implement this method
+
                         mFilename = file_input_field.getText().toString();
                         start(true);
                     }
@@ -178,7 +178,7 @@ public class Download {
     }
 
     public interface OnDownloadCompleteListener {
-        public abstract void onDownloadComplete(String fileName, String mimetype);
+        void onDownloadComplete(String fileName, String mimetype);
     }
 
     private class DownloadBroadcastReceiver extends BroadcastReceiver {
@@ -186,7 +186,7 @@ public class Download {
 
         @Override
         public void onReceive(Context p1, Intent p2) {
-            // TODO: Implement this method
+
             //id=p2.getLongExtra("flg", 0);
             //int id=p2.getFlags();
             long id = p2.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);

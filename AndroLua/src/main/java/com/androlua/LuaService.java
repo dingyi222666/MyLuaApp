@@ -45,7 +45,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 	public String luaCpath;
 	LuaBinder mBinder=new LuaBinder();
 	private LuaDexLoader mLuaDexLoader;
-	private ArrayList<LuaGcable> gclist=new ArrayList<LuaGcable>();
+	private final ArrayList<LuaGcable> gclist=new ArrayList<LuaGcable>();
 	private String luaLpath;
 	private LuaService.MainHandler handler;
 	private String luaMdDir;
@@ -56,9 +56,9 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 	private String libDir;
 	private String luaExtDir;
 	private BroadcastReceiver mReceiver;
-	private StringBuilder output = new StringBuilder();
+	private final StringBuilder output = new StringBuilder();
 	private Toast toast;
-	private StringBuilder toastbuilder = new StringBuilder();
+	private final StringBuilder toastbuilder = new StringBuilder();
 	private long lastShow;
 	private LuaResources mResources;
 
@@ -80,7 +80,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 
 	@Override
 	public ArrayList<ClassLoader> getClassLoaders() {
-		// TODO: Implement this method
+
 		return mLuaDexLoader.getClassLoaders();
 	}
 
@@ -127,18 +127,18 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 	}
 
 	public Intent registerReceiver(LuaBroadcastReceiver receiver, IntentFilter filter) {
-		// TODO: Implement this method
+
 		return super.registerReceiver(receiver, filter);
 	}
 
 	public Intent registerReceiver(LuaBroadcastReceiver.OnReceiveListener ltr, IntentFilter filter) {
-		// TODO: Implement this method
+
 		LuaBroadcastReceiver receiver=new LuaBroadcastReceiver(ltr);
 		return super.registerReceiver(receiver, filter);
 	}
 
 	public Intent registerReceiver(IntentFilter filter) {
-		// TODO: Implement this method
+
 		if (mReceiver != null)
 			unregisterReceiver(mReceiver);
 		mReceiver = new LuaBroadcastReceiver(this);
@@ -147,19 +147,19 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// TODO: Implement this method
+
 		runFunc("onReceive", context, intent);
 	}
 
 	@Override
 	public void regGc(LuaGcable obj) {
-		// TODO: Implement this method
+
 		gclist.add(obj);
 	}
 
 	@Override
 	public String getLuaPath() {
-        // TODO: Implement this method
+
         return luaPath;
     }
 
@@ -185,7 +185,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 
 	@Override
 	public String getLuaDir(String name) {
-		// TODO: Implement this method
+
 		File dir=new File(luaDir + "/" + name);
 		if (!dir.exists())
 			if (!dir.mkdirs())
@@ -195,7 +195,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 
 	@Override
 	public String getLuaExtDir(String name) {
-		// TODO: Implement this method
+
 		File dir=new File(luaExtDir + "/" + name);
 		if (!dir.exists())
 			if (!dir.mkdirs())
@@ -227,37 +227,37 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 
     @Override
 	public String getLuaDir() {
-		// TODO: Implement this method
+
 		return luaDir;
 	}
 
 	@Override
 	public String getLuaExtDir() {
-		// TODO: Implement this method
+
 		return luaExtDir;
 	}
 
 	@Override
 	public String getLuaLpath() {
-		// TODO: Implement this method
+
 		return luaLpath;
 	}
 
 	@Override
 	public String getLuaCpath() {
-		// TODO: Implement this method
+
 		return luaCpath;
 	}
 
 	@Override
 	public Context getContext() {
-		// TODO: Implement this method
+
 		return this;
 	}
 
 	@Override
 	public LuaState getLuaState() {
-		// TODO: Implement this method
+
 		return L;
 	}
 
@@ -271,14 +271,14 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 
 	@Override
 	public IBinder onBind(Intent p1) {
-		// TODO: Implement this method
+
 		startForeground(1, new Notification());
 		return new LuaBinder();
 	}
 
 	@Override
 	public void onCreate() {
-		// TODO: Implement this method
+
 		super.onCreate();
 		_this = LuaService.this;
 		//定义文件夹
@@ -297,7 +297,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO: Implement this method
+
 		_this = LuaService.this;
 		if (L == null) {
 			startForeground(1, new Notification());
@@ -330,13 +330,13 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 
 	@Override
 	public boolean onUnbind(Intent intent) {
-		// TODO: Implement this method
+
 		return super.onUnbind(intent);
 	}
 
 	@Override
 	public void onDestroy() {
-		// TODO: Implement this method
+
 		runFunc("onDestroy");
 		if(mReceiver!=null)
 		unregisterReceiver(mReceiver);
@@ -537,7 +537,7 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 					output.append(val);
 					output.append("\t");
 				}
-				sendMsg(output.toString().substring(1, output.length() - 1));
+				sendMsg(output.substring(1, output.length() - 1));
 				output.setLength(0);
 				return 0;
 			}
@@ -575,8 +575,8 @@ public class LuaService extends Service implements LuaContext,LuaBroadcastReceiv
 				}
 
 				return 0;
-			};
-		};
+			}
+        };
 		call.register("call");
 
 	}

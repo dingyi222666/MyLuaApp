@@ -10,12 +10,14 @@ package com.dingyi.editor.lua.common;
 
 import android.graphics.Rect;
 
-
 import com.dingyi.editor.lua.common.language.base.Language;
-import com.dingyi.editor.lua.common.language.lua.LanguageLua;
 import com.dingyi.editor.lua.common.language.base.LanguageNonProg;
-import com.dingyi.editor.lua.common.language.lua.LuaTokenTypes;
+import com.dingyi.editor.lua.common.language.lua.LanguageLua;
 import com.dingyi.editor.lua.common.language.lua.LuaLexer;
+import com.dingyi.editor.lua.common.language.lua.LuaTokenTypes;
+import com.dingyi.lua.analysis.LuaAnalysis;
+import com.dingyi.lua.analysis.info.InfoTable;
+import com.dingyi.lua.analysis.info.TokenInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,10 @@ public class Lexer {
     public final static int OPERATOR = 2;
     public final static int NAME = 3;
     public final static int LITERAL = 4;
+    public final static int GLOBAL = 5;
+    public final static int UPVAL = 6;
+    public final static int LOCAL = 7;
+
     /**
      * A word that starts with a special symbol, inclusive.
      * Examples:
@@ -73,6 +79,7 @@ public class Lexer {
     private final static int MAX_KEYWORD_LENGTH = 127;
     private static Language _globalLanguage = LanguageNonProg.getInstance();
     private static ArrayList<Rect> mLines = new ArrayList<>();
+    private final LuaAnalysis analysis = new LuaAnalysis();
     LexCallback _callback = null;
     private DocumentProvider _hDoc;
     private LexThread _workerThread = null;
@@ -87,6 +94,16 @@ public class Lexer {
 
     synchronized public static void setLanguage(Language lang) {
         _globalLanguage = lang;
+    }
+
+
+    /**
+     * Get LuaAnalysis
+     *
+     * @return LuaAnalysis
+     */
+    public LuaAnalysis getAnalysis() {
+        return analysis;
     }
 
     private static boolean isKeyword(LuaTokenTypes t) {
@@ -227,6 +244,7 @@ public class Lexer {
             ArrayList<Rect> lineStacks = new ArrayList<>(8196);
             ArrayList<Rect> lineStacks2 = new ArrayList<>(8196);
 
+
             LuaLexer lexer = new LuaLexer(hDoc);
             Language language = Lexer.getLanguage();
             language.clearUserWord();
@@ -244,6 +262,12 @@ public class Lexer {
                 boolean isModule = false;
                 boolean hasDo = true;
                 int lastNameIdx = -1;
+                InfoTable infoTable = null;
+                try {
+                    infoTable = analysis.analysis(hDoc.toString()).copy();
+                } catch (Exception e) {
+                    System.err.println(e);
+                }
                 while (!_abort.isSet()) {
                     Pair pair = null;
                     LuaTokenTypes type = lexer.advance();
@@ -376,11 +400,16 @@ public class Lexer {
                                 p.setFirst(p.getFirst() + len);
                             }
                             String name = lexer.yytext();
-                            if (lastType == LuaTokenTypes.FUNCTION) {
+                            TokenInfo info = null;
+                            if (infoTable != null) {
+                                info = infoTable.findTokenInfo(lexer.yyline() + 1, lexer.yycolumn());
+                            }
+                            /*if (lastType == LuaTokenTypes.FUNCTION) {
                                 //函数名
                                 tokens.add(new Pair(len, LITERAL));
                                 language.addUserWord(name);
-                            } else if (language.isUserWord(name)) {
+                            } else*/
+                            if (language.isUserWord(name)) {
                                 tokens.add(new Pair(len, LITERAL));
                             } else if (lastType == LuaTokenTypes.GOTO || lastType == LuaTokenTypes.AT) {
                                 tokens.add(new Pair(len, LITERAL));
@@ -393,6 +422,12 @@ public class Lexer {
                                 tokens.add(new Pair(len, NAME));
                             } else if (language.isName(name)) {
                                 tokens.add(new Pair(len, NAME));
+                            } else if (info != null) {
+                                if (info.getInfo().isLocal()) {
+                                    tokens.add(new Pair(len, LOCAL));
+                                } else {
+                                    tokens.add(new Pair(len, GLOBAL));
+                                }
                             } else {
                                 tokens.add(new Pair(len, NORMAL));
                             }

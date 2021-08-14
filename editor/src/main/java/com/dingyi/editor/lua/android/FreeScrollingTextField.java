@@ -90,6 +90,7 @@ import com.dingyi.editor.lua.common.Lexer;
 import com.dingyi.editor.lua.common.Pair;
 import com.dingyi.editor.lua.common.RowListener;
 import com.dingyi.editor.lua.common.TextWarriorException;
+import com.dingyi.lua.analysis.LuaAnalysis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -238,6 +239,7 @@ public abstract class FreeScrollingTextField extends BaseEditor
     protected int _autoIndentWidth = 4;
     protected boolean _isLongPressCaps = false;
     protected AutoCompletePanel _autoCompletePanel;
+
     protected boolean _isAutoComplete = true;
     private TextFieldController _fieldController; // the controller in MVC
     private TextFieldInputConnection _inputConnection;
@@ -317,7 +319,7 @@ public abstract class FreeScrollingTextField extends BaseEditor
     private float mX;
     private float mY;
 
-    private OnTextChangerListener changerListener;
+    private OnTextChangerListener _changerListener;
 
 
     public FreeScrollingTextField(Context context) {
@@ -346,7 +348,7 @@ public abstract class FreeScrollingTextField extends BaseEditor
 
     @Override
     public void setOnTextChangeListener(OnTextChangerListener listener) {
-        this.changerListener=listener;
+        this._changerListener =listener;
     }
 
     public int getTopOffset() {
@@ -453,6 +455,10 @@ public abstract class FreeScrollingTextField extends BaseEditor
             @Override
             public void onRowChange(int newRowIndex) {
                 // Do nothing
+
+                if (_changerListener !=null) {
+                    _changerListener.onTextChanger(null);
+                }
             }
         };
 
@@ -460,19 +466,25 @@ public abstract class FreeScrollingTextField extends BaseEditor
 
             @Override
             public void onSelectionChanged(boolean active, int selStart, int selEnd) {
-                // TODO: Implement this method
+
                 if (active)
                     _clipboardPanel.show();
                 else
                     _clipboardPanel.hide();
+
+                if (_changerListener !=null) {
+                    _changerListener.onTextChanger(null);
+                }
             }
+
+
         };
 
         _textLis = new TextChangeListener() {
 
             @Override
             public void onNewLine(String c, int _caretPosition, int p2) {
-                // TODO: Implement this method
+
                 if (isAccessibilityEnabled) {
                     AccessibilityEvent event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
                     event.setFromIndex(_caretPosition - 1);
@@ -482,6 +494,9 @@ public abstract class FreeScrollingTextField extends BaseEditor
 
                 _autoCompletePanel.dismiss();
 
+                if (_changerListener !=null) {
+                    _changerListener.onTextChanger(null);
+                }
             }
 
 
@@ -495,8 +510,8 @@ public abstract class FreeScrollingTextField extends BaseEditor
                     sendAccessibilityEventUnchecked(event);
                 }
                 _autoCompletePanel.dismiss();
-                if (changerListener!=null) {
-                    changerListener.onTextChanger(null);
+                if (_changerListener !=null) {
+                    _changerListener.onTextChanger(null);
                 }
             }
 
@@ -522,8 +537,8 @@ public abstract class FreeScrollingTextField extends BaseEditor
                 else
                     _autoCompletePanel.dismiss();
 
-                if (changerListener!=null) {
-                    changerListener.onTextChanger(null);
+                if (_changerListener !=null) {
+                    _changerListener.onTextChanger(null);
                 }
             }
         };
@@ -749,7 +764,7 @@ public abstract class FreeScrollingTextField extends BaseEditor
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        // TODO: Implement this method
+
         if (changed) {
             Rect rect = new Rect();
             getWindowVisibleDisplayFrame(rect);
@@ -758,7 +773,7 @@ public abstract class FreeScrollingTextField extends BaseEditor
                 respan();
             _isLayout = right > 0;
             invalidate();
-            _autoCompletePanel.setWidth(getWidth() / 2);
+            _autoCompletePanel.setWidth((int) (getWidth() *0.6));
         }
         super.onLayout(changed, left, top, right, bottom);
     }
@@ -2082,6 +2097,8 @@ public abstract class FreeScrollingTextField extends BaseEditor
         CharSequence text = _clipboardManager.getText();
         if (text != null)
             _fieldController.paste(text.toString());
+
+
     }
 
     public void cut(ClipboardManager cb) {
@@ -2605,6 +2622,15 @@ public abstract class FreeScrollingTextField extends BaseEditor
 
     }
 
+
+    /**
+     * Get LuaAnalysis
+     * @return LuaAnalysis
+     */
+    public LuaAnalysis getAnalysis() {
+        return _fieldController._lexer.getAnalysis();
+    }
+
     private class TextFieldController
             implements Lexer.LexCallback {
         private final Lexer _lexer = new Lexer(this);
@@ -2643,6 +2669,8 @@ public abstract class FreeScrollingTextField extends BaseEditor
 
         //TODO minimise invalidate calls from moveCaret(), insertion/deletion and word wrap
         public void onPrintableChar(char c) {
+
+           
 
             // delete currently selected text, if any
             boolean selectionDeleted = false;
@@ -2862,6 +2890,9 @@ public abstract class FreeScrollingTextField extends BaseEditor
 
             _caretPosition = i;
             updateAfterCaretJump();
+
+           
+
         }
 
         private void updateAfterCaretJump() {
@@ -2987,6 +3018,7 @@ public abstract class FreeScrollingTextField extends BaseEditor
             if (!scrolled) {
                 invalidateSelectionRows();
             }
+           
         }
 
         /**
@@ -3049,6 +3081,8 @@ public abstract class FreeScrollingTextField extends BaseEditor
                     _selectionEdge = newCaretPosition;
                 }
             }
+
+           
         }
 
 
@@ -3090,6 +3124,8 @@ public abstract class FreeScrollingTextField extends BaseEditor
                 return;
             }
 
+           
+
             _hDoc.beginBatchEdit();
             selectionDelete();
 
@@ -3122,6 +3158,7 @@ public abstract class FreeScrollingTextField extends BaseEditor
                     invalidateFromRow(invalidateStartRow);
                 }
             }
+           
         }
 
         /**
@@ -3174,6 +3211,9 @@ public abstract class FreeScrollingTextField extends BaseEditor
         }
 
         void replaceText(int from, int charCount, String text) {
+
+           
+
             int invalidateStartRow, originalOffset;
             boolean isInvalidateSingleRow = true;
             boolean dirty = false;
@@ -3272,6 +3312,8 @@ public abstract class FreeScrollingTextField extends BaseEditor
             int invalidateStartRow, originalOffset;
             boolean isInvalidateSingleRow = true;
             boolean dirty = false;
+
+           
 
             //delete selection
             if (_isInSelectionMode) {

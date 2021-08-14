@@ -28,7 +28,7 @@ public class LoadingDrawable extends Drawable {
     static final int STATE_LOADING = 0;
     static final int STATE_SUCCESS = 1;
     static final int STATE_FAIL = -1;
-    private Paint p;
+    private final Paint p;
     private int mState;
 
     public LoadingDrawable(Context context) {

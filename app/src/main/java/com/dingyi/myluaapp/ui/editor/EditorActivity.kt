@@ -2,9 +2,7 @@ package com.dingyi.myluaapp.ui.editor
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -106,6 +104,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                     }
                 }
 
+                tab.view.setOnLongClickListener {
+                    presenter.showTabMenu(tab)
+                    true
+                }
+
                 viewModel.editPagerTabText[position]?.let { liveData ->
                     if (tab.text != liveData.value) {
                         tab.text = liveData.value
@@ -114,6 +117,13 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                     liveData.observe(this@EditorActivity) {
                         tab.text = it
                     }
+                }
+
+                symbolView.setOnClickListener {
+                    LiveDataBus
+                        .getDefault()
+                        .with("addSymbol",javaClass<Pair<Int,String>>())
+                        .value=editorPage.currentItem to it
                 }
 
             }.attach()
@@ -133,7 +143,6 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                         if (progress.visibility == View.VISIBLE) {
                             progress.visibility = View.GONE
                             editorPage.visibility = View.VISIBLE
-
                             drawerPage.apply {
                                 adapter = DrawerPagerAdapter(this@EditorActivity).apply {
                                     add(FileListFragment::class.java)
@@ -149,7 +158,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
         }
 
         LiveDataBus.getDefault()
-            .with("openPath", String::class.java)
+            .with("openPath", javaClass<String>())
             .observe(this) {
                 when (it.toFile().suffix) {
                     "lua" -> {
@@ -167,6 +176,35 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                     }
                 }
             }
+
+
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        return when (keyCode) {
+            KeyEvent.KEYCODE_BACK -> {
+                when {
+                    (viewBinding.drawer.isDrawerOpen(GravityCompat.START)) -> {
+                        viewBinding.drawer.closeDrawers()
+                        true
+                    }
+                    (System.currentTimeMillis() - lastBackTime > 2000) -> {
+                        R.string.toast_exit_app
+                            .getString()
+                            .showSnackBar(viewBinding.editorRoot)
+                        lastBackTime = System.currentTimeMillis()
+                        true
+                    }
+                    else -> super.onKeyUp(keyCode, event)
+                }
+            }
+            else -> super.onKeyUp(keyCode, event)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.saveAllFile()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -184,6 +222,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                     else
                         openDrawer(GravityCompat.START)
                 }
+            }
+            R.id.editor_action_save -> {
+                presenter.saveAllFile()
             }
         }
         return super.onOptionsItemSelected(item)

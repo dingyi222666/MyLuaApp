@@ -37,7 +37,7 @@ class MainApplication : LuaApplication() {
             .into()
 
 
-        LitePal.initialize(this);
+        LitePal.initialize(this)
 
 
     }

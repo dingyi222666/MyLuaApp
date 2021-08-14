@@ -9,6 +9,7 @@
 package com.dingyi.editor.lua.common;
 
 import com.dingyi.editor.lua.common.language.base.Language;
+import com.dingyi.lua.analysis.LuaAnalysis;
 
 import java.util.List;
 
@@ -27,6 +28,9 @@ import java.util.List;
 public class DocumentProvider implements java.lang.CharSequence {
 
     private final Document _theText;
+
+
+
     /**
      * Current position in the text. Range [ 0, _theText.getTextLength() )
      */
@@ -48,7 +52,7 @@ public class DocumentProvider implements java.lang.CharSequence {
 
     @Override
     public int length() {
-        // TODO: Implement this method
+
         return _theText.length();
     }
 
@@ -58,6 +62,7 @@ public class DocumentProvider implements java.lang.CharSequence {
     public CharSequence subSequence(int charOffset, int maxChars) {
         return _theText.subSequence(charOffset, maxChars);
     }
+
 
     public char charAt(int charOffset) {
         if (_theText.isValid(charOffset)) {
@@ -314,7 +319,7 @@ public class DocumentProvider implements java.lang.CharSequence {
 
     @Override
     public String toString() {
-        // TODO: Implement this method
+
         return _theText.toString();
     }
 

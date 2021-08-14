@@ -16,19 +16,19 @@ import java.util.HashMap;
 import dalvik.system.DexClassLoader;
 
 public class LuaDexLoader {
-    private static HashMap<String, LuaDexClassLoader> dexCache = new HashMap<String, LuaDexClassLoader>();
-    private ArrayList<ClassLoader> dexList = new ArrayList<ClassLoader>();
-    private HashMap<String, String> libCache = new HashMap<String, String>();
+    private static final HashMap<String, LuaDexClassLoader> dexCache = new HashMap<String, LuaDexClassLoader>();
+    private final ArrayList<ClassLoader> dexList = new ArrayList<ClassLoader>();
+    private final HashMap<String, String> libCache = new HashMap<String, String>();
 
-    private LuaContext mContext;
+    private final LuaContext mContext;
 
-    private String luaDir;
+    private final String luaDir;
 
     private AssetManager mAssetManager;
 
     private LuaResources mResources;
     private Resources.Theme mTheme;
-    private String odexDir;
+    private final String odexDir;
 
     public LuaDexLoader(LuaContext context) {
         mContext = context;
@@ -43,7 +43,7 @@ public class LuaDexLoader {
     }
 
     public ArrayList<ClassLoader> getClassLoaders() {
-        // TODO: Implement this method
+
         return dexList;
     }
 

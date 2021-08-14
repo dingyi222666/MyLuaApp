@@ -122,6 +122,6 @@ public class Ticker
 
 	public interface OnTickListener
 	{
-		public void onTick();
+		void onTick();
 	}
 }

@@ -24,8 +24,7 @@ class FileListAdapter :
     }
 
     inner class ViewHolder(val binding: LayoutItemEditorFileListBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-    }
+        RecyclerView.ViewHolder(binding.root)
 
     companion object DiffItemCallback : DiffUtil.ItemCallback<Pair<Int, String>>() {
         override fun areItemsTheSame(

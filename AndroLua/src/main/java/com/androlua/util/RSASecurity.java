@@ -20,9 +20,9 @@ public class RSASecurity {
     /** 密钥长度，用来初始化 */
     private static final int KEY_SIZE = 1024;
     /** 指定公钥存放文件 */
-    private static String PUBLIC_KEY_FILE = LuaApplication.getInstance().getLuaExtDir("PublicKey");
+    private static final String PUBLIC_KEY_FILE = LuaApplication.getInstance().getLuaExtDir("PublicKey");
     /** 指定私钥存放文件 */
-    private static String PRIVATE_KEY_FILE = LuaApplication.getInstance().getLuaExtDir("PrivateKey");
+    private static final String PRIVATE_KEY_FILE = LuaApplication.getInstance().getLuaExtDir("PrivateKey");
 
     /**
      * 生成密钥对

@@ -29,6 +29,6 @@ public class LuaFileObserver extends FileObserver {
     }
 
     public interface OnEventListener{
-        public void onEvent(int event, String path);
+        void onEvent(int event, String path);
     }
 }

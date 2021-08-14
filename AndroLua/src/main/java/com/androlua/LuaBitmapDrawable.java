@@ -27,12 +27,12 @@ import java.net.URL;
 
 public class LuaBitmapDrawable extends Drawable implements Runnable ,LuaGcable{
 
-    private LuaContext mLuaContext;
+    private final LuaContext mLuaContext;
     private int mDuration;
     private long mMovieStart;
     private int mCurrentAnimationTime;
     private Movie mMovie;
-    private LoadingDrawable mLoadingDrawable;
+    private final LoadingDrawable mLoadingDrawable;
     private Drawable mBitmapDrawable;
     private NineBitmapDrawable mNineBitmapDrawable;
     private ColorFilter mColorFilter;

@@ -28,3 +28,7 @@ fun <T> T?.checkNotNull(): T {
     return checkNotNull(this)
 }
 
+inline fun <reified T> javaClass():Class<T> {
+    return T::class.java
+}
+

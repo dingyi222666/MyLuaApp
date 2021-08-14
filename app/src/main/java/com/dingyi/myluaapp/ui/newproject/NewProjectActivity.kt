@@ -104,7 +104,7 @@ class NewProjectActivity : BaseActivity<ActivityNewProjectBinding, MainViewModel
                     }
                     lastSelectId = if (id == -1) lastSelectId else id
                 }
-            };
+            }
 
             arrayOf(root, chipGroup).forEach {
                 it.addLayoutTransition()
@@ -135,7 +135,7 @@ class NewProjectActivity : BaseActivity<ActivityNewProjectBinding, MainViewModel
     }
 
     override fun getViewModelClass(): Class<MainViewModel> {
-        return MainViewModel::class.java
+        return javaClass()
     }
 
     override fun getViewBindingInstance(): ActivityNewProjectBinding {

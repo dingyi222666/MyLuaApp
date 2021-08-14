@@ -11,7 +11,7 @@ import com.android.cglib.proxy.MethodInterceptor;
 
 public class LuaEnhancer {
 
-    private Enhancer mEnhancer;
+    private final Enhancer mEnhancer;
 
     public LuaEnhancer(String cls) throws ClassNotFoundException {
         this(Class.forName(cls));

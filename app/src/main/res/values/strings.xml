@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">MyLuaApp</string>
+    <string name="toast_exit_app">再按一次退出当前界面</string>
     <string name="welcome_description">MyLuaApp by dingyi</string>
     <string name="main_menu_add">创建项目</string>
     <string name="main_project_list_config_error">发现有项目文件配置错误，请尝试手动修复</string>
@@ -34,6 +35,9 @@
     <string name="editor_menu_import_fix">分析导入</string>
     <string name="editor_menu_plugin">插件</string>
     <string name="editor_menu_more">更多</string>
+    <string name="editor_menu_tab_save">保存</string>
+    <string name="editor_menu_tab_close">关闭</string>
+    <string name="editor_menu_tab_close_other">关闭其他</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>

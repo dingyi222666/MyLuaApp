@@ -24,14 +24,14 @@ import java.util.HashMap;
 
 public class LuaArrayAdapter extends ArrayListAdapter {
 
-    private Resources mRes;
-    private LuaContext mContext;
+    private final Resources mRes;
+    private final LuaContext mContext;
 
-    private LuaState L;
+    private final LuaState L;
 
-    private LuaObject mResource;
+    private final LuaObject mResource;
 
-    private LuaObject loadlayout;
+    private final LuaObject loadlayout;
 
     private Animation mAnimation;
 
@@ -57,13 +57,13 @@ public class LuaArrayAdapter extends ArrayListAdapter {
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        // TODO: Implement this method
+
         return getView(position, convertView, parent);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO: Implement this method
+
         View view = null;
         LuaObject holder = null;
         if (convertView == null) {
@@ -126,14 +126,14 @@ public class LuaArrayAdapter extends ArrayListAdapter {
         }
     }
 
-    private Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             notifyDataSetChanged();
         }
 
     };
-    private HashMap<String, Boolean> loaded = new HashMap<String, Boolean>();
+    private final HashMap<String, Boolean> loaded = new HashMap<String, Boolean>();
 
     private class AsyncLoader extends Thread {
 
@@ -142,7 +142,7 @@ public class LuaArrayAdapter extends ArrayListAdapter {
         private LuaContext mContext;
 
         public Drawable getBitmap(LuaContext context, String path) throws IOException {
-            // TODO: Implement this method
+
             mContext = context;
             mPath = path;
             if (!path.toLowerCase().startsWith("http://")&&!path.toLowerCase().startsWith("https://"))
@@ -159,7 +159,7 @@ public class LuaArrayAdapter extends ArrayListAdapter {
 
         @Override
         public void run() {
-            // TODO: Implement this method
+
             try {
                 LuaBitmap.getBitmap(mContext, mPath);
                 mHandler.sendEmptyMessage(0);

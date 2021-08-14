@@ -6,7 +6,7 @@ import android.graphics.drawable.*;
 import java.io.*;
 
 public class NineBitmapDrawable extends Drawable implements LuaGcable {
-    private Paint mPaint = new Paint();
+    private final Paint mPaint = new Paint();
     private Bitmap mBitmap;
 
     private int mX1;
@@ -108,7 +108,7 @@ public class NineBitmapDrawable extends Drawable implements LuaGcable {
 
     @Override
     public void draw(Canvas canvas) {
-        // TODO: Implement this method
+
         Rect rect = getBounds();
         int w = rect.right;
         int h = rect.bottom;
@@ -140,19 +140,19 @@ public class NineBitmapDrawable extends Drawable implements LuaGcable {
 
     @Override
     public void setAlpha(int p1) {
-        // TODO: Implement this method
+
         mPaint.setAlpha(p1);
     }
 
     @Override
     public void setColorFilter(ColorFilter p1) {
-        // TODO: Implement this method
+
         mPaint.setColorFilter(p1);
     }
 
     @Override
     public int getOpacity() {
-        // TODO: Implement this method
+
         return PixelFormat.UNKNOWN;
     }
 

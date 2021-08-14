@@ -69,7 +69,7 @@ public class TextBuffer implements java.lang.CharSequence {
 
     @Override
     public int length() {
-        // TODO: Implement this method
+
         return getTextLength() - 1;
     }
 
@@ -704,7 +704,7 @@ public class TextBuffer implements java.lang.CharSequence {
 
     @Override
     public String toString() {
-        // TODO: Implement this method
+
         int len = getTextLength();
         StringBuffer buf = new StringBuffer();
         for (int i = 0; i < len; i++) {

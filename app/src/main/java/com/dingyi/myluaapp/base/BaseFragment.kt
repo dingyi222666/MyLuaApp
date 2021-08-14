@@ -22,10 +22,6 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
     protected lateinit var viewModel: T
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

@@ -10,7 +10,7 @@ public class LuaTimer extends TimerX implements LuaGcable
 
 	@Override
 	public void gc() {
-		// TODO: Implement this method
+
 		stop();
 		mGc=true;
 	}
@@ -20,7 +20,7 @@ public class LuaTimer extends TimerX implements LuaGcable
 		return mGc;
 	}
 
-	private LuaTimerTask task;
+	private final LuaTimerTask task;
 	
 	public LuaTimer(LuaContext main,String src) throws LuaException
 	{

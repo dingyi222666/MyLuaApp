@@ -17,8 +17,9 @@ import java.util.HashMap;
 public abstract class ColorScheme {
     // In ARGB format: 0xAARRGGBB
     private static final int BLACK = 0xFF000000;
-    private static final int BLUE = 0xFF0000FF;
-    private static final int DARK_RED = 0xFF8B0000;
+    private static final int BLUE = 0xFF8888AA;
+    private static final int YELLOW = 0xFFAAAA88;
+    private static final int DARK_RED = 0xFFBBBBBB;
     private static final int DARK_BLUE = 0xFFD040DD;
     private static final int GREY = 0xFF808080;
     private static final int LIGHT_GREY = 0xFFAAAAAA;
@@ -26,12 +27,13 @@ public abstract class ColorScheme {
     private static final int INDIGO = 0xFF2A40FF;
     private static final int OLIVE_GREEN = 0xFF3F7F5F;
     private static final int PURPLE = 0xFFDD4488;
-    private static final int RED = 0x44FF0000;
+    private static final int RED = 0xFFAA8888;
     private static final int WHITE = 0xFFFFFFE0;
     private static final int PURPLE2 = 0xFFFF00FF;
     private static final int LIGHT_BLUE = 0xFF6080FF;
     private static final int LIGHT_BLUE2 = 0xFF40B0FF;
     private static final int GREEN = 0xFF88AA88;
+
     protected HashMap<Colorable, Integer> _colors = generateDefaultColors();
 
     public void setColor(Colorable colorable, int color) {
@@ -51,6 +53,17 @@ public abstract class ColorScheme {
     public int getTokenColor(int tokenType) {
         Colorable element;
         switch (tokenType) {
+            case Lexer.GLOBAL:
+                element = Colorable.GLOBAL;
+                break;
+            case Lexer.UPVAL:
+                element = Colorable.UPVAL;
+                break;
+
+            case Lexer.LOCAL:
+                element = Colorable.LOCAL;
+                break;
+
             case Lexer.NORMAL:
                 element = Colorable.FOREGROUND;
                 break;
@@ -102,6 +115,11 @@ public abstract class ColorScheme {
         colors.put(Colorable.CARET_DISABLED, GREY);
         colors.put(Colorable.LINE_HIGHLIGHT, 0x20888888);
 
+        colors.put(Colorable.GLOBAL, GREEN);
+        colors.put(Colorable.UPVAL, BLUE);
+        colors.put(Colorable.LOCAL, YELLOW);
+
+
         colors.put(Colorable.NON_PRINTING_GLYPH, LIGHT_GREY);
         colors.put(Colorable.COMMENT, OLIVE_GREEN); //  Eclipse default color
         colors.put(Colorable.KEYWORD, DARK_BLUE); // Eclipse default color
@@ -111,10 +129,11 @@ public abstract class ColorScheme {
         colors.put(Colorable.SECONDARY, GREY);
         return colors;
     }
+
     public enum Colorable {
         FOREGROUND, BACKGROUND, SELECTION_FOREGROUND, SELECTION_BACKGROUND,
         CARET_FOREGROUND, CARET_BACKGROUND, CARET_DISABLED, LINE_HIGHLIGHT,
         NON_PRINTING_GLYPH, COMMENT, KEYWORD, NAME, LITERAL, STRING,
-        SECONDARY
+        SECONDARY,GLOBAL, UPVAL, LOCAL
     }
 }

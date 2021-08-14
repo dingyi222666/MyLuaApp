@@ -13,7 +13,7 @@ import com.luajava.LuaFunction;
 public class LuaAnimation extends Animation {
 
     private final LuaContext mContext;
-    private LuaFunction mAnimation;
+    private final LuaFunction mAnimation;
     private LuaFunction mApplyTransformation;
 
     public LuaAnimation(LuaFunction animation) {

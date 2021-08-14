@@ -9,7 +9,7 @@ public class LuaTimerTask extends TimerTaskX
 {
 	private LuaState L;
 	
-	private LuaContext mLuaContext;
+	private final LuaContext mLuaContext;
 
 	private String mSrc;
 
@@ -90,7 +90,7 @@ public class LuaTimerTask extends TimerTaskX
 	@Override
 	public boolean cancel()
 	{
-		// TODO: Implement this method
+
 		return super.cancel();
 	}
 
@@ -390,4 +390,4 @@ public class LuaTimerTask extends TimerTaskX
 		L.setGlobal(key);
 	}
 
-};
+}

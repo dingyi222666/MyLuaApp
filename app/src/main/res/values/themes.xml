@@ -10,8 +10,8 @@
 
         <item name="windowActionModeOverlay">true</item>
         <item name="textInputStyle">@style/BaseTextInputLayoutStyle</item>
-        <!--        <item name="popupMenuStyle">@style/BasePopMenuStyle</item>-->
-        <!--        <item name="actionOverflowMenuStyle">@style/BaseOverflowMenuStyle</item>-->
+        <item name="popupMenuStyle">@style/BasePopMenuStyle</item>-->
+        <item name="actionOverflowMenuStyle">@style/BaseOverflowMenuStyle</item>-->
         <item name="theme_backgroundColor">@color/theme_default_backgroundColor</item>
         <item name="theme_rippleColor">@color/theme_default_rippleColor</item>
         <item name="theme_cardBackgroundColor">@color/theme_default_cardBackgroundColor</item>
@@ -33,12 +33,12 @@
     </style>
     <!--Base OverflowMenu Style -->
     <style name="BaseOverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
-        <!-- <item name="android:popupBackground">@drawable/popup_menu_background</item> -->
+        <item name="android:popupBackground">@drawable/popup_menu_background</item>
     </style>
     <!--Base PopMenu Style -->
     <style name="BasePopMenuStyle" parent="Widget.AppCompat.PopupMenu">
         <item name="elevation">1dp</item>
-        <!-- <item name="android:popupBackground">@drawable/popup_menu_background</item> -->
+        <item name="android:popupBackground">@drawable/popup_menu_background</item>
     </style>
     <!--Base ToolBar Style -->
     <style name="BaseToolBarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
@@ -72,7 +72,7 @@
         <item name="android:windowExitAnimation">@anim/dialog_exit_anim</item>
     </style>
 
-    <style name="Theme.MyLuaApp" parent="Theme.BaseTheme"/>
+    <style name="Theme.MyLuaApp" parent="Theme.BaseTheme" />
 
     <style name="Theme.MyLuaApp_Blue" parent="Theme.BaseTheme">
         <item name="colorPrimary">@color/theme_blue_colorPrimary</item>

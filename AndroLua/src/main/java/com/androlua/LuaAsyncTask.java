@@ -18,7 +18,7 @@ public class LuaAsyncTask extends AsyncTaskX implements LuaGcable {
 
 	@Override
 	public void gc() {
-		// TODO: Implement this method
+
 		if (getStatus()==Status.RUNNING)
 			cancel(true);
 		mGc=true;
@@ -31,13 +31,13 @@ public class LuaAsyncTask extends AsyncTaskX implements LuaGcable {
 
 	private LuaState L;
 
-	private LuaContext mLuaContext;
+	private final LuaContext mLuaContext;
 
 	private byte[] mBuffer;
 
 	private long mDelay=0;
 
-	private LuaObject mCallback;
+	private final LuaObject mCallback;
 
 	private LuaObject mUpdate;
 
@@ -78,7 +78,7 @@ public class LuaAsyncTask extends AsyncTaskX implements LuaGcable {
 	}
 
 	public void execute() throws IllegalArgumentException, ArrayIndexOutOfBoundsException, LuaException {
-		// TODO: Implement this method
+
 		super.execute();
 	}
 
@@ -128,7 +128,7 @@ public class LuaAsyncTask extends AsyncTaskX implements LuaGcable {
 
 			@Override
 			public int execute() {
-				// TODO: Implement this method
+
 				update(L.toJavaObject(2));
 				return 0;
 			}
@@ -186,7 +186,7 @@ public class LuaAsyncTask extends AsyncTaskX implements LuaGcable {
 
 	@Override
 	protected void onPostExecute(Object result) {
-		// TODO: Implement this method
+
 
 		if(isCancelled())
 			return;
@@ -200,7 +200,7 @@ public class LuaAsyncTask extends AsyncTaskX implements LuaGcable {
 
 	@Override
 	protected void onProgressUpdate(Object[] values) {
-		// TODO: Implement this method
+
 		if (mUpdate != null)
 			mUpdate.call(values);
 		super.onProgressUpdate(values);

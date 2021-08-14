@@ -19,8 +19,7 @@ data class ProjectInfo(
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(iconPath)

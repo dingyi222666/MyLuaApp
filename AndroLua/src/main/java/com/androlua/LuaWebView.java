@@ -52,11 +52,11 @@ import java.util.HashMap;
 public class LuaWebView extends WebView implements LuaGcable {
 
     private LuaWebView.DownloadBroadcastReceiver mDownloadBroadcastReceiver;
-    private HashMap<Long, String[]> mDownload = new HashMap<Long, String[]>();
+    private final HashMap<Long, String[]> mDownload = new HashMap<Long, String[]>();
     private OnDownloadCompleteListener mOnDownloadCompleteListener;
-    private LuaActivity mContext;
+    private final LuaActivity mContext;
     private ProgressBar mProgressbar;
-    private DisplayMetrics dm;
+    private final DisplayMetrics dm;
     private Dialog open_dlg;
     private ListView open_list;
     private ValueCallback<Uri> mUploadMessage;
@@ -136,7 +136,6 @@ public class LuaWebView extends WebView implements LuaGcable {
                                              public void onClick(DialogInterface dialog,
                                                                  int which) {
                                                  handler.cancel();
-                                                 ;
                                              }
                                          });
                                  b.setCancelable(false);
@@ -210,7 +209,7 @@ public class LuaWebView extends WebView implements LuaGcable {
 
     @Override
     public void destroy() {
-        // TODO: Implement this method
+
         if (mDownloadBroadcastReceiver != null) {
             mContext.unregisterReceiver(mDownloadBroadcastReceiver);
         }
@@ -228,24 +227,24 @@ public class LuaWebView extends WebView implements LuaGcable {
 
     @Override
     public void setOnKeyListener(View.OnKeyListener l) {
-        // TODO: Implement this method
+
         super.setOnKeyListener(l);
     }
 
     @SuppressLint("AddJavascriptInterface")
     public void addJSInterface(JsInterface object, String name) {
-        // TODO: Implement this method
+
         super.addJavascriptInterface(new JsObject(object), name);
     }
 
     @SuppressLint("AddJavascriptInterface")
     public void addJsInterface(JsInterface object, String name) {
-        // TODO: Implement this method
+
         super.addJavascriptInterface(new JsObject(object), name);
     }
 
     public void setWebViewClient(LuaWebViewClient client) {
-        // TODO: Implement this method
+
         super.setWebViewClient(new SimpleLuaWebViewClient(client));
     }
 
@@ -308,17 +307,17 @@ public class LuaWebView extends WebView implements LuaGcable {
 
 
     public interface OnDownloadCompleteListener {
-        public abstract void onDownloadComplete(String fileName, String mimetype);
+        void onDownloadComplete(String fileName, String mimetype);
     }
 
 
     public interface OnDownloadStartListener {
-        public abstract void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength);
+        void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength);
     }
 
     public interface JsInterface {
         @JavascriptInterface
-        public String execute(String arg);
+        String execute(String arg);
     }
 
     public interface LuaWebViewClient {
@@ -326,120 +325,120 @@ public class LuaWebView extends WebView implements LuaGcable {
         /**
          * Generic error
          */
-        public static final int ERROR_UNKNOWN = -1;
+        int ERROR_UNKNOWN = -1;
         /**
          * Server or proxy hostname lookup failed
          */
-        public static final int ERROR_HOST_LOOKUP = -2;
+        int ERROR_HOST_LOOKUP = -2;
         /**
          * Unsupported authentication scheme (not basic or digest)
          */
-        public static final int ERROR_UNSUPPORTED_AUTH_SCHEME = -3;
+        int ERROR_UNSUPPORTED_AUTH_SCHEME = -3;
         /**
          * User authentication failed on server
          */
-        public static final int ERROR_AUTHENTICATION = -4;
+        int ERROR_AUTHENTICATION = -4;
         /**
          * User authentication failed on proxy
          */
-        public static final int ERROR_PROXY_AUTHENTICATION = -5;
+        int ERROR_PROXY_AUTHENTICATION = -5;
         /**
          * Failed to connect to the server
          */
-        public static final int ERROR_CONNECT = -6;
+        int ERROR_CONNECT = -6;
 
 
         // These ints must match up to the hidden values in EventHandler.
         /**
          * Failed to read or write to the server
          */
-        public static final int ERROR_IO = -7;
+        int ERROR_IO = -7;
         /**
          * Connection timed out
          */
-        public static final int ERROR_TIMEOUT = -8;
+        int ERROR_TIMEOUT = -8;
         /**
          * Too many redirects
          */
-        public static final int ERROR_REDIRECT_LOOP = -9;
+        int ERROR_REDIRECT_LOOP = -9;
         /**
          * Unsupported URI scheme
          */
-        public static final int ERROR_UNSUPPORTED_SCHEME = -10;
+        int ERROR_UNSUPPORTED_SCHEME = -10;
         /**
          * Failed to perform SSL handshake
          */
-        public static final int ERROR_FAILED_SSL_HANDSHAKE = -11;
+        int ERROR_FAILED_SSL_HANDSHAKE = -11;
         /**
          * Malformed URL
          */
-        public static final int ERROR_BAD_URL = -12;
+        int ERROR_BAD_URL = -12;
         /**
          * Generic file error
          */
-        public static final int ERROR_FILE = -13;
+        int ERROR_FILE = -13;
         /**
          * File not found
          */
-        public static final int ERROR_FILE_NOT_FOUND = -14;
+        int ERROR_FILE_NOT_FOUND = -14;
         /**
          * Too many requests during this load
          */
-        public static final int ERROR_TOO_MANY_REQUESTS = -15;
+        int ERROR_TOO_MANY_REQUESTS = -15;
 
-        public boolean shouldOverrideUrlLoading(WebView view, String url);
+        boolean shouldOverrideUrlLoading(WebView view, String url);
 
-        public void onPageStarted(WebView view, String url, Bitmap favicon);
+        void onPageStarted(WebView view, String url, Bitmap favicon);
 
-        public void onPageFinished(WebView view, String url);
+        void onPageFinished(WebView view, String url);
 
-        public void onLoadResource(WebView view, String url);
+        void onLoadResource(WebView view, String url);
 
-        public WebResourceResponse shouldInterceptRequest(WebView view,
-                                                          String url);
+        WebResourceResponse shouldInterceptRequest(WebView view,
+                                                   String url);
 
         @Deprecated
-        public void onTooManyRedirects(WebView view, Message cancelMsg,
-                                       Message continueMsg);
+        void onTooManyRedirects(WebView view, Message cancelMsg,
+                                Message continueMsg);
 
-        public void onReceivedError(WebView view, int errorCode,
-                                    String description, String failingUrl);
-
-
-        public void onFormResubmission(WebView view, Message dontResend,
-                                       Message resend);
+        void onReceivedError(WebView view, int errorCode,
+                             String description, String failingUrl);
 
 
-        public void doUpdateVisitedHistory(WebView view, String url,
-                                           boolean isReload);
+        void onFormResubmission(WebView view, Message dontResend,
+                                Message resend);
 
 
-        public void onReceivedSslError(WebView view, SslErrorHandler handler,
-                                       SslError error);
+        void doUpdateVisitedHistory(WebView view, String url,
+                                    boolean isReload);
 
 
-        public void onProceededAfterSslError(WebView view, SslError error);
+        void onReceivedSslError(WebView view, SslErrorHandler handler,
+                                SslError error);
 
 
-        public void onReceivedClientCertRequest(WebView view,
-                                                ClientCertRequest handler, String host_and_port);
+        void onProceededAfterSslError(WebView view, SslError error);
 
 
-        public void onReceivedHttpAuthRequest(WebView view,
-                                              HttpAuthHandler handler, String host, String realm);
+        void onReceivedClientCertRequest(WebView view,
+                                         ClientCertRequest handler, String host_and_port);
 
 
-        public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event);
+        void onReceivedHttpAuthRequest(WebView view,
+                                       HttpAuthHandler handler, String host, String realm);
 
 
-        public void onUnhandledKeyEvent(WebView view, KeyEvent event);
+        boolean shouldOverrideKeyEvent(WebView view, KeyEvent event);
 
 
-        public void onScaleChanged(WebView view, float oldScale, float newScale);
+        void onUnhandledKeyEvent(WebView view, KeyEvent event);
 
 
-        public void onReceivedLoginRequest(WebView view, String realm,
-                                           String account, String args);
+        void onScaleChanged(WebView view, float oldScale, float newScale);
+
+
+        void onReceivedLoginRequest(WebView view, String realm,
+                                    String account, String args);
 
     }
 
@@ -449,7 +448,7 @@ public class LuaWebView extends WebView implements LuaGcable {
 
         @Override
         public void onReceive(Context p1, Intent p2) {
-            // TODO: Implement this method
+
             //id=p2.getLongExtra("flg", 0);
             //int id=p2.getFlags();
             long id = p2.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
@@ -479,7 +478,7 @@ public class LuaWebView extends WebView implements LuaGcable {
         @SuppressLint("DefaultLocale")
         @Override
         public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-            // TODO: Implement this method
+
             mUrl = url;
             mUserAgent = userAgent;
             mContentDisposition = contentDisposition;
@@ -500,7 +499,7 @@ public class LuaWebView extends WebView implements LuaGcable {
             file_input_field = new EditText(mContext);
             //file_input_field.setTextColor(0xff000000);
             file_input_field.setText(mFilename);
-            String size=String.valueOf(contentLength)+"B";
+            String size= contentLength +"B";
             if(contentLength>1024*1024)
                 size=String.format("%.2f MB",Long.valueOf(contentLength).doubleValue()/(1024*1024));
             else if(contentLength>1024)
@@ -513,7 +512,7 @@ public class LuaWebView extends WebView implements LuaGcable {
                     .setPositiveButton(DOWNLOAD, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface p1, int p2) {
-                            // TODO: Implement this method
+
                             mFilename = file_input_field.getText().toString();
                             download(false);
                         }
@@ -523,7 +522,7 @@ public class LuaWebView extends WebView implements LuaGcable {
 
                         @Override
                         public void onClick(DialogInterface p1, int p2) {
-                            // TODO: Implement this method
+
                             mFilename = file_input_field.getText().toString();
                             download(true);
                         }
@@ -570,7 +569,7 @@ public class LuaWebView extends WebView implements LuaGcable {
     }
 
     class JsObject {
-        private LuaWebView.JsInterface mJs;
+        private final LuaWebView.JsInterface mJs;
 
         public JsObject(JsInterface js) {
             mJs = js;
@@ -581,12 +580,11 @@ public class LuaWebView extends WebView implements LuaGcable {
             return mJs.execute(arg);
         }
 
-        ;
     }
 
     private class LuaJavaScriptInterface {
 
-        private LuaActivity mMain;
+        private final LuaActivity mMain;
 
         public LuaJavaScriptInterface(LuaActivity main) {
             mMain = main;
@@ -615,7 +613,7 @@ public class LuaWebView extends WebView implements LuaGcable {
 
     private class SimpleLuaWebViewClient extends WebViewClient {
 
-        private LuaWebView.LuaWebViewClient mLuaWebViewClient;
+        private final LuaWebView.LuaWebViewClient mLuaWebViewClient;
 
         public SimpleLuaWebViewClient(LuaWebViewClient wvc) {
             mLuaWebViewClient = wvc;
@@ -731,8 +729,6 @@ public class LuaWebView extends WebView implements LuaGcable {
             return true;
         }
 
-        ;
-
         @Override
         public boolean onJsConfirm(WebView view, String url,
                                    String message, final JsResult result) {
@@ -758,8 +754,6 @@ public class LuaWebView extends WebView implements LuaGcable {
             b.show();
             return true;
         }
-
-        ;
 
         @Override
         public boolean onJsPrompt(WebView view, String url, String message,
@@ -794,8 +788,6 @@ public class LuaWebView extends WebView implements LuaGcable {
             return true;
         }
 
-        ;
-
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             //mContext.setProgressBarVisibility(true);
@@ -820,7 +812,7 @@ public class LuaWebView extends WebView implements LuaGcable {
 
         @Override
         public void onReceivedIcon(WebView view, Bitmap icon) {
-            // TODO: Implement this method
+
             //mContext.setIcon(new BitmapDrawable(icon));
             super.onReceivedIcon(view, icon);
             if(mOnReceivedIconListener!=null)
@@ -863,10 +855,10 @@ public class LuaWebView extends WebView implements LuaGcable {
     }
 
     public interface OnReceivedTitleListener{
-        public void onReceivedTitle(String string);
+        void onReceivedTitle(String string);
     }
 
     public interface OnReceivedIconListener{
-        public void onReceivedIcon(Bitmap bitmap);
+        void onReceivedIcon(Bitmap bitmap);
     }
 }

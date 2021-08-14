@@ -57,7 +57,7 @@ public class TimerX
     private static final class TimerImpl extends Thread {
 
         private static final class TimerHeap {
-            private int DEFAULT_HEAP_SIZE = 256;
+            private final int DEFAULT_HEAP_SIZE = 256;
 
             private TimerTaskX[] timers = new TimerTaskX[DEFAULT_HEAP_SIZE];
 
@@ -181,7 +181,7 @@ public class TimerX
          * Contains scheduled events, sorted according to
          * {@code when} field of TaskScheduled object.
          */
-        private TimerHeap tasks = new TimerHeap();
+        private final TimerHeap tasks = new TimerHeap();
 
         /**
          * Starts a new timer.

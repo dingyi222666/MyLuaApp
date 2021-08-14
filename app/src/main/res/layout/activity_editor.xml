@@ -35,10 +35,11 @@
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/editorTab"
-                    android:background="?theme_backgroundColor"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
                     android:layout_marginTop="56dp"
+
+                    android:background="?theme_backgroundColor"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tabIndicator="@drawable/default_tab_indicator"
@@ -61,36 +62,44 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/main"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-               >
+                android:layout_height="match_parent">
 
                 <ProgressBar
                     android:id="@+id/progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent" />
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/editor_page"
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_height="0dp"
+                    android:id="@+id/editor_root"
+                    app:layout_constraintBottom_toTopOf="@id/symbolView"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent" />
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/editor_page"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone" />
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
                 <com.dingyi.myluaapp.widget.view.SymbolView
+                    android:id="@+id/symbolView"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:background="?theme_backgroundColor"
                     android:elevation="6dp"
-                    android:id="@+id/symbolView"
                     android:scrollbars="none"
+                    app:layout_constraintTop_toBottomOf="@id/editor_root"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:ignore="SpeakableTextPresentCheck" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -102,8 +111,8 @@
                 android:background="@android:color/transparent">
 
                 <androidx.viewpager2.widget.ViewPager2
-                    android:layout_width="0dp"
                     android:id="@+id/drawerPage"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:background="?theme_backgroundColor"
                     app:layout_constraintLeft_toLeftOf="parent"

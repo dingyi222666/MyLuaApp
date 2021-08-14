@@ -20,7 +20,7 @@ class SymbolView(context: Context?, attrs: AttributeSet?) : HorizontalScrollView
 
     private val symbols = mutableListOf<String>()
 
-    private val _onClick = { _: String -> }
+    private var _onClick = { _: String -> }
 
     init {
         linearLayout.elevation = elevation
@@ -35,6 +35,10 @@ class SymbolView(context: Context?, attrs: AttributeSet?) : HorizontalScrollView
             linearLayout.addView(binding.root)
         }
 
+    }
+
+    fun setOnClickListener(block:(String)->Unit) {
+        _onClick=block
     }
 
     fun readSymbol() {

@@ -35,13 +35,13 @@ public class LuaBitmap {
     }
 
     public static boolean checkCache(LuaContext context, String url) {
-        // TODO: Implement this method
+
         String path = context.getLuaExtDir("cache") + "/" + url.hashCode();
         File f = new File(path);
         return f.exists() && mCacheTime!=-1 && System.currentTimeMillis() - f.lastModified() < mCacheTime;
     }
 
-    public static Bitmap getLocalBitmap(String url) throws FileNotFoundException, IOException {
+    public static Bitmap getLocalBitmap(String url) throws IOException {
 
         FileInputStream fis = new FileInputStream(url);
         Bitmap bitmap = BitmapFactory.decodeStream(fis);
@@ -156,8 +156,8 @@ public class LuaBitmap {
 
         try {
             bitmap = BitmapFactory.decodeFile(filePath, opts);
-        } catch (Exception e) {
-            // TODO: handle exception
+        } catch (Exception ignored) {
+
         }
         return bitmap;
     }

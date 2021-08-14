@@ -168,7 +168,7 @@ public class YoyoNavigationMethod extends TouchNavigationMethod {
 
     @Override
     public void onLongPress(MotionEvent e) {
-        // TODO: Implement this method
+
         onDoubleTap(e);
     }
 
@@ -230,7 +230,7 @@ public class YoyoNavigationMethod extends TouchNavigationMethod {
 
     @Override
     public void onColorSchemeChanged(ColorScheme colorScheme) {
-        // TODO: Implement this method
+
         _yoyoCaret.setHandleColor(colorScheme.getColor(ColorScheme.Colorable.CARET_BACKGROUND));
     }
 
@@ -268,7 +268,7 @@ public class YoyoNavigationMethod extends TouchNavigationMethod {
         }
 
         public void setHandleColor(int color) {
-            // TODO: Implement this method
+
             _brush.setColor(color);
         }
 

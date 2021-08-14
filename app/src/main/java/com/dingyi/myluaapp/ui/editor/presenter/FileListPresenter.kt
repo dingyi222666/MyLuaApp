@@ -57,7 +57,7 @@ class FileListPresenter(
 
 
     suspend fun refreshFileList(path: String) = withContext(Dispatchers.IO) {
-        println(path)
+
         viewModel.projectConfig.value?.run {
             val list =
                 path
@@ -93,7 +93,7 @@ class FileListPresenter(
             else -> it
         }
 
-        println(path)
+        
         path?.let {
             block(path)
             it.toFile().isDirectory {

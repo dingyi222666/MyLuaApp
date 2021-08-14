@@ -8,56 +8,56 @@ import java.util.*;
 
 public interface LuaContext {
 
-    public ArrayList<ClassLoader> getClassLoaders();
+    ArrayList<ClassLoader> getClassLoaders();
 
-    public void call(String func, Object... args);
+    void call(String func, Object... args);
 
-    public void set(String name, Object value);
+    void set(String name, Object value);
 
-    public String getLuaPath();
+    String getLuaPath();
 
-    public String getLuaPath(String path);
+    String getLuaPath(String path);
 
-    public String getLuaPath(String dir, String name);
+    String getLuaPath(String dir, String name);
 
-    public String getLuaDir();
+    String getLuaDir();
 
-    public String getLuaDir(String dir);
+    String getLuaDir(String dir);
 
-    public String getLuaExtDir();
+    String getLuaExtDir();
 
-    public String getLuaExtDir(String dir);
+    String getLuaExtDir(String dir);
 
-    public void setLuaExtDir(String dir);
+    void setLuaExtDir(String dir);
 
-    public String getLuaExtPath(String path);
+    String getLuaExtPath(String path);
 
-    public String getLuaExtPath(String dir, String name);
+    String getLuaExtPath(String dir, String name);
 
-    public String getLuaLpath();
+    String getLuaLpath();
 
-    public String getLuaCpath();
+    String getLuaCpath();
 
-    public Context getContext();
+    Context getContext();
 
-    public LuaState getLuaState();
+    LuaState getLuaState();
 
-    public Object doFile(String path, Object... arg);
+    Object doFile(String path, Object... arg);
 
-    public void sendMsg(String msg);
+    void sendMsg(String msg);
 
-    public void sendError(String title, Exception msg);
+    void sendError(String title, Exception msg);
 
-    public int getWidth();
+    int getWidth();
 
-    public int getHeight();
+    int getHeight();
 
-    public Map getGlobalData();
+    Map getGlobalData();
 
-    public Object getSharedData(String key);
-    public Object getSharedData(String key,Object def);
-    public boolean setSharedData(String key, Object value);
+    Object getSharedData(String key);
+    Object getSharedData(String key, Object def);
+    boolean setSharedData(String key, Object value);
 
-    public void regGc(LuaGcable obj);
+    void regGc(LuaGcable obj);
 
 }

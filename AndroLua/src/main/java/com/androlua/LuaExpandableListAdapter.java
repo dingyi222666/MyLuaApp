@@ -15,38 +15,38 @@ import java.util.*;
 
 public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 
-	private BitmapDrawable mDraw;
-	private Resources mRes;
-	private LuaState L;
-	private LuaContext mContext;
+	private final BitmapDrawable mDraw;
+	private final Resources mRes;
+	private final LuaState L;
+	private final LuaContext mContext;
 	
-	private LuaTable<Integer,LuaTable<String,Object>> mGroupData;
-	private LuaTable<Integer,LuaTable<Integer,LuaTable<String,Object>>> mChildData;
+	private final LuaTable<Integer,LuaTable<String,Object>> mGroupData;
+	private final LuaTable<Integer,LuaTable<Integer,LuaTable<String,Object>>> mChildData;
 
-	private HashMap<View,Animation> mAnimCache = new HashMap<View,Animation>();
+	private final HashMap<View,Animation> mAnimCache = new HashMap<View,Animation>();
 	
-	private LuaTable mGroupLayout;
-	private LuaTable mChildLayout;
+	private final LuaTable mGroupLayout;
+	private final LuaTable mChildLayout;
 	
-	private LuaFunction<View> loadlayout;
+	private final LuaFunction<View> loadlayout;
 
-	private LuaFunction<?> insert;
+	private final LuaFunction<?> insert;
 	
-	private LuaFunction<?> remove;
+	private final LuaFunction<?> remove;
 
 	private boolean updateing;
 
 	private LuaFunction<Animation> mAnimationUtil;
 
 	private boolean mNotifyOnChange;
-	private Handler mHandler=new Handler(){
+	private final Handler mHandler=new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
 			notifyDataSetChanged();
 		}
 
 	};
-	private HashMap<String,Boolean> loaded=new HashMap<String,Boolean>();
+	private final HashMap<String,Boolean> loaded=new HashMap<String,Boolean>();
 
 	public LuaExpandableListAdapter(LuaContext context,  LuaTable groupLayout, LuaTable childLayout) throws LuaException {
 		this(context,null,null,groupLayout,childLayout);
@@ -89,48 +89,48 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getGroupCount() {
-		// TODO: Implement this method
+
 		return mGroupData.length();
 	}
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		// TODO: Implement this method
+
 		return mChildData.get(groupPosition + 1).length();
 	}
 
 	@Override
 	public Object getGroup(int groupPosition) {
-		// TODO: Implement this method
+
 		return mGroupData.get(groupPosition + 1);
 	}
 
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
-		// TODO: Implement this method
+
 		return mChildData.get(groupPosition + 1).get(childPosition + 1);
 	}
 
 	@Override
 	public long getGroupId(int groupPosition) {
-		// TODO: Implement this method
+
 		return groupPosition + 1;
 	}
 
 	@Override
 	public long getChildId(int groupPosition, int childPosition) {
-		// TODO: Implement this method
+
 		return childPosition + 1;
 	}
 	
 	@Override
 	public boolean hasStableIds() {
-		// TODO: Implement this method
+
 		return false;
 	}
 
 	public GroupItem getGroupItem(int groupPosition) {
-		// TODO: Implement this method
+
 		return new GroupItem(mChildData.get(groupPosition + 1));
 	}
 	
@@ -182,7 +182,7 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-		// TODO: Implement this method
+
 		View view = null;
 		LuaTable<String,View> holder = null;
 		if (convertView == null) {
@@ -244,7 +244,7 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-		// TODO: Implement this method
+
 		View view = null;
 		LuaTable<String,View> holder = null;
 		if (convertView == null) {
@@ -304,7 +304,7 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		// TODO: Implement this method
+
 		return false;
 	}
 
@@ -314,7 +314,7 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 			try {
 				String key2=entry2.getKey();
 				Object value2 = entry2.getValue();
-				if (key2.toLowerCase().equals("src"))
+				if (key2.equalsIgnoreCase("src"))
 					setHelper(view, value2);
 				else
 					javaSetter(view, key2, value2);
@@ -355,7 +355,7 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 
 	private int javaSetter(Object obj, String methodName, Object value) throws LuaException {
 
-		if (methodName.length() > 2 && methodName.substring(0, 2).equals("on") && value instanceof LuaFunction)
+		if (methodName.length() > 2 && methodName.startsWith("on") && value instanceof LuaFunction)
 			return javaSetListener(obj, methodName, value);
 
 		return javaSetMethod(obj, methodName, value);
@@ -444,7 +444,7 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 	}
 
 	private class GroupItem {
-		private LuaTable<Integer,LuaTable<String,Object>> mData;
+		private final LuaTable<Integer,LuaTable<String,Object>> mData;
 		public GroupItem(LuaTable<Integer,LuaTable<String,Object>> item){
 			mData=item;
 		}
@@ -482,7 +482,7 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 		private LuaContext mContext;
 
 		public Drawable getBitmap(LuaContext context, String path) throws IOException {
-			// TODO: Implement this method
+
 			mContext = context;
 			mPath = path;
 			if (!path.toLowerCase().startsWith("http://")&&!path.toLowerCase().startsWith("https://"))
@@ -499,7 +499,7 @@ public class LuaExpandableListAdapter extends BaseExpandableListAdapter {
 
 		@Override
 		public void run() {
-			// TODO: Implement this method
+
 			try {
 				LuaBitmap.getBitmap(mContext, mPath);
 				mHandler.sendEmptyMessage(0);

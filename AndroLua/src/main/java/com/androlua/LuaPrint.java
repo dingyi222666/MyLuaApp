@@ -4,9 +4,9 @@ import com.luajava.*;
 
 public class LuaPrint extends JavaFunction {
 
-    private LuaState L;
-    private LuaContext mLuaContext;
-    private StringBuilder output = new StringBuilder();
+    private final LuaState L;
+    private final LuaContext mLuaContext;
+    private final StringBuilder output = new StringBuilder();
 
     public LuaPrint(LuaContext luaContext, LuaState L) {
         super(L);
@@ -39,7 +39,7 @@ public class LuaPrint extends JavaFunction {
             output.append(val);
             output.append("\t");
         }
-        mLuaContext.sendMsg(output.toString().substring(1, output.length() - 1));
+        mLuaContext.sendMsg(output.substring(1, output.length() - 1));
         output.setLength(0);
         return 0;
     }

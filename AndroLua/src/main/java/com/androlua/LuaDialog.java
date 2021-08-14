@@ -19,9 +19,9 @@ import java.util.Arrays;
  */
 
 public class LuaDialog extends AlertDialog implements  DialogInterface.OnClickListener{
-    private Context mContext;
+    private final Context mContext;
 
-    private ListView mListView;
+    private final ListView mListView;
 
     private String mMessage;
 
@@ -95,7 +95,7 @@ public class LuaDialog extends AlertDialog implements  DialogInterface.OnClickLi
 
     @Override
     public void setTitle(CharSequence title) {
-        // TODO: Implement this method
+
         mTitle = title.toString();
         super.setTitle(title);
     }
@@ -106,14 +106,14 @@ public class LuaDialog extends AlertDialog implements  DialogInterface.OnClickLi
 
     @Override
     public void setMessage(CharSequence message) {
-        // TODO: Implement this method
+
         mMessage = message.toString();
         super.setMessage(message);
     }
 
     @Override
     public void setIcon(Drawable icon) {
-        // TODO: Implement this method
+
         super.setIcon(icon);
     }
 
@@ -123,7 +123,7 @@ public class LuaDialog extends AlertDialog implements  DialogInterface.OnClickLi
 
     @Override
     public void setView(View view) {
-        // TODO: Implement this method
+
         mView = view;
         super.setView(view);
     }
@@ -184,13 +184,13 @@ public class LuaDialog extends AlertDialog implements  DialogInterface.OnClickLi
 
     @Override
     public void setOnCancelListener(DialogInterface.OnCancelListener listener) {
-        // TODO: Implement this method
+
         super.setOnCancelListener(listener);
     }
 
     @Override
     public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
-        // TODO: Implement this method
+
         super.setOnDismissListener(listener);
     }
 
@@ -217,7 +217,7 @@ public class LuaDialog extends AlertDialog implements  DialogInterface.OnClickLi
     }
 
     public interface OnClickListener{
-        public void onClick(LuaDialog dlg,Button btn);
+        void onClick(LuaDialog dlg, Button btn);
     }
 
 /*
@@ -229,7 +229,7 @@ public class LuaDialog extends AlertDialog implements  DialogInterface.OnClickLi
     @Override
     public void dismiss()
     {
-        // TODO: Implement this method
+
         super.hide();
     }*/
 

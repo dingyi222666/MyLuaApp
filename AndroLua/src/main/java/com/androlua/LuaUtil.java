@@ -232,7 +232,7 @@ public class LuaUtil {
     }
 
     public static String getFileMD5(InputStream in) {
-        byte buffer[] = new byte[4096];
+        byte[] buffer = new byte[4096];
         int len;
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
@@ -268,7 +268,7 @@ public class LuaUtil {
     }
 
     public static String getFileSha1(InputStream in) {
-        byte buffer[] = new byte[4096];
+        byte[] buffer = new byte[4096];
         int len;
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-1");

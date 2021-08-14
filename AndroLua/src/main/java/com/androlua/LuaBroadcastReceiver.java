@@ -5,7 +5,7 @@ import android.content.*;
 public class LuaBroadcastReceiver extends BroadcastReceiver
 {
 
-	private OnReceiveListener mRlt;
+	private final OnReceiveListener mRlt;
 	
 	public LuaBroadcastReceiver(OnReceiveListener rlt)
 	{
@@ -15,12 +15,12 @@ public class LuaBroadcastReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		// TODO: Implement this method
+
 		mRlt.onReceive(context,intent);
 	}
 	
 	public interface OnReceiveListener
 	{
-		public void onReceive(android.content.Context context, android.content.Intent intent);
+		void onReceive(android.content.Context context, android.content.Intent intent);
 	}
 }

@@ -50,7 +50,7 @@ public class GifDecoder extends Thread{
 	private boolean isShow = false;
 	
 
-	private byte[] block = new byte[256]; // current data block
+	private final byte[] block = new byte[256]; // current data block
 	private int blockSize = 0; // block size
 
 	// last graphic control extension info
@@ -770,14 +770,14 @@ public class GifDecoder extends Thread{
 		public GifFrame nextFrame = null;
 	}
 
-	public static interface GifAction {
+	public interface GifAction {
 
 		/**
 		 * gif解码观察者
 		 * @param parseStatus 解码是否成功，成功会为true
 		 * @param frameIndex 当前解码的第几帧，当全部解码成功后，这里为-1
 		 */
-		public void parseOk(boolean parseStatus,int frameIndex);
+        void parseOk(boolean parseStatus, int frameIndex);
 	}
 
 

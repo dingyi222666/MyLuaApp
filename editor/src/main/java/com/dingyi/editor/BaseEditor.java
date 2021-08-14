@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 
 import com.dingyi.editor.lua.android.OnTextChangerListener;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author: dingyi
  * @date: 2021/8/8 22:43
@@ -106,6 +108,7 @@ public abstract class BaseEditor extends View {
     public abstract void setWordWrap(boolean enable);
     public abstract void gotoLine();
     public abstract void search();
+    public abstract void paste(@NotNull String second);
     public abstract void setOnTextChangeListener(OnTextChangerListener listener);
     public abstract String getSelectedText();
 }

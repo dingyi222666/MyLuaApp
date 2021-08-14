@@ -11,7 +11,7 @@ public class LuaFragment extends Fragment {
 
     private LuaTable mLayout = null;
 
-    private LuaObject mLoadLayout = null;
+    private final LuaObject mLoadLayout = null;
     private View mView;
 
     public LuaFragment() {

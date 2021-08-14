@@ -38,14 +38,14 @@ public class CrashHandler implements UncaughtExceptionHandler
 	//系统默认的UncaughtException处理类 
 	private Thread.UncaughtExceptionHandler mDefaultHandler;
 	//CrashHandler实例
-	private static CrashHandler INSTANCE = new CrashHandler();
+	private static final CrashHandler INSTANCE = new CrashHandler();
 	//程序的Context对象
 	private Context mContext;
 	//用来存储设备信息和异常信息
-	private Map<String, String> infos = new LinkedHashMap<String, String>();
+	private final Map<String, String> infos = new LinkedHashMap<String, String>();
 
 	//用于格式化日期,作为日志文件名的一部分
-	private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+	private final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
 	/** 保证只有一个CrashHandler实例 */
 	private CrashHandler()

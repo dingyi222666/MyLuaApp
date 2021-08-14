@@ -36,37 +36,37 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
 
     private final LuaTable<Integer, LuaTable<String, Object>> mBaseData;
     private BitmapDrawable mDraw;
-    private Resources mRes;
-    private LuaState L;
-    private LuaContext mContext;
+    private final Resources mRes;
+    private final LuaState L;
+    private final LuaContext mContext;
 
 
     private final Object mLock = new Object();
 
-    private LuaTable mLayout;
+    private final LuaTable mLayout;
     private LuaTable<Integer, LuaTable<String, Object>> mData;
     private LuaTable<String, Object> mTheme;
 
     private CharSequence mPrefix;
 
-    private LuaFunction<View> loadlayout;
+    private final LuaFunction<View> loadlayout;
 
-    private LuaFunction insert;
+    private final LuaFunction insert;
 
-    private LuaFunction remove;
+    private final LuaFunction remove;
 
     private LuaFunction<Animation> mAnimationUtil;
 
-    private HashMap<View, Animation> mAnimCache = new HashMap<View, Animation>();
+    private final HashMap<View, Animation> mAnimCache = new HashMap<View, Animation>();
 
-    private HashMap<View, Boolean> mStyleCache = new HashMap<View, Boolean>();
+    private final HashMap<View, Boolean> mStyleCache = new HashMap<View, Boolean>();
 
     private boolean mNotifyOnChange = true;
 
     private boolean updateing;
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0) {
@@ -80,7 +80,7 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
         }
 
     };
-    private HashMap<String, Boolean> loaded = new HashMap<String, Boolean>();
+    private final HashMap<String, Boolean> loaded = new HashMap<String, Boolean>();
     private ArrayFilter mFilter;
     private LuaFunction mLuaFilter;
 
@@ -119,19 +119,19 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public int getCount() {
-        // TODO: Implement this method
+
         return mData.length();
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO: Implement this method
+
         return mData.get(position + 1);
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO: Implement this method
+
         return position + 1;
     }
 
@@ -173,14 +173,14 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public void notifyDataSetChanged() {
-        // TODO: Implement this method
+
         super.notifyDataSetChanged();
         if (updateing == false) {
             updateing = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    // TODO: Implement this method
+
                     updateing = false;
                 }
             }, 500);
@@ -189,7 +189,7 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        // TODO: Implement this method
+
         return getView(position, convertView, parent);
     }
 
@@ -200,7 +200,7 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO: Implement this method
+
         View view = null;
         LuaObject holder = null;
         if (convertView == null) {
@@ -269,7 +269,7 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
         for (Map.Entry<String, Object> entry2 : sets) {
             String key2 = entry2.getKey();
             Object value2 = entry2.getValue();
-            if (key2.toLowerCase().equals("src"))
+            if (key2.equalsIgnoreCase("src"))
                 setHelper(view, value2);
             else
                 javaSetter(view, key2, value2);
@@ -303,7 +303,7 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
 
     private int javaSetter(Object obj, String methodName, Object value) throws LuaException {
 
-        if (methodName.length() > 2 && methodName.substring(0, 2).equals("on") && value instanceof LuaFunction)
+        if (methodName.length() > 2 && methodName.startsWith("on") && value instanceof LuaFunction)
             return javaSetListener(obj, methodName, value);
 
         return javaSetMethod(obj, methodName, value);
@@ -393,7 +393,7 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
         private LuaContext mContext;
 
         public Drawable getBitmap(LuaContext context, String path) throws IOException {
-            // TODO: Implement this method
+
             mContext = context;
             mPath = path;
             if (!path.toLowerCase().startsWith("http://")&&!path.toLowerCase().startsWith("https://"))
@@ -410,7 +410,7 @@ public class LuaAdapter extends BaseAdapter implements Filterable {
 
         @Override
         public void run() {
-            // TODO: Implement this method
+
             try {
                 LuaBitmap.getBitmap(mContext, mPath);
                 mHandler.sendEmptyMessage(0);

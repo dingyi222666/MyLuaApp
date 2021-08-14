@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.dingyi.myluaapp.MainApplication
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * @author: dingyi
@@ -90,6 +91,13 @@ fun TextView.setTextIfDiff(data: String) {
 
 fun String.showToast() =
     Toast.makeText(MainApplication.instance, this, Toast.LENGTH_LONG).show()
+
+fun String.showSnackBar(view:View) =
+    Snackbar.make(view,this,Snackbar.LENGTH_LONG)
+        .apply {
+            animationMode=Snackbar.ANIMATION_MODE_SLIDE
+        }.show()
+
 
 fun Int.getString(): String = MainApplication.instance.getString(this)
 

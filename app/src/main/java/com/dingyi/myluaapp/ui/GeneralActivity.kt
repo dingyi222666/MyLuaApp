@@ -25,14 +25,14 @@ class GeneralActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         intent?.let {
-            val bundle = it.getBundleExtra("arg").checkNotNull()
+            val bundle = it.getBundleExtra("arg")
             val type = it.getStringExtra("type").checkNotNull()
 
             val classStatic = Class.forName(type)
 
-            val method = classStatic.getMethod("newInstance", Bundle::class.java)
-
-            method.invoke(null, bundle) as Fragment
+            (classStatic.newInstance() as Fragment).apply {
+                    arguments=bundle
+            }
 
         }?.let {
             supportFragmentManager.beginTransaction().add(R.id.container, it)

@@ -18,7 +18,7 @@ public class GlobalActionAutomator {
 
     private AccessibilityService mService;
     private ScreenMetrics mScreenMetrics;
-    private Handler mHandler;
+    private final Handler mHandler;
 
     @TargetApi(Build.VERSION_CODES.N)
     public GlobalActionAutomator(AccessibilityService service,Handler handler) {

@@ -32,13 +32,13 @@ public class ClipboardPanel {
     }
 
     public void startClipboardAction() {
-        // TODO: Implement this method
+
         if (_clipboardActionMode == null)
             _textField.startActionMode(new ActionMode.Callback() {
 
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    // TODO: Implement this method
+
                     _clipboardActionMode = mode;
                     mode.setTitle(android.R.string.selectTextMode);
                     TypedArray array = _context.getTheme().obtainStyledAttributes(new int[]{
@@ -72,13 +72,13 @@ public class ClipboardPanel {
 
                 @Override
                 public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    // TODO: Implement this method
+
                     return false;
                 }
 
                 @Override
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                    // TODO: Implement this method
+
                     switch (item.getItemId()) {
                         case 0:
                             _textField.selectAll();
@@ -100,7 +100,7 @@ public class ClipboardPanel {
 
                 @Override
                 public void onDestroyActionMode(ActionMode p1) {
-                    // TODO: Implement this method
+
                     _textField.selectText(false);
                     _clipboardActionMode = null;
                 }

@@ -12,10 +12,11 @@ class CodeFile : LitePalSupport() {
     var id: Int = 0
     lateinit var projectConfig: ProjectConfig
     var openSelection: Int = 0
+    var code=""
     lateinit var filePath: String
 
     override fun toString(): String {
-        return "File(id=$id,  selection=$openSelection, path='$filePath')"
+        return "File(id=$id, code='$code', selection=$openSelection, path='$filePath')"
     }
 
 }

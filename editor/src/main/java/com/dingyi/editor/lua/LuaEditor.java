@@ -39,11 +39,11 @@ public class LuaEditor extends FreeScrollingTextField  {
 
     private boolean _isWordWrap;
 
-    private Context mContext;
+    private final Context mContext;
 
     private String _lastSelectedFile;
 
-    private String fontDir = LuaApplication.getInstance().getLuaExtDir("fonts");
+    private final String fontDir = LuaApplication.getInstance().getLuaExtDir("fonts");
 
     private int _index;
     private LinearSearchStrategy finder;
@@ -113,7 +113,7 @@ public class LuaEditor extends FreeScrollingTextField  {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        // TODO: Implement this method
+
         super.onLayout(changed, left, top, right, bottom);
         if (_index != 0 && right > 0) {
             moveCaret(_index);
@@ -158,12 +158,12 @@ public class LuaEditor extends FreeScrollingTextField  {
     }
 
     public void setPanelBackgroundColor(int color) {
-        // TODO: Implement this method
+
         _autoCompletePanel.setBackgroundColor(color);
     }
 
     public void setPanelTextColor(int color) {
-        // TODO: Implement this method
+
         _autoCompletePanel.setTextColor(color);
     }
 
@@ -200,7 +200,7 @@ public class LuaEditor extends FreeScrollingTextField  {
     }
 
     public String getSelectedText() {
-        // TODO: Implement this method
+
         return _hDoc.subSequence(getSelectionStart(), getSelectionEnd() - getSelectionStart()).toString();
     }
 
@@ -236,17 +236,17 @@ public class LuaEditor extends FreeScrollingTextField  {
     }
 
     public void gotoLine() {
-        // TODO: Implement this method
+
         startGotoMode();
     }
 
     public void search() {
-        // TODO: Implement this method
+
         startFindMode();
     }
 
     public void startGotoMode() {
-        // TODO: Implement this method
+
         startActionMode(new ActionMode.Callback() {
 
             private int idx;
@@ -255,7 +255,7 @@ public class LuaEditor extends FreeScrollingTextField  {
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                // TODO: Implement this method
+
                 mode.setTitle("转到");
                 mode.setSubtitle(null);
 
@@ -277,7 +277,7 @@ public class LuaEditor extends FreeScrollingTextField  {
 
                     @Override
                     public boolean onEditorAction(TextView p1, int p2, KeyEvent p3) {
-                        // TODO: Implement this method
+
                         _gotoLine();
                         return true;
                     }
@@ -299,18 +299,18 @@ public class LuaEditor extends FreeScrollingTextField  {
                     l = _hDoc.getRowCount();
                 }
                 gotoLine(l);
-                // TODO: Implement this method
+
             }
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                // TODO: Implement this method
+
                 return false;
             }
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                // TODO: Implement this method
+
                 switch (item.getItemId()) {
                     case 1:
                         break;
@@ -324,14 +324,14 @@ public class LuaEditor extends FreeScrollingTextField  {
 
             @Override
             public void onDestroyActionMode(ActionMode p1) {
-                // TODO: Implement this method
+
             }
         });
 
     }
 
     public void startFindMode() {
-        // TODO: Implement this method
+
         startActionMode(new ActionMode.Callback() {
 
             private LinearSearchStrategy finder;
@@ -342,7 +342,7 @@ public class LuaEditor extends FreeScrollingTextField  {
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                // TODO: Implement this method
+
                 mode.setTitle("搜索");
                 mode.setSubtitle(null);
 
@@ -361,7 +361,7 @@ public class LuaEditor extends FreeScrollingTextField  {
 
                     @Override
                     public boolean onEditorAction(TextView p1, int p2, KeyEvent p3) {
-                        // TODO: Implement this method
+
                         findNext();
                         return true;
                     }
@@ -375,13 +375,13 @@ public class LuaEditor extends FreeScrollingTextField  {
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                // TODO: Implement this method
+
                 return false;
             }
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                // TODO: Implement this method
+
                 switch (item.getItemId()) {
                     case 1:
                         break;
@@ -394,7 +394,7 @@ public class LuaEditor extends FreeScrollingTextField  {
             }
 
             private void findNext() {
-                // TODO: Implement this method
+
                 finder = new LinearSearchStrategy();
                 String kw = edit.getText().toString();
                 if (kw.isEmpty()) {
@@ -415,7 +415,7 @@ public class LuaEditor extends FreeScrollingTextField  {
 
             @Override
             public void onDestroyActionMode(ActionMode p1) {
-                // TODO: Implement this method
+
             }
         });
 
@@ -423,7 +423,7 @@ public class LuaEditor extends FreeScrollingTextField  {
 
     @Override
     public void setWordWrap(boolean enable) {
-        // TODO: Implement this method
+
         _isWordWrap = enable;
         super.setWordWrap(enable);
     }
@@ -548,7 +548,7 @@ public class LuaEditor extends FreeScrollingTextField  {
             mKeyword = keyword;
             idx = 0;
         }
-        // TODO: Implement this method
+
         finder = new LinearSearchStrategy();
         String kw = mKeyword;
         if (kw.isEmpty()) {

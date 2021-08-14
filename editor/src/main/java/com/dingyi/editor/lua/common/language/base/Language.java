@@ -47,7 +47,7 @@ public abstract class Language {
     private String[] _name;
 
     public void updateUserWord() {
-        // TODO: Implement this method
+
         String[] uw = new String[_ueserCache.size()];
         _userWords = _ueserCache.toArray(uw);
     }

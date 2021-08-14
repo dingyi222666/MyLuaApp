@@ -305,21 +305,21 @@ public class Http {
 
     public static class HttpTask extends AsyncTaskX<Object, Object, Object> {
 
-        private String mUrl;
+        private final String mUrl;
 
-        private LuaObject mCallback;
+        private final LuaObject mCallback;
 
         private byte[] mData;
 
         private String mCharset;
 
-        private String mOutCharset;
+        private final String mOutCharset;
 
-        private String mCookie;
+        private final String mCookie;
 
-        private HashMap<String, String> mHeader;
+        private final HashMap<String, String> mHeader;
 
-        private String mMethod;
+        private final String mMethod;
 
 
         public HttpTask(String url, String method, String cookie, String charset, HashMap<String, String> header, LuaObject callback) {
@@ -335,7 +335,7 @@ public class Http {
 
         @Override
         protected Object doInBackground(Object[] p1) {
-            // TODO: Implement this method
+
             try {
                 URL url = new URL(mUrl);
 
@@ -462,8 +462,8 @@ public class Http {
 
         }
 
-        private byte[] formatData(Object[] p1) throws UnsupportedEncodingException, IOException {
-            // TODO: Implement this method
+        private byte[] formatData(Object[] p1) throws IOException {
+
             byte[] bs = null;
             if (p1.length == 1) {
                 Object obj = p1[0];
@@ -480,7 +480,7 @@ public class Http {
         }
 
         private byte[] formatData(Map<String, String> obj) throws UnsupportedEncodingException {
-            // TODO: Implement this method
+
             StringBuilder buf = new StringBuilder();
             Set<Map.Entry<String, String>> entries = obj.entrySet();
             for (Map.Entry<String, String> entry : entries) {
@@ -491,14 +491,14 @@ public class Http {
 
 
         public boolean cancel() {
-            // TODO: Implement this method
+
             return super.cancel(true);
         }
 
 
         @Override
         protected void onPostExecute(Object result) {
-            // TODO: Implement this method
+
             if (isCancelled())
                 return;
             mCallback.call((Object[]) result);

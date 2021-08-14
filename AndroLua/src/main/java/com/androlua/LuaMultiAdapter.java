@@ -37,29 +37,29 @@ import java.util.Set;
 public class LuaMultiAdapter extends BaseAdapter {
 
     private BitmapDrawable mDraw;
-    private Resources mRes;
-    private LuaState L;
-    private LuaContext mContext;
-    private LuaTable<Integer, LuaTable> mLayout;
-    private LuaTable<Integer, LuaTable<String, Object>> mData;
+    private final Resources mRes;
+    private final LuaState L;
+    private final LuaContext mContext;
+    private final LuaTable<Integer, LuaTable> mLayout;
+    private final LuaTable<Integer, LuaTable<String, Object>> mData;
     private LuaTable<String, Object> mTheme;
-    private LuaFunction<View> loadLayout;
-    private LuaFunction insert;
-    private LuaFunction remove;
+    private final LuaFunction<View> loadLayout;
+    private final LuaFunction insert;
+    private final LuaFunction remove;
     private LuaTable<Integer, LuaFunction<Animation>> mAnimationUtil;
-    private HashMap<View, Animation> mAnimCache = new HashMap<View, Animation>();
-    private HashMap<View, Boolean> mStyleCache = new HashMap<View, Boolean>();
+    private final HashMap<View, Animation> mAnimCache = new HashMap<View, Animation>();
+    private final HashMap<View, Boolean> mStyleCache = new HashMap<View, Boolean>();
 
     private boolean mNotifyOnChange = true;
     private boolean updateing;
-    private Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             notifyDataSetChanged();
         }
 
     };
-    private HashMap<String, Boolean> loaded = new HashMap<String, Boolean>();
+    private final HashMap<String, Boolean> loaded = new HashMap<String, Boolean>();
 
     public LuaMultiAdapter(LuaContext context, LuaTable layout) throws LuaException {
         this(context, null, layout);
@@ -113,19 +113,19 @@ public class LuaMultiAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        // TODO: Implement this method
+
         return mData.length();
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO: Implement this method
+
         return mData.get(position + 1);
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO: Implement this method
+
         return position + 1;
     }
 
@@ -168,14 +168,14 @@ public class LuaMultiAdapter extends BaseAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-        // TODO: Implement this method
+
         super.notifyDataSetChanged();
         if (!updateing) {
             updateing = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    // TODO: Implement this method
+
                     updateing = false;
                 }
             }, 500);
@@ -184,7 +184,7 @@ public class LuaMultiAdapter extends BaseAdapter {
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        // TODO: Implement this method
+
         return getView(position, convertView, parent);
     }
 
@@ -195,7 +195,7 @@ public class LuaMultiAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO: Implement this method
+
         View view = null;
         LuaObject holder;
         int t = (int) mData.get(position + 1).get("__type");
@@ -271,7 +271,7 @@ public class LuaMultiAdapter extends BaseAdapter {
         for (Map.Entry<String, Object> entry2 : sets) {
             String key2 = entry2.getKey();
             Object value2 = entry2.getValue();
-            if (key2.toLowerCase().equals("src"))
+            if (key2.equalsIgnoreCase("src"))
                 setHelper(view, value2);
             else
                 javaSetter(view, key2, value2);
@@ -305,7 +305,7 @@ public class LuaMultiAdapter extends BaseAdapter {
 
     private int javaSetter(Object obj, String methodName, Object value) throws LuaException {
 
-        if (methodName.length() > 2 && methodName.substring(0, 2).equals("on") && value instanceof LuaFunction)
+        if (methodName.length() > 2 && methodName.startsWith("on") && value instanceof LuaFunction)
             return javaSetListener(obj, methodName, value);
 
         return javaSetMethod(obj, methodName, value);
@@ -395,7 +395,7 @@ public class LuaMultiAdapter extends BaseAdapter {
         private LuaContext mContext;
 
         public Drawable getBitmap(LuaContext context, String path) throws IOException {
-            // TODO: Implement this method
+
             mContext = context;
             mPath = path;
             if (!path.toLowerCase().startsWith("http://")&&!path.toLowerCase().startsWith("https://"))
@@ -412,7 +412,7 @@ public class LuaMultiAdapter extends BaseAdapter {
 
         @Override
         public void run() {
-            // TODO: Implement this method
+
             try {
                 LuaBitmap.getBitmap(mContext, mPath);
                 mHandler.sendEmptyMessage(0);

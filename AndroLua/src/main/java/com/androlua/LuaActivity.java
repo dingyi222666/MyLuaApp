@@ -89,7 +89,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
     private final static String ARG = "arg";
     private final static String DATA = "data";
     private final static String NAME = "name";
-    private static ArrayList<String> prjCache = new ArrayList<String>();
+    private static final ArrayList<String> prjCache = new ArrayList<String>();
     private String luaDir;
     private Handler handler;
     private TextView status;
@@ -101,7 +101,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
     private ArrayListAdapter<String> adapter;
     private LuaState L;
     private String luaPath;
-    private StringBuilder toastbuilder = new StringBuilder();
+    private final StringBuilder toastbuilder = new StringBuilder();
     private Boolean isCreate = false;
     private Toast toast;
     private LinearLayout layout;
@@ -131,7 +131,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
     private boolean mDebug = true;
     private LuaResources mResources;
     private Resources.Theme mTheme;
-    private ArrayList<LuaGcable> gclist = new ArrayList<LuaGcable>();
+    private final ArrayList<LuaGcable> gclist = new ArrayList<LuaGcable>();
     private String pageName = "main";
     private static String sKey;
     private static final HashMap<String, LuaActivity> sLuaActivityMap = new HashMap<String, LuaActivity>();
@@ -152,7 +152,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
 
     @Override
     public ArrayList<ClassLoader> getClassLoaders() {
-        // TODO: Implement this method
+
         return mLuaDexLoader.getClassLoaders();
     }
 
@@ -407,7 +407,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
 
     @Override
     public void regGc(LuaGcable obj) {
-        // TODO: Implement this method
+
         gclist.add(obj);
     }
 
@@ -465,7 +465,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
     }
 
     public String getLuaPath() {
-        // TODO: Implement this method
+
         Intent intent = getIntent();
         Uri uri = intent.getData();
         String path = null;
@@ -539,19 +539,19 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
 
     @Override
     public String getLuaLpath() {
-        // TODO: Implement this method
+
         return luaLpath;
     }
 
     @Override
     public String getLuaCpath() {
-        // TODO: Implement this method
+
         return luaCpath;
     }
 
     @Override
     public Context getContext() {
-        // TODO: Implement this method
+
         return this;
     }
 
@@ -845,18 +845,18 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
     }
 
     public Intent registerReceiver(LuaBroadcastReceiver receiver, IntentFilter filter) {
-        // TODO: Implement this method
+
         return super.registerReceiver(receiver, filter);
     }
 
     public Intent registerReceiver(LuaBroadcastReceiver.OnReceiveListener ltr, IntentFilter filter) {
-        // TODO: Implement this method
+
         LuaBroadcastReceiver receiver = new LuaBroadcastReceiver(ltr);
         return super.registerReceiver(receiver, filter);
     }
 
     public Intent registerReceiver(IntentFilter filter) {
-        // TODO: Implement this method
+
         if (mReceiver != null)
             unregisterReceiver(mReceiver);
         mReceiver = new LuaBroadcastReceiver(this);
@@ -865,13 +865,13 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: Implement this method
+
         runFunc("onReceive", context, intent);
     }
 
     @Override
     public void onContentChanged() {
-        // TODO: Implement this method
+
         super.onContentChanged();
         isSetViewed = true;
     }
@@ -922,7 +922,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO: Implement this method
+
         if (data != null) {
             String name = data.getStringExtra(NAME);
             if (name != null) {
@@ -986,7 +986,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // TODO: Implement this method
+
         optionsMenu = menu;
         runFunc("onCreateOptionsMenu", menu);
         return super.onCreateOptionsMenu(menu);
@@ -994,7 +994,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO: Implement this method
+
         Object ret = null;
         if (!item.hasSubMenu())
             ret = runFunc("onOptionsItemSelected", item);
@@ -1011,21 +1011,21 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        // TODO: Implement this method
+
         runFunc("onCreateContextMenu", menu, v, menuInfo);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        // TODO: Implement this method
+
         runFunc("onContextItemSelected", item);
         return super.onContextItemSelected(item);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        // TODO: Implement this method
+
         super.onConfigurationChanged(newConfig);
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -1069,13 +1069,13 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
 
             @Override
             public void onServiceConnected(ComponentName comp, IBinder binder) {
-                // TODO: Implement this method
+
                 runFunc("onServiceConnected", comp, ((LuaService.LuaBinder) binder).getService());
             }
 
             @Override
             public void onServiceDisconnected(ComponentName comp) {
-                // TODO: Implement this method
+
                 runFunc("onServiceDisconnected", comp);
             }
         };
@@ -1083,7 +1083,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
     }
 
     public boolean bindService(ServiceConnection conn, int flag) {
-        // TODO: Implement this method
+
         Intent service = new Intent(this, LuaService.class);
         service.putExtra("luaDir", luaDir);
         service.putExtra("luaPath", luaPath);
@@ -1107,7 +1107,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
     }
 
     public ComponentName startService(String path, Object[] arg) {
-        // TODO: Implement this method
+
         Intent intent = new Intent(this, LuaService.class);
         intent.putExtra("luaDir", luaDir);
         intent.putExtra("luaPath", luaPath);
@@ -1377,7 +1377,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
     }
 
     public void setContentView(String layout, LuaObject env) throws LuaException {
-        // TODO: Implement this method
+
         LuaObject loadlayout = L.getLuaObject("loadlayout");
         View view = (View) loadlayout.call(layout, env);
         super.setContentView(view);
@@ -1388,7 +1388,7 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
     }
 
     public void setContentView(LuaObject layout, LuaObject env) throws LuaException {
-        // TODO: Implement this method
+
         LuaObject loadlayout = L.getLuaObject("loadlayout");
         View view = null;
         if (layout.isString())
@@ -1467,7 +1467,6 @@ public class LuaActivity extends AppCompatActivity implements LuaBroadcastReceiv
                 return 0;
             }
 
-            ;
         };
         call.register("call");
 

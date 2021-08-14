@@ -70,7 +70,7 @@ public class LuaContentObserver extends ContentObserver implements LuaGcable{
     }
 
     public interface OnChangeListener {
-        public void onChange(boolean selfChange, Uri uri,Cursor cursor);
+        void onChange(boolean selfChange, Uri uri, Cursor cursor);
     }
 
 }

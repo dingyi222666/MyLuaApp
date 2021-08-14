@@ -155,7 +155,7 @@ public class LuaServer implements LuaGcable {
     }
 
     public interface OnReadLineListener {
-        public void onReadLine(LuaServer server, SocketThread socket, String line);
+        void onReadLine(LuaServer server, SocketThread socket, String line);
     }
 
 }
