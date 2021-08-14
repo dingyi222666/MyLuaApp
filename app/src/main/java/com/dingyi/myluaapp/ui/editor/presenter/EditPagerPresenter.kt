@@ -30,13 +30,13 @@ class EditPagerPresenter(
                     }
                 }
                 fragment.editorView.apply {
-                    text = if (useDataBase) {
+                    setText(if (useDataBase) {
                         it.code
                     } else {
                         it.filePath.toFile().readText()
-                    }
+                    })
                     it.code= text.toString()
-                    setSelection(it.openSelection)
+                    setSelection(it.openSelectionLine,it.openSelectionColumn)
                 }
             }
 
@@ -51,7 +51,8 @@ class EditPagerPresenter(
             val saveText = editorView.text.toString()
 
             codeFile.apply {
-                openSelection = editorView.selectionEnd
+                openSelectionLine = editorView.cursor.leftLine
+                openSelectionLine = editorView.cursor.leftColumn
                 code = saveText
                 update(codeFile.id.toLong())
             }

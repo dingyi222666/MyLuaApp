@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.dingyi.editor.BaseEditor
-import com.dingyi.editor.lua.LuaEditor
+import com.dingyi.editor.CodeEditor
+import com.dingyi.editor.language.lua.LuaLanguage
 import com.dingyi.myluaapp.base.BaseFragment
+import com.dingyi.myluaapp.common.kts.endsWith
 import com.dingyi.myluaapp.common.kts.javaClass
 import com.dingyi.myluaapp.database.bean.CodeFile
 import com.dingyi.myluaapp.databinding.FragmentEditorEditPagerBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.presenter.EditPagerPresenter
+import io.github.rosemoe.editor.widget.schemes.SchemeVS2019
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import livedatabus.LiveDataBus
@@ -31,7 +33,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
 
     lateinit var codeFile: CodeFile
 
-    var editorView by Delegates.notNull<BaseEditor>()
+    var editorView by Delegates.notNull<CodeEditor>()
 
 
     private val presenter by lazy {
@@ -79,7 +81,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
                 viewModel.projectConfig.value?.let { config ->
                     val position = config.findCodeFileByPath(openPath)
                     if (position == it.first) {
-                        editorView.paste(it.second)
+                        editorView.cursor.onCommitText(it.second)
                     }
                 }
             }
@@ -89,12 +91,16 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
 
     private fun initEditor() {
         editorView = when {
-            openPath.endsWith(".lua") -> {
-                LuaEditor(requireContext())
+            openPath.endsWith(".lua",".aly") -> {
+                CodeEditor(requireContext()).apply {
+                    cursor.setLanguage(LuaLanguage)
+                }
             }
             else -> {
-                LuaEditor(requireContext())
+                CodeEditor(requireContext())
             }
+        }.apply {
+
         }
 
 

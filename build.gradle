@@ -10,8 +10,7 @@ buildscript {
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public'}
         mavenCentral()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-
-
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
@@ -28,9 +27,10 @@ buildscript {
 allprojects {
     repositories {
         google()
+        maven { url 'https://jitpack.io' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public'}
         maven { url 'https://dl.bintray.com/pixplicity/android' }
-        maven { url 'https://jitpack.io' }
+
         mavenCentral()
     }
 }

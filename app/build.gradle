@@ -46,6 +46,7 @@ dependencies {
     api project(":AndroLua") //androlua libs
     api project(":editor")
     api project(":LuaLibrary")//lua library
+
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])//libs jar
 
     //androidx and more
@@ -53,6 +54,9 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01'
     implementation 'com.google.android.material:material:1.5.0-alpha01'
     implementation 'androidx.appcompat:appcompat:1.4.0-alpha03'
+
+
+    implementation 'com.github.Rosemoe.CodeEditor:editor:0.5.4'
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha01"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-alpha01"

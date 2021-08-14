@@ -38,7 +38,8 @@ class MainPresenter(
             CodeFile().apply {
                 projectConfig = it
                 filePath = path
-                openSelection = 0
+                openSelectionColumn= 0
+                openSelectionLine= 0
                 save()
             }
             it.update(it.id.toLong())

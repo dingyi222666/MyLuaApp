@@ -41,7 +41,8 @@ object ProjectService {
                     val file = CodeFile().apply {
                         id = 0
                         projectConfig = config
-                        openSelection = 0
+                        openSelectionColumn=0
+                        openSelectionLine=0
                         this.filePath = "$path/app/src/main/assets/main.lua"
                     }
                     config.openFiles.add(file)

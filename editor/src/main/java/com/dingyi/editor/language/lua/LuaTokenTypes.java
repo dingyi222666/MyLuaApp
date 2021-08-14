@@ -1,8 +1,10 @@
-package com.dingyi.editor.lua.common.language.lua;
+package com.dingyi.editor.language.lua;
 
 /**
- * Created by Administrator on 2018/07/28 0028.
- */
+ * @author: dingyi
+ * @date: 2021/8/14 21:01
+ * @description:
+ **/
 
 public enum LuaTokenTypes {
     SHEBANG_CONTENT,
