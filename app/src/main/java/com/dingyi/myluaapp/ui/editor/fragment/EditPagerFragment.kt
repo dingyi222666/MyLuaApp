@@ -96,7 +96,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
                     setEditorLanguage(LuaLanguage())
                 }
             }
-            colorScheme=SchemeLua
+            colorScheme=SchemeLua()
         }
 
 
