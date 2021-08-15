@@ -18,6 +18,7 @@ class SchemeLua: EditorColorScheme() {
         setColor(NAME,0xFF2A40FF.toInt())
         setColor(LITERAL, 0xFF6080FF.toInt())
         setColor(OPERATOR,0xFF808080.toInt())
+        setColor(AUTO_COMP_PANEL_CORNER,0xff000000.toInt())
     }
 
     companion object {

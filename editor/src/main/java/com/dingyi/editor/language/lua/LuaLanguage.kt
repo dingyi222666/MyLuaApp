@@ -81,11 +81,11 @@ class LuaLanguage : BaseLanguage(), EditorLanguage {
     }
 
     override fun getAutoCompleteProvider(): AutoCompleteProvider {
-        return AutoCompleteProvider { _, _, _, _ -> mutableListOf() }
+        return LuaAutoComplete(this)
     }
 
     override fun isAutoCompleteChar(ch: Char): Boolean {
-        return MyCharacter.isJavaIdentifierPart(ch.code);
+        return ch=='.' || ch==':' || MyCharacter.isJavaIdentifierPart(ch.code)
     }
 
     override fun getIndentAdvance(content: String?): Int {
@@ -113,7 +113,7 @@ class LuaLanguage : BaseLanguage(), EditorLanguage {
 
     inner class BraceHandler : NewlineHandler {
         override fun matchesRequirement(beforeText: String, afterText: String): Boolean {
-            return true
+            return afterText.endsWith("end") || afterText.endsWith("}")
         }
 
         override fun handleNewline(

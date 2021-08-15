@@ -1017,6 +1017,7 @@ public class LuaLexer {
      *               This number must not be greater than yylength()!
      */
     public void yypushback(int number) {
+
         if (number > yylength())
             zzScanError(ZZ_PUSHBACK_2BIG);
 
@@ -1164,6 +1165,7 @@ public class LuaLexer {
 
             // store back cached position
             zzMarkedPos = zzMarkedPosL;
+
 
             if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
                 zzAtEOF = true;

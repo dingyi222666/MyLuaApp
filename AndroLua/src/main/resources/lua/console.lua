@@ -18,6 +18,7 @@ end
 
 local function _format()
   local p=0
+  
   return function(str)
     str=str:gsub("[ \t]+$","")
     str=string.format('%s%s',string.rep(' ',p),str)

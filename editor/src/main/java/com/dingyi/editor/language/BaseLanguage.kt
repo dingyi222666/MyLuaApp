@@ -75,17 +75,8 @@ abstract class BaseLanguage {
     }
 
     fun isBasePackage(s: String): Boolean {
-        return basePackages.containsKey(s)
+        return basePackages.contains(s)
     }
-
-    fun isBaseWord(p: String, s: String): Boolean {
-        val pkg = basePackages[p]!!
-        for (n in pkg) {
-            if (n == s) return true
-        }
-        return false
-    }
-
 
 
 }

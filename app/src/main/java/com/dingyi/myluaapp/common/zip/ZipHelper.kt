@@ -35,9 +35,10 @@ object ZipHelper {
         block: () -> Any = {},
         unPathFilterPrefix: String = "/"
     ) =
+
         withContext(Dispatchers.Main) {
             val coroutineDispatcher = Executors.newFixedThreadPool(6).asCoroutineDispatcher()
-            launch {
+            launch(Dispatchers.IO) {
                 inZipPathList.forEach {
                     async(coroutineDispatcher) {
                         unSingleZipFile(
