@@ -1,5 +1,6 @@
 package com.dingyi.editor.language.lua
 
+import com.dingyi.editor.CodeEditor
 import com.dingyi.editor.language.BaseLanguage
 import com.dingyi.lua.analyzer.LuaAnalyzer
 import io.github.rosemoe.editor.interfaces.AutoCompleteProvider
@@ -17,7 +18,7 @@ import io.github.rosemoe.editor.widget.SymbolPairMatch
  * @date: 2021/8/14 20:57
  * @description:
  **/
-class LuaLanguage : BaseLanguage(), EditorLanguage {
+class LuaLanguage() : BaseLanguage(), EditorLanguage {
 
     private val keywordTarget =
         "and|break|case|catch|continue|default|defer|do|else|elseif|end|false|finally|for|function|goto|if|in|lambda|local|nil|not|or|repeat|return|switch|then|true|try|until|when|while"
@@ -85,15 +86,15 @@ class LuaLanguage : BaseLanguage(), EditorLanguage {
     }
 
     override fun isAutoCompleteChar(ch: Char): Boolean {
-        return ch=='.' || ch==':' || MyCharacter.isJavaIdentifierPart(ch.code)
+        return  MyCharacter.isJavaIdentifierPart(ch.code) || ch=='.' || ch==':'
     }
 
-    override fun getIndentAdvance(content: String?): Int {
+    override fun getIndentAdvance(content: String): Int {
         return LuaFormat.createAutoIndent(content)
     }
 
     override fun useTab(): Boolean {
-        return false;
+        return true;
     }
 
     override fun format(text: CharSequence?): CharSequence {

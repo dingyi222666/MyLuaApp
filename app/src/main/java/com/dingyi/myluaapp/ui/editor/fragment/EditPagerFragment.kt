@@ -126,6 +126,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
 
         if (!::codeFile.isInitialized) {
             presenter.readCodeFile()
+            presenter.readCodeFile()
         } else {
             presenter.readCodeFile(true)
         }

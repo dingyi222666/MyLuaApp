@@ -23,11 +23,12 @@ object LuaFormat {
         } catch (e: IOException) {
             e.printStackTrace()
         }
+        lexer.yyclose()
         return idt
     }
 
 
-    fun indent(t: LuaTokenTypes): Int {
+    private fun indent(t: LuaTokenTypes): Int {
         return when (t) {
             LuaTokenTypes.FOR, LuaTokenTypes.WHILE, LuaTokenTypes.FUNCTION, LuaTokenTypes.IF, LuaTokenTypes.REPEAT, LuaTokenTypes.LCURLY, LuaTokenTypes.SWITCH -> 1
             LuaTokenTypes.UNTIL, LuaTokenTypes.END, LuaTokenTypes.RCURLY -> -1
@@ -88,6 +89,7 @@ object LuaFormat {
         } catch (e: IOException) {
             e.printStackTrace()
         }
+        lexer.yyclose()
         return builder
     }
 

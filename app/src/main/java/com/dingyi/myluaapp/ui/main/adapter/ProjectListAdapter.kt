@@ -58,7 +58,7 @@ class ProjectListAdapter :
         holder.binding.apply {
 
             root.setOnClickListener {
-                onClickListener(currentList[position])
+                onClickListener(info)
             }
 
             appName.text = info.appName

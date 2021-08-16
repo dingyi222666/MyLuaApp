@@ -5,7 +5,7 @@ public class BaseInfo {
 
 
 
-    protected boolean isLocal = false;
+    protected boolean isLocal = true;
 
     protected boolean isArg = false;
 

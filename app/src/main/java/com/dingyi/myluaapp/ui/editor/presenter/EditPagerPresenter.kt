@@ -36,7 +36,8 @@ class EditPagerPresenter(
                         it.filePath.toFile().readText()
                     })
                     it.code= text.toString()
-                    setSelection(it.openSelectionLine,it.openSelectionColumn)
+
+                    setSelection((lineCount-1).coerceAtMost(it.openSelectionLine),it.openSelectionColumn)
                 }
             }
 

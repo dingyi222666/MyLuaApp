@@ -50,7 +50,7 @@ class AutoCompletionItemAdapter : EditorCompletionAdapter() {
                     itemView.setBackgroundColor(0xffffffff.toInt());
                 }
 
-                title.text = getItem(position).label.split(".").run { get(size - 1) }
+                title.text = getItem(position).label
                 desc.text = getItem(position).desc
                 image.setImageDrawable(getItem(position).icon)
             }

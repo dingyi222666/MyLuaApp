@@ -40,6 +40,7 @@ public class LuaInfoListener extends LuaBaseListener {
         blockContextDeque.push(ctx);
     }
 
+
     private boolean isNumberByExp(LuaParser.ExpContext ctx) {
         for (LuaParser.ExpContext context : ctx.exp()) {
             if (context.number() != null) {
@@ -61,7 +62,7 @@ public class LuaInfoListener extends LuaBaseListener {
             return Type.BOOLEAN;
         }
         if (expContext.lambdadef() != null || expContext.functiondef() != null) {
-            return Type.FUNCTION;
+            return Type.FUNC;
         }
         if (expContext.tableconstructor() != null) {
             return Type.TABLE;
@@ -215,8 +216,14 @@ public class LuaInfoListener extends LuaBaseListener {
         Range result = new Range();
         result.setStartLine(token.getLine());
         result.setStartColumn(token.getCharPositionInLine());
-        result.setEndLine(ctx.stop.getLine());
-        result.setEndColumn(ctx.stop.getCharPositionInLine());
+        try {
+            result.setEndLine(ctx.stop.getLine());
+            result.setEndColumn(ctx.stop.getCharPositionInLine());
+        } catch (Exception exception) {
+            exception.printStackTrace(System.err);
+            result.setEndLine(ctx.start.getLine());
+            result.setEndColumn(ctx.start.getCharPositionInLine());
+        }
         return result;
     }
 
@@ -246,6 +253,22 @@ public class LuaInfoListener extends LuaBaseListener {
         //walk end
     }
 
+    @Override
+    public void enterRetstat(LuaParser.RetstatContext ctx) {
+        super.enterRetstat(ctx);
+        if (ctx.explist() != null) {
+            for (LuaParser.ExpContext exp : ctx.explist().exp()) {
+                if (exp.prefixexp() == null || exp.prefixexp().varOrExp() == null) {
+                    continue;
+                }
+                LuaParser.VarContext var = exp.prefixexp().varOrExp().var();
+                TerminalNode name = var.NAME();
+                BaseInfo info = findOrNewInfo(name.getText(),
+                        newRange(name.getSymbol(), blockContextDeque.peek()));
+                newTokenInfo(info, name.getSymbol());
+            }
+        }
+    }
 
     @Override
     public void enterFunctionCallStat(LuaParser.FunctionCallStatContext ctx) {
@@ -271,6 +294,7 @@ public class LuaInfoListener extends LuaBaseListener {
         //TODO 分析arg
 
     }
+
 
     private BaseInfo findOrNewInfo(String name, Range range) {
         BaseInfo argInfo = this.infoTable.findArgInfoByNameAndRange(name, range);
@@ -298,7 +322,7 @@ public class LuaInfoListener extends LuaBaseListener {
 
         //作用域就是父区块
         VarInfo info = newLocalVarInfo(ctx.NAME().getText(), blockContextDeque.peek(), ctx.NAME().getSymbol());
-        info.setType(Type.FUNCTION);
+        info.setType(Type.FUNC);
         newTokenInfo(info, ctx.NAME().getSymbol());
         blockContextDeque.push(ctx);
     }

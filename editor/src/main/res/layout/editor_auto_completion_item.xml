@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:text="Small Text"
             android:id="@+id/result_item_desc"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:typeface="monospace"
             android:layout_marginRight="12dp"/>
 

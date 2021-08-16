@@ -1,7 +1,8 @@
 package com.dingyi.editor.language.lua
 
-import android.content.Context
+import android.app.Application
 import android.graphics.drawable.Drawable
+import com.androlua.LuaApplication
 
 /**
  * @author: dingyi
@@ -9,15 +10,17 @@ import android.graphics.drawable.Drawable
  * @description:
  **/
 object DrawablePool {
-    private val pool= mutableMapOf<Int, Drawable>()
+    private val pool = mutableMapOf<Int, Drawable>()
 
     fun clear() {
         pool.clear()
     }
 
-    fun loadDrawable(context: Context, resId: Int): Drawable? {
+
+
+    fun loadDrawable(resId: Int): Drawable? {
         if (!pool.containsKey(resId)) {
-            val drawable=context.getDrawable(resId)
+            val drawable = LuaApplication.getInstance().getDrawable(resId)
             drawable?.let { pool.put(resId, it) }
         }
         return pool[resId]
