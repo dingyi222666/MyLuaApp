@@ -1,6 +1,6 @@
 package com.dingyi.lua.analyzer.info;
 
-public class FunctionCallInfo extends BaseInfo {
+public class FunctionCallInfo extends TableInfo {
 
     private String value;
 

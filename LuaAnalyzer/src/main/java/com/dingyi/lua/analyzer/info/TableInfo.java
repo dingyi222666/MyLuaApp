@@ -18,6 +18,16 @@ public class TableInfo extends BaseInfo {
         return members;
     }
 
+    public void addMember(VarInfo info) {
+        if (members == null) {
+            members = new VarInfo[0];
+        }
+        VarInfo[] _members=new VarInfo[members.length+1];
+        System.arraycopy(members,0,_members,0,members.length);
+        _members[_members.length-1]=info;
+        members=_members;
+    }
+
     public void setMembers(VarInfo[] members) {
         this.members = members;
     }

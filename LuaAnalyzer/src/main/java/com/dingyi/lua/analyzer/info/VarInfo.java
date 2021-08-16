@@ -3,7 +3,7 @@ package com.dingyi.lua.analyzer.info;
 public class VarInfo extends BaseInfo {
     protected Type type=Type.UNKNOWN;
 
-    protected BaseInfo value;//null
+    protected TableInfo value;//null
 
     @Override
     public String toString() {
@@ -23,11 +23,11 @@ public class VarInfo extends BaseInfo {
     }
 
 
-    public BaseInfo getValue() {
+    public TableInfo getValue() {
         return value;
     }
 
-    public void setValue(BaseInfo value) {
+    public void setValue(TableInfo value) {
         this.value = value;
     }
 

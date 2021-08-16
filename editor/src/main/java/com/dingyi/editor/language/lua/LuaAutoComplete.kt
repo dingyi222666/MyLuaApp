@@ -126,7 +126,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             }
 
             //table info
-            if (info.type == Type.TABLE && value is TableInfo) {
+            if (value is TableInfo) {
                 value.members.forEach {
                     if (it.name.startsWith(name)) {
                         result.add(

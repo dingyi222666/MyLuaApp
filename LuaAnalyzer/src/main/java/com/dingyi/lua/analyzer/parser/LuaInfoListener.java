@@ -133,9 +133,11 @@ public class LuaInfoListener extends LuaBaseListener {
             infoArray[i].setType(expType);
             infoArray[i].setValue(analysisExp(expList.exp(i)));
         }
+
+
     }
 
-    private BaseInfo analysisExp(LuaParser.ExpContext exp) {
+    private TableInfo analysisExp(LuaParser.ExpContext exp) {
         switch (getExpType(exp)) {
             case FUNCTIONCALL:
                 FunctionCallInfo info = new FunctionCallInfo();
@@ -148,7 +150,7 @@ public class LuaInfoListener extends LuaBaseListener {
         }
     }
 
-    private BaseInfo analysisTable(LuaParser.ExpContext table) {
+    private TableInfo analysisTable(LuaParser.ExpContext table) {
         TableInfo info = new TableInfo();
         if (table.tableconstructor().fieldlist() != null) {
             List<LuaParser.FieldContext> fields = table.tableconstructor().fieldlist().field();
@@ -322,8 +324,24 @@ public class LuaInfoListener extends LuaBaseListener {
 
         newTokenInfo(info, name.getSymbol());
 
+        //不会渲染这里 节约下性能
         if (left.var().varSuffix() != null) {
-            //TODO 分析后缀
+            TableInfo childInfo=((VarInfo) info).getValue();
+            if (childInfo == null) {
+                childInfo=new TableInfo();
+                ((VarInfo) info).setValue(childInfo);
+            }
+            for (LuaParser.VarSuffixContext context:left.var().varSuffix()) {
+                if (context.NAME()!=null) {
+                    VarInfo varInfo = new VarInfo();
+                    varInfo.setName(context.NAME().getText());
+                    varInfo.setLocal(true);
+                    varInfo.setType(Type.FIELD);
+                    varInfo.setValue(new TableInfo());
+                    childInfo.addMember(varInfo);
+                    childInfo = varInfo.getValue();
+                }
+            }
         }
 
         //TODO 分析arg
