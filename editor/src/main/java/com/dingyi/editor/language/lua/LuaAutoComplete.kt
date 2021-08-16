@@ -2,10 +2,7 @@ package com.dingyi.editor.language.lua
 
 
 import com.dingyi.editor.R
-import com.dingyi.lua.analyzer.info.BaseInfo
-import com.dingyi.lua.analyzer.info.InfoTable
-import com.dingyi.lua.analyzer.info.Type
-import com.dingyi.lua.analyzer.info.VarInfo
+import com.dingyi.lua.analyzer.info.*
 import com.luajava.LuajLuaState
 import io.github.rosemoe.editor.interfaces.AutoCompleteProvider
 import io.github.rosemoe.editor.struct.CompletionItem
@@ -61,6 +58,24 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
     }
 
 
+    private fun getType(it: VarInfo, showLocal: Boolean = true): String {
+        val buffer = StringBuilder()
+        if (showLocal)
+            buffer.append(
+                if (it.isLocal) "local" else "global"
+            )
+
+        when (it.type) {
+            Type.UNKNOWN, Type.FUNCTIONCALL -> buffer.append("")
+            Type.ARG -> {
+                buffer.clear()
+                buffer.append("arg")
+            }
+            else -> buffer.append(" ${it.type.toString().lowercase()}")
+        }
+        return buffer.toString()
+    }
+
     private fun autoComplete(
         name: String,
         isLast: Boolean,
@@ -75,7 +90,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
         //local or var field
 
-        if (isLast && lastList.isNotEmpty()) {
+        if (lastList.isNotEmpty()) {
             val state = LuajLuaState(JsePlatform.standardGlobals())
             state.openLibs()
             state.openBase()
@@ -84,6 +99,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             val info = lastList[0].info as VarInfo
             val lastName = info.name
             val value = info.value
+            val lastCommit = lastList[0].commit
             //base package
 
 
@@ -99,12 +115,30 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                                     this
                                 }, label = it, commit = "$lastName.$it", iconRes = R.drawable.field,
                                 info = null
-                            )
+                            ) .apply {
+                                if (description=="function") {
+                                    iconRes=R.drawable.function
+                                }
+                            }
                         )
                     }
                 }
             }
 
+            //table info
+            if (info.type == Type.TABLE && value is TableInfo) {
+                value.members.forEach {
+                    if (it.name.startsWith(name)) {
+                        result.add(
+                            AutoCompleteBean(
+                                description = getType(it, false), label = it.name,
+                                commit = "$lastCommit.${it.name}", iconRes = R.drawable.field,
+                                info = it
+                            )
+                        )
+                    }
+                }
+            }
 
             state.close()
             System.gc()
@@ -119,36 +153,49 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
         infoTab?.let { infoTable ->
             infoTable.getVarInfoByRange(line).forEach {
+
                 if (it.name.startsWith(name)) {
-
-                    val buffer = StringBuilder()
-                    buffer.append(
-                        if (it.isLocal) "local" else "global"
-                    )
-                    when (it.type) {
-                        Type.UNKNOWN, Type.FUNCTIONCALL -> buffer.append("")
-                        Type.ARG -> {
-                            buffer.clear()
-                            buffer.append("arg")
-                        }
-                        else -> buffer.append(" ${it.type.toString().lowercase()}")
-                    }
-
                     result.add(
                         AutoCompleteBean(
                             commit = it.name,
                             label = it.name,
-                            iconRes = R.drawable.field,
+                            iconRes = when {
+                                it.isArg -> R.drawable.parameter
+                                it.type==Type.FUNC -> {
+                                    if (it.isLocal) R.drawable.function else R.drawable.method
+                                }
+                                it.isLocal -> R.drawable.field
+                                else -> R.drawable.variable
+                            },
                             info = it,
-                            description = buffer.toString()
+                            description = getType(it)
                         )
                     )
                 }
+
+
+
+                if (it.name == name && !isLast && it.value != null) {
+
+                    when (it.type) {
+                        /*Type.FUNCTIONCALL -> {
+                        }
+
+                         */
+                        Type.TABLE -> {
+                            val lastIndex = result.get(result.lastIndex)
+                            result.clear()
+                            result.add(lastIndex)
+                            return result
+                        }
+                    }
+                }
+
+
             }
         }
 
         //functions
-
         language.getNames().forEach {
             if (it.lowercase().startsWith(name)) {
                 if (language.isBasePackage(it)) {
@@ -165,7 +212,6 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                             commit = it, iconRes = R.drawable.variable, info = null
                         )
                     )
-
                 } else if (it.startsWith("__")) {
                     result.add(
                         AutoCompleteBean(
@@ -178,7 +224,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                     result.add(
                         AutoCompleteBean(
                             description = "global func", label = it,
-                            commit = it, iconRes = R.drawable.variable, info = null
+                            commit = it, iconRes = R.drawable.method, info = null
                         )
                     )
 
@@ -188,7 +234,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
         //keyword
-        language.getKeywords().forEach {
+        language.getKeywords().forEach{
             if (it.lowercase().startsWith(name)) {
                 result.add(
                     AutoCompleteBean(
@@ -201,7 +247,6 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
         //is base package
-
         if (language.isBasePackage(name) && !isLast) {
             result.clear()//清空全部结果
             result.add(AutoCompleteBean(null, VarInfo().apply {
@@ -219,7 +264,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
     data class AutoCompleteBean(
-        val iconRes: Int?,
+        var iconRes: Int?,
         val info: BaseInfo?,
         val label: String = "",
         val description: String = "",

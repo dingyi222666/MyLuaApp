@@ -162,8 +162,10 @@ public class LuaInfoListener extends LuaBaseListener {
                     name = field.NAME().getText();
                     context = field.exp(0);
                 } else if (field.exp() != null && field.exp().size() == 2) {
-                    name = field.exp(0).string().getText();
-                    context = field.exp(1);
+                    if (field.exp(0).string()!=null) {
+                        name = getStringContent(field.exp(0).string());
+                        context = field.exp(1);
+                    }
                 }
                 if (name != null) {
                     Type type = getExpType(context);
@@ -177,6 +179,38 @@ public class LuaInfoListener extends LuaBaseListener {
         }
         return info;
 
+    }
+
+    private String getStringContent(String text) {
+        //char or default
+        if (text.charAt(0)=='"'||text.charAt(0)=='\'') {
+            return text.substring(1,text.length() - 1);
+        } else { //[[
+            int startLength=1;
+            char nowChar;
+            while (true) {
+                nowChar=text.charAt(startLength+1);
+                if (nowChar=='='||nowChar=='[') {
+                    startLength++;
+                } else {
+                    break;
+                }
+            }
+            return text.substring(startLength+1,text.length()-startLength-1);
+        }
+    }
+
+    private String getStringContent(LuaParser.StringContext string) {
+        if (string.CHARSTRING()!=null) {
+            return getStringContent(string.CHARSTRING().getText());
+        }
+        if (string.LONGSTRING()!=null) {
+            return getStringContent(string.LONGSTRING().getText());
+        }
+        if (string.NORMALSTRING()!=null) {
+            return getStringContent(string.NORMALSTRING().getText());
+        }
+        return "";
     }
 
     private VarInfo newLocalVarInfo(String name, ParserRuleContext context, Token symbol) {
@@ -242,6 +276,7 @@ public class LuaInfoListener extends LuaBaseListener {
         for (TerminalNode node : ctx.parlist().namelist().NAME()) {
             VarInfo info = newLocalVarInfo(node.getText(), blockContextDeque.peek(), node.getSymbol());
             info.setType(Type.ARG);
+            info.setArg(true);
             newTokenInfo(info, node.getSymbol());
         }
     }
@@ -348,6 +383,19 @@ public class LuaInfoListener extends LuaBaseListener {
     @Override
     public void exitFunctionDefStat(LuaParser.FunctionDefStatContext ctx) {
         super.exitFunctionDefStat(ctx);
+        blockContextDeque.pop();
+    }
+
+
+    @Override
+    public void enterFunctiondef(LuaParser.FunctiondefContext ctx) {
+        super.enterFunctiondef(ctx);
+        blockContextDeque.push(ctx);
+    }
+
+    @Override
+    public void exitFunctiondef(LuaParser.FunctiondefContext ctx) {
+        super.exitFunctiondef(ctx);
         blockContextDeque.pop();
     }
 

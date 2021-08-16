@@ -16,4 +16,5 @@ local function autotheme()
     end
   end
 end
+
 return autotheme

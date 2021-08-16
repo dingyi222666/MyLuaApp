@@ -10,9 +10,11 @@ TAG = 0
 -- sets or returns tag of a LuaXML object
 function tag(var,tag)
   if base.type(var)~="table" then return end
+
   if base.type(tag)=="nil" then 
     return var[TAG]
   end
+
   var[TAG] = tag
 end
 
@@ -38,8 +40,10 @@ end
 
 -- converts any Lua var into an XML string
 function str(var,indent,tagValue)
+
   if base.type(var)=="nil" then return end
   local indent = indent or 0
+
   local indentStr=""
   for i = 1,indent do indentStr=indentStr.."  " end
   local tableStr=""
@@ -56,6 +60,7 @@ function str(var,indent,tagValue)
         end
       end
     end
+
     if #var==0 and #tableStr==0 then
       s = s.." />\n"
     elseif #var==1 and base.type(var[1])~="table" and #tableStr==0 then -- single element
