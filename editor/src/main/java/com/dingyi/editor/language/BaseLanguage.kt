@@ -78,5 +78,15 @@ abstract class BaseLanguage {
         return basePackages.contains(s)
     }
 
+    fun getBasePackages(): MutableList<String> {
+        val result=mutableListOf<String>()
+        basePackages.forEach { element ->
+           element.value.map {"${element.key}.$it"}.let {
+               result.addAll(it)
+           }
+        }
+        return result
+    }
+
 
 }

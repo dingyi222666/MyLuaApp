@@ -58,7 +58,11 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
     }
 
 
-    private fun getType(it: VarInfo, showLocal: Boolean = true): String {
+    private fun getType(
+        it: VarInfo,
+        showLocal: Boolean = true,
+        showField: Boolean = false
+    ): String {
         val buffer = StringBuilder()
         if (showLocal)
             buffer.append(
@@ -66,11 +70,14 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             )
 
         when (it.type) {
-            Type.UNKNOWN, Type.FUNCTIONCALL -> buffer.append("")
+            Type.UNKNOWN, Type.FUNCTIONCALL -> {
+                if (showField) buffer.append("field") else buffer.append("")
+            }
             Type.ARG -> {
                 buffer.clear()
                 buffer.append("arg")
             }
+
             else -> buffer.append(" ${it.type.toString().lowercase()}")
         }
         return buffer.toString()
@@ -115,14 +122,19 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                                     this
                                 }, label = it, commit = "$lastName.$it", iconRes = R.drawable.field,
                                 info = null
-                            ) .apply {
-                                if (description=="function") {
-                                    iconRes=R.drawable.function
+                            ).apply {
+                                if (description == "function") {
+                                    iconRes = R.drawable.function
                                 }
                             }
                         )
                     }
                 }
+            }
+
+
+            if (value is FunctionCallInfo) {
+
             }
 
             //table info
@@ -131,8 +143,13 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                     if (it.name.startsWith(name)) {
                         result.add(
                             AutoCompleteBean(
-                                description = getType(it, false), label = it.name,
-                                commit = "$lastCommit.${it.name}", iconRes = R.drawable.field,
+                                description = getType(it, false, true), label = it.name,
+                                commit = "$lastCommit.${it.name}", iconRes = when (it.type) {
+                                    Type.FUNC -> {
+                                        if (it.isLocal) R.drawable.function else R.drawable.method
+                                    }
+                                    else -> R.drawable.field
+                                },
                                 info = it
                             )
                         )
@@ -149,7 +166,8 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         }
 
 
-        //local or global vr
+        //local or global var
+
 
         infoTab?.let { infoTable ->
             infoTable.getVarInfoByRange(line).forEach {
@@ -161,7 +179,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                             label = it.name,
                             iconRes = when {
                                 it.isArg -> R.drawable.parameter
-                                it.type==Type.FUNC -> {
+                                it.type == Type.FUNC -> {
                                     if (it.isLocal) R.drawable.function else R.drawable.method
                                 }
                                 it.isLocal -> R.drawable.field
@@ -175,20 +193,16 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
 
-                if (it.name == name && !isLast && it.value != null) {
+                if (it.name.equals(name) && !isLast && it.value != null) {
+                    println("error:${it.name} ${it.type} $name")
 
-                    when (it.type) {
-                        /*Type.FUNCTIONCALL -> {
-                        }
+                    val lastIndex = result[result.lastIndex]
+                    println("error:${it.name} ${it.type} $name $lastIndex")
+                    result.clear()
+                    result.add(lastIndex)
+                    return result
 
-                         */
-                        Type.TABLE -> {
-                            val lastIndex = result.get(result.lastIndex)
-                            result.clear()
-                            result.add(lastIndex)
-                            return result
-                        }
-                    }
+
                 }
 
 
@@ -234,7 +248,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
         //keyword
-        language.getKeywords().forEach{
+        language.getKeywords().forEach {
             if (it.lowercase().startsWith(name)) {
                 result.add(
                     AutoCompleteBean(

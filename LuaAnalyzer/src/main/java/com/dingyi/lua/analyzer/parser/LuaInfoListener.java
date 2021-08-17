@@ -16,6 +16,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import java.util.ArrayDeque;
 import java.util.List;
 
+
 /**
  * @author: dingyi
  * @date: 2021/8/14 13:41
@@ -99,17 +100,88 @@ public class LuaInfoListener extends LuaBaseListener {
 
         for (int i = 0; i < infoArray.length; i++) {
             LuaParser.VarContext var = varList.var(i);
-            VarInfo varInfo = newGlobalVarInfo(var.NAME().getText(), var.NAME().getSymbol());
+            VarInfo varInfo = (VarInfo) findOrNewInfo(var.NAME().getText(), newRange(var.NAME().getSymbol(), blockContextDeque.peek()));
             infoArray[i] = varInfo;
+
+
             newTokenInfo(varInfo, var.NAME().getSymbol());
+            //不会渲染这里 节约下性能
+            if (var.varSuffix() != null) {
+                TableInfo childInfo = ((VarInfo) varInfo).getValue();
+                if (childInfo == null) {
+                    childInfo = new TableInfo();
+                    ((VarInfo) varInfo).setValue(childInfo);
+                }
+                for (LuaParser.VarSuffixContext context : var.varSuffix()) {
+                    if (context.NAME()==null) {continue;}
+                    if (childInfo.getMember(context.NAME().getText()) != null) {
+                        childInfo = childInfo.getMember(context.NAME().getText()).getValue();
+                    } else {
+                        VarInfo info = new VarInfo();
+                        info.setName(context.NAME().getText());
+                        info.setLocal(true);
+                        info.setType(Type.FIELD);
+                        info.setValue(new TableInfo());
+                        childInfo.addMember(info);
+                        childInfo = info.getValue();
+                    }
+
+                }
+                infoArray[i] = varInfo;
+            }
+
+
         }
 
         LuaParser.ExplistContext expList = ctx.explist();
 
         for (int i = 0; i < expList.exp().size(); i++) {
+
             infoArray[i].setType(getExpType(expList.exp(i)));
         }
 
+    }
+
+    @Override
+    public void enterExp(LuaParser.ExpContext ctx) {
+        super.enterExp(ctx);
+
+
+        Type type = getExpType(ctx);
+
+        if (type == Type.FUNCTIONCALL) {
+            LuaParser.VarContext var = ctx.prefixexp().varOrExp().var();
+
+            if (var == null || var.NAME() == null) {
+                return;
+            }
+
+            VarInfo varInfo = (VarInfo) findOrNewInfo(var.NAME().getText(), newRange(var.NAME().getSymbol(), blockContextDeque.peek()));
+
+            //不会渲染这里 节约下性能
+            if (var.varSuffix() != null) {
+                TableInfo childInfo = ((VarInfo) varInfo).getValue();
+                if (childInfo == null) {
+                    childInfo = new TableInfo();
+                    ((VarInfo) varInfo).setValue(childInfo);
+                }
+                for (LuaParser.VarSuffixContext context : var.varSuffix()) {
+                    if (context.NAME() != null) {
+                        VarInfo info = new VarInfo();
+                        info.setName(context.NAME().getText());
+                        info.setLocal(true);
+                        info.setType(Type.FIELD);
+                        info.setValue(new TableInfo());
+                        childInfo.addMember(info);
+                        varInfo = info;
+                        childInfo = info.getValue();
+                    }
+                }
+            }
+
+            newTokenInfo(varInfo, var.NAME().getSymbol());
+
+        }
     }
 
     @Override
@@ -128,6 +200,9 @@ public class LuaInfoListener extends LuaBaseListener {
 
         LuaParser.ExplistContext expList = ctx.explist();
 
+        if (expList == null) {
+            return;
+        }
         for (int i = 0; i < expList.exp().size(); i++) {
             Type expType = getExpType(expList.exp(i));
             infoArray[i].setType(expType);
@@ -164,7 +239,7 @@ public class LuaInfoListener extends LuaBaseListener {
                     name = field.NAME().getText();
                     context = field.exp(0);
                 } else if (field.exp() != null && field.exp().size() == 2) {
-                    if (field.exp(0).string()!=null) {
+                    if (field.exp(0).string() != null) {
                         name = getStringContent(field.exp(0).string());
                         context = field.exp(1);
                     }
@@ -185,31 +260,31 @@ public class LuaInfoListener extends LuaBaseListener {
 
     private String getStringContent(String text) {
         //char or default
-        if (text.charAt(0)=='"'||text.charAt(0)=='\'') {
-            return text.substring(1,text.length() - 1);
+        if (text.charAt(0) == '"' || text.charAt(0) == '\'') {
+            return text.substring(1, text.length() - 1);
         } else { //[[
-            int startLength=1;
+            int startLength = 1;
             char nowChar;
             while (true) {
-                nowChar=text.charAt(startLength+1);
-                if (nowChar=='='||nowChar=='[') {
+                nowChar = text.charAt(startLength + 1);
+                if (nowChar == '=' || nowChar == '[') {
                     startLength++;
                 } else {
                     break;
                 }
             }
-            return text.substring(startLength+1,text.length()-startLength-1);
+            return text.substring(startLength + 1, text.length() - startLength - 1);
         }
     }
 
     private String getStringContent(LuaParser.StringContext string) {
-        if (string.CHARSTRING()!=null) {
+        if (string.CHARSTRING() != null) {
             return getStringContent(string.CHARSTRING().getText());
         }
-        if (string.LONGSTRING()!=null) {
+        if (string.LONGSTRING() != null) {
             return getStringContent(string.LONGSTRING().getText());
         }
-        if (string.NORMALSTRING()!=null) {
+        if (string.NORMALSTRING() != null) {
             return getStringContent(string.NORMALSTRING().getText());
         }
         return "";
@@ -265,6 +340,14 @@ public class LuaInfoListener extends LuaBaseListener {
 
 
     @Override
+    public void enterLambdaStat(LuaParser.LambdaStatContext ctx) {
+        super.enterLambdaStat(ctx);
+        blockContextDeque.push(ctx);
+
+    }
+
+
+    @Override
     public void enterFuncbody(LuaParser.FuncbodyContext ctx) {
         super.enterFuncbody(ctx);
 
@@ -312,10 +395,11 @@ public class LuaInfoListener extends LuaBaseListener {
         super.enterFunctionCallStat(ctx);
 
         //get left
-        LuaParser.VarOrExpContext left = ctx.functioncall().varOrExp();
+
+        LuaParser.VarContext left = ctx.functioncall().varOrExp().var();
 
         //get name
-        TerminalNode name = left.var().NAME();
+        TerminalNode name = left.NAME();
 
 
         Range nowRange = newRange(name.getSymbol(), blockContextDeque.peek());
@@ -324,27 +408,31 @@ public class LuaInfoListener extends LuaBaseListener {
 
         newTokenInfo(info, name.getSymbol());
 
+
         //不会渲染这里 节约下性能
-        if (left.var().varSuffix() != null) {
-            TableInfo childInfo=((VarInfo) info).getValue();
+        if (left.varSuffix() != null) {
+            TableInfo childInfo = ((VarInfo) info).getValue();
             if (childInfo == null) {
-                childInfo=new TableInfo();
+                childInfo = new TableInfo();
                 ((VarInfo) info).setValue(childInfo);
             }
-            for (LuaParser.VarSuffixContext context:left.var().varSuffix()) {
-                if (context.NAME()!=null) {
-                    VarInfo varInfo = new VarInfo();
-                    varInfo.setName(context.NAME().getText());
-                    varInfo.setLocal(true);
-                    varInfo.setType(Type.FIELD);
-                    varInfo.setValue(new TableInfo());
-                    childInfo.addMember(varInfo);
-                    childInfo = varInfo.getValue();
+            for (LuaParser.VarSuffixContext context : left.varSuffix()) {
+                if (context.NAME() != null) {
+                    if (childInfo.getMember(name.getText()) != null) {
+                        childInfo = childInfo.getMember(name.getText()).getValue();
+                    } else {
+                        VarInfo varInfo = new VarInfo();
+                        varInfo.setName(name.getText());
+                        varInfo.setLocal(true);
+                        varInfo.setType(Type.FIELD);
+                        varInfo.setValue(new TableInfo());
+                        childInfo.addMember(varInfo);
+                        childInfo = varInfo.getValue();
+                    }
                 }
             }
         }
 
-        //TODO 分析arg
 
     }
 
@@ -393,6 +481,22 @@ public class LuaInfoListener extends LuaBaseListener {
     }
 
     @Override
+    public void enterLambdabody(LuaParser.LambdabodyContext ctx) {
+        super.enterLambdabody(ctx);
+
+        if (ctx.parlist() == null || ctx.parlist().namelist() == null) {
+            return;
+        }
+
+        for (TerminalNode node : ctx.parlist().namelist().NAME()) {
+            VarInfo info = newLocalVarInfo(node.getText(), blockContextDeque.peek(), node.getSymbol());
+            info.setType(Type.ARG);
+            info.setArg(true);
+            newTokenInfo(info, node.getSymbol());
+        }
+    }
+
+    @Override
     public void enterLabelStat(LuaParser.LabelStatContext ctx) {
         super.enterLabelStat(ctx);
         blockContextDeque.push(ctx);
@@ -402,6 +506,8 @@ public class LuaInfoListener extends LuaBaseListener {
     public void exitFunctionDefStat(LuaParser.FunctionDefStatContext ctx) {
         super.exitFunctionDefStat(ctx);
         blockContextDeque.pop();
+
+
     }
 
 
@@ -409,18 +515,66 @@ public class LuaInfoListener extends LuaBaseListener {
     public void enterFunctiondef(LuaParser.FunctiondefContext ctx) {
         super.enterFunctiondef(ctx);
         blockContextDeque.push(ctx);
+
     }
 
     @Override
     public void exitFunctiondef(LuaParser.FunctiondefContext ctx) {
         super.exitFunctiondef(ctx);
         blockContextDeque.pop();
+
+
     }
 
     @Override
     public void enterFunctionDefStat(LuaParser.FunctionDefStatContext ctx) {
         super.enterFunctionDefStat(ctx);
         blockContextDeque.push(ctx);
+
+        if (ctx.funcname() == null || ctx.funcname().NAME() == null || ctx.funcname().NAME().isEmpty()) {
+            return;
+        }
+
+        String text = ctx.funcname().getText();
+        boolean self = text.indexOf(':') != -1;
+
+        TerminalNode rootName = ctx.funcname().NAME(0);
+        VarInfo varInfo = (VarInfo) findOrNewInfo(rootName.getText(), newRange(rootName.getSymbol(), blockContextDeque.peek()));
+
+
+        newTokenInfo(varInfo, rootName.getSymbol());
+        //不会渲染这里 节约下性能
+        if (ctx.funcname().NAME().size() > 1) {
+            TableInfo childInfo = ((VarInfo) varInfo).getValue();
+            if (childInfo == null) {
+                childInfo = new TableInfo();
+                ((VarInfo) varInfo).setValue(childInfo);
+            }
+            for (int i = 1; i < ctx.funcname().NAME().size(); i++) {
+                TerminalNode name = ctx.funcname().NAME(i);
+                if (childInfo.getMember(name.getText()) != null) {
+                    childInfo = childInfo.getMember(name.getText()).getValue();
+                } else {
+                    VarInfo info = new VarInfo();
+                    info.setName(name.getText());
+                    info.setLocal(true);
+                    info.setType(Type.FIELD);
+                    info.setValue(new TableInfo());
+                    childInfo.addMember(info);
+                    childInfo = info.getValue();
+                }
+
+            }
+        } else {
+            varInfo.setType(Type.FUNC);
+        }
+
+        if (self) {
+            VarInfo selfInfo = newLocalVarInfo("self", ctx, rootName.getSymbol());
+            selfInfo.setType(Type.SELF);
+            selfInfo.setValue(varInfo.getValue());
+        }
+
     }
 
     @Override

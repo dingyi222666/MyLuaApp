@@ -1,5 +1,6 @@
 package com.dingyi.editor.language.lua
 
+import android.view.View
 import com.dingyi.editor.CodeEditor
 import com.dingyi.editor.language.BaseLanguage
 import com.dingyi.lua.analyzer.LuaAnalyzer
@@ -75,6 +76,7 @@ class LuaLanguage() : BaseLanguage(), EditorLanguage {
         super.addBasePackage("coroutine", package_coroutine.split("|").toTypedArray());
         super.addBasePackage("package", package_package.split("|").toTypedArray());
         super.addBasePackage("debug", package_debug.split("|").toTypedArray());
+
     }
 
     override fun getAnalyzer(): CodeAnalyzer {
@@ -86,7 +88,7 @@ class LuaLanguage() : BaseLanguage(), EditorLanguage {
     }
 
     override fun isAutoCompleteChar(ch: Char): Boolean {
-        return  MyCharacter.isJavaIdentifierPart(ch.code) || ch=='.' || ch==':'
+        return  MyCharacter.isJavaIdentifierPart(ch.code) || ch=='.' || ch==':' || ch=='_'
     }
 
     override fun getIndentAdvance(content: String): Int {

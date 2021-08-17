@@ -127,7 +127,7 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                                 infoTable.findTokenInfo(lexer.yyline() + 1, lexer.yycolumn())
                             val type =
                                 if (tokenInfo.info.isLocal) SchemeLua.LOCAL else SchemeLua.GLOBAL
-                            println("${type == SchemeLua.LOCAL} ${tokenInfo.info}")
+
                             colors.addIfNeeded(line, column, type)
                         }
 

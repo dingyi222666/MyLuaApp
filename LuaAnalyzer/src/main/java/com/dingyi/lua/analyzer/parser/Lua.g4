@@ -24,10 +24,10 @@ stat
     | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end'  #forStat
     | 'for' namelist 'in' explist 'do' block 'end'  #forInStat
     | 'function' funcname funcbody  #functionDefStat
-    | 'local' 'function' NAME funcbody  #localFunctionDefStat
-    | 'local' attnamelist ('=' explist)?  #localVarListStat
+    | ('local'|'$') 'function' NAME funcbody  #localFunctionDefStat
+    | ('local'|'$') attnamelist ('=' explist)?  #localVarListStat
     | 'switch' exp ('do')? casebody* defaultbody? 'end' #switchStat
-    | 'when' exp functioncall ('else'? functioncall)? #whenStat
+    | 'when' exp prefixexp ('else'? prefixexp)? #whenStat
     | 'lambda' lambdabody #lambdaStat
     | 'defer' functioncall #deferStat
     ;
@@ -54,7 +54,7 @@ casebody
     ;
 
 lambdabody
-    :(parlist) ':' (functioncall|explist|varOrExp|namelist)
+    :(parlist) ':' (explist)
     ;
 
 attnamelist
