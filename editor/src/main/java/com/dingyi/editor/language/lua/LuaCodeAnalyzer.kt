@@ -83,6 +83,7 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                 }
 
                 END -> {
+
                     removeBlock()
                     colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD)
                 }
@@ -98,7 +99,15 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                 }
                 //注释
                 SHORT_COMMENT, BLOCK_COMMENT, DOC_COMMENT -> {
-                    colors.addIfNeeded(line, column, EditorColorScheme.COMMENT)
+
+                    if (token==SHORT_COMMENT && lexer.yytext().indexOf("@")!=-1) {
+                        colors.addIfNeeded(line, column, EditorColorScheme.COMMENT)
+                        // 666 TODO 高亮注释(注释联想)
+                    } else {
+                        colors.addIfNeeded(line, column, EditorColorScheme.COMMENT)
+
+                    }
+
                 }
                 //符号
                 LPAREN, RPAREN, LBRACK, RBRACK, COMMA, DOT -> {

@@ -127,7 +127,7 @@ public class LuaInfoListener extends LuaBaseListener {
                     }
 
                 }
-                infoArray[i] = varInfo;
+                infoArray[i] = childInfo.getParent();
             }
 
 
@@ -136,7 +136,7 @@ public class LuaInfoListener extends LuaBaseListener {
         LuaParser.ExplistContext expList = ctx.explist();
 
         for (int i = 0; i < expList.exp().size(); i++) {
-
+            System.out.println(infoArray[i].toString());
             infoArray[i].setType(getExpType(expList.exp(i)));
         }
 
@@ -157,6 +157,8 @@ public class LuaInfoListener extends LuaBaseListener {
             }
 
             VarInfo varInfo = (VarInfo) findOrNewInfo(var.NAME().getText(), newRange(var.NAME().getSymbol(), blockContextDeque.peek()));
+
+
 
             //不会渲染这里 节约下性能
             if (var.varSuffix() != null) {
@@ -418,11 +420,11 @@ public class LuaInfoListener extends LuaBaseListener {
             }
             for (LuaParser.VarSuffixContext context : left.varSuffix()) {
                 if (context.NAME() != null) {
-                    if (childInfo.getMember(name.getText()) != null) {
-                        childInfo = childInfo.getMember(name.getText()).getValue();
+                    if (childInfo.getMember(context.NAME().getText()) != null) {
+                        childInfo = childInfo.getMember(context.getText()).getValue();
                     } else {
                         VarInfo varInfo = new VarInfo();
-                        varInfo.setName(name.getText());
+                        varInfo.setName(context.NAME().getText());
                         varInfo.setLocal(true);
                         varInfo.setType(Type.FIELD);
                         varInfo.setValue(new TableInfo());
@@ -565,6 +567,7 @@ public class LuaInfoListener extends LuaBaseListener {
                 }
 
             }
+            childInfo.getParent().setType(Type.FUNC);
         } else {
             varInfo.setType(Type.FUNC);
         }

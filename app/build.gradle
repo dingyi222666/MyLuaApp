@@ -13,7 +13,7 @@ android {
         minSdkVersion 21
         //noinspection OldTargetApi
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 16
         versionName "0.1.16 (alpna)"
 
@@ -82,8 +82,6 @@ dependencies {
 
     //gson
     implementation 'com.google.code.gson:gson:2.8.7'
-    // 权限请求
-    implementation 'com.permissionx.guolindev:permissionx:1.4.0'
     // 网络请求框架：https://github.com/getActivity/EasyHttp
     implementation 'com.github.getActivity:EasyHttp:9.6'
     // OkHttp 框架：https://github.com/square/okhttp

@@ -6,6 +6,16 @@ public class TableInfo extends VarInfo {
     private VarInfo[] members;
 
 
+    protected VarInfo parent;
+
+    public VarInfo getParent() {
+        return parent;
+    }
+
+    public void setParent(VarInfo parent) {
+        this.parent = parent;
+    }
+
     @Override
     public String toString() {
         return "TableInfo{" +
@@ -25,8 +35,8 @@ public class TableInfo extends VarInfo {
             //不要从已知属性换到未知属性
             if (parent.name.equals(info.name) &&
                     ((parent.type != Type.UNKNOWN &&
-                            info.type == Type.UNKNOWN) || info.type == parent.type)) {
-
+                            info.type == Type.UNKNOWN) || (parent.type != Type.FIELD &&
+                            info.type == Type.FIELD)|| info.type == parent.type)) {
 
                 return;
             }

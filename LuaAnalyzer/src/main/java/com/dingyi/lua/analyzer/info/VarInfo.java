@@ -29,6 +29,7 @@ public class VarInfo extends BaseInfo {
 
     public void setValue(TableInfo value) {
         this.value = value;
+        value.parent=this;
     }
 
 

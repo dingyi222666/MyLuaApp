@@ -20,9 +20,9 @@ stat
     | 'do' block 'end'  #doStat
     | 'while' exp 'do' block 'end'  #whileStat
     | 'repeat' block 'until' exp  #repeatStat
-    | 'if' exp 'then' ifbody elseifbody* elsebody? 'end'  #ifStat
-    | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end'  #forStat
-    | 'for' namelist 'in' explist 'do' block 'end'  #forInStat
+    | 'if' exp ('then')? ifbody elseifbody* elsebody? 'end'  #ifStat
+    | 'for' NAME '=' exp ',' exp (',' exp)? ('do')? block 'end'  #forStat
+    | 'for' namelist 'in' explist ('do')? block 'end'  #forInStat
     | 'function' funcname funcbody  #functionDefStat
     | ('local'|'$') 'function' NAME funcbody  #localFunctionDefStat
     | ('local'|'$') attnamelist ('=' explist)?  #localVarListStat

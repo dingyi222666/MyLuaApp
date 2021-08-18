@@ -1,7 +1,5 @@
 package com.dingyi.editor
 
-import android.content.res.Resources
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,13 +40,12 @@ class AutoCompletionItemAdapter : EditorCompletionAdapter() {
             if (it.tag == null) {
                 it.tag = ViewHolder(it)
             }
-            (it.tag as ViewHolder).apply {
 
-               if (isCurrentCursorPosition) {
+            (it.tag as ViewHolder).apply {
+                if (isCurrentCursorPosition)
                     itemView.setBackgroundColor(0xffdddddd.toInt());
-                } else {
+                else
                     itemView.setBackgroundColor(0xffffffff.toInt());
-                }
 
                 title.text = getItem(position).label
                 desc.text = getItem(position).desc

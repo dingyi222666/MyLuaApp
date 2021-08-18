@@ -44,8 +44,8 @@ fun List<File>.sortBySelf(): List<File> {
 }
 
 object Paths {
-    val mainDir = Environment.getExternalStorageDirectory().absolutePath + "/MyLuaApp"
+    val mainDir = MainApplication.instance.getExternalFilesDir("test")?.parentFile?.absolutePath
     val projectDir = "$mainDir/project"
     val assetsDir = MainApplication.instance.filesDir.absolutePath
-    val projectTemplateDir = assetsDir + "/res/template/project/"
+    val projectTemplateDir = "$assetsDir/res/template/project/"
 }

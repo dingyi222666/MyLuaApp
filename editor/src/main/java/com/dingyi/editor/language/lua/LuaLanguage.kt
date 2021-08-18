@@ -24,7 +24,7 @@ class LuaLanguage() : BaseLanguage(), EditorLanguage {
     private val keywordTarget =
         "and|break|case|catch|continue|default|defer|do|else|elseif|end|false|finally|for|function|goto|if|in|lambda|local|nil|not|or|repeat|return|switch|then|true|try|until|when|while"
     private  val globalTarget =
-        "self|__add|__band|__bnot|__bor|__bxor|__call|__close|__concat|__div|__eq|__gc|__idiv|__index|__le|__len|__lt|__mod|__mul|__newindex|__pow|__shl|__shr|__sub|__tostring|__unm|_ENV|_G|assert|collectgarbage|dofile|error|getfenv|getmetatable|ipairs|load|loadfile|loadstring|module|next|pairs|pcall|print|rawequal|rawget|rawlen|rawset|require|select|self|setfenv|setmetatable|tointeger|tonumber|tostring|type|unpack|xpcall"
+        "self|__add|__band|__bnot|__bor|__bxor|__call|__close|__concat|__div|__eq|__gc|__idiv|__index|__le|__len|__lt|__mod|__mul|__newindex|__pow|__shl|__shr|__sub|__tostring|__unm|_ENV|_G|assert|collectgarbage|dofile|error|getfenv|getmetatable|ipairs|load|loadfile|loadstring|module|next|pairs|pcall|print|rawequal|rawget|rawlen|rawset|require|select|setfenv|setmetatable|tointeger|tonumber|tostring|type|unpack|xpcall"
 
     private val packageName = "coroutine|debug|io|luajava|math|os|package|string|table|utf8"
     private  val package_coroutine = "create|isyieldable|resume|running|status|wrap|yield"
@@ -88,7 +88,11 @@ class LuaLanguage() : BaseLanguage(), EditorLanguage {
     }
 
     override fun isAutoCompleteChar(ch: Char): Boolean {
-        return  MyCharacter.isJavaIdentifierPart(ch.code) || ch=='.' || ch==':' || ch=='_'
+        return if (ch==',')
+            false;
+        else
+            ch=='.' || ch==':'
+                    || ch=='_' || MyCharacter.isJavaIdentifierPart(ch.code);
     }
 
     override fun getIndentAdvance(content: String): Int {

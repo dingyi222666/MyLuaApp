@@ -3,6 +3,7 @@ MyLuaApp by dingyi
 
 0.1.16 alpha
 重构 as重写apk架构
+提升 目标版本号提升到30 去除读写权限
 
 0.15 alpha
 更改 优化版本号命名方式

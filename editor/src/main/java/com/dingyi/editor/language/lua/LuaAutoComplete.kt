@@ -2,6 +2,7 @@ package com.dingyi.editor.language.lua
 
 
 import com.dingyi.editor.R
+import com.dingyi.editor.language.java.AndroidApi
 import com.dingyi.lua.analyzer.info.*
 import com.luajava.LuajLuaState
 import io.github.rosemoe.editor.interfaces.AutoCompleteProvider
@@ -37,7 +38,8 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
         split.forEachIndexed { index, s ->
             list = autoComplete(
-                s, (index == split.size - 1), infoTab, line, list
+                s, (index == split.size - 1), infoTab,
+                line, prefix, list
             )
         }
 
@@ -88,6 +90,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         isLast: Boolean,
         infoTab: InfoTable?,
         line: Int,
+        allText: String,
         lastList: List<AutoCompleteBean>,
     ): List<AutoCompleteBean> {
 
@@ -132,6 +135,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                 }
             }
 
+            //java class
 
             if (value is FunctionCallInfo) {
 
@@ -168,7 +172,6 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
         //local or global var
 
-
         infoTab?.let { infoTable ->
             infoTable.getVarInfoByRange(line).forEach {
 
@@ -194,10 +197,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
                 if (it.name.equals(name) && !isLast && it.value != null) {
-                    println("error:${it.name} ${it.type} $name")
-
                     val lastIndex = result[result.lastIndex]
-                    println("error:${it.name} ${it.type} $name $lastIndex")
                     result.clear()
                     result.add(lastIndex)
                     return result
@@ -209,6 +209,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             }
         }
 
+
         //functions
         language.getNames().forEach {
             if (it.lowercase().startsWith(name)) {
@@ -219,7 +220,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                             commit = it, iconRes = R.drawable.field, info = null
                         )
                     )
-                } else if (it == "activity" || it == "_G" || it == "_ENV") {
+                } else if (it == "activity" || it == "_G" || it == "_ENV" || it == "self") {
                     result.add(
                         AutoCompleteBean(
                             description = "global $it", label = it,
@@ -260,6 +261,36 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         }
 
 
+        //java
+
+        AndroidApi
+            .findClassesByEnd(name)
+            .forEach {
+                val className = it.split(".")[0]
+                result.add(
+                    AutoCompleteBean(
+                        description = "class", label = it.split(".").run { get(lastIndex) },
+                        commit = className, iconRes = R.drawable.java_class, info = VarInfo(),
+                    )
+                )
+            }
+
+        //java package (deep:1)
+
+        AndroidApi
+            .findClasses(allText)
+            .map { it.split(".")[0] }
+            .distinct()
+            .forEach {
+                val className = it.split(".")[0]
+                result.add(
+                    AutoCompleteBean(
+                        description = "package", label = className,
+                        commit = className, iconRes = R.drawable.java_package, info = VarInfo(),
+                    )
+                )
+            }
+
         //is base package
         if (language.isBasePackage(name) && !isLast) {
             result.clear()//清空全部结果
@@ -268,7 +299,6 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             }))
 
         }
-
 
 
         System.gc()
