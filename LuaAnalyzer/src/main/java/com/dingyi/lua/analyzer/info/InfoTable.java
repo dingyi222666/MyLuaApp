@@ -26,7 +26,7 @@ public class InfoTable {
         System.gc();
     }
 
-    public BaseInfo findArgInfoByNameAndRange(String name, Range range) {
+    public synchronized BaseInfo findArgInfoByNameAndRange(String name, Range range) {
         List<BaseInfo> temp = new ArrayList<>();
         //step 1:find name equals
         synchronized (infoList) {
@@ -71,7 +71,7 @@ public class InfoTable {
         //step 3 sort and get first
     }
 
-    public BaseInfo findGlobalInfoByName(String name) {
+    public synchronized BaseInfo findGlobalInfoByName(String name) {
         synchronized (infoList) {
             for (BaseInfo tmp : infoList) {
                 if (tmp.name != null && tmp.name.equals(name) && !tmp.isLocal()) {
@@ -82,7 +82,7 @@ public class InfoTable {
         return null;
     }
 
-    public BaseInfo findLocalInfoByNameAndRange(String name, Range range) {
+    public synchronized BaseInfo findLocalInfoByNameAndRange(String name, Range range) {
         List<BaseInfo> temp = new ArrayList<>();
         //step 1:find name equals
         synchronized (infoList) {
@@ -124,7 +124,7 @@ public class InfoTable {
         //step 3 sort and get first
     }
 
-    public VarInfo[] getVarInfoByRange(int line) {
+    public synchronized VarInfo[] getVarInfoByRange(int line) {
         Map<String, VarInfo> varInfo = new HashMap<>();
 
         synchronized (infoList) {
@@ -160,7 +160,7 @@ public class InfoTable {
 
     }
 
-    public TokenInfo findTokenInfo(int line, int column) {
+    public synchronized TokenInfo findTokenInfo(int line, int column) {
         synchronized (tokenInfoList) {
             for (TokenInfo info : tokenInfoList) {
                 if (info.getLine() == line && info.getColumn() == column) {
@@ -171,7 +171,7 @@ public class InfoTable {
         return null;
     }
 
-    public InfoTable copy() {
+    public synchronized InfoTable copy() {
         InfoTable table = new InfoTable();
         table.tokenInfoList.addAll(tokenInfoList);
         table.infoList.addAll(infoList);

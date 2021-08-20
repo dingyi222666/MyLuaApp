@@ -1,4 +1,4 @@
-package com.dingyi.editor.language.java
+package com.dingyi.editor.language.java.api
 
 import org.json.JSONObject
 import java.io.InputStream

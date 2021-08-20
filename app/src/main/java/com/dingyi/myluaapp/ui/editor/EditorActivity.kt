@@ -9,7 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import com.dingyi.editor.language.java.AndroidApi
+import com.dingyi.editor.language.java.api.AndroidApi
 import com.dingyi.editor.language.lua.DrawablePool
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity

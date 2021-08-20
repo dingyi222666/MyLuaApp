@@ -2,7 +2,8 @@ package com.dingyi.editor.language.lua
 
 
 import com.dingyi.editor.R
-import com.dingyi.editor.language.java.AndroidApi
+import com.dingyi.editor.language.java.api.AndroidApi
+import com.dingyi.editor.language.java.api.SystemApiHelper
 import com.dingyi.lua.analyzer.info.*
 import com.luajava.LuajLuaState
 import io.github.rosemoe.editor.interfaces.AutoCompleteProvider
@@ -38,9 +39,10 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
         split.forEachIndexed { index, s ->
             list = autoComplete(
-                s, (index == split.size - 1), infoTab,
+                s, index, (index == split.size - 1), infoTab,
                 line, prefix, list
             )
+
         }
 
 
@@ -87,6 +89,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
     private fun autoComplete(
         name: String,
+        index: Int,
         isLast: Boolean,
         infoTab: InfoTable?,
         line: Int,
@@ -101,6 +104,8 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         //local or var field
 
         if (lastList.isNotEmpty()) {
+
+
             val state = LuajLuaState(JsePlatform.standardGlobals())
             state.openLibs()
             state.openBase()
@@ -108,11 +113,11 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
             val info = lastList[0].info as VarInfo
             val lastName = info.name
-            val value = info.value
+            var value = info.value
             val lastCommit = lastList[0].commit
+
+
             //base package
-
-
             if (language.isBasePackage(lastName)) {
                 language.getBasePackage(lastName)?.forEach { it ->
                     if (it.startsWith(name)) {
@@ -133,6 +138,56 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                         )
                     }
                 }
+            }
+
+
+
+
+            if (info is PackageInfo) {
+
+                AndroidApi
+                    .findClasses(allText)
+                    .map {
+
+                        it.split(".")[index]
+                    }
+                    .distinct()
+                    .forEach {
+                        println("forEach $it")
+                        val className = it
+                        val allClass = "$lastCommit.$className"
+                        if (!isLast && className == name) {
+                            result.clear()
+                        }
+
+                        if (SystemApiHelper.findClass(allClass)) {
+                            result.add(
+                                AutoCompleteBean(
+                                    description = "class",
+                                    label = className,
+                                    commit = allClass,
+                                    iconRes = R.drawable.java_class,
+                                    info = VarInfo().apply {
+                                        value=FunctionCallInfo().apply {
+                                           setName(allClass)
+                                        }
+                                    },
+                                )
+                            )
+
+                        } else {
+                            result.add(
+                                AutoCompleteBean(
+                                    description = "package",
+                                    label = className,
+                                    commit = allClass,
+                                    iconRes = R.drawable.java_package,
+                                    info = PackageInfo(),
+                                )
+                            )
+                        }
+
+                    }
             }
 
             //java class
@@ -173,40 +228,37 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         //local or global var
 
         infoTab?.let { infoTable ->
-            infoTable.getVarInfoByRange(line).forEach {
-
-                if (it.name.startsWith(name)) {
-                    result.add(
-                        AutoCompleteBean(
-                            commit = it.name,
-                            label = it.name,
-                            iconRes = when {
-                                it.isArg -> R.drawable.parameter
-                                it.type == Type.FUNC -> {
-                                    if (it.isLocal) R.drawable.function else R.drawable.method
-                                }
-                                it.isLocal -> R.drawable.field
-                                else -> R.drawable.variable
-                            },
-                            info = it,
-                            description = getType(it)
+            infoTable.getVarInfoByRange(line)
+                .sortedBy { it.name }
+                .forEach {
+                    if (it.name.startsWith(name)) {
+                        result.add(
+                            AutoCompleteBean(
+                                commit = it.name,
+                                label = it.name,
+                                iconRes = when {
+                                    it.isArg -> R.drawable.parameter
+                                    it.type == Type.FUNC -> {
+                                        if (it.isLocal) R.drawable.function else R.drawable.method
+                                    }
+                                    it.isLocal -> R.drawable.field
+                                    else -> R.drawable.variable
+                                },
+                                info = it,
+                                description = getType(it)
+                            )
                         )
-                    )
+                    }
+
+
+
+                    if (it.name.equals(name) && !isLast && it.value != null) {
+                        val lastIndex = result[result.lastIndex]
+                        result.clear()
+                        result.add(lastIndex)
+                        return result
+                    }
                 }
-
-
-
-                if (it.name.equals(name) && !isLast && it.value != null) {
-                    val lastIndex = result[result.lastIndex]
-                    result.clear()
-                    result.add(lastIndex)
-                    return result
-
-
-                }
-
-
-            }
         }
 
 
@@ -266,13 +318,17 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         AndroidApi
             .findClassesByEnd(name)
             .forEach {
-                val className = it.split(".")[0]
-                result.add(
-                    AutoCompleteBean(
-                        description = "class", label = it.split(".").run { get(lastIndex) },
-                        commit = className, iconRes = R.drawable.java_class, info = VarInfo(),
+                val className = it.split(".").run { get(lastIndex) }
+                if (!isLast && className == name) {
+
+                } else {
+                    result.add(
+                        AutoCompleteBean(
+                            description = "class", label = className,
+                            commit = className, iconRes = R.drawable.java_class, info = VarInfo(),
+                        )
                     )
-                )
+                }
             }
 
         //java package (deep:1)
@@ -281,14 +337,21 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             .findClasses(allText)
             .map { it.split(".")[0] }
             .distinct()
+            .sorted()
             .forEach {
-                val className = it.split(".")[0]
+                val className = it
+                if (!isLast && className == name) {
+                    result.clear()
+                }
+
                 result.add(
                     AutoCompleteBean(
                         description = "package", label = className,
-                        commit = className, iconRes = R.drawable.java_package, info = VarInfo(),
+                        commit = className, iconRes = R.drawable.java_package,
+                        info = PackageInfo()
                     )
                 )
+                println(result)
             }
 
         //is base package

@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayDeque;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -136,8 +137,8 @@ public class LuaInfoListener extends LuaBaseListener {
         LuaParser.ExplistContext expList = ctx.explist();
 
         for (int i = 0; i < expList.exp().size(); i++) {
-            System.out.println(infoArray[i].toString());
             infoArray[i].setType(getExpType(expList.exp(i)));
+            infoArray[i].setValue(analysisExp(expList.exp(i)));
         }
 
     }
@@ -256,6 +257,7 @@ public class LuaInfoListener extends LuaBaseListener {
                 }
             }
         }
+        System.out.println(info);
         return info;
 
     }
@@ -421,7 +423,8 @@ public class LuaInfoListener extends LuaBaseListener {
             for (LuaParser.VarSuffixContext context : left.varSuffix()) {
                 if (context.NAME() != null) {
                     if (childInfo.getMember(context.NAME().getText()) != null) {
-                        childInfo = childInfo.getMember(context.getText()).getValue();
+
+                        childInfo = childInfo.getMember(context.NAME().getText()).getValue();
                     } else {
                         VarInfo varInfo = new VarInfo();
                         varInfo.setName(context.NAME().getText());

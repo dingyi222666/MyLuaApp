@@ -24,23 +24,20 @@ public class VarInfo extends BaseInfo {
 
 
     public TableInfo getValue() {
+        if (value==null) {
+            value=new TableInfo();
+            value.parent=this;
+        }
         return value;
     }
 
     public void setValue(TableInfo value) {
         this.value = value;
-        value.parent=this;
+        if (value!=null) {
+            value.parent = this;
+        }
     }
 
 
-    public VarInfo copy() {
-        VarInfo tmp=new VarInfo();
-        tmp.value=value;
-        tmp.isLocal=isLocal;
-        tmp.range=range;
-        tmp.name=name;
-        tmp.isArg=isArg;
-        tmp.type=type;
-        return tmp;
-    }
+
 }

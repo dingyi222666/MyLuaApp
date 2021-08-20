@@ -24,6 +24,9 @@ public class TableInfo extends VarInfo {
     }
 
     public VarInfo[] getMembers() {
+        if (members == null) {
+            members = new VarInfo[0]; //new a empty array
+        }
         return members;
     }
 
