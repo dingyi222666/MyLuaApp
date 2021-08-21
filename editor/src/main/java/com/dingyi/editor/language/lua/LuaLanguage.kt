@@ -86,7 +86,7 @@ class LuaLanguage() : BaseLanguage(), EditorLanguage {
     }
 
     override fun isAutoCompleteChar(ch: Char): Boolean {
-        return if (ch==','||ch=='=')
+        return if (ch==',')
             false;
         else
             ch=='.' || ch==':'

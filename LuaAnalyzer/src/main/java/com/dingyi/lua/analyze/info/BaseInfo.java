@@ -21,9 +21,11 @@ public class BaseInfo {
 
     @Override
     public String toString() {
-        return " range=" + range +
+        return "BaseInfo{" +
+                "range=" + range +
                 ", isLocal=" + isLocal +
                 ", isArg=" + isArg +
+                ", name='" + name + '\'' +
                 '}';
     }
 

@@ -1,15 +1,20 @@
 package com.dingyi.editor.language.lua
 
 
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import com.dingyi.editor.ColorCompletionItem
 import com.dingyi.editor.R
 import com.dingyi.editor.language.java.api.AndroidApi
 import com.dingyi.editor.language.java.api.SystemApiHelper
 import com.dingyi.lua.analyze.info.*
 import com.luajava.LuajLuaState
 import io.github.rosemoe.editor.interfaces.AutoCompleteProvider
-import io.github.rosemoe.editor.struct.CompletionItem
 import io.github.rosemoe.editor.text.TextAnalyzeResult
 import org.luaj.vm2.lib.jse.JsePlatform
+import java.lang.reflect.AccessibleObject
+import java.util.*
 
 /**
  * @author: dingyi
@@ -24,9 +29,9 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         isInCodeBlock: Boolean,
         colors: TextAnalyzeResult,
         line: Int
-    ): MutableList<CompletionItem> {
+    ): MutableList<ColorCompletionItem> {
 
-        val result = mutableListOf<CompletionItem>()
+        val result = mutableListOf<ColorCompletionItem>()
 
         var list = listOf<AutoCompleteBean>()
 
@@ -47,12 +52,12 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
         list.forEach { autoCompleteBean ->
             result.add(
-                CompletionItem("", "").apply {
+                ColorCompletionItem("").apply {
                     icon = autoCompleteBean.iconRes?.let {
                         DrawablePool.loadDrawable(it)
                     }
                     desc = autoCompleteBean.description
-                    label = autoCompleteBean.label
+                    colorLabel = autoCompleteBean.label
                     commit = autoCompleteBean.commit
                 })
         }
@@ -152,7 +157,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                         val allClass = "$lastCommit.$className"
                         if (!isLast && className == name) {
                             result.clear()
-                            isLocked=true
+                            isLocked = true
                         }
                         when {
                             SystemApiHelper.findClass(allClass) -> {
@@ -189,12 +194,11 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             }
 
 
-
-
             //java class
             if (value is FunctionCallInfo) {
+                println(value.name)
                 SystemApiHelper
-                    .analyzeCode("${value.name}.name")
+                    .analyzeCode(value.name)
                     .let { data ->
                         data.classList.forEach { clazz ->
                             if (data.isNewInstance) {
@@ -206,37 +210,48 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                                     clazz, name
                                 )
                             }.filter {
-                                println(it)
-                                it.name.lowercase().startsWith(name)
-                            }.forEach {
-                                if (!isLast && it.name==name) {
+                                it.name.lowercase(Locale.getDefault())
+                                    .startsWith(name.lowercase(Locale.getDefault()))
+                            }.distinctBy {
+                                SystemApiHelper.getAccessibleObjectText(it.base)
+                            }.sortedBy {
+                                if (data.isNewInstance) {
+                                    it.type == Type.METHOD
+                                } else {
+                                    it.type == Type.FIELD
+                                }
+                            }.forEach { fieldData ->
+                                if (!isLast && fieldData.name == name) {
                                     result.clear()
-                                    isLocked=true
+                                    isLocked = true
                                 }
                                 result.add(
                                     AutoCompleteBean(
-                                        description = it.typeClass?.simpleName.toString(),
-                                        label = it.name,
+                                        description = fieldData.typeClass?.simpleName.toString(),
+                                        label = getColorText(fieldData.name, fieldData.base),
                                         commit = "$lastCommit.${
-                                            if (it.type == Type.METHOD) {
-                                                "${it.name}()"
+                                            if (fieldData.type == Type.METHOD) {
+                                                "${fieldData.name}()"
                                             } else {
-                                                it.name
+                                                fieldData.name
                                             }
                                         }", iconRes =
-                                        when (it.type) {
+                                        when (fieldData.type) {
                                             Type.METHOD -> R.drawable.method
                                             else -> R.drawable.field
                                         },
                                         info = VarInfo().apply {
-                                            value = FunctionCallInfo()
-                                                .apply {
-                                                    setName("${it.typeClass?.name}.${it.name}")
-                                                }
+                                            setValue(
+                                                FunctionCallInfo()
+                                                    .also {
+                                                        it.name = "$lastCommit.${fieldData.name}()"
+                                                    }
+                                            )
                                         }
                                     )
                                 )
                                 if (isLocked) {
+                                    println(result)
                                     return result
                                 }
                             }
@@ -283,29 +298,42 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             infoTable.getVarInfoByRange(line)
                 .sortedBy { it.name }
                 .filter { it.name.startsWith(name) }
-                .forEach {
+                .forEach { info ->
                     result.add(
                         AutoCompleteBean(
-                            commit = it.name,
-                            label = it.name,
+                            commit = info.name,
+                            label = info.name,
                             iconRes = when {
-                                it.isArg -> R.drawable.parameter
-                                it.type == Type.FUNC -> {
-                                    if (it.isLocal) R.drawable.function else R.drawable.method
+                                info.isArg -> R.drawable.parameter
+                                info.type == Type.FUNC -> {
+                                    if (info.isLocal) R.drawable.function else R.drawable.method
                                 }
-                                it.isLocal -> R.drawable.field
+                                info.isLocal -> R.drawable.field
                                 else -> R.drawable.variable
                             },
-                            info = it,
-                            description = getType(it)
+                            info = info.apply {
+                                AndroidApi
+                                    .findClassesByEnd(info.name)
+                                    .map { it.split(".").run { get(lastIndex) } }
+                                    .distinct()
+                                    .any { it == info.name }.let {
+                                        if (it) {
+                                            value = FunctionCallInfo().apply {
+                                                setName(info.code)
+                                            }
+                                        }
+                                    }
+                            },
+                            description = getType(info)
                         )
                     )
 
 
-                    if (!isLast && it.value != null) {
+                    if (!isLast && info.value != null) {
                         val lastIndex = result[result.lastIndex]
                         result.clear()
                         result.add(lastIndex)
+
                         return result
                     }
                 }
@@ -446,11 +474,27 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         return result
     }
 
+    private fun getColorText(name: String, base: AccessibleObject): CharSequence {
+        val baseString = SystemApiHelper.getAccessibleObjectText(base)
+        val span = SpannableStringBuilder(name)
+            .append(baseString)
+        span.setSpan(
+            ForegroundColorSpan(
+                0xff808080.toInt()
+            ),
+            name.length,
+            span.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        return span
+    }
+
 
     data class AutoCompleteBean(
         var iconRes: Int?,
         val info: BaseInfo?,
-        val label: String = "",
+        val label: CharSequence = "",
         val description: String = "",
         val commit: String = ""
     )

@@ -5,13 +5,29 @@ public class VarInfo extends BaseInfo {
 
     protected TableInfo value;//null
 
+
+    protected String code ="";
+
+    public String getCode() {
+        return code;
+    }
+
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public String toString() {
         return "VarInfo{" +
-                "type=" + type +
+                "range=" + range +
+                ", isLocal=" + isLocal +
+                ", isArg=" + isArg +
                 ", name='" + name + '\'' +
+                ", type=" + type +
                 ", value=" + value +
-                "," + super.toString();
+                ", code='" + code + '\'' +
+                '}';
     }
 
     public Type getType() {

@@ -138,6 +138,7 @@ public class LuaInfoListener extends LuaBaseListener {
         for (int i = 0; i < expList.exp().size(); i++) {
             infoArray[i].setType(getExpType(expList.exp(i)));
             infoArray[i].setValue(analysisExp(expList.exp(i)));
+            infoArray[i].setCode(expList.exp(i).getText());
         }
 
     }
@@ -159,6 +160,7 @@ public class LuaInfoListener extends LuaBaseListener {
             VarInfo varInfo = (VarInfo) findOrNewInfo(var.NAME().getText(), newRange(var.NAME().getSymbol(), blockContextDeque.peek()));
 
 
+            varInfo.setCode(ctx.getText());
 
             //不会渲染这里 节约下性能
             if (var.varSuffix() != null) {
@@ -208,6 +210,7 @@ public class LuaInfoListener extends LuaBaseListener {
         for (int i = 0; i < expList.exp().size(); i++) {
             Type expType = getExpType(expList.exp(i));
             infoArray[i].setType(expType);
+            infoArray[i].setCode(expList.exp(i).getText());
             infoArray[i].setValue(analysisExp(expList.exp(i)));
         }
 
@@ -251,6 +254,7 @@ public class LuaInfoListener extends LuaBaseListener {
                     VarInfo varInfo = new VarInfo();
                     varInfo.setType(type);
                     varInfo.setName(name);
+                    varInfo.setCode(context.getText());
                     varInfo.setValue(analysisExp(context));
                     bArr[i] = varInfo;
                 }
@@ -411,6 +415,7 @@ public class LuaInfoListener extends LuaBaseListener {
 
         newTokenInfo(info, name.getSymbol());
 
+        ((VarInfo)info).setCode(left.getText() + (ctx.functioncall().nameAndArgs()==null ? "" : "()"));
 
         //不会渲染这里 节约下性能
         if (left.varSuffix() != null) {
@@ -578,6 +583,7 @@ public class LuaInfoListener extends LuaBaseListener {
             VarInfo selfInfo = newLocalVarInfo("self", ctx, rootName.getSymbol());
             selfInfo.setType(Type.SELF);
             selfInfo.setValue(varInfo.getValue());
+
         }
 
     }

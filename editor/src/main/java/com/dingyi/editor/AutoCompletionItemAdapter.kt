@@ -1,5 +1,9 @@
 package com.dingyi.editor
 
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +23,6 @@ class AutoCompletionItemAdapter : EditorCompletionAdapter() {
 
     class ViewHolder(val itemView: View) {
         val title: TextView = itemView.findViewById(R.id.result_item_label)
-        val desc: TextView = itemView.findViewById(R.id.result_item_desc)
         val image: ImageView = itemView.findViewById(R.id.result_item_image)
     }
 
@@ -47,8 +50,24 @@ class AutoCompletionItemAdapter : EditorCompletionAdapter() {
                 else
                     itemView.setBackgroundColor(0xffffffff.toInt());
 
-                title.text = getItem(position).label
-                desc.text = getItem(position).desc
+
+                val spannableStringBuilder = SpannableStringBuilder()
+                    .append((getItem(position) as ColorCompletionItem).colorLabel)
+
+                val startIndex = spannableStringBuilder.length
+                spannableStringBuilder.append(
+                    " :" + getItem(position).desc,
+                    ForegroundColorSpan(0xff808080.toInt()),
+                    SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                spannableStringBuilder.setSpan(
+                    AbsoluteSizeSpan(14, true),
+                    startIndex, spannableStringBuilder.length,
+                    SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                title.text = spannableStringBuilder
+
                 image.setImageDrawable(getItem(position).icon)
             }
         }

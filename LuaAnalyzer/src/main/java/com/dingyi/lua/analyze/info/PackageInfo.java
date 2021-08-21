@@ -6,4 +6,17 @@ package com.dingyi.lua.analyze.info;
  * @description:
  **/
 public class PackageInfo extends FunctionCallInfo  {
+    @Override
+    public String toString() {
+        return "PackageInfo{" +
+                "range=" + range +
+                ", isLocal=" + isLocal +
+                ", isArg=" + isArg +
+                ", name='" + name + '\'' +
+                ", parent=" + parent +
+                ", type=" + type +
+                ", value=" + value +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }

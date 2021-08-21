@@ -26,6 +26,8 @@ class MainPresenter(
 ) : BasePresenter<MainViewModel>(viewModel, activity) {
 
 
+
+
     fun requestPoetry() {
         activity.lifecycleScope.launch {
             MainService.getPoetry(activity)
