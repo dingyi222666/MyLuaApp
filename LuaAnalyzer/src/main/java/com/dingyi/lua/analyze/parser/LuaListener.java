@@ -1,5 +1,5 @@
 // Generated from D:/android studio project/MyLuaApp2/LuaAnalyzer/src/main/java/com/dingyi/lua/analyzer/parser\Lua.g4 by ANTLR 4.9.1
-package com.dingyi.lua.analyzer.parser;
+package com.dingyi.lua.analyze.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

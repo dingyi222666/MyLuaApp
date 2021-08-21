@@ -1,4 +1,4 @@
-package com.dingyi.lua.analyzer;
+package com.dingyi.lua.analyze;
 
 public interface ErrorListener {
     void error(String error);

@@ -1,13 +1,13 @@
-package com.dingyi.lua.analyzer.parser;
+package com.dingyi.lua.analyze.parser;
 
-import com.dingyi.lua.analyzer.info.BaseInfo;
-import com.dingyi.lua.analyzer.info.FunctionCallInfo;
-import com.dingyi.lua.analyzer.info.InfoTable;
-import com.dingyi.lua.analyzer.info.Range;
-import com.dingyi.lua.analyzer.info.TableInfo;
-import com.dingyi.lua.analyzer.info.TokenInfo;
-import com.dingyi.lua.analyzer.info.Type;
-import com.dingyi.lua.analyzer.info.VarInfo;
+import com.dingyi.lua.analyze.info.BaseInfo;
+import com.dingyi.lua.analyze.info.FunctionCallInfo;
+import com.dingyi.lua.analyze.info.InfoTable;
+import com.dingyi.lua.analyze.info.Range;
+import com.dingyi.lua.analyze.info.TableInfo;
+import com.dingyi.lua.analyze.info.TokenInfo;
+import com.dingyi.lua.analyze.info.Type;
+import com.dingyi.lua.analyze.info.VarInfo;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -15,7 +15,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayDeque;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -219,7 +218,7 @@ public class LuaInfoListener extends LuaBaseListener {
         switch (getExpType(exp)) {
             case FUNCTIONCALL:
                 FunctionCallInfo info = new FunctionCallInfo();
-                info.setValue(exp.prefixexp().getText());
+                info.setName(exp.prefixexp().getText());
                 return info;
             case TABLE:
                 return analysisTable(exp);

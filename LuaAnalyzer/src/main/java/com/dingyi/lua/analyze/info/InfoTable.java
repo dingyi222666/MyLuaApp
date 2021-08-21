@@ -1,4 +1,4 @@
-package com.dingyi.lua.analyzer.info;
+package com.dingyi.lua.analyze.info;
 
 import java.util.ArrayList;
 import java.util.Collections;

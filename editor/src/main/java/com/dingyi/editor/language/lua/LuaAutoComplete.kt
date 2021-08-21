@@ -4,7 +4,7 @@ package com.dingyi.editor.language.lua
 import com.dingyi.editor.R
 import com.dingyi.editor.language.java.api.AndroidApi
 import com.dingyi.editor.language.java.api.SystemApiHelper
-import com.dingyi.lua.analyzer.info.*
+import com.dingyi.lua.analyze.info.*
 import com.luajava.LuajLuaState
 import io.github.rosemoe.editor.interfaces.AutoCompleteProvider
 import io.github.rosemoe.editor.struct.CompletionItem
@@ -25,7 +25,6 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         colors: TextAnalyzeResult,
         line: Int
     ): MutableList<CompletionItem> {
-
 
         val result = mutableListOf<CompletionItem>()
 
@@ -100,15 +99,10 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
         val result = mutableListOf<AutoCompleteBean>()
 
+        var isLocked = false
 
-        //local or var field
-
+        //not empty
         if (lastList.isNotEmpty()) {
-
-
-            val state = LuajLuaState(JsePlatform.standardGlobals())
-            state.openLibs()
-            state.openBase()
 
 
             val info = lastList[0].info as VarInfo
@@ -116,11 +110,15 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             var value = info.value
             val lastCommit = lastList[0].commit
 
-
             //base package
             if (language.isBasePackage(lastName)) {
-                language.getBasePackage(lastName)?.forEach { it ->
-                    if (it.startsWith(name)) {
+                val state = LuajLuaState(JsePlatform.standardGlobals())
+                state.openLibs()
+                state.openBase()
+
+                language.getBasePackage(lastName)
+                    ?.filter { it.startsWith(name) }
+                    ?.forEach { it ->
                         result.add(
                             AutoCompleteBean(
                                 description = getType(state, "$lastName.$it").run {
@@ -137,10 +135,8 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                             }
                         )
                     }
-                }
+                state.close()
             }
-
-
 
 
             if (info is PackageInfo) {
@@ -148,58 +144,116 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                 AndroidApi
                     .findClasses(allText)
                     .map {
-
                         it.split(".")[index]
                     }
                     .distinct()
                     .forEach {
-                        println("forEach $it")
                         val className = it
                         val allClass = "$lastCommit.$className"
                         if (!isLast && className == name) {
                             result.clear()
+                            isLocked=true
                         }
-
-                        if (SystemApiHelper.findClass(allClass)) {
-                            result.add(
-                                AutoCompleteBean(
-                                    description = "class",
-                                    label = className,
-                                    commit = allClass,
-                                    iconRes = R.drawable.java_class,
-                                    info = VarInfo().apply {
-                                        value=FunctionCallInfo().apply {
-                                           setName(allClass)
-                                        }
-                                    },
+                        when {
+                            SystemApiHelper.findClass(allClass) -> {
+                                result.add(
+                                    AutoCompleteBean(
+                                        description = "class",
+                                        label = className,
+                                        commit = allClass,
+                                        iconRes = R.drawable.java_class,
+                                        info = VarInfo().apply {
+                                            value = FunctionCallInfo().apply {
+                                                setName(allClass)
+                                            }
+                                        },
+                                    )
                                 )
-                            )
-
-                        } else {
-                            result.add(
-                                AutoCompleteBean(
-                                    description = "package",
-                                    label = className,
-                                    commit = allClass,
-                                    iconRes = R.drawable.java_package,
-                                    info = PackageInfo(),
+                            }
+                            else -> {
+                                result.add(
+                                    AutoCompleteBean(
+                                        description = "package",
+                                        label = className,
+                                        commit = allClass,
+                                        iconRes = R.drawable.java_package,
+                                        info = PackageInfo(),
+                                    )
                                 )
-                            )
+                            }
                         }
-
+                        if (isLocked) {
+                            return result
+                        }
                     }
             }
 
+
+
+
             //java class
-
             if (value is FunctionCallInfo) {
-
+                SystemApiHelper
+                    .analyzeCode("${value.name}.name")
+                    .let { data ->
+                        data.classList.forEach { clazz ->
+                            if (data.isNewInstance) {
+                                SystemApiHelper.getPublicFieldData(
+                                    clazz, name
+                                )
+                            } else {
+                                SystemApiHelper.getPublicStaticFieldData(
+                                    clazz, name
+                                )
+                            }.filter {
+                                println(it)
+                                it.name.lowercase().startsWith(name)
+                            }.forEach {
+                                if (!isLast && it.name==name) {
+                                    result.clear()
+                                    isLocked=true
+                                }
+                                result.add(
+                                    AutoCompleteBean(
+                                        description = it.typeClass?.simpleName.toString(),
+                                        label = it.name,
+                                        commit = "$lastCommit.${
+                                            if (it.type == Type.METHOD) {
+                                                "${it.name}()"
+                                            } else {
+                                                it.name
+                                            }
+                                        }", iconRes =
+                                        when (it.type) {
+                                            Type.METHOD -> R.drawable.method
+                                            else -> R.drawable.field
+                                        },
+                                        info = VarInfo().apply {
+                                            value = FunctionCallInfo()
+                                                .apply {
+                                                    setName("${it.typeClass?.name}.${it.name}")
+                                                }
+                                        }
+                                    )
+                                )
+                                if (isLocked) {
+                                    return result
+                                }
+                            }
+                        }
+                    }
             }
+
 
             //table info
             if (value is TableInfo) {
-                value.members.forEach {
-                    if (it.name.startsWith(name)) {
+                value.members
+                    .filter { it.name.startsWith(name) }
+                    .forEach {
+                        if (!isLast) {
+                            result.clear()
+                        }
+
                         result.add(
                             AutoCompleteBean(
                                 description = getType(it, false, true), label = it.name,
@@ -213,10 +267,9 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                             )
                         )
                     }
-                }
             }
 
-            state.close()
+
             System.gc()
 
             return result
@@ -226,33 +279,30 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
         //local or global var
-
         infoTab?.let { infoTable ->
             infoTable.getVarInfoByRange(line)
                 .sortedBy { it.name }
+                .filter { it.name.startsWith(name) }
                 .forEach {
-                    if (it.name.startsWith(name)) {
-                        result.add(
-                            AutoCompleteBean(
-                                commit = it.name,
-                                label = it.name,
-                                iconRes = when {
-                                    it.isArg -> R.drawable.parameter
-                                    it.type == Type.FUNC -> {
-                                        if (it.isLocal) R.drawable.function else R.drawable.method
-                                    }
-                                    it.isLocal -> R.drawable.field
-                                    else -> R.drawable.variable
-                                },
-                                info = it,
-                                description = getType(it)
-                            )
+                    result.add(
+                        AutoCompleteBean(
+                            commit = it.name,
+                            label = it.name,
+                            iconRes = when {
+                                it.isArg -> R.drawable.parameter
+                                it.type == Type.FUNC -> {
+                                    if (it.isLocal) R.drawable.function else R.drawable.method
+                                }
+                                it.isLocal -> R.drawable.field
+                                else -> R.drawable.variable
+                            },
+                            info = it,
+                            description = getType(it)
                         )
-                    }
+                    )
 
 
-
-                    if (it.name.equals(name) && !isLast && it.value != null) {
+                    if (!isLast && it.value != null) {
                         val lastIndex = result[result.lastIndex]
                         result.clear()
                         result.add(lastIndex)
@@ -263,73 +313,95 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
         //functions
-        language.getNames().forEach {
-            if (it.lowercase().startsWith(name)) {
-                if (language.isBasePackage(it)) {
-                    result.add(
-                        AutoCompleteBean(
-                            description = "global table", label = it,
-                            commit = it, iconRes = R.drawable.field, info = null
+        language.getNames()
+            .filter {
+                it.lowercase().startsWith(name)
+            }
+            .forEach {
+                when {
+                    language.isBasePackage(it) -> {
+                        result.add(
+                            AutoCompleteBean(
+                                description = "global table", label = it,
+                                commit = it, iconRes = R.drawable.field, info = null
+                            )
                         )
-                    )
-                } else if (it == "activity" || it == "_G" || it == "_ENV" || it == "self") {
-                    result.add(
-                        AutoCompleteBean(
-                            description = "global $it", label = it,
-                            commit = it, iconRes = R.drawable.variable, info = null
+                    }
+                    (it == "activity" || it == "_G" || it == "_ENV" || it == "self") -> {
+                        result.add(
+                            AutoCompleteBean(
+                                description = "global $it", label = it,
+                                commit = it, iconRes = R.drawable.variable, info = null
+                            )
                         )
-                    )
-                } else if (it.startsWith("__")) {
-                    result.add(
-                        AutoCompleteBean(
-                            description = "metamethod", label = it, commit = it,
-                            iconRes = R.drawable.method, info = null
+                    }
+                    it.startsWith("__") -> {
+                        result.add(
+                            AutoCompleteBean(
+                                description = "metamethod", label = it, commit = it,
+                                iconRes = R.drawable.method, info = null
+                            )
                         )
-                    )
 
-                } else {
-                    result.add(
-                        AutoCompleteBean(
-                            description = "global func", label = it,
-                            commit = it, iconRes = R.drawable.method, info = null
+                    }
+                    else -> {
+                        result.add(
+                            AutoCompleteBean(
+                                description = "global func", label = it,
+                                commit = it, iconRes = R.drawable.method, info = null
+                            )
                         )
-                    )
-
+                    }
                 }
             }
-        }
 
 
         //keyword
-        language.getKeywords().forEach {
-            if (it.lowercase().startsWith(name)) {
+        language.getKeywords()
+            .filter {
+                it.lowercase().startsWith(name)
+            }
+            .forEach {
                 result.add(
                     AutoCompleteBean(
                         description = "keyword", label = it,
                         commit = it, iconRes = null, info = null
                     )
                 )
+
             }
-        }
 
 
         //java
+
 
         AndroidApi
             .findClassesByEnd(name)
             .forEach {
                 val className = it.split(".").run { get(lastIndex) }
                 if (!isLast && className == name) {
+                    result.clear()
+                    isLocked = true
+                }
 
-                } else {
-                    result.add(
-                        AutoCompleteBean(
-                            description = "class", label = className,
-                            commit = className, iconRes = R.drawable.java_class, info = VarInfo(),
-                        )
+
+                result.add(
+                    AutoCompleteBean(
+                        description = "class", label = className,
+                        commit = className, iconRes = R.drawable.java_class,
+                        info = VarInfo().apply {
+                            value = FunctionCallInfo()
+                                .apply {
+                                    setName(className)
+                                }
+                        }
                     )
+                )
+                if (isLocked) {
+                    return result
                 }
             }
+
 
         //java package (deep:1)
 
@@ -342,6 +414,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                 val className = it
                 if (!isLast && className == name) {
                     result.clear()
+                    isLocked = true
                 }
 
                 result.add(
@@ -351,8 +424,12 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                         info = PackageInfo()
                     )
                 )
-                println(result)
+                if (isLocked) {
+                    return result
+                }
+
             }
+
 
         //is base package
         if (language.isBasePackage(name) && !isLast) {

@@ -1,4 +1,4 @@
-package com.dingyi.lua.analyzer.info;
+package com.dingyi.lua.analyze.info;
 
 public class BaseInfo {
     protected Range range;

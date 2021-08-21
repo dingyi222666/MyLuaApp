@@ -1,9 +1,9 @@
-package com.dingyi.lua.analyzer;
+package com.dingyi.lua.analyze;
 
-import com.dingyi.lua.analyzer.info.InfoTable;
-import com.dingyi.lua.analyzer.parser.LuaInfoListener;
-import com.dingyi.lua.analyzer.parser.LuaLexer;
-import com.dingyi.lua.analyzer.parser.LuaParser;
+import com.dingyi.lua.analyze.info.InfoTable;
+import com.dingyi.lua.analyze.parser.LuaInfoListener;
+import com.dingyi.lua.analyze.parser.LuaLexer;
+import com.dingyi.lua.analyze.parser.LuaParser;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.CharStreams;

@@ -1,9 +1,7 @@
 package com.dingyi.editor.language.lua
 
-import android.view.View
-import com.dingyi.editor.CodeEditor
 import com.dingyi.editor.language.BaseLanguage
-import com.dingyi.lua.analyzer.LuaAnalyzer
+import com.dingyi.lua.analyze.LuaAnalyzer
 import io.github.rosemoe.editor.interfaces.AutoCompleteProvider
 import io.github.rosemoe.editor.interfaces.CodeAnalyzer
 import io.github.rosemoe.editor.interfaces.EditorLanguage
@@ -88,7 +86,7 @@ class LuaLanguage() : BaseLanguage(), EditorLanguage {
     }
 
     override fun isAutoCompleteChar(ch: Char): Boolean {
-        return if (ch==',')
+        return if (ch==','||ch=='=')
             false;
         else
             ch=='.' || ch==':'

@@ -5,7 +5,8 @@
 ---
 
 require "import"
-imports = require "import"
+
+--@type func
 import {
   "android.app.*",
   "android.os.*",
@@ -15,8 +16,11 @@ import {
 
 import "com.dingyi.MyLuaApp.R"
 import "com.dingyi.MyLuaApp.databinding.PluginPermisssionLayoutBinding"
+
+
 activity.setTheme(R.style.Theme_MyLuaApp)
 
+--@type string
 local path = tostring(...);
 
 local permission_info = {
@@ -66,6 +70,8 @@ local permission_info = {
 local permission_tab = {
 };
 
+
+--@type class
 local databinding = PluginPermisssionLayoutBinding.inflate(LayoutInflater.from(this));
 local list = databinding.list
 
