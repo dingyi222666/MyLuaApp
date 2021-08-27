@@ -2,6 +2,8 @@ package com.dingyi.myluaapp.core.welcome
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.dingyi.myluaapp.common.kts.Paths
+import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.common.zip.ZipHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,6 +46,10 @@ class PrepareAssets(private val activity: AppCompatActivity) {
                 unPathFilterPrefix = "/assets"
             )
 
+
+            arrayOf(Paths.projectDir,Paths.fontsDir).forEach {
+                it.toFile().mkdirs()
+            }
 
             block()
 

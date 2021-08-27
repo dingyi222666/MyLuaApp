@@ -68,6 +68,11 @@ class AutoCompletionItemAdapter : EditorCompletionAdapter() {
                 )
                 title.text = spannableStringBuilder
 
+                if (getItem(position).commit.indexOf("(")!=-1) {
+                    getItem(position).cursorOffset(getItem(position).commit.indexOf("(")+1)
+                } else {
+                    getItem(position).cursorOffset(getItem(position).commit.length)
+                }
                 image.setImageDrawable(getItem(position).icon)
             }
         }

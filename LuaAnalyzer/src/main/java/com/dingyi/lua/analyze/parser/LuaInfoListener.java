@@ -89,6 +89,7 @@ public class LuaInfoListener extends LuaBaseListener {
     }
 
 
+
     @Override
     public void enterVarListStat(LuaParser.VarListStatContext ctx) {
         super.enterVarListStat(ctx);
@@ -658,6 +659,13 @@ public class LuaInfoListener extends LuaBaseListener {
     public void enterForInStat(LuaParser.ForInStatContext ctx) {
         super.enterForInStat(ctx);
         blockContextDeque.push(ctx);
+        if (ctx.namelist()==null) {
+            return;
+        }
+        for (TerminalNode node:ctx.namelist().NAME()) {
+            VarInfo info=newLocalVarInfo(node.getText(),ctx,node.getSymbol());
+            newTokenInfo(info,node.getSymbol());
+        }
     }
 
     @Override
@@ -670,12 +678,22 @@ public class LuaInfoListener extends LuaBaseListener {
     public void enterForStat(LuaParser.ForStatContext ctx) {
         super.enterForStat(ctx);
         blockContextDeque.push(ctx);
+
+        VarInfo varInfo=newLocalVarInfo(ctx.NAME().getText(),ctx,ctx.NAME().getSymbol());
+
+        if (ctx.exp(0)!=null) {
+            varInfo.setType(getExpType(ctx.exp(0)));
+        }
+
+        newTokenInfo(varInfo,ctx.NAME().getSymbol());
+
     }
 
     @Override
     public void exitForStat(LuaParser.ForStatContext ctx) {
         super.exitForStat(ctx);
         blockContextDeque.pop();
+
     }
 
     @Override

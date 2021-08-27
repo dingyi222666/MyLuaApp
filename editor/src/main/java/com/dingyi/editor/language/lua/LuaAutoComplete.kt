@@ -293,6 +293,23 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         }
 
 
+
+        //keyword
+        language.getKeywords()
+            .filter {
+                it.lowercase().startsWith(name)
+            }
+            .forEach {
+                result.add(
+                    AutoCompleteBean(
+                        description = "keyword", label = it,
+                        commit = it, iconRes = null, info = null
+                    )
+                )
+
+            }
+
+
         //local or global var
         infoTab?.let { infoTable ->
             infoTable.getVarInfoByRange(line)
@@ -384,20 +401,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             }
 
 
-        //keyword
-        language.getKeywords()
-            .filter {
-                it.lowercase().startsWith(name)
-            }
-            .forEach {
-                result.add(
-                    AutoCompleteBean(
-                        description = "keyword", label = it,
-                        commit = it, iconRes = null, info = null
-                    )
-                )
 
-            }
 
 
         //java

@@ -86,6 +86,32 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
                 }
             }
 
+
+        LiveDataBus
+            .getDefault()
+            .with("undo", javaClass<Pair<Int, String>>())
+            .observe(viewLifecycleOwner) {
+                viewModel.projectConfig.value?.let { config ->
+                    val position = config.findCodeFileByPath(openPath)
+                    if (position == it.first) {
+                        codeEditor.undo()
+                    }
+                }
+            }
+
+        LiveDataBus
+            .getDefault()
+            .with("redo", javaClass<Pair<Int, String>>())
+            .observe(viewLifecycleOwner) {
+                viewModel.projectConfig.value?.let { config ->
+                    val position = config.findCodeFileByPath(openPath)
+                    if (position == it.first) {
+                        codeEditor.redo()
+                    }
+                }
+            }
+
+
     }
 
 

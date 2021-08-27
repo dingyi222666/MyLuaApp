@@ -41,23 +41,6 @@ class AutoCompleteWindow(private val mEditor: CodeEditor) : EditorAutoCompleteWi
         field.get(this) as ListView
     }
 
-    override fun select(position: Int) {
-        val item = (mListView.adapter as EditorCompletionAdapter).getItem(position)
-        val cursor = mEditor.cursor
-        if (!cursor.isSelected) {
-            mCancelShowUp = true
-            mEditor.text.delete(
-                cursor.leftLine,
-                cursor.leftColumn - prefix.length,
-                cursor.leftLine,
-                cursor.leftColumn
-            )
-            cursor.onCommitText(item.commit)
-
-            mCancelShowUp = false
-        }
-        mEditor.postHideCompletionWindow()
-    }
 
 
 }

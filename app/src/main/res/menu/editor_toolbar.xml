@@ -7,7 +7,7 @@
         android:title="@string/editor_menu_run"
         app:showAsAction="always" />
     <item
-        android:id="@+id/edtior_action_undo"
+        android:id="@+id/editor_action_undo"
         android:icon="@drawable/ic_twotone_undo_24"
         android:title="@string/editor_menu_undo"
         app:showAsAction="always" />

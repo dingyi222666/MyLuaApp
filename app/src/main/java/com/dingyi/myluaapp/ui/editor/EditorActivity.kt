@@ -73,6 +73,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
 
             editorPage.apply {
                 adapter = EditPagerAdapter(this@EditorActivity, viewModel)
+
                 isUserInputEnabled = false
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
@@ -136,7 +137,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
 
         presenter.openProject(projectInfo)
 
-        AndroidApi.prepareJson(assets.open("android.json"))
+        AndroidApi.prepareJson(assets.open("res/api/android.json"))
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -166,7 +167,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
             .with("openPath", javaClass<String>())
             .observe(this) {
                 when (it.toFile().suffix) {
-                    "lua" -> {
+                    "lua","aly" -> {
                         viewModel.projectConfig.value?.let { config ->
                             var position = config.findCodeFileByPath(it)
                             if (position == null) {
@@ -229,11 +230,27 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                         openDrawer(GravityCompat.START)
                 }
             }
+            R.id.editor_action_redo -> {
+                sendMessageToEditFragment(viewBinding.editorPage.currentItem,
+                "redo","redo")
+            }
+            R.id.editor_action_undo -> {
+                sendMessageToEditFragment(viewBinding.editorPage.currentItem,
+                    "undo","undo")
+            }
             R.id.editor_action_save -> {
                 presenter.saveAllFile()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    private fun sendMessageToEditFragment(page:Int,key:String,value:String) {
+        LiveDataBus
+            .getDefault()
+            .with(key,javaClass<Pair<Int,String>>())
+            .postValue(page to value)
     }
 
     override fun getViewModelClass(): Class<MainViewModel> {

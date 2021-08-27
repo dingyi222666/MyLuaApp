@@ -26,6 +26,9 @@ class WelcomeActivity : AppCompatActivity() {
         val version = getSharedPreferences("default", Context.MODE_PRIVATE).getInt("version", 0)
 
         PrepareAssets(this).start {
+
+
+
             startToMainActivity()
         }
         /*

@@ -1,9 +1,11 @@
 package com.dingyi.editor.language.lua
 
+import android.graphics.Color
 import com.dingyi.editor.language.lua.LuaTokenTypes.*
 import com.dingyi.editor.scheme.SchemeLua
 import io.github.rosemoe.editor.interfaces.CodeAnalyzer
 import io.github.rosemoe.editor.struct.BlockLine
+import io.github.rosemoe.editor.struct.Span
 import io.github.rosemoe.editor.text.TextAnalyzeResult
 import io.github.rosemoe.editor.text.TextAnalyzer
 import io.github.rosemoe.editor.widget.EditorColorScheme
@@ -83,7 +85,6 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                 }
 
                 END -> {
-
                     removeBlock()
                     colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD)
                 }
@@ -100,12 +101,13 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                 //注释
                 SHORT_COMMENT, BLOCK_COMMENT, DOC_COMMENT -> {
 
-                    if (token==SHORT_COMMENT && lexer.yytext().indexOf("@")!=-1) {
+                    if (token == SHORT_COMMENT && lexer.yytext().indexOf("@") != -1) {
                         colors.addIfNeeded(line, column, EditorColorScheme.COMMENT)
-                        // 666 TODO 高亮注释(注释联想)
+                        findCommentType(lexer.yytext())?.let {
+                            colors.addIfNeeded(line, it.column, EditorColorScheme.ANNOTATION)
+                        }
                     } else {
                         colors.addIfNeeded(line, column, EditorColorScheme.COMMENT)
-
                     }
 
                 }
@@ -123,17 +125,33 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                 }
                 //数字
                 NUMBER -> {
-                    colors.addIfNeeded(line, column, EditorColorScheme.LITERAL)
+                    Span.obtain(column, EditorColorScheme.LITERAL).apply {
+                        val text = lexer.yytext()
+                        if (text.startsWith("0x") && text.length > 6) {
+                           runCatching {
+                               Color.parseColor(text.replace("0x","#"))
+                           }.onSuccess {
+                               setUnderlineColor(it)
+                           }
+                        }
+                    }.let {
+                        colors.add(line, it)
+                    }
                 }
                 //名字
                 NAME -> {
                     val text = lexer.yytext()
 
                     when {
+                        language.isKeyword(text) -> colors.addIfNeeded(
+                            line,
+                            column,
+                            EditorColorScheme.KEYWORD
+                        )
                         language.isName(text) -> colors.addIfNeeded(line, column, SchemeLua.NAME)
-                        infoTable?.findTokenInfo(lexer.yyline() + 1, lexer.yycolumn()) != null -> {
+                        infoTable?.findTokenInfo(line + 1, column) != null -> {
                             val tokenInfo =
-                                infoTable.findTokenInfo(lexer.yyline() + 1, lexer.yycolumn())
+                                infoTable.findTokenInfo(line + 1, column)
                             val type =
                                 if (tokenInfo.info.isLocal) SchemeLua.LOCAL else SchemeLua.GLOBAL
 
@@ -165,6 +183,31 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
         colors.mExtra = infoTable //scan table and content
         lexer.yyclose()
 
+    }
+
+    private fun findCommentType(text: String): CommentData? {
+        return when {
+            text.lowercase().indexOf("@todo ") != -1 -> {
+                CommentData(
+                    text.lowercase().indexOf("@todo "),
+                    CommentData.Type.TODO, ""
+                ).apply {
+                    content = text.substring(column)
+                }
+            }
+            else -> null
+
+
+        }
+    }
+
+    data class CommentData(
+        val column: Int,
+        val type: Type, var content: String
+    ) {
+        enum class Type {
+            TODO, TYPE, RETURN, PARAMETER
+        }
     }
 
 }

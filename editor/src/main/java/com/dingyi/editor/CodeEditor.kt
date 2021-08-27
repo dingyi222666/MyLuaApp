@@ -3,8 +3,10 @@ package com.dingyi.editor
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
+import com.androlua.LuaApplication
 import com.dingyi.editor.kts.dp
 import io.github.rosemoe.editor.widget.CodeEditor
+import java.io.File
 
 
 /**
@@ -31,11 +33,23 @@ class CodeEditor(context: Context, attributeSet: AttributeSet) :
         setTextActionMode(TextActionMode.ACTION_MODE)
         setPinLineNumber(false)
 
+        LuaApplication.getInstance().externalCacheDir?.parentFile?.run {
+            File("$absolutePath/files/fonts/default.ttf")
+        }?.run {
+            if (exists())
+                this
+            else
+                null
+        }?.let {
+            this@CodeEditor.typefaceText=Typeface.createFromFile(it)
+            this@CodeEditor.typefaceLineNumber= Typeface.createFromFile(it)
+        }
 
         blockLineWidth = 1.dp * 0.4f
         dividerWidth = 1.dp * 0.4f
         scrollBarSize = 2.dp
         tabWidth = 4
+
     }
 
     // make public
