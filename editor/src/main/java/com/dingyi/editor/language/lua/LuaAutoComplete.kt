@@ -1,9 +1,7 @@
 package com.dingyi.editor.language.lua
 
 
-import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
 import com.dingyi.editor.ColorCompletionItem
 import com.dingyi.editor.R
 import com.dingyi.editor.language.java.api.AndroidApi
@@ -30,6 +28,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         colors: TextAnalyzeResult,
         line: Int
     ): MutableList<ColorCompletionItem> {
+
 
         val result = mutableListOf<ColorCompletionItem>()
 
@@ -102,7 +101,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
     ): List<AutoCompleteBean> {
 
 
-        val result = mutableListOf<AutoCompleteBean>()
+        var result = mutableListOf<AutoCompleteBean>()
 
         var isLocked = false
 
@@ -197,6 +196,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             //java class
             if (value is FunctionCallInfo) {
                 println(value.name)
+                println(name)
                 SystemApiHelper
                     .analyzeCode(value.name)
                     .let { data ->
@@ -210,16 +210,8 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                                     clazz, name
                                 )
                             }.filter {
-                                it.name.lowercase(Locale.getDefault())
-                                    .startsWith(name.lowercase(Locale.getDefault()))
-                            }.distinctBy {
-                                SystemApiHelper.getAccessibleObjectText(it.base)
-                            }.sortedBy {
-                                if (data.isNewInstance) {
-                                    it.type == Type.METHOD
-                                } else {
-                                    it.type == Type.FIELD
-                                }
+                                it.name.lowercase()
+                                    .startsWith(name.lowercase())
                             }.forEach { fieldData ->
                                 if (!isLast && fieldData.name == name) {
                                     result.clear()
@@ -244,19 +236,24 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                                             setValue(
                                                 FunctionCallInfo()
                                                     .also {
-                                                        it.name = "$lastCommit.${fieldData.name}()"
+                                                        it.name =
+                                                            "$lastCommit.${fieldData.name}()"
                                                     }
                                             )
                                         }
                                     )
                                 )
                                 if (isLocked) {
-                                    println(result)
                                     return result
                                 }
                             }
                         }
                     }
+
+
+                result=result.distinctBy {
+                    it.commit
+                }.toMutableList()
             }
 
 
@@ -291,7 +288,6 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
         }
-
 
 
         //keyword
@@ -401,9 +397,6 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             }
 
 
-
-
-
         //java
 
 
@@ -479,19 +472,9 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
     }
 
     private fun getColorText(name: String, base: AccessibleObject): CharSequence {
-        val baseString = SystemApiHelper.getAccessibleObjectText(base)
-        val span = SpannableStringBuilder(name)
+        val baseString = SystemApiHelper.getAccessibleObjectText(base,language)
+        return SpannableStringBuilder(name)
             .append(baseString)
-        span.setSpan(
-            ForegroundColorSpan(
-                0xff808080.toInt()
-            ),
-            name.length,
-            span.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        return span
     }
 
 

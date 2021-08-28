@@ -1,5 +1,8 @@
 MyLuaApp by dingyi
-当前版本 0.1.16(alpha)
+当前版本 0.3.2(alpha)
+
+0.3.2 alpha
+优化 代码
 
 0.1.16 alpha
 重构 as重写apk架构

@@ -1,16 +1,20 @@
 package com.dingyi.editor.language.java.api
 
+
+import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
-import com.androlua.LuaActivity
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import com.androlua.LuaApplication
+import com.dingyi.editor.language.lua.LuaLanguage
+import com.dingyi.editor.scheme.SchemeLua
 import com.dingyi.lua.analyze.info.Type
 import java.lang.reflect.AccessibleObject
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
-import java.util.*
 
 
 /**
@@ -19,7 +23,6 @@ import java.util.*
  * @description:
  **/
 object SystemApiHelper {
-
 
 
     fun findClass(className: String): Boolean {
@@ -36,8 +39,8 @@ object SystemApiHelper {
                     Modifier.isStatic(it.modifiers)
                 }
                 .filter {
-                    it.name.lowercase(Locale.getDefault())
-                        .startsWith(name.lowercase(Locale.getDefault()))
+                    it.name.lowercase()
+                        .startsWith(name.lowercase())
                 }
                 .forEach {
                     add(it)
@@ -53,8 +56,8 @@ object SystemApiHelper {
                     Modifier.isStatic(it.modifiers)
                 }
                 .filter {
-                    it.name.lowercase(Locale.getDefault())
-                        .startsWith(name.lowercase(Locale.getDefault()))
+                    it.name.lowercase()
+                        .startsWith(name.lowercase())
                 }
                 .forEach {
                     add(it)
@@ -67,11 +70,11 @@ object SystemApiHelper {
             clazz
                 .methods
                 .filterNot {
-                    Modifier.isStrict(it.modifiers)
+                    Modifier.isStatic(it.modifiers)
                 }
                 .filter {
-                    it.name.lowercase(Locale.getDefault())
-                        .startsWith(name.lowercase(Locale.getDefault()))
+                    it.name.lowercase()
+                        .startsWith(name.lowercase())
                 }
                 .forEach {
                     add(it)
@@ -84,11 +87,11 @@ object SystemApiHelper {
             clazz
                 .fields
                 .filterNot {
-                    Modifier.isStrict(it.modifiers)
+                    Modifier.isStatic(it.modifiers)
                 }
                 .filter {
-                    it.name.lowercase(Locale.getDefault())
-                        .startsWith(name.lowercase(Locale.getDefault()))
+                    it.name.lowercase()
+                        .startsWith(name.lowercase())
                 }
                 .forEach {
                     add(it)
@@ -241,7 +244,7 @@ object SystemApiHelper {
         }.getOrNull()
     }
 
-    fun getAccessibleObjectText(accessibleObject: AccessibleObject): CharSequence {
+    fun getAccessibleObjectText(accessibleObject: AccessibleObject,language: LuaLanguage): CharSequence {
         return when (accessibleObject) {
             is Method -> {
                 accessibleObject.toString().run {
@@ -254,10 +257,52 @@ object SystemApiHelper {
                             length,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                         )
+                        setSpan(
+                            ForegroundColorSpan(
+                                language.getSchemeColor(SchemeLua.AUTO_COMP_PANEL_TEXT_TYPE)
+                            ),
+                            0,
+                            length,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
                     }
                 }
             }
-            else -> ""
+            is Field -> {
+
+                runCatching {
+                    SpannableString(
+                        " ( = ${accessibleObject.get(null)} ) "
+                    ).apply {
+
+                        setSpan(
+                            AbsoluteSizeSpan(
+                                14, true
+                            ),
+                            0,
+                            length,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                        setSpan(
+                            ForegroundColorSpan(
+                                language.getSchemeColor(SchemeLua.AUTO_COMP_PANEL_TEXT_TYPE)
+                            ),
+                            0,
+                            length,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                        setSpan(
+                            StyleSpan(
+                                Typeface.ITALIC
+                            ), 2,
+                            length - 2,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }.getOrNull() ?: ""
+
+            }
+            else -> accessibleObject.toString()
         }
 
     }

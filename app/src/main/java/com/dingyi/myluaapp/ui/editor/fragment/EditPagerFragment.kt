@@ -119,7 +119,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
         codeEditor.apply {
             when {
                 openPath.endsWith(".lua", ".aly") -> {
-                    setEditorLanguage(LuaLanguage())
+                    setEditorLanguage(LuaLanguage(viewBinding.codeEditor))
                 }
             }
             colorScheme=SchemeLua()

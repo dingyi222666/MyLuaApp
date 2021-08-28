@@ -9,6 +9,7 @@ import io.github.rosemoe.editor.interfaces.NewlineHandler
 import io.github.rosemoe.editor.interfaces.NewlineHandler.HandleResult
 import io.github.rosemoe.editor.langs.internal.MyCharacter
 import io.github.rosemoe.editor.text.TextUtils
+import io.github.rosemoe.editor.widget.CodeEditor
 import io.github.rosemoe.editor.widget.SymbolPairMatch
 
 
@@ -17,7 +18,10 @@ import io.github.rosemoe.editor.widget.SymbolPairMatch
  * @date: 2021/8/14 20:57
  * @description:
  **/
-class LuaLanguage() : BaseLanguage(), EditorLanguage {
+
+//The language must binding editor to get color scheme
+
+class LuaLanguage(private val codeEditor: CodeEditor) : BaseLanguage(), EditorLanguage {
 
     private val keywordTarget =
         "and|break|case|catch|continue|default|defer|do|else|elseif|end|false|finally|for|function|goto|if|in|lambda|local|nil|not|or|repeat|return|switch|then|true|try|until|when|while"
@@ -83,6 +87,10 @@ class LuaLanguage() : BaseLanguage(), EditorLanguage {
 
     override fun getAutoCompleteProvider(): AutoCompleteProvider {
         return LuaAutoComplete(this)
+    }
+
+    fun getSchemeColor(type: Int):Int {
+        return codeEditor.colorScheme.getColor(type)
     }
 
     override fun isAutoCompleteChar(ch: Char): Boolean {

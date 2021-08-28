@@ -19,6 +19,7 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
         delegate: TextAnalyzer.AnalyzeThread.Delegate
     ) {
 
+
         val string = content.toString()
         val lexer = LuaLexer(content)
         val blockStack = ArrayDeque<BlockLine>()

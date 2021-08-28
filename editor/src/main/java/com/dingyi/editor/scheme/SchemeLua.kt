@@ -23,6 +23,7 @@ class SchemeLua: EditorColorScheme() {
         setColor(LOCAL,0xFFAAAA88.toInt())
         setColor(LINE_NUMBER_BACKGROUND,getColor(WHOLE_BACKGROUND))
         setColor(ANNOTATION,0xff0f9f2f.toInt())
+        setColor(AUTO_COMP_PANEL_TEXT_TYPE, 0xff808080.toInt())
         setColor(AUTO_COMP_PANEL_CORNER,0xff000000.toInt())
     }
 
@@ -31,5 +32,6 @@ class SchemeLua: EditorColorScheme() {
         const val NAME= 0xff64622
         const val GLOBAL=0xff54455
         const val LOCAL=0x25165255
+        const val AUTO_COMP_PANEL_TEXT_TYPE = 0x126327
     }
 }

@@ -3,6 +3,15 @@ package com.dingyi.myluaapp.common.kts
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.TypedArray
+
+import android.content.pm.ActivityInfo
+
+import androidx.appcompat.app.AppCompatActivity
+
+import android.os.Build
+import java.lang.Exception
+
 
 /**
  * @author: dingyi
@@ -29,3 +38,4 @@ fun Context.getAttributeColor(resId: Int): Int {
     typedArray.recycle()
     return color
 }
+

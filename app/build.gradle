@@ -14,8 +14,8 @@ android {
         //noinspection OldTargetApi
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 30
-        versionCode 16
-        versionName "0.1.16 (alpna)"
+        versionCode 17
+        versionName "0.3.2 (alpna)"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,7 +44,7 @@ android {
 
 dependencies {
     api project(":AndroLua") //androlua libs
-    api project(":editor")
+    api project(":editor") // editor
     api project(":LuaLibrary")//lua library
 
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])//libs jar
@@ -71,6 +71,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" //kt
+
+
+    //Slidr
+    implementation 'com.r0adkll:slidableactivity:2.1.0'
 
     //litepal
 
