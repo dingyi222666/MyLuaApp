@@ -79,7 +79,7 @@ class EditPagerPresenter(
                 val tmp = if (text == codeEditor.text.toString())
                     name
                 else
-                    "*$name"
+                    "$name*"
 
                 viewModel.projectConfig.value?.run {
                     findCodeFileByPath(openPath)?.let {

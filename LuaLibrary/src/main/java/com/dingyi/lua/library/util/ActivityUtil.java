@@ -16,6 +16,5 @@ public class ActivityUtil {
      */
     public Bitmap getActivityScreen(Activity activity) {
         return null;
-        //TODO
     }
 }

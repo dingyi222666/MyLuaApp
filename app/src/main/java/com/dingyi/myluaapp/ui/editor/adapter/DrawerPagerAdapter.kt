@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.ui.editor.adapter
 
+import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -21,6 +22,7 @@ class DrawerPagerAdapter(context: FragmentActivity) : FragmentStateAdapter(conte
         return classes[position].newInstance() as Fragment
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun add(vararg arg: Class<*>) {
         classes.addAll(arg)
         notifyDataSetChanged()

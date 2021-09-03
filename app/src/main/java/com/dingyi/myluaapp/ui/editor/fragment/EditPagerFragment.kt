@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.dingyi.editor.language.lua.LuaLanguage
 import com.dingyi.editor.scheme.SchemeLua
+import com.dingyi.editor.struct.ColumnNavigationItem
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.endsWith
 import com.dingyi.myluaapp.common.kts.javaClass
@@ -16,7 +17,6 @@ import com.dingyi.myluaapp.database.bean.CodeFile
 import com.dingyi.myluaapp.databinding.FragmentEditorEditPagerBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.presenter.EditPagerPresenter
-import io.github.rosemoe.editor.widget.schemes.SchemeEclipse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import livedatabus.LiveDataBus
@@ -111,9 +111,27 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
                 }
             }
 
+        viewModel.realPosition.observe(viewLifecycleOwner) {
+           observeAndSendNavigationList()
+        }
 
     }
 
+    private fun observeAndSendNavigationList() {
+        viewModel.projectConfig.value?.let { config ->
+            val position = config.findCodeFileByPath(openPath)
+            val realPosition = viewModel.realPosition.value
+            if (position == realPosition) {
+                codeEditor.textAnalyzeResult.navigation?.map {
+                    it as ColumnNavigationItem
+                }?.let {
+                    if (viewModel.navigationList.value?.toString()!=it.toString()) {
+                        viewModel.navigationList.postValue(it)
+                    }
+                }
+            }
+        }
+    }
 
     private fun initEditor() {
         codeEditor.apply {
@@ -132,6 +150,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
                     delay(150)
                     presenter.saveCodeFile(true)
                     presenter.checkFile()
+                    observeAndSendNavigationList()
                 }
             }
         }

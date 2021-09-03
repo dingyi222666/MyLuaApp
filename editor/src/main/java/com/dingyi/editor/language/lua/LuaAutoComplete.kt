@@ -2,7 +2,7 @@ package com.dingyi.editor.language.lua
 
 
 import android.text.SpannableStringBuilder
-import com.dingyi.editor.ColorCompletionItem
+import com.dingyi.editor.struct.ColorCompletionItem
 import com.dingyi.editor.R
 import com.dingyi.editor.language.java.api.AndroidApi
 import com.dingyi.editor.language.java.api.SystemApiHelper

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.dingyi.editor.kts.dp
+import com.dingyi.editor.struct.ColorCompletionItem
 import io.github.rosemoe.editor.widget.EditorCompletionAdapter
 
 

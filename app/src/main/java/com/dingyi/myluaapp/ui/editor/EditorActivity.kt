@@ -18,6 +18,7 @@ import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.ui.editor.adapter.DrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditPagerAdapter
+import com.dingyi.myluaapp.ui.editor.fragment.CodeNavigationFragment
 import com.dingyi.myluaapp.ui.editor.fragment.FileListFragment
 import com.dingyi.myluaapp.ui.editor.presenter.MainPresenter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -40,6 +41,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         intent.getParcelableExtra<ProjectInfo>("info")?.let {
             projectInfo = it
@@ -74,7 +76,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
             editorPage.apply {
                 adapter = EditPagerAdapter(this@EditorActivity, viewModel)
 
-                isUserInputEnabled = false
+
+                
+                //isUserInputEnabled = false
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
                         viewModel.projectConfig.value?.run {
@@ -83,6 +87,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                             }.toString()
                             supportActionBar?.subtitle = name
                         }
+                        viewModel.realPosition.postValue(position)
                     }
                 })
             }
@@ -118,7 +123,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                     }
                     liveData.removeObservers(this@EditorActivity)
                     liveData.observe(this@EditorActivity) {
-                        if (tab.text.toString()!=it) {
+                        if (tab.text.toString() != it) {
                             tab.text = it
                         }
                     }
@@ -127,8 +132,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                 symbolView.setOnClickListener {
                     LiveDataBus
                         .getDefault()
-                        .with("addSymbol",javaClass<Pair<Int,String>>())
-                        .value=editorPage.currentItem to it
+                        .with("addSymbol", javaClass<Pair<Int, String>>())
+                        .value = editorPage.currentItem to it
                 }
 
             }.attach()
@@ -151,7 +156,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                             editorPage.visibility = View.VISIBLE
                             drawerPage.apply {
                                 adapter = DrawerPagerAdapter(this@EditorActivity).apply {
-                                    add(FileListFragment::class.java)
+                                    add(javaClass<FileListFragment>(), javaClass<CodeNavigationFragment>())
                                 }
                             }
                         }
@@ -167,7 +172,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
             .with("openPath", javaClass<String>())
             .observe(this) {
                 when (it.toFile().suffix) {
-                    "lua","aly" -> {
+                    "lua", "aly" -> {
                         viewModel.projectConfig.value?.let { config ->
                             var position = config.findCodeFileByPath(it)
                             if (position == null) {
@@ -231,12 +236,16 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                 }
             }
             R.id.editor_action_redo -> {
-                sendMessageToEditFragment(viewBinding.editorPage.currentItem,
-                "redo","redo")
+                sendMessageToEditFragment(
+                    viewBinding.editorPage.currentItem,
+                    "redo", "redo"
+                )
             }
             R.id.editor_action_undo -> {
-                sendMessageToEditFragment(viewBinding.editorPage.currentItem,
-                    "undo","undo")
+                sendMessageToEditFragment(
+                    viewBinding.editorPage.currentItem,
+                    "undo", "undo"
+                )
             }
             R.id.editor_action_save -> {
                 presenter.saveAllFile()
@@ -246,10 +255,10 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
     }
 
 
-    private fun sendMessageToEditFragment(page:Int,key:String,value:String) {
+    private fun sendMessageToEditFragment(page: Int, key: String, value: String) {
         LiveDataBus
             .getDefault()
-            .with(key,javaClass<Pair<Int,String>>())
+            .with(key, javaClass<Pair<Int, String>>())
             .postValue(page to value)
     }
 

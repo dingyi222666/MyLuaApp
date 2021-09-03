@@ -3,8 +3,10 @@ package com.dingyi.myluaapp.ui.editor
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dingyi.editor.struct.ColumnNavigationItem
 import com.dingyi.myluaapp.bean.ProjectInfo
 import com.dingyi.myluaapp.database.bean.ProjectConfig
+
 
 /**
  * @author: dingyi
@@ -19,4 +21,7 @@ class MainViewModel : ViewModel() {
 
     val fileList = MutableLiveData<List<String>>()
     val fileListTitle = MutableLiveData<String>()
+    val realPosition = MutableLiveData(0)
+
+    val navigationList= MutableLiveData<List<ColumnNavigationItem>>()
 }

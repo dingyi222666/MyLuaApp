@@ -3,10 +3,13 @@ package com.dingyi.editor
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.Log
+import android.view.MotionEvent
 import com.androlua.LuaApplication
 import com.dingyi.editor.kts.dp
 import io.github.rosemoe.editor.widget.CodeEditor
 import java.io.File
+import kotlin.math.absoluteValue
 
 
 /**
@@ -17,6 +20,8 @@ import java.io.File
 
 class CodeEditor(context: Context, attributeSet: AttributeSet) :
     CodeEditor(context, attributeSet) {
+
+    private var downX = 0
 
     init {
         Typeface.BOLD
@@ -41,8 +46,8 @@ class CodeEditor(context: Context, attributeSet: AttributeSet) :
             else
                 null
         }?.let {
-            this@CodeEditor.typefaceText=Typeface.createFromFile(it)
-            this@CodeEditor.typefaceLineNumber= Typeface.createFromFile(it)
+            this@CodeEditor.typefaceText = Typeface.createFromFile(it)
+            this@CodeEditor.typefaceLineNumber = Typeface.createFromFile(it)
         }
 
         blockLineWidth = 1.dp * 0.4f
@@ -51,6 +56,38 @@ class CodeEditor(context: Context, attributeSet: AttributeSet) :
         tabWidth = 4
 
     }
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        when (event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                downX= event.x.toInt()
+                parent.requestDisallowInterceptTouchEvent(false)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val deltaX=(event.x.toInt()-downX).absoluteValue
+                if (deltaX>0 && canScrollHorizontally(1)) {
+                    parent.requestDisallowInterceptTouchEvent(false)
+                } else {
+                    parent.requestDisallowInterceptTouchEvent(true)
+                }
+                downX=event.x.toInt()
+            }
+            MotionEvent.ACTION_UP -> {
+                if (scrollX==0||scrollX==scrollMaxX) { //
+                    parent.requestDisallowInterceptTouchEvent(true)
+                } else {
+                    parent.requestDisallowInterceptTouchEvent(false)
+                }
+            }
+            else -> parent.requestDisallowInterceptTouchEvent(true)
+        }
+
+        return super.dispatchTouchEvent(event)
+
+    }
+
+
+
 
     // make public
     public override fun postHideCompletionWindow() {

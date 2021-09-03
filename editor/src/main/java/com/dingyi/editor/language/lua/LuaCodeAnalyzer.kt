@@ -3,8 +3,10 @@ package com.dingyi.editor.language.lua
 import android.graphics.Color
 import com.dingyi.editor.language.lua.LuaTokenTypes.*
 import com.dingyi.editor.scheme.SchemeLua
+import com.dingyi.editor.struct.ColumnNavigationItem
 import io.github.rosemoe.editor.interfaces.CodeAnalyzer
 import io.github.rosemoe.editor.struct.BlockLine
+
 import io.github.rosemoe.editor.struct.Span
 import io.github.rosemoe.editor.text.TextAnalyzeResult
 import io.github.rosemoe.editor.text.TextAnalyzer
@@ -26,6 +28,7 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
         var token: LuaTokenTypes? = lexer.advance()
         var maxSwitch = 1
         var currSwitch = 0
+        val navigationList = mutableListOf<ColumnNavigationItem>()
 
         val infoTable = runCatching {
             language.codeAnalyzer
@@ -105,6 +108,14 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                     if (token == SHORT_COMMENT && lexer.yytext().indexOf("@") != -1) {
                         colors.addIfNeeded(line, column, EditorColorScheme.COMMENT)
                         findCommentType(lexer.yytext())?.let {
+                            navigationList.add(
+                                ColumnNavigationItem(
+                                    column = it.column,
+                                    _line = line,
+                                    _label = it.content,
+                                    type = "@" + it.type.toString().lowercase()
+                                )
+                            )
                             colors.addIfNeeded(line, it.column, EditorColorScheme.ANNOTATION)
                         }
                     } else {
@@ -129,11 +140,11 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                     Span.obtain(column, EditorColorScheme.LITERAL).apply {
                         val text = lexer.yytext()
                         if (text.startsWith("0x") && text.length > 6) {
-                           runCatching {
-                               Color.parseColor(text.replace("0x","#"))
-                           }.onSuccess {
-                               setUnderlineColor(it)
-                           }
+                            runCatching {
+                                Color.parseColor(text.replace("0x", "#"))
+                            }.onSuccess {
+                                setUnderlineColor(it)
+                            }
                         }
                     }.let {
                         colors.add(line, it)
@@ -181,6 +192,8 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
         }
 
         colors.suppressSwitch = maxSwitch + 10;
+
+        colors.navigation = navigationList as List<io.github.rosemoe.editor.struct.NavigationItem>
         colors.mExtra = infoTable //scan table and content
         lexer.yyclose()
 
@@ -190,12 +203,37 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
         return when {
             text.lowercase().indexOf("@todo ") != -1 -> {
                 CommentData(
-                    text.lowercase().indexOf("@todo "),
+                    text.lowercase().indexOf("@todo ") + "@todo ".length,
                     CommentData.Type.TODO, ""
                 ).apply {
                     content = text.substring(column)
                 }
             }
+            text.lowercase().indexOf("@tag ") != -1 -> {
+                CommentData(
+                    text.lowercase().indexOf("@tag ") + "@tag ".length,
+                    CommentData.Type.TAG, ""
+                ).apply {
+                    content = text.substring(column)
+                }
+            }
+            text.lowercase().indexOf("@type ") != -1 -> {
+                CommentData(
+                    text.lowercase().indexOf("@type ") + "@type ".length,
+                    CommentData.Type.TYPE, ""
+                ).apply {
+                    content = text.substring(column)
+                }
+            }
+            text.lowercase().indexOf("@parameter ") != -1 -> {
+                CommentData(
+                    text.lowercase().indexOf("@parameter ") + "@parameter ".length,
+                    CommentData.Type.PARAMETER, ""
+                ).apply {
+                    content = text.substring(column)
+                }
+            }
+
             else -> null
 
 
@@ -207,7 +245,7 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
         val type: Type, var content: String
     ) {
         enum class Type {
-            TODO, TYPE, RETURN, PARAMETER
+            TODO, TYPE, PARAMETER, TAG
         }
     }
 

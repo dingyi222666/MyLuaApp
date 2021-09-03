@@ -1,4 +1,4 @@
-package com.dingyi.editor
+package com.dingyi.editor.struct
 
 import io.github.rosemoe.editor.struct.CompletionItem
 
