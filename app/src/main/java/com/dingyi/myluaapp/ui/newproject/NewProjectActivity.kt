@@ -65,6 +65,8 @@ class NewProjectActivity : BaseActivity<ActivityNewProjectBinding, MainViewModel
                 }
             }
 
+
+
             appPackageName.observe(this@NewProjectActivity) {
                 info.appPackageName = it
                 viewBinding.appPackageName.setTextIfDiff(it)

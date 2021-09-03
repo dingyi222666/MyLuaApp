@@ -252,7 +252,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
 
                 result=result.distinctBy {
-                    it.commit
+                    it.label.toString()
                 }.toMutableList()
             }
 

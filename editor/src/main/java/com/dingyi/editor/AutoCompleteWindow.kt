@@ -36,11 +36,6 @@ class AutoCompleteWindow(private val mEditor: CodeEditor) : EditorAutoCompleteWi
 
     private val field =
         EditorAutoCompleteWindow::class.java.getDeclaredField("mListView") //save fleld
-    private val mListView by lazy { //val
-        field.isAccessible = true
-        field.get(this) as ListView
-    }
-
 
 
 }

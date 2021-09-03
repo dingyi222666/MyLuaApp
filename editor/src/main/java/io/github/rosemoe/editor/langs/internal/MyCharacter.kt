@@ -30,8 +30,8 @@ object MyCharacter {
      * @param bitIndex Target index
      * @return Boolean value at the index
      */
-    private operator fun get(values: IntArray?, bitIndex: Int): Boolean {
-        return values!![bitIndex / 32] and (1 shl bitIndex % 32) != 0
+    private operator fun get(values: IntArray, bitIndex: Int): Boolean {
+        return values[bitIndex / 32] and (1 shl bitIndex % 32) != 0
     }
 
     /**

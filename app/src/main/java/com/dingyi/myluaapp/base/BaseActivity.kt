@@ -11,9 +11,6 @@ import androidx.viewbinding.ViewBinding
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.getString
 import com.dingyi.myluaapp.common.kts.showSnackBar
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrPosition
 
 
 /**
@@ -40,19 +37,6 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel, P : BasePresenter<T>
 
         setContentView(getViewBindingImp().root)
 
-        val config = SlidrConfig.Builder()
-            .position(SlidrPosition.LEFT)
-            .sensitivity(1f)
-            .scrimColor(Color.BLACK)
-            .scrimStartAlpha(0.8f)
-            .scrimEndAlpha(0f)
-            .velocityThreshold(2400f)
-            .distanceThreshold(0.25f)
-            .edge(true)
-            .edgeSize(0.18f) // The % of the screen that counts as the edge, default 18%
-            .build();
-
-        Slidr.attach(this, config);
 
         viewModel = ViewModelProvider(this)[getViewModelClass()]
 

@@ -73,9 +73,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" //kt
 
 
-    //Slidr
-    implementation 'com.r0adkll:slidableactivity:2.1.0'
-
     //litepal
 
     implementation 'org.litepal.guolindev:core:3.2.3'
