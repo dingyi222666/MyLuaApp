@@ -12,7 +12,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
-        android:name="com.dingyi.myluaapp.MainApplication"
+        android:name=".MainApplication"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyLuaApp"
         android:fullBackupContent="@xml/backup_descriptor">
@@ -20,7 +20,7 @@
 
         <activity
             android:exported="true"
-            android:name="com.dingyi.myluaapp.ui.welcome.WelcomeActivity"
+            android:name=".ui.welcome.WelcomeActivity"
             android:theme="@style/Theme.MyLuaApp"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize|keyboardHidden">
@@ -32,11 +32,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.dingyi.myluaapp.ui.main.MainActivity" />
+        <activity android:name=".ui.main.MainActivity" />
 
-        <activity android:name="com.dingyi.myluaapp.ui.newproject.NewProjectActivity" />
+        <activity android:name=".ui.newproject.NewProjectActivity" />
 
-        <activity android:name="com.dingyi.myluaapp.ui.editor.EditorActivity" />
+        <activity android:name=".ui.editor.EditorActivity" />
+
+        <activity android:name=".ui.about.AboutActivity" />
 
         <activity android:name=".ui.GeneralActivity" />
 

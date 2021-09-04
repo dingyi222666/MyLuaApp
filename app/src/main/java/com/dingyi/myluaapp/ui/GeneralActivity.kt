@@ -1,7 +1,9 @@
 package com.dingyi.myluaapp.ui
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.checkNotNull
@@ -20,9 +22,12 @@ class GeneralActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        delegate.localNightMode= AppCompatDelegate.MODE_NIGHT_YES
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
+
+        setSupportActionBar(binding.toolbarInclude.toolbar)
 
         intent?.let {
             val bundle = it.getBundleExtra("arg")
@@ -38,6 +43,11 @@ class GeneralActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().add(R.id.container, it)
                 .commit()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        finish()
+        return super.onOptionsItemSelected(item)
     }
 
 }

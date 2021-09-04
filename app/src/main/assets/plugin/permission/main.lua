@@ -20,7 +20,7 @@ import "com.dingyi.MyLuaApp.databinding.PluginPermisssionLayoutBinding"
 
 activity.setTheme(R.style.Theme_MyLuaApp)
 
---@type string
+--@type number
 local path = tostring(...);
 
 local permission_info = {

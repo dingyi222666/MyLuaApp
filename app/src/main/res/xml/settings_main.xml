@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    >
-
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="settings"
+    android:title="@string/settings_main_title">
     <Preference
-
         android:icon="@drawable/ic_twotone_palette_24"
-        android:title="@string/settings_application_category" />
+        android:summary="@string/settings_application_summary"
+        android:title="@string/settings_application_category"
+        app:tint="?theme_hintTextColor">
+
+    </Preference>
     <Preference
         android:icon="@drawable/ic_twotone_keyboard_24"
-        android:title="@string/settings_editor_category" />
+        android:summary="@string/settings_editor_summary"
+        android:title="@string/settings_editor_category">
+
+    </Preference>
     <Preference
         android:icon="@drawable/ic_twotone_build_24"
-        android:title="@string/settings_build_category" />
+        android:summary="@string/settings_build_summary"
+        android:title="@string/settings_build_category">
+
+    </Preference>
     <Preference
         android:icon="@drawable/ic_twotone_memory_24"
-        android:title="@string/settings_plugin_category" />
+        android:summary="@string/settings_plugin_summary"
+        android:title="@string/settings_plugin_category">
+
+    </Preference>
     <Preference
-        android:title="@string/settings_about_category" />
+        android:key="openActivity(com.dingyi.myluaapp.ui.about.AboutActivity)"
+        android:title="@string/settings_about_category">
+    </Preference>
 </PreferenceScreen>

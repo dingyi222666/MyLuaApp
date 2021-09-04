@@ -73,6 +73,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" //kt
 
 
+
+    //about
+    implementation 'com.drakeet.about:about:2.4.1'
+    implementation 'com.drakeet.multitype:multitype:4.0.0'
+
     //litepal
 
     implementation 'org.litepal.guolindev:core:3.2.3'

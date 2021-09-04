@@ -9,6 +9,7 @@ import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.ui.GeneralActivity
+import com.dingyi.myluaapp.ui.about.AboutActivity
 import com.dingyi.myluaapp.ui.editor.EditorActivity
 import com.dingyi.myluaapp.ui.main.adapter.ProjectListAdapter
 import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
@@ -87,6 +88,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel, MainPresen
             R.id.main_action_menu_new_project -> {
                 startActivity<NewProjectActivity>()
             }
+            R.id.main_action_menu_about -> startActivity<AboutActivity>()
             R.id.main_action_menu_settings -> {
                 startActivity<GeneralActivity> {
                     putExtra("type", javaClass<SettingsFragment>().name)

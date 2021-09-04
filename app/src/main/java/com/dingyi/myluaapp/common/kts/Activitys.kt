@@ -28,6 +28,11 @@ inline fun <reified T> Activity.startActivity(block: Intent.() -> Unit = {}) {
     startActivity(Intent(this, T::class.java).apply(block))
 }
 
+inline fun  Activity.startActivity(targetClass:Class<*>,block: Intent.() -> Unit = {}) {
+    startActivity(Intent(this,targetClass).apply(block))
+}
+
+
 fun Context.getStringArray(resId: Int): Array<String> {
     return this.resources.getStringArray(resId)
 }

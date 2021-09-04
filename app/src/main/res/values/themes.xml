@@ -21,6 +21,9 @@
 
         <!-- Customize your theme here. -->
     </style>
+    <style name="BasePreferenceStyle" parent="@style/PreferenceThemeOverlay">
+        <item name="android:tint">?theme_hintTextColor</item>
+    </style>
     <!--Base BaseTableLayout Style -->
     <style name="BaseTableLayoutStyle" parent="TextAppearance.AppCompat.Button">
         <item name="textAllCaps">false</item>
