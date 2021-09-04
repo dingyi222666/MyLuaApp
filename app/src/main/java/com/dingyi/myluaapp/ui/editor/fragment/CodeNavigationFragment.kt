@@ -63,6 +63,9 @@ class CodeNavigationFragment : BaseFragment<FragmentEditorCodeNavigationBinding,
             list.adapter = adapter
             list.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         }
+        adapter.setOnItemClickListener {
+            
+        }
 
     }
 }

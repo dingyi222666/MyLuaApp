@@ -35,7 +35,6 @@ class GeneralActivity : AppCompatActivity() {
             }
 
         }?.let {
-
             supportFragmentManager.beginTransaction().add(R.id.container, it)
                 .commit()
         }

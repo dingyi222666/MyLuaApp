@@ -6,6 +6,7 @@ import com.dingyi.editor.scheme.SchemeLua
 import com.dingyi.editor.struct.ColumnNavigationItem
 import io.github.rosemoe.editor.interfaces.CodeAnalyzer
 import io.github.rosemoe.editor.struct.BlockLine
+import io.github.rosemoe.editor.struct.NavigationItem
 
 import io.github.rosemoe.editor.struct.Span
 import io.github.rosemoe.editor.text.TextAnalyzeResult
@@ -193,51 +194,34 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
 
         colors.suppressSwitch = maxSwitch + 10;
 
-        colors.navigation = navigationList as List<io.github.rosemoe.editor.struct.NavigationItem>
+        colors.navigation = navigationList as List<NavigationItem>
         colors.mExtra = infoTable //scan table and content
         lexer.yyclose()
 
     }
 
     private fun findCommentType(text: String): CommentData? {
-        return when {
-            text.lowercase().indexOf("@todo ") != -1 -> {
-                CommentData(
-                    text.lowercase().indexOf("@todo ") + "@todo ".length,
-                    CommentData.Type.TODO, ""
-                ).apply {
-                    content = text.substring(column)
-                }
-            }
-            text.lowercase().indexOf("@tag ") != -1 -> {
-                CommentData(
-                    text.lowercase().indexOf("@tag ") + "@tag ".length,
-                    CommentData.Type.TAG, ""
-                ).apply {
-                    content = text.substring(column)
-                }
-            }
-            text.lowercase().indexOf("@type ") != -1 -> {
-                CommentData(
-                    text.lowercase().indexOf("@type ") + "@type ".length,
-                    CommentData.Type.TYPE, ""
-                ).apply {
-                    content = text.substring(column)
-                }
-            }
-            text.lowercase().indexOf("@parameter ") != -1 -> {
-                CommentData(
-                    text.lowercase().indexOf("@parameter ") + "@parameter ".length,
-                    CommentData.Type.PARAMETER, ""
-                ).apply {
-                    content = text.substring(column)
-                }
-            }
+        val typeArray = arrayOf("todo", "tag", "type", "parameter")
+        var result: CommentData? = null
 
-            else -> null
+        typeArray.forEach {
+            val targetString = "@$it "
+            val index = text.lowercase().indexOf(targetString)
+            if (index != -1) {
 
-
+                result = CommentData(
+                    column = index,
+                    content = text.substring(index + targetString.length),
+                    type = CommentData.Type::class.java.run {
+                        val targetField = it.uppercase()
+                        getField(targetField).get(null) as CommentData.Type
+                    }
+                )
+                return result
+            }
         }
+
+        return result
     }
 
     data class CommentData(

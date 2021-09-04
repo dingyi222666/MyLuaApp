@@ -3,13 +3,11 @@ package com.dingyi.editor
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import com.androlua.LuaApplication
 import com.dingyi.editor.kts.dp
 import io.github.rosemoe.editor.widget.CodeEditor
 import java.io.File
-import kotlin.math.absoluteValue
 
 
 /**
@@ -22,6 +20,8 @@ class CodeEditor(context: Context, attributeSet: AttributeSet) :
     CodeEditor(context, attributeSet) {
 
     private var downX = 0
+
+    private var mForceHorizontalScrollable = true
 
     init {
         Typeface.BOLD
@@ -57,37 +57,46 @@ class CodeEditor(context: Context, attributeSet: AttributeSet) :
 
     }
 
-    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                downX= event.x.toInt()
-                parent.requestDisallowInterceptTouchEvent(false)
-            }
-            MotionEvent.ACTION_MOVE -> {
-                val deltaX=(event.x.toInt()-downX).absoluteValue
-                if (deltaX>0 && canScrollHorizontally(1)) {
-                    parent.requestDisallowInterceptTouchEvent(false)
-                } else {
-                    parent.requestDisallowInterceptTouchEvent(true)
-                }
-                downX=event.x.toInt()
-            }
-            MotionEvent.ACTION_UP -> {
-                if (scrollX==0||scrollX==scrollMaxX) { //
-                    parent.requestDisallowInterceptTouchEvent(true)
-                } else {
-                    parent.requestDisallowInterceptTouchEvent(false)
-                }
-            }
-            else -> parent.requestDisallowInterceptTouchEvent(true)
-        }
-
-        return super.dispatchTouchEvent(event)
-
+    /**
+     * @see CodeEditor.forceHorizontalScrollEnableWhenIntercept
+     */
+    fun isForceHorizontalScrollEnableWhenIntercept(): Boolean {
+        return mForceHorizontalScrollable
     }
 
+    /**
+     * When the parent is a scrollable view group,
+     * request it not to allow horizontal scrolling to be intercepted.
+     * Until the code cannot scroll horizontally
+     * @param forceHorizontalScrollable  Whether force horizontal scrolling
+     */
+    fun forceHorizontalScrollEnableWhenIntercept(forceHorizontalScrollable: Boolean) {
+        mForceHorizontalScrollable = forceHorizontalScrollable
+    }
 
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        val x = event.x.toInt()
 
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                downX = x
+                if (mForceHorizontalScrollable) {
+                    parent.requestDisallowInterceptTouchEvent(true)
+                }
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val deltaX = x - downX
+                if (mForceHorizontalScrollable) {
+                    if (deltaX > 0 && scroller.currX == 0
+                        || deltaX < 0 && scroller.currX == scrollMaxX
+                    ) {
+                        parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
 
     // make public
     public override fun postHideCompletionWindow() {

@@ -65,6 +65,12 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
     }
 
 
+    /**
+     * Get varInfo type to string
+     * @param it varInfo
+     * @param showLocal Can append "local " in target string if type local
+     * @param showField Can append "field " in target string if type unknown
+     */
     private fun getType(
         it: VarInfo,
         showLocal: Boolean = true,
@@ -90,6 +96,16 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         return buffer.toString()
     }
 
+    /**
+     * try to analyzer code (split)
+     * @param isLast is finally split code
+     * @param line autoComplete Code line
+     * @param allText editor all text
+     * @param lastList last autoComplete list
+     * @param name code
+     * @param index split index
+     * @param infoTab analyzer info
+     */
     private fun autoComplete(
         name: String,
         index: Int,
@@ -478,6 +494,9 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
     }
 
 
+    /**
+     * a bean for autoComplete
+     */
     data class AutoCompleteBean(
         var iconRes: Int?,
         val info: BaseInfo?,
@@ -486,6 +505,11 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         val commit: String = ""
     )
 
+    /**
+     * get a lua code type if not null
+     * @param luaJvm LuaJVm
+     * @param s luaCode
+     */
     private fun getType(luaJvm: LuajLuaState, s: String): String {
 
         val tab = runCatching {
