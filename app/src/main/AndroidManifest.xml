@@ -38,6 +38,8 @@
 
         <activity android:name="com.dingyi.myluaapp.ui.editor.EditorActivity" />
 
+        <activity android:name=".ui.GeneralActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.dingyi.myluaapp"

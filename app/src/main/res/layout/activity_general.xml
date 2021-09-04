@@ -3,6 +3,10 @@
     android:layout_width="match_parent"
     android:background="?colorBackgroundFloating"
     android:layout_height="match_parent">
+    <include
+        android:id="@+id/toolbar_include"
+        layout="@layout/layout_include_toolbar" />
+
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

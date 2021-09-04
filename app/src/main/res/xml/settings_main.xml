@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+
+    <Preference
+
+        android:icon="@drawable/ic_twotone_palette_24"
+        android:title="@string/settings_application_category" />
+    <Preference
+        android:icon="@drawable/ic_twotone_keyboard_24"
+        android:title="@string/settings_editor_category" />
+    <Preference
+        android:icon="@drawable/ic_twotone_build_24"
+        android:title="@string/settings_build_category" />
+    <Preference
+        android:icon="@drawable/ic_twotone_memory_24"
+        android:title="@string/settings_plugin_category" />
+    <Preference
+        android:title="@string/settings_about_category" />
+</PreferenceScreen>

@@ -8,9 +8,11 @@ import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
+import com.dingyi.myluaapp.ui.GeneralActivity
 import com.dingyi.myluaapp.ui.editor.EditorActivity
 import com.dingyi.myluaapp.ui.main.adapter.ProjectListAdapter
 import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
+import com.dingyi.myluaapp.ui.settings.SettingsFragment
 
 /**
  * @author: dingyi
@@ -84,6 +86,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel, MainPresen
         when (item.itemId) {
             R.id.main_action_menu_new_project -> {
                 startActivity<NewProjectActivity>()
+            }
+            R.id.main_action_menu_settings -> {
+                startActivity<GeneralActivity> {
+                    putExtra("type", javaClass<SettingsFragment>().name)
+                    val targetBundle=Bundle()
+                    targetBundle.putInt("resId",R.xml.settings_main)
+                    putExtra("arg",targetBundle)
+                }
             }
         }
         return super.onOptionsItemSelected(item)

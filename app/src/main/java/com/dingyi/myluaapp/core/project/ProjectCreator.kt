@@ -20,6 +20,9 @@ class ProjectCreator(
 ) {
 
 
+    /**
+     * replace string
+     */
     private fun replaceString(context: String, usePath: Boolean = false): String {
         return context.replace("\$app_name", info.appName)
             .replace(
