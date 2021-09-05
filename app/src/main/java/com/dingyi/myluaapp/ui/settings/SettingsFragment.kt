@@ -8,8 +8,10 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceGroup
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.getAttributeColor
+import com.dingyi.myluaapp.common.kts.javaClass
 import com.dingyi.myluaapp.common.kts.loadClass
 import com.dingyi.myluaapp.common.kts.startActivity
+import com.dingyi.myluaapp.ui.GeneralActivity
 
 
 /**
@@ -34,7 +36,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
 
         _preference?.let { preference ->
-            runSimpleCode(preference.key)
+            if (preference.hasKey()) {
+                runSimpleCode(preference.key)
+            }
         }
 
         return super.onPreferenceTreeClick(_preference)
@@ -44,11 +48,27 @@ class SettingsFragment : PreferenceFragmentCompat() {
      * run a simple code (openActivity/openPreference)
      */
     private fun runSimpleCode(code: String) {
-        if (code.indexOf("openActivity") != -1) {
-            requireActivity().startActivity(
-                code.substring("openActivity(".length, code.length - 1).loadClass()
-            )
+
+        when {
+            code.indexOf("openActivity") != -1 -> {
+                requireActivity().startActivity(
+                    code.substring(code.indexOf("(")+1, code.length - 1).loadClass()
+                )
+            }
+            code.indexOf("openPreference") != -1 -> {
+                val targetFieldName = code.substring(code.indexOf("(")+1, code.length - 1)
+                requireActivity().startActivity<GeneralActivity> {
+                    putExtra("type", javaClass<SettingsFragment>().name)
+                    val targetBundle = Bundle()
+                    targetBundle.putInt(
+                        "resId",
+                        javaClass<R.xml>().getField(targetFieldName).get(null) as Int
+                    )
+                    putExtra("arg", targetBundle)
+                }
+            }
         }
+
     }
 
     private fun tintIcons(preference: Preference, color: Int) {

@@ -6,6 +6,7 @@
     <Preference
         android:icon="@drawable/ic_twotone_palette_24"
         android:summary="@string/settings_application_summary"
+        android:key="openPreference(settings_application)"
         android:title="@string/settings_application_category"
         app:tint="?theme_hintTextColor">
 

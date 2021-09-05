@@ -51,6 +51,8 @@
     <string name="settings_build_summary">配置构建和运行设置</string>
     <string name="settings_plugin_summary">配置插件设置</string>
     <string name="about_slogan_title">关于</string>
+    <string name="settings_application_language_title">语言</string>
+    <string name="settings_application_language_summary">设置程序界面的语言</string>
 
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
