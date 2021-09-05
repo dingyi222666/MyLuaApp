@@ -1,5 +1,7 @@
 package com.dingyi.myluaapp.ui.settings
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
@@ -7,10 +9,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceGroup
 import com.dingyi.myluaapp.R
-import com.dingyi.myluaapp.common.kts.getAttributeColor
-import com.dingyi.myluaapp.common.kts.javaClass
-import com.dingyi.myluaapp.common.kts.loadClass
-import com.dingyi.myluaapp.common.kts.startActivity
+import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.ui.GeneralActivity
 
 
@@ -20,6 +19,11 @@ import com.dingyi.myluaapp.ui.GeneralActivity
  * @description:
  **/
 class SettingsFragment : PreferenceFragmentCompat() {
+
+
+    companion object {
+        const val REQUEST_FONT_SET_CODE = 1
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         arguments?.getInt("resId")?.let { addPreferencesFromResource(it) }
@@ -52,11 +56,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
         when {
             code.indexOf("openActivity") != -1 -> {
                 requireActivity().startActivity(
-                    code.substring(code.indexOf("(")+1, code.length - 1).loadClass()
+                    code.substring(code.indexOf("(") + 1, code.length - 1).loadClass()
                 )
             }
             code.indexOf("openPreference") != -1 -> {
-                val targetFieldName = code.substring(code.indexOf("(")+1, code.length - 1)
+                val targetFieldName = code.substring(code.indexOf("(") + 1, code.length - 1)
                 requireActivity().startActivity<GeneralActivity> {
                     putExtra("type", javaClass<SettingsFragment>().name)
                     val targetBundle = Bundle()
@@ -67,7 +71,46 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     putExtra("arg", targetBundle)
                 }
             }
+            code == "font_set" -> {
+                startActivityForResult(
+                    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        type = "font/ttf"
+                    },
+                    REQUEST_FONT_SET_CODE
+                )
+            }
         }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_FONT_SET_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    var success = false
+                    data?.data?.let {
+                        requireContext().contentResolver.openInputStream(it)?.use { input ->
+                            success = runCatching {
+                                (Paths.fontsDir + "/default.ttf").toFile().run {
+                                    if (!exists()) {
+                                        createNewFile()
+                                    }
+                                    outputStream()
+                                }.use { output ->
+                                    input.copyTo(output)
+                                }
+                            }.isSuccess
+                        }
+                    }
+                    run {
+                        if (success) R.string.settings_editor_font_toast_successful
+                        else R.string.settings_editor_font_toast_fail
+                    }.getString().showToast()
+                }
+            }
+        }
+
 
     }
 

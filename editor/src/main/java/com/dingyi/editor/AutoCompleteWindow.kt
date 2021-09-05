@@ -13,7 +13,7 @@ import io.github.rosemoe.editor.widget.EditorCompletionAdapter
  * @date: 2021/8/16 1:32
  * @description:
  **/
-class AutoCompleteWindow(private val mEditor: CodeEditor) : EditorAutoCompleteWindow(mEditor) {
+class AutoCompleteWindow(mEditor: CodeEditor) : EditorAutoCompleteWindow(mEditor) {
 
 
     init {
@@ -33,9 +33,6 @@ class AutoCompleteWindow(private val mEditor: CodeEditor) : EditorAutoCompleteWi
         params.bottomMargin = 1.dp
         view.layoutParams = params
     }
-
-    private val field =
-        EditorAutoCompleteWindow::class.java.getDeclaredField("mListView") //save fleld
 
 
 }

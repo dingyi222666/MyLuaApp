@@ -6,10 +6,12 @@ import android.content.Intent
 import android.content.res.TypedArray
 
 import android.content.pm.ActivityInfo
+import android.net.Uri
 
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
 import java.lang.Exception
 
 
@@ -32,6 +34,11 @@ inline fun  Activity.startActivity(targetClass:Class<*>,block: Intent.() -> Unit
     startActivity(Intent(this,targetClass).apply(block))
 }
 
+fun AppCompatActivity.openDocument(fileType:String,callback:(Uri)->Unit) {
+    registerForActivityResult(ActivityResultContracts.OpenDocument()) {
+        callback(it)
+    }.launch(arrayOf(fileType))
+}
 
 fun Context.getStringArray(resId: Int): Array<String> {
     return this.resources.getStringArray(resId)

@@ -17,10 +17,8 @@ import io.github.rosemoe.editor.widget.SymbolPairMatch
  * @author: dingyi
  * @date: 2021/8/14 20:57
  * @description:
+ * @param codeEditor The language must binding editor to get color scheme
  **/
-
-//The language must binding editor to get color scheme
-
 class LuaLanguage(private val codeEditor: CodeEditor) : BaseLanguage(), EditorLanguage {
 
     private val keywordTarget =
@@ -63,6 +61,8 @@ class LuaLanguage(private val codeEditor: CodeEditor) : BaseLanguage(), EditorLa
     )
 
     val codeAnalyzer= LuaAnalyzer()
+
+    val languageOption = mutableMapOf<String,Boolean>()
 
     init {
         super.setOperators(LUA_OPERATORS)

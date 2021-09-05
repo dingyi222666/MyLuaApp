@@ -34,7 +34,7 @@ class CodeEditor(context: Context, attributeSet: AttributeSet) :
             }
 
         completeWindowField.set(this, newCompleteWindow)//换掉显示窗口
-        setAutoCompletionItemAdapter(AutoCompletionItemAdapter())
+        setAutoCompletionItemAdapter(AutoCompletionItemAdapter(this))
         setTextActionMode(TextActionMode.ACTION_MODE)
         setPinLineNumber(false)
 

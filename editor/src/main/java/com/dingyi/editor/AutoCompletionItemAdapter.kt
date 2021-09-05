@@ -19,7 +19,7 @@ import io.github.rosemoe.editor.widget.EditorCompletionAdapter
  * @date: 2021/8/15 6:36
  * @description:
  **/
-class AutoCompletionItemAdapter : EditorCompletionAdapter() {
+class AutoCompletionItemAdapter(private val codeEditor: io.github.rosemoe.editor.widget.CodeEditor) : EditorCompletionAdapter() {
 
 
     class ViewHolder(val itemView: View) {
@@ -67,6 +67,8 @@ class AutoCompletionItemAdapter : EditorCompletionAdapter() {
                     startIndex, spannableStringBuilder.length,
                     SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
+                title.typeface=codeEditor.typefaceText
+
                 title.text = spannableStringBuilder
 
                 if (getItem(position).commit.indexOf("(")!=-1) {

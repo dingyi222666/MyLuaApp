@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings_editor_category">
+    <PreferenceCategory android:title="@string/settings_editor_function_category">
+        <EditTextPreference
+            android:key="symbol_bar"
+            android:title="@string/settings_editor_symbol_bar_category" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_editor_appearance_category">
+        <Preference
+            android:key="font_set"
+            android:summary="@string/settings_editor_font_summary"
+            android:title="@string/settings_editor_font_category" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_editor_other_category">
+        <Preference
+            android:summary="@string/settings_editor_language_summary"
+            android:title="@string/settings_editor_language_category" />
+    </PreferenceCategory>
+</PreferenceScreen>

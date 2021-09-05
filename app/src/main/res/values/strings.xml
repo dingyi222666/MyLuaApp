@@ -46,14 +46,23 @@
     <string name="settings_plugin_category">插件</string>
     <string name="settings_about_category">关于</string>
     <string name="settings_main_title">设置</string>
-    <string name="settings_application_summary">配置全局引用设置</string>
+    <string name="settings_application_summary">配置全局应用设置</string>
     <string name="settings_editor_summary">配置编辑器设置</string>
     <string name="settings_build_summary">配置构建和运行设置</string>
     <string name="settings_plugin_summary">配置插件设置</string>
     <string name="about_slogan_title">关于</string>
     <string name="settings_application_language_title">语言</string>
     <string name="settings_application_language_summary">设置程序界面的语言</string>
-
+    <string name="settings_editor_function_category">功能</string>
+    <string name="settings_editor_appearance_category">外观</string>
+    <string name="settings_editor_language_category">语言特性</string>
+    <string name="settings_editor_language_summary">设置不同语言在编辑器下的特性</string>
+    <string name="settings_editor_other_category">其他</string>
+    <string name="settings_editor_font_category">字体</string>
+    <string name="settings_editor_font_summary">设置编辑器的字体</string>
+    <string name="settings_editor_symbol_bar_category">符号栏</string>
+    <string name="settings_editor_font_toast_successful">选择字体成功</string>
+    <string name="settings_editor_font_toast_fail">选择字体失败</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>

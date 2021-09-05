@@ -96,6 +96,10 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         return buffer.toString()
     }
 
+
+
+
+
     /**
      * try to analyzer code (split)
      * @param isLast is finally split code
@@ -211,8 +215,6 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
             //java class
             if (value is FunctionCallInfo) {
-                println(value.name)
-                println(name)
                 SystemApiHelper
                     .analyzeCode(value.name)
                     .let { data ->
@@ -486,6 +488,9 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
         return result
     }
+
+
+
 
     private fun getColorText(name: String, base: AccessibleObject): CharSequence {
         val baseString = SystemApiHelper.getAccessibleObjectText(base,language)
