@@ -1,16 +1,17 @@
 package com.dingyi.editor.language.lua
 
+import androidx.appcompat.app.AppCompatActivity
 import com.dingyi.editor.language.BaseLanguage
-import com.dingyi.lua.analyze.LuaAnalyzer
-import io.github.rosemoe.editor.interfaces.AutoCompleteProvider
-import io.github.rosemoe.editor.interfaces.CodeAnalyzer
-import io.github.rosemoe.editor.interfaces.EditorLanguage
-import io.github.rosemoe.editor.interfaces.NewlineHandler
-import io.github.rosemoe.editor.interfaces.NewlineHandler.HandleResult
-import io.github.rosemoe.editor.langs.internal.MyCharacter
-import io.github.rosemoe.editor.text.TextUtils
-import io.github.rosemoe.editor.widget.CodeEditor
-import io.github.rosemoe.editor.widget.SymbolPairMatch
+import com.dingyi.lua.analysis.LuaAnalyzer
+import io.github.rosemoe.sora.interfaces.AutoCompleteProvider
+import io.github.rosemoe.sora.interfaces.CodeAnalyzer
+import io.github.rosemoe.sora.interfaces.EditorLanguage
+import io.github.rosemoe.sora.interfaces.NewlineHandler
+import io.github.rosemoe.sora.interfaces.NewlineHandler.HandleResult
+import io.github.rosemoe.sora.langs.internal.MyCharacter
+import io.github.rosemoe.sora.text.TextUtils
+import io.github.rosemoe.sora.widget.CodeEditor
+import io.github.rosemoe.sora.widget.SymbolPairMatch
 
 
 /**
@@ -19,34 +20,35 @@ import io.github.rosemoe.editor.widget.SymbolPairMatch
  * @description:
  * @param codeEditor The language must binding editor to get color scheme
  **/
-class LuaLanguage(private val codeEditor: CodeEditor) : BaseLanguage(), EditorLanguage {
+class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatActivity) :
+    BaseLanguage(), EditorLanguage {
 
     private val keywordTarget =
         "and|break|case|catch|continue|default|defer|do|else|elseif|end|false|finally|for|function|goto|if|in|lambda|local|nil|not|or|repeat|return|switch|then|true|try|until|when|while"
-    private  val globalTarget =
+    private val globalTarget =
         "self|__add|__band|__bnot|__bor|__bxor|__call|__close|__concat|__div|__eq|__gc|__idiv|__index|__le|__len|__lt|__mod|__mul|__newindex|__pow|__shl|__shr|__sub|__tostring|__unm|_ENV|_G|assert|collectgarbage|dofile|error|getfenv|getmetatable|ipairs|load|loadfile|loadstring|module|next|pairs|pcall|print|rawequal|rawget|rawlen|rawset|require|select|setfenv|setmetatable|tointeger|tonumber|tostring|type|unpack|xpcall"
 
     private val packageName = "coroutine|debug|io|luajava|math|os|package|string|table|utf8"
-    private  val package_coroutine = "create|isyieldable|resume|running|status|wrap|yield"
+    private val package_coroutine = "create|isyieldable|resume|running|status|wrap|yield"
     private val package_debug =
         "debug|gethook|getinfo|getlocal|getmetatable|getregistry|getupvalue|getuservalue|sethook|setlocal|setmetatable|setupvalue|setuservalue|traceback|upvalueid|upvaluejoin"
-    private  val package_io =
+    private val package_io =
         "close|flush|info|input|isdir|lines|ls|mkdir|open|output|popen|read|readall|stderr|stdin|stdout|tmpfile|type|write"
-    private  val package_luajava =
+    private val package_luajava =
         "astable|bindClass|clear|coding|createArray|createProxy|getContext|instanceof|loadLib|loaded|luapath|new|newArray|newInstance|override|package|tostring"
-    private  val package_math =
+    private val package_math =
         "abs|acos|asin|atan|atan2|ceil|cos|cosh|deg|exp|floor|fmod|frexp|huge|ldexp|log|log10|max|maxinteger|min|mininteger|modf|pi|pow|rad|random|randomseed|sin|sinh|sqrt|tan|tanh|tointeger|type|ult"
-    private  val package_os =
+    private val package_os =
         "clock|date|difftime|execute|exit|getenv|remove|rename|setlocale|time|tmpname"
-    private  val package_package =
+    private val package_package =
         "config|cpath|loaded|loaders|loadlib|path|preload|searchers|searchpath|seeall"
-    private  val package_string =
+    private val package_string =
         "byte|char|dump|find|format|gfind|gmatch|gsub|len|lower|match|rep|reverse|sub|upper"
-    private  val package_table =
+    private val package_table =
         "clear|clone|concat|const|find|foreach|foreachi|gfind|insert|maxn|move|pack|remove|size|sort|unpack"
-    private  val package_utf8 =
+    private val package_utf8 =
         "byte|char|charpattern|charpos|codepoint|codes|escape|find|fold|gfind|gmatch|gsub|insert|len|lower|match|ncasecmp|next|offset|remove|reverse|sub|title|upper|width|widthindex"
-    private  val extFunctionTarget =
+    private val extFunctionTarget =
         "activity|call|compile|dump|each|enum|import|loadbitmap|loadlayout|loadmenu|service|set|task|thread|timer"
     private val functionTarget = "$globalTarget|activity|import|task|$packageName"
 
@@ -60,11 +62,14 @@ class LuaLanguage(private val codeEditor: CodeEditor) : BaseLanguage(), EditorLa
         '?', '~', '%', '^'
     )
 
-    val codeAnalyzer= LuaAnalyzer()
+    val codeAnalyzer = LuaAnalyzer()
 
-    val languageOption = mutableMapOf<String,Boolean>()
+
+    private val codeSpanAnalyzer = LuaCodeAnalyzer(this)
+
 
     init {
+        println(__keywords.joinToString())
         super.setOperators(LUA_OPERATORS)
         super.setKeywords(__keywords)
         super.setNames(__names)
@@ -81,24 +86,27 @@ class LuaLanguage(private val codeEditor: CodeEditor) : BaseLanguage(), EditorLa
 
     }
 
+
+
     override fun getAnalyzer(): CodeAnalyzer {
-        return LuaCodeAnalyzer(this)
+        return codeSpanAnalyzer
     }
+
 
     override fun getAutoCompleteProvider(): AutoCompleteProvider {
         return LuaAutoComplete(this)
     }
 
-    fun getSchemeColor(type: Int):Int {
+    fun getSchemeColor(type: Int): Int {
         return codeEditor.colorScheme.getColor(type)
     }
 
     override fun isAutoCompleteChar(ch: Char): Boolean {
-        return if (ch==',')
+        return if (ch == ',')
             false;
         else
-            ch=='.' || ch==':'
-                    || ch=='_' || MyCharacter.isJavaIdentifierPart(ch.code);
+            ch == '.' || ch == ':'
+                    || ch == '_' || MyCharacter.isJavaIdentifierPart(ch.code);
     }
 
     override fun getIndentAdvance(content: String): Int {

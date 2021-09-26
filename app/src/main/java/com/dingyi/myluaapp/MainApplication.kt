@@ -1,6 +1,6 @@
 package com.dingyi.myluaapp
 
-import com.androlua.LuaApplication
+import android.app.Application
 import com.dingyi.myluaapp.common.handler.RequestHandler
 
 import com.hjq.http.EasyConfig
@@ -13,7 +13,7 @@ import kotlin.properties.Delegates
  * @date: 2021/8/4 13:02
  * @description:
  **/
-class MainApplication : LuaApplication() {
+class MainApplication : Application() {
 
     override fun onCreate() {
 
@@ -26,6 +26,7 @@ class MainApplication : LuaApplication() {
 
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .build()
+
 
 
         EasyConfig.with(okHttpClient) // 是否打印日志

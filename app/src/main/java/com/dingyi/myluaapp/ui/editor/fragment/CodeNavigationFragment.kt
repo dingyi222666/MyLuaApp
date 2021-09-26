@@ -1,12 +1,11 @@
 package com.dingyi.myluaapp.ui.editor.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dingyi.editor.struct.ColumnNavigationItem
+import com.dingyi.editor.data.ColumnNavigationItem
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.javaClass
 import com.dingyi.myluaapp.databinding.FragmentEditorCodeNavigationBinding

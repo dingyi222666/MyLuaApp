@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.dingyi.editor.kts.dp
-import com.dingyi.editor.struct.ColorCompletionItem
-import io.github.rosemoe.editor.widget.EditorCompletionAdapter
+import com.dingyi.editor.data.ColorCompletionItem
+import io.github.rosemoe.sora.widget.EditorCompletionAdapter
 
 
 /**
@@ -19,7 +19,7 @@ import io.github.rosemoe.editor.widget.EditorCompletionAdapter
  * @date: 2021/8/15 6:36
  * @description:
  **/
-class AutoCompletionItemAdapter(private val codeEditor: io.github.rosemoe.editor.widget.CodeEditor) : EditorCompletionAdapter() {
+class AutoCompletionItemAdapter(private val codeEditor: io.github.rosemoe.sora.widget.CodeEditor) : EditorCompletionAdapter() {
 
 
     class ViewHolder(val itemView: View) {

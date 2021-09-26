@@ -1,6 +1,6 @@
 package com.dingyi.editor.language.java.api
 
-import com.androlua.LuaActivity
+
 import org.json.JSONObject
 import java.io.InputStream
 
@@ -11,9 +11,6 @@ import java.io.InputStream
  **/
 object AndroidApi {
 
-    private val staticClassPool = mapOf(
-        "activity" to LuaActivity::class.java.name,
-    )
 
     private val androidApiList = mutableListOf<String>()
 

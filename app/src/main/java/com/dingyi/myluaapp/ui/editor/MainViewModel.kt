@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.ui.editor
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dingyi.editor.struct.ColumnNavigationItem
+import com.dingyi.editor.data.ColumnNavigationItem
 import com.dingyi.myluaapp.bean.ProjectInfo
 import com.dingyi.myluaapp.database.bean.ProjectConfig
 

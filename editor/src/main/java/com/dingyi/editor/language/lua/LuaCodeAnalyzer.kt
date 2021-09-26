@@ -3,17 +3,17 @@ package com.dingyi.editor.language.lua
 import android.graphics.Color
 import com.dingyi.editor.language.lua.LuaTokenTypes.*
 import com.dingyi.editor.scheme.SchemeLua
-import com.dingyi.editor.struct.ColumnNavigationItem
-import io.github.rosemoe.editor.interfaces.CodeAnalyzer
-import io.github.rosemoe.editor.struct.BlockLine
-import io.github.rosemoe.editor.struct.NavigationItem
-
-import io.github.rosemoe.editor.struct.Span
-import io.github.rosemoe.editor.text.TextAnalyzeResult
-import io.github.rosemoe.editor.text.TextAnalyzer
-import io.github.rosemoe.editor.widget.EditorColorScheme
+import com.dingyi.editor.data.ColumnNavigationItem
+import io.github.rosemoe.sora.interfaces.CodeAnalyzer
+import io.github.rosemoe.sora.struct.BlockLine
+import io.github.rosemoe.sora.struct.NavigationItem
+import io.github.rosemoe.sora.struct.Span
+import io.github.rosemoe.sora.text.TextAnalyzeResult
+import io.github.rosemoe.sora.text.TextAnalyzer
+import io.github.rosemoe.sora.widget.EditorColorScheme
 
 class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
+
 
 
     override fun analyze(
@@ -23,21 +23,13 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
     ) {
 
 
-        val string = content.toString()
         val lexer = LuaLexer(content)
         val blockStack = ArrayDeque<BlockLine>()
         var token: LuaTokenTypes? = lexer.advance()
         var maxSwitch = 1
         var currSwitch = 0
-        val navigationList = mutableListOf<ColumnNavigationItem>()
+        val navigationList = mutableListOf<NavigationItem>()
 
-        val infoTable = runCatching {
-            language.codeAnalyzer
-                .analysis(string)
-                .copy()
-        }.onFailure {
-            it.printStackTrace(System.err)
-        }.getOrNull()
 
         val removeBlock = {
             if (!blockStack.isEmpty()) {
@@ -87,6 +79,7 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                 DO, FUNCTION, IF, WHILE, SWITCH, FOR -> {
                     addBlock()
                     colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD)
+
                 }
 
                 END -> {
@@ -96,7 +89,7 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
 
                 //关键字
                 LOCAL, LAMBDA, WHEN, NOT, FALSE, TRUE, NIL, AND, OR, THEN, ELSE, ELSEIF, RETURN, REPEAT, UNTIL,
-                CASE, DEFAULT, DEFER -> {
+                CASE, DEFAULT, DEFER, CONTINUE, TRY, CATCH -> {
                     colors.addIfNeeded(line, column, EditorColorScheme.KEYWORD)
                 }
                 //字符串
@@ -154,23 +147,8 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                 //名字
                 NAME -> {
                     val text = lexer.yytext()
-
                     when {
-                        language.isKeyword(text) -> colors.addIfNeeded(
-                            line,
-                            column,
-                            EditorColorScheme.KEYWORD
-                        )
                         language.isName(text) -> colors.addIfNeeded(line, column, SchemeLua.NAME)
-                        infoTable?.findTokenInfo(line + 1, column) != null -> {
-                            val tokenInfo =
-                                infoTable.findTokenInfo(line + 1, column)
-                            val type =
-                                if (tokenInfo.info.isLocal) SchemeLua.LOCAL else SchemeLua.GLOBAL
-
-                            colors.addIfNeeded(line, column, type)
-                        }
-
                         else -> colors.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL)
                     }
                 }
@@ -179,9 +157,12 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                 }
             }
 
+
+
             token = lexer.advance()
 
         }
+
 
 
         colors.determine(lexer.yyline())
@@ -194,8 +175,8 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
 
         colors.suppressSwitch = maxSwitch + 10;
 
-        colors.navigation = navigationList as List<NavigationItem>
-        colors.mExtra = infoTable //scan table and content
+        colors.navigation = navigationList
+        colors.mExtra = content.toString() //content
         lexer.yyclose()
 
     }

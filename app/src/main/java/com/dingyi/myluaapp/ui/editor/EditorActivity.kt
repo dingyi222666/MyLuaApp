@@ -78,7 +78,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
 
 
                 
-                //isUserInputEnabled = false
+                isUserInputEnabled = false
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
                         viewModel.projectConfig.value?.run {

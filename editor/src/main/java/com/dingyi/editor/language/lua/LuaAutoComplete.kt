@@ -2,14 +2,15 @@ package com.dingyi.editor.language.lua
 
 
 import android.text.SpannableStringBuilder
-import com.dingyi.editor.struct.ColorCompletionItem
 import com.dingyi.editor.R
 import com.dingyi.editor.language.java.api.AndroidApi
 import com.dingyi.editor.language.java.api.SystemApiHelper
-import com.dingyi.lua.analyze.info.*
+import com.dingyi.editor.data.ColorCompletionItem
+import com.dingyi.lua.analysis.info.*
 import com.luajava.LuajLuaState
-import io.github.rosemoe.editor.interfaces.AutoCompleteProvider
-import io.github.rosemoe.editor.text.TextAnalyzeResult
+import io.github.rosemoe.sora.data.CompletionItem
+import io.github.rosemoe.sora.interfaces.AutoCompleteProvider
+import io.github.rosemoe.sora.text.TextAnalyzeResult
 import org.luaj.vm2.lib.jse.JsePlatform
 import java.lang.reflect.AccessibleObject
 import java.util.*
@@ -24,18 +25,24 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
 
     override fun getAutoCompleteItems(
         prefix: String,
-        isInCodeBlock: Boolean,
         colors: TextAnalyzeResult,
-        line: Int
-    ): MutableList<ColorCompletionItem> {
+        line: Int,
+        column: Int
+    ): MutableList<CompletionItem> {
 
 
-        val result = mutableListOf<ColorCompletionItem>()
+        val result = mutableListOf<CompletionItem>()
 
         var list = listOf<AutoCompleteBean>()
 
 
-        val infoTab = colors.mExtra as InfoTable?
+        val infoTab =
+            runCatching {
+                language.codeAnalyzer
+                    .analysis(colors.extra.toString())
+            }.onFailure {
+                it.printStackTrace(System.err)
+            }.getOrNull()
 
 
         val split = prefix.split(".")
@@ -53,7 +60,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
             result.add(
                 ColorCompletionItem("").apply {
                     icon = autoCompleteBean.iconRes?.let {
-                        DrawablePool.loadDrawable(it)
+                        DrawablePool.loadDrawable(language.codeEditor.context,it)
                     }
                     desc = autoCompleteBean.description
                     colorLabel = autoCompleteBean.label
@@ -95,9 +102,6 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         }
         return buffer.toString()
     }
-
-
-
 
 
     /**
@@ -269,7 +273,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
                     }
 
 
-                result=result.distinctBy {
+                result = result.distinctBy {
                     it.label.toString()
                 }.toMutableList()
             }
@@ -490,10 +494,8 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
     }
 
 
-
-
     private fun getColorText(name: String, base: AccessibleObject): CharSequence {
-        val baseString = SystemApiHelper.getAccessibleObjectText(base,language)
+        val baseString = SystemApiHelper.getAccessibleObjectText(base, language)
         return SpannableStringBuilder(name)
             .append(baseString)
     }
@@ -524,6 +526,7 @@ class LuaAutoComplete(private val language: LuaLanguage) : AutoCompleteProvider 
         }
         return tab.getOrNull() ?: "field"
     }
+
 
 
 }

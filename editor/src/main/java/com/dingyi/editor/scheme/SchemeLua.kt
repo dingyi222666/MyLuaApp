@@ -1,6 +1,6 @@
 package com.dingyi.editor.scheme
 
-import io.github.rosemoe.editor.widget.EditorColorScheme
+import io.github.rosemoe.sora.widget.EditorColorScheme
 
 /**
  * @author: dingyi

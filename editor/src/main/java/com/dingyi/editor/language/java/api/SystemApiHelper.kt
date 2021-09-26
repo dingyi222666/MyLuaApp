@@ -7,10 +7,10 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import com.androlua.LuaApplication
+
 import com.dingyi.editor.language.lua.LuaLanguage
 import com.dingyi.editor.scheme.SchemeLua
-import com.dingyi.lua.analyze.info.Type
+import com.dingyi.lua.analysis.info.Type
 import java.lang.reflect.AccessibleObject
 import java.lang.reflect.Field
 import java.lang.reflect.Method
@@ -27,7 +27,7 @@ object SystemApiHelper {
 
     fun findClass(className: String): Boolean {
         return runCatching {
-            LuaApplication.getInstance().classLoader.loadClass(className)
+           this.javaClass.classLoader?.loadClass(className)
         }.isSuccess
     }
 
@@ -240,7 +240,7 @@ object SystemApiHelper {
 
     private fun getClass(it: String): Class<*>? {
         return runCatching {
-            LuaApplication.getInstance().classLoader.loadClass(it)
+           this.javaClass.classLoader?.loadClass(it)
         }.getOrNull()
     }
 

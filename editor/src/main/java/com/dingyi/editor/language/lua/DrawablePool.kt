@@ -1,7 +1,8 @@
 package com.dingyi.editor.language.lua
 
+import android.content.Context
 import android.graphics.drawable.Drawable
-import com.androlua.LuaApplication
+
 
 
 /**
@@ -17,9 +18,9 @@ object DrawablePool {
     }
 
 
-    fun loadDrawable(resId: Int): Drawable? {
+    fun loadDrawable(context: Context, resId: Int): Drawable? {
         if (!pool.containsKey(resId)) {
-            val drawable = LuaApplication.getInstance().getDrawable(resId)
+            val drawable = context.getDrawable(resId)
             drawable?.let { pool.put(resId, it) }
         }
         return pool[resId]

@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.RelativeLayout
 import com.dingyi.editor.kts.dp
-import io.github.rosemoe.editor.widget.EditorAutoCompleteWindow
-import io.github.rosemoe.editor.widget.EditorCompletionAdapter
+import io.github.rosemoe.sora.widget.EditorAutoCompleteWindow
+import io.github.rosemoe.sora.widget.EditorCompletionAdapter
 
 /**
  * @author: dingyi
@@ -18,7 +18,7 @@ class AutoCompleteWindow(mEditor: CodeEditor) : EditorAutoCompleteWindow(mEditor
 
     init {
         val autoCompleteWindowClass =
-            io.github.rosemoe.editor.widget.EditorAutoCompleteWindow::class.java
+            io.github.rosemoe.sora.widget.EditorAutoCompleteWindow::class.java
         var field = autoCompleteWindowClass.getDeclaredField("mBg")
         field.isAccessible = true
         val drawable = field.get(this) as GradientDrawable

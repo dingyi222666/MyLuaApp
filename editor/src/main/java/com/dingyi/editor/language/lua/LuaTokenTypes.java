@@ -91,6 +91,9 @@ public enum LuaTokenTypes {
     AT,
     DEFER,
     WHEN,
-    LAMBDA
+    LAMBDA,
+    TRY,
+    CATCH,
+    FINALLY
 
 }
