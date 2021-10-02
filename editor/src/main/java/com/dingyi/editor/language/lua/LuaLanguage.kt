@@ -9,6 +9,9 @@ import io.github.rosemoe.sora.interfaces.EditorLanguage
 import io.github.rosemoe.sora.interfaces.NewlineHandler
 import io.github.rosemoe.sora.interfaces.NewlineHandler.HandleResult
 import io.github.rosemoe.sora.langs.internal.MyCharacter
+import io.github.rosemoe.sora.text.Content
+import io.github.rosemoe.sora.text.ContentListener
+import io.github.rosemoe.sora.text.TextAnalyzer
 import io.github.rosemoe.sora.text.TextUtils
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.SymbolPairMatch
@@ -65,11 +68,11 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
     val codeAnalyzer = LuaAnalyzer()
 
 
-    private val codeSpanAnalyzer = LuaCodeAnalyzer(this)
+    val analyzerThread = LuaAnalyzerThread()
 
 
     init {
-        println(__keywords.joinToString())
+
         super.setOperators(LUA_OPERATORS)
         super.setKeywords(__keywords)
         super.setNames(__names)
@@ -84,12 +87,47 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
         super.addBasePackage("package", package_package.split("|").toTypedArray());
         super.addBasePackage("debug", package_debug.split("|").toTypedArray());
 
+
+        val mSpanner = CodeEditor::class.java.getDeclaredField("mSpanner")
+            .apply {
+                isAccessible = true
+            }.get(codeEditor) as TextAnalyzer
+
+
+        analyzerThread.waitRefreshCallback = {
+            mSpanner.analyze(codeEditor.text)
+        }
+
+        codeEditor.text.addContentListener(object : ContentListener {
+            override fun beforeReplace(content: Content?) {
+                analyzerThread.pushObject(content.toString())
+            }
+
+            override fun afterInsert(
+                content: Content?,
+                startLine: Int,
+                startColumn: Int,
+                endLine: Int,
+                endColumn: Int,
+                insertedContent: CharSequence?
+            ) {}
+
+            override fun afterDelete(
+                content: Content?,
+                startLine: Int,
+                startColumn: Int,
+                endLine: Int,
+                endColumn: Int,
+                deletedContent: CharSequence?
+            ) {}
+
+        })
     }
 
 
 
     override fun getAnalyzer(): CodeAnalyzer {
-        return codeSpanAnalyzer
+        return LuaCodeAnalyzer(this)
     }
 
 

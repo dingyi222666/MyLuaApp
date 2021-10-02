@@ -1,7 +1,10 @@
 package com.dingyi.editor
 
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 import kotlin.concurrent.thread
+import kotlin.properties.Delegates
 
 /**
  * @author: dingyi
@@ -10,48 +13,51 @@ import kotlin.concurrent.thread
  **/
 abstract class AnalyzerThread() {
 
-    private var lookObject: Any? = null
+    private var lookObject:Any? = Any()
 
     private var analyzerObject: Any? = null
 
-    private var runThread: Thread? = null
-
     private var runSuccessFlag = false
 
+    private val threadPool = Executors.newCachedThreadPool()
 
-    fun getOrLock(nowObject: Any): Any? {
-        if (nowObject.toString() == nowObject.toString()) {
-            return if (runSuccessFlag) {
-                analyzerObject
-            } else {
-                //lock
-                while (true) {
-                    if (analyzerObject == true) {
-                        break
-                    }
-                }
-                analyzerObject
-            }
-        } else {
-            runThread?.interrupt()
-            run(nowObject)
-            return null
+    private var nowRunFuture:Future<*>? = null
+
+    var waitRefreshCallback = {
+
+    }
+
+    fun pushObject(nowObject: Any){
+        if (nowObject.hashCode() != lookObject?.hashCode()) {
+            nowRunFuture?.cancel(true)
+            lookObject  = nowObject
+            run()
         }
 
-        //fail
+    }
 
+    fun getOrNull():Any? {
+        if (runSuccessFlag) {
+            return analyzerObject
+        }
+        return null
     }
 
     fun interrupt() {
-        kotlin.runCatching {
-            runThread?.interrupt()
+        runCatching {
+            nowRunFuture?.cancel(true)
         }
     }
 
-    fun run(nowObject: Any) {
-        runThread = thread(start = true) {
+    fun shutdown() {
+        threadPool.shutdownNow()
+    }
+
+    fun run() {
+        nowRunFuture = threadPool.submit {
             runSuccessFlag = false
-            analyzerObject = analyze(nowObject)
+            analyzerObject = lookObject?.let { analyze(it) }
+            waitRefreshCallback()
             runSuccessFlag = true
         }
     }

@@ -77,4 +77,18 @@ public class Range {
         this.endColumn = endColumn;
     }
 
+    // 8:2 - 12:4
+    // 7:2 - 10:2
+    public boolean checkRange(Range range) {
+        return range.startLine >= startLine && range.endLine >= endLine;
+    }
+    public static Range build(int startLine,int startColumn,int endLine,int endColumn) {
+        Range result = new Range();
+        result.endLine = endLine;
+        result.endColumn = endColumn;
+        result.startColumn = startColumn;
+        result.startLine = startLine;
+        return result;
+    }
+
 }

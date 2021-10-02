@@ -1,19 +1,19 @@
 package com.dingyi.editor.language.lua
 
 import android.graphics.Color
+import com.dingyi.editor.data.ColumnNavigationItem
 import com.dingyi.editor.language.lua.LuaTokenTypes.*
 import com.dingyi.editor.scheme.SchemeLua
-import com.dingyi.editor.data.ColumnNavigationItem
+import com.dingyi.lua.analysis.symbol.SymbolTable
+import io.github.rosemoe.sora.data.BlockLine
+import io.github.rosemoe.sora.data.NavigationItem
+import io.github.rosemoe.sora.data.Span
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer
-import io.github.rosemoe.sora.struct.BlockLine
-import io.github.rosemoe.sora.struct.NavigationItem
-import io.github.rosemoe.sora.struct.Span
 import io.github.rosemoe.sora.text.TextAnalyzeResult
 import io.github.rosemoe.sora.text.TextAnalyzer
 import io.github.rosemoe.sora.widget.EditorColorScheme
 
 class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
-
 
 
     override fun analyze(
@@ -30,6 +30,10 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
         var currSwitch = 0
         val navigationList = mutableListOf<NavigationItem>()
 
+
+        val luaSymbolTable = runCatching {
+            language.analyzerThread.getOrNull() as SymbolTable
+        }.getOrNull()
 
         val removeBlock = {
             if (!blockStack.isEmpty()) {
@@ -147,9 +151,20 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
                 //名字
                 NAME -> {
                     val text = lexer.yytext()
+
                     when {
                         language.isName(text) -> colors.addIfNeeded(line, column, SchemeLua.NAME)
-                        else -> colors.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL)
+                        else -> {
+                            var flag = EditorColorScheme.TEXT_NORMAL
+                            luaSymbolTable?.getOrNewSymbol(text)?.let {
+                                it.tokenLocations[(line + 1).toString() + column]
+                            }?.let {
+                                flag = if (it.isLocal) SchemeLua.LOCAL else SchemeLua.GLOBAL
+                                colors.addIfNeeded(line, column, flag)
+                            }
+                            if (flag == EditorColorScheme.TEXT_NORMAL)
+                                colors.addIfNeeded(line, column, EditorColorScheme.TEXT_NORMAL)
+                        }
                     }
                 }
                 else -> {
@@ -176,42 +191,45 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
         colors.suppressSwitch = maxSwitch + 10;
 
         colors.navigation = navigationList
-        colors.mExtra = content.toString() //content
+
+
+
         lexer.yyclose()
-
-    }
-
-    private fun findCommentType(text: String): CommentData? {
-        val typeArray = arrayOf("todo", "tag", "type", "parameter")
-        var result: CommentData? = null
-
-        typeArray.forEach {
-            val targetString = "@$it "
-            val index = text.lowercase().indexOf(targetString)
-            if (index != -1) {
-
-                result = CommentData(
-                    column = index,
-                    content = text.substring(index + targetString.length),
-                    type = CommentData.Type::class.java.run {
-                        val targetField = it.uppercase()
-                        getField(targetField).get(null) as CommentData.Type
-                    }
-                )
-                return result
-            }
-        }
-
-        return result
-    }
-
-    data class CommentData(
-        val column: Int,
-        val type: Type, var content: String
-    ) {
-        enum class Type {
-            TODO, TYPE, PARAMETER, TAG
-        }
     }
 
 }
+
+private fun findCommentType(text: String): CommentData? {
+    val typeArray = arrayOf("todo", "tag", "type", "parameter")
+    var result: CommentData? = null
+
+    typeArray.forEach {
+        val targetString = "@$it "
+        val index = text.lowercase().indexOf(targetString)
+        if (index != -1) {
+
+            result = CommentData(
+                column = index,
+                content = text.substring(index + targetString.length),
+                type = CommentData.Type::class.java.run {
+                    val targetField = it.uppercase()
+                    getField(targetField).get(null) as CommentData.Type
+                }
+            )
+            return result
+        }
+    }
+
+    return result
+}
+
+data class CommentData(
+    val column: Int,
+    val type: Type, var content: String
+) {
+    enum class Type {
+        TODO, TYPE, PARAMETER, TAG
+    }
+}
+
+

@@ -29,6 +29,7 @@ public class SymbolTable {
         synchronized (this) {
             symbolTable.clear();
         }
+        System.gc();
     }
 
 }

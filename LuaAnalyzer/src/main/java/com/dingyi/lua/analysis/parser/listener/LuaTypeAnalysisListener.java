@@ -8,6 +8,7 @@ import com.dingyi.lua.analysis.parser.LuaParser;
 import com.dingyi.lua.analysis.symbol.Range;
 import com.dingyi.lua.analysis.symbol.Symbol;
 import com.dingyi.lua.analysis.symbol.SymbolTable;
+import com.dingyi.lua.analysis.util.Pair;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -65,36 +66,48 @@ public class LuaTypeAnalysisListener extends LuaBaseListener {
         return "";
     }
 
-    private TypeDeclaration getExpStatTypeDeclaration(LuaParser.ExpContext expContext) {
+    private Pair<TypeDeclaration, Declaration> getExpStatTypeDeclaration(LuaParser.ExpContext expContext) {
         if (expContext.number() != null || isNumberByExpStat(expContext)) {
-            return TypeDeclaration.NUMBER;
+            return new Pair<>(TypeDeclaration.NUMBER, null);
         }
         if (expContext.string() != null) {
-            return TypeDeclaration.STRING;
+            return new Pair<>(TypeDeclaration.STRING, null);
         }
         if (expContext.getText().equals("false") || expContext.getText().equals("true")) {
-            return TypeDeclaration.BOOLEAN;
+            return new Pair<>(TypeDeclaration.BOOLEAN, null);
         }
         if (expContext.lambdadef() != null || expContext.functiondef() != null) {
-            return TypeDeclaration.FUNC;
+            return new Pair<>(TypeDeclaration.FUNC, null);
         }
         if (expContext.tableconstructor() != null) {
-            return TypeDeclaration.TABLE;
+            return new Pair<>(TypeDeclaration.TABLE, null);
         }
         if (expContext.prefixexp() != null) {
             if (expContext.prefixexp().varOrExp() != null) {
                 if (expContext.prefixexp().varOrExp().var() != null) {
                     String name = expContext.prefixexp().varOrExp().var().NAME().getText();
                     if (name.equals("import")) {
-                        return TypeDeclaration.IMPORT;
+                        return new Pair<>(TypeDeclaration.IMPORT, null);
                     } else if (name.equals("require")) {
-                        return TypeDeclaration.REQUIRE;
+                        return new Pair<>(TypeDeclaration.REQUIRE, null);
+                    } else { //尝试获取符号
+
+                        Token token = expContext.prefixexp().varOrExp().var().NAME().getSymbol();
+                        Declaration declaration = symbolTable.getOrNewSymbol(name).findDeclaration(
+                                buildRange(token, getParentScope(expContext)), token
+                        );
+
+                        if (declaration != null) {
+                            return new Pair<>(declaration.type, declaration);
+                        }
+
                     }
                 }
+
             }
-            return TypeDeclaration.FUNCTIONCALL;
+            return new Pair<>(TypeDeclaration.FUNCTIONCALL, null);
         }
-        return TypeDeclaration.UNKNOWN;
+        return new Pair<>(TypeDeclaration.UNKNOWN, null);
     }
 
     private boolean isNumberByExpStat(LuaParser.ExpContext ctx) {
@@ -164,8 +177,10 @@ public class LuaTypeAnalysisListener extends LuaBaseListener {
 
             declaration.isLocal = true;
 
+            declaration.token = localVarName.getSymbol();
+
             declaration.link(lastDeclaration);
-            
+
             declarationList.add(declaration);
 
             localVarSymbol.tokenLocations.put(
@@ -174,7 +189,11 @@ public class LuaTypeAnalysisListener extends LuaBaseListener {
 
 
             if (localVarExp != null) {
-                declaration.type = getExpStatTypeDeclaration(localVarExp);
+                Pair<TypeDeclaration, Declaration> pair = getExpStatTypeDeclaration(localVarExp);
+                declaration.type = pair.first;
+                if (pair.second != null) {
+                    declaration.link(pair.second);
+                }
                 declaration.value = analyseTypeExpStat(declaration, localVarExp);
             }
 
@@ -182,6 +201,49 @@ public class LuaTypeAnalysisListener extends LuaBaseListener {
         }
 
     }
+
+    @Override
+    public void enterLocalFunctionDefStat(LuaParser.LocalFunctionDefStatContext ctx) {
+        super.enterLocalFunctionDefStat(ctx);
+
+        TerminalNode localVarName = ctx.NAME();
+
+        ParserRuleContext parentScope = getParentScope(ctx);
+
+        //get for new symbol
+        Symbol localVarSymbol = symbolTable.getOrNewSymbol(localVarName.getText());
+
+        //get range
+        Range scopeRange = buildRange(localVarName.getSymbol(), parentScope);
+
+        //new a declaration
+        Declaration declaration = new Declaration();
+
+
+        declaration.type=TypeDeclaration.FUNC;
+
+        declaration.isLocal = true;
+
+        localVarSymbol.tokenLocations.put(
+                tokenToString(localVarName.getSymbol()),declaration
+        );
+
+        List<Declaration> declarationList = null;
+
+        if (!localVarSymbol.scopes.containsKey(scopeRange)) {
+            declarationList = new ArrayList<>();
+            localVarSymbol.scopes.put(scopeRange, declarationList);
+        } else {
+            declarationList = localVarSymbol.scopes.get(scopeRange);
+        }
+
+        declarationList.add(declaration);
+
+
+    }
+
+
+
 
     private Declaration analyseTypeExpStat(Declaration declaration, LuaParser.ExpContext localVarExp) {
         return null;
@@ -203,4 +265,10 @@ public class LuaTypeAnalysisListener extends LuaBaseListener {
                 || peek instanceof LuaParser.ForStatContext;
     }
 
+
+    @Override
+    public void enterChunk(LuaParser.ChunkContext ctx) {
+        super.enterChunk(ctx);
+        symbolTable.clearSymbol();
+    }
 }

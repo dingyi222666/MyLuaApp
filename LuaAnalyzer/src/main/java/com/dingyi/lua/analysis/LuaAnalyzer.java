@@ -6,6 +6,8 @@ import com.dingyi.lua.analysis.parser.listener.LuaTokenAnalyzerListener;
 import com.dingyi.lua.analysis.parser.listener.LuaInfoListener;
 import com.dingyi.lua.analysis.parser.LuaLexer;
 import com.dingyi.lua.analysis.parser.LuaParser;
+import com.dingyi.lua.analysis.parser.listener.LuaTypeAnalysisListener;
+import com.dingyi.lua.analysis.symbol.SymbolTable;
 import com.dingyi.lua.analysis.util.DefaultUtils;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
@@ -15,6 +17,7 @@ import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -27,6 +30,8 @@ public class LuaAnalyzer {
 
 
     private final LuaTokenAnalyzerListener tokenAnalyzerListener = new LuaTokenAnalyzerListener();
+
+    private final LuaTypeAnalysisListener typeAnalyzerListener =  new LuaTypeAnalysisListener();
 
     private ErrorListener listener;
 
@@ -45,6 +50,7 @@ public class LuaAnalyzer {
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
             if (listener != null) {
+
                 listener.error(line + ":" + charPositionInLine + " " + msg);
             }
         }
@@ -94,6 +100,19 @@ public class LuaAnalyzer {
         long endTime=System.currentTimeMillis();
         //walk
 
+    }
+
+
+    public SymbolTable analyserCode(String code) {
+        LuaLexer lexer=new LuaLexer(CharStreams.fromString(code));
+        CommonTokenStream stream= new CommonTokenStream(lexer);
+        LuaParser parser=new LuaParser(stream);
+        parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+        long useTime=DefaultUtils.measureTime( () -> {
+            ParseTreeWalker.DEFAULT.walk(typeAnalyzerListener, parser.chunk());
+        });
+        System.out.println("use time:"+useTime+" ms");
+        return typeAnalyzerListener.symbolTable;
     }
 
 

@@ -1,5 +1,7 @@
 package com.dingyi.lua.analysis.declaration;
 
+import org.antlr.v4.runtime.Token;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,8 @@ import java.util.List;
  * @description:
  **/
 public class Declaration {
+
+    public Token token = null;
 
     /**
      * isLocal
@@ -49,9 +53,9 @@ public class Declaration {
                 declarations = declaration.declarations; //全局直接软引用
             }
         }
-        type = declaration.type;
-        isLocal = declaration.isLocal;
-        value = declaration.value;
+        this.type = declaration.type;
+        this.isLocal = declaration.isLocal;
+        this.value = declaration.value;
     }
 
     @Override

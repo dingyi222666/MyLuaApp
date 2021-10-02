@@ -19,13 +19,13 @@ public class Main {
     public static void main(String[] args) {
 
 
-        LuaLexer lexer = new LuaLexer(CharStreams.fromString("local a,b,c = 1,2,3 local d = a"));
+        LuaLexer lexer = new LuaLexer(CharStreams.fromString("local a,b,c = 1,2,3 local d = a local function e() end"));
         CommonTokenStream stream = new CommonTokenStream(lexer);
 
         LuaParser parser = new LuaParser(stream);
         LuaTypeAnalysisListener typeAnalysisListener = new LuaTypeAnalysisListener();
         ParseTreeWalker.DEFAULT.walk(typeAnalysisListener,parser.chunk());
-        System.out.println(typeAnalysisListener.symbolTable.getOrNewSymbol("a"));
+        System.out.println(typeAnalysisListener.symbolTable.getOrNewSymbol("e"));
 
     }
 }
