@@ -31,7 +31,6 @@ android {
 }
 
 dependencies {
-    implementation project(':LuaAnalyzer')
 
     implementation fileTree(dir: "../app/libs", include: ["*.jar", "*.aar"])//libs jar
 

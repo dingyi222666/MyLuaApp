@@ -1,14 +1,10 @@
-package com.dingyi.editor.language.lua;
-
-import java.io.File;
-import java.nio.file.Path;
+package com.dingyi.lsp.lua.lexer;
 
 /**
  * @author: dingyi
- * @date: 2021/8/14 21:01
+ * @date: 2021/10/7 9:22
  * @description:
  **/
-
 public enum LuaTokenTypes {
     SHEBANG_CONTENT,
     NEW_LINE,

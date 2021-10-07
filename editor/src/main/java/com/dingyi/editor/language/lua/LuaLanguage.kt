@@ -3,16 +3,14 @@ package com.dingyi.editor.language.lua
 import androidx.appcompat.app.AppCompatActivity
 import com.dingyi.editor.language.BaseLanguage
 import com.dingyi.lua.analysis.LuaAnalyzer
+import io.github.rosemoe.sora.data.CompletionItem
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer
 import io.github.rosemoe.sora.interfaces.EditorLanguage
 import io.github.rosemoe.sora.interfaces.NewlineHandler
 import io.github.rosemoe.sora.interfaces.NewlineHandler.HandleResult
 import io.github.rosemoe.sora.langs.internal.MyCharacter
-import io.github.rosemoe.sora.text.Content
-import io.github.rosemoe.sora.text.ContentListener
-import io.github.rosemoe.sora.text.TextAnalyzer
-import io.github.rosemoe.sora.text.TextUtils
+import io.github.rosemoe.sora.text.*
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.SymbolPairMatch
 
@@ -65,11 +63,6 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
         '?', '~', '%', '^'
     )
 
-    val codeAnalyzer = LuaAnalyzer()
-
-
-    val analyzerThread = LuaAnalyzerThread()
-
     private var mContent: Content? = null
 
 
@@ -90,24 +83,7 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
         super.addBasePackage("debug", package_debug.split("|").toTypedArray());
 
 
-        val mSpanner = CodeEditor::class.java.getDeclaredField("mSpanner")
-            .apply {
-                isAccessible = true
-            }.get(codeEditor) as TextAnalyzer
 
-
-        analyzerThread.waitRefreshCallback = {
-            mSpanner.analyze(mContent)
-            println("analyzer done")
-        }
-
-
-        val mListenerList = Content::class.java.getDeclaredField("mListeners")
-            .apply {
-                isAccessible = true
-            }.get(codeEditor.text) as MutableList<ContentListener>
-
-        codeEditor.text.addContentListener(this)
 
     }
 
@@ -124,9 +100,7 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
         endColumn: Int,
         insertedContent: CharSequence?
     ) {
-        mContent = content
-        println("push object $content")
-        content?.toString()?.let { analyzerThread.pushObject(it) }
+
     }
 
     override fun afterDelete(
@@ -137,18 +111,35 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
         endColumn: Int,
         deletedContent: CharSequence?
     ) {
-        mContent = content
-        println("push object $content")
-        content?.toString()?.let { analyzerThread.pushObject(it) }
+
     }
 
     override fun getAnalyzer(): CodeAnalyzer {
-        return LuaCodeAnalyzer(this)
+        return object : CodeAnalyzer {
+            override fun analyze(
+                content: CharSequence?,
+                result: TextAnalyzeResult?,
+                delegate: TextAnalyzer.AnalyzeThread.Delegate?
+            ) {
+                result?.addNormalIfNull()
+            }
+
+        }
     }
 
 
     override fun getAutoCompleteProvider(): AutoCompleteProvider {
-        return LuaAutoComplete(this)
+        return object : AutoCompleteProvider {
+            override fun getAutoCompleteItems(
+                prefix: String?,
+                analyzeResult: TextAnalyzeResult?,
+                line: Int,
+                column: Int
+            ): MutableList<CompletionItem> {
+                return mutableListOf()
+            }
+
+        }
     }
 
     fun getSchemeColor(type: Int): Int {
@@ -164,15 +155,15 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
     }
 
     override fun getIndentAdvance(content: String): Int {
-        return LuaFormat.createAutoIndent(content)
+        return 0
     }
 
     override fun useTab(): Boolean {
         return true;
     }
 
-    override fun format(text: CharSequence?): CharSequence {
-        return LuaFormat.format(text, 4)
+    override fun format(text: CharSequence): CharSequence {
+        return text
     }
 
     override fun getSymbolPairs(): SymbolPairMatch {

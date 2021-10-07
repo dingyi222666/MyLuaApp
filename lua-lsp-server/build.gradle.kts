@@ -19,7 +19,7 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/org.eclipse.lsp4j/org.eclipse.lsp4j
     implementation("org.eclipse.lsp4j:org.eclipse.lsp4j:0.12.0")
-
+    implementation("com.strumenta.antlr-kotlin:antlr-kotlin-runtime:6304d5c1c4")
     // add the plugin to the classpath
 
 }
