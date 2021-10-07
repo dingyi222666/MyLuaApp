@@ -173,11 +173,9 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
             }
 
 
-
             token = lexer.advance()
 
         }
-
 
 
         colors.determine(lexer.yyline())
@@ -192,7 +190,7 @@ class LuaCodeAnalyzer(private val language: LuaLanguage) : CodeAnalyzer {
 
         colors.navigation = navigationList
 
-
+        colors.extra = content.toString()
 
         lexer.yyclose()
     }

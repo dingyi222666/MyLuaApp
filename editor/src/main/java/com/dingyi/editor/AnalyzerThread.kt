@@ -28,12 +28,12 @@ abstract class AnalyzerThread() {
     }
 
     fun pushObject(nowObject: Any){
-        if (nowObject.hashCode() != lookObject?.hashCode()) {
+        if (nowObject != lookObject) {
             nowRunFuture?.cancel(true)
             lookObject  = nowObject
             run()
+            println("start run")
         }
-
     }
 
     fun getOrNull():Any? {
@@ -54,6 +54,7 @@ abstract class AnalyzerThread() {
     }
 
     fun run() {
+        System.out.println("running")
         nowRunFuture = threadPool.submit {
             runSuccessFlag = false
             analyzerObject = lookObject?.let { analyze(it) }

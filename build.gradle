@@ -3,20 +3,20 @@ buildscript {
     ext.kotlin_version = '1.5.21'
 
 
-
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://maven.aliyun.com/nexus/content/groups/public'}
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
         maven { url 'https://jitpack.io' }
+
+        maven { url 'https://dl.bintray.com/pixplicity/android' }
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public'}
+
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30"
+        classpath "com.strumenta.antlr-kotlin:antlr-kotlin-gradle-plugin:6304d5c1c4"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -30,7 +30,6 @@ allprojects {
         maven { url 'https://jitpack.io' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public'}
         maven { url 'https://dl.bintray.com/pixplicity/android' }
-
 
     }
 }

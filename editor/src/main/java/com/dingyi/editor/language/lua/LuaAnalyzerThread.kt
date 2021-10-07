@@ -12,11 +12,8 @@ class LuaAnalyzerThread : AnalyzerThread() {
 
     private val luaAnalyzer = LuaAnalyzer()
     override fun analyze(nowObject: Any): Any {
-        val nowCode = nowObject.toString()
-
         return luaAnalyzer.analyserCode(
-            nowCode
+            nowObject.toString()
         )
-
     }
 }

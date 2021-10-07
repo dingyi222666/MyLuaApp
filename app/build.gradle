@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id "com.android.application"
     id 'kotlin-android'
 }
 
@@ -11,13 +11,17 @@ android {
     defaultConfig {
         applicationId "com.dingyi.MyLuaApp"
         minSdkVersion 21
-        //noinspection OldTargetApi
-        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 30
-        versionCode 17
-        versionName "0.3.2 (alpna)"
+        versionCode 18
+        versionName "0.3.3 (alpna)"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ["src/main/kotlin"]
+        }
     }
 
     buildFeatures {
@@ -37,16 +41,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility =  JavaVersion.VERSION_1_8
+        targetCompatibility  = JavaVersion.VERSION_1_8
     }
 }
-
 dependencies {
     api project(":editor") // editor
-    api project(":LuaLibrary")//lua library
 
-    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])//libs jar
+    implementation(fileTree(dir: "libs", include: ["*.jar", "*.aar"]))//libs jar
 
     //androidx and more
 
@@ -54,9 +56,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.5.0-alpha01'
     implementation 'androidx.appcompat:appcompat:1.4.0-alpha03'
 
-
-    implementation 'io.github.Rosemoe.sora-editor:editor:0.6.0-dev-1'
-
+    implementation 'io.github.Rosemoe.sora-editor:editor:0.6.0-dev-4'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha01"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-alpha01"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha01"

@@ -21,10 +21,10 @@ import io.github.rosemoe.sora.widget.SymbolPairMatch
  * @author: dingyi
  * @date: 2021/8/14 20:57
  * @description:
- * @param codeEditor The language must binding editor to get color scheme
+ * @param codeEditor The language must binding editor to get color scheme and analyze code
  **/
 class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatActivity) :
-    BaseLanguage(), EditorLanguage {
+    BaseLanguage(), EditorLanguage, ContentListener {
 
     private val keywordTarget =
         "and|break|case|catch|continue|default|defer|do|else|elseif|end|false|finally|for|function|goto|if|in|lambda|local|nil|not|or|repeat|return|switch|then|true|try|until|when|while"
@@ -70,6 +70,8 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
 
     val analyzerThread = LuaAnalyzerThread()
 
+    private var mContent: Content? = null
+
 
     init {
 
@@ -95,36 +97,50 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
 
 
         analyzerThread.waitRefreshCallback = {
-            mSpanner.analyze(codeEditor.text)
+            mSpanner.analyze(mContent)
+            println("analyzer done")
         }
 
-        codeEditor.text.addContentListener(object : ContentListener {
-            override fun beforeReplace(content: Content?) {
-                analyzerThread.pushObject(content.toString())
-            }
 
-            override fun afterInsert(
-                content: Content?,
-                startLine: Int,
-                startColumn: Int,
-                endLine: Int,
-                endColumn: Int,
-                insertedContent: CharSequence?
-            ) {}
+        val mListenerList = Content::class.java.getDeclaredField("mListeners")
+            .apply {
+                isAccessible = true
+            }.get(codeEditor.text) as MutableList<ContentListener>
 
-            override fun afterDelete(
-                content: Content?,
-                startLine: Int,
-                startColumn: Int,
-                endLine: Int,
-                endColumn: Int,
-                deletedContent: CharSequence?
-            ) {}
+        codeEditor.text.addContentListener(this)
 
-        })
     }
 
 
+    override fun beforeReplace(content: Content?) {
+        println(content)
+    }
+
+    override fun afterInsert(
+        content: Content?,
+        startLine: Int,
+        startColumn: Int,
+        endLine: Int,
+        endColumn: Int,
+        insertedContent: CharSequence?
+    ) {
+        mContent = content
+        println("push object $content")
+        content?.toString()?.let { analyzerThread.pushObject(it) }
+    }
+
+    override fun afterDelete(
+        content: Content?,
+        startLine: Int,
+        startColumn: Int,
+        endLine: Int,
+        endColumn: Int,
+        deletedContent: CharSequence?
+    ) {
+        mContent = content
+        println("push object $content")
+        content?.toString()?.let { analyzerThread.pushObject(it) }
+    }
 
     override fun getAnalyzer(): CodeAnalyzer {
         return LuaCodeAnalyzer(this)

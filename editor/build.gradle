@@ -37,7 +37,7 @@ dependencies {
 
 
     //editor
-    implementation 'io.github.Rosemoe.sora-editor:editor:0.6.0-dev-1'
+    implementation 'io.github.Rosemoe.sora-editor:editor:0.6.0-dev-4'
 
     implementation 'androidx.appcompat:appcompat:1.4.0-alpha03'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha01"
