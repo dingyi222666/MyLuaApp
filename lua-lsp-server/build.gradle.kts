@@ -1,7 +1,7 @@
 plugins {
     id("java-library")
     id("kotlin")
-    id("antlr")
+
 }
 
 
@@ -25,6 +25,7 @@ dependencies {
 }
 
 
+
 // in antlr-kotlin-plugin <0.0.5, the configuration was applied by the plugin.
 // starting from verison 0.0.5, you have to apply it manually:
 tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generateKotlinCommonGrammarSource") {
@@ -40,7 +41,7 @@ tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generate
     )
     maxHeapSize = "64m"
     packageName = "com.strumenta.antlrkotlin.examples"
-    arguments = listOf("-package","com.dingyi.lsp.lua.parser")
+    arguments = listOf("-visitor","-package","com.dingyi.lsp.lua.common.parser")
     source = project.objects
         .sourceDirectorySet("antlr", "antlr")
         .srcDir("src/main/antlr").apply {
@@ -48,7 +49,7 @@ tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generate
         }
     // outputDirectory is required, put it into the build directory
     // if you do not want to add the generated sources to version control
-    outputDirectory = File("src/main/kotlin-antlr")
+    outputDirectory = File("src/gen/kotlin-antlr")
     // use this settings if you want to add the generated sources to version control
     // outputDirectory = File("src/commonAntlr/kotlin")
 }
@@ -60,7 +61,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 
     sourceSets["main"].java {
-        srcDirs("src/main/kotlin","src/main/kotlin-antlr")
+        srcDirs("src/main/kotlin","src/gen/kotlin-antlr")
     }
 
 }

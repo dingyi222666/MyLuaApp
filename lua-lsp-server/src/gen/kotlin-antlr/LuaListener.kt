@@ -1,5 +1,5 @@
 // Generated from java-escape by ANTLR 4.7.1
-package com.dingyi.lsp.lua.parser
+package com.dingyi.lsp.lua.common.parser
 
 import org.antlr.v4.kotlinruntime.tree.ParseTreeListener
 
@@ -473,15 +473,15 @@ interface LuaListener : ParseTreeListener {
 	 */
 	fun exitVarOrExp(ctx: LuaParser.VarOrExpContext)
 	/**
-	 * Enter a parse tree produced by {@link LuaParser#var}.
+	 * Enter a parse tree produced by {@link LuaParser#lvar}.
 	 * @param ctx the parse tree
 	 */
-	fun enterVar(ctx: LuaParser.VarContext)
+	fun enterLvar(ctx: LuaParser.LvarContext)
 	/**
-	 * Exit a parse tree produced by {@link LuaParser#var}.
+	 * Exit a parse tree produced by {@link LuaParser#lvar}.
 	 * @param ctx the parse tree
 	 */
-	fun exitVar(ctx: LuaParser.VarContext)
+	fun exitLvar(ctx: LuaParser.LvarContext)
 	/**
 	 * Enter a parse tree produced by {@link LuaParser#varSuffix}.
 	 * @param ctx the parse tree

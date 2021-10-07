@@ -1,5 +1,5 @@
 // Generated from java-escape by ANTLR 4.7.1
-package com.dingyi.lsp.lua.parser
+package com.dingyi.lsp.lua.common.parser
 
 import com.strumenta.kotlinmultiplatform.asCharArray
 import org.antlr.v4.kotlinruntime.CharStream

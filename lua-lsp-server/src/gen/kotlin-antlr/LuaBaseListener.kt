@@ -1,5 +1,5 @@
 // Generated from java-escape by ANTLR 4.7.1
-package com.dingyi.lsp.lua.parser
+package com.dingyi.lsp.lua.common.parser
 
 import org.antlr.v4.kotlinruntime.ParserRuleContext
 import org.antlr.v4.kotlinruntime.tree.ErrorNode
@@ -520,13 +520,13 @@ open class LuaBaseListener : LuaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun enterVar(ctx: LuaParser.VarContext) { }
+	override fun enterLvar(ctx: LuaParser.LvarContext) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun exitVar(ctx: LuaParser.VarContext) { }
+	override fun exitLvar(ctx: LuaParser.LvarContext) { }
 	/**
 	 * {@inheritDoc}
 	 *

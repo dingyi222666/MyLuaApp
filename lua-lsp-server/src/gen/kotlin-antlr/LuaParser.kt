@@ -1,5 +1,5 @@
 // Generated from java-escape by ANTLR 4.7.1
-package com.dingyi.lsp.lua.parser;
+package com.dingyi.lsp.lua.common.parser;
 import com.strumenta.kotlinmultiplatform.asCharArray
 import com.strumenta.kotlinmultiplatform.getType
 import com.strumenta.kotlinmultiplatform.TypeDeclarator
@@ -39,7 +39,7 @@ class LuaParser(input: TokenStream) : Parser(input) {
                                                               LuaParser.PrefixexpContext::class,
                                                               LuaParser.FunctioncallContext::class,
                                                               LuaParser.VarOrExpContext::class,
-                                                              LuaParser.VarContext::class,
+                                                              LuaParser.LvarContext::class,
                                                               LuaParser.VarSuffixContext::class,
                                                               LuaParser.NameAndArgsContext::class,
                                                               LuaParser.ArgsContext::class,
@@ -180,7 +180,7 @@ class LuaParser(input: TokenStream) : Parser(input) {
         RULE_prefixexp(18),
         RULE_functioncall(19),
         RULE_varOrExp(20),
-        RULE_var(21),
+        RULE_lvar(21),
         RULE_varSuffix(22),
         RULE_nameAndArgs(23),
         RULE_args(24),
@@ -215,7 +215,7 @@ class LuaParser(input: TokenStream) : Parser(input) {
                                 "attnamelist", "attrib", "retstat", "label", 
                                 "funcname", "varlist", "namelist", "explist", 
                                 "exp", "prefixexp", "functioncall", "varOrExp", 
-                                "var", "varSuffix", "nameAndArgs", "args", 
+                                "lvar", "varSuffix", "nameAndArgs", "args", 
                                 "functiondef", "lambdadef", "funcbody", 
                                 "parlist", "tableconstructor", "fieldlist", 
                                 "field", "fieldsep", "operatorOr", "operatorAnd", 
@@ -408,6 +408,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitChunk(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitChunk(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  chunk() : ChunkContext {
@@ -447,6 +451,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitBlock(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitBlock(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -519,6 +527,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitIfStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitIfStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class DefaultStatContext : StatContext {
 		constructor(ctx: StatContext) { copyFrom(ctx) }
@@ -527,6 +539,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitDefaultStat(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitDefaultStat(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 	open class SwitchStatContext : StatContext {
@@ -541,6 +557,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitSwitchStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitSwitchStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class ContinueStatContext : StatContext {
 		constructor(ctx: StatContext) { copyFrom(ctx) }
@@ -550,6 +570,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitContinueStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitContinueStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class BreakStatContext : StatContext {
 		constructor(ctx: StatContext) { copyFrom(ctx) }
@@ -558,6 +582,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitBreakStat(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitBreakStat(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 	open class WhenStatContext : StatContext {
@@ -571,6 +599,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitWhenStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitWhenStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class LabelStatContext : StatContext {
 		fun findLabel() : LabelContext? = getRuleContext(solver.getType("LabelContext"),0)
@@ -580,6 +612,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitLabelStat(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitLabelStat(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 	open class ForStatContext : StatContext {
@@ -594,6 +630,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitForStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitForStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class FunctionCallStatContext : StatContext {
 		fun findFunctioncall() : FunctioncallContext? = getRuleContext(solver.getType("FunctioncallContext"),0)
@@ -603,6 +643,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitFunctionCallStat(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitFunctionCallStat(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 	open class LocalFunctionDefStatContext : StatContext {
@@ -615,6 +659,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitLocalFunctionDefStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitLocalFunctionDefStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class RepeatStatContext : StatContext {
 		fun findBlock() : BlockContext? = getRuleContext(solver.getType("BlockContext"),0)
@@ -626,6 +674,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitRepeatStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitRepeatStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class DeferStatContext : StatContext {
 		fun findFunctioncall() : FunctioncallContext? = getRuleContext(solver.getType("FunctioncallContext"),0)
@@ -635,6 +687,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitDeferStat(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitDeferStat(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 	open class LambdaStatContext : StatContext {
@@ -646,6 +702,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitLambdaStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitLambdaStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class GotoStatContext : StatContext {
 		fun NAME() : TerminalNode? = getToken(LuaParser.Tokens.NAME.id, 0)
@@ -655,6 +715,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitGotoStat(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitGotoStat(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 	open class ForInStatContext : StatContext {
@@ -668,6 +732,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitForInStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitForInStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class DoStatContext : StatContext {
 		fun findBlock() : BlockContext? = getRuleContext(solver.getType("BlockContext"),0)
@@ -677,6 +745,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitDoStat(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitDoStat(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 	open class LocalVarListStatContext : StatContext {
@@ -689,6 +761,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitLocalVarListStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitLocalVarListStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class CommentContext : StatContext {
 		fun COMMENT() : TerminalNode? = getToken(LuaParser.Tokens.COMMENT.id, 0)
@@ -698,6 +774,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitComment(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitComment(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 	open class FunctionDefStatContext : StatContext {
@@ -710,6 +790,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitFunctionDefStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitFunctionDefStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class LineCommentContext : StatContext {
 		fun LINE_COMMENT() : TerminalNode? = getToken(LuaParser.Tokens.LINE_COMMENT.id, 0)
@@ -719,6 +803,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitLineComment(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitLineComment(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 	open class VarListStatContext : StatContext {
@@ -731,6 +819,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitVarListStat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitVarListStat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 	open class WhileStatContext : StatContext {
 		fun findExp() : ExpContext? = getRuleContext(solver.getType("ExpContext"),0)
@@ -741,6 +833,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitWhileStat(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitWhileStat(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1130,6 +1226,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitIfbody(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitIfbody(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  ifbody() : IfbodyContext {
@@ -1166,6 +1266,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitElseifbody(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitElseifbody(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1209,6 +1313,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitElsebody(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitElsebody(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  elsebody() : ElsebodyContext {
@@ -1246,6 +1354,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitDefaultbody(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitDefaultbody(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1285,6 +1397,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitCasebody(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitCasebody(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1348,6 +1464,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitLambdabody(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitLambdabody(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  lambdabody() : LambdabodyContext {
@@ -1394,6 +1514,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitAttnamelist(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitAttnamelist(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1452,6 +1576,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitAttrib(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitAttrib(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  attrib() : AttribContext {
@@ -1500,6 +1628,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitRetstat(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitRetstat(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1558,6 +1690,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitLabel(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitLabel(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  label() : LabelContext {
@@ -1612,6 +1748,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitFuncname(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitFuncname(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1669,8 +1809,8 @@ class LuaParser(input: TokenStream) : Parser(input) {
 	    override var ruleIndex: Int
 	        get() = Rules.RULE_varlist.id
 	        set(value) { throw RuntimeException() }
-		fun findVar() : List<VarContext> = getRuleContexts(solver.getType("VarContext"))
-		fun findVar(i: Int) : VarContext? = getRuleContext(solver.getType("VarContext"),i)
+		fun findLvar() : List<LvarContext> = getRuleContexts(solver.getType("LvarContext"))
+		fun findLvar(i: Int) : LvarContext? = getRuleContext(solver.getType("LvarContext"),i)
 		constructor(parent: ParserRuleContext?, invokingState: Int) : super(parent, invokingState){
 		}
 		override fun enterRule(listener: ParseTreeListener) {
@@ -1678,6 +1818,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitVarlist(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitVarlist(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1689,7 +1833,7 @@ class LuaParser(input: TokenStream) : Parser(input) {
 			enterOuterAlt(_localctx, 1)
 			if (true){
 			this.state = 281
-			var()
+			lvar()
 			this.state = 286
 			errorHandler.sync(this);
 			_la = _input!!.LA(1)
@@ -1699,7 +1843,7 @@ class LuaParser(input: TokenStream) : Parser(input) {
 				this.state = 282
 				match(T__13) as Token
 				this.state = 283
-				var()
+				lvar()
 				}
 				}
 				this.state = 288
@@ -1732,6 +1876,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitNamelist(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitNamelist(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1788,6 +1936,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitExplist(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitExplist(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -1860,6 +2012,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitExp(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitExp(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -2059,6 +2215,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitPrefixexp(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitPrefixexp(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  prefixexp() : PrefixexpContext {
@@ -2114,6 +2274,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitFunctioncall(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitFunctioncall(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  functioncall() : FunctioncallContext {
@@ -2159,7 +2323,7 @@ class LuaParser(input: TokenStream) : Parser(input) {
 	    override var ruleIndex: Int
 	        get() = Rules.RULE_varOrExp.id
 	        set(value) { throw RuntimeException() }
-		fun findVar() : VarContext? = getRuleContext(solver.getType("VarContext"),0)
+		fun findLvar() : LvarContext? = getRuleContext(solver.getType("LvarContext"),0)
 		fun findExp() : ExpContext? = getRuleContext(solver.getType("ExpContext"),0)
 		constructor(parent: ParserRuleContext?, invokingState: Int) : super(parent, invokingState){
 		}
@@ -2168,6 +2332,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitVarOrExp(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitVarOrExp(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -2182,7 +2350,7 @@ class LuaParser(input: TokenStream) : Parser(input) {
 			enterOuterAlt(_localctx, 1)
 			if (true){
 			this.state = 372
-			var()
+			lvar()
 			}}
 			2 -> {
 			enterOuterAlt(_localctx, 2)
@@ -2207,9 +2375,9 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		return _localctx
 	}
 
-	open class VarContext : ParserRuleContext {
+	open class LvarContext : ParserRuleContext {
 	    override var ruleIndex: Int
-	        get() = Rules.RULE_var.id
+	        get() = Rules.RULE_lvar.id
 	        set(value) { throw RuntimeException() }
 		fun NAME() : TerminalNode? = getToken(LuaParser.Tokens.NAME.id, 0)
 		fun findExp() : ExpContext? = getRuleContext(solver.getType("ExpContext"),0)
@@ -2218,16 +2386,20 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		constructor(parent: ParserRuleContext?, invokingState: Int) : super(parent, invokingState){
 		}
 		override fun enterRule(listener: ParseTreeListener) {
-			if ( listener is LuaListener ) (listener as LuaListener).enterVar(this)
+			if ( listener is LuaListener ) (listener as LuaListener).enterLvar(this)
 		}
 		override fun exitRule(listener: ParseTreeListener) {
-			if ( listener is LuaListener ) (listener as LuaListener).exitVar(this)
+			if ( listener is LuaListener ) (listener as LuaListener).exitLvar(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitLvar(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
-	fun  var() : VarContext {
-		var _localctx : VarContext = VarContext(context, state)
-		enterRule(_localctx, 42, Rules.RULE_var.id)
+	fun  lvar() : LvarContext {
+		var _localctx : LvarContext = LvarContext(context, state)
+		enterRule(_localctx, 42, Rules.RULE_lvar.id)
 		try {
 			var _alt: Int
 			enterOuterAlt(_localctx, 1)
@@ -2296,6 +2468,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitVarSuffix(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitVarSuffix(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -2374,6 +2550,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitNameAndArgs(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitNameAndArgs(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  nameAndArgs() : NameAndArgsContext {
@@ -2424,6 +2604,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitArgs(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitArgs(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -2492,6 +2676,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitFunctiondef(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitFunctiondef(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  functiondef() : FunctiondefContext {
@@ -2529,6 +2717,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitLambdadef(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitLambdadef(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -2568,6 +2760,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitFuncbody(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitFuncbody(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -2621,6 +2817,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitParlist(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitParlist(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -2684,6 +2884,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitTableconstructor(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitTableconstructor(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -2763,6 +2967,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitFieldlist(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitFieldlist(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  fieldlist() : FieldlistContext {
@@ -2831,6 +3039,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitField(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitField(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  field() : FieldContext {
@@ -2895,6 +3107,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitFieldsep(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitFieldsep(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  fieldsep() : FieldsepContext {
@@ -2939,6 +3155,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitOperatorOr(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitOperatorOr(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  operatorOr() : OperatorOrContext {
@@ -2974,6 +3194,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitOperatorAnd(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitOperatorAnd(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  operatorAnd() : OperatorAndContext {
@@ -3008,6 +3232,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitOperatorComparison(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitOperatorComparison(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -3053,6 +3281,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitOperatorStrcat(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitOperatorStrcat(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  operatorStrcat() : OperatorStrcatContext {
@@ -3087,6 +3319,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitOperatorAddSub(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitOperatorAddSub(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -3132,6 +3368,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitOperatorMulDivMod(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitOperatorMulDivMod(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  operatorMulDivMod() : OperatorMulDivModContext {
@@ -3175,6 +3415,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitOperatorBitwise(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitOperatorBitwise(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -3220,6 +3464,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitOperatorUnary(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitOperatorUnary(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  operatorUnary() : OperatorUnaryContext {
@@ -3264,6 +3512,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitOperatorPower(this)
 		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitOperatorPower(this)
+			else return visitor.visitChildren(this)!!
+		}
 	}
 
 	fun  operatorPower() : OperatorPowerContext {
@@ -3302,6 +3554,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitNumber(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitNumber(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 
@@ -3349,6 +3605,10 @@ class LuaParser(input: TokenStream) : Parser(input) {
 		}
 		override fun exitRule(listener: ParseTreeListener) {
 			if ( listener is LuaListener ) (listener as LuaListener).exitString(this)
+		}
+		override fun <T> accept(visitor : ParseTreeVisitor<out T>) : T {
+			if ( visitor is LuaVisitor ) return (visitor as LuaVisitor<out T>).visitString(this)
+			else return visitor.visitChildren(this)!!
 		}
 	}
 

@@ -15,9 +15,7 @@ import java.util.concurrent.CompletableFuture
 class LuaLanguageServer: LanguageServer {
 
     override fun initialize(params: InitializeParams?): CompletableFuture<InitializeResult> {
-        params?.apply {
-
-        }
+        TODO("not yet implemented")
     }
 
     override fun shutdown(): CompletableFuture<Any> {

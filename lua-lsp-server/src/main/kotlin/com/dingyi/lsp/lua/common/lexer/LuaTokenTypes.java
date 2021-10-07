@@ -1,4 +1,4 @@
-package com.dingyi.lsp.lua.lexer;
+package com.dingyi.lsp.lua.common.lexer;
 
 /**
  * @author: dingyi
