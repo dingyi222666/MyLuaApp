@@ -12,28 +12,28 @@ class ConstantsNode(
     value: Any = 0
 ) : ExpressionNode() {
 
-    private var _value:Any = 0
+    private var _value: Any = 0
 
-     var value by Delegates.observable(
+    var rawValue by Delegates.observable(
         initialValue = Any(),
         onChange = { _, _, newValue ->
-            _value=switchValue(newValue)
+            _value = switchValue(newValue)
         }
     )
 
     private fun switchValue(newValue: Any): Any {
         return when (type) {
             TYPE.NUMBER -> {
-                newValue.toString().toIntOrNull() ?: newValue.toString().toDoubleOrNull() ?: newValue
+                newValue.toString().toIntOrNull() ?: newValue.toString().toDoubleOrNull()
+                ?: newValue
             }
             else -> newValue
         }
     }
 
 
-
     init {
-        this.value = value
+        this.rawValue = value
     }
 
     enum class TYPE {

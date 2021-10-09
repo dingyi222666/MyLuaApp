@@ -40,13 +40,13 @@ open class LuaBaseListener : LuaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun enterDefaultStat(ctx: LuaParser.DefaultStatContext) { }
+	override fun enterNil(ctx: LuaParser.NilContext) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun exitDefaultStat(ctx: LuaParser.DefaultStatContext) { }
+	override fun exitNil(ctx: LuaParser.NilContext) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -280,25 +280,37 @@ open class LuaBaseListener : LuaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun enterComment(ctx: LuaParser.CommentContext) { }
+	override fun enterReturnStat(ctx: LuaParser.ReturnStatContext) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun exitComment(ctx: LuaParser.CommentContext) { }
+	override fun exitReturnStat(ctx: LuaParser.ReturnStatContext) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun enterLineComment(ctx: LuaParser.LineCommentContext) { }
+	override fun enterCommentStat(ctx: LuaParser.CommentStatContext) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun exitLineComment(ctx: LuaParser.LineCommentContext) { }
+	override fun exitCommentStat(ctx: LuaParser.CommentStatContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	override fun enterLineCommentStat(ctx: LuaParser.LineCommentStatContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	override fun exitLineCommentStat(ctx: LuaParser.LineCommentStatContext) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -431,6 +443,18 @@ open class LuaBaseListener : LuaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	override fun exitFuncname(ctx: LuaParser.FuncnameContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	override fun enterFuncname_self(ctx: LuaParser.Funcname_selfContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	override fun exitFuncname_self(ctx: LuaParser.Funcname_selfContext) { }
 	/**
 	 * {@inheritDoc}
 	 *

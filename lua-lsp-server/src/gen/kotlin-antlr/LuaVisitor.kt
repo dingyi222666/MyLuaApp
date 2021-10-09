@@ -24,12 +24,12 @@ interface LuaVisitor<T> : ParseTreeVisitor<T> {
 	 */
 	fun visitBlock(ctx : LuaParser.BlockContext) : T
 	/**
-	 * Visit a parse tree produced by the {@code defaultStat}
+	 * Visit a parse tree produced by the {@code nil}
 	 * labeled alternative in {@link LuaParser#stat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	fun visitDefaultStat(ctx : LuaParser.DefaultStatContext) : T
+	fun visitNil(ctx : LuaParser.NilContext) : T
 	/**
 	 * Visit a parse tree produced by the {@code varListStat}
 	 * labeled alternative in {@link LuaParser#stat}.
@@ -164,19 +164,26 @@ interface LuaVisitor<T> : ParseTreeVisitor<T> {
 	 */
 	fun visitDeferStat(ctx : LuaParser.DeferStatContext) : T
 	/**
-	 * Visit a parse tree produced by the {@code comment}
+	 * Visit a parse tree produced by the {@code returnStat}
 	 * labeled alternative in {@link LuaParser#stat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	fun visitComment(ctx : LuaParser.CommentContext) : T
+	fun visitReturnStat(ctx : LuaParser.ReturnStatContext) : T
 	/**
-	 * Visit a parse tree produced by the {@code lineComment}
+	 * Visit a parse tree produced by the {@code commentStat}
 	 * labeled alternative in {@link LuaParser#stat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	fun visitLineComment(ctx : LuaParser.LineCommentContext) : T
+	fun visitCommentStat(ctx : LuaParser.CommentStatContext) : T
+	/**
+	 * Visit a parse tree produced by the {@code lineCommentStat}
+	 * labeled alternative in {@link LuaParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	fun visitLineCommentStat(ctx : LuaParser.LineCommentStatContext) : T
 	/**
 	 * Visit a parse tree produced by {@link LuaParser#ifbody}.
 	 * @param ctx the parse tree
@@ -243,6 +250,12 @@ interface LuaVisitor<T> : ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	fun visitFuncname(ctx : LuaParser.FuncnameContext) : T
+	/**
+	 * Visit a parse tree produced by {@link LuaParser#funcname_self}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	fun visitFuncname_self(ctx : LuaParser.Funcname_selfContext) : T
 	/**
 	 * Visit a parse tree produced by {@link LuaParser#varlist}.
 	 * @param ctx the parse tree

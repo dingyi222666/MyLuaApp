@@ -10,7 +10,7 @@ block
     ;
 
 stat
-    : ';' #defaultStat
+    : ';' #nil
     | varlist '=' explist  #varListStat
     | functioncall  #functionCallStat
     | label  #labelStat
@@ -24,14 +24,15 @@ stat
     | 'for' NAME '=' exp ',' exp (',' exp)? ('do')? block 'end'  #forStat
     | 'for' namelist 'in' explist ('do')? block 'end'  #forInStat
     | 'function' funcname funcbody  #functionDefStat
-    | ('local'|'$') 'function' NAME funcbody  #localFunctionDefStat
-    | ('local'|'$') attnamelist ('=' explist)?  #localVarListStat
+    | 'local' 'function' NAME funcbody  #localFunctionDefStat
+    | 'local' attnamelist ('=' explist)?  #localVarListStat
     | 'switch' exp ('do')? casebody* defaultbody? 'end' #switchStat
     | 'when' exp prefixexp ('else'? prefixexp)? #whenStat
     | 'lambda' lambdabody #lambdaStat
     | 'defer' functioncall #deferStat
-    | COMMENT #comment
-    | LINE_COMMENT #lineComment
+    | 'return' block #returnStat
+    | COMMENT #commentStat
+    | LINE_COMMENT #lineCommentStat
     ;
 
 ifbody
@@ -77,7 +78,11 @@ label
     ;
 
 funcname
-    : NAME ('.' NAME)* (':' NAME)?
+    : NAME ('.' NAME)* funcname_self?
+    ;
+
+funcname_self
+    : ':' NAME
     ;
 
 varlist

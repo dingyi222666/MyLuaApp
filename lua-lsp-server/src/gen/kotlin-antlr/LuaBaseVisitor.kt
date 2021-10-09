@@ -32,7 +32,7 @@ open class LuaBaseVisitor<T> : AbstractParseTreeVisitor<T>(), LuaVisitor<T> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	override fun visitDefaultStat(ctx : LuaParser.DefaultStatContext ) : T { return this!!.visitChildren(ctx)!! }
+	override fun visitNil(ctx : LuaParser.NilContext ) : T { return this!!.visitChildren(ctx)!! }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -172,14 +172,21 @@ open class LuaBaseVisitor<T> : AbstractParseTreeVisitor<T>(), LuaVisitor<T> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	override fun visitComment(ctx : LuaParser.CommentContext ) : T { return this!!.visitChildren(ctx)!! }
+	override fun visitReturnStat(ctx : LuaParser.ReturnStatContext ) : T { return this!!.visitChildren(ctx)!! }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	override fun visitLineComment(ctx : LuaParser.LineCommentContext ) : T { return this!!.visitChildren(ctx)!! }
+	override fun visitCommentStat(ctx : LuaParser.CommentStatContext ) : T { return this!!.visitChildren(ctx)!! }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	override fun visitLineCommentStat(ctx : LuaParser.LineCommentStatContext ) : T { return this!!.visitChildren(ctx)!! }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -257,6 +264,13 @@ open class LuaBaseVisitor<T> : AbstractParseTreeVisitor<T>(), LuaVisitor<T> {
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	override fun visitFuncname(ctx : LuaParser.FuncnameContext ) : T { return this!!.visitChildren(ctx)!! }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	override fun visitFuncname_self(ctx : LuaParser.Funcname_selfContext ) : T { return this!!.visitChildren(ctx)!! }
 	/**
 	 * {@inheritDoc}
 	 *
