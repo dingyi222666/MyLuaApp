@@ -19,7 +19,7 @@ If you don't know how to use Lua,it's okay, you can also use Java to develop And
 More features will be implemented as we continue to develop this app.
 
 ## Test Apk
-If implemented Lua auto completion will be uploaded to repository.
+[here](https://github.com/dingyi222666/MyLuaApp/tree/master/app/apk/debug).
 
 ## Discuss
  - QQ Group:[1020019846](https://jq.qq.com/?_wv=1027&k=zGdBLMr8)
