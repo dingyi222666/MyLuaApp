@@ -4,6 +4,15 @@ plugins {
 }
 
 android {
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (variant.buildType.name == 'debug') {
+                variant.getPackageApplication().outputDirectory = new File("apk/debug")
+            }
+        }
+    }
+
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -44,6 +53,8 @@ android {
         targetCompatibility  = JavaVersion.VERSION_1_8
     }
 }
+
+
 dependencies {
     api project(":editor") // editor
 
