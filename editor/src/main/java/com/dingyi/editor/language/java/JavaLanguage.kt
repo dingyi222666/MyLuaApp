@@ -23,8 +23,8 @@ class JavaLanguage(codeEditor: CodeEditor) : TextMateBridgeLanguage(codeEditor) 
     init {
 
         codeEditor.colorScheme = TextMateTheme {
-            TextMateTheme.Builder.CSSTheme {
-                FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/theme/light.css")
+            TextMateTheme.Builder.VSCodeTheme ("light.json") {
+                FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/theme/light.json")
             }
         }
     }

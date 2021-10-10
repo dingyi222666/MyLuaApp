@@ -70,6 +70,7 @@ public class CSSParser {
 				Selector selector = list.item(i);
 				if (selector instanceof ExtendedSelector) {
 					ExtendedSelector s = ((ExtendedSelector) selector);
+
 					int nbMatch = s.nbMatch(names);
 					if (nbMatch > 0 && nbMatch == s.nbClass()) {
 						if (bestStyle == null || (nbMatch >= bestSpecificity)) {

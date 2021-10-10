@@ -16,25 +16,20 @@ class LineContent {
     private val diffContent = ArrayMap<Int, Line>()
 
 
-    fun commitText(text: String, delegate: TextAnalyzer.AnalyzeThread.Delegate): Boolean {
-        var allDiffFlag = false
-        diffContent.clear()
+    fun commitText(text: String, delegate: TextAnalyzer.AnalyzeThread.Delegate) {
+
         if (!delegate.shouldAnalyze()) {
-            return false
+            return
         }
+        diffContent.clear()
         text.reader().readLines().forEachIndexed { line, lineText ->
 
             if (!delegate.shouldAnalyze()) {
-                return false
+                return
             }
             val bufferLine: Line? = bufferContent.get(line)
-            var diffFlag = false
 
             if (lineText.hashCode() != bufferLine?.content.hashCode()) {
-                diffFlag = true
-            }
-
-            if (diffFlag) {
                 val diffLine = bufferLine ?: Line(line, lineText)
                 if (bufferContent.indexOfKey(line) < 0) {
                     bufferContent.put(line, diffLine)
@@ -42,11 +37,10 @@ class LineContent {
                     diffLine.content = lineText
                 }
                 diffContent[line] = diffLine
-                allDiffFlag = true
             }
 
         }
-        return allDiffFlag
+
     }
 
 

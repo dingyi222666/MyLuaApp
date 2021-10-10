@@ -76,6 +76,11 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
         result: TextAnalyzeResult,
         delegate: TextAnalyzer.AnalyzeThread.Delegate,
     ) {
+
+        if (!delegate.shouldAnalyze()) {
+            return
+        }
+
         val lineTokens = textMateBridgeLanguage.tokenizer.tokenize(
             lineText.content, globalState, 0, 1000000000
         )
@@ -92,12 +97,13 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
 
         for (token in lineTokens.tokens) {
             if (!delegate.shouldAnalyze()) {
-                break
+                return
             }
-            println()
-            val pair = token.startIndex  to (themeScheme?.match(token))
+
+            val pair = token.startIndex  to themeScheme?.match(token)
 
             bufferSpanList.add(pair)
+
             if (pair.second != null) {
                 result.addIfNeeded(line, pair.first , pair.second!!)
             } else {
