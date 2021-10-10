@@ -9,6 +9,7 @@ You can use lua to develop Android Apps!The project use [AndroLua_pro](https://g
 If you don't know how to use Lua,it's okay, you can also use Java to develop Android apps.But the project isn't use 'real gradle' to build apk(like [AIDE](https://play.google.com/store/apps/details?id=com.aide.ui&hl=en_US&gl=US)).
 
 ## Features 
+ - [ ] TextMate Basic Support(tm4e)
  - [ ] Lua Auto Completion
  - [ ] Java Auto Completion
  - [ ] Project Templates
