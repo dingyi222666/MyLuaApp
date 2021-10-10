@@ -193,7 +193,11 @@ class ASTGenerator(inputCode: String) {
 
         private fun parseCallExpressionBase(ctx: LuaParser.FunctioncallContext): ExpressionNode {
             val nameAndArgList =
-                if (ctx.findNameAndArgs().isNotEmpty()) ctx.findNameAndArgs().dropLast(1) else listOf()
+                if (ctx.findNameAndArgs().isNotEmpty())
+                    ctx.findNameAndArgs().dropLast(1)
+                else listOf()
+
+            TODO("")
         }
 
         override fun visitFunctionCallStat(ctx: LuaParser.FunctionCallStatContext): StatementNode {

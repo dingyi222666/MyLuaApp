@@ -11,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.dingyi.editor.language.lua.LuaLanguage
 import com.dingyi.editor.scheme.SchemeLua
 import com.dingyi.editor.data.ColumnNavigationItem
+import com.dingyi.editor.language.java.JavaLanguage
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.endsWith
 import com.dingyi.myluaapp.common.kts.javaClass
@@ -141,9 +142,13 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
                     setEditorLanguage(LuaLanguage(viewBinding.codeEditor,
                         requireActivity() as AppCompatActivity
                     ))
+                    colorScheme=SchemeLua()
+                }
+                openPath.endsWith(".java") -> {
+                    setEditorLanguage(JavaLanguage(viewBinding.codeEditor))
                 }
             }
-            colorScheme=SchemeLua()
+
         }
 
 

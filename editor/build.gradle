@@ -34,6 +34,7 @@ dependencies {
 
     implementation fileTree(dir: "../app/libs", include: ["*.jar", "*.aar"])//libs jar
 
+    implementation project(":tm4e")
 
     //editor
     implementation 'io.github.Rosemoe.sora-editor:editor:0.6.0-dev-4'

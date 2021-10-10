@@ -172,7 +172,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
             .with("openPath", javaClass<String>())
             .observe(this) {
                 when (it.toFile().suffix) {
-                    "lua", "aly" -> {
+                    "lua", "aly","java" -> {
                         viewModel.projectConfig.value?.let { config ->
                             var position = config.findCodeFileByPath(it)
                             if (position == null) {

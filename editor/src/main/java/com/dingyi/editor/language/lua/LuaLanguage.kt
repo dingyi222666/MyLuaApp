@@ -2,7 +2,6 @@ package com.dingyi.editor.language.lua
 
 import androidx.appcompat.app.AppCompatActivity
 import com.dingyi.editor.language.BaseLanguage
-import com.dingyi.lua.analysis.LuaAnalyzer
 import io.github.rosemoe.sora.data.CompletionItem
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer
@@ -22,7 +21,7 @@ import io.github.rosemoe.sora.widget.SymbolPairMatch
  * @param codeEditor The language must binding editor to get color scheme and analyze code
  **/
 class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatActivity) :
-    BaseLanguage(), EditorLanguage, ContentListener {
+    BaseLanguage(), ContentListener {
 
     private val keywordTarget =
         "and|break|case|catch|continue|default|defer|do|else|elseif|end|false|finally|for|function|goto|if|in|lambda|local|nil|not|or|repeat|return|switch|then|true|try|until|when|while"

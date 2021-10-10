@@ -29,8 +29,11 @@ public class RegexSource {
 	private RegexSource() {
 	}
 
+    /**
+     * fix pattern run error in android
+     */
 	private static final Pattern CAPTURING_REGEX_SOURCE = Pattern
-			.compile("\\$(\\d+)|\\$\\{(\\d+):\\/(downcase|upcase)}");
+			.compile("\\$(\\d+)|\\$\\{(\\d+):/(downcase|upcase)\\}");
 
 	public static boolean hasCaptures(String regexSource) {
 		if (regexSource == null) {
