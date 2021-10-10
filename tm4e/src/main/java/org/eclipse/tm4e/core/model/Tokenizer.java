@@ -76,7 +76,7 @@ public class Tokenizer implements ITokenizationSupport {
 			// do not push a new token if the type is exactly the same (also
 			// helps with ligatures)
 			if (!tokenType.equals(lastTokenType)) {
-				tokens.add(new TMToken(tokenStartIndex + offsetDelta, tokenType));
+				tokens.add(new TMToken(tokenStartIndex + offsetDelta, tokenType,token.getScopes()));
 				lastTokenType = tokenType;
 			}
 		}

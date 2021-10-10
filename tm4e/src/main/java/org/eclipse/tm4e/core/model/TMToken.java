@@ -16,13 +16,16 @@
  */
 package org.eclipse.tm4e.core.model;
 
+import java.util.List;
+
 public class TMToken {
 
 	public final int startIndex;
 	public final String type;
-
-	public TMToken(int startIndex, String type) {
+    public final List<String> scopes;
+	public TMToken(int startIndex, String type,List<String> scopes) {
 		this.startIndex = startIndex;
 		this.type = type;
+		this.scopes = scopes;
 	}
 }

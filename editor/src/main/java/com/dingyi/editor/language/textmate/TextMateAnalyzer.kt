@@ -1,10 +1,11 @@
 package com.dingyi.editor.language.textmate
 
+import android.util.SparseArray
+import com.dingyi.editor.language.textmate.content.Line
+import com.dingyi.editor.language.textmate.content.LineContent
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer
 import io.github.rosemoe.sora.text.TextAnalyzeResult
 import io.github.rosemoe.sora.text.TextAnalyzer
-import io.github.rosemoe.sora.widget.EditorColorScheme
-import org.eclipse.tm4e.core.model.TMState
 
 /**
  * @author: dingyi
@@ -14,11 +15,13 @@ import org.eclipse.tm4e.core.model.TMState
 class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguage) : CodeAnalyzer {
 
 
-    private val bufferSpanMap = mutableMapOf<Int,
-            MutableList<Pair<Int, Int>>>()
+    private val bufferSpanMap = SparseArray<MutableList<Pair<Int, Int?>>>()
 
 
     private val lineContent = LineContent()
+
+
+    private var globalState = textMateBridgeLanguage.tokenizer.initialState
 
     override fun analyze(
         content: CharSequence,
@@ -26,23 +29,25 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
         delegate: TextAnalyzer.AnalyzeThread.Delegate
     ) {
 
-        lineContent.commitText(content.toString())
+        lineContent.commitText(content.toString(), delegate)
 
-        var state = textMateBridgeLanguage.tokenizer.initialState
         var lines = 0
-        lineContent.getLines().forEachIndexed { index, charArray ->
-            lines = index
+
+        for (index in 0 until lineContent.getLines().size()) {
+            lines = index + 1
             if (!delegate.shouldAnalyze()) {
                 return
             }
             if (lineContent.getDiffLines().containsKey(index)) {
-                state = scanDiffLine(index, charArray, result, delegate, state)
+                scanLine(index, lineContent.getLines()[index], result, delegate)
             } else {
                 putAnalyzeCached(index, result, delegate)
             }
         }
 
-        result.determine(lines)
+
+
+        result.determine(lines + 1)
 
     }
 
@@ -52,45 +57,56 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
         delegate: TextAnalyzer.AnalyzeThread.Delegate
     ) {
 
-        for (i in bufferSpanMap[line] ?: mutableListOf()) {
+        for (pair in bufferSpanMap[line] ?: mutableListOf()) {
             if (!delegate.shouldAnalyze()) {
                 break
             }
-            result.addIfNeeded(line, i.first, i.second)
+
+            if (pair.second != null) {
+                result.addIfNeeded(line, pair.first , pair.second!!)
+            } else {
+                result.addNormalIfNull()
+            }
         }
     }
 
-    private fun scanDiffLine(
+    private fun scanLine(
         line: Int,
-        charArray: CharArray,
+        lineText: Line,
         result: TextAnalyzeResult,
         delegate: TextAnalyzer.AnalyzeThread.Delegate,
-        state: TMState
-    ): TMState {
+    ) {
         val lineTokens = textMateBridgeLanguage.tokenizer.tokenize(
-            String(charArray), state, 0, 10000000
+            lineText.content, globalState, 0, 1000000000
         )
 
-        val bufferSpanList = bufferSpanMap.getOrElse(line) { mutableListOf() }
+        globalState = lineTokens.endState
+
+        val bufferSpanList = bufferSpanMap.get(line, mutableListOf())
 
         bufferSpanList.clear()
 
         val themeScheme = runCatching {
-            textMateBridgeLanguage.codeEditor.colorScheme as BaseTextMateTheme
+            textMateBridgeLanguage.codeEditor.colorScheme as TextMateTheme
         }.getOrNull()
-
 
         for (token in lineTokens.tokens) {
             if (!delegate.shouldAnalyze()) {
                 break
             }
-            val pair = token.startIndex to (themeScheme?.match(token.type)
-                ?: EditorColorScheme.TEXT_NORMAL)
+            println()
+            val pair = token.startIndex  to (themeScheme?.match(token))
+
             bufferSpanList.add(pair)
-            result.addIfNeeded(line, pair.first, pair.second)
+            if (pair.second != null) {
+                result.addIfNeeded(line, pair.first , pair.second!!)
+            } else {
+                result.addNormalIfNull()
+            }
         }
-        bufferSpanMap[line] = bufferSpanList
-        return lineTokens.endState
+        if (bufferSpanMap.indexOfKey(line) < 0) {
+            bufferSpanMap.put(line, bufferSpanList)
+        }
     }
 
 }

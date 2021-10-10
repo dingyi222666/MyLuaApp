@@ -167,7 +167,6 @@ public class TMModel implements ITMModel {
 		 * @param eventBuilder
 		 * @param startIndex 0-based
 		 * @param endLineIndex 0-based
-		 * @param emitEvents
 		 * @return the first line index (0-based) that was NOT processed by this operation
 		 */
 		private int updateTokensInRange(ModelTokensChangedEventBuilder eventBuilder, int startIndex, int endLineIndex) {
@@ -197,13 +196,13 @@ public class TMModel implements ITMModel {
 
 				if (r != null && r.actualStopOffset < text.length()) {
 					// Treat the rest of the line (if above limit) as one default token
-					r.tokens.add(new TMToken(r.actualStopOffset, ""));
+					r.tokens.add(new TMToken(r.actualStopOffset, "",new ArrayList<>()));
 					// Use as end state the starting state
 					r.endState = modeLine.getState();
 				}
 
 				if (r == null) {
-					r = new LineTokens(Collections.singletonList(new TMToken(0, "")), text.length(), modeLine.getState());
+					r = new LineTokens(Collections.singletonList(new TMToken(0, "",new ArrayList<>())), text.length(), modeLine.getState());
 				}
 				modeLine.setTokens(r.tokens);
 				eventBuilder.registerChangedTokens(lineIndex + 1);
@@ -291,7 +290,9 @@ public class TMModel implements ITMModel {
 		this.fThread = null;
 	}
 
-	private void buildEventWithCallback(Consumer<ModelTokensChangedEventBuilder> callback) {
+
+
+    private void buildEventWithCallback(Consumer<ModelTokensChangedEventBuilder> callback) {
 		ModelTokensChangedEventBuilder eventBuilder = new ModelTokensChangedEventBuilder(this);
 
 		callback.accept(eventBuilder);

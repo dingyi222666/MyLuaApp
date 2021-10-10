@@ -7,15 +7,12 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
-
     defaultConfig {
         applicationId "com.dingyi.MyLuaApp"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 18
         versionName "0.3.3 (alpna)"
-
-
     }
 
     sourceSets {

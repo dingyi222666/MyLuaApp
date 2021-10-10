@@ -11,6 +11,6 @@ object  TextMateGlobal {
 
     val registry = Registry()
 
-    val themes = mutableMapOf<String,BaseTextMateTheme>()
+    val themes = mutableMapOf<String,TextMateTheme>()
 
 }

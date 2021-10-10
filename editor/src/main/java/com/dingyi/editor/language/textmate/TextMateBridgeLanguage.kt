@@ -13,7 +13,7 @@ import java.io.InputStream
 /**
  * @author: dingyi
  * @date: 2021/10/10 15:14
- * @description:
+ * @description:The TextMate Bridge Class
  **/
 abstract class TextMateBridgeLanguage(
     val codeEditor: CodeEditor
@@ -34,6 +34,7 @@ abstract class TextMateBridgeLanguage(
            languageConfig.languagePath,
             languageConfig.languageInputStream
         )
+
         //TODO load grammar in registry if already exists
         tokenizer = Tokenizer(grammar)
     }
