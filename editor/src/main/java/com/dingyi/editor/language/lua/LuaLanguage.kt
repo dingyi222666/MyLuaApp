@@ -1,17 +1,18 @@
 package com.dingyi.editor.language.lua
 
-import androidx.appcompat.app.AppCompatActivity
-import com.dingyi.editor.language.BaseLanguage
-import io.github.rosemoe.sora.data.CompletionItem
+import com.dingyi.editor.language.textmate.TextMateBridgeLanguage
+import com.dingyi.editor.language.textmate.TextMateGlobal
+import com.dingyi.editor.language.textmate.theme.VSCodeTheme
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider
-import io.github.rosemoe.sora.interfaces.CodeAnalyzer
-import io.github.rosemoe.sora.interfaces.EditorLanguage
 import io.github.rosemoe.sora.interfaces.NewlineHandler
 import io.github.rosemoe.sora.interfaces.NewlineHandler.HandleResult
 import io.github.rosemoe.sora.langs.internal.MyCharacter
-import io.github.rosemoe.sora.text.*
+import io.github.rosemoe.sora.text.Content
+import io.github.rosemoe.sora.text.ContentListener
+import io.github.rosemoe.sora.text.TextUtils
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.SymbolPairMatch
+import java.io.FileInputStream
 
 
 /**
@@ -20,8 +21,8 @@ import io.github.rosemoe.sora.widget.SymbolPairMatch
  * @description:
  * @param codeEditor The language must binding editor to get color scheme and analyze code
  **/
-class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatActivity) :
-    BaseLanguage(), ContentListener {
+class LuaLanguage(codeEditor: CodeEditor) :
+    TextMateBridgeLanguage(codeEditor), ContentListener {
 
     private val keywordTarget =
         "and|break|case|catch|continue|default|defer|do|else|elseif|end|false|finally|for|function|goto|if|in|lambda|local|nil|not|or|repeat|return|switch|then|true|try|until|when|while"
@@ -67,6 +68,12 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
 
     init {
 
+        codeEditor.colorScheme = TextMateGlobal.loadTheme("light") {
+            VSCodeTheme("light.json") {
+                FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/theme/light.json")
+            }
+        }
+
         super.setOperators(LUA_OPERATORS)
         super.setKeywords(__keywords)
         super.setNames(__names)
@@ -80,8 +87,6 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
         super.addBasePackage("coroutine", package_coroutine.split("|").toTypedArray());
         super.addBasePackage("package", package_package.split("|").toTypedArray());
         super.addBasePackage("debug", package_debug.split("|").toTypedArray());
-
-
 
 
     }
@@ -113,37 +118,20 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
 
     }
 
-    override fun getAnalyzer(): CodeAnalyzer {
-        return object : CodeAnalyzer {
-            override fun analyze(
-                content: CharSequence?,
-                result: TextAnalyzeResult?,
-                delegate: TextAnalyzer.AnalyzeThread.Delegate?
-            ) {
-                result?.addNormalIfNull()
-            }
 
-        }
+    override fun getLanguageConfig(): LanguageConfig {
+        return LanguageConfig(
+            language = "lua",
+            languagePath = "lua.tmLanguage.json",
+            languageInputStream = FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/lua.tmLanguage.json")
+        )
     }
 
 
     override fun getAutoCompleteProvider(): AutoCompleteProvider {
-        return object : AutoCompleteProvider {
-            override fun getAutoCompleteItems(
-                prefix: String?,
-                analyzeResult: TextAnalyzeResult?,
-                line: Int,
-                column: Int
-            ): MutableList<CompletionItem> {
-                return mutableListOf()
-            }
-
-        }
+        return AutoCompleteProvider { prefix, analyzeResult, line, column -> mutableListOf() }
     }
 
-    fun getSchemeColor(type: Int): Int {
-        return codeEditor.colorScheme.getColor(type)
-    }
 
     override fun isAutoCompleteChar(ch: Char): Boolean {
         return if (ch == ',')
@@ -153,9 +141,6 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
                     || ch == '_' || MyCharacter.isJavaIdentifierPart(ch.code);
     }
 
-    override fun getIndentAdvance(content: String): Int {
-        return 0
-    }
 
     override fun useTab(): Boolean {
         return true;
@@ -171,10 +156,6 @@ class LuaLanguage(val codeEditor: CodeEditor, private val activity: AppCompatAct
 
     private val newlineHandlers = arrayOf(BraceHandler())
 
-    @Override
-    override fun getNewlineHandlers(): Array<out NewlineHandler> {
-        return newlineHandlers;
-    }
 
     inner class BraceHandler : NewlineHandler {
         override fun matchesRequirement(beforeText: String, afterText: String): Boolean {

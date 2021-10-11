@@ -11,13 +11,13 @@ import com.google.gson.annotations.SerializedName
  * @description:
  **/
 @Keep
-data class ThemeBean(
+data class VSCodeThemeBean(
     @SerializedName("name")
-    var name: String, // Light+ (default light)
+    var themeName: String, // Light+ (default light)
     @SerializedName("tokenColors")
     var tokenColors: List<TokenColor>,
     @SerializedName("colors")
-    var colors: Map<String,String>?
+    var editorColors: Map<String,String>?
 ) {
 
     @Keep
@@ -27,12 +27,8 @@ data class ThemeBean(
         @SerializedName("scope")
         var scope: Any, // null
         @SerializedName("settings")
-        var settings: Settings
+        var style: FontStyle
     ) {
-        @Keep
-        data class Settings(
-            @SerializedName("foreground")
-            var foreground: String // #795E26
-        )
+
     }
 }

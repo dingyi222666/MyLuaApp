@@ -1,7 +1,8 @@
 package com.dingyi.editor.language.java
 
 import com.dingyi.editor.language.textmate.TextMateBridgeLanguage
-import com.dingyi.editor.language.textmate.TextMateTheme
+import com.dingyi.editor.language.textmate.TextMateGlobal
+import com.dingyi.editor.language.textmate.theme.VSCodeTheme
 import io.github.rosemoe.sora.widget.CodeEditor
 import java.io.FileInputStream
 
@@ -22,8 +23,8 @@ class JavaLanguage(codeEditor: CodeEditor) : TextMateBridgeLanguage(codeEditor) 
 
     init {
 
-        codeEditor.colorScheme = TextMateTheme(codeEditor) {
-            TextMateTheme.Builder.VSCodeTheme ("light.json") {
+        codeEditor.colorScheme = TextMateGlobal.loadTheme("light") {
+            VSCodeTheme("light.json") {
                 FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/theme/light.json")
             }
         }
