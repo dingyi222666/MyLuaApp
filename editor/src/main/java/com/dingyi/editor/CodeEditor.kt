@@ -20,6 +20,8 @@ class CodeEditor(context: Context, attributeSet: AttributeSet) :
     CodeEditor(context, attributeSet) {
 
 
+
+
     init {
         Typeface.BOLD
         typefaceText = Typeface.MONOSPACE;
@@ -34,6 +36,8 @@ class CodeEditor(context: Context, attributeSet: AttributeSet) :
         setAutoCompletionItemAdapter(AutoCompletionItemAdapter(this))
         setTextActionMode(TextActionMode.ACTION_MODE)
         setPinLineNumber(false)
+        isOverScrollEnabled = false
+        isHardwareAcceleratedDrawAllowed = true
 
         context.externalCacheDir?.parentFile?.run {
             File("$absolutePath/files/fonts/default.ttf")

@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.util.ArrayMap
 import com.dingyi.editor.language.textmate.bean.ThemeBean
 import com.google.gson.Gson
+import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.EditorColorScheme
 import org.eclipse.tm4e.core.model.TMToken
 import java.io.InputStream
@@ -15,6 +16,7 @@ import java.io.InputStreamReader
  * @description:
  **/
 class TextMateTheme(
+    private val codeEditor: CodeEditor,
     private val themeBlock: Builder.() -> Builder.Theme,
 ) : EditorColorScheme() {
 
@@ -31,7 +33,6 @@ class TextMateTheme(
     private val colorCache = ArrayMap<String, Int>()
 
 
-
     init {
         applyDefault()
         when (theme) {
@@ -43,12 +44,12 @@ class TextMateTheme(
 
                     when (it.key) {
                         "editor.foreground" -> {
-                            setColor(LINE_NUMBER,Color.parseColor(it.value))
+                            setColor(LINE_NUMBER, Color.parseColor(it.value))
                         }
                         "editor.background" -> {
 
-                            setColor(LINE_NUMBER_BACKGROUND,Color.parseColor(it.value))
-                            setColor(WHOLE_BACKGROUND,Color.parseColor(it.value))
+                            setColor(LINE_NUMBER_BACKGROUND, Color.parseColor(it.value))
+                            setColor(WHOLE_BACKGROUND, Color.parseColor(it.value))
                         }
                     }
                 }
@@ -61,10 +62,13 @@ class TextMateTheme(
         return t!!
     }
 
+
     private fun matchCache(name: String): Int? {
         if (colorCache[name] != null) {
             val color = getOrNull(colorCache[name])
-            setColor(color, color)
+            codeEditor.post {
+                setColor(color, color-0xff)
+            }
             return color
         }
         return null
@@ -73,6 +77,7 @@ class TextMateTheme(
     fun match(token: TMToken): Int? {
         val scopes = token.scopes.toMutableList()
         scopes.removeAt(0)
+
         for (index in scopes.lastIndex downTo 0) {
 
             val scope = scopes[index]
@@ -83,11 +88,7 @@ class TextMateTheme(
                 return cachedResult
             }
 
-            var color = matchScope(scope, scope)
-
-            if (color != null) {
-                return color
-            }
+            var color: Int?
 
             val splitScope = scope.split(".").toMutableList()
 
@@ -97,7 +98,7 @@ class TextMateTheme(
                 val tmpString = splitScope.joinToString(separator = ".")
 
                 color = matchScope(tmpString, scope)
-                println("color=$color scope=$tmpString")
+
                 if (color != null) {
                     return color
                 }
@@ -108,13 +109,15 @@ class TextMateTheme(
 
         }
 
-        return TEXT_NORMAL
+        return null
 
     }
 
     private fun putCache(color: Int, scope: String) {
-        setColor(color, color)
-        colorCache[scope] = color
+        codeEditor.post {
+            setColor(color + 0xff, color)
+        }
+        colorCache[scope] = color + 0xff
     }
 
     private fun matchScope(matchScope: String, scope: String): Int? {
@@ -144,6 +147,8 @@ class TextMateTheme(
             else -> null
         }?.apply {
             putCache(this, scope)
+        }?.run {
+            this + 0xff
         }
     }
 
@@ -152,10 +157,26 @@ class TextMateTheme(
      * copy the them
      */
     fun clone(): TextMateTheme {
-        val new = TextMateTheme(themeBlock)
+        val new = TextMateTheme(codeEditor, themeBlock)
         //TODO be implemented
         return new
     }
 
+    fun getDefaultColor(): Int? {
+        return when (theme) {
+            is Builder.VSCodeTheme -> {
+                runCatching {
+                    Color.parseColor(vsCodeTheme?.colors?.get("editor.foreground"))
+                }.getOrNull()?.apply {
+                    codeEditor.post {
+                        setColor(this+0xff,this)
+                    }
+                }?.let {
+                    it+0xff
+                }
+            }
+            else -> null
+        }
 
+    }
 }

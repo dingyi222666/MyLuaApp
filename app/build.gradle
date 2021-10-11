@@ -5,13 +5,13 @@ plugins {
 
 android {
 
-    applicationVariants.all { variant ->
+    /*applicationVariants.all { variant ->
         variant.outputs.all {
             if (variant.buildType.name == 'debug') {
                 variant.getPackageApplication().outputDirectory = new File("apk/debug")
             }
         }
-    }
+    }*/
 
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
