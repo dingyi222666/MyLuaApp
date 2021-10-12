@@ -23,3 +23,4 @@ More features will be implemented as we continue to develop this app.
 
 ## Discuss
  - QQ Group:[1020019846](https://jq.qq.com/?_wv=1027&k=zGdBLMr8)
+ - [Telegram](https://t.me/MyLuaApp)
