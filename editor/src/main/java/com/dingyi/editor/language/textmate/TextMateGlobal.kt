@@ -1,10 +1,13 @@
 package com.dingyi.editor.language.textmate
 
 import android.util.ArrayMap
+import com.dingyi.editor.language.textmate.bean.Settings
 import com.dingyi.editor.language.textmate.theme.ITheme
 import com.dingyi.editor.language.textmate.theme.VSCodeTheme
+import com.google.gson.Gson
 import org.eclipse.tm4e.core.registry.Registry
 import java.io.FileInputStream
+import java.io.FileReader
 import kotlin.concurrent.thread
 
 /**
@@ -17,6 +20,9 @@ object TextMateGlobal {
     val registry = Registry()
 
     private val themes = ArrayMap<String, ITheme>()
+
+    val settings = Gson()
+        .fromJson(FileReader("/data/data/com.dingyi.MyLuaApp/files/res/textmate/settings.json"), Settings::class.java)
 
     init {
         //先加载主题

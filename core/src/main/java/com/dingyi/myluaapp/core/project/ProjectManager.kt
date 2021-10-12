@@ -14,10 +14,14 @@ import java.io.OutputStream
 class ProjectManager(private val projectRootPath:String) {
 
 
+
+
     /**
      * delete project
      */
-    fun deleteProject(project:Project) {}
+    fun deleteProject(project:Project) {
+        
+    }
 
     /**
      * backup project

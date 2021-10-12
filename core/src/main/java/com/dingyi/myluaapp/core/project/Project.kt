@@ -8,6 +8,9 @@ package com.dingyi.myluaapp.core.project
 class Project {
 
 
+    var projectPath = ""
+
+
 
     class Builder {
 

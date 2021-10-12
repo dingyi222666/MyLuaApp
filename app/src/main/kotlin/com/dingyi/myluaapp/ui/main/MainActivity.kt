@@ -35,7 +35,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel, MainPresen
         }
 
 
-
         initView()
         presenter.requestPoetry()
         presenter.refreshProjectList()

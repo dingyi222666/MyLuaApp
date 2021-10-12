@@ -78,7 +78,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
 
 
                 
-                isUserInputEnabled = false
+                isUserInputEnabled = true
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
                         viewModel.projectConfig.value?.run {
@@ -142,7 +142,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
 
         presenter.openProject(projectInfo)
 
-        AndroidApi.prepareJson(assets.open("res/api/android.json"))
+
     }
 
     @SuppressLint("NotifyDataSetChanged")

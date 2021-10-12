@@ -26,17 +26,29 @@ abstract class TextMateBridgeLanguage(
 
     abstract fun getLanguageConfig(): LanguageConfig
 
-    var tokenizer:Tokenizer
+    val tokenizer: Tokenizer
+
+
+    var settings: Map<String, String>? = null
 
     init {
         val languageConfig = getLanguageConfig()
-        val grammar=TextMateGlobal.registry.loadGrammarFromPathSync(
-           languageConfig.languagePath,
+        val grammar = TextMateGlobal.registry.loadGrammarFromPathSync(
+            languageConfig.languagePath,
             languageConfig.languageInputStream
         )
 
         //TODO load grammar in registry if already exists
         tokenizer = Tokenizer(grammar)
+
+        settings = runCatching {
+            TextMateGlobal.settings.filter {
+                it["name"].toString() == grammar.name.toString()
+            }[0] as Map<String, String>
+        }.getOrNull().apply {
+            println("this $this")
+        }
+
     }
 
     data class LanguageConfig(

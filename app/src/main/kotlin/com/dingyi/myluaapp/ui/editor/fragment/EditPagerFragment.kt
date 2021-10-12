@@ -34,12 +34,12 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
 
     lateinit var codeFile: CodeFile
 
-    val codeEditor by lazy {
+    val codeEditor by lazy(LazyThreadSafetyMode.NONE) {
         viewBinding.codeEditor
     }
 
 
-    private val presenter by lazy {
+    private val presenter by lazy(LazyThreadSafetyMode.NONE) {
         EditPagerPresenter(this, viewModel)
     }
 
@@ -145,7 +145,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
                     setEditorLanguage(JavaLanguage(viewBinding.codeEditor))
                 }
             }
-
+            this.isNestedScrollingEnabled
         }
 
 

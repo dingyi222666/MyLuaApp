@@ -36,6 +36,7 @@ class CodeEditor(context: Context, attributeSet: AttributeSet) :
         setAutoCompletionItemAdapter(AutoCompletionItemAdapter(this))
         setTextActionMode(TextActionMode.ACTION_MODE)
         setPinLineNumber(false)
+        setInterceptParentHorizontalScrollIfNeeded(true)
         isOverScrollEnabled = false
         isHardwareAcceleratedDrawAllowed = true
 
