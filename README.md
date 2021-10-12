@@ -2,7 +2,7 @@
 
 It's **Work In Progress**. Now the project is in the **alpha** stage and most features are **not completed**(For example,Build Apk).It means the project is unavailable.
 
-MyLuaApp is an Android IDE,use **Lua/Java**  to develop Android apps on Android smartphones. 
+MyLuaApp is an Android Development Kit,use **Lua/Java**  to develop Android apps on Android system. 
 
 You can use lua to develop Android Apps!The project use [AndroLua_pro](https://github.com/nirenr/AndroLua_pro) as lua running framework to run lua in Android.It's fast than [AndroLua](https://github.com/mkottman/AndroLua)
 
