@@ -19,4 +19,7 @@ public interface IRawTheme {
 
 	Collection<IRawThemeSetting> getSettings();
 
+    IRawThemeSetting getEditorSetting();
+
+
 }

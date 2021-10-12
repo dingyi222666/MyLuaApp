@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.util.ArrayMap
 import android.util.SparseIntArray
 import com.dingyi.editor.language.textmate.bean.FontStyle
-import com.dingyi.editor.language.textmate.bean.VSCodeThemeBean
-import com.google.gson.Gson
+import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader
+import org.eclipse.tm4e.core.theme.Theme
 import java.io.InputStream
 import java.io.InputStreamReader
 
@@ -17,7 +17,7 @@ import java.io.InputStreamReader
 class VSCodeTheme(val path: String, val block: () -> InputStream) : ITheme {
 
     private val vsCodeTheme =
-        Gson().fromJson(InputStreamReader(block()), VSCodeThemeBean::class.java)
+        ThemeReader.readThemeSync(path, block())
 
     private val scopesThemeMap = ArrayMap<String, FontStyle>(100)
 
@@ -26,11 +26,12 @@ class VSCodeTheme(val path: String, val block: () -> InputStream) : ITheme {
 
     private val colorCacheList = SparseIntArray()
 
+    private val vsCodeTMTheme = Theme.createFromRawTheme(vsCodeTheme)
 
     //load all theme
     override fun init() {
 
-        vsCodeTheme.editorColors?.forEach { editorColor ->
+        (vsCodeTheme.editorSetting as Map<String,String>).forEach { editorColor ->
             val color = Color.parseColor(editorColor.value.run {
                 if (this.length < 9) {
                     "#" + ((this.length - 1..7).joinToString(
@@ -53,21 +54,22 @@ class VSCodeTheme(val path: String, val block: () -> InputStream) : ITheme {
     }
 
     private fun matchFontStyle(scope: String): FontStyle? {
-        vsCodeTheme.tokenColors.forEach { tokenColor ->
-            if (tokenColor.scope is String && tokenColor.scope == scope) {
-                scopesThemeMap[tokenColor.scope as String] = tokenColor.style
-                return tokenColor.style
-            } else if (tokenColor.scope is List<*>) {
-                (tokenColor.scope as List<String>).forEach {
-                    if (it == scope) {
-                        scopesThemeMap[it] = tokenColor.style
-                        return tokenColor.style
-                    }
+        return vsCodeTMTheme.match(scope).run {
+            var result: FontStyle? = null
+            forEach {
+                if (vsCodeTMTheme.getColor(it.foreground) != null) {
+                    result = FontStyle(
+                        vsCodeTMTheme.getColor(it.foreground),
+                        vsCodeTMTheme.getColor(it.fontStyle),
+                        vsCodeTMTheme.getColor(it.background)
+                    )
+                    return@forEach
                 }
             }
+            result
         }
-        return null
     }
+
 
     override fun parseColor(colorText: String): Int {
         return if (colorCacheMap.containsKey(colorText)) {

@@ -2,6 +2,7 @@
   "$schema": "vscode://schemas/color-theme",
   "name": "Dark+ (default dark)",
   "include": "./dark_vs.json",
+
   "colors": {
     "editor.background": "#1E1E1E",
     "editor.foreground": "#D4D4D4",
@@ -21,6 +22,7 @@
     "sideBarSectionHeader.border": "#ccc3",
     "tab.lastPinnedBorder": "#ccc3"
   },
+  "//": "if use vscode theme,must set 'tokenColors' to 'settings'",
   "tokenColors": [
     {
       "name": "Function declarations",

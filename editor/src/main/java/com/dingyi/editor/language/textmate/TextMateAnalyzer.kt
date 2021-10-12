@@ -33,7 +33,7 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
                 result.addNormalIfNull()
             }
             val lineTokens = textMateBridgeLanguage.tokenizer.tokenize(
-                lineText,
+                "$lineText",
                 globalState,
                 0,
                 1000000000

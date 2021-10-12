@@ -24,4 +24,5 @@ public interface IRawThemeSetting {
 
 	IThemeSetting getSetting();
 
+
 }

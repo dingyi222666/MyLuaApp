@@ -53,43 +53,16 @@ class TextMateScheme(
     }
 
 
-    private val buffer = StringBuilder()
     private fun matchVSCodeTheme(token: TMToken): FontStyle? {
 
         val scopes = token.scopes
 
-        val scope = scopes[scopes.lastIndex]
-        //if cached
-
-        var cachedResult = theme.match(scope)
-        if (cachedResult != null) {
-            return cachedResult
-        }
-
-
-        val splitScope = scope.split(".").toMutableList()
-
-        //逐个去匹配
-
-        buffer.delete(0,buffer.length)
-
-        while (splitScope.isNotEmpty()) {
-            splitScope.forEach {
-                buffer.append(it).append('.')
-            }
-
-            buffer.deleteCharAt(buffer.lastIndex)
-
-            cachedResult = theme.match(buffer.toString())
-
+        scopes?.forEach {
+            val cachedResult = theme.match(it)
             if (cachedResult != null) {
                 return cachedResult
             }
-            splitScope.removeAt(splitScope.lastIndex)
-            buffer.delete(0,buffer.length)
         }
-
-
 
         return null
 
