@@ -3,9 +3,9 @@
 [![Telegram](https://img.shields.io/badge/Join-Telegram-blue)](https://t.me/MyLuaApp)
 [![QQ](https://img.shields.io/badge/Join-QQ_Group-ff69b4)](https://jq.qq.com/?_wv=1027&k=XnJ4FMvS)   
 
-It's **Work In Progress**. Now the project is in the **alpha** stage and most features are **not completed**(For example,Build Apk).It means the project is unavailable.
+It's ***Work In Progress***. Now the project is in the **alpha** stage and most features are **not completed**(For example,Build Apk).It means the project is not run well.
 
-MyLuaApp is an Android Development Kit,use **Lua/Java**  to develop Android apps on Android system. 
+MyLuaApp is an Android App,use **Lua/Java**  to develop Android apps on Android system. 
 
 You can use lua to develop Android Apps!The project use [AndroLua_pro](https://github.com/nirenr/AndroLua_pro) as lua running framework to run lua in Android.It's fast than [AndroLua](https://github.com/mkottman/AndroLua)
 
