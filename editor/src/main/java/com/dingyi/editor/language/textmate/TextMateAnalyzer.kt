@@ -5,6 +5,8 @@ import io.github.rosemoe.sora.interfaces.CodeAnalyzer
 import io.github.rosemoe.sora.text.TextAnalyzeResult
 import io.github.rosemoe.sora.text.TextAnalyzer
 import io.github.rosemoe.sora.widget.EditorColorScheme
+import org.eclipse.tm4e.core.model.LineTokens
+import org.eclipse.tm4e.core.model.TMState
 
 /**
  * @author: dingyi
@@ -34,12 +36,21 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
             if (!delegate.shouldAnalyze()) {
                 return@forEachLine
             }
-            val lineTokens = textMateBridgeLanguage.tokenizer.tokenize(
-                lineText,
-                globalState,
-                0,
-                1000000000
-            )
+            val lineTokens = runCatching {
+                tokenize(
+                    lineText,
+                    globalState,
+                    0,
+                    1000000000
+                )
+            }.getOrElse {
+                tokenize(
+                    lineText,
+                    globalState,
+                    0,
+                    1000000000
+                )
+            }
             globalState = lineTokens.endState
 
             val theme = (textMateBridgeLanguage.codeEditor.colorScheme as TextMateScheme)
@@ -53,12 +64,24 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
                             ?: theme.getDefaultColor() ?: EditorColorScheme.TEXT_NORMAL
                     )
                 )
-
             }
             line++
         }
         result.determine(line)
 
+    }
+
+    private fun tokenize(
+        lineText: String,
+        globalState: TMState?,
+        startIndex: Int,
+        endIndex: Int
+    ): LineTokens {
+        return runCatching {
+            textMateBridgeLanguage.tokenizer.tokenize(lineText, globalState, startIndex, endIndex)
+        }.getOrElse {
+            tokenize(lineText, globalState, startIndex, endIndex)
+        }
     }
 
 

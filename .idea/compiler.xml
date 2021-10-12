@@ -5,6 +5,8 @@
       <module name="MyLuaApp.AndroLua" target="11" />
       <module name="MyLuaApp.app" target="11" />
       <module name="MyLuaApp.builder" target="11" />
+      <module name="MyLuaApp.common" target="11" />
+      <module name="MyLuaApp.core" target="11" />
       <module name="MyLuaApp.editor" target="11" />
       <module name="MyLuaApp.LuaLibrary" target="11" />
       <module name="MyLuaApp.tm4e" target="11" />
