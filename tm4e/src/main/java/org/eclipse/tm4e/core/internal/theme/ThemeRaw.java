@@ -32,11 +32,7 @@ public class ThemeRaw extends HashMap<String, Object> implements IRawTheme, IRaw
 
     @Override
     public Collection<IRawThemeSetting> getSettings() {
-        Collection<IRawThemeSetting> settings = ((Collection<IRawThemeSetting>) super.get("settings"));
-        if (settings != null) {
-            return settings;
-        }
-        return (Collection<IRawThemeSetting>) super.get("tokenColors");
+        return ((Collection<IRawThemeSetting>) super.get("settings"));
     }
 
     @Override
@@ -47,11 +43,6 @@ public class ThemeRaw extends HashMap<String, Object> implements IRawTheme, IRaw
     @Override
     public IThemeSetting getSetting() {
         return (IThemeSetting) super.get("settings");
-    }
-
-    @Override
-    public IRawThemeSetting getEditorSetting() {
-        return (IRawThemeSetting) super.get("colors");
     }
 
     @Override

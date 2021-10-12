@@ -25,6 +25,7 @@ public class TMTokenDecodeData {
 
 	TMTokenDecodeData(String[] scopes, Map<Integer, Map<Integer, Boolean>> scopeTokensMaps) {
 		this.scopes = scopes;
+
 		this.scopeTokensMaps = scopeTokensMaps;
 	}
 

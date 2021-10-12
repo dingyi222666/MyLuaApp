@@ -7,7 +7,6 @@ import com.dingyi.editor.language.textmate.bean.FontStyle
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader
 import org.eclipse.tm4e.core.theme.Theme
 import java.io.InputStream
-import java.io.InputStreamReader
 
 /**
  * @author: dingyi
@@ -17,7 +16,9 @@ import java.io.InputStreamReader
 class VSCodeTheme(val path: String, val block: () -> InputStream) : ITheme {
 
     private val vsCodeTheme =
-        ThemeReader.readThemeSync(path, block())
+        ThemeRaw().apply {
+            putAll(ThemeReader.readThemeSync(path, block()) as Map<String, Any>)
+        }
 
     private val scopesThemeMap = ArrayMap<String, FontStyle>(100)
 
@@ -31,7 +32,7 @@ class VSCodeTheme(val path: String, val block: () -> InputStream) : ITheme {
     //load all theme
     override fun init() {
 
-        (vsCodeTheme.editorSetting as Map<String,String>).forEach { editorColor ->
+        vsCodeTheme.editorSettings.forEach { editorColor ->
             val color = Color.parseColor(editorColor.value.run {
                 if (this.length < 9) {
                     "#" + ((this.length - 1..7).joinToString(
@@ -95,5 +96,6 @@ class VSCodeTheme(val path: String, val block: () -> InputStream) : ITheme {
             colorCacheList[this]
         }
     }
-
 }
+
+

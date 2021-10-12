@@ -17,7 +17,6 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
 
     private var globalState = textMateBridgeLanguage.tokenizer.initialState
 
-    private var delegate: TextAnalyzer.AnalyzeThread.Delegate? = null
 
     override fun analyze(
         content: CharSequence,
@@ -32,13 +31,15 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
             if (line > 0) {
                 result.addNormalIfNull()
             }
+            if (!delegate.shouldAnalyze()) {
+                return@forEachLine
+            }
             val lineTokens = textMateBridgeLanguage.tokenizer.tokenize(
-                "$lineText",
+                lineText,
                 globalState,
                 0,
                 1000000000
             )
-
             globalState = lineTokens.endState
 
             val theme = (textMateBridgeLanguage.codeEditor.colorScheme as TextMateScheme)
