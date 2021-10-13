@@ -77,6 +77,7 @@ class MainPresenter(
 
         luaVm.close()
         System.gc()//clear lua vm
+        println(result)
         viewModel.mainProjectList.value = result
 
     }

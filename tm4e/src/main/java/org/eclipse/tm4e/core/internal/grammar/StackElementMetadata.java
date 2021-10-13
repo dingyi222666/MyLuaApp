@@ -63,8 +63,8 @@ public class StackElementMetadata {
 		foreground = foreground == 0 ? StackElementMetadata.getForeground(metadata) : foreground;
 		background = background == 0 ? StackElementMetadata.getBackground(metadata) : background;
 		return ((languageId << MetadataConsts.LANGUAGEID_OFFSET) | (tokenType << MetadataConsts.TOKEN_TYPE_OFFSET)
-				| (fontStyle << MetadataConsts.FONT_STYLE_OFFSET) | (foreground << MetadataConsts.FOREGROUND_OFFSET)
-				| (background << MetadataConsts.BACKGROUND_OFFSET)) >>> 0;
+                | (fontStyle << MetadataConsts.FONT_STYLE_OFFSET) | (foreground << MetadataConsts.FOREGROUND_OFFSET)
+                | (background << MetadataConsts.BACKGROUND_OFFSET));
 	}
 
 }

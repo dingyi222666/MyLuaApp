@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.util.ArrayMap
 import android.util.SparseIntArray
 import com.dingyi.editor.language.textmate.bean.FontStyle
+import org.eclipse.tm4e.core.internal.grammar.StackElementMetadata
 import org.eclipse.tm4e.core.internal.theme.reader.ThemeReader
 import org.eclipse.tm4e.core.theme.Theme
 import java.io.InputStream
@@ -20,10 +21,17 @@ class VSCodeTheme(val path: String, val block: () -> InputStream) : ITheme {
             putAll(ThemeReader.readThemeSync(path, block()) as Map<String, Any>)
         }
 
-    private val scopesThemeMap = ArrayMap<String, FontStyle>(100)
+    private val scopesThemeMap = ArrayMap<Int, FontStyle>(100)
 
     private val colorCacheMap = ArrayMap<String, Int>()
 
+    private val fontStyleMap = mapOf(
+        -1 to "notset",
+        0 to "none",
+        1 to "italic",
+        2 to "Bold",
+        3 to "underline"
+    )
 
     private val colorCacheList = SparseIntArray()
 
@@ -50,29 +58,26 @@ class VSCodeTheme(val path: String, val block: () -> InputStream) : ITheme {
     }
 
 
-    override fun match(scope: String): FontStyle? {
+    override fun match(scope: Int): FontStyle? {
         return scopesThemeMap[scope] ?: matchFontStyle(scope)
     }
 
-    private fun matchFontStyle(scope: String): FontStyle? {
-        return vsCodeTMTheme.match(scope).run {
-            var result: FontStyle? = null
-            forEach {
-                if (vsCodeTMTheme.getColor(it.foreground) != null) {
-                    result = FontStyle(
-                        vsCodeTMTheme.getColor(it.foreground),
-                        vsCodeTMTheme.getColor(it.fontStyle),
-                        vsCodeTMTheme.getColor(it.background)
-                    )
-                    return@forEach
-                }
-            }
-            result
+    private fun matchFontStyle(scope: Int): FontStyle? {
+        val foreground = StackElementMetadata.getForeground(scope)
+        if (vsCodeTMTheme.getColor(foreground) != "#000000") {
+            return FontStyle(
+                vsCodeTMTheme.getColor(foreground),
+                fontStyleMap[StackElementMetadata.getFontStyle(scope)],
+                vsCodeTMTheme.getColor(StackElementMetadata.getBackground(scope))
+            )
         }
+        return null
     }
 
 
     override fun parseColor(colorText: String): Int {
+
+
         return if (colorCacheMap.containsKey(colorText)) {
             colorCacheMap.getValue(colorText)
         } else {
@@ -95,6 +100,10 @@ class VSCodeTheme(val path: String, val block: () -> InputStream) : ITheme {
         return colorCacheMap[settings]?.run {
             colorCacheList[this]
         }
+    }
+
+    override fun getThemeRaw(): org.eclipse.tm4e.core.internal.theme.ThemeRaw {
+        return vsCodeTheme
     }
 }
 

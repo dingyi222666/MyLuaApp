@@ -60,10 +60,18 @@ object BuildConfig {
         }
 
         object AndroidX {
+            const val lifecycle_livedata = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle_version}"
+            const val lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle_version}"
+            const val lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle_version}"
+            const val constraintlayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintlayout_version}"
             const val appcompat = "androidx.appcompat:appcompat:${Versions.appcompat_version}"
+            const val preference_ktx = "androidx.preference:preference-ktx:${Versions.preference_ktx_version}"
+            const val swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swiperefreshlayout_version}"
+
         }
 
         object Default {
+            const val glide = "com.github.bumptech.glide:glide:${Versions.glide_version}"
             const val code_editor = "io.github.Rosemoe.sora-editor:editor:${Versions.code_editor_version}"
         }
 

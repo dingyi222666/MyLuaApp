@@ -6,10 +6,11 @@ import io.github.rosemoe.sora.interfaces.CodeAnalyzer
 import io.github.rosemoe.sora.text.TextAnalyzeResult
 import io.github.rosemoe.sora.text.TextAnalyzer
 import io.github.rosemoe.sora.widget.EditorColorScheme
+import org.eclipse.tm4e.core.grammar.StackElement
 import org.eclipse.tm4e.core.internal.oniguruma.OnigRegExp
 import org.eclipse.tm4e.core.internal.oniguruma.OnigString
-import org.eclipse.tm4e.core.model.LineTokens
-import org.eclipse.tm4e.core.model.TMState
+import java.io.BufferedReader
+import java.io.StringReader
 
 /**
  * @author: dingyi
@@ -20,8 +21,15 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
     CodeAnalyzer {
 
 
-    private var globalState = textMateBridgeLanguage.tokenizer.initialState
-
+    private fun BufferedReader.forEachLines(block: (String) -> Unit) {
+        use {
+            var buffer: String? = readLine()
+            while (buffer != null) {
+                block(buffer)
+                buffer = readLine()
+            }
+        }
+    }
 
     override fun analyze(
         content: CharSequence,
@@ -29,9 +37,13 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
         delegate: TextAnalyzer.AnalyzeThread.Delegate
     ) {
 
-        globalState = textMateBridgeLanguage.tokenizer.initialState
+        val theme = (textMateBridgeLanguage.codeEditor.colorScheme as TextMateScheme)
 
-        var (maxSwitch ,currSwitch) = 1 to 0
+        textMateBridgeLanguage.registry.setTheme(theme.theme.getThemeRaw())
+
+        var globalState: StackElement = StackElement.NULL
+
+        var (maxSwitch, currSwitch) = 1 to 0
 
         val foldScannerStart =
             textMateBridgeLanguage.settings?.get("foldingStartMarker")?.let {
@@ -46,33 +58,26 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
         val blockLines = ArrayDeque<BlockLine>()
 
         var line = 0
-        content.toString().reader().forEachLine { lineText ->
+        BufferedReader(StringReader(content.toString())).forEachLines { preLineText ->
+
+            val lineText = StringBuilder(preLineText).append('\n')
+
             if (line > 0) {
                 result.addNormalIfNull()
             }
             if (!delegate.shouldAnalyze()) {
-                return@forEachLine
+                return@forEachLines
             }
 
 
-            val lineTokens = runCatching {
-                tokenize(
-                    lineText,
-                    globalState,
-                    0,
-                    1000000000
-                )
-            }.getOrElse {
-                tokenize(
-                    lineText,
-                    globalState,
-                    0,
-                    1000000000
-                )
-            }
-            foldScannerStart?.search(OnigString(lineText), 0)?.let {
+            val colorTokens = textMateBridgeLanguage.grammar.tokenizeLine2(
+                lineText.toString(),
+                globalState
+            )
+
+            foldScannerStart?.search(OnigString(lineText.toString()), 0)?.let {
                 if (blockLines.isEmpty()) {
-                    if (currSwitch>maxSwitch) {
+                    if (currSwitch > maxSwitch) {
                         maxSwitch = currSwitch
                     }
                     currSwitch = 0
@@ -86,26 +91,36 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
             }
 
 
-            foldScannerEnd?.search(OnigString(lineText), 0)?.let {
+            foldScannerEnd?.search(OnigString(lineText.toString()), 0)?.let {
                 blockLines.removeFirstOrNull()?.apply {
                     endLine = line
                     endColumn = it.locationAt(0)
-                    result.addBlockLine(this)
+                    if (startLine != endLine) {
+                        result.addBlockLine(this)
+                    } else {
+                        currSwitch--
+                    }
                 }
             }
 
 
 
-            globalState = lineTokens.endState
+            globalState = colorTokens.ruleStack
 
-            val theme = (textMateBridgeLanguage.codeEditor.colorScheme as TextMateScheme)
 
-            lineTokens.tokens.forEach { token ->
-                val fontStyle = theme.match(token)
+            for (index in 0..colorTokens.tokens.lastIndex / 2) {
+
+                val startIndex = colorTokens.tokens[index * 2]
+                val metadata = colorTokens.tokens[index * 2 + 1]
+                val nextStartIndex = colorTokens.tokens.getOrElse(index * 2 + 2) { startIndex }
+
+                val fontStyle = theme.match(metadata)
+
+
                 result.add(
                     line,
                     Span.obtain(
-                        token.startIndex,
+                        startIndex,
                         fontStyle?.foreground?.let { theme.parseColor(it) }
                             ?: theme.getDefaultColor() ?: EditorColorScheme.TEXT_NORMAL
                     )
@@ -117,22 +132,8 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
         }
 
         result.determine(line)
-        result.suppressSwitch = maxSwitch+10
+        result.suppressSwitch = maxSwitch + 10
 
-    }
-
-
-    private fun tokenize(
-        lineText: String,
-        globalState: TMState?,
-        startIndex: Int,
-        endIndex: Int
-    ): LineTokens {
-        return runCatching {
-            textMateBridgeLanguage.tokenizer.tokenize(lineText, globalState, startIndex, endIndex)
-        }.getOrElse {
-            tokenize(lineText, globalState, startIndex, endIndex)
-        }
     }
 
 

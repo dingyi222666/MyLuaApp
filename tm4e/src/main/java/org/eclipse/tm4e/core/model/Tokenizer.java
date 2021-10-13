@@ -27,13 +27,15 @@ import org.eclipse.tm4e.core.grammar.ITokenizeLineResult;
 
 public class Tokenizer implements ITokenizationSupport {
 
-	private final IGrammar grammar;
+	public final IGrammar grammar;
 	private final DecodeMap decodeMap;
 
 	public Tokenizer(IGrammar grammar) {
 		this.grammar = grammar;
 		this.decodeMap = new DecodeMap();
 	}
+
+
 
 	@Override
 	public TMState getInitialState() {

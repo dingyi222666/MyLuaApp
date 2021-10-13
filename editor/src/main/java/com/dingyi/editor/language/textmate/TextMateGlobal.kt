@@ -17,11 +17,10 @@ import kotlin.concurrent.thread
  **/
 object TextMateGlobal {
 
-    val registry = Registry()
 
     private val themes = ArrayMap<String, ITheme>()
 
-    val settings = Gson()
+    val settings: Settings = Gson()
         .fromJson(FileReader("/data/data/com.dingyi.MyLuaApp/files/res/textmate/settings.json"), Settings::class.java)
 
     init {

@@ -5,6 +5,7 @@ import com.dingyi.editor.language.textmate.theme.ITheme
 import com.dingyi.editor.language.textmate.theme.VSCodeTheme
 import io.github.rosemoe.sora.widget.EditorColorScheme
 import org.eclipse.tm4e.core.model.TMToken
+import org.eclipse.tm4e.core.registry.Registry
 
 /**
  * @author: dingyi
@@ -16,6 +17,7 @@ class TextMateScheme(
 
 
     val theme = themeBlock()
+
 
     init {
         theme.init()
@@ -46,28 +48,15 @@ class TextMateScheme(
     }
 
 
-    fun match(token: TMToken): FontStyle? {
+    fun match(metaData:Int): FontStyle? {
         return when (theme) {
-            is VSCodeTheme -> matchVSCodeTheme(token)
+            is VSCodeTheme -> theme.match(metaData)
             else -> null
         }
     }
 
 
-    private fun matchVSCodeTheme(token: TMToken): FontStyle? {
 
-        val scopes = token.scopes
-
-        scopes?.forEach {
-            val cachedResult = theme.match(it)
-            if (cachedResult != null) {
-                return cachedResult
-            }
-        }
-
-        return null
-
-    }
 
     fun parseColor(colorString: String): Int {
         return theme.parseColor(colorString)

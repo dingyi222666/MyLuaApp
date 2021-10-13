@@ -7,7 +7,9 @@ import io.github.rosemoe.sora.interfaces.NewlineHandler
 import io.github.rosemoe.sora.langs.internal.MyCharacter
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.SymbolPairMatch
+import org.eclipse.tm4e.core.grammar.IGrammar
 import org.eclipse.tm4e.core.model.Tokenizer
+import org.eclipse.tm4e.core.registry.Registry
 import java.io.InputStream
 
 /**
@@ -19,6 +21,8 @@ abstract class TextMateBridgeLanguage(
     val codeEditor: CodeEditor
 ) : BaseLanguage() {
 
+    val registry = Registry()
+
 
     override fun getAnalyzer(): CodeAnalyzer {
         return TextMateAnalyzer(this)
@@ -26,20 +30,17 @@ abstract class TextMateBridgeLanguage(
 
     abstract fun getLanguageConfig(): LanguageConfig
 
-    val tokenizer: Tokenizer
-
 
     var settings: Map<String, String>? = null
 
+    var grammar: IGrammar
+
     init {
         val languageConfig = getLanguageConfig()
-        val grammar = TextMateGlobal.registry.loadGrammarFromPathSync(
+        grammar = registry.loadGrammarFromPathSync(
             languageConfig.languagePath,
             languageConfig.languageInputStream
         )
-
-        //TODO load grammar in registry if already exists
-        tokenizer = Tokenizer(grammar)
 
         settings = runCatching {
             TextMateGlobal.settings.filter {

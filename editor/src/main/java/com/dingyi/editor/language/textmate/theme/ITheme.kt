@@ -9,7 +9,7 @@ import com.dingyi.editor.language.textmate.bean.FontStyle
  **/
 
 interface ITheme {
-    fun match(scope: String): FontStyle?
+    fun match(metadata: Int): FontStyle?
 
     /**
      * return color index
@@ -23,6 +23,7 @@ interface ITheme {
      */
     fun getColor(index:Int):Int
     fun matchSettings(settings: String):Int?
+    fun getThemeRaw():org.eclipse.tm4e.core.internal.theme.ThemeRaw
 }
 
 
