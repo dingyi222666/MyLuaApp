@@ -14,6 +14,7 @@ android {
         targetSdkVersion 30
         versionCode 18
         versionName "0.3.3 (alpna)"
+        multiDexEnabled true
     }
 
     sourceSets {
@@ -48,9 +49,11 @@ android {
 
 
 dependencies {
-    api project(":editor") // editor
+    implementation project(":editor") // editor
 
-    implementation(fileTree(dir: "libs", include: ["*.jar", "*.aar"]))//libs jar
+    implementation project(":luaj")
+    implementation(fileTree(dir: "libs", include: ["*.jar"]))//libs jar
+
 
     //androidx and more
 
@@ -67,8 +70,7 @@ dependencies {
    
     implementation 'com.github.zhudaihao:livedatbus-master:1.0.1'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" //kt
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30" //kt
 
 
     //about
