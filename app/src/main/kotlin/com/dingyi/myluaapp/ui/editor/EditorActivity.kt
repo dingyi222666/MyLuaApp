@@ -9,7 +9,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import com.dingyi.editor.language.java.api.AndroidApi
 import com.dingyi.editor.language.lua.DrawablePool
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
@@ -77,7 +76,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                 adapter = EditPagerAdapter(this@EditorActivity, viewModel)
 
 
-                
+
                 isUserInputEnabled = true
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
@@ -156,7 +155,10 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
                             editorPage.visibility = View.VISIBLE
                             drawerPage.apply {
                                 adapter = DrawerPagerAdapter(this@EditorActivity).apply {
-                                    add(javaClass<FileListFragment>(), javaClass<CodeNavigationFragment>())
+                                    add(
+                                        javaClass<FileListFragment>(),
+                                        javaClass<CodeNavigationFragment>()
+                                    )
                                 }
                             }
                         }
@@ -172,7 +174,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel, MainPr
             .with("openPath", javaClass<String>())
             .observe(this) {
                 when (it.toFile().suffix) {
-                    "lua", "aly","java" -> {
+                    "lua", "aly", "java" -> {
                         viewModel.projectConfig.value?.let { config ->
                             var position = config.findCodeFileByPath(it)
                             if (position == null) {

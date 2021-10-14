@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseFragment
-import com.dingyi.myluaapp.common.kts.*
+import com.dingyi.myluaapp.common.kts.getAttributeColor
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.databinding.FragmentEditorFileListBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel

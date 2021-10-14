@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.core.project
 
-import java.io.FileOutputStream
 import java.io.OutputStream
 
 /**
@@ -11,32 +10,29 @@ import java.io.OutputStream
 /**
  * @param projectRootPath root project path
  */
-class ProjectManager(private val projectRootPath:String) {
-
-
+class ProjectManager(private val projectRootPath: String) {
 
 
     /**
      * delete project
      */
-    fun deleteProject(project:Project) {
-        
+    fun deleteProject(project: Project) {
+
     }
 
     /**
      * backup project
      */
-    fun backupProject(project:Project,exportOutputStream: OutputStream) {}
+    fun backupProject(project: Project, exportOutputStream: OutputStream) {}
 
     /**
      * create project
      */
-    fun createProject(projectBuilder:Project.Builder) {}
+    fun createProject(projectBuilder: Project.Builder) {}
 
-    fun listProject(block:(Project)->Unit) {
+    fun listProject(block: (Project) -> Unit) {
 
     }
-
 
 
 }

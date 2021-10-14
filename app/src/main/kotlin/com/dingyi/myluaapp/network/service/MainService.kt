@@ -3,7 +3,6 @@ package com.dingyi.myluaapp.network.service
 import androidx.lifecycle.LifecycleOwner
 import com.dingyi.myluaapp.bean.Poetry
 import com.dingyi.myluaapp.network.api.PoetryApi
-import com.hjq.http.EasyHttp
 import com.hjq.http.model.ResponseClass
 import kotlinx.coroutines.flow.flow
 

@@ -16,9 +16,9 @@ package org.eclipse.tm4e.core.theme.css;
  */
 public class ParserNotFoundException extends RuntimeException {
 
-	private static final long serialVersionUID = 4339161134287845644L;
+    private static final long serialVersionUID = 4339161134287845644L;
 
-	public ParserNotFoundException(Throwable throwable) {
-		super(throwable);
-	}
+    public ParserNotFoundException(Throwable throwable) {
+        super(throwable);
+    }
 }

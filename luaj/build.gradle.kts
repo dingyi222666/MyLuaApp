@@ -1,5 +1,5 @@
 plugins {
-    id ("java-library")
+    id("java-library")
 }
 
 java {
@@ -8,5 +8,5 @@ java {
 }
 
 dependencies {
-    api(fileTree("dir" to "libs","include" to "*.jar"))
+    api(fileTree("dir" to "libs", "include" to "*.jar"))
 }

@@ -93,7 +93,7 @@ class FileListPresenter(
             else -> it
         }
 
-        
+
         path?.let {
             block(path)
             it.toFile().isDirectory {

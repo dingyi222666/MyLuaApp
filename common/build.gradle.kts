@@ -4,11 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = BuildConfig.Config.Default.compileSdk
+    buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 30
+        minSdk = BuildConfig.Config.Default.minSdk
+        targetSdk = BuildConfig.Config.Default.targetSdk
 
         consumerProguardFiles ("consumer-rules.pro")
     }

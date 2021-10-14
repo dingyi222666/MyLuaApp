@@ -5,16 +5,16 @@
     android:title="@string/settings_main_title">
     <Preference
         android:icon="@drawable/ic_twotone_palette_24"
-        android:summary="@string/settings_application_summary"
         android:key="openPreference(settings_application)"
+        android:summary="@string/settings_application_summary"
         android:title="@string/settings_application_category"
         app:tint="?theme_hintTextColor">
 
     </Preference>
     <Preference
         android:icon="@drawable/ic_twotone_keyboard_24"
-        android:summary="@string/settings_editor_summary"
         android:key="openPreference(settings_editor_main)"
+        android:summary="@string/settings_editor_summary"
         android:title="@string/settings_editor_category">
 
     </Preference>
@@ -34,6 +34,5 @@
     </Preference>
     <Preference
         android:key="openActivity(com.dingyi.myluaapp.ui.about.AboutActivity)"
-        android:title="@string/settings_about_category">
-    </Preference>
+        android:title="@string/settings_about_category"></Preference>
 </PreferenceScreen>

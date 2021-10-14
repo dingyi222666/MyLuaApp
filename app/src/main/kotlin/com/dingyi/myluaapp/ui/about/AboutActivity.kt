@@ -8,7 +8,6 @@ import com.bumptech.glide.Glide
 import com.dingyi.myluaapp.BuildConfig
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.applyRoundedCorners
-import com.dingyi.myluaapp.common.kts.getString
 import com.drakeet.about.AbsAboutActivity
 
 /**
@@ -16,7 +15,7 @@ import com.drakeet.about.AbsAboutActivity
  * @date: 2021/9/4 20:42
  * @description:
  **/
-class AboutActivity:AbsAboutActivity() {
+class AboutActivity : AbsAboutActivity() {
 
     @SuppressLint("SetTextI18n")
     override fun onCreateHeader(icon: ImageView, slogan: TextView, version: TextView) {

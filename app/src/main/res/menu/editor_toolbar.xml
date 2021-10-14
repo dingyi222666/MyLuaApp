@@ -47,8 +47,7 @@
     </item>
     <item
         android:id="@+id/editor_action_plugin"
-        android:title="@string/editor_menu_plugin">
-    </item>
+        android:title="@string/editor_menu_plugin"></item>
     <item
         android:id="@+id/editor_action_more"
         android:title="@string/editor_menu_more">

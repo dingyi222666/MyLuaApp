@@ -91,9 +91,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel, MainPresen
             R.id.main_action_menu_settings -> {
                 startActivity<GeneralActivity> {
                     putExtra("type", javaClass<SettingsFragment>().name)
-                    val targetBundle=Bundle()
-                    targetBundle.putInt("resId",R.xml.settings_main)
-                    putExtra("arg",targetBundle)
+                    val targetBundle = Bundle()
+                    targetBundle.putInt("resId", R.xml.settings_main)
+                    putExtra("arg", targetBundle)
                 }
             }
         }

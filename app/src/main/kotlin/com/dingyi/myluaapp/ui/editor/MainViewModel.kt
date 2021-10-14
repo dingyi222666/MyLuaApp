@@ -23,5 +23,5 @@ class MainViewModel : ViewModel() {
     val fileListTitle = MutableLiveData<String>()
     val realPosition = MutableLiveData(0)
 
-    val navigationList= MutableLiveData<List<ColumnNavigationItem>>()
+    val navigationList = MutableLiveData<List<ColumnNavigationItem>>()
 }

@@ -47,7 +47,7 @@ class PrepareAssets(private val activity: AppCompatActivity) {
             )
 
 
-            arrayOf(Paths.projectDir,Paths.fontsDir).forEach {
+            arrayOf(Paths.projectDir, Paths.fontsDir).forEach {
                 it.toFile().mkdirs()
             }
 

@@ -13,30 +13,29 @@ package org.eclipse.tm4e.core.theme.css;
 /**
  * SAC Constants Parsers.
  *
- * @version 1.0.0
  * @author <a href="mailto:angelo.zerr@gmail.com">Angelo ZERR</a>
- *
+ * @version 1.0.0
  */
 public class SACConstants {
 
-	/**
-	 * org.w3c.flute.parser.Parser SAC Parser.
-	 */
-	public static final String SACPARSER_FLUTE = "org.w3c.flute.parser.Parser";
+    /**
+     * org.w3c.flute.parser.Parser SAC Parser.
+     */
+    public static final String SACPARSER_FLUTE = "org.w3c.flute.parser.Parser";
 
-	/**
-	 * org.w3c.flute.parser.Parser SAC Parser.
-	 */
-	public static final String SACPARSER_FLUTE_CSS3 = "org.w3c.flute.parser.CSS3Parser";
+    /**
+     * org.w3c.flute.parser.Parser SAC Parser.
+     */
+    public static final String SACPARSER_FLUTE_CSS3 = "org.w3c.flute.parser.CSS3Parser";
 
-	/**
-	 * com.steadystate.css.parser.SACParser SAC Parser
-	 */
-	public static final String SACPARSER_STEADYSTATE = "com.steadystate.css.parser.SACParser";
+    /**
+     * com.steadystate.css.parser.SACParser SAC Parser
+     */
+    public static final String SACPARSER_STEADYSTATE = "com.steadystate.css.parser.SACParser";
 
-	/**
-	 * org.apache.batik.css.parser.Parser SAC Parser.
-	 */
-	public static final String SACPARSER_BATIK = "org.apache.batik.css.parser.Parser";
+    /**
+     * org.apache.batik.css.parser.Parser SAC Parser.
+     */
+    public static final String SACPARSER_BATIK = "org.apache.batik.css.parser.Parser";
 
 }

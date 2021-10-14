@@ -1,29 +1,16 @@
 plugins {
     id("java-library")
     id("kotlin")
-
-}
-
-
-
-repositories {
-    // used for local development and while building by travis ci and jitpack.io
-    mavenLocal()
-    // used to download antlr4
-    mavenCentral()
-    // used to download antlr-kotlin-runtime
-    maven("https://jitpack.io")
 }
 
 
 dependencies {
     // https://mvnrepository.com/artifact/org.eclipse.lsp4j/org.eclipse.lsp4j
-    implementation("org.eclipse.lsp4j:org.eclipse.lsp4j:0.12.0")
-    implementation("com.strumenta.antlr-kotlin:antlr-kotlin-runtime:6304d5c1c4")
+    implementation(BuildConfig.Libs.Tools.lsp4j)
+    implementation(BuildConfig.Libs.Tools.antlr_kotlin_runtime)
     // add the plugin to the classpath
 
 }
-
 
 
 // in antlr-kotlin-plugin <0.0.5, the configuration was applied by the plugin.
@@ -37,11 +24,11 @@ tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generate
         // project.dependencies.create("org.antlr:antlr4:$antlrVersion"),
 
         // antlr target, required to create kotlin code
-        project.dependencies.create("com.strumenta.antlr-kotlin:antlr-kotlin-target:6304d5c1c4")
+        project.dependencies.create(BuildConfig.Libs.Tools.antlr_kotlin_target)
     )
     maxHeapSize = "64m"
     packageName = "com.strumenta.antlrkotlin.examples"
-    arguments = listOf("-visitor","-package","com.dingyi.lsp.lua.common.parser")
+    arguments = listOf("-visitor", "-package", "com.dingyi.lsp.lua.common.parser")
     source = project.objects
         .sourceDirectorySet("antlr", "antlr")
         .srcDir("src/main/antlr").apply {
@@ -54,14 +41,16 @@ tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generate
     // outputDirectory = File("src/commonAntlr/kotlin")
 }
 
-
+tasks.register("generateGrammarSource") {
+    //No do
+}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 
     sourceSets["main"].java {
-        srcDirs("src/main/kotlin","src/gen/kotlin-antlr")
+        srcDirs("src/main/kotlin", "src/gen/kotlin-antlr")
     }
 
 }

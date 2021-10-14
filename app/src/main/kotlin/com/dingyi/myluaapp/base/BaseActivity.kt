@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.base
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu

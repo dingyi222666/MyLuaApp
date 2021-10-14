@@ -30,14 +30,19 @@ class EditPagerPresenter(
                     }
                 }
                 fragment.codeEditor.apply {
-                    setText(if (useDataBase) {
-                        it.code
-                    } else {
-                        it.filePath.toFile().readText()
-                    })
-                    it.code= text.toString()
+                    setText(
+                        if (useDataBase) {
+                            it.code
+                        } else {
+                            it.filePath.toFile().readText()
+                        }
+                    )
+                    it.code = text.toString()
 
-                    setSelection((lineCount-1).coerceAtMost(it.openSelectionLine),it.openSelectionColumn)
+                    setSelection(
+                        (lineCount - 1).coerceAtMost(it.openSelectionLine),
+                        it.openSelectionColumn
+                    )
                 }
             }
 

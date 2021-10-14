@@ -38,8 +38,8 @@ class MainPresenter(
             CodeFile().apply {
                 projectConfig = it
                 filePath = path
-                openSelectionColumn= 0
-                openSelectionLine= 0
+                openSelectionColumn = 0
+                openSelectionLine = 0
                 save()
             }
             it.update(it.id.toLong())
@@ -70,9 +70,9 @@ class MainPresenter(
             .apply {
                 inflate(R.menu.editor_tab)
                 viewModel.projectConfig.value?.let { projectConfig ->
-                    if (projectConfig.openFiles.size<2) {
-                        menu.findItem(R.id.editor_action_close).isVisible=false
-                        menu.findItem(R.id.editor_action_close_other).isVisible=false
+                    if (projectConfig.openFiles.size < 2) {
+                        menu.findItem(R.id.editor_action_close).isVisible = false
+                        menu.findItem(R.id.editor_action_close_other).isVisible = false
                     }
                 }
             }

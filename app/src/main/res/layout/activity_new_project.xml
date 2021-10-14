@@ -11,16 +11,16 @@
         layout="@layout/layout_include_toolbar" />
 
     <ProgressBar
-        android:layout_width="0dp"
         android:id="@+id/progress"
-        android:indeterminate="true"
-        android:elevation="4dp"
-        android:visibility="gone"
         style="@android:style/Widget.Material.ProgressBar.Horizontal"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="16dp"
+        android:elevation="4dp"
+        android:indeterminate="true"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_include"
-        android:layout_height="16dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_include" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/base_info_title"
@@ -38,12 +38,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/app_name_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="12dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -51,20 +51,20 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/app_name"
-            android:maxLines="1"
-            android:paddingStart="12dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/new_project_app_name_hint" />
+            android:hint="@string/new_project_app_name_hint"
+            android:maxLines="1"
+            android:paddingStart="12dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/app_package_name_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
 
         android:layout_marginRight="12dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -73,12 +73,12 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/app_package_name"
-            android:maxLines="1"
-            android:paddingStart="12dp"
-            android:text="@string/new_project_app_package_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/new_project_app_package_hint" />
+            android:hint="@string/new_project_app_package_hint"
+            android:maxLines="1"
+            android:paddingStart="12dp"
+            android:text="@string/new_project_app_package_text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textview.MaterialTextView
@@ -96,18 +96,17 @@
         app:layout_constraintTop_toBottomOf="@id/app_package_name_parent" />
 
     <com.google.android.material.chip.ChipGroup
-        android:layout_height="wrap_content"
+        android:id="@+id/chip_group"
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        app:singleSelection="true"
-        android:id="@+id/chip_group"
-
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/base_template_title">
 
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/base_template_title"
+        app:singleSelection="true">
 
 
     </com.google.android.material.chip.ChipGroup>
@@ -128,25 +127,27 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:gravity="left|center"
-
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/base_other_title"
-        android:layout_height="48dp">
+
+        android:gravity="left|center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/base_other_title">
+
         <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:enabled="false"
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:layout_marginLeft="16dp"
-            android:text="@string/new_project_use_androidx"
-            android:layout_height="wrap_content"/>
+            android:text="@string/new_project_use_androidx" />
+
         <androidx.appcompat.widget.AppCompatCheckBox
             android:layout_width="wrap_content"
 
-            android:enabled="false"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:enabled="false" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

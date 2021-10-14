@@ -4,11 +4,11 @@
     android:title="@string/settings_application_category">
 
     <ListPreference
-        android:icon="@drawable/ic_twotone_translate_24"
-        android:key="language"
         android:defaultValue="default"
         android:entryValues="@array/settings_application_language_entry_value"
-        app:entries="@array/settings_application_language_entry"
+        android:icon="@drawable/ic_twotone_translate_24"
+        android:key="language"
         android:summary="@string/settings_application_language_summary"
-        android:title="@string/settings_application_language_title"/>
+        android:title="@string/settings_application_language_title"
+        app:entries="@array/settings_application_language_entry" />
 </PreferenceScreen>

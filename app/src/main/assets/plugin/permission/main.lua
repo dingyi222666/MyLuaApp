@@ -17,7 +17,6 @@ import {
 import "com.dingyi.MyLuaApp.R"
 import "com.dingyi.MyLuaApp.databinding.PluginPermisssionLayoutBinding"
 
-
 activity.setTheme(R.style.Theme_MyLuaApp)
 
 --@type number

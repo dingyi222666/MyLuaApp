@@ -92,10 +92,10 @@ fun TextView.setTextIfDiff(data: String) {
 fun String.showToast() =
     Toast.makeText(MainApplication.instance, this, Toast.LENGTH_LONG).show()
 
-fun String.showSnackBar(view:View) =
-    Snackbar.make(view,this,Snackbar.LENGTH_LONG)
+fun String.showSnackBar(view: View) =
+    Snackbar.make(view, this, Snackbar.LENGTH_LONG)
         .apply {
-            animationMode=Snackbar.ANIMATION_MODE_SLIDE
+            animationMode = Snackbar.ANIMATION_MODE_SLIDE
         }.show()
 
 

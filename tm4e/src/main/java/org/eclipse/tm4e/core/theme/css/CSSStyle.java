@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
+ * <p>
  * SPDX-License-Identifier: EPL-2.0
- *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * <p>
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.theme.css;
 
@@ -17,75 +17,75 @@ import org.w3c.css.sac.SelectorList;
 
 public class CSSStyle implements IStyle {
 
-	private final SelectorList selector;
-	private RGB color;
-	private RGB backgroundColor;
-	
-	private boolean bold;
-	private boolean italic;
-	private boolean underline;
-	private boolean strikeThrough;
+    private final SelectorList selector;
+    private RGB color;
+    private RGB backgroundColor;
 
-	public CSSStyle(SelectorList selector) {
-		this.selector = selector;
-	}
+    private boolean bold;
+    private boolean italic;
+    private boolean underline;
+    private boolean strikeThrough;
 
-	public void setColor(RGB color) {
-		this.color = color;
-	}
+    public CSSStyle(SelectorList selector) {
+        this.selector = selector;
+    }
 
-	@Override
-	public RGB getColor() {
-		return color;
-	}
+    @Override
+    public RGB getColor() {
+        return color;
+    }
 
-	@Override
-	public RGB getBackgroundColor() {
-		return backgroundColor;
-	}
-	
-	public void setBackgroundColor(RGB backgroundColor) {
-		this.backgroundColor = backgroundColor;		
-	}
-	
-	public SelectorList getSelectorList() {
-		return selector;
-	}
+    public void setColor(RGB color) {
+        this.color = color;
+    }
 
-	public void setBold(boolean bold) {
-		this.bold = bold;
-	}
+    @Override
+    public RGB getBackgroundColor() {
+        return backgroundColor;
+    }
 
-	@Override
-	public boolean isBold() {
-		return bold;
-	}
+    public void setBackgroundColor(RGB backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
 
-	public void setItalic(boolean italic) {
-		this.italic = italic;
-	}
+    public SelectorList getSelectorList() {
+        return selector;
+    }
 
-	@Override
-	public boolean isItalic() {
-		return italic;
-	}
+    @Override
+    public boolean isBold() {
+        return bold;
+    }
 
-	@Override
-	public boolean isUnderline() {
-		return underline;
-	}
+    public void setBold(boolean bold) {
+        this.bold = bold;
+    }
 
-	public void setUnderline(boolean underline) {
-		this.underline = underline;
-	}
+    @Override
+    public boolean isItalic() {
+        return italic;
+    }
 
-	@Override
-	public boolean isStrikeThrough() {
-		return strikeThrough;
-	}
-	
-	public void setStrikeThrough(boolean strikeThrough) {
-		this.strikeThrough = strikeThrough;
-	}
+    public void setItalic(boolean italic) {
+        this.italic = italic;
+    }
+
+    @Override
+    public boolean isUnderline() {
+        return underline;
+    }
+
+    public void setUnderline(boolean underline) {
+        this.underline = underline;
+    }
+
+    @Override
+    public boolean isStrikeThrough() {
+        return strikeThrough;
+    }
+
+    public void setStrikeThrough(boolean strikeThrough) {
+        this.strikeThrough = strikeThrough;
+    }
 
 }

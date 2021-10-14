@@ -22,7 +22,7 @@ class GeneralActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        delegate.localNightMode= AppCompatDelegate.MODE_NIGHT_YES
+        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
@@ -36,7 +36,7 @@ class GeneralActivity : AppCompatActivity() {
             val classStatic = Class.forName(type)
 
             (classStatic.newInstance() as Fragment).apply {
-                    arguments=bundle
+                arguments = bundle
             }
 
         }?.let {

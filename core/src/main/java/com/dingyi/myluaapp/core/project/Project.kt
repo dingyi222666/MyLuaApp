@@ -11,7 +11,6 @@ class Project {
     var projectPath = ""
 
 
-
     class Builder {
 
     }

@@ -1,14 +1,19 @@
+import android.annotation.SuppressLint
+
 plugins {
     id("com.android.library")
     id("kotlin-android")
 }
 
+
 android {
-    compileSdk = 30
+    compileSdk = BuildConfig.Config.Default.compileSdk
+    buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 30
+        minSdk = BuildConfig.Config.Default.minSdk
+        targetSdk = BuildConfig.Config.Default.targetSdk
+
 
         // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled = true
@@ -36,17 +41,20 @@ android {
     kotlinOptions {
         jvmTarget = "1.11"
     }
+
+    configurations { 
+        all { 
+            exclude(module= "httpclient")
+        }
+    }
 }
 
 dependencies {
-    api("org.jruby.joni:joni:2.1.11")
-    api("org.jruby.jcodings:jcodings:1.0.18")
-    api("com.google.code.gson:gson:2.8.8")
-    implementation("org.apache.xmlgraphics:batik-css:1.14")
-    implementation("org.apache.xmlgraphics:batik-util:1.14")
-    implementation("org.w3c:dom:2.3.0-jaxb-1.0.6")
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
-}
-repositories {
-    mavenCentral()
+    implementation(BuildConfig.Libs.Tools.joni)
+    implementation(BuildConfig.Libs.Tools.jcodings)
+    api(BuildConfig.Libs.Google.gson)
+    implementation(BuildConfig.Libs.Tools.batik_css)
+    implementation(BuildConfig.Libs.Tools.batik_util)
+    implementation(BuildConfig.Libs.Tools.dom)
+    coreLibraryDesugaring(BuildConfig.Libs.Tools.desugar_jdk_libs)
 }

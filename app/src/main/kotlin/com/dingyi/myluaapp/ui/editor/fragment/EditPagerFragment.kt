@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.dingyi.editor.language.lua.LuaLanguage
-import com.dingyi.editor.scheme.SchemeLua
 import com.dingyi.editor.data.ColumnNavigationItem
 import com.dingyi.editor.language.java.JavaLanguage
+import com.dingyi.editor.language.lua.LuaLanguage
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.endsWith
 import com.dingyi.myluaapp.common.kts.javaClass
@@ -114,7 +112,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
             }
 
         viewModel.realPosition.observe(viewLifecycleOwner) {
-           observeAndSendNavigationList()
+            observeAndSendNavigationList()
         }
 
     }
@@ -127,7 +125,7 @@ class EditPagerFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewM
                 codeEditor.textAnalyzeResult.navigation?.map {
                     it as ColumnNavigationItem
                 }?.let {
-                    if (viewModel.navigationList.value?.toString()!=it.toString()) {
+                    if (viewModel.navigationList.value?.toString() != it.toString()) {
                         viewModel.navigationList.postValue(it)
                     }
                 }

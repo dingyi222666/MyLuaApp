@@ -4,11 +4,13 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = BuildConfig.Config.Default.compileSdk
+    buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
 
     defaultConfig {
-        minSdk  = 21
-        targetSdk  = 30
+        minSdk = BuildConfig.Config.Default.minSdk
+        targetSdk = BuildConfig.Config.Default.targetSdk
+
 
         consumerProguardFiles ("consumer-rules.pro")
     }
@@ -36,7 +38,8 @@ dependencies {
 
     //editor
     implementation (BuildConfig.Libs.AndroidX.appcompat)
-    implementation ("io.github.Rosemoe.sora-editor:editor:0.6.0-dev-4")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha01")
+    implementation (BuildConfig.Libs.AndroidX.lifecycle_runtime)
+
+    implementation (BuildConfig.Libs.Views.code_editor)
 
 }

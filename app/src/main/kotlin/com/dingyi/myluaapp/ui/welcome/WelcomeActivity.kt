@@ -28,7 +28,6 @@ class WelcomeActivity : AppCompatActivity() {
         PrepareAssets(this).start {
 
 
-
             startToMainActivity()
         }
         /*

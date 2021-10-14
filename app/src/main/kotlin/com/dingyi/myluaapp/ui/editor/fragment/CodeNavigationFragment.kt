@@ -60,10 +60,11 @@ class CodeNavigationFragment : BaseFragment<FragmentEditorCodeNavigationBinding,
     private fun initView() {
         viewBinding.apply {
             list.adapter = adapter
-            list.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+            list.layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         }
         adapter.setOnItemClickListener {
-            
+
         }
 
     }

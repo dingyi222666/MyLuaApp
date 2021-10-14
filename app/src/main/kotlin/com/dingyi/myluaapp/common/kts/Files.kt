@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.common.kts
 
-import android.os.Environment
 import com.dingyi.myluaapp.MainApplication
 import java.io.File
 import java.util.zip.ZipFile

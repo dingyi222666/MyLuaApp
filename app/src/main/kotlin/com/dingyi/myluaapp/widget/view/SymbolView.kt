@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
-import androidx.viewpager2.widget.ViewPager2
 import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.common.kts.layoutInflater
 import com.dingyi.myluaapp.databinding.LayoutItemSymbolBinding
@@ -39,8 +38,8 @@ class SymbolView(context: Context?, attrs: AttributeSet?) : HorizontalScrollView
 
     }
 
-    fun setOnClickListener(block:(String)->Unit) {
-        _onClick=block
+    fun setOnClickListener(block: (String) -> Unit) {
+        _onClick = block
     }
 
     fun readSymbol() {
