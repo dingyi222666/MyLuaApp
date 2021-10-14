@@ -8,6 +8,9 @@ import com.dingyi.myluaapp.bean.ProjectInfo
 import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.network.service.MainService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import org.luaj.vm2.LuajVm
 import java.io.File
