@@ -1,4 +1,5 @@
 import android.annotation.SuppressLint
+import com.android.build.api.dsl.LintOptions
 
 plugins {
     id("com.android.library")
@@ -30,6 +31,11 @@ android {
             )
         }
     }
+
+    lint {
+        isAbortOnError = false
+    }
+
     compileOptions {
         // Flag to enable support for the new language APIs
         isCoreLibraryDesugaringEnabled = true
