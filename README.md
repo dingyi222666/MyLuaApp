@@ -3,7 +3,7 @@
 [![Telegram](https://img.shields.io/badge/Join-Telegram-blue)](https://t.me/MyLuaApp)
 [![QQ](https://img.shields.io/badge/Join-QQ_Group-ff69b4)](https://jq.qq.com/?_wv=1027&k=XnJ4FMvS)   
 
-English | [中文](https://github.com/dingyi222666/MyLuaApp/README_ZH.md)
+English | [中文](https://github.com/dingyi222666/MyLuaApp/tree/master/README_ZH.md)
 
 It's ***Work In Progress***. Now the project is in the **alpha** stage and most features are **not completed**(For example,Build Apk).It means the project is not run well.
 
