@@ -3,6 +3,8 @@
 [![Telegram](https://img.shields.io/badge/Join-Telegram-blue)](https://t.me/MyLuaApp)
 [![QQ](https://img.shields.io/badge/Join-QQ_Group-ff69b4)](https://jq.qq.com/?_wv=1027&k=XnJ4FMvS)   
 
+English | [中文](https://github.com/dingyi222666/MyLuaApp/tree/master/README_ZH.md)
+
 It's ***Work In Progress***. Now the project is in the **alpha** stage and most features are **not completed**(For example,Build Apk).It means the project is not run well.
 
 MyLuaApp is an Android App,use **Lua/Java**  to develop Android apps on Android system. 
@@ -22,7 +24,8 @@ If you don't know how to use Lua,it's okay, you can also use Java to develop And
 More features will be implemented as we continue to develop this app.
 
 ## Test Apk
-[~~here~~](https://github.com/dingyi222666/MyLuaApp/tree/master/app/apk/debug).
+Use Github actions,event commit will be build and upload debug apk,click[here](https://github.com/dingyi222666/MyLuaApp/actions)
+to get last commit generate apk file.
 
 ## Discuss
  - QQ Group:[1020019846](https://jq.qq.com/?_wv=1027&k=zGdBLMr8)
