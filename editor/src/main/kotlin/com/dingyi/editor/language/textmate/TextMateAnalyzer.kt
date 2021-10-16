@@ -7,8 +7,6 @@ import io.github.rosemoe.sora.text.TextAnalyzeResult
 import io.github.rosemoe.sora.text.TextAnalyzer
 import io.github.rosemoe.sora.widget.EditorColorScheme
 import org.eclipse.tm4e.core.grammar.StackElement
-import org.eclipse.tm4e.core.internal.oniguruma.OnigRegExp
-import org.eclipse.tm4e.core.internal.oniguruma.OnigString
 import java.io.BufferedReader
 import java.io.StringReader
 
@@ -43,19 +41,6 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
 
         var globalState: StackElement = StackElement.NULL
 
-        var (maxSwitch, currSwitch) = 1 to 0
-
-        val foldScannerStart =
-            textMateBridgeLanguage.settings?.get("foldingStartMarker")?.let {
-                OnigRegExp(it)
-            }
-
-
-        val foldScannerEnd = textMateBridgeLanguage.settings?.get("foldingStopMarker")?.let {
-            OnigRegExp(it)
-        }
-
-        val blockLines = ArrayDeque<BlockLine>()
 
         var line = 0
         BufferedReader(StringReader(content.toString())).forEachLines { preLineText ->
@@ -74,34 +59,6 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
                 lineText.toString(),
                 globalState
             )
-
-            foldScannerStart?.search(OnigString(lineText.toString()), 0)?.let {
-                if (blockLines.isEmpty()) {
-                    if (currSwitch > maxSwitch) {
-                        maxSwitch = currSwitch
-                    }
-                    currSwitch = 0
-                }
-                result.obtainNewBlock().apply {
-                    startLine = line
-                    startColumn = it.locationAt(0)
-                    blockLines.addFirst(this)
-                }
-                currSwitch++
-            }
-
-
-            foldScannerEnd?.search(OnigString(lineText.toString()), 0)?.let {
-                blockLines.removeFirstOrNull()?.apply {
-                    endLine = line
-                    endColumn = it.locationAt(0)
-                    if (startLine != endLine) {
-                        result.addBlockLine(this)
-                    } else {
-                        currSwitch--
-                    }
-                }
-            }
 
 
 
@@ -132,7 +89,6 @@ class TextMateAnalyzer(private val textMateBridgeLanguage: TextMateBridgeLanguag
         }
 
         result.determine(line)
-        result.suppressSwitch = maxSwitch + 10
 
     }
 

@@ -17,7 +17,7 @@ class JavaLanguage(codeEditor: CodeEditor) : TextMateBridgeLanguage(codeEditor) 
         return LanguageConfig(
             language = "java",
             languagePath = "java.tmLanguage.json",
-            languageInputStream = FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/java.tmLanguage.json")
+            languageGrammarInputStream = FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/java/java.tmLanguage.json")
         )
     }
 

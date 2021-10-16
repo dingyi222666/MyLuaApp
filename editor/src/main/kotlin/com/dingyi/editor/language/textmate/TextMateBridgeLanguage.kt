@@ -8,8 +8,8 @@ import io.github.rosemoe.sora.langs.internal.MyCharacter
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.SymbolPairMatch
 import org.eclipse.tm4e.core.grammar.IGrammar
-import org.eclipse.tm4e.core.model.Tokenizer
 import org.eclipse.tm4e.core.registry.Registry
+import org.eclipse.tm4e.languageconfiguration.internal.LanguageConfiguration
 import java.io.InputStream
 
 /**
@@ -31,31 +31,29 @@ abstract class TextMateBridgeLanguage(
     abstract fun getLanguageConfig(): LanguageConfig
 
 
-    var settings: Map<String, String>? = null
+    val grammar: IGrammar
 
-    var grammar: IGrammar
+    private val languageConfiguration: LanguageConfiguration?
 
     init {
-        val languageConfig = getLanguageConfig()
+        val languageConfig:LanguageConfig by lazy(LazyThreadSafetyMode.NONE) { getLanguageConfig() }
+
         grammar = registry.loadGrammarFromPathSync(
             languageConfig.languagePath,
-            languageConfig.languageInputStream
+            languageConfig.languageGrammarInputStream
         )
 
-        settings = runCatching {
-            TextMateGlobal.settings.filter {
-                it["name"].toString() == grammar.name.toString()
-            }[0] as Map<String, String>
-        }.getOrNull().apply {
-            println("this $this")
+        languageConfiguration = languageConfig.languageConfigurationInputStream?.reader().use {
+            LanguageConfiguration.load(it)
         }
-
+        
     }
 
     data class LanguageConfig(
         val language: String,
         val languagePath: String,
-        val languageInputStream: InputStream
+        val languageGrammarInputStream: InputStream,
+        val languageConfigurationInputStream: InputStream? = null
     )
 
     override fun isAutoCompleteChar(ch: Char): Boolean {
@@ -83,7 +81,16 @@ abstract class TextMateBridgeLanguage(
     }
 
     override fun getSymbolPairs(): SymbolPairMatch {
-        return SymbolPairMatch.DefaultSymbolPairs()
+        return languageConfiguration?.autoClosingPairs?.let {
+            SymbolPairMatch().apply {
+                it.forEach {
+                    this.putPair(
+                        it.key.toCharArray()[0],
+                        SymbolPairMatch.Replacement(it.key + it.value, it.key.length)
+                    )
+                }
+            }
+        } ?: SymbolPairMatch.DefaultSymbolPairs()
     }
 
 }

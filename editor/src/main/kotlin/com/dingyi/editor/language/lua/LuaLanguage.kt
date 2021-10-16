@@ -123,7 +123,8 @@ class LuaLanguage(codeEditor: CodeEditor) :
         return LanguageConfig(
             language = "lua",
             languagePath = "lua.tmLanguage.json",
-            languageInputStream = FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/lua.tmLanguage.json")
+            languageConfigurationInputStream = FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/lua/language-configuration.json"),
+            languageGrammarInputStream = FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/lua/lua.tmLanguage.json")
         )
     }
 
