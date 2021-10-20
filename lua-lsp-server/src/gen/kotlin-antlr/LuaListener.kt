@@ -293,17 +293,15 @@ interface LuaListener : ParseTreeListener {
 	 */
 	fun exitCommentStat(ctx: LuaParser.CommentStatContext)
 	/**
-	 * Enter a parse tree produced by the {@code lineCommentStat}
-	 * labeled alternative in {@link LuaParser#stat}.
+	 * Enter a parse tree produced by {@link LuaParser#comment}.
 	 * @param ctx the parse tree
 	 */
-	fun enterLineCommentStat(ctx: LuaParser.LineCommentStatContext)
+	fun enterComment(ctx: LuaParser.CommentContext)
 	/**
-	 * Exit a parse tree produced by the {@code lineCommentStat}
-	 * labeled alternative in {@link LuaParser#stat}.
+	 * Exit a parse tree produced by {@link LuaParser#comment}.
 	 * @param ctx the parse tree
 	 */
-	fun exitLineCommentStat(ctx: LuaParser.LineCommentStatContext)
+	fun exitComment(ctx: LuaParser.CommentContext)
 	/**
 	 * Enter a parse tree produced by {@link LuaParser#ifbody}.
 	 * @param ctx the parse tree

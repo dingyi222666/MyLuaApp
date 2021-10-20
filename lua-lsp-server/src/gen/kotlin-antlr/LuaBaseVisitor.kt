@@ -186,7 +186,7 @@ open class LuaBaseVisitor<T> : AbstractParseTreeVisitor<T>(), LuaVisitor<T> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	override fun visitLineCommentStat(ctx : LuaParser.LineCommentStatContext ) : T { return this!!.visitChildren(ctx)!! }
+	override fun visitComment(ctx : LuaParser.CommentContext ) : T { return this!!.visitChildren(ctx)!! }
 	/**
 	 * {@inheritDoc}
 	 *

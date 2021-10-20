@@ -31,9 +31,13 @@ stat
     | 'lambda' lambdabody #lambdaStat
     | 'defer' functioncall #deferStat
     | 'return' block #returnStat
-    | COMMENT #commentStat
-    | LINE_COMMENT #lineCommentStat
+    | comment # commentStat
     ;
+
+comment
+     : COMMENT
+     | LINE_COMMENT
+     ;
 
 ifbody
     :block
@@ -69,7 +73,8 @@ attrib
     ;
 
 retstat
-    : 'return' explist? ';'?
+    : 'return' explist? ';'? (comment*)?
+
     ;
 
 label

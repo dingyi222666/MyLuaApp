@@ -178,12 +178,11 @@ interface LuaVisitor<T> : ParseTreeVisitor<T> {
 	 */
 	fun visitCommentStat(ctx : LuaParser.CommentStatContext) : T
 	/**
-	 * Visit a parse tree produced by the {@code lineCommentStat}
-	 * labeled alternative in {@link LuaParser#stat}.
+	 * Visit a parse tree produced by {@link LuaParser#comment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	fun visitLineCommentStat(ctx : LuaParser.LineCommentStatContext) : T
+	fun visitComment(ctx : LuaParser.CommentContext) : T
 	/**
 	 * Visit a parse tree produced by {@link LuaParser#ifbody}.
 	 * @param ctx the parse tree

@@ -12,12 +12,12 @@ import org.antlr.v4.kotlinruntime.CommonTokenStream
  * @date: 2021/10/7 10:50
  * @description: convert cst to ast
  **/
-class ASTGenerator(inputCode: String) {
+class ASTGenerator() {
 
-    private val targetLexer = LuaLexer(CharStreams.fromString(inputCode))
-    private val targetParser = LuaParser(CommonTokenStream(targetLexer))
 
-    fun generate(): ChunkNode {
+    fun generate(inputCode: String): ChunkNode {
+        val targetLexer = LuaLexer(CharStreams.fromString(inputCode))
+        val targetParser = LuaParser(CommonTokenStream(targetLexer))
         return CSTVisitor().visitChunk(targetParser.chunk())
     }
 
@@ -77,9 +77,19 @@ class ASTGenerator(inputCode: String) {
                 is LuaParser.FunctionCallStatContext -> {
                     return visitFunctionCallStat(ctx)
                 }
+                is LuaParser.WhileStatContext -> {
+                    return visitWhileStat(ctx)
+                }
             }
             return LocalStatement()
         }
+
+       override fun visitWhileStat(ctx:LuaParser.WhileStatContext):StatementNode {
+           val result = WhileStatement()
+           result.condition = ctx.findExp()?.let { visitExp(it) } ?: ConstantsNode()
+           result.body = ctx.findBlock()?.let { visitBlock(it) } ?: BlockNode()
+           return result
+       }
 
         private fun visitAttrNameList(ctx: LuaParser.AttnamelistContext): List<ASTNode> {
             val result = mutableListOf<ASTNode>()

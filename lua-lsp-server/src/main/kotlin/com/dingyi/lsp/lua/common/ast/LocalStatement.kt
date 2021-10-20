@@ -10,4 +10,7 @@ class LocalStatement(
     val init: MutableList<ExpressionNode> = mutableListOf(),
 ):StatementNode() {
 
+    override fun toString(): String {
+        return "LocalStatement(variables=$variables, init=$init)"
+    }
 }

@@ -19,5 +19,9 @@ class BlockNode() : ASTNode() {
         statements.add(statement)
     }
 
+    override fun toString(): String {
+        return "BlockNode(statements=$statements, returnStatement=$returnStatement)"
+    }
+
 
 }

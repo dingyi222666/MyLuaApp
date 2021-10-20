@@ -304,13 +304,13 @@ open class LuaBaseListener : LuaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun enterLineCommentStat(ctx: LuaParser.LineCommentStatContext) { }
+	override fun enterComment(ctx: LuaParser.CommentContext) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	override fun exitLineCommentStat(ctx: LuaParser.LineCommentStatContext) { }
+	override fun exitComment(ctx: LuaParser.CommentContext) { }
 	/**
 	 * {@inheritDoc}
 	 *
