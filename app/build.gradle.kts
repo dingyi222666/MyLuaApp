@@ -57,6 +57,7 @@ dependencies {
     implementation(project(":editor")) // editor
 
     implementation(project(":luaj"))
+    implementation(project(":common"))
     implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 
     //androidx and more

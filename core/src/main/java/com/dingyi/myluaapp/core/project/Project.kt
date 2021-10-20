@@ -14,4 +14,14 @@ class Project {
     class Builder {
 
     }
+
+
+    fun openFile(filePath: String) {
+
+    }
+
+    fun getChangeProjectFiles() {
+
+    }
+
 }

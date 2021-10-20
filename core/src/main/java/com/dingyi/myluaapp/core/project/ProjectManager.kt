@@ -28,7 +28,9 @@ class ProjectManager(private val projectRootPath: String) {
     /**
      * create project
      */
-    fun createProject(projectBuilder: Project.Builder) {}
+    fun createProject(projectBuilder: Project.Builder) {
+
+    }
 
     fun listProject(block: (Project) -> Unit) {
 

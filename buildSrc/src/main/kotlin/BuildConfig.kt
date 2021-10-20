@@ -18,8 +18,8 @@ object BuildConfig {
         }
 
         object App {
-            const val versionCode = 19
-            const val versionName = "0.3.10(alpna)"
+            const val versionCode = 20
+            const val versionName = "0.4.0(alpna)"
             const val packageName = "com.dingyi.MyLuaApp"
 
         }
@@ -50,6 +50,7 @@ object BuildConfig {
         const val jcodings_version = "1.0.18"
         const val xmlgraphics_version = "1.14"
         const val dom_version = "2.3.0-jaxb-1.0.6"
+        const val kotlinx_coroutines_android_version = "1.3.9"
     }
 
     object Libs {
@@ -91,7 +92,7 @@ object BuildConfig {
             const val glide_compiler =
                 "com.github.bumptech.glide:compiler:${Versions.glide_version}"
             const val glide = "com.github.bumptech.glide:glide:${Versions.glide_version}"
-
+            const val kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinx_coroutines_android_version}"
         }
 
         object Tools {

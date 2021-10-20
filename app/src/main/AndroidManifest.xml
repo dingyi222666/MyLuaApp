@@ -17,28 +17,6 @@
         android:theme="@style/Theme.MyLuaApp">
 
 
-        <activity
-            android:name=".ui.welcome.WelcomeActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.MyLuaApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ui.main.MainActivity" />
-
-        <activity android:name=".ui.newproject.NewProjectActivity" />
-
-        <activity android:name=".ui.editor.EditorActivity" />
-
-        <activity android:name=".ui.about.AboutActivity" />
-
-        <activity android:name=".ui.GeneralActivity" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.dingyi.myluaapp"
