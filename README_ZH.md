@@ -3,7 +3,7 @@
 [![Telegram](https://img.shields.io/badge/Join-Telegram-blue)](https://t.me/MyLuaApp)
 [![QQ](https://img.shields.io/badge/Join-QQ_Group-ff69b4)](https://jq.qq.com/?_wv=1027&k=XnJ4FMvS)   
 
-[English](https://github.com/dingyi222666/MyLuaApp/README.md) | 中文
+[English](https://github.com/dingyi222666/MyLuaApp/tree/master/README.md) | 中文
 
 目前该项目仍在***开发中***. 项目还在**alpha** 阶段，大部分功能都**没有完成**(比如内置的项目打包).这意味着目前该项目没法很好的运行。
 
