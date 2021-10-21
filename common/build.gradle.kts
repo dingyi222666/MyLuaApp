@@ -31,6 +31,8 @@ android {
 
 dependencies {
     implementation(BuildConfig.Libs.AndroidX.appcompat)
+    implementation(BuildConfig.Libs.AndroidX.core_kotlinx)
+    implementation(BuildConfig.Libs.Google.material)
     implementation(BuildConfig.Libs.Tools.litepal)
     // OkHttp 框架：https://github.com/square/okhttp
     // noinspection GradleDependency

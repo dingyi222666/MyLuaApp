@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.dingyi.myluaapp.R
-import com.dingyi.myluapp.common.kts.getString
-import com.dingyi.myluapp.common.kts.showSnackBar
+import com.dingyi.myluaapp.common.kts.getString
+import com.dingyi.myluaapp.common.kts.showSnackBar
 
 /**
  * @author: dingyi

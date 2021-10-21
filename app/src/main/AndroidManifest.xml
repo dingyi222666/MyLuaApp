@@ -17,6 +17,19 @@
         android:theme="@style/Theme.MyLuaApp">
 
 
+        <activity android:name=".ui.welcome.WelcomeActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+                <action
+                    android:name="android.intent.action.ACTION_VIEW" />
+                <action
+                    android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.dingyi.myluaapp"

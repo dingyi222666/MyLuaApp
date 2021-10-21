@@ -32,7 +32,7 @@ fun String.loadClass(): Class<*> {
     return Class.forName(this)
 }
 
-inline fun <reified T> javaClass(): Class<T> {
+inline fun <reified T> getJavaClass(): Class<T> {
     return T::class.java
 }
 

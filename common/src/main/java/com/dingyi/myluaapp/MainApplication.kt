@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp
 
 import android.app.Application
-import com.dingyi.builder.common.handler.RequestHandler
+import com.dingyi.myluaapp.common.handler.RequestHandler
 
 import com.hjq.http.EasyConfig
 import okhttp3.OkHttpClient
@@ -32,7 +32,7 @@ class MainApplication : Application() {
         EasyConfig.with(okHttpClient) // 是否打印日志
             .setServer("https://www.baidu.com")// 设置服务器配置
             .setLogEnabled(true)
-            .setHandler(com.dingyi.builder.common.handler.RequestHandler(this))
+            .setHandler(RequestHandler(this))
             .setRetryCount(2) // 添加全局请求参数
             // 启用配置
             .into()

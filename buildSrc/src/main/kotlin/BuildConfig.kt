@@ -13,8 +13,8 @@ object BuildConfig {
 
             const val targetSdk = 30
             const val minSdk = 21
-            const val buildToolsVersion = "30.0.3"
-            const val compileSdk = 30
+            const val buildToolsVersion = "31.0.0"
+            const val compileSdk = 31
         }
 
         object App {
@@ -51,6 +51,7 @@ object BuildConfig {
         const val xmlgraphics_version = "1.14"
         const val dom_version = "2.3.0-jaxb-1.0.6"
         const val kotlinx_coroutines_android_version = "1.3.9"
+        const val core_ktx_version = "1.7.0-rc01"
     }
 
     object Libs {
@@ -70,6 +71,7 @@ object BuildConfig {
         }
 
         object AndroidX {
+            const val core_kotlinx = "androidx.core:core-ktx:${Versions.core_ktx_version}"
             const val lifecycle_livedata =
                 "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle_version}"
             const val lifecycle_viewmodel =

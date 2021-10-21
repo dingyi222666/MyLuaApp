@@ -34,4 +34,5 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(BuildConfig.Libs.AndroidX.appcompat)
 }

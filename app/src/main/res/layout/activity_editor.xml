@@ -94,7 +94,7 @@
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-                <com.dingyi.myluaapp.widget.view.SymbolView
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/symbolView"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"

@@ -13,7 +13,7 @@ import java.util.zip.ZipEntry
  **/
 object ZipHelper {
 
-    suspend fun getZipAllList(zipPath: String) = withContext(Dispatchers.IO) {
+    suspend fun getZipFileList(zipPath: String) = withContext(Dispatchers.IO) {
         mutableListOf<ZipEntry>().apply {
             runCatching {
                 zipPath.toZipFile()
@@ -32,10 +32,10 @@ object ZipHelper {
         zipPath: String,
         inZipPathList: List<String>,
         toPath: String,
-        block: () -> Any = {},
-        unPathFilterPrefix: String = "/"
+        unPathFilterPrefix: String = "/",
+        block: (String?) -> Any = {},
     ) = withContext(Dispatchers.Main) {
-            val coroutineDispatcher = Executors.newFixedThreadPool(6).asCoroutineDispatcher()
+            val coroutineDispatcher = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()).asCoroutineDispatcher()
             launch(Dispatchers.IO) {
                 inZipPathList.forEach {
                     async(coroutineDispatcher) {
@@ -44,11 +44,12 @@ object ZipHelper {
                             it,
                             "$toPath/${it.substring(unPathFilterPrefix.lastIndex)}"
                         )
+                        block(it)
                     }
                 }
             }.join()
             coroutineDispatcher.close()
-            block()
+            block(null)
         }
 
     private fun unSingleZipFile(zipPath: String, inZipPath: String, toPath: String): Boolean {

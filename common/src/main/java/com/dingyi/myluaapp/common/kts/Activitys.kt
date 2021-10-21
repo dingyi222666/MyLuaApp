@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.common.kts
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -42,5 +43,13 @@ fun Context.getAttributeColor(resId: Int): Int {
     val color = typedArray.getColor(0, 0)
     typedArray.recycle()
     return color
+}
+
+fun <T> SharedPreferences.edit(block: SharedPreferences.Editor.() -> T): T {
+    var result: T
+    this.edit().apply {
+        result = block(this)
+    }.apply()
+    return result
 }
 
