@@ -16,7 +16,7 @@ import com.dingyi.myluaapp.common.kts.showSnackBar
  * @date: 2021/10/20 20:21
  * @description:
  **/
-abstract class BaseActivity<V : ViewBinding, T : ViewModel, P : BasePresenter<T>> :
+abstract class BaseActivity<V : ViewBinding, T : ViewModel, P : BasePresenter<T,*>> :
     AppCompatActivity() {
 
 

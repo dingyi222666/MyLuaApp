@@ -9,6 +9,5 @@ import androidx.lifecycle.ViewModel
  * @description:
  **/
 class MainViewModel: ViewModel() {
-
     val updateMessage = MutableLiveData<String>()
 }
