@@ -16,7 +16,7 @@ import com.dingyi.myluaapp.common.kts.showSnackBar
  * @date: 2021/10/20 20:21
  * @description:
  **/
-abstract class BaseActivity<V : ViewBinding, T : ViewModel, P : BasePresenter<T,*>> :
+abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
     AppCompatActivity() {
 
 
@@ -28,7 +28,6 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel, P : BasePresenter<T,
 
     protected lateinit var viewModel: T
 
-    protected lateinit var presenter: P
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +36,6 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel, P : BasePresenter<T,
 
 
         viewModel = ViewModelProvider(this)[getViewModelClass()]
-
-        presenter = getPresenterImp()
 
         observeViewModel()
 
@@ -74,7 +71,6 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel, P : BasePresenter<T,
         }
     }
 
-    abstract fun getPresenterImp(): P
 
     open fun observeViewModel() {}
 

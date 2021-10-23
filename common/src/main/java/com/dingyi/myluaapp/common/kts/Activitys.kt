@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
  **/
 
 
-inline val Activity.versionCode: Int
+inline val Context.versionCode: Int
     get() = packageManager.getPackageInfo(packageName, 0).versionCode
 
 

@@ -1,9 +1,13 @@
 package com.dingyi.myluaapp.ui.welcome
 
 import android.os.Bundle
+import android.util.Log
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.databinding.ActivityWelcomeBinding
+import com.dingyi.myluaapp.ui.main.MainActivity
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * @author: dingyi
@@ -11,8 +15,7 @@ import com.dingyi.myluaapp.databinding.ActivityWelcomeBinding
  * @description:
  **/
 class WelcomeActivity :
-    BaseActivity<ActivityWelcomeBinding, MainViewModel, MainPresenter>(),
-    MainPresenter.WelcomeView {
+    BaseActivity<ActivityWelcomeBinding, MainViewModel>() {
 
     override fun getViewModelClass(): Class<MainViewModel> {
         return getJavaClass()
@@ -22,30 +25,47 @@ class WelcomeActivity :
         return ActivityWelcomeBinding.inflate(layoutInflater)
     }
 
-    override fun getPresenterImp(): MainPresenter {
-        return MainPresenter(viewModel).apply {
-            attachView(this@WelcomeActivity)
+
+    override fun observeViewModel() {
+        super.observeViewModel()
+        viewModel.jumpFlag.observe(this) {
+            if (it) {
+                jumpToMainActivity()
+            } else {
+                observeUnZip()
+            }
+        }
+        println("flag:"+viewModel.jumpFlag.value)
+
+
+
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun observeUnZip() {
+        viewModel.updateMessage.observe(this) {
+            if (it == null) {
+                jumpToMainActivity()
+            } else {
+                viewBinding.title.setText("unFile:$it")
+            }
         }
     }
 
-    override fun observeViewModel() {
-        viewModel.updateMessage.observe(this) {
-            viewBinding.title.text = it
-        }
+    private fun jumpToMainActivity() {
+        startActivity<MainActivity>()
+        finish()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter.startup()
-    }
-
-    override fun jumpToMainActivity() {
 
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter.detachView()
+
     }
 
 }

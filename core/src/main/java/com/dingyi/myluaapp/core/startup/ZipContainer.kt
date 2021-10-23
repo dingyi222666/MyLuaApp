@@ -2,9 +2,13 @@ package com.dingyi.myluaapp.core.startup
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
+import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.common.kts.edit
 import com.dingyi.myluaapp.common.kts.versionCode
 import com.dingyi.myluaapp.common.zip.ZipHelper
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.flow
 
 /**
  * @author: dingyi
@@ -13,19 +17,22 @@ import com.dingyi.myluaapp.common.zip.ZipHelper
  **/
 object ZipContainer {
 
-    fun checkVersion(context: AppCompatActivity): Boolean {
+    fun checkVersion(): Boolean {
+        val context = MainApplication.instance
         val versionCode = context.versionCode
 
         val lastVersionCode = context.getSharedPreferences("default", Context.MODE_PRIVATE)
             .getInt("versionCode", 0)
 
 
-        return versionCode != lastVersionCode
+        return false //versionCode != lastVersionCode
 
     }
 
-    suspend fun unFileToAssets(context: AppCompatActivity, callback: suspend (String?) -> Unit) {
-        val unFileList = ZipHelper.getZipFileList(context.applicationContext.packageResourcePath)
+    @ExperimentalCoroutinesApi
+    fun unFileToAssets() = channelFlow {
+        val context = MainApplication.instance
+        val unFileList = ZipHelper.getZipFileList(context.packageResourcePath)
             .map { it.name }
             .filter { path -> path.startsWith("assets/") || path.startsWith("lua/") }
 
@@ -35,7 +42,7 @@ object ZipContainer {
 
         ZipHelper.UnZipBuilder()
             .apply {
-                zipPath = context.applicationContext.packageResourcePath
+                zipPath = context.packageResourcePath
                 inZipPathList = unFileList
             }
             .toPath {
@@ -58,7 +65,7 @@ object ZipContainer {
                             //putInt("versionCode", context.versionCode)
                         }
                 }
-                callback(it)
+                send(it)
             }
 
 

@@ -30,6 +30,8 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:name=".ui.main.MainActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.dingyi.myluaapp"
