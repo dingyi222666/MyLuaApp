@@ -42,7 +42,7 @@ object BuildConfig {
         const val glide_version = "4.11.0"
         const val easy_http_version = "10.2"
         const val okhttp3_version = "4.9.0"
-        const val livedatbus_version = "1.0.1"
+        const val channel_version = "1.1.4"
         const val swiperefreshlayout_version = "1.2.0-alpha01"
         const val desugar_jdk_libs_version = "1.1.5"
         const val lsp4j_version = "0.12.0"
@@ -50,8 +50,9 @@ object BuildConfig {
         const val jcodings_version = "1.0.18"
         const val xmlgraphics_version = "1.14"
         const val dom_version = "2.3.0-jaxb-1.0.6"
-        const val kotlinx_coroutines_android_version = "1.3.9"
+        const val kotlinx_coroutines_android_version = "1.5.1"
         const val core_ktx_version = "1.7.0-rc01"
+        const val brv_version = "1.3.37"
     }
 
     object Libs {
@@ -89,6 +90,7 @@ object BuildConfig {
         }
 
         object Default {
+
             const val kotlin_stdlib =
                 "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin_version}"
             const val glide_compiler =
@@ -104,7 +106,7 @@ object BuildConfig {
 
             const val litepal = "org.litepal.guolindev:core:${Versions.litepal_version}"
 
-            const val livedatbus = "com.github.zhudaihao:livedatbus-master:${Versions.livedatbus_version}"
+            const val channel = "com.github.liangjingkanji:Channel:${Versions.channel_version}"
 
             const val lsp4j = "org.eclipse.lsp4j:org.eclipse.lsp4j:${Versions.lsp4j_version}"
 
@@ -119,13 +121,12 @@ object BuildConfig {
             const val batik_css = "org.apache.xmlgraphics:batik-css:${Versions.xmlgraphics_version}"
             const val batik_util = "org.apache.xmlgraphics:batik-util:${Versions.xmlgraphics_version}"
             const val dom = "org.w3c:dom:${Versions.dom_version}"
+            const val brv = "com.github.liangjingkanji:BRV:${Versions.brv_version}"
         }
 
         object Views {
             const val code_editor =
                 "io.github.Rosemoe.sora-editor:editor:${Versions.code_editor_version}"
-            const val drakeet_about = "com.drakeet.about:about:${Versions.drakeet_about_version}"
-            const val drakeet_multitype = "com.drakeet.multitype:multitype:${Versions.drakeet_multitype_version}"
 
         }
         object Network {

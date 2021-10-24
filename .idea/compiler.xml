@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="MyLuaApp.AndroLua" target="11" />
+      <module name="MyLuaApp.androlua" target="11" />
       <module name="MyLuaApp.app" target="11" />
       <module name="MyLuaApp.builder" target="11" />
       <module name="MyLuaApp.common" target="11" />

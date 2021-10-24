@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -19,17 +20,18 @@ android {
     }
 
     sourceSets {
-        getByName("main") {
+       getByName("main") {
             java.srcDirs("src/main/kotlin")
-        }
+       }
     }
 
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 
     buildTypes {
-        getByName("release") {
+          release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -37,7 +39,7 @@ android {
             )
         }
 
-        getByName("debug") {
+        debug {
             isMinifyEnabled = false
 
             ndk {
@@ -59,6 +61,7 @@ dependencies {
     implementation(project(":luaj"))
     implementation(project(":common"))
     implementation(project(":core"))
+
     implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 
     //androidx and more
@@ -77,14 +80,11 @@ dependencies {
 
     implementation(BuildConfig.Libs.Views.code_editor)
 
-    implementation(BuildConfig.Libs.Tools.livedatbus)
+    implementation(BuildConfig.Libs.Tools.channel)
+    implementation(BuildConfig.Libs.Tools.brv)
 
     implementation(BuildConfig.Libs.Default.kotlin_stdlib) //kt
 
-
-    //about
-    implementation(BuildConfig.Libs.Views.drakeet_about)
-    implementation(BuildConfig.Libs.Views.drakeet_multitype)
 
     //litepal
 

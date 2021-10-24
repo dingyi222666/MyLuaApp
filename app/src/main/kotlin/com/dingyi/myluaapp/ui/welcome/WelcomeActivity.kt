@@ -26,6 +26,7 @@ class WelcomeActivity :
     }
 
 
+
     override fun observeViewModel() {
         super.observeViewModel()
         viewModel.jumpFlag.observe(this) {
@@ -35,9 +36,6 @@ class WelcomeActivity :
                 observeUnZip()
             }
         }
-        println("flag:"+viewModel.jumpFlag.value)
-
-
 
     }
 
@@ -47,7 +45,7 @@ class WelcomeActivity :
             if (it == null) {
                 jumpToMainActivity()
             } else {
-                viewBinding.title.setText("unFile:$it")
+                viewBinding.title.text = "unFile:$it"
             }
         }
     }
@@ -63,9 +61,5 @@ class WelcomeActivity :
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
 
 }
