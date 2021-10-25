@@ -20,11 +20,11 @@ class ProjectFile(path:String) {
     }
 
     fun getFileMD5():String {
-     return ""
+       return ""
     }
 
     /**
-     * commit change to database
+     * Commit change to database
      */
     fun commitChange(text:CharSequence) {
 

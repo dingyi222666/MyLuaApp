@@ -74,6 +74,7 @@ dependencies {
     implementation(BuildConfig.Libs.AndroidX.constraintlayout)
     implementation(BuildConfig.Libs.AndroidX.preference_ktx)
 
+
     //google
     implementation(BuildConfig.Libs.Google.material)
     implementation(BuildConfig.Libs.Google.gson)

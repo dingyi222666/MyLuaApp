@@ -30,6 +30,9 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":luaj"))
+
     implementation(BuildConfig.Libs.AndroidX.appcompat)
     implementation(BuildConfig.Libs.AndroidX.core_kotlinx)
     implementation(BuildConfig.Libs.Google.material)

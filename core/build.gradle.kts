@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":luaj"))
     implementation(BuildConfig.Libs.AndroidX.appcompat)
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
 }

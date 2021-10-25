@@ -8,14 +8,23 @@ import java.io.OutputStream
  * @description: project bean class
  **/
 class Project(
-    val projectPath: String = ""
+    val projectPath: String = "",
+    val projectManager: ProjectManager
 ) : IProject {
+
+
 
 
     class Builder {
 
     }
 
+    data class AppProject(
+        val appPackageName: String,
+        val appName: String,
+        val iconPath: String,
+        val path: String
+    )
 
     fun openFile(filePath: String) {
 
@@ -23,6 +32,18 @@ class Project(
 
     override fun delete(): Boolean {
         return true;
+    }
+
+    fun generateAppProject(): AppProject? {
+        return runCatching {
+            val table = projectManager.globalLuaJVM.loadFile("$projectPath/.MyLuaApp/.config.lua")
+            AppProject(
+                appName = table["appName"].tojstring(),
+                appPackageName = table["appPackageName"].tojstring(),
+                iconPath = projectPath + "/" + table["iconPath"].tojstring(),
+                path = projectPath
+            )
+        }.getOrNull()
     }
 
     override fun openFile(): ProjectFile {

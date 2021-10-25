@@ -30,6 +30,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.newproject.NewProjectActivity" />
 
         <activity android:name=".ui.main.MainActivity" />
         <provider

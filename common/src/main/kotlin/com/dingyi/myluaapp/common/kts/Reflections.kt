@@ -1,5 +1,7 @@
 package com.dingyi.myluaapp.common.kts
 
+import org.luaj.vm2.LuajVm
+
 /**
  * @author: dingyi
  * @date: 2021/8/4 16:31
@@ -35,4 +37,7 @@ fun String.loadClass(): Class<*> {
 inline fun <reified T> getJavaClass(): Class<T> {
     return T::class.java
 }
+
+typealias LuaJVM = LuajVm
+
 
