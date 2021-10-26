@@ -41,6 +41,7 @@ class MainViewModel : ViewModel() {
                 it.generateAppProject()
             }.forEach {
                 if (it == null) {
+
                     showErrorMessage(binding)
                 } else {
                     result.add(it)

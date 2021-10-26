@@ -13,8 +13,6 @@ class Project(
 ) : IProject {
 
 
-
-
     data class AppProject(
         val appPackageName: String,
         val appName: String,
@@ -39,7 +37,10 @@ class Project(
                 iconPath = projectPath + "/" + table["iconPath"].tojstring(),
                 path = projectPath
             )
-        }.getOrNull()
+        }.onFailure {
+            it.printStackTrace()
+        }
+            .getOrNull()
     }
 
     override fun openFile(): ProjectFile {

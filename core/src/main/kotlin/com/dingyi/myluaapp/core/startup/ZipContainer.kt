@@ -53,9 +53,9 @@ object ZipContainer {
                 }
             }.unPathFilterPrefix {
                 if (it.startsWith("assets/")) {
-                    "assets"
+                    "/assets"
                 } else {
-                    "lua"
+                    "/lua"
                 }
             }
             .build {

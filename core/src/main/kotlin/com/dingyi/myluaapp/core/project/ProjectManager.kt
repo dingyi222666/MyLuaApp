@@ -39,26 +39,17 @@ class ProjectManager(private val projectRootPath: String) {
             .walk()
             .maxDepth(1)
             .toList()
+            .drop(1)
             .sortedByDescending {
                 it.lastModified()
             }
+            .filter {
+                "${it.absolutePath}/build.gradle.lua".toFile()
+                    .exists() && "${it.absolutePath}/.MyLuaApp/.config.lua".toFile()
+                    .exists()
+            }
             .forEach { file ->
-                file.walk()
-                    .maxDepth(1)
-                    .toList()
-                    //为了速度 就做一个简单的判断就行了
-                    .filter {
-                        "${it.absolutePath}/build.gradle.lua".toFile()
-                            .exists() && "${it.absolutePath}/.MyLuaApp/.config.lua".toFile()
-                            .exists()
-                    }
-                    .let {
-                        if (it.size == 1) {
-                            block(Project(file.absolutePath, this))
-                        } else {
-                            block(null)
-                        }
-                    }
+                block(Project(file.absolutePath, this))
             }
 
     }
