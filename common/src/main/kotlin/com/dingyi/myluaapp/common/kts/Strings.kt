@@ -16,3 +16,4 @@ fun String.endsWith(vararg prefix: String): Boolean {
     }
     return false
 }
+

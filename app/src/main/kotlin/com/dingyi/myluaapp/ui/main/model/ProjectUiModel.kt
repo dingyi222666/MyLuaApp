@@ -22,7 +22,7 @@ class ProjectUiModel(private val project: Project.AppProject):ItemBind {
             appName.text = project.appName
             appPackageName.text = project.appPackageName
             Glide.with(image)
-                .load(project.path)
+                .load(project.iconPath)
                 .into(image)
         }
 

@@ -99,8 +99,8 @@ dependencies {
     // OkHttp 框架：https://github.com/square/okhttp
     // noinspection GradleDependency
     implementation(BuildConfig.Libs.Network.okhttp3)
-    // 网络请求框架：https://github.com/getActivity/EasyHttp
-    implementation(BuildConfig.Libs.Network.easy_http)
+    // 网络请求框架：https://hub.fastgit.org/liangjingkanji/Net
+    implementation(BuildConfig.Libs.Network.net)
 
 
     coreLibraryDesugaring(BuildConfig.Libs.Tools.desugar_jdk_libs)

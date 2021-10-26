@@ -99,7 +99,6 @@ fun String.showSnackBar(view: View) =
         }.show()
 
 
-fun Int.getString(): String = MainApplication.instance.getString(this)
 
 
 inline val Int.dp: Int

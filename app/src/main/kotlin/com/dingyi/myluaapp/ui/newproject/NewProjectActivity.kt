@@ -32,6 +32,7 @@ class NewProjectActivity : BaseActivity<
 
         viewModel.apply {
             templates.observe(this@NewProjectActivity) { templates ->
+                viewBinding.chipGroup.removeAllViews()
                 templates.forEachIndexed { index, it ->
                     val name = it.name
                     viewBinding.chipGroup.addView(

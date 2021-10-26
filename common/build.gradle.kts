@@ -41,7 +41,7 @@ dependencies {
     // noinspection GradleDependency
     implementation(BuildConfig.Libs.Network.okhttp3)
     // 网络请求框架：https://github.com/getActivity/EasyHttp
-    implementation(BuildConfig.Libs.Network.easy_http)
+    implementation(BuildConfig.Libs.Network.net)
     implementation(BuildConfig.Libs.Default.kotlin_stdlib) //kt
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
     //glide

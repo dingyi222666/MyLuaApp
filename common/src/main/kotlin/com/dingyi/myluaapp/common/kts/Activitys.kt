@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.dingyi.myluaapp.MainApplication
 
 
 /**
@@ -36,6 +37,14 @@ fun AppCompatActivity.openDocument(fileType: String, callback: (Uri) -> Unit) {
 
 fun Context.getStringArray(resId: Int): Array<String> {
     return this.resources.getStringArray(resId)
+}
+
+fun Int.getString():String {
+    return MainApplication.instance.getString(this)
+}
+
+fun Int.getStringArray():Array<String> {
+    return MainApplication.instance.getStringArray(this)
 }
 
 fun Context.getAttributeColor(resId: Int): Int {

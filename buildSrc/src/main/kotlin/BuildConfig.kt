@@ -38,7 +38,7 @@ object BuildConfig {
         const val constraintlayout_version = "2.0.4"
         const val litepal_version = "3.2.3"
         const val glide_version = "4.11.0"
-        const val easy_http_version = "10.2"
+        const val net_version = "3.0.25"
         const val okhttp3_version = "4.9.0"
         const val channel_version = "1.1.4"
         const val swiperefreshlayout_version = "1.2.0-alpha01"
@@ -128,7 +128,7 @@ object BuildConfig {
 
         }
         object Network {
-            const val easy_http = "com.github.getActivity:EasyHttp:${Versions.easy_http_version}"
+            const val net = "com.github.liangjingkanji:Net:${Versions.net_version}"
             const val okhttp3 = "com.squareup.okhttp3:okhttp:${Versions.okhttp3_version}"
         }
 

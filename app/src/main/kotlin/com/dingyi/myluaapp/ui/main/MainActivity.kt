@@ -38,17 +38,7 @@ class MainActivity : BaseActivity<
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
-    override fun observeViewModel() {
-        super.observeViewModel()
-        viewModel.projectList.observe(this) { projectList ->
-            projectList.map {
-                ProjectUiModel(it)
-            }.let {
-                viewBinding.list.bindingAdapter
-                    .models = it
-            }
-        }
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,9 +49,28 @@ class MainActivity : BaseActivity<
             title = getString(R.string.app_name)
         }
 
+        viewModel.refreshPoetry(this)
 
         initViewBinding()
         initData()
+    }
+
+
+    override fun observeViewModel() {
+        super.observeViewModel()
+        viewModel.projectList.observe(this) { projectList ->
+            projectList.map {
+                ProjectUiModel(it)
+            }.let {
+                viewBinding.list.bindingAdapter
+                    .models = it
+            }
+        }
+
+        viewModel.poetry.observe(this) {
+            supportActionBar?.subtitle = it
+        }
+
     }
 
     private fun initData() {
