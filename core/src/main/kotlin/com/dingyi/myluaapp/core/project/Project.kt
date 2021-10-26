@@ -15,10 +15,6 @@ class Project(
 
 
 
-    class Builder {
-
-    }
-
     data class AppProject(
         val appPackageName: String,
         val appName: String,

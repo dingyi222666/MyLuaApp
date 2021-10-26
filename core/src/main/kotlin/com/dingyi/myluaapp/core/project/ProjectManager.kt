@@ -32,13 +32,6 @@ class ProjectManager(private val projectRootPath: String) {
         project.backup(exportOutputStream)
     }
 
-    /**
-     * create project
-     */
-    fun createProject(projectBuilder: Project.Builder) {
-
-    }
-
 
     private fun listProject(block: (Project?) -> Unit) {
 

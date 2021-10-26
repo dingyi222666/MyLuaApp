@@ -36,7 +36,7 @@ object ZipContainer {
             .map { it.name }
             .filter { path -> path.startsWith("assets/") || path.startsWith("lua/") }
 
-
+        println(unFileList)
         val defaultPath = "${context.filesDir.parentFile?.absolutePath}"
 
 

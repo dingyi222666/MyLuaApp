@@ -1,7 +1,10 @@
 {
   "templates": [
     {
-      "name": "空模板",
+      "name": {
+        "default":"空模板",
+        "english": "Empty Project"
+      },
       "path": "zip/empty_project.zip",
       "replaces": [
         "xml",

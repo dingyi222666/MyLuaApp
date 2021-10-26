@@ -15,7 +15,7 @@ fun String.toFile() = File(this)
 
 fun String.toZipFile() = ZipFile(this)
 
-val File.suffix: String
+inline val File.suffix: String
     get() = name.substring(name.lastIndexOf(".") + 1)
 
 inline fun File.isDirectory(block: File.() -> Unit) {

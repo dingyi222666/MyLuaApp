@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.common.zip
 
+import com.dingyi.myluaapp.common.kts.println
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.common.kts.toZipFile
 import kotlinx.coroutines.*
@@ -15,6 +16,7 @@ import kotlin.properties.Delegates
 object ZipHelper {
 
     suspend fun getZipFileList(zipPath: String) = withContext(Dispatchers.IO) {
+        println(zipPath)
         mutableListOf<ZipEntry>().apply {
             runCatching {
                 zipPath.toZipFile()
@@ -32,54 +34,59 @@ object ZipHelper {
     class UnZipBuilder {
         var zipPath by Delegates.notNull<String>()
         var inZipPathList by Delegates.notNull<List<String>>()
-        var toPath by Delegates.notNull<(String)->String>()
+        var toPath by Delegates.notNull<(String) -> String>()
         var unPathFilterPrefix by Delegates.notNull<(String) -> String>()
 
-        fun toPath(toPath: (String) -> String):UnZipBuilder {
+        fun toPath(toPath: (String) -> String): UnZipBuilder {
             this.toPath = toPath
             return this
         }
 
-        fun unPathFilterPrefix(unPathFilterPrefix: (String) -> String):UnZipBuilder {
+        fun unPathFilterPrefix(unPathFilterPrefix: (String) -> String): UnZipBuilder {
             this.unPathFilterPrefix = unPathFilterPrefix
             return this
 
         }
 
         suspend fun build(block: suspend (String?) -> Unit) {
-             unZipFile(
+            unZipFile(
                 zipPath, inZipPathList, toPath, unPathFilterPrefix, block
-             )
+            )
         }
 
     }
 
+
+
     suspend fun unZipFile(
         zipPath: String,
         inZipPathList: List<String>,
-        toPath: (String) -> String ,
+        toPath: (String) -> String,
         unPathFilterPrefix: (String) -> String = { "/" },
         block: suspend (String?) -> Unit = {},
     ) = withContext(Dispatchers.Main) {
-            val coroutineDispatcher = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()).asCoroutineDispatcher()
-            launch(Dispatchers.IO) {
-                inZipPathList.forEach { inZipPath ->
-                    async(coroutineDispatcher) {
-                        val filterPrefix = unPathFilterPrefix(inZipPath)
-                        unSingleZipFile(
-                            zipPath,
-                            inZipPath,
-                            "${toPath(inZipPath)}/${inZipPath.substring(filterPrefix.lastIndex)}"
-                        )
-                        block(inZipPath)
-                    }
+        val coroutineDispatcher =
+            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
+                .asCoroutineDispatcher()
+        launch(Dispatchers.IO) {
+            inZipPathList.forEach { inZipPath ->
+                async(coroutineDispatcher) {
+                    val filterPrefix = unPathFilterPrefix(inZipPath)
+                    unSingleZipFile(
+                        zipPath,
+                        inZipPath,
+                        "${toPath(inZipPath)}/${inZipPath.substring(filterPrefix.lastIndex)}"
+                    )
+                    block(inZipPath)
                 }
-            }.join()
-            coroutineDispatcher.close()
-            block(null)
-        }
+            }
+        }.join()
+        coroutineDispatcher.close()
+        block(null)
+    }
 
     private fun unSingleZipFile(zipPath: String, inZipPath: String, toPath: String): Boolean {
+        println(zipPath,inZipPath,toPath)
         zipPath.toZipFile().use {
             val entry = it.getEntry(inZipPath)
             if (entry.isDirectory) {

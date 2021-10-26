@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.common.kts
 
 import org.luaj.vm2.LuajVm
+import kotlin.Pair
 
 /**
  * @author: dingyi
@@ -26,16 +27,35 @@ inline fun <reified T> Class<T>.getPrivateField(obj: Any?, name: String): T {
  * returns the not null value.
  *
  */
-fun <T> T?.checkNotNull(): T {
+inline fun <T> T?.checkNotNull(): T {
     return checkNotNull(this)
 }
 
-fun String.loadClass(): Class<*> {
+inline fun String.loadClass(): Class<*> {
     return Class.forName(this)
 }
 
 inline fun <reified T> getJavaClass(): Class<T> {
     return T::class.java
+}
+
+inline fun println(vararg  args:Any) {
+    val buffer = StringBuilder()
+    args.forEach {
+        buffer.append(it.toString()).append(" ")
+    }
+    kotlin.io.println(buffer)
+}
+
+data class MutablePair<A,B>(
+   var first: A,
+   var second: B
+) : java.io.Serializable {
+
+    /**
+     * Returns string representation of the [Pair] including its [first] and [second] values.
+     */
+   override fun toString(): String = "($first, $second)"
 }
 
 typealias LuaJVM = LuajVm

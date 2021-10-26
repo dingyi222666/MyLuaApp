@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.ui.main
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -11,8 +12,10 @@ import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.getAttributeColor
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.iconColor
+import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.ui.main.model.ProjectUiModel
+import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
@@ -63,7 +66,8 @@ class MainActivity : BaseActivity<
 
     private fun initData() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.refreshProjectList(viewBinding) //立即刷新一次
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.refreshProjectList(viewBinding)
             }
         }
@@ -77,6 +81,16 @@ class MainActivity : BaseActivity<
             }
     }
 
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.main_action_menu_new_project -> {
+                startActivity<NewProjectActivity>()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_toolbar, menu)
