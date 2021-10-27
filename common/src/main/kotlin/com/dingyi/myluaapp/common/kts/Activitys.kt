@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.common.kts
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,6 +10,7 @@ import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.dingyi.myluaapp.MainApplication
+import kotlin.system.exitProcess
 
 
 /**
@@ -35,15 +38,24 @@ fun AppCompatActivity.openDocument(fileType: String, callback: (Uri) -> Unit) {
     }.launch(arrayOf(fileType))
 }
 
+fun Activity.restartApp() {
+    val intent = packageManager
+        .getLaunchIntentForPackage(application.packageName)
+    val restartIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
+    val mgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+    mgr?.set(AlarmManager.RTC, System.currentTimeMillis() + 100, restartIntent) // 1秒钟后重启应用
+    exitProcess(0)
+}
+
 fun Context.getStringArray(resId: Int): Array<String> {
     return this.resources.getStringArray(resId)
 }
 
-fun Int.getString():String {
+fun Int.getString(): String {
     return MainApplication.instance.getString(this)
 }
 
-fun Int.getStringArray():Array<String> {
+fun Int.getStringArray(): Array<String> {
     return MainApplication.instance.getStringArray(this)
 }
 

@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.hjq.language.MultiLanguages
 
 /**
  * @author: dingyi
@@ -38,6 +40,8 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
     ): View? {
         return getViewBindingImp(inflater, container).root
     }
+
+
 
 
     private fun getViewBindingImp(inflater: LayoutInflater, container: ViewGroup?): V {

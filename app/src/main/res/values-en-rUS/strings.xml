@@ -52,7 +52,7 @@
     <string name="settings_plugin_summary">Configure Plugin Settings</string>
     <string name="about_slogan_title">About</string>
     <string name="settings_application_language_title">Language</string>
-    <string name="settings_application_language_summary">Set Language of the Program</string>
+    <string name="settings_application_language_summary">Set Application Language</string>
     <string name="settings_editor_function_category">Features</string>
     <string name="settings_editor_appearance_category">Appearance</string>
     <string name="settings_editor_language_category">Language Features</string>
@@ -63,6 +63,7 @@
     <string name="settings_editor_symbol_bar_category">Symbol Bar</string>
     <string name="settings_editor_font_toast_successful">Choose Font Successful</string>
     <string name="settings_editor_font_toast_fail">Choose Font fail</string>
+    <string name="settings_editor_language_restart_toast">Take effect after restart</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>

@@ -57,6 +57,7 @@
     <string name="settings_editor_appearance_category">外观</string>
     <string name="settings_editor_language_category">语言特性</string>
     <string name="settings_editor_language_summary">设置不同语言在编辑器下的特性</string>
+    <string name="settings_editor_language_restart_toast">重启后生效</string>
     <string name="settings_editor_other_category">其他</string>
     <string name="settings_editor_font_category">字体</string>
     <string name="settings_editor_font_summary">设置编辑器的字体</string>

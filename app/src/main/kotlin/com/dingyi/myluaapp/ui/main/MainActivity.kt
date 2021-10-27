@@ -14,8 +14,10 @@ import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.iconColor
 import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
+import com.dingyi.myluaapp.ui.GeneralActivity
 import com.dingyi.myluaapp.ui.main.model.ProjectUiModel
 import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
+import com.dingyi.myluaapp.ui.settings.SettingsFragment
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
@@ -37,7 +39,6 @@ class MainActivity : BaseActivity<
     override fun getViewBindingInstance(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
     }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,13 +93,21 @@ class MainActivity : BaseActivity<
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
+        when (item.itemId) {
             R.id.main_action_menu_new_project -> {
                 startActivity<NewProjectActivity>()
-                true
+                return true
             }
-            else -> super.onOptionsItemSelected(item)
+            R.id.main_action_menu_settings -> {
+                startActivity<GeneralActivity> {
+                    putExtra("type", getJavaClass<SettingsFragment>().name)
+                    val targetBundle = Bundle()
+                    targetBundle.putInt("resId", R.xml.settings_main)
+                    putExtra("arg", targetBundle)
+                }
+            }
         }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -51,6 +51,7 @@ object BuildConfig {
         const val kotlinx_coroutines_android_version = "1.5.1"
         const val core_ktx_version = "1.7.0-rc01"
         const val brv_version = "1.3.37"
+        const val multi_languages_version = "6.9"
     }
 
     object Libs {
@@ -94,7 +95,8 @@ object BuildConfig {
             const val glide_compiler =
                 "com.github.bumptech.glide:compiler:${Versions.glide_version}"
             const val glide = "com.github.bumptech.glide:glide:${Versions.glide_version}"
-            const val kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinx_coroutines_android_version}"
+            const val kotlinx_coroutines_android =
+                "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinx_coroutines_android_version}"
         }
 
         object Tools {
@@ -108,18 +110,23 @@ object BuildConfig {
 
             const val lsp4j = "org.eclipse.lsp4j:org.eclipse.lsp4j:${Versions.lsp4j_version}"
 
-            const val antlr_kotlin_runtime = "com.strumenta.antlr-kotlin:antlr-kotlin-runtime:${Versions.antlr_kotlin_version}"
+            const val antlr_kotlin_runtime =
+                "com.strumenta.antlr-kotlin:antlr-kotlin-runtime:${Versions.antlr_kotlin_version}"
 
-            const val antlr_kotlin_target = "com.strumenta.antlr-kotlin:antlr-kotlin-target:${Versions.antlr_kotlin_version}"
+            const val antlr_kotlin_target =
+                "com.strumenta.antlr-kotlin:antlr-kotlin-target:${Versions.antlr_kotlin_version}"
 
             const val joni = "org.jruby.joni:joni:${Versions.joni_version}"
 
             const val jcodings = "org.jruby.jcodings:jcodings:${Versions.jcodings_version}"
 
             const val batik_css = "org.apache.xmlgraphics:batik-css:${Versions.xmlgraphics_version}"
-            const val batik_util = "org.apache.xmlgraphics:batik-util:${Versions.xmlgraphics_version}"
+            const val batik_util =
+                "org.apache.xmlgraphics:batik-util:${Versions.xmlgraphics_version}"
             const val dom = "org.w3c:dom:${Versions.dom_version}"
             const val brv = "com.github.liangjingkanji:BRV:${Versions.brv_version}"
+            const val multi_languages =
+                "com.github.getActivity:MultiLanguages:${Versions.multi_languages_version}"
         }
 
         object Views {
@@ -127,6 +134,7 @@ object BuildConfig {
                 "io.github.Rosemoe.sora-editor:editor:${Versions.code_editor_version}"
 
         }
+
         object Network {
             const val net = "com.github.liangjingkanji:Net:${Versions.net_version}"
             const val okhttp3 = "com.squareup.okhttp3:okhttp:${Versions.okhttp3_version}"

@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu
@@ -10,6 +11,7 @@ import androidx.viewbinding.ViewBinding
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.getString
 import com.dingyi.myluaapp.common.kts.showSnackBar
+import com.hjq.language.MultiLanguages
 
 /**
  * @author: dingyi
@@ -41,6 +43,12 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
 
     }
 
+
+
+    override fun attachBaseContext(base: Context) {
+        // 绑定语种
+        super.attachBaseContext(MultiLanguages.attach(base))
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         this.optionsMenu = menu
