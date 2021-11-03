@@ -10,7 +10,8 @@ import java.io.OutputStream
 interface IProject {
     fun backup(exportOutputStream: OutputStream):Boolean
     fun delete():Boolean
-    fun openFile():ProjectFile
+    fun deleteFile(path: String)
+    fun openFile(path:String):ProjectFile
     fun getOpenFiles():List<ProjectFile>
     fun saveAllOpenFile():Boolean
 
