@@ -14,7 +14,9 @@ import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.iconColor
 import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
+import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
 import com.dingyi.myluaapp.ui.GeneralActivity
+import com.dingyi.myluaapp.ui.editior.EditorActivity
 import com.dingyi.myluaapp.ui.main.model.ProjectUiModel
 import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
 import com.dingyi.myluaapp.ui.settings.SettingsFragment
@@ -88,6 +90,13 @@ class MainActivity : BaseActivity<
             .linear(orientation = LinearLayoutManager.VERTICAL)
             .setup {
                 addType<ProjectUiModel>(R.layout.layout_item_main_project)
+            }
+            .onBind {
+                itemView.setOnClickListener {
+                    startActivity<EditorActivity> {
+                        putExtra("project_path",getModel<ProjectUiModel>().project.path)
+                    }
+                }
             }
     }
 

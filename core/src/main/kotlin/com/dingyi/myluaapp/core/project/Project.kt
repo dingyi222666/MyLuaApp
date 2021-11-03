@@ -1,5 +1,8 @@
 package com.dingyi.myluaapp.core.project
 
+import android.os.Parcel
+import android.os.Parcelable
+import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.toFile
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
@@ -14,8 +17,8 @@ import java.io.OutputStream
  **/
 class Project(
     val projectPath: String = "",
-    val projectManager: ProjectManager
-) : IProject {
+    private val projectManager: ProjectManager = ProjectManager(projectPath.toFile().parentFile?.absolutePath ?: "")
+) : IProject,Parcelable {
 
 
     data class AppProject(
@@ -26,12 +29,16 @@ class Project(
     )
 
 
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: ""
+    )
+
     override fun delete(): Boolean {
         return true;
     }
 
     override fun deleteFile(path: String) {
-        ProjectFile(path,this).deleteFile()
+        ProjectFile(path, this).deleteFile()
     }
 
     fun generateAppProject(): AppProject? {
@@ -49,40 +56,43 @@ class Project(
             .getOrNull()
     }
 
-    override fun openFile(path:String): ProjectFile {
+    override fun openFile(path: String): ProjectFile {
         if (!path.toFile().exists()) {
             throw FileNotFoundException("Not Found File.")
         }
-        val file=getOpenedFile()
+        val file = getOpenedFile()
         val table = projectManager.globalLuaJVM.loadFile(file.absolutePath)
-        table.insert(table.keyCount()+1, LuaValue.valueOf(path))
+        table.insert(table.keyCount() + 1, LuaValue.valueOf(path))
         file.writeText(formatOpenFile(table))
-        return ProjectFile(path,this)
+
+        return ProjectFile(path, this)
     }
 
-    private fun formatOpenFile(table: LuaTable):String {
+    private fun formatOpenFile(table: LuaTable): String {
         val buffer = StringBuilder()
         buffer.append("openFiles={").append("\n")
         for (i in 1..table.keyCount()) {
-            val key= table[i]
+            val key = table[i]
             val value = table[key].tojstring()
             buffer.append('[').append(key)
                 .append(']').append(" = ")
                 .append('"').append(value)
                 .append(",").append("\n")
         }
-        buffer.removeRange(buffer.lastIndex-2..buffer.lastIndex)
+        buffer.removeRange(buffer.lastIndex - 2..buffer.lastIndex)
         buffer.append("\n").append("}")
         return buffer.toString()
     }
 
     private fun getOpenedFile(): File {
-        val path="$projectPath/.MyLuaApp/open_files.lua"
-        val file=path.toFile()
+        val path = "$projectPath/.MyLuaApp/open_files.lua"
+        val file = path.toFile()
         if (!file.exists()) {
-            file.writeText("""
+            file.writeText(
+                """
                 openFiles = {}
-            """.trimIndent())
+            """.trimIndent()
+            )
         }
         return file
     }
@@ -92,13 +102,15 @@ class Project(
         val result = mutableListOf<ProjectFile>()
         table.keys().forEach {
             val project = table.get(it).tojstring()
-            result.add(ProjectFile(project,this))
+            result.add(ProjectFile(project, this))
         }
         return result
     }
 
     override fun saveAllOpenFile(): Boolean {
-        TODO("Not yet implemented")
+        return getOpenFiles().map {
+            it.saveChange()
+        }.filter { !it }.size > 1
     }
 
     override fun backup(exportOutputStream: OutputStream): Boolean {
@@ -107,6 +119,24 @@ class Project(
 
     fun getChangeProjectFiles() {
 
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(projectPath)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Project> {
+        override fun createFromParcel(parcel: Parcel): Project {
+            return Project(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Project?> {
+            return arrayOfNulls(size)
+        }
     }
 
 

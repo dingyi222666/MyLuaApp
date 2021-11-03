@@ -13,7 +13,7 @@ import com.drake.brv.item.ItemBind
  * @date: 2021/10/25 9:07
  * @description:
  **/
-class ProjectUiModel(private val project: Project.AppProject):ItemBind {
+class ProjectUiModel(val project: Project.AppProject):ItemBind {
 
 
     override fun onBind(holder: BindingAdapter.BindingViewHolder) {

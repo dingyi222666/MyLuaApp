@@ -38,7 +38,7 @@ class ProjectFile(
      * Commit change to cache file
      */
     fun commitChange(text: CharSequence) {
-        change = true
+
         val history = getLocalHistory()
 
         if (history.caches.size + 1 > 10) {
@@ -55,6 +55,7 @@ class ProjectFile(
         cache.saveText(text)
         history.caches.add(0, cache)
         history.save(virtualFile.outputStream())
+        change = true
     }
 
     private fun getLocalHistory(): ProjectFileHistory {
@@ -68,9 +69,12 @@ class ProjectFile(
         }
     }
 
-    fun saveChange() {
-        change = false
-        cache.caches[0].copyTo(path)
+    fun saveChange():Boolean {
+        return runCatching {
+            cache.caches[0].copyTo(path)
+            change = false
+        }.isSuccess
+
     }
 
     data class ProjectFileHistory(
