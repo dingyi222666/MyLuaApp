@@ -8,7 +8,12 @@ import kotlin.properties.Delegates
  * @description:
  **/
 class MemberExpression : ExpressionNode() {
-    var base by Delegates.notNull<ExpressionNode>()
-    var indexed by Delegates.notNull<Identifier>()
+
+
     var identifier by Delegates.notNull<Identifier>()
+
+    var indexer by Delegates.notNull<String>()
+
+    var base by Delegates.notNull<ExpressionNode>()
+
 }

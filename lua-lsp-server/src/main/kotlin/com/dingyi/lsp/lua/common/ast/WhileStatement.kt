@@ -11,4 +11,9 @@ class WhileStatement:StatementNode() {
     var condition by Delegates.notNull<ASTNode>()
     var body by Delegates.notNull<BlockNode>()
 
+    override fun toString(): String {
+        return "WhileStatement(condition=$condition, body=$body)"
+    }
+
+
 }

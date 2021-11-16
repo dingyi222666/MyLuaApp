@@ -12,6 +12,9 @@ fun main(args: Array<String>) {
     generator.generate("""
         local d = 12
         local s = d
+        while (a) do
+          a = 25
+        end  
     """.trimIndent()).run {
         println(this.body)
     }

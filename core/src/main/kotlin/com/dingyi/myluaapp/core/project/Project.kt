@@ -97,7 +97,7 @@ class Project(
         return file
     }
 
-    override fun getOpenFiles(): List<ProjectFile> {
+    override fun getOpenedFiles(): List<ProjectFile> {
         val table = projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath)
         val result = mutableListOf<ProjectFile>()
         table.keys().forEach {
@@ -107,18 +107,29 @@ class Project(
         return result
     }
 
-    override fun saveAllOpenFile(): Boolean {
-        return getOpenFiles().map {
+    override fun saveAllOpenedFile(): Boolean {
+        return getOpenedFiles().map {
             it.saveChange()
         }.filter { !it }.size > 1
     }
 
-    override fun backup(exportOutputStream: OutputStream): Boolean {
-        return true;
+    override fun saveOpenedFile(path: String): Boolean {
+        return ProjectFile(path,this).saveChange()
     }
 
-    fun getChangeProjectFiles() {
+    override fun closeOpenedFile(path: String) {
+        val table = projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath)
+        (1..table.keyCount()).forEach {
+            if (table[it].tojstring()==path) {
+                table.remove(it)
+                return@forEach
+            }
+        }
+        getOpenedFile().writeText(formatOpenFile(table))
+    }
 
+    override fun backup(exportOutputStream: OutputStream): Boolean {
+        return true;
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

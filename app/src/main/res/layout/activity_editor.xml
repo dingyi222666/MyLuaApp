@@ -39,8 +39,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
                     android:layout_marginTop="56dp"
-
                     android:background="?theme_backgroundColor"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tabIndicator="@drawable/default_tab_indicator"
@@ -65,34 +65,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ProgressBar
-                    android:id="@+id/progress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    android:id="@+id/editor_root"
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/editor_page"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    app:layout_constraintBottom_toTopOf="@id/symbolView"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/editor_page"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:visibility="gone" />
-
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@id/symbolView" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/symbolView"
@@ -101,8 +79,9 @@
                     android:background="?theme_backgroundColor"
                     android:elevation="6dp"
                     android:scrollbars="none"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/editor_root"
+                    app:layout_constraintTop_toBottomOf="@id/editor_page"
                     tools:ignore="SpeakableTextPresentCheck" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

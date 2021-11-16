@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.ui.editior
 
+import android.os.Bundle
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
@@ -19,5 +20,12 @@ class EditorActivity: BaseActivity<ActivityEditorBinding,MainViewModel>() {
 
     override fun getViewBindingInstance(): ActivityEditorBinding {
         return ActivityEditorBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.initProjectController(intent.getStringExtra("project_path") ?: "")
+
     }
 }

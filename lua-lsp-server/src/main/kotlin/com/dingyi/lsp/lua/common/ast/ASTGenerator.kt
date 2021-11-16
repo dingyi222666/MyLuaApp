@@ -5,6 +5,8 @@ import com.dingyi.lsp.lua.common.parser.LuaLexer
 import com.dingyi.lsp.lua.common.parser.LuaParser
 import org.antlr.v4.kotlinruntime.CharStreams
 import org.antlr.v4.kotlinruntime.CommonTokenStream
+import org.antlr.v4.kotlinruntime.ParserRuleContext
+import kotlin.properties.Delegates
 
 
 /**
@@ -192,7 +194,6 @@ class ASTGenerator() {
 
             //parser base
 
-
             if (ctx.findNameAndArgs().isNotEmpty()) {
                 parseCallExpressionArguments(ctx, expression)
             }
@@ -202,12 +203,51 @@ class ASTGenerator() {
         }
 
         private fun parseCallExpressionBase(ctx: LuaParser.FunctioncallContext): ExpressionNode {
-            val nameAndArgList =
-                if (ctx.findNameAndArgs().isNotEmpty())
-                    ctx.findNameAndArgs().dropLast(1)
-                else listOf()
 
-            TODO("")
+
+            
+
+            val list = buildCallExpressionParseList(ctx)
+
+
+            list
+                .toMutableList() //copy list
+                .apply { reverse() }
+                .forEachIndexed { index, parserRuleContext ->
+                    if (index == 1) {
+                        return@forEachIndexed //break
+                    }
+
+                    when (parserRuleContext) {
+                        is LuaParser.NameAndArgsContext -> {
+
+                        }
+                        is LuaParser.VarSuffixContext -> {
+
+                        }
+                    }
+
+                }
+
+            return result
+
+        }
+
+        private fun buildCallExpressionParseList(ctx:LuaParser.FunctioncallContext): MutableList<ParserRuleContext> {
+
+            val result = mutableListOf<ParserRuleContext>()
+
+
+            ctx.findVarOrExp()?.findLvar()?.findVarSuffix()?.forEach {
+                result.add(it)
+            }
+
+            ctx.findNameAndArgs().forEach {
+                result.add(it)
+            }
+
+
+            return result
         }
 
         override fun visitFunctionCallStat(ctx: LuaParser.FunctionCallStatContext): StatementNode {
