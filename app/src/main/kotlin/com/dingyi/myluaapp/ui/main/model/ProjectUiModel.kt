@@ -1,13 +1,9 @@
 package com.dingyi.myluaapp.ui.main.model
 
-import android.view.View
 import com.bumptech.glide.Glide
-import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.core.project.Project
 import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
-import com.dingyi.myluaapp.ui.editior.EditorActivity
 import com.drake.brv.BindingAdapter
-import com.drake.brv.animation.ItemAnimation
 import com.drake.brv.item.ItemBind
 
 /**

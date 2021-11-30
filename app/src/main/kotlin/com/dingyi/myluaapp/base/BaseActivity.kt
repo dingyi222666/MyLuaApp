@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.dingyi.myluaapp.R
+import com.dingyi.myluaapp.common.kts.getAttributeColor
 import com.dingyi.myluaapp.common.kts.getString
+import com.dingyi.myluaapp.common.kts.iconColor
 import com.dingyi.myluaapp.common.kts.showSnackBar
 import com.hjq.language.MultiLanguages
 
@@ -52,6 +54,8 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         this.optionsMenu = menu
+        //call iconColor when call support method
+        menu?.iconColor(getAttributeColor(R.attr.theme_hintTextColor))
         return super.onCreateOptionsMenu(menu)
     }
 

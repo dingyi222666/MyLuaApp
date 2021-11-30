@@ -79,6 +79,7 @@ class ProjectBuilder {
                     }
                     filePath
                 }
+
                 .filter {
                     it.endsWith(*template.replaces.toTypedArray())
                 }

@@ -83,6 +83,7 @@
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_item_main_project.xml" value="0.3859964093357271" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_item_symbol.xml" value="0.20425724637681159" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu/editor_tab.xml" value="0.24205128205128204" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu/editor_toolbar.xml" value="0.25" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu/main_toolbar.xml" value="0.1" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu/new_project_toolbar.xml" value="0.24615384615384617" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
@@ -100,7 +101,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
