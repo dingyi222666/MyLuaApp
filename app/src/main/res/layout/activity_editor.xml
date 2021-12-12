@@ -34,7 +34,7 @@
                     app:subtitleTextAppearance="@style/BaseToolBarSubTitleStyle"
                     app:titleTextColor="?colorPrimary" />
 
-                <com.google.android.material.tabs.TabLayout
+                <com.dingyi.myluaapp.view.EditorTabLayout
                     android:id="@+id/editorTab"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"

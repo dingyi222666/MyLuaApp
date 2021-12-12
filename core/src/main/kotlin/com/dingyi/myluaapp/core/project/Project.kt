@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.core.project
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
 import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.toFile
 import org.luaj.vm2.LuaTable
@@ -98,9 +99,11 @@ class Project(
     }
 
     override fun getOpenedFiles(): List<ProjectFile> {
-        val table = projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath)
+        val table = projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath).get("openFiles").checktable()
+        Log.e("fuck","$table ${projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath).get("openFiles")}")
         val result = mutableListOf<ProjectFile>()
         table.keys().forEach {
+            Log.e("fuck","${table} ${it} ${table.get("it")}")
             val project = table.get(it).tojstring()
             result.add(ProjectFile(project, this))
         }

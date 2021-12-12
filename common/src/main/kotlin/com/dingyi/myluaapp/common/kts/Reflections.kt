@@ -35,6 +35,10 @@ inline fun String.loadClass(): Class<*> {
     return Class.forName(this)
 }
 
+inline fun <reified T> Any.convertObject():T {
+    return this as T
+}
+
 inline fun <reified T> getJavaClass(): Class<T> {
     return T::class.java
 }

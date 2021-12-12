@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
  * @description:
  **/
 class ProjectFile(
-    private val path: String,
+    val path: String,
     private val project: Project
 ) {
 
@@ -69,12 +69,19 @@ class ProjectFile(
         }
     }
 
-    fun saveChange():Boolean {
+    fun saveChange(): Boolean {
         return runCatching {
             cache.caches[0].copyTo(path)
             change = false
         }.isSuccess
 
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is ProjectFile) {
+            return other.path == this.path
+        }
+        return false
     }
 
     data class ProjectFileHistory(

@@ -5,7 +5,7 @@ buildscript {
         google()
         mavenCentral()
         maven("https://jitpack.io")
-        maven("https://dl.bintray.com/pixplicity/android")
+        //maven("https://dl.bintray.com/pixplicity/android")
         maven("https://maven.aliyun.com/nexus/content/groups/public")
 
     }
@@ -25,7 +25,7 @@ allprojects {
         google()
         mavenCentral()
         maven("https://jitpack.io")
-        maven("https://dl.bintray.com/pixplicity/android")
+        //maven("https://dl.bintray.com/pixplicity/android")
         maven("https://maven.aliyun.com/nexus/content/groups/public")
 
     }
