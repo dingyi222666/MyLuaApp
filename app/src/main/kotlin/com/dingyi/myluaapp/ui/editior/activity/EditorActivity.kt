@@ -37,6 +37,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         initView()
 
+        viewModel.controller.project.openFile("build.gradle.lua")
+
 
     }
 

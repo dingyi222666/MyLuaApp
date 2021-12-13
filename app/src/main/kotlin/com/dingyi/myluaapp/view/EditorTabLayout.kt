@@ -18,6 +18,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     private var oldOpenedFileList = listOf<ProjectFile>()
 
     fun postOpenedFiles(list: List<ProjectFile>) {
+
         DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
                 return oldOpenedFileList.size
@@ -49,22 +50,22 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
             }
 
             override fun onMoved(fromPosition: Int, toPosition: Int) {
-               //no to
+               getTabAt(toPosition)?.text = getTabText(list[toPosition])
             }
 
             override fun onChanged(position: Int, count: Int, payload: Any?) {
+
                 getTabAt(position)?.text = getTabText(list[position])
             }
 
         })
-
 
         oldOpenedFileList = list
 
     }
 
     private fun getTabText(projectFile: ProjectFile): String {
-        return projectFile.path
+        return projectFile.path.substring(project.projectPath.length+1)
     }
 
     private fun generateTab(text:String): Tab {

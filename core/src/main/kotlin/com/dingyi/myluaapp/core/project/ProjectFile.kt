@@ -77,6 +77,8 @@ class ProjectFile(
 
     }
 
+
+
     override fun equals(other: Any?): Boolean {
         if (other is ProjectFile) {
             return other.path == this.path
@@ -121,5 +123,9 @@ class ProjectFile(
 
     fun deleteFile() {
 
+    }
+
+    override fun toString(): String {
+        return "ProjectFile(path='$path', project=$project, file=$file, virtualFile=$virtualFile, change=$change)"
     }
 }

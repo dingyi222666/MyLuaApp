@@ -18,8 +18,10 @@ import java.io.OutputStream
  **/
 class Project(
     val projectPath: String = "",
-    private val projectManager: ProjectManager = ProjectManager(projectPath.toFile().parentFile?.absolutePath ?: "")
-) : IProject,Parcelable {
+    private val projectManager: ProjectManager = ProjectManager(
+        projectPath.toFile().parentFile?.absolutePath ?: ""
+    )
+) : IProject, Parcelable {
 
 
     data class AppProject(
@@ -58,14 +60,26 @@ class Project(
     }
 
     override fun openFile(path: String): ProjectFile {
+        var path = path
         if (!path.toFile().exists()) {
-            throw FileNotFoundException("Not Found File.")
+            path = "$projectPath/$path"
+            if (!path.toFile().exists())
+                throw FileNotFoundException("Not Found File.")
         }
         val file = getOpenedFile()
-        val table = projectManager.globalLuaJVM.loadFile(file.absolutePath)
+
+        val table = projectManager.globalLuaJVM.loadFile(file.absolutePath).get("openFiles")
+        .checktable()
+
+        table.keys().forEach {
+            if (table[it].tojstring()==path) {
+                //不重复写入
+                return ProjectFile(path,this)
+            }
+        }
+
         table.insert(table.keyCount() + 1, LuaValue.valueOf(path))
         file.writeText(formatOpenFile(table))
-
         return ProjectFile(path, this)
     }
 
@@ -73,12 +87,12 @@ class Project(
         val buffer = StringBuilder()
         buffer.append("openFiles={").append("\n")
         for (i in 1..table.keyCount()) {
-            val key = table[i]
-            val value = table[key].tojstring()
-            buffer.append('[').append(key)
+            val value = table[i].tojstring()
+            buffer.append('[').append(i)
                 .append(']').append(" = ")
                 .append('"').append(value)
-                .append(",").append("\n")
+                .append('"').append(",")
+                .append("\n")
         }
         buffer.removeRange(buffer.lastIndex - 2..buffer.lastIndex)
         buffer.append("\n").append("}")
@@ -99,13 +113,15 @@ class Project(
     }
 
     override fun getOpenedFiles(): List<ProjectFile> {
-        val table = projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath).get("openFiles").checktable()
-        Log.e("fuck","$table ${projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath).get("openFiles")}")
+        val table =
+            projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath).get("openFiles")
+                .checktable()
+
         val result = mutableListOf<ProjectFile>()
         table.keys().forEach {
-            Log.e("fuck","${table} ${it} ${table.get("it")}")
-            val project = table.get(it).tojstring()
-            result.add(ProjectFile(project, this))
+            runCatching { table.get(it).checkstring() }.getOrNull()?.let { path ->
+                result.add(ProjectFile(path.tojstring(), this))
+            }
         }
         return result
     }
@@ -117,13 +133,13 @@ class Project(
     }
 
     override fun saveOpenedFile(path: String): Boolean {
-        return ProjectFile(path,this).saveChange()
+        return ProjectFile(path, this).saveChange()
     }
 
     override fun closeOpenedFile(path: String) {
         val table = projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath)
         (1..table.keyCount()).forEach {
-            if (table[it].tojstring()==path) {
+            if (table[it].tojstring() == path) {
                 table.remove(it)
                 return@forEach
             }
@@ -141,6 +157,10 @@ class Project(
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    override fun toString(): String {
+        return "Project(projectPath='$projectPath', projectManager=$projectManager)"
     }
 
     companion object CREATOR : Parcelable.Creator<Project> {
