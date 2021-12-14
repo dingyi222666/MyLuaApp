@@ -12,8 +12,8 @@ interface IProject {
     fun delete():Boolean
     fun deleteFile(path: String)
     fun openFile(path:String):ProjectFile
-    fun getOpenedFiles():List<ProjectFile>
+    fun getOpenedFiles():Pair<List<ProjectFile>,String>
     fun saveAllOpenedFile():Boolean
     fun saveOpenedFile(path:String): Boolean
-    fun closeOpenedFile(path:String)
+    fun closeOpenedFile(path:String,nowOpenedFile:String)
 }

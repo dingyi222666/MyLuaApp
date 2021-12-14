@@ -45,7 +45,7 @@ class ProjectManager(private val projectRootPath: String) {
             }
             .filter {
                 "${it.absolutePath}/build.gradle.lua".toFile()
-                    .exists() && "${it.absolutePath}/.MyLuaApp/.config.lua".toFile()
+                    .exists() && "${it.absolutePath}/.MyLuaApp/.config.json".toFile()
                     .exists()
             }
             .forEach { file ->

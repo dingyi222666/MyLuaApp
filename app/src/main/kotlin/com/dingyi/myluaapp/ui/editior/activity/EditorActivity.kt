@@ -9,6 +9,7 @@ import com.dingyi.myluaapp.common.kts.convertObject
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.ui.editior.MainViewModel
+import com.dingyi.myluaapp.ui.editior.adapter.EditorPagerAdapter
 
 
 /**
@@ -30,12 +31,14 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         viewModel.initProjectController(intent.getStringExtra("project_path") ?: "")
+
+        initView()
 
         setSupportActionBar(viewBinding.toolbar)
 
-
-        initView()
+        viewModel.refreshOpenedFile()
 
         viewModel.controller.project.openFile("build.gradle.lua")
 
@@ -45,6 +48,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
     private fun initView() {
         viewBinding.editorTab.project = viewModel.controller.project
+        viewBinding.editorPage.adapter = EditorPagerAdapter(this, viewModel)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -57,14 +61,17 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         viewModel.appTitle.observe(this) {
             supportActionBar?.title = it
+
         }
 
         viewModel.openFiles.observe(this) {
-            viewBinding.editorTab.visibility = if (it.isNotEmpty()) View.VISIBLE else View.GONE
-            if (it.isNotEmpty()) viewBinding.editorTab.postOpenedFiles(it)
+            val list = it.first
+            val visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
+            viewBinding.editorPage.visibility = visibility
+            viewBinding.editorTab.visibility = visibility
+            if (list.isNotEmpty()) viewBinding.editorTab.postOpenedFiles(list)
+            viewBinding.editorPage.adapter?.notifyDataSetChanged()
         }
-
-
 
 
     }

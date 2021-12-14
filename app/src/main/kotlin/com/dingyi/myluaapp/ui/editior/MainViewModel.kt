@@ -18,12 +18,11 @@ class MainViewModel: ViewModel() {
     var controller by Delegates.notNull<ProjectController>()
 
     private val _appTitle = MutableLiveData("")
-
-    val appTitle = _appTitle.map { it }
-
-    private val _openFiles = MutableLiveData<List<ProjectFile>>()
+    private val _openFiles = MutableLiveData<Pair<List<ProjectFile>,String>>()
+    private val _nowOpenFile = MutableLiveData("")
 
     val openFiles = _openFiles.map { it }
+    val appTitle = _appTitle.map { it }
 
     fun initProjectController(projectPath:String) {
         controller = ProjectController(projectPath)
@@ -32,16 +31,16 @@ class MainViewModel: ViewModel() {
 
 
 
+    }
+
+
+    fun refreshOpenedFile() {
         viewModelScope.launch {
             controller.getOpenedFile().apply {
                 _openFiles.postValue(this)
             }
         }
-
-
-
     }
-
 
 
 

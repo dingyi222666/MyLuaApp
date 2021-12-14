@@ -3,10 +3,9 @@ package com.dingyi.myluaapp.core.project
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
-import com.dingyi.myluaapp.common.kts.Paths
+import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.toFile
-import org.luaj.vm2.LuaTable
-import org.luaj.vm2.LuaValue
+import com.google.gson.Gson
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.OutputStream
@@ -23,12 +22,13 @@ class Project(
     )
 ) : IProject, Parcelable {
 
+    private val gson = Gson()
 
     data class AppProject(
         val appPackageName: String,
         val appName: String,
         val iconPath: String,
-        val path: String
+        var path: String = ""
     )
 
 
@@ -46,13 +46,12 @@ class Project(
 
     fun generateAppProject(): AppProject? {
         return runCatching {
-            val table = projectManager.globalLuaJVM.loadFile("$projectPath/.MyLuaApp/.config.lua")
-            AppProject(
-                appName = table["appName"].tojstring(),
-                appPackageName = table["appPackageName"].tojstring(),
-                iconPath = projectPath + "/" + table["iconPath"].tojstring(),
-                path = projectPath
-            )
+            gson.fromJson(
+                "$projectPath/.MyLuaApp/.config.json".toFile().reader(),
+                getJavaClass<AppProject>()
+            ).apply {
+                this.path = projectPath
+            }
         }.onFailure {
             it.printStackTrace()
         }
@@ -60,74 +59,77 @@ class Project(
     }
 
     override fun openFile(path: String): ProjectFile {
+
+        val openFilePath = getAbsoluteFile(path)
+
+        val bean = getOpenedFileBean()
+
+        return bean?.run {
+            nowOpenFile = openFilePath
+            if (!openedFiles.contains(openFilePath)) openedFiles.add(openFilePath)
+            saveOpenedFile(this)
+            ProjectFile(openFilePath, this@Project)
+        } ?: throw Exception("Open File fail")
+
+
+    }
+
+    private fun getAbsoluteFile(path: String): String {
         var path = path
         if (!path.toFile().exists()) {
             path = "$projectPath/$path"
-            if (!path.toFile().exists())
-                throw FileNotFoundException("Not Found File.")
+            if (!path.toFile().exists()) throw FileNotFoundException("Not Found File.")
+            return path
         }
-        val file = getOpenedFile()
-
-        val table = projectManager.globalLuaJVM.loadFile(file.absolutePath).get("openFiles")
-        .checktable()
-
-        table.keys().forEach {
-            if (table[it].tojstring()==path) {
-                //不重复写入
-                return ProjectFile(path,this)
-            }
-        }
-
-        table.insert(table.keyCount() + 1, LuaValue.valueOf(path))
-        file.writeText(formatOpenFile(table))
-        return ProjectFile(path, this)
+        return path
     }
 
-    private fun formatOpenFile(table: LuaTable): String {
-        val buffer = StringBuilder()
-        buffer.append("openFiles={").append("\n")
-        for (i in 1..table.keyCount()) {
-            val value = table[i].tojstring()
-            buffer.append('[').append(i)
-                .append(']').append(" = ")
-                .append('"').append(value)
-                .append('"').append(",")
-                .append("\n")
+    private fun saveOpenedFile(bean: OpenedFilesBean) {
+        Log.d("test", "save bean $bean")
+        gson.toJson(bean).apply {
+            getOpenedFile().writeText(this)
         }
-        buffer.removeRange(buffer.lastIndex - 2..buffer.lastIndex)
-        buffer.append("\n").append("}")
-        return buffer.toString()
     }
 
     private fun getOpenedFile(): File {
-        val path = "$projectPath/.MyLuaApp/open_files.lua"
+        val path = "$projectPath/.MyLuaApp/opened_files.json"
         val file = path.toFile()
         if (!file.exists()) {
             file.writeText(
                 """
-                openFiles = {}
-            """.trimIndent()
+                    {
+                      openedFiles = [],
+                      nowOpenFile = ""
+                    }
+                """.trimIndent()
             )
         }
         return file
     }
 
-    override fun getOpenedFiles(): List<ProjectFile> {
-        val table =
-            projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath).get("openFiles")
-                .checktable()
+
+    private fun getOpenedFileBean(): OpenedFilesBean? {
+        return runCatching {
+            gson.fromJson(
+                getOpenedFile().reader(),
+                getJavaClass<OpenedFilesBean>()
+            )
+        }.getOrNull()
+    }
+
+    override fun getOpenedFiles(): Pair<List<ProjectFile>,String> {
+
+        val bean = getOpenedFileBean()
 
         val result = mutableListOf<ProjectFile>()
-        table.keys().forEach {
-            runCatching { table.get(it).checkstring() }.getOrNull()?.let { path ->
-                result.add(ProjectFile(path.tojstring(), this))
-            }
+        bean?.openedFiles?.forEach {
+            result.add(ProjectFile(it, this))
         }
-        return result
+        return result to (bean?.nowOpenFile ?: "")
     }
 
     override fun saveAllOpenedFile(): Boolean {
-        return getOpenedFiles().map {
+        return getOpenedFiles().first.map {
             it.saveChange()
         }.filter { !it }.size > 1
     }
@@ -136,15 +138,14 @@ class Project(
         return ProjectFile(path, this).saveChange()
     }
 
-    override fun closeOpenedFile(path: String) {
-        val table = projectManager.globalLuaJVM.loadFile(getOpenedFile().absolutePath)
-        (1..table.keyCount()).forEach {
-            if (table[it].tojstring() == path) {
-                table.remove(it)
-                return@forEach
-            }
+    override fun closeOpenedFile(path: String, nowOpenedFile: String) {
+        getOpenedFileBean()?.let { bean ->
+            bean.openedFiles.remove(path)
+            val nowOpenFilePath = getAbsoluteFile(nowOpenedFile)
+            bean.nowOpenFile = nowOpenFilePath
+            saveOpenedFile(bean)
         }
-        getOpenedFile().writeText(formatOpenFile(table))
+
     }
 
     override fun backup(exportOutputStream: OutputStream): Boolean {
@@ -172,6 +173,12 @@ class Project(
             return arrayOfNulls(size)
         }
     }
+
+
+    data class OpenedFilesBean(
+        var nowOpenFile: String,
+        val openedFiles: MutableList<String>
+    )
 
 
 }

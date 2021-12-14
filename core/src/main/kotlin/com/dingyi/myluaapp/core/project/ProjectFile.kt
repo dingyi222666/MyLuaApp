@@ -6,6 +6,7 @@ import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.common.kts.toMD5
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import java.io.InputStream
 import java.io.OutputStream
 import kotlin.properties.Delegates
 
@@ -26,6 +27,7 @@ class ProjectFile(
             if (!exists()) {
                 parentFile?.mkdirs()
                 createNewFile()
+                writeText("{\"caches\":[]}")
             }
         }
 
@@ -78,6 +80,15 @@ class ProjectFile(
     }
 
 
+    fun readText(): String {
+        return getInputStream().readBytes().decodeToString()
+    }
+
+    private fun getInputStream(): InputStream {
+        return getLocalHistory().caches.getOrNull(0)?.run {
+            this.path.toFile().inputStream()
+        } ?: path.toFile().inputStream()
+    }
 
     override fun equals(other: Any?): Boolean {
         if (other is ProjectFile) {
@@ -116,13 +127,19 @@ class ProjectFile(
 
 
         fun save(outputStream: OutputStream) {
-
+            outputStream.use {
+                it.writer().apply { write(Gson().toJson(this)) }.close()
+            }
         }
 
     }
 
     fun deleteFile() {
-
+        getLocalHistory().caches.forEach {
+            it.delete()
+        }
+        virtualFile.delete()
+        path.toFile().delete()
     }
 
     override fun toString(): String {

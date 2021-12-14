@@ -41,6 +41,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
 
         viewModel = ViewModelProvider(this)[getViewModelClass()]
 
+
         observeViewModel()
 
     }
