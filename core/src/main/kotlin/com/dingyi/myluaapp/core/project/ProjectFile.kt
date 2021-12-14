@@ -76,19 +76,15 @@ class ProjectFile(
             cache.caches[0].copyTo(path)
             change = false
         }.isSuccess
-
     }
 
 
     fun readText(): String {
-        return getInputStream().readBytes().decodeToString()
+        return getLocalHistory().caches.getOrNull(0)?.run {
+            readText()
+        } ?: path.toFile().readText()
     }
 
-    private fun getInputStream(): InputStream {
-        return getLocalHistory().caches.getOrNull(0)?.run {
-            this.path.toFile().inputStream()
-        } ?: path.toFile().inputStream()
-    }
 
     override fun equals(other: Any?): Boolean {
         if (other is ProjectFile) {
@@ -123,26 +119,41 @@ class ProjectFile(
             fun copyTo(targetPath: String) {
                 path.toFile().copyTo(targetPath.toFile(), true)
             }
+
+
         }
 
 
         fun save(outputStream: OutputStream) {
             outputStream.use {
-                it.writer().apply { write(Gson().toJson(this)) }.close()
+                it.write(Gson().toJson(this).encodeToByteArray())
+            }
+        }
+
+        fun delete() {
+            caches.forEach {
+                it.delete()
             }
         }
 
     }
 
     fun deleteFile() {
-        getLocalHistory().caches.forEach {
-            it.delete()
-        }
+        getLocalHistory().delete()
         virtualFile.delete()
         path.toFile().delete()
     }
 
     override fun toString(): String {
         return "ProjectFile(path='$path', project=$project, file=$file, virtualFile=$virtualFile, change=$change)"
+    }
+
+    override fun hashCode(): Int {
+        var result = path.hashCode()
+        result = 31 * result + project.hashCode()
+        result = 31 * result + file.hashCode()
+        result = 31 * result + virtualFile.hashCode()
+        result = 31 * result + change.hashCode()
+        return result
     }
 }

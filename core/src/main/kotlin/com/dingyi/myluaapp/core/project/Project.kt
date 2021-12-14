@@ -27,7 +27,7 @@ class Project(
     data class AppProject(
         val appPackageName: String,
         val appName: String,
-        val iconPath: String,
+        var iconPath: String,
         var path: String = ""
     )
 
@@ -50,7 +50,8 @@ class Project(
                 "$projectPath/.MyLuaApp/.config.json".toFile().reader(),
                 getJavaClass<AppProject>()
             ).apply {
-                this.path = projectPath
+                iconPath = "$projectPath/$iconPath"
+                path = projectPath
             }
         }.onFailure {
             it.printStackTrace()
@@ -117,7 +118,7 @@ class Project(
         }.getOrNull()
     }
 
-    override fun getOpenedFiles(): Pair<List<ProjectFile>,String> {
+    override fun getOpenedFiles(): Pair<List<ProjectFile>, String> {
 
         val bean = getOpenedFileBean()
 
