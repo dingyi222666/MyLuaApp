@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.preference.PreferenceManager
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.core.project.ProjectFile
@@ -60,14 +61,26 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
         super.onViewCreated(view, savedInstanceState)
 
 
+        initEditor()
+
         lifecycleScope.launch {
             viewBinding.codeEditor.setText(
                 withContext(Dispatchers.IO) { getProjectFile().readText() })
         }
 
+
+
+    }
+
+    private fun initEditor() {
+
+        viewBinding.codeEditor.apply {
+            isMagnifierEnabled = PreferenceManager.getDefaultSharedPreferences(requireActivity()).getBoolean(
+                "magnifier_set",true
+            )
+        }
+
         addCodeEditorListener()
-
-
     }
 
     private fun getProjectFile(): ProjectFile {

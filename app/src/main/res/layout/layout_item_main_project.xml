@@ -19,7 +19,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/app_name"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
-
+        android:transitionName="project_name_transition"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

@@ -3,13 +3,19 @@ package com.dingyi.myluaapp.ui.editior.activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
+import com.dingyi.myluaapp.common.kts.addLayoutTransition
 import com.dingyi.myluaapp.common.kts.convertObject
 import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.kts.getPrivateField
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.ui.editior.MainViewModel
 import com.dingyi.myluaapp.ui.editior.adapter.EditorPagerAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
@@ -29,8 +35,10 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        //先不启用过渡动画
+        postponeEnterTransition()
 
+        super.onCreate(savedInstanceState)
 
         viewModel.initProjectController(intent.getStringExtra("project_path") ?: "")
 
@@ -38,9 +46,30 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         setSupportActionBar(viewBinding.toolbar)
 
-        viewModel.refreshOpenedFile()
+        //反射获取控件和启用过渡动画
+        viewBinding.toolbar.getPrivateField<TextView>("mTitleTextView").transitionName =
+            "project_name_transition"
+
+        startPostponedEnterTransition()
 
         viewModel.controller.project.openFile("build.gradle.lua")
+
+        viewModel.refreshOpenedFile()
+
+
+        lifecycleScope.launch {
+
+            viewModel.controller.project.closeOpenedFile("build.gradle.lua", "")
+
+            viewModel.refreshOpenedFile()
+
+            delay(6000)
+
+            viewModel.controller.project.openFile("build.gradle.lua")
+
+            viewModel.refreshOpenedFile()
+
+        }
 
 
     }
@@ -49,6 +78,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     private fun initView() {
         viewBinding.editorTab.project = viewModel.controller.project
         viewBinding.editorPage.adapter = EditorPagerAdapter(this, viewModel)
+        listOf(viewBinding.container).forEach { it.addLayoutTransition() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

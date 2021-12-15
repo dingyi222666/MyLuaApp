@@ -141,7 +141,8 @@ class Project(
 
     override fun closeOpenedFile(path: String, nowOpenedFile: String) {
         getOpenedFileBean()?.let { bean ->
-            bean.openedFiles.remove(path)
+            bean.openedFiles.remove(getAbsoluteFile(path))
+            println(bean.openedFiles)
             val nowOpenFilePath = getAbsoluteFile(nowOpenedFile)
             bean.nowOpenFile = nowOpenFilePath
             saveOpenedFile(bean)

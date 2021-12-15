@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.base
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import com.dingyi.myluaapp.R
+import com.dingyi.myluaapp.common.kts.getString
+import com.dingyi.myluaapp.common.kts.showSnackBar
 import com.hjq.language.MultiLanguages
 
 /**
@@ -17,6 +21,8 @@ import com.hjq.language.MultiLanguages
  * @description:
  **/
 abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
+
+
 
 
     protected lateinit var viewBinding: V
@@ -42,8 +48,6 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
     }
 
 
-
-
     private fun getViewBindingImp(inflater: LayoutInflater, container: ViewGroup?): V {
         if (!this::viewBinding.isInitialized) {
             viewBinding = getViewBindingInstance(inflater, container)
@@ -62,5 +66,9 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
             return null
         }
     }
+
+
+
+
 
 }

@@ -64,6 +64,8 @@
     <string name="settings_editor_font_toast_successful">选择字体成功</string>
     <string name="settings_editor_font_toast_fail">选择字体失败</string>
     <string name="settings_editor_language_restart_toast">重启后生效</string>
+    <string name="settings_editor_magnifier_summary">在拖动选择文本时放大临近内容</string>
+    <string name="settings_editor_magnifier_category">放大镜</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>

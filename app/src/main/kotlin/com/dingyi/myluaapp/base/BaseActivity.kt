@@ -69,7 +69,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         return when (keyCode) {
-            KeyEvent.KEYCODE_BACK -> {
+            KeyEvent.KEYCODE_BACK,KeyEvent.KEYCODE_ESCAPE -> {
                 if (System.currentTimeMillis() - lastBackTime > 2000) {
                     R.string.toast_exit_app
                         .getString()
@@ -77,6 +77,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
                     lastBackTime = System.currentTimeMillis()
                     true
                 } else {
+                    finish()
                     super.onKeyUp(keyCode, event)
                 }
             }

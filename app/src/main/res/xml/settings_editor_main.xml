@@ -9,8 +9,15 @@
     <PreferenceCategory android:title="@string/settings_editor_appearance_category">
         <Preference
             android:key="font_set"
+            android:icon="@drawable/ic_twotone_translate_24"
             android:summary="@string/settings_editor_font_summary"
             android:title="@string/settings_editor_font_category" />
+        <SwitchPreference
+            android:icon="@drawable/ic_twotone_search_24"
+            android:key="magnifier_set"
+            android:defaultValue="true"
+            android:summary="@string/settings_editor_magnifier_summary"
+            android:title="@string/settings_editor_magnifier_category" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_editor_other_category">
         <Preference

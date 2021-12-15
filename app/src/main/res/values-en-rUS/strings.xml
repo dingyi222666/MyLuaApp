@@ -7,7 +7,7 @@
     <string name="main_project_list_config_error">Find Project Configuration Error, please try to fix it manually</string>
     <string name="settings">Settings</string>
     <string name="help">Help</string>
-    <string name="about">About</string>
+   <string name="about">About</string>
     <string name="imports">Import Project</string>
     <string name="new_project_base_info">Base info</string>
     <string name="new_project_app_name_hint">AppName</string>
@@ -64,6 +64,9 @@
     <string name="settings_editor_font_toast_successful">Choose Font Successful</string>
     <string name="settings_editor_font_toast_fail">Choose Font fail</string>
     <string name="settings_editor_language_restart_toast">Take effect after restart</string>
+    <string name="settings_editor_magnifier_category">Magnifier</string>
+    <string name="settings_editor_magnifier_summary">Zoom in on adjacent content while dragging selected text</string>
+
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>
