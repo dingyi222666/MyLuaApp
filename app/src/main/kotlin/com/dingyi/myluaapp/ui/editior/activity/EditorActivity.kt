@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.addLayoutTransition
+import com.dingyi.myluaapp.common.kts.addDrawerListener
 import com.dingyi.myluaapp.common.kts.convertObject
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.getPrivateField
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.ui.editior.MainViewModel
+import com.dingyi.myluaapp.ui.editior.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editior.adapter.EditorPagerAdapter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -42,9 +45,10 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         viewModel.initProjectController(intent.getStringExtra("project_path") ?: "")
 
+        setSupportActionBar(viewBinding.toolbar)
+
         initView()
 
-        setSupportActionBar(viewBinding.toolbar)
 
         //反射获取控件和启用过渡动画
         viewBinding.toolbar.getPrivateField<TextView>("mTitleTextView").transitionName =
@@ -57,28 +61,36 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         viewModel.refreshOpenedFile()
 
 
-        lifecycleScope.launch {
-
-            viewModel.controller.project.closeOpenedFile("build.gradle.lua", "")
-
-            viewModel.refreshOpenedFile()
-
-            delay(6000)
-
-            viewModel.controller.project.openFile("build.gradle.lua")
-
-            viewModel.refreshOpenedFile()
-
-        }
-
-
     }
 
 
     private fun initView() {
         viewBinding.editorTab.project = viewModel.controller.project
         viewBinding.editorPage.adapter = EditorPagerAdapter(this, viewModel)
+        viewBinding.drawerPage.adapter = EditorDrawerPagerAdapter(this).apply {
+            notifyDataSetChanged()
+        }
+
         listOf(viewBinding.container).forEach { it.addLayoutTransition() }
+
+        supportActionBar?.let { actionBar ->
+            viewBinding.editorTab.bindActionBar(actionBar)
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            val toggle = ActionBarDrawerToggle(this, viewBinding.drawer, viewBinding.toolbar, 0, 0)
+
+            viewBinding.drawer.addDrawerListener(toggle)
+            toggle.syncState()
+        }
+        viewBinding.drawer.apply {
+            setScrimColor(0)
+            drawerElevation = 0f
+            addDrawerListener(
+                onDrawerSlide = { _, slideOffset ->
+                    viewBinding.main.x = viewBinding.drawerPage.width * slideOffset
+                }
+            )
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -87,7 +99,6 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     }
 
     override fun observeViewModel() {
-
 
         viewModel.appTitle.observe(this) {
             supportActionBar?.title = it
@@ -99,10 +110,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             val visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
             viewBinding.editorPage.visibility = visibility
             viewBinding.editorTab.visibility = visibility
-            if (list.isNotEmpty()) viewBinding.editorTab.postOpenedFiles(list)
+            if (list.isNotEmpty()) viewBinding.editorTab.postOpenedFiles(it.first, it.second)
             viewBinding.editorPage.adapter?.notifyDataSetChanged()
         }
-
 
     }
 }

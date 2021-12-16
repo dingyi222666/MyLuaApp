@@ -1,10 +1,13 @@
 package com.dingyi.myluaapp.view
 
+
 import android.content.Context
 import android.util.AttributeSet
+import androidx.appcompat.app.ActionBar
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
+import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.core.project.Project
 import com.dingyi.myluaapp.core.project.ProjectFile
 import com.google.android.material.tabs.TabLayout
@@ -17,7 +20,9 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
 
     private var oldOpenedFileList = listOf<ProjectFile>()
 
-    fun postOpenedFiles(list: List<ProjectFile>) {
+    private var actionBar by Delegates.notNull<ActionBar>()
+
+    fun postOpenedFiles(list: List<ProjectFile>,nowOpenedFile:String) {
 
         DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
@@ -62,10 +67,16 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
 
         oldOpenedFileList = list
 
+        actionBar.subtitle = nowOpenedFile.toFile().name
+
     }
 
     private fun getTabText(projectFile: ProjectFile): String {
         return projectFile.path.substring(project.projectPath.length+1)
+    }
+
+    fun bindActionBar(actionBar: ActionBar) {
+        this.actionBar = actionBar
     }
 
     private fun generateTab(text:String): Tab {

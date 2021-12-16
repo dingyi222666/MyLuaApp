@@ -92,6 +92,12 @@ class Project(
         }
     }
 
+    fun selectOpenedFile(nowOpenFile: String) {
+        getOpenedFileBean()?.apply {
+            this.nowOpenFile = nowOpenFile
+        }?.let { saveOpenedFile(it) }
+    }
+
     private fun getOpenedFile(): File {
         val path = "$projectPath/.MyLuaApp/opened_files.json"
         val file = path.toFile()
