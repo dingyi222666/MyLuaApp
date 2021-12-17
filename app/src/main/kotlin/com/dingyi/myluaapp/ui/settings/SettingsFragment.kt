@@ -16,6 +16,7 @@ import com.hjq.language.MultiLanguages
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.concurrent.thread
 
 
 /**
@@ -73,10 +74,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
 
         if (restart) {
-            requireActivity().lifecycleScope.launch {
-                R.string.settings_editor_language_restart_toast.getString().showToast()
-                delay(200)
+            //就算退出了也会运行
+            thread {
+                requireActivity().runOnUiThread {
+                    R.string.settings_editor_language_restart_toast.getString().showToast()
+                }
+                Thread.sleep(200)
                 requireActivity().restartApp()
+
             }
         }
     }

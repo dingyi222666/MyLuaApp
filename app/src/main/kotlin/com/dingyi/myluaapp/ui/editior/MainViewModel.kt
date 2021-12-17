@@ -1,12 +1,15 @@
 package com.dingyi.myluaapp.ui.editior
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.dingyi.myluaapp.core.project.ProjectController
 import com.dingyi.myluaapp.core.project.ProjectFile
-import kotlin.properties.Delegates
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.withContext
+import kotlin.properties.Delegates
 
 /**
  * @author: dingyi
@@ -19,10 +22,10 @@ class MainViewModel: ViewModel() {
 
     private val _appTitle = MutableLiveData("")
     private val _openFiles = MutableLiveData<Pair<List<ProjectFile>,String>>()
-    private val _nowOpenFile = MutableLiveData("")
-
+    private val _openedDir = MutableLiveData<String>()
     val openFiles = _openFiles.map { it }
     val appTitle = _appTitle.map { it }
+    val openedDir = _openedDir.map { it }
 
     fun initProjectController(projectPath:String) {
         controller = ProjectController(projectPath)
@@ -30,9 +33,15 @@ class MainViewModel: ViewModel() {
         _appTitle.value = controller.getProjectName()
 
 
-
     }
 
+    fun refreshOpenedDir() {
+        viewModelScope.launch {
+            val path =
+                withContext(Dispatchers.Default) { controller.project.getNowOpenedDir() }
+            _openedDir.postValue(path)
+        }
+    }
 
     fun refreshOpenedFile() {
         viewModelScope.launch {

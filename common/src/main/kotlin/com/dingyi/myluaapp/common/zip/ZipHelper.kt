@@ -75,7 +75,7 @@ object ZipHelper {
                     unSingleZipFile(
                         zipPath,
                         inZipPath,
-                        "${toPath(inZipPath)}/${inZipPath.substring(filterPrefix.lastIndex)}"
+                        "${toPath(inZipPath)}${inZipPath.substring(filterPrefix.lastIndex)}"
                     )
                     block(inZipPath)
                 }

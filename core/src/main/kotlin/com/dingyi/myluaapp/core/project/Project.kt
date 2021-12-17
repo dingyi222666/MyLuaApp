@@ -77,7 +77,7 @@ class Project(
 
     private fun getAbsoluteFile(path: String): String {
         var path = path
-        if (!path.toFile().exists()) {
+        if (!path.toFile().exists() || path == "") {
             path = "$projectPath/$path"
             if (!path.toFile().exists()) throw FileNotFoundException("Not Found File.")
             return path
@@ -90,6 +90,16 @@ class Project(
         gson.toJson(bean).apply {
             getOpenedFile().writeText(this)
         }
+    }
+
+    fun postNowOpenedDir(nowOpenedDir: String) {
+        getOpenedFileBean()?.apply {
+            this.nowOpenedDir = nowOpenedDir
+        }?.let { saveOpenedFile(it) }
+    }
+
+    fun getNowOpenedDir():String {
+        return getOpenedFileBean()?.nowOpenedDir ?: getAbsoluteFile("")
     }
 
     fun selectOpenedFile(nowOpenFile: String) {
@@ -106,7 +116,8 @@ class Project(
                 """
                     {
                       openedFiles = [],
-                      nowOpenFile = ""
+                      nowOpenFile = "",
+                      nowOpenedDir = ""
                     }
                 """.trimIndent()
             )
@@ -120,8 +131,14 @@ class Project(
             gson.fromJson(
                 getOpenedFile().reader(),
                 getJavaClass<OpenedFilesBean>()
-            )
-        }.getOrNull()
+            )?.apply {
+                nowOpenedDir = getAbsoluteFile(nowOpenedDir)
+                println(nowOpenedDir)
+            }
+        }.onFailure {
+            it.printStackTrace(System.out)
+        }
+            .getOrNull()
     }
 
     override fun getOpenedFiles(): Pair<List<ProjectFile>, String> {
@@ -134,6 +151,7 @@ class Project(
         }
         return result to (bean?.nowOpenFile ?: "")
     }
+
 
     override fun saveAllOpenedFile(): Boolean {
         return getOpenedFiles().first.map {
@@ -185,7 +203,8 @@ class Project(
 
     data class OpenedFilesBean(
         var nowOpenFile: String,
-        val openedFiles: MutableList<String>
+        val openedFiles: MutableList<String>,
+        var nowOpenedDir: String
     )
 
 

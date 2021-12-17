@@ -1,10 +1,14 @@
 package com.dingyi.myluaapp.ui.editior.activity
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
@@ -89,6 +93,15 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                     viewBinding.main.x = viewBinding.drawerPage.width * slideOffset
                 }
             )
+            addDrawerListener(
+                onDrawerClosed = {
+                    setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                },
+                onDrawerOpened = {
+                    setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                    setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN)
+                }
+            )
         }
 
     }
@@ -96,6 +109,21 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.editor_toolbar, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                viewBinding.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNDEFINED)
+                if (viewBinding.drawer.isDrawerOpen(GravityCompat.START)) {
+                    viewBinding.drawer.closeDrawers()
+                } else {
+                    viewBinding.drawer.openDrawer(GravityCompat.START)
+                }
+                false
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun observeViewModel() {
