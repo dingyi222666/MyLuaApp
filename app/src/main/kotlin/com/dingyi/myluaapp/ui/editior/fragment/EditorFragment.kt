@@ -86,7 +86,7 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
     private fun getProjectFile(): ProjectFile {
         return projectFile?.get() ?: ProjectFile(
             arguments?.getString("editor_page_path", "") ?: "",
-            viewModel.controller.project
+            viewModel.controller.getProjectFile()
         ).apply {
             //被回收的话就重新给一个值
             projectFile = WeakReference(this)

@@ -48,9 +48,13 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
 
 
             bindTitleView(viewBinding.title)
-            projectPath = viewModel.controller.project.projectPath
+            projectPath = viewModel.controller.projectPath
             onEnterFile {
-                viewModel.controller.project.postNowOpenedDir(it)
+                viewModel.controller.postNowOpenedDir(it)
+            }
+            onClickFile {
+                viewModel.controller.openFile(it)
+                viewModel.refreshOpenedFile()
             }
             onEnterDir {
                 this@EditorFileListFragment.loadFileList(it)

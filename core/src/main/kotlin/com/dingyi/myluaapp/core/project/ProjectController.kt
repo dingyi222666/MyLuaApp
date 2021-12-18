@@ -11,9 +11,10 @@ import kotlinx.coroutines.withContext
  * @date: 2021/11/16 17:27
  * @description:
  **/
-class ProjectController(private val path: String) {
+class ProjectController(val projectPath: String) {
 
-    val project = Project(path)
+
+    private val project = Project(projectPath)
 
 
     fun getProjectName(): String {
@@ -21,11 +22,23 @@ class ProjectController(private val path: String) {
 
     }
 
-
-
     suspend fun getOpenedFile() = withContext(Dispatchers.Default) {
         project.getOpenedFiles()
     }
+
+    fun selectOpenedFile(it: String) {
+        project.selectOpenedFile(it)
+    }
+
+    fun getProjectFile(): Project {
+        return project
+    }
+
+    val getNowOpenedDir = project::getNowOpenedDir
+
+
+    val openFile = project::openFile
+    val postNowOpenedDir = project::postNowOpenedDir
 
 
 }

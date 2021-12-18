@@ -1,10 +1,7 @@
 package com.dingyi.myluaapp.ui.editior.activity
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -21,6 +18,7 @@ import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.ui.editior.MainViewModel
 import com.dingyi.myluaapp.ui.editior.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editior.adapter.EditorPagerAdapter
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -60,7 +58,6 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         startPostponedEnterTransition()
 
-        viewModel.controller.project.openFile("build.gradle.lua")
 
         viewModel.refreshOpenedFile()
 
@@ -69,18 +66,27 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
 
     private fun initView() {
-        viewBinding.editorTab.project = viewModel.controller.project
+
         viewBinding.editorPage.adapter = EditorPagerAdapter(this, viewModel)
         viewBinding.drawerPage.adapter = EditorDrawerPagerAdapter(this).apply {
             notifyDataSetChanged()
         }
+
+        viewBinding.editorTab.apply {
+            bindEditorPager(viewBinding.editorPage)
+            projectPath = viewModel.controller.projectPath
+            onSelectFile {
+                viewModel.controller.selectOpenedFile(it)
+            }
+        }
+
 
         listOf(viewBinding.container).forEach { it.addLayoutTransition() }
 
         supportActionBar?.let { actionBar ->
             viewBinding.editorTab.bindActionBar(actionBar)
             actionBar.setDisplayHomeAsUpEnabled(true)
-            val toggle = ActionBarDrawerToggle(this, viewBinding.drawer, viewBinding.toolbar, 0, 0)
+            val toggle = ActionBarDrawerToggle(this, viewBinding.drawer, 0, 0)
 
             viewBinding.drawer.addDrawerListener(toggle)
             toggle.syncState()
@@ -89,17 +95,15 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             setScrimColor(0)
             drawerElevation = 0f
             addDrawerListener(
-                onDrawerSlide = { _, slideOffset ->
-                    viewBinding.main.x = viewBinding.drawerPage.width * slideOffset
-                }
-            )
-            addDrawerListener(
                 onDrawerClosed = {
                     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                 },
                 onDrawerOpened = {
                     setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                     setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN)
+                },
+                onDrawerSlide = { _, slideOffset ->
+                    viewBinding.main.x = viewBinding.drawerPage.width * slideOffset
                 }
             )
         }
@@ -112,18 +116,17 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+        when (item.itemId) {
             android.R.id.home -> {
-                viewBinding.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNDEFINED)
-                if (viewBinding.drawer.isDrawerOpen(GravityCompat.START)) {
-                    viewBinding.drawer.closeDrawers()
-                } else {
-                    viewBinding.drawer.openDrawer(GravityCompat.START)
+                viewBinding.drawer.apply {
+                    if (isDrawerOpen(GravityCompat.START))
+                        closeDrawer(GravityCompat.START)
+                    else
+                        openDrawer(GravityCompat.START)
                 }
-                false
             }
-            else -> super.onOptionsItemSelected(item)
         }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun observeViewModel() {
@@ -138,9 +141,26 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             val visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
             viewBinding.editorPage.visibility = visibility
             viewBinding.editorTab.visibility = visibility
+            viewBinding.editorToastOpenFile.visibility =
+                if (list.isEmpty()) View.VISIBLE else View.GONE
             if (list.isNotEmpty()) viewBinding.editorTab.postOpenedFiles(it.first, it.second)
             viewBinding.editorPage.adapter?.notifyDataSetChanged()
         }
 
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        return when (keyCode) {
+            KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
+                when {
+                    (viewBinding.drawer.isDrawerOpen(GravityCompat.START)) -> {
+                        viewBinding.drawer.closeDrawers()
+                        true
+                    }
+                    else -> super.onKeyUp(keyCode, event)
+                }
+            }
+            else -> super.onKeyUp(keyCode, event)
+        }
     }
 }

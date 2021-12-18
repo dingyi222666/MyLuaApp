@@ -38,7 +38,7 @@ class MainViewModel: ViewModel() {
     fun refreshOpenedDir() {
         viewModelScope.launch {
             val path =
-                withContext(Dispatchers.Default) { controller.project.getNowOpenedDir() }
+                withContext(Dispatchers.Default) { controller.getNowOpenedDir() }
             _openedDir.postValue(path)
         }
     }

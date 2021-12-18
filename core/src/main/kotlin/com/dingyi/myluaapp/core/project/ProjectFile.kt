@@ -149,11 +149,6 @@ class ProjectFile(
     }
 
     override fun hashCode(): Int {
-        var result = path.hashCode()
-        result = 31 * result + project.hashCode()
-        result = 31 * result + file.hashCode()
-        result = 31 * result + virtualFile.hashCode()
-        result = 31 * result + change.hashCode()
-        return result
+        return path.hashCode()
     }
 }

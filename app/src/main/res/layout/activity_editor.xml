@@ -74,6 +74,16 @@
                     android:visibility="gone"
                     app:layout_constraintBottom_toTopOf="@id/symbolView" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/editor_toast_open_file"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:text="@string/editor_toast_no_open_file"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/symbolView"
                     android:layout_width="match_parent"
@@ -100,7 +110,7 @@
                     android:background="?theme_backgroundColor"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintHorizontal_bias="0"
-                    app:layout_constraintWidth_percent="0.8" />
+                    app:layout_constraintWidth_percent="0.9" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -22,6 +22,7 @@
     <string name="new_project_app_package_text">com.MyLuaApp.application</string>
     <string name="permission_request_sdcard">MyLuaApp needs storage permissions for opening and editing projects</string>
     <string name="permission_request_sdcard_denied">Storage permissions are required permissions, otherwise they will be unavailable</string>
+    <string name="editor_toast_no_open_file">No Open File</string>
     <string name="editor_menu_run">Run</string>
     <string name="editor_menu_undo">Undo</string>
     <string name="editor_action_save">Save</string>
