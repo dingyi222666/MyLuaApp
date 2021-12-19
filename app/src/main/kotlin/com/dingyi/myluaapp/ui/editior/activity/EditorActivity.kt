@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.ui.editior.activity
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -51,10 +52,14 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         initView()
 
-
         //反射获取控件和启用过渡动画
-        viewBinding.toolbar.getPrivateField<TextView>("mTitleTextView").transitionName =
-            "project_name_transition"
+        viewBinding.toolbar.getPrivateField<TextView>("mTitleTextView").apply {
+            transitionName =
+                "project_name_transition"
+
+            ellipsize = TextUtils.TruncateAt.END
+
+        }
 
         startPostponedEnterTransition()
 
@@ -71,6 +76,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         viewBinding.drawerPage.adapter = EditorDrawerPagerAdapter(this).apply {
             notifyDataSetChanged()
         }
+        viewBinding.editorPage.offscreenPageLimit = 2
 
         viewBinding.editorTab.apply {
             bindEditorPager(viewBinding.editorPage)
@@ -133,17 +139,17 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         viewModel.appTitle.observe(this) {
             supportActionBar?.title = it
-
         }
 
-        viewModel.openFiles.observe(this) {
-            val list = it.first
+        viewModel.openFiles.observe(this) { pair ->
+            val list = pair.first
             val visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
-            viewBinding.editorPage.visibility = visibility
-            viewBinding.editorTab.visibility = visibility
+            arrayOf(viewBinding.editorPage, viewBinding.editorTab).forEach {
+                it.visibility = visibility
+            }
             viewBinding.editorToastOpenFile.visibility =
                 if (list.isEmpty()) View.VISIBLE else View.GONE
-            if (list.isNotEmpty()) viewBinding.editorTab.postOpenedFiles(it.first, it.second)
+            if (list.isNotEmpty()) viewBinding.editorTab.postOpenedFiles(list, pair.second)
             viewBinding.editorPage.adapter?.notifyDataSetChanged()
         }
 

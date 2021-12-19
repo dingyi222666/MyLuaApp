@@ -77,7 +77,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
                     lastBackTime = System.currentTimeMillis()
                     true
                 } else {
-                    finish()
+                    finishAfterTransition()
                     super.onKeyUp(keyCode, event)
                 }
             }

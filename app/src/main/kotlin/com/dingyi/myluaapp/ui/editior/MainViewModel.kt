@@ -29,9 +29,7 @@ class MainViewModel: ViewModel() {
 
     fun initProjectController(projectPath:String) {
         controller = ProjectController(projectPath)
-
         _appTitle.value = controller.getProjectName()
-
 
     }
 

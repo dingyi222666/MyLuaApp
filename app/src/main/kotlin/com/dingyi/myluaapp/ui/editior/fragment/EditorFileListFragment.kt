@@ -1,9 +1,11 @@
 package com.dingyi.myluaapp.ui.editior.fragment
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
@@ -45,8 +47,6 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
 
     private fun initView() {
         viewBinding.list.apply {
-
-
             bindTitleView(viewBinding.title)
             projectPath = viewModel.controller.projectPath
             onEnterFile {
@@ -60,6 +60,9 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
                 this@EditorFileListFragment.loadFileList(it)
             }
         }
+
+
+
         viewBinding.refresh.apply {
             setOnRefreshListener {
                 refreshFileList()

@@ -2,18 +2,22 @@ package com.dingyi.myluaapp.view
 
 
 import android.content.Context
+import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.PopupMenu
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.viewpager2.widget.ViewPager2
+import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.core.project.Project
 import com.dingyi.myluaapp.core.project.ProjectController
 import com.dingyi.myluaapp.core.project.ProjectFile
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlin.properties.Delegates
 
 class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(context, attrs) {
@@ -21,17 +25,24 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
 
     var projectPath = ""
 
-    private var editorPage by Delegates.notNull<ViewPager2>()
+    private var editorPage: ViewPager2? = null
 
     private var oldOpenedFileList = listOf<ProjectFile>()
 
     private var actionBar by Delegates.notNull<ActionBar>()
 
-    private var onSelectFileCallback: (String) -> Unit = {}
+    private val viewPagerCallback = ViewPagerCallback()
 
     val onSelectFile = { callback: (String) -> Unit ->
-        onSelectFileCallback = callback
+        callbackList[0x01] = callback
     }
+
+    val onCloseFile = { callback: (String) -> Unit ->
+        callbackList[0x02] = callback
+    }
+
+    private val callbackList = mutableMapOf<Int,(String) -> Unit>()
+
 
     fun postOpenedFiles(list: List<ProjectFile>, nowOpenedFile: String) {
 
@@ -55,7 +66,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
         }).dispatchUpdatesTo(object : ListUpdateCallback {
             override fun onInserted(position: Int, count: Int) {
                 for (i in position until (position + count)) {
-                    addTab(generateTab(list[i].path.toFile().name), i)
+                    addTab(generateTab(list[i].path.toFile().name), i,false)
                 }
             }
 
@@ -78,19 +89,22 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
 
         })
 
-        oldOpenedFileList = list
 
         println("nowOpenedFile $nowOpenedFile")
 
+        oldOpenedFileList = list
+
         list.forEachIndexed { index, projectFile ->
             if (projectFile.path == nowOpenedFile) {
-                selectTab(getTabAt(index))
+                println("now indexed $index $projectFile ${editorPage?.adapter} ${editorPage?.adapter?.itemCount}")
                 actionBar.subtitle = getTabText(projectFile)
-                editorPage.setCurrentItem(index, true)
-                onSelectFileCallback(projectFile.path)
+                callbackList[0x01]?.invoke(projectFile.path)
+                getTabAt(index)?.select()
+                println("now indexed test ${editorPage?.currentItem}")
                 return
             }
         }
+
 
     }
 
@@ -105,21 +119,25 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
 
     init {
         addOnTabSelectedListener(object : OnTabSelectedListener {
-            override fun onTabSelected(tab: Tab?) {
-                tab?.let { tab ->
+            override fun onTabSelected(selectTab: Tab?) {
+                selectTab?.let { tab ->
                     val index = getTabIndex(tab)
                     if (oldOpenedFileList.isNotEmpty()) {
                         actionBar.subtitle = getTabText(oldOpenedFileList[index])
-                        onSelectFileCallback(oldOpenedFileList[index].path)
+                        callbackList[0x01]?.invoke(oldOpenedFileList[index].path)
+                        //不知道为什么有效
+                        handler.postDelayed( {
+                            editorPage?.currentItem = index
+                        },10)
                     }
-                    editorPage.setCurrentItem(index, true)
                 }
             }
-
             override fun onTabUnselected(tab: Tab?) {}
             override fun onTabReselected(tab: Tab?) {}
         })
     }
+
+
 
     private fun getTabText(projectFile: ProjectFile): String {
         return projectFile.path.substring(projectPath.length + 1)
@@ -132,11 +150,37 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     private fun generateTab(text: String): Tab {
         return newTab().apply {
             this.text = text
+            this.view.setOnLongClickListener {
+                PopupMenu(context, it).apply {
+                    inflate(R.menu.editor_tab)
+                    show()
+                }
+                true
+            }
         }
     }
 
+
+    inner class ViewPagerCallback: ViewPager2.OnPageChangeCallback() {
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+
+            setScrollPosition(position,positionOffset,true,true)
+        }
+
+        override fun onPageSelected(position: Int) {
+            actionBar.subtitle = getTabText(oldOpenedFileList[position])
+        }
+
+    }
+
     fun bindEditorPager(editorPage: ViewPager2) {
+        this.editorPage?.unregisterOnPageChangeCallback(viewPagerCallback)
         this.editorPage = editorPage
+        editorPage.registerOnPageChangeCallback(viewPagerCallback)
     }
 
 

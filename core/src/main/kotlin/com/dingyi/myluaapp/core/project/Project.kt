@@ -69,6 +69,7 @@ class Project(
             nowOpenFile = openFilePath
             if (!openedFiles.contains(openFilePath)) openedFiles.add(openFilePath)
             saveOpenedFile(this)
+            Log.e("openFile","$path $nowOpenFile")
             ProjectFile(openFilePath, this@Project)
         } ?: throw Exception("Open File fail")
 

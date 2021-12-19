@@ -64,8 +64,12 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
         initEditor()
 
         lifecycleScope.launch {
-            viewBinding.codeEditor.setText(
-                withContext(Dispatchers.IO) { getProjectFile().readText() })
+            runCatching {
+                viewBinding.codeEditor.setText(
+                    withContext(Dispatchers.IO) { getProjectFile().readText() })
+            }.onFailure {
+                it.printStackTrace()
+            }
         }
 
 

@@ -11,13 +11,17 @@ class EditorPagerAdapter(fragmentActivity: FragmentActivity, private val viewMod
     FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int {
-        return viewModel.openFiles.value?.run { first.size } ?: 0
+        return viewModel.openFiles.value?.run {
+            println("size ${first.size}")
+            first.size
+        } ?: 0
     }
 
     override fun createFragment(position: Int): Fragment {
         return EditorFragment.newInstance(
             bundle = Bundle().apply {
                 putString("editor_page_path", viewModel.openFiles.value?.run {
+                    println("message $position ${first[position].path}")
                     first[position].path
                 })
             }

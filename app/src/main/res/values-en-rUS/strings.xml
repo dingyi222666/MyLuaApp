@@ -39,6 +39,7 @@
     <string name="editor_menu_tab_save">Save</string>
     <string name="editor_menu_tab_close">Close</string>
     <string name="editor_menu_tab_close_other">Close Other</string>
+    <string name="editor_menu_file_history">Show Edit History</string>
     <string name="editor_navigation_title">Code navigation</string>
     <string name="settings_editor_category">Editor</string>
     <string name="settings_editor_title">Editor</string>
