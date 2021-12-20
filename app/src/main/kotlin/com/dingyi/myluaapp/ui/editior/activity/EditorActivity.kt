@@ -84,6 +84,16 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             onSelectFile {
                 viewModel.controller.selectOpenedFile(it)
             }
+            onCloseFile {
+                viewModel.controller.closeFile(it.first, it.second)
+                viewModel.refreshOpenedFile()
+            }
+            onCloseOtherFile {
+                viewModel.controller.closeOtherFile(it)
+                //清空下
+
+                viewModel.refreshOpenedFile()
+            }
         }
 
 
@@ -143,6 +153,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         viewModel.openFiles.observe(this) { pair ->
             val list = pair.first
+
             val visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
             arrayOf(viewBinding.editorPage, viewBinding.editorTab).forEach {
                 it.visibility = visibility

@@ -68,8 +68,8 @@ class Project(
         return bean?.run {
             nowOpenFile = openFilePath
             if (!openedFiles.contains(openFilePath)) openedFiles.add(openFilePath)
-            saveOpenedFile(this)
-            Log.e("openFile","$path $nowOpenFile")
+            saveOpenedFiles(this)
+            Log.e("openFile", "$path $nowOpenFile")
             ProjectFile(openFilePath, this@Project)
         } ?: throw Exception("Open File fail")
 
@@ -86,7 +86,7 @@ class Project(
         return path
     }
 
-    private fun saveOpenedFile(bean: OpenedFilesBean) {
+    private fun saveOpenedFiles(bean: OpenedFilesBean) {
         Log.d("test", "save bean $bean")
         gson.toJson(bean).apply {
             getOpenedFile().writeText(this)
@@ -96,17 +96,17 @@ class Project(
     fun postNowOpenedDir(nowOpenedDir: String) {
         getOpenedFileBean()?.apply {
             this.nowOpenedDir = nowOpenedDir
-        }?.let { saveOpenedFile(it) }
+        }?.let { saveOpenedFiles(it) }
     }
 
-    fun getNowOpenedDir():String {
+    fun getNowOpenedDir(): String {
         return getOpenedFileBean()?.nowOpenedDir ?: getAbsoluteFile("")
     }
 
     fun selectOpenedFile(nowOpenFile: String) {
         getOpenedFileBean()?.apply {
             this.nowOpenFile = nowOpenFile
-        }?.let { saveOpenedFile(it) }
+        }?.let { saveOpenedFiles(it) }
     }
 
     private fun getOpenedFile(): File {
@@ -167,12 +167,20 @@ class Project(
     override fun closeOpenedFile(path: String, nowOpenedFile: String) {
         getOpenedFileBean()?.let { bean ->
             bean.openedFiles.remove(getAbsoluteFile(path))
-            println(bean.openedFiles)
             val nowOpenFilePath = getAbsoluteFile(nowOpenedFile)
             bean.nowOpenFile = nowOpenFilePath
-            saveOpenedFile(bean)
+            saveOpenedFiles(bean)
         }
 
+    }
+
+    override fun closeOtherOpenedFile(path: String) {
+        getOpenedFileBean()?.let { bean ->
+            bean.openedFiles.clear()
+            bean.openedFiles.add(path)
+            bean.nowOpenFile = path
+            saveOpenedFiles(bean)
+        }
     }
 
     override fun backup(exportOutputStream: OutputStream): Boolean {

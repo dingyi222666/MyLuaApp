@@ -34,8 +34,11 @@ class ProjectController(val projectPath: String) {
         return project
     }
 
+    val closeOtherFile = project::closeOtherOpenedFile
+
     val getNowOpenedDir = project::getNowOpenedDir
 
+    val closeFile = project::closeOpenedFile
 
     val openFile = project::openFile
     val postNowOpenedDir = project::postNowOpenedDir

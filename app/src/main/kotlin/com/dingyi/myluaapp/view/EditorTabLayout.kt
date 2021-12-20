@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.viewpager2.widget.ViewPager2
 import com.dingyi.myluaapp.R
+import com.dingyi.myluaapp.common.kts.convertObject
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.core.project.Project
 import com.dingyi.myluaapp.core.project.ProjectController
@@ -33,15 +34,21 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
 
     private val viewPagerCallback = ViewPagerCallback()
 
+    private var firstCurrentItem = false
+
     val onSelectFile = { callback: (String) -> Unit ->
         callbackList[0x01] = callback
     }
 
-    val onCloseFile = { callback: (String) -> Unit ->
+    val onCloseFile = { callback: (Pair<String, String>) -> Unit ->
         callbackList[0x02] = callback
     }
 
-    private val callbackList = mutableMapOf<Int,(String) -> Unit>()
+    val onCloseOtherFile = { callback: (String) -> Unit ->
+        callbackList[0x03] = callback
+    }
+
+    private val callbackList = mutableMapOf<Int, Any>()
 
 
     fun postOpenedFiles(list: List<ProjectFile>, nowOpenedFile: String) {
@@ -66,7 +73,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
         }).dispatchUpdatesTo(object : ListUpdateCallback {
             override fun onInserted(position: Int, count: Int) {
                 for (i in position until (position + count)) {
-                    addTab(generateTab(list[i].path.toFile().name), i,false)
+                    addTab(generateTab(list[i].path.toFile().name), i, false)
                 }
             }
 
@@ -84,7 +91,6 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                 for (i in position until (position + count)) {
                     getTabAt(i)?.text = list[i].path.toFile().name
                 }
-
             }
 
         })
@@ -98,7 +104,10 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
             if (projectFile.path == nowOpenedFile) {
                 println("now indexed $index $projectFile ${editorPage?.adapter} ${editorPage?.adapter?.itemCount}")
                 actionBar.subtitle = getTabText(projectFile)
-                callbackList[0x01]?.invoke(projectFile.path)
+                runCatching {
+                    callbackList[0x01]?.convertObject<(String) -> Unit>()
+                        ?.invoke(projectFile.path)
+                }
                 getTabAt(index)?.select()
                 println("now indexed test ${editorPage?.currentItem}")
                 return
@@ -124,19 +133,27 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                     val index = getTabIndex(tab)
                     if (oldOpenedFileList.isNotEmpty()) {
                         actionBar.subtitle = getTabText(oldOpenedFileList[index])
-                        callbackList[0x01]?.invoke(oldOpenedFileList[index].path)
+                        runCatching {
+                            callbackList[0x01]?.convertObject<(String) -> Unit>()
+                                ?.invoke(oldOpenedFileList[index].path)
+                        }
                         //不知道为什么有效
-                        handler.postDelayed( {
-                            editorPage?.currentItem = index
-                        },10)
+                        handler.postDelayed({
+                            if (firstCurrentItem) {
+                                editorPage?.setCurrentItem(index, false)
+                                firstCurrentItem = false
+                            } else {
+                                editorPage?.currentItem = index
+                            }
+                        }, 5)
                     }
                 }
             }
+
             override fun onTabUnselected(tab: Tab?) {}
             override fun onTabReselected(tab: Tab?) {}
         })
     }
-
 
 
     private fun getTabText(projectFile: ProjectFile): String {
@@ -150,10 +167,54 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     private fun generateTab(text: String): Tab {
         return newTab().apply {
             this.text = text
-            this.view.setOnLongClickListener {
-                PopupMenu(context, it).apply {
-                    inflate(R.menu.editor_tab)
-                    show()
+            view.setOnLongClickListener { view ->
+                PopupMenu(context, view).let { menu ->
+                    menu.inflate(R.menu.editor_tab)
+                    menu.show()
+                    menu.setOnMenuItemClickListener {
+                        when (it.itemId) {
+                            R.id.editor_action_close_other -> {
+                                val index = getTabIndex(this)
+                                val deleteProjectFile = oldOpenedFileList[index]
+
+                                runCatching {
+                                    callbackList[0x03]?.convertObject<(String) -> Unit>()
+                                        ?.invoke(
+                                            deleteProjectFile.path
+                                        )
+                                }
+                            }
+                            R.id.editor_action_close -> {
+                                val index = getTabIndex(this)
+                                val deleteProjectFile = oldOpenedFileList[index]
+
+                                val oldOpenedFileList = oldOpenedFileList.toMutableList().apply {
+                                    removeAt(index)
+                                }
+
+                                val selectIndex = selectedTabPosition
+
+                                val targetIndex = if (selectIndex == index) {
+                                    (index - 1).coerceAtLeast(oldOpenedFileList.lastIndex)
+                                } else {
+                                    selectIndex - 1
+                                }
+
+                                println("targetIndex $selectIndex $targetIndex")
+
+                                val projectFile = oldOpenedFileList.getOrNull(targetIndex)
+                                println("projectFile $projectFile")
+                                runCatching {
+                                    callbackList[0x02]?.convertObject<(Pair<String, String>) -> Unit>()
+                                        ?.invoke(
+                                            deleteProjectFile.path to (projectFile?.path ?: "")
+                                        )
+                                }
+
+                            }
+                        }
+                        true
+                    }
                 }
                 true
             }
@@ -161,14 +222,14 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     }
 
 
-    inner class ViewPagerCallback: ViewPager2.OnPageChangeCallback() {
+    inner class ViewPagerCallback : ViewPager2.OnPageChangeCallback() {
         override fun onPageScrolled(
             position: Int,
             positionOffset: Float,
             positionOffsetPixels: Int
         ) {
 
-            setScrollPosition(position,positionOffset,true,true)
+            setScrollPosition(position, positionOffset, true, true)
         }
 
         override fun onPageSelected(position: Int) {
@@ -178,6 +239,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     }
 
     fun bindEditorPager(editorPage: ViewPager2) {
+        firstCurrentItem = true
         this.editorPage?.unregisterOnPageChangeCallback(viewPagerCallback)
         this.editorPage = editorPage
         editorPage.registerOnPageChangeCallback(viewPagerCallback)

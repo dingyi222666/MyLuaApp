@@ -23,7 +23,7 @@ inline fun <reified T> Class<T>.getPrivateField(obj: Any?, name: String): T {
 }
 
 /**
- * Throws an [IllegalStateException] if the [value] is null. Otherwise
+ * Throws an [IllegalStateException] if self is null. Otherwise
  * returns the not null value.
  *
  */

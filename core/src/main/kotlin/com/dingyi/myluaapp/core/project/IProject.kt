@@ -16,4 +16,5 @@ interface IProject {
     fun saveAllOpenedFile():Boolean
     fun saveOpenedFile(path:String): Boolean
     fun closeOpenedFile(path:String,nowOpenedFile:String)
+    fun closeOtherOpenedFile(path: String)
 }
