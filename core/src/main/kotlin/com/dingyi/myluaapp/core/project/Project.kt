@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
 import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.kts.println
 import com.dingyi.myluaapp.common.kts.toFile
 import com.google.gson.Gson
 import java.io.File
@@ -166,6 +167,7 @@ class Project(
 
     override fun closeOpenedFile(path: String, nowOpenedFile: String) {
         getOpenedFileBean()?.let { bean ->
+            println("closePath",path,nowOpenedFile)
             bean.openedFiles.remove(getAbsoluteFile(path))
             val nowOpenFilePath = getAbsoluteFile(nowOpenedFile)
             bean.nowOpenFile = nowOpenFilePath

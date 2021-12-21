@@ -64,6 +64,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         startPostponedEnterTransition()
 
 
+
         viewModel.refreshOpenedFile()
 
 
@@ -91,13 +92,15 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             onCloseOtherFile {
                 viewModel.controller.closeOtherFile(it)
                 //清空下
-
                 viewModel.refreshOpenedFile()
             }
         }
 
 
-        listOf(viewBinding.container).forEach { it.addLayoutTransition() }
+        listOf(viewBinding.container,viewBinding.toolbar).forEach {
+            it.addLayoutTransition() }
+
+
 
         supportActionBar?.let { actionBar ->
             viewBinding.editorTab.bindActionBar(actionBar)
@@ -155,11 +158,18 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             val list = pair.first
 
             val visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
-            arrayOf(viewBinding.editorPage, viewBinding.editorTab).forEach {
+            arrayOf(
+                viewBinding.editorPage,
+                viewBinding.editorTab,
+
+            ).forEach {
                 it.visibility = visibility
             }
             viewBinding.editorToastOpenFile.visibility =
-                if (list.isEmpty()) View.VISIBLE else View.GONE
+                if (list.isEmpty()) {
+                    viewBinding.toolbar.subtitle = ""
+                    View.VISIBLE
+                } else View.GONE
             if (list.isNotEmpty()) viewBinding.editorTab.postOpenedFiles(list, pair.second)
             viewBinding.editorPage.adapter?.notifyDataSetChanged()
         }

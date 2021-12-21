@@ -4,6 +4,7 @@ package com.dingyi.myluaapp.view
 import android.content.Context
 import android.os.SystemClock
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.PopupMenu
@@ -11,8 +12,10 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.convertObject
+import com.dingyi.myluaapp.common.kts.setPrivateField
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.core.project.Project
 import com.dingyi.myluaapp.core.project.ProjectController
@@ -35,6 +38,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     private val viewPagerCallback = ViewPagerCallback()
 
     private var firstCurrentItem = false
+
 
     val onSelectFile = { callback: (String) -> Unit ->
         callbackList[0x01] = callback
@@ -100,6 +104,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
 
         oldOpenedFileList = list
 
+
         list.forEachIndexed { index, projectFile ->
             if (projectFile.path == nowOpenedFile) {
                 println("now indexed $index $projectFile ${editorPage?.adapter} ${editorPage?.adapter?.itemCount}")
@@ -108,8 +113,8 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                     callbackList[0x01]?.convertObject<(String) -> Unit>()
                         ?.invoke(projectFile.path)
                 }
-                getTabAt(index)?.select()
-                println("now indexed test ${editorPage?.currentItem}")
+                println(" tab ${getTabAt(index)?.text} ${getTabAt(index)?.position}")
+                selectTab(getTabAt(index))
                 return
             }
         }
@@ -118,12 +123,20 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     }
 
     private fun getTabIndex(tab: Tab): Int {
-        for (i in 0 until tabCount) {
-            if (getTabAt(i) == tab) {
-                return i
-            }
+        //如果确定位置对 就不用更新tab位置
+        if (getTabAt(tab.position) == tab) {
+            return tab.position
         }
-        return 0
+        //否则就更新一次tab位置
+        for (i in 0 until tabCount) {
+            getTabAt(i)?.setPrivateField<Tab>("position", i)
+            Log.d(
+                "fuck,bug",
+                "name:${getTabAt(i)?.text},nowPosition:${i},tabPosition:${getTabAt(i)?.position}"
+            )
+        }
+        return tab.position
+
     }
 
     init {
@@ -131,6 +144,9 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
             override fun onTabSelected(selectTab: Tab?) {
                 selectTab?.let { tab ->
                     val index = getTabIndex(tab)
+                    Log.d("fuck,bug", "want index $index")
+                    editorPage?.setCurrentItem(index, true)
+
                     if (oldOpenedFileList.isNotEmpty()) {
                         actionBar.subtitle = getTabText(oldOpenedFileList[index])
                         runCatching {
@@ -138,20 +154,15 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                                 ?.invoke(oldOpenedFileList[index].path)
                         }
                         //不知道为什么有效
-                        handler.postDelayed({
-                            if (firstCurrentItem) {
-                                editorPage?.setCurrentItem(index, false)
-                                firstCurrentItem = false
-                            } else {
-                                editorPage?.currentItem = index
-                            }
-                        }, 5)
                     }
+
                 }
             }
 
             override fun onTabUnselected(tab: Tab?) {}
-            override fun onTabReselected(tab: Tab?) {}
+            override fun onTabReselected(tab: Tab?) {
+                this.onTabSelected(tab)
+            }
         })
     }
 
@@ -188,21 +199,17 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                                 val index = getTabIndex(this)
                                 val deleteProjectFile = oldOpenedFileList[index]
 
-                                val oldOpenedFileList = oldOpenedFileList.toMutableList().apply {
+                                val nowOpenedFileList = oldOpenedFileList.toMutableList().apply {
                                     removeAt(index)
                                 }
 
-                                val selectIndex = selectedTabPosition
+                                val targetIndex = 0.coerceAtLeast(
+                                    (selectedTabPosition - 1).coerceAtMost(nowOpenedFileList.size)
+                                )
 
-                                val targetIndex = if (selectIndex == index) {
-                                    (index - 1).coerceAtLeast(oldOpenedFileList.lastIndex)
-                                } else {
-                                    selectIndex - 1
-                                }
+                                println("targetIndex $index $selectedTabPosition $targetIndex")
 
-                                println("targetIndex $selectIndex $targetIndex")
-
-                                val projectFile = oldOpenedFileList.getOrNull(targetIndex)
+                                val projectFile = nowOpenedFileList.getOrNull(targetIndex)
                                 println("projectFile $projectFile")
                                 runCatching {
                                     callbackList[0x02]?.convertObject<(Pair<String, String>) -> Unit>()
@@ -222,20 +229,62 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     }
 
 
-    inner class ViewPagerCallback : ViewPager2.OnPageChangeCallback() {
+    /**
+     * A [ViewPager2.OnPageChangeCallback] class which contains the necessary calls back to the
+     * provided [TabLayout] so that the tab position is kept in sync.
+     *
+     *
+     * This class stores the provided TabLayout weakly, meaning that you can use [ ][ViewPager2.registerOnPageChangeCallback] without removing the
+     * callback and not cause a leak.
+     */
+    private inner class ViewPagerCallback :
+        ViewPager2.OnPageChangeCallback() {
+
+        private var previousScrollState = 0
+        private var scrollState = 0
+        override fun onPageScrollStateChanged(state: Int) {
+            previousScrollState = scrollState
+            scrollState = state
+        }
+
+        init {
+            scrollState = ViewPager2.SCROLL_STATE_IDLE
+            previousScrollState = scrollState
+        }
+
         override fun onPageScrolled(
             position: Int,
             positionOffset: Float,
             positionOffsetPixels: Int
         ) {
 
-            setScrollPosition(position, positionOffset, true, true)
+            // Only update the text selection if we're not settling, or we are settling after
+            // being dragged
+            val updateText =
+                scrollState != ViewPager2.SCROLL_STATE_SETTLING || previousScrollState == ViewPager2.SCROLL_STATE_DRAGGING
+            // Update the indicator if we're not settling after being idle. This is caused
+            // from a setCurrentItem() call and will be handled by an animation from
+            // onPageSelected() instead.
+            val updateIndicator =
+                !(scrollState == ViewPager2.SCROLL_STATE_SETTLING && previousScrollState == ViewPager2.SCROLL_STATE_IDLE)
+            setScrollPosition(position, positionOffset, updateText, updateIndicator)
+
         }
 
         override fun onPageSelected(position: Int) {
-            actionBar.subtitle = getTabText(oldOpenedFileList[position])
-        }
 
+            if (selectedTabPosition != position && position < tabCount) {
+                // Select the tab, only updating the indicator if we're not being dragged/settled
+                // (since onPageScrolled will handle that).
+                val updateIndicator = (scrollState == ViewPager2.SCROLL_STATE_IDLE
+                        || (scrollState == ViewPager2.SCROLL_STATE_SETTLING
+                        && previousScrollState == ViewPager2.SCROLL_STATE_IDLE))
+                selectTab(getTabAt(position), updateIndicator)
+
+
+            }
+
+        }
     }
 
     fun bindEditorPager(editorPage: ViewPager2) {

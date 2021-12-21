@@ -36,6 +36,10 @@ fun Menu.iconColor(color: Int) {
 fun ViewGroup.addLayoutTransition() {
     layoutTransition = LayoutTransition().apply {
         enableTransitionType(LayoutTransition.CHANGING)
+        enableTransitionType(LayoutTransition.APPEARING)
+        enableTransitionType(LayoutTransition.CHANGE_APPEARING)
+        enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING)
+        enableTransitionType(LayoutTransition.DISAPPEARING)
     }
 }
 

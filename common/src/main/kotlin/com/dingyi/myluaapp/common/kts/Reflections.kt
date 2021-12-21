@@ -22,6 +22,12 @@ inline fun <reified T> Class<T>.getPrivateField(obj: Any?, name: String): T {
     return field.get(obj) as T
 }
 
+inline fun <reified T> Any?.setPrivateField(name: String, obj: Any?) {
+    val field = getJavaClass<T>().getDeclaredField(name)
+    field.isAccessible = true
+    return field.set(this, obj)
+}
+
 /**
  * Throws an [IllegalStateException] if self is null. Otherwise
  * returns the not null value.
@@ -36,7 +42,7 @@ inline fun String.loadClass(): Class<*> {
     return Class.forName(this)
 }
 
-inline fun <reified T> Any.convertObject():T {
+inline fun <reified T> Any.convertObject(): T {
     return this as T
 }
 
@@ -44,23 +50,23 @@ inline fun <reified T> getJavaClass(): Class<T> {
     return T::class.java
 }
 
-inline fun println(vararg  args:Any) {
+inline fun println(vararg args: Any) {
     val buffer = StringBuilder()
-    args.forEach {
-        buffer.append(it.toString()).append(" ")
+    for (arg in args) {
+        buffer.append(arg.toString()).append(" ")
     }
     kotlin.io.println(buffer)
 }
 
-data class MutablePair<A,B>(
-   var first: A,
-   var second: B
+data class MutablePair<A, B>(
+    var first: A,
+    var second: B
 ) : java.io.Serializable {
 
     /**
      * Returns string representation of the [Pair] including its [first] and [second] values.
      */
-   override fun toString(): String = "($first, $second)"
+    override fun toString(): String = "($first, $second)"
 }
 
 typealias LuaJVM = LuajVm
