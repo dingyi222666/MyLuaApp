@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/theme_default_colorPrimary</item>
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Corner.BottomSheetDialog</item>
         <item name="dialogCornerRadius">8dp</item>
 
 
@@ -21,6 +22,26 @@
 
         <!-- Customize your theme here. -->
     </style>
+
+
+    <style
+        name="ThemeOverlay.Corner.BottomSheetDialog"
+        parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.Corner.Round.BottomSheet</item>
+    </style>
+
+    <style name="Widget.Corner.Round.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Corner.Round</item>
+    </style>
+
+
+    <style name="ShapeAppearanceOverlay.Corner.Round" parent="">
+        <item name="cornerSizeTopLeft">8dp</item>
+        <item name="cornerSizeTopRight">8dp</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+    </style>
+
 
     <style name="BasePreferenceStyle" parent="@style/PreferenceThemeOverlay">
         <item name="android:tint">?theme_hintTextColor</item>

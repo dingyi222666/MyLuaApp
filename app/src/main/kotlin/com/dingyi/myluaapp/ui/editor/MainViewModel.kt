@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.ui.editior
+package com.dingyi.myluaapp.ui.editor
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.dingyi.myluaapp.core.project.ProjectController
 import com.dingyi.myluaapp.core.project.ProjectFile
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.properties.Delegates

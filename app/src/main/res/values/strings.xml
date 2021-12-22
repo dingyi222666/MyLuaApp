@@ -68,6 +68,7 @@
     <string name="settings_editor_font_toast_fail">选择字体失败</string>
     <string name="settings_editor_magnifier_summary">在拖动选择文本时放大临近内容</string>
     <string name="settings_editor_magnifier_category">放大镜</string>
+    <string name="editor_menu_file_list_toolbar_new_file">新建文件</string>
 
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>

@@ -55,7 +55,7 @@ class NewProjectActivity : BaseActivity<
             }
 
             appName.observe(this@NewProjectActivity) {
-                viewBinding.appName.setTextIfDiff(it)
+                viewBinding.appName.setTextIfDifferent(it)
                 pair.first = it
                 viewBinding.appNameParent.isErrorEnabled = true
                 if (it.isEmpty()) {
@@ -72,7 +72,7 @@ class NewProjectActivity : BaseActivity<
 
             appPackageName.observe(this@NewProjectActivity) {
                 pair.second = it
-                viewBinding.appPackageName.setTextIfDiff(it)
+                viewBinding.appPackageName.setTextIfDifferent(it)
                 if (it.isEmpty()) {
                     viewBinding.appPackageNameParent.isErrorEnabled = true
                     viewBinding.appPackageNameParent.error =

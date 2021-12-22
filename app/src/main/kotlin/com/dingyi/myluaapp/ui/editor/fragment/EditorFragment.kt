@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.ui.editior.fragment
+package com.dingyi.myluaapp.ui.editor.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -13,16 +13,13 @@ import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.core.project.ProjectFile
 import com.dingyi.myluaapp.databinding.FragmentEditorEditPagerBinding
-import com.dingyi.myluaapp.ui.editior.MainViewModel
-import io.github.rosemoe.sora.text.Content
-import io.github.rosemoe.sora.text.ContentListener
+import com.dingyi.myluaapp.ui.editor.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 import kotlin.math.absoluteValue
-import kotlin.properties.Delegates
 
 /**
  * @email : dingyi222666@foxmail.com

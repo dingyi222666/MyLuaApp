@@ -1,19 +1,18 @@
-package com.dingyi.myluaapp.ui.editior.adapter
+package com.dingyi.myluaapp.ui.editor.adapter
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.dingyi.myluaapp.common.kts.checkNotNull
-import com.dingyi.myluaapp.ui.editior.MainViewModel
-import com.dingyi.myluaapp.ui.editior.fragment.EditorFragment
+import com.dingyi.myluaapp.ui.editor.MainViewModel
+import com.dingyi.myluaapp.ui.editor.fragment.EditorFragment
 
 class EditorPagerAdapter(fragmentActivity: FragmentActivity, private val viewModel: MainViewModel) :
     FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int {
         return viewModel.openFiles.value?.run {
-            println("size ${first.size}")
             first.size
         } ?: 0
     }
@@ -22,6 +21,10 @@ class EditorPagerAdapter(fragmentActivity: FragmentActivity, private val viewMod
         return (runCatching {
             viewModel.openFiles.checkNotNull().value.checkNotNull().first[position].hashCode()
         }.getOrNull() ?: position).toLong()
+    }
+
+    override fun containsItem(itemId: Long): Boolean {
+        return true
     }
 
     override fun createFragment(position: Int): Fragment {

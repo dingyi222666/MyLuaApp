@@ -30,11 +30,12 @@
             </intent-filter>
         </activity>
 
+
         <activity android:name=".ui.newproject.NewProjectActivity" />
 
         <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.GeneralActivity" />
-        <activity android:name=".ui.editior.activity.EditorActivity" />
+        <activity android:name=".ui.editor.activity.EditorActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.dingyi.myluaapp"

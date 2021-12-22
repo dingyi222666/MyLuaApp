@@ -88,9 +88,6 @@ dependencies {
     implementation(BuildConfig.Libs.Default.kotlin_stdlib) //kt
 
 
-    //litepal
-
-    implementation(BuildConfig.Libs.Tools.litepal)
 
     //glide
     implementation(BuildConfig.Libs.Default.glide)

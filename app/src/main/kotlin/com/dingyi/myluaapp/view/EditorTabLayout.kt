@@ -16,6 +16,7 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.convertObject
 import com.dingyi.myluaapp.common.kts.setPrivateField
+import com.dingyi.myluaapp.common.kts.showPopMenu
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.core.project.Project
 import com.dingyi.myluaapp.core.project.ProjectController
@@ -144,7 +145,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
             override fun onTabSelected(selectTab: Tab?) {
                 selectTab?.let { tab ->
                     val index = getTabIndex(tab)
-                    Log.d("fuck,bug", "want index $index")
+
                     editorPage?.setCurrentItem(index, true)
 
                     if (oldOpenedFileList.isNotEmpty()) {
@@ -179,9 +180,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
         return newTab().apply {
             this.text = text
             view.setOnLongClickListener { view ->
-                PopupMenu(context, view).let { menu ->
-                    menu.inflate(R.menu.editor_tab)
-                    menu.show()
+                R.menu.editor_tab.showPopMenu(view) { menu ->
                     menu.setOnMenuItemClickListener {
                         when (it.itemId) {
                             R.id.editor_action_close_other -> {

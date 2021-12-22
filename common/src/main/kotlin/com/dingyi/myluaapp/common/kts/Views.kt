@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.children
@@ -41,6 +42,14 @@ fun ViewGroup.addLayoutTransition() {
         enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING)
         enableTransitionType(LayoutTransition.DISAPPEARING)
     }
+}
+
+
+inline fun Int.showPopMenu(view: View, block:(PopupMenu)->Unit) {
+    val popupMenu = PopupMenu(view.context,view)
+    popupMenu.inflate(this)
+    block(popupMenu)
+    popupMenu.show()
 }
 
 fun RequestBuilder<Drawable>.applyRoundedCorners(): RequestBuilder<Drawable> {
@@ -86,7 +95,7 @@ inline fun DrawerLayout.addDrawerListener(
     })
 }
 
-fun TextView.setTextIfDiff(data: String) {
+fun TextView.setTextIfDifferent(data: String) {
     if (this.text.toString() != data) {
         text = data
     }

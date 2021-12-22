@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.ui.editior.activity
+package com.dingyi.myluaapp.ui.editor.activity
 
 import android.os.Bundle
 import android.text.TextUtils
@@ -7,21 +7,16 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.addLayoutTransition
 import com.dingyi.myluaapp.common.kts.addDrawerListener
-import com.dingyi.myluaapp.common.kts.convertObject
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.getPrivateField
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
-import com.dingyi.myluaapp.ui.editior.MainViewModel
-import com.dingyi.myluaapp.ui.editior.adapter.EditorDrawerPagerAdapter
-import com.dingyi.myluaapp.ui.editior.adapter.EditorPagerAdapter
-import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.dingyi.myluaapp.ui.editor.MainViewModel
+import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
+import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 
 
 /**
