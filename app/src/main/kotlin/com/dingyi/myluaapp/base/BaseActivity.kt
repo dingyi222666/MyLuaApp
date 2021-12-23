@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.dingyi.myluaapp.R
+import com.dingyi.myluaapp.common.theme.ThemeManager
 import com.dingyi.myluaapp.common.kts.getAttributeColor
 import com.dingyi.myluaapp.common.kts.getString
 import com.dingyi.myluaapp.common.kts.iconColor
@@ -32,9 +33,13 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
 
     protected lateinit var viewModel: T
 
+    val themeManager = ThemeManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        themeManager.apply(this)
 
         setContentView(getViewBindingImp().root)
 

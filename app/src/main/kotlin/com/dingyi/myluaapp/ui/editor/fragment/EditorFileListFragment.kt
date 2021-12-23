@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
+import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.base.BaseFragment
+import com.dingyi.myluaapp.common.kts.convertObject
 import com.dingyi.myluaapp.common.kts.getAttributeColor
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.showPopMenu
@@ -60,16 +62,17 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
         }
 
 
-        viewBinding.more.let { view ->
-            R.menu.editor_file_list_toolbar.showPopMenu(view) { menu ->
+        viewBinding.more.setOnClickListener { view ->
+            R.menu.editor_file_list_toolbar.showPopMenu(
+                view
+            ) { menu ->
                 menu.setOnMenuItemClickListener {
-                     when (it.itemId) {
-                         R.id.editor_file_list_toolbar_action_new_file -> {
-
-                             true
-                         }
-                         else -> false
-                     }
+                    when (it.itemId) {
+                        R.id.editor_file_list_toolbar_action_new_file -> {
+                            true
+                        }
+                        else -> false
+                    }
                 }
             }
         }

@@ -13,6 +13,7 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="textInputStyle">@style/BaseTextInputLayoutStyle</item>
         <item name="popupMenuStyle">@style/BasePopMenuStyle</item>
+        <item name="android:popupMenuStyle">@style/BasePopMenuStyle</item>
         <item name="actionOverflowMenuStyle">@style/BaseOverflowMenuStyle</item>
         <item name="theme_backgroundColor">@color/theme_default_backgroundColor</item>
         <item name="theme_rippleColor">@color/theme_default_rippleColor</item>

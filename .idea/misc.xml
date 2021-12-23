@@ -80,6 +80,7 @@
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/fragment_editor_code_navigation.xml" value="0.12864583333333332" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/fragment_editor_edit_pager.xml" value="0.15081521739130435" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/fragment_editor_file_list.xml" value="0.15081521739130435" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_base_dialog_bottom_dialog_default_input.xml" value="0.264" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_include_toolbar.xml" value="0.1" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_item_editor_code_mavigation_item.xml" value="0.229126213592233" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_item_editor_file_list.xml" value="0.2623456790123457" />
@@ -97,6 +98,7 @@
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/xml/settings_application.xml" value="0.1" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/xml/settings_editor_main.xml" value="0.1" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/xml/settings_main.xml" value="0.2975778546712803" />
+        <entry key="..\:/android studio project/MyLuaApp2/common/src/main/res/layout/layout_base_dialog_bottom_dialog_default_input.xml" value="0.264" />
         <entry key="..\:/android studio project/MyLuaApp2/common/src/main/res/layout/layout_base_dialog_bottom_dialog_empty.xml" value="0.15896739130434784" />
         <entry key="..\:/android studio project/MyLuaApp2/editor/src/main/res/drawable/field.xml" value="0.26614583333333336" />
         <entry key="..\:/android studio project/MyLuaApp2/editor/src/main/res/drawable/method.xml" value="0.26614583333333336" />

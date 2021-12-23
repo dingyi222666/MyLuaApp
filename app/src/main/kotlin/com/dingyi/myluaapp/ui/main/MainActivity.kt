@@ -11,7 +11,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
-import com.dingyi.myluaapp.common.dialog.BottomDialogBuilder
+import com.dingyi.myluaapp.common.dialog.builder.BottomDialogBuilder
+import com.dingyi.myluaapp.common.dialog.layout.DefaultInputLayout
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
@@ -117,8 +118,14 @@ class MainActivity : BaseActivity<
     //test code here
     private fun test() {
         BottomDialogBuilder.with(this)
-            .setContentView(com.dingyi.myluaapp.common.R.layout.layout_base_dialog_bottom_dialog_empty)
+            .setDialogLayout(DefaultInputLayout())
             .show()
+            .apply {
+                layoutHelper.getCloseView().setOnClickListener {
+                    dismiss()
+                }
+                layoutHelper.getPositiveButton()?.setOnClickListener {}
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

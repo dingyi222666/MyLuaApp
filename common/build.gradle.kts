@@ -14,6 +14,10 @@ android {
         consumerProguardFiles ("consumer-rules.pro")
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

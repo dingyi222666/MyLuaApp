@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.dingyi.myluaapp.R
+import com.dingyi.myluaapp.common.theme.ThemeManager
 import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.common.kts.getString
 import com.dingyi.myluaapp.common.kts.showSnackBar
@@ -26,9 +26,13 @@ class GeneralActivity : AppCompatActivity() {
         ActivityGeneralBinding.inflate(layoutInflater)
     }
 
+    protected val themeManager = ThemeManager()
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
         super.onCreate(savedInstanceState)
+
+        themeManager.apply(this)
+
 
         setContentView(binding.root)
 
