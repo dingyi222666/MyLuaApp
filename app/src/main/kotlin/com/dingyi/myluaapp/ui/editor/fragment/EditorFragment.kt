@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
+import androidx.core.os.postDelayed
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -62,13 +64,20 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
 
         lifecycleScope.launch {
             runCatching {
+
                 viewBinding.codeEditor.setText(
                     withContext(Dispatchers.IO) { getProjectFile().readText() })
+
+                withContext(Dispatchers.Default) {
+                    readEditorData(
+                        getProjectFile().readEditorData()
+                    )
+                }
+
             }.onFailure {
                 it.printStackTrace()
             }
         }
-
 
 
     }
@@ -76,9 +85,10 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
     private fun initEditor() {
 
         viewBinding.codeEditor.apply {
-            isMagnifierEnabled = PreferenceManager.getDefaultSharedPreferences(requireActivity()).getBoolean(
-                "magnifier_set",true
-            )
+            isMagnifierEnabled =
+                PreferenceManager.getDefaultSharedPreferences(requireActivity()).getBoolean(
+                    "magnifier_set", true
+                )
         }
 
         addCodeEditorListener()
@@ -95,17 +105,54 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
     }
 
 
+    private fun createEditorData(): Map<String, Float> {
+        return mapOf(
+            "line" to viewBinding.codeEditor.text.cursor.leftLine.toFloat(),
+            "scrollX" to viewBinding.codeEditor.scroller.currX.toFloat(),
+            "scrollY" to viewBinding.codeEditor.scroller.currY.toFloat(),
+            "column" to viewBinding.codeEditor.text.cursor.leftColumn.toFloat(),
+            "textSize" to viewBinding.codeEditor.textSizePx
+        )
+    }
+
+    private fun readEditorData(data: Map<String, Float>) {
+        requireActivity().runOnUiThread {
+            viewBinding.codeEditor.apply {
+                val textSize = data.getValue("textSize")
+                if (textSize > 0) {
+                    textSizePx = textSize
+                }
+                handler.postDelayed(0) {
+                    scroller.startScroll(
+                        scroller.currX,
+                        scroller.currY,
+                        data.getValue("scrollX").toInt() - scroller.currX,
+                        data.getValue("scrollY").toInt() - scroller.currY,0
+                    )
+                }
+                text.cursor.set(
+                    data.getValue("line").toInt(),
+                    data.getValue("column").toInt()
+                )
+
+            }
+
+        }
+    }
+
     private fun addCodeEditorListener() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 while (true) {
                     delay(1000 * 30) //休眠30秒
                     withContext(Dispatchers.Default) {
-
                         val nowCodeContentLength = viewBinding.codeEditor.text.length
                         if ((nowCodeContentLength - lastCodeContentLength).absoluteValue > 20) {
                             Log.d("test", "commit change!")
-                            getProjectFile().commitChange(viewBinding.codeEditor.text)
+                            getProjectFile().commitChange(
+                                viewBinding.codeEditor.text,
+                                createEditorData()
+                            )
                         }
                     }
                     lastCodeContentLength = viewBinding.codeEditor.text.length
@@ -121,7 +168,7 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
         projectFile?.clear()
         //新获取一个
         getProjectFile().apply {
-            commitChange(viewBinding.codeEditor.text)
+            commitChange(viewBinding.codeEditor.text, createEditorData())
             saveChange()
         }
         //清除引用

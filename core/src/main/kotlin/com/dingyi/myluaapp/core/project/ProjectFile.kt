@@ -6,7 +6,6 @@ import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.common.kts.toMD5
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import java.io.InputStream
 import java.io.OutputStream
 import kotlin.properties.Delegates
 
@@ -22,7 +21,7 @@ class ProjectFile(
 
     private val file = path.toFile()
 
-    private val virtualFile =
+    private val virtualProjectFilePath =
         "${project.projectPath}/.MyLuaApp/cache/virtual_file_${path.toMD5()}".toFile().apply {
             if (!exists()) {
                 parentFile?.mkdirs()
@@ -33,56 +32,77 @@ class ProjectFile(
 
     private var change = true
 
-    private var cache by Delegates.notNull<ProjectFileHistory>()
+    private var virtualProjectFile by Delegates.notNull<VirtualProjectFile>()
 
 
     /**
      * Commit change to cache file
      */
-    fun commitChange(text: CharSequence) {
+    fun commitChange(text: CharSequence, data: Map<String, Float>) {
 
-        val history = getLocalHistory()
+        val history = getVirtualProjectFile()
 
-        if (history.caches.size + 1 > 10) {
-            history.caches.removeAt(history.caches.lastIndex)
+        if (history.historyList.size + 1 > 10) {
+            history.historyList.removeAt(history.historyList.lastIndex)
                 .delete()
         }
+        history.apply {
+            val defaultValue = { 0f }
+            scrollX = data.getOrElse("scrollX", defaultValue).toInt()
+            scrollY = data.getOrElse("scrollY", defaultValue).toInt()
+            column = data.getOrElse("column", defaultValue).toInt()
+            line = data.getOrElse("line", defaultValue).toInt()
+            textSize = data.getOrElse("textSize",defaultValue)
+        }
         val timestamp = System.currentTimeMillis()
-        val cache = ProjectFileHistory.ProjectFileCache(
+        val cache = VirtualProjectFile.ProjectFileCache(
             "${project.projectPath}/.MyLuaApp/cache/history_file_${path.toMD5()}_${
                 timestamp.toString().toMD5()
             }",
             timestamp
         )
         cache.saveText(text)
-        history.caches.add(0, cache)
-        history.save(virtualFile.outputStream())
+        history.historyList.add(0, cache)
+        history.save(virtualProjectFilePath.outputStream())
         change = true
     }
 
-    private fun getLocalHistory(): ProjectFileHistory {
-        readLocalHistory()
-        return cache
+    @JvmName("getVirtualProjectFile1")
+    private fun getVirtualProjectFile(): VirtualProjectFile {
+        readLocalVirtualFile()
+        return virtualProjectFile
     }
 
-    private fun readLocalHistory() {
+
+    private fun readLocalVirtualFile() {
         if (change) {
-            cache = Gson().fromJson(virtualFile.reader(), getJavaClass<ProjectFileHistory>())
+            virtualProjectFile =
+                Gson().fromJson(virtualProjectFilePath.reader(), getJavaClass<VirtualProjectFile>())
         }
     }
 
     fun saveChange(): Boolean {
         return runCatching {
-            cache.caches[0].copyTo(path)
+            virtualProjectFile.historyList[0].copyTo(path)
             change = false
         }.isSuccess
     }
 
 
     fun readText(): String {
-        return getLocalHistory().caches.getOrNull(0)?.run {
+        return getVirtualProjectFile().historyList.getOrNull(0)?.run {
             readText()
         } ?: path.toFile().readText()
+    }
+
+    fun readEditorData(): Map<String, Float> {
+        return mapOf(
+            "line" to getVirtualProjectFile().line.toFloat(),
+            "scrollX" to getVirtualProjectFile().scrollX.toFloat(),
+            "scrollY" to getVirtualProjectFile().scrollY.toFloat(),
+            "column" to getVirtualProjectFile().column.toFloat(),
+            "textSize" to getVirtualProjectFile().textSize
+        )
     }
 
 
@@ -93,10 +113,19 @@ class ProjectFile(
         return false
     }
 
-    data class ProjectFileHistory(
+
+    data class VirtualProjectFile(
         @SerializedName("caches")
-        var caches: MutableList<ProjectFileCache>
+        var historyList: MutableList<ProjectFileCache>,
+        var scrollX: Int = 0,
+        var scrollY: Int = 0,
+        var line: Int = 0,
+        var column: Int = 0,
+        //if size==0
+        var textSize: Float = 0f
+
     ) {
+
         @Keep
         data class ProjectFileCache(
             @SerializedName("path")
@@ -131,7 +160,7 @@ class ProjectFile(
         }
 
         fun delete() {
-            caches.forEach {
+            historyList.forEach {
                 it.delete()
             }
         }
@@ -139,13 +168,13 @@ class ProjectFile(
     }
 
     fun deleteFile() {
-        getLocalHistory().delete()
-        virtualFile.delete()
+        getVirtualProjectFile().delete()
+        virtualProjectFilePath.delete()
         path.toFile().delete()
     }
 
     override fun toString(): String {
-        return "ProjectFile(path='$path', project=$project, file=$file, virtualFile=$virtualFile, change=$change)"
+        return "ProjectFile(path='$path', project=$project, file=$file, virtualFile=$virtualProjectFilePath, change=$change)"
     }
 
     override fun hashCode(): Int {
