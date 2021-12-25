@@ -2,12 +2,12 @@ package com.dingyi.myluaapp.common.dialog.helper
 
 import android.view.View
 import android.widget.TextView
-import com.dingyi.myluaapp.databinding.LayoutBaseDialogBottomDialogDefaultInputBinding
+import com.dingyi.myluaapp.databinding.LayoutBottomDialogDefaultInputBinding
 import com.google.android.material.textfield.TextInputLayout
 
 class DefaultInputLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelper(rootView) {
 
-    val binding = LayoutBaseDialogBottomDialogDefaultInputBinding.bind(rootView)
+    private val binding = LayoutBottomDialogDefaultInputBinding.bind(rootView)
 
     override fun getTextInputLayout(): TextInputLayout? {
         return binding.inputLayout

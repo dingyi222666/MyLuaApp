@@ -17,4 +17,6 @@ interface IProject {
     fun saveOpenedFile(path:String): Boolean
     fun closeOpenedFile(path:String,nowOpenedFile:String)
     fun closeOtherOpenedFile(path: String)
+    fun getFileTemplates(templatePath:String):List<Pair<String,String>>
+    fun createTemplateFile(createDir:String,templateDir:String,fileTemplate:String)
 }

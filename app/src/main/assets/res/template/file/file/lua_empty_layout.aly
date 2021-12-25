@@ -1,0 +1,11 @@
+{
+  LinearLayout,
+  orientation="vertical",
+  layout_width="fill",
+  layout_height="fill",
+  {
+    TextView,
+    text="hello MyLuaApp",
+    layout_width="fill",
+  },
+}

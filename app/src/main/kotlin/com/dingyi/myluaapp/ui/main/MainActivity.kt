@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.dialog.builder.BottomDialogBuilder
+import com.dingyi.myluaapp.common.dialog.layout.DefaultClickListLayout
 import com.dingyi.myluaapp.common.dialog.layout.DefaultInputLayout
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.startActivity
@@ -118,13 +119,15 @@ class MainActivity : BaseActivity<
     //test code here
     private fun test() {
         BottomDialogBuilder.with(this)
-            .setDialogLayout(DefaultInputLayout())
+            .setDialogLayout(DefaultClickListLayout())
             .show()
             .apply {
-                layoutHelper.getCloseView().setOnClickListener {
-                    dismiss()
-                }
-                layoutHelper.getPositiveButton()?.setOnClickListener {}
+                layoutHelper.setItemList(
+                    listOf(
+                        "test" to 0,
+                        "666" to 1
+                    )
+                )
             }
     }
 

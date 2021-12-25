@@ -11,21 +11,21 @@ import kotlin.Pair
 
 
 inline fun <reified T> Any.getPrivateField(name: String): T {
-    val field = this.javaClass.getDeclaredField(name)
-    field.isAccessible = true
-    return field.get(this) as T
+    return this.javaClass.getDeclaredField(name).apply {
+        isAccessible = true
+    }.get(this) as T
 }
 
 inline fun <reified T> Class<T>.getPrivateField(obj: Any?, name: String): T {
-    val field = getDeclaredField(name)
-    field.isAccessible = true
-    return field.get(obj) as T
+    return getDeclaredField(name).apply {
+        isAccessible = true
+    }.get(obj) as T
 }
 
 inline fun <reified T> Any?.setPrivateField(name: String, obj: Any?) {
-    val field = getJavaClass<T>().getDeclaredField(name)
-    field.isAccessible = true
-    return field.set(this, obj)
+    return getJavaClass<T>().getDeclaredField(name).apply {
+        isAccessible = true
+    }.set(this, obj)
 }
 
 /**
@@ -37,6 +37,11 @@ inline fun <T> T?.checkNotNull(): T {
     return checkNotNull(this)
 }
 
+inline fun <T> T?.ifNull(block: () -> Unit) {
+    if (this == null) {
+        block()
+    }
+}
 
 inline fun String.loadClass(): Class<*> {
     return Class.forName(this)

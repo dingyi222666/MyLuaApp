@@ -29,7 +29,8 @@ class Project(
         val appPackageName: String,
         val appName: String,
         var iconPath: String,
-        var path: String = ""
+        var path: String = "",
+        var fileTemplates: List<String>
     )
 
 
@@ -185,6 +186,28 @@ class Project(
         }
     }
 
+    override fun getFileTemplates(templatePath: String): List<Pair<String, String>> {
+        val templateJsonList = generateAppProject()?.fileTemplates
+        val resultList = mutableListOf<Pair<String,String>>()
+        templateJsonList?.forEach {
+            gson.fromJson(
+                "$templatePath/$it".toFile().readText(),
+                getJavaClass<List<FileTemplateBeanItem>>()
+            ).forEach {
+                resultList.add(it.templateName  to it.templatePath)
+            }
+        }
+        return resultList
+    }
+
+    override fun createTemplateFile(
+        createDir: String,
+        templateDir: String,
+        fileTemplate: String
+    ) {
+        TODO("Not yet implemented")
+    }
+
     override fun backup(exportOutputStream: OutputStream): Boolean {
         return true;
     }
@@ -218,5 +241,10 @@ class Project(
         var nowOpenedDir: String
     )
 
+
+    data class FileTemplateBeanItem(
+        val templateName: String, // Lua Empty Layout
+        val templatePath: String // file/lua_empty_layout.aly
+    )
 
 }

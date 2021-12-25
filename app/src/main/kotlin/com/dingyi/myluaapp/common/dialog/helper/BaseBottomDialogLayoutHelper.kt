@@ -2,22 +2,36 @@ package com.dingyi.myluaapp.common.dialog.helper
 
 import android.view.View
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 
-abstract class BaseBottomDialogLayoutHelper(val rootView: View) {
+abstract class BaseBottomDialogLayoutHelper(val rootView: View):IBaseBottomDialogLayoutHelper
+
+interface IBaseBottomDialogLayoutHelper {
 
     /***
      * if layout has textInputLayout return it
      * @return return textInputLayout if not null
      **/
-    abstract fun  getTextInputLayout():TextInputLayout?
+    fun getTextInputLayout(): TextInputLayout? {
+        return null
+    }
 
+    fun getMessageView(): TextView? {
+        return null
+    }
 
+    fun getPositiveButton(): View? {
+        return null
+    }
 
+    fun getListView(): RecyclerView? {
+        return null
+    }
 
-    abstract fun getMessageView():TextView?
+    fun setItemList(list: List<Pair<String, Any>>) {}
 
-    abstract fun getPositiveButton():View?
+    fun onItemClick(block: (String, Any) -> Unit) {}
 
-    abstract fun getCloseView():View
+    fun getCloseView(): View
 }

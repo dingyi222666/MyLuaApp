@@ -154,6 +154,7 @@ class ProjectFile(
 
 
         fun save(outputStream: OutputStream) {
+            //TODO use binary history key-map file and gzip support
             outputStream.use {
                 it.write(Gson().toJson(this).encodeToByteArray())
             }
