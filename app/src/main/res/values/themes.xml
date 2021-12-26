@@ -8,8 +8,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Corner.BottomSheetDialog</item>
         <item name="dialogCornerRadius">8dp</item>
-
-
+        <item name="colorOnPrimary">@color/white</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="textInputStyle">@style/BaseTextInputLayoutStyle</item>
         <item name="popupMenuStyle">@style/BasePopMenuStyle</item>
@@ -20,7 +19,7 @@
         <item name="theme_cardBackgroundColor">@color/theme_default_cardBackgroundColor</item>
         <item name="theme_textColor">@color/theme_default_textColor</item>
         <item name="theme_hintTextColor">@color/theme_default_hintTextColor</item>
-
+        <item name="theme_rippleColorOnBackground">@color/theme_white_rippleColor</item>
         <!-- Customize your theme here. -->
     </style>
 

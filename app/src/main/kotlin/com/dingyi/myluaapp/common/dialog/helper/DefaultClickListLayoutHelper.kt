@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dingyi.myluaapp.common.dialog.BottomDialog
 import com.dingyi.myluaapp.common.kts.convertObject
 import com.dingyi.myluaapp.common.kts.ifNull
 import com.dingyi.myluaapp.databinding.LayoutBottomDialogDefaultClickListBinding
@@ -20,12 +21,13 @@ class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelpe
         return binding.closeImage
     }
 
-    private var clickCallBack: ((String, Any) -> Unit)? = null
+    override fun apply(params: BottomDialog.BottomDialogCreateParams) {
 
-    override fun onItemClick(block: (String, Any) -> Unit) {
-        clickCallBack = block
     }
 
+    private var clickCallBack: ((String, Any) -> Unit)? = null
+
+    /*
     @SuppressLint("NotifyDataSetChanged")
     override fun setItemList(list: List<Pair<String, Any>>) {
 
@@ -46,6 +48,8 @@ class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelpe
             ?.notifyDataSetChanged()
 
     }
+
+     */
 
     class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 

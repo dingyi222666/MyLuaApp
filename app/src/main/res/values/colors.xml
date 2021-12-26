@@ -18,4 +18,5 @@
     <color name="theme_default_errorMessageBackgroundColor">#FFE53935</color>
     <color name="theme_default_rippleColor">#27000000</color>
     <color name="theme_blue_colorPrimary">#1E88E5</color>
+    <color name="theme_white_rippleColor">#3fffffff</color>
 </resources>

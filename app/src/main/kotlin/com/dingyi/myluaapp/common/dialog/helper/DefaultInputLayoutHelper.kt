@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.common.dialog.helper
 
 import android.view.View
 import android.widget.TextView
+import com.dingyi.myluaapp.common.dialog.BottomDialog
 import com.dingyi.myluaapp.databinding.LayoutBottomDialogDefaultInputBinding
 import com.google.android.material.textfield.TextInputLayout
 
@@ -14,15 +15,57 @@ class DefaultInputLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelper(ro
     }
 
     override fun getMessageView(): TextView? {
-       return null
+        return null
     }
 
-    override fun getPositiveButton(): View? {
+    override fun getPositiveButton(): View {
         return binding.positiveButton
     }
 
     override fun getCloseView(): View {
         return binding.closeImage
+    }
+
+    override fun apply(params: BottomDialog.BottomDialogCreateParams) {
+        if (params.title.isEmpty()) {
+            binding.title.visibility = View.INVISIBLE
+        } else {
+            binding.title.text = params.title
+        }
+
+        if (params.positiveButtonText.isNotEmpty()) {
+            binding.positiveButton.apply {
+                text = params.positiveButtonText
+                setOnClickListener {
+                    params.positiveButtonClick(this@DefaultInputLayoutHelper, null)
+                }
+            }
+        } else {
+            binding.positiveButton.visibility = View.GONE
+        }
+
+        if (params.negativeButtonText.isNotEmpty()) {
+            binding.negativeButton.apply {
+                text = params.negativeButtonText
+                setOnClickListener {
+                    params.negativeButtonClick(this@DefaultInputLayoutHelper, null)
+                }
+            }
+        } else {
+            binding.negativeButton.visibility = View.GONE
+        }
+
+        if (params.neutralButtonText.isNotEmpty()) {
+            binding.neutralButton.apply {
+                text = params.neutralButtonText
+                setOnClickListener {
+                    params.neutralButtonClick(this@DefaultInputLayoutHelper, null)
+                }
+            }
+        } else {
+            binding.neutralButton.visibility = View.GONE
+        }
+
     }
 
 }

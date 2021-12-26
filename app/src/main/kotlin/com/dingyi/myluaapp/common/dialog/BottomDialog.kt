@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.common.dialog
 
 import android.content.Context
+import android.view.View
 import com.dingyi.myluaapp.common.dialog.helper.BaseBottomDialogLayoutHelper
 import com.dingyi.myluaapp.common.dialog.layout.BaseBottomDialogLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -19,6 +20,35 @@ class BottomDialog(context: Context) : BottomSheetDialog(context) {
         setContentView(rootView)
     }
 
+    fun show(params:BottomDialogCreateParams) {
+        _layoutHelper.apply(params)
+        super.show()
+    }
+
+    class BottomDialogCreateParams {
+
+        enum class ChoiceType {
+            SingleChoice,MultiChoice,None
+        }
+
+        private val defaultClick:DialogClickListener = { helper: BaseBottomDialogLayoutHelper,item:Pair<String,Any>? -> }
+        var title = ""
+        var message = ""
+        var negativeButtonText = ""
+        var negativeButtonClick = defaultClick
+        var positiveButtonText = ""
+        var positiveButtonClick = defaultClick
+        var neutralButtonText = ""
+        var neutralButtonClick = defaultClick
+        var items = listOf<Pair<String,Any>>()
+        var itemsClick = defaultClick
+        var choiceType = ChoiceType.None
+        var defaultChoiceItem = intArrayOf(0)
+
+
+    }
 
 
 }
+
+typealias DialogClickListener= (BaseBottomDialogLayoutHelper, Pair<String, Any>?) -> Unit

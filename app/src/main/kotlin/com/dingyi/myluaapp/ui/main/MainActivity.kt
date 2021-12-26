@@ -119,16 +119,10 @@ class MainActivity : BaseActivity<
     //test code here
     private fun test() {
         BottomDialogBuilder.with(this)
-            .setDialogLayout(DefaultClickListLayout())
+            .setTitle("test")
+            .setPositiveButton("test")
+            .setDialogLayout(DefaultInputLayout())
             .show()
-            .apply {
-                layoutHelper.setItemList(
-                    listOf(
-                        "test" to 0,
-                        "666" to 1
-                    )
-                )
-            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

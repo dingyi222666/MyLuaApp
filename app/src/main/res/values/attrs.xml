@@ -5,5 +5,5 @@
     <attr name="theme_cardBackgroundColor" format="color|reference" />
     <attr name="theme_textColor" format="color|reference" />
     <attr name="theme_hintTextColor" format="reference|color" />
-
+    <attr name="theme_rippleColorOnBackground" format="reference|color" />
 </resources>

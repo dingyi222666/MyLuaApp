@@ -3,9 +3,14 @@ package com.dingyi.myluaapp.common.dialog.helper
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.dingyi.myluaapp.common.dialog.BottomDialog
 import com.google.android.material.textfield.TextInputLayout
 
-abstract class BaseBottomDialogLayoutHelper(val rootView: View):IBaseBottomDialogLayoutHelper
+abstract class BaseBottomDialogLayoutHelper(val rootView: View):IBaseBottomDialogLayoutHelper {
+    override fun apply(params: BottomDialog.BottomDialogCreateParams) {
+        getCloseView().setOnClickListener {  }
+    }
+}
 
 interface IBaseBottomDialogLayoutHelper {
 
@@ -29,9 +34,7 @@ interface IBaseBottomDialogLayoutHelper {
         return null
     }
 
-    fun setItemList(list: List<Pair<String, Any>>) {}
-
-    fun onItemClick(block: (String, Any) -> Unit) {}
 
     fun getCloseView(): View
+    fun apply(params: BottomDialog.BottomDialogCreateParams)
 }
