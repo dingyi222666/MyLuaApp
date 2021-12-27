@@ -61,6 +61,7 @@
         android:textAllCaps="false"
         app:cornerRadius="4dp"
         app:elevation="0dp"
+        app:rippleColor="?theme_rippleColorOnBackground"
         android:textColor="?colorOnPrimary"
         android:text="test"
         android:textSize="15sp"

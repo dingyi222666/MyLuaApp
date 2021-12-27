@@ -22,14 +22,59 @@ class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelpe
     }
 
     override fun apply(params: BottomDialog.BottomDialogCreateParams) {
-
+        if (params.items.isNotEmpty()) {
+            setItemList(params)
+        } else {
+            binding.list.visibility = View.GONE
+        }
+        applyView(params)
     }
 
     private var clickCallBack: ((String, Any) -> Unit)? = null
 
-    /*
+
+    private fun applyView(params: BottomDialog.BottomDialogCreateParams) {
+        if (params.negativeButtonText.isNotEmpty()) {
+            binding.negativeButton.text = params.negativeButtonText
+            binding.negativeButton.setOnClickListener {
+                params.negativeButtonClick(
+                    this, getSelectItemValue(params)
+                )
+            }
+        } else {
+            binding.negativeButton.visibility = View.GONE
+        }
+
+        if (params.neutralButtonText.isNotEmpty()) {
+
+            binding.neutralButton.text = params.neutralButtonText
+            binding.neutralButton.setOnClickListener {
+                params.neutralButtonClick(this, getSelectItemValue(params))
+            }
+        } else {
+            binding.neutralButton.visibility = View.GONE
+        }
+
+        if (params.positiveButtonText.isNotEmpty()) {
+
+            binding.positiveButton.text = params.positiveButtonText
+            binding.positiveButton.setOnClickListener {
+                params.positiveButtonClick(this, getSelectItemValue(params))
+            }
+
+        } else {
+            binding.positiveButton.visibility = View.GONE
+        }
+    }
+
+    private fun getSelectItemValue(params: BottomDialog.BottomDialogCreateParams): Pair<String, Any> {
+        return params.items[
+                binding.list.adapter?.convertObject<ListAdapter>()?.selectIndex ?: 0
+        ]
+    }
+
     @SuppressLint("NotifyDataSetChanged")
-    override fun setItemList(list: List<Pair<String, Any>>) {
+    private fun setItemList(params: BottomDialog.BottomDialogCreateParams) {
 
         binding.list.adapter.ifNull {
             binding.list.adapter = ListAdapter()
@@ -43,17 +88,19 @@ class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelpe
         binding.list.adapter?.convertObject<ListAdapter>()
             ?.apply {
                 setItemClick(clickCallBack)
-                addAll(list)
+                addAll(params.items)
+                setChecked(params.defaultChoiceItem[0])
             }
             ?.notifyDataSetChanged()
 
     }
 
-     */
 
-    class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+    private inner class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
         private val list = mutableListOf<Pair<String, Any>>()
+
+        var selectIndex = 0
 
         private var clickCallBack: ((String, Any) -> Unit)? = null
 
@@ -65,7 +112,7 @@ class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelpe
             this.list.addAll(list)
         }
 
-        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val binding = LayoutItemBottomDialogDefaultClickItemBinding.bind(itemView)
         }
 
@@ -78,14 +125,29 @@ class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelpe
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.binding.item.text = list[position].first
+            holder.binding.text.text = list[position].first
             holder.binding.root.setOnClickListener {
+                holder.binding.radioButton.toggle()
                 clickCallBack?.invoke(list[position].first, list[position].second)
             }
+            holder.binding.radioButton.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    selectIndex = position
+                    if (!binding.list.isComputingLayout) {
+                        notifyDataSetChanged()
+                    }
+                }
+            }
+            holder.binding.radioButton.isChecked = position == selectIndex
         }
 
         override fun getItemCount(): Int {
             return list.size
+        }
+
+        fun setChecked(index: Int) {
+            selectIndex = index
+            notifyDataSetChanged()
         }
 
     }

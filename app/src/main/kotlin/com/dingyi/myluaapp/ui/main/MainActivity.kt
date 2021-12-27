@@ -121,7 +121,8 @@ class MainActivity : BaseActivity<
         BottomDialogBuilder.with(this)
             .setTitle("test")
             .setPositiveButton("test")
-            .setDialogLayout(DefaultInputLayout())
+            .setSingleChoiceItems(listOf("test" to 0, "666" to 1), 1) { _, _ -> }
+            .setDialogLayout(DefaultClickListLayout())
             .show()
     }
 
