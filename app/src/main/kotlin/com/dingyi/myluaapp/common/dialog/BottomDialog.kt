@@ -16,7 +16,10 @@ class BottomDialog(context: Context) : BottomSheetDialog(context) {
 
     fun setContentView(bottomDialogLayout: BaseBottomDialogLayout) {
         val rootView = bottomDialogLayout.getRootView(layoutInflater)
-        _layoutHelper = bottomDialogLayout.getLayoutHelper(rootView)
+        _layoutHelper = bottomDialogLayout.getLayoutHelper(rootView,this)
+        _layoutHelper.getCloseView().setOnClickListener {
+            dismiss()
+        }
         setContentView(rootView)
     }
 

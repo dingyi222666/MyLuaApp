@@ -5,8 +5,10 @@ import android.os.Parcelable
 import android.util.Log
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.println
+import com.dingyi.myluaapp.common.kts.suffix
 import com.dingyi.myluaapp.common.kts.toFile
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.OutputStream
@@ -188,24 +190,40 @@ class Project(
 
     override fun getFileTemplates(templatePath: String): List<Pair<String, String>> {
         val templateJsonList = generateAppProject()?.fileTemplates
-        val resultList = mutableListOf<Pair<String,String>>()
-        templateJsonList?.forEach {
-            gson.fromJson(
-                "$templatePath/$it".toFile().readText(),
-                getJavaClass<List<FileTemplateBeanItem>>()
-            ).forEach {
-                resultList.add(it.templateName  to it.templatePath)
+        val resultList = mutableListOf<Pair<String, String>>()
+        runCatching {
+            templateJsonList?.forEach { path ->
+                gson.fromJson<List<FileTemplateBeanItem>>(
+                    "${templatePath}/${path}".toFile().readText(),
+                    object : TypeToken<List<FileTemplateBeanItem>>() {}.type
+                ).forEach {
+                    resultList.add(it.templateName to it.templatePath)
+                }
             }
+        }.onFailure {
+            it.printStackTrace(System.err)
         }
         return resultList
     }
 
     override fun createTemplateFile(
+        fileName: String,
         createDir: String,
         templateDir: String,
         fileTemplate: String
-    ) {
-        TODO("Not yet implemented")
+    ):String {
+
+        val suffix = fileTemplate.toFile().suffix
+        val createPath = "$createDir/$fileName.$suffix"
+
+        val templatePath = "$templateDir/$fileTemplate"
+
+        createPath.toFile().apply {
+            parentFile?.mkdirs()
+            createNewFile()
+        }.writeText(templatePath.toFile().readText())
+
+        return createPath
     }
 
     override fun backup(exportOutputStream: OutputStream): Boolean {

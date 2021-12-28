@@ -43,5 +43,7 @@ class ProjectController(val projectPath: String) {
     val openFile = project::openFile
     val postNowOpenedDir = project::postNowOpenedDir
 
+    val getFileTemplates = project::getFileTemplates
 
+    val createTemplateFile = project::createTemplateFile
 }

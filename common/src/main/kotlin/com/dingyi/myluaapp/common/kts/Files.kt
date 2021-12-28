@@ -47,5 +47,8 @@ object Paths {
     val projectDir = "$mainDir/project"
     val fontsDir = "$mainDir/fonts"
     val assetsDir = MainApplication.instance.filesDir.absolutePath
-    val projectTemplateDir = "$assetsDir/res/template/project/"
+    val resDir = "$assetsDir/res"
+    val tempateDir  = "$resDir/template"
+    val projectFileTemplateDir = "$tempateDir/file"
+    val projectTemplateDir = "$tempateDir/project/"
 }

@@ -47,6 +47,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
+            android:id="@+id/inputEditText"
             android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +65,7 @@
         app:rippleColor="?theme_rippleColorOnBackground"
         android:textColor="?colorOnPrimary"
         android:text="test"
-        android:textSize="15sp"
+        android:textSize="14sp"
         app:backgroundTint="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/inputLayout"
@@ -81,7 +82,7 @@
         app:cornerRadius="4dp"
         app:elevation="0dp"
         android:text="test"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:textColor="?colorPrimary"
         app:backgroundTint="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -104,7 +105,7 @@
         android:textColor="?colorOnPrimary"
         android:text="test"
         app:backgroundTint="?colorPrimary"
-        android:textSize="15sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintLeft_toLeftOf="parent"

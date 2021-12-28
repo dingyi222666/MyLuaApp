@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
-import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.base.BaseFragment
-import com.dingyi.myluaapp.common.kts.convertObject
-import com.dingyi.myluaapp.common.kts.getAttributeColor
-import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.showPopMenu
+import com.dingyi.myluaapp.common.dialog.builder.BottomDialogBuilder
+import com.dingyi.myluaapp.common.dialog.layout.DefaultClickListLayout
+import com.dingyi.myluaapp.common.dialog.layout.DefaultInputLayout
+import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.databinding.FragmentEditorFileListBinding
 
 import com.dingyi.myluaapp.ui.editor.MainViewModel
@@ -69,6 +68,7 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
                 menu.setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.editor_file_list_toolbar_action_new_file -> {
+                            showChooseFileTemplateDialog()
                             true
                         }
                         else -> false
@@ -85,7 +85,53 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
         }
     }
 
+
+    private fun showChooseFileTemplateDialog() {
+        BottomDialogBuilder.with(requireActivity())
+            .setTitle(R.string.editor_dialog_choose_file_template_title)
+            .setPositiveButton(android.R.string.ok.getString()) { helper, item ->
+                item?.apply {
+                    showInputPathDialog(item)
+                }
+            }
+            .setDialogLayout(DefaultClickListLayout())
+            .setSingleChoiceItems(
+                viewModel.controller.getFileTemplates(
+                    Paths.projectFileTemplateDir
+                ), 0
+            )
+            .show()
+
+    }
+
+    private fun showInputPathDialog(item: Pair<String, Any>) {
+
+        BottomDialogBuilder.with(requireActivity())
+            .setDialogLayout(DefaultInputLayout())
+            .setPositiveButton(android.R.string.ok.getString()) { helper, inputText ->
+                val (_, templateName) = item.checkNotNull()
+                val (_, inputName) = inputText.checkNotNull()
+                if (inputName.toString().isEmpty()) {
+                    //拦截不关闭dialog
+                    return@setPositiveButton helper.interceptClose(false)
+                } else {
+                    val createFilePath = viewModel.controller.createTemplateFile(
+                        inputName.toString(),
+                        viewBinding.list.nowOpenDir,
+                        Paths.projectFileTemplateDir,
+                        templateName.toString()
+                    )
+                    refreshFileList()
+                    viewModel.controller.openFile(createFilePath)
+                    viewModel.refreshOpenedFile()
+                }
+            }
+            .show()
+    }
+
+
     private fun loadFileList(path: String) {
+
         lifecycleScope.launch {
             viewBinding.refresh.isRefreshing = true
             viewBinding.list.loadFileList(path)

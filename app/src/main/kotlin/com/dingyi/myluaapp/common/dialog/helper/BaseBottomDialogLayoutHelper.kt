@@ -6,9 +6,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dingyi.myluaapp.common.dialog.BottomDialog
 import com.google.android.material.textfield.TextInputLayout
 
-abstract class BaseBottomDialogLayoutHelper(val rootView: View):IBaseBottomDialogLayoutHelper {
-    override fun apply(params: BottomDialog.BottomDialogCreateParams) {
-        getCloseView().setOnClickListener {  }
+abstract class BaseBottomDialogLayoutHelper(val rootView: View, val dialog: BottomDialog) :
+    IBaseBottomDialogLayoutHelper {
+
+
+    private var canClose = true
+
+    override fun interceptClose(close: Boolean) {
+        canClose = close
+    }
+
+    override fun dismiss() {
+        if (canClose) {
+            dialog.dismiss()
+        }
     }
 }
 
@@ -37,4 +48,9 @@ interface IBaseBottomDialogLayoutHelper {
 
     fun getCloseView(): View
     fun apply(params: BottomDialog.BottomDialogCreateParams)
+
+    fun dismiss()
+
+    fun interceptClose(close: Boolean)
+
 }

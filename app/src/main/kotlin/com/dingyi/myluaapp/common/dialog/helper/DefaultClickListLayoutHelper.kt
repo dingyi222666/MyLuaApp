@@ -11,9 +11,8 @@ import com.dingyi.myluaapp.common.kts.convertObject
 import com.dingyi.myluaapp.common.kts.ifNull
 import com.dingyi.myluaapp.databinding.LayoutBottomDialogDefaultClickListBinding
 import com.dingyi.myluaapp.databinding.LayoutItemBottomDialogDefaultClickItemBinding
-import kotlin.properties.Delegates
 
-class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelper(rootView) {
+class DefaultClickListLayoutHelper(rootView: View, dialog: BottomDialog) : BaseBottomDialogLayoutHelper(rootView, dialog) {
 
     private val binding = LayoutBottomDialogDefaultClickListBinding.bind(rootView)
 
@@ -34,12 +33,21 @@ class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelpe
 
 
     private fun applyView(params: BottomDialog.BottomDialogCreateParams) {
+
+        if (params.title.isNotEmpty()) {
+            binding.title.text = params.title
+        } else {
+            binding.title.visibility = View.GONE
+        }
+
         if (params.negativeButtonText.isNotEmpty()) {
             binding.negativeButton.text = params.negativeButtonText
             binding.negativeButton.setOnClickListener {
+                interceptClose(true)
                 params.negativeButtonClick(
                     this, getSelectItemValue(params)
                 )
+                dialog.dismiss()
             }
         } else {
             binding.negativeButton.visibility = View.GONE
@@ -49,7 +57,9 @@ class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelpe
 
             binding.neutralButton.text = params.neutralButtonText
             binding.neutralButton.setOnClickListener {
+                interceptClose(true)
                 params.neutralButtonClick(this, getSelectItemValue(params))
+                dismiss()
             }
         } else {
             binding.neutralButton.visibility = View.GONE
@@ -59,9 +69,11 @@ class DefaultClickListLayoutHelper(rootView: View) : BaseBottomDialogLayoutHelpe
 
             binding.positiveButton.text = params.positiveButtonText
             binding.positiveButton.setOnClickListener {
+                interceptClose(true)
                 params.positiveButtonClick(this, getSelectItemValue(params))
-            }
 
+                dismiss()
+            }
         } else {
             binding.positiveButton.visibility = View.GONE
         }

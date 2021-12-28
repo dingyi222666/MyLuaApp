@@ -68,8 +68,9 @@
     <string name="settings_editor_language_restart_toast">Take effect after restart</string>
     <string name="settings_editor_magnifier_category">Magnifier</string>
     <string name="settings_editor_magnifier_summary">Zoom in on adjacent content while dragging selected text</string>
-    <string name="editor_menu_file_list_toolbar_new_file">New File</string>
-
+    <string name="editor_menu_file_list_toolbar_new_file">Create File</string>
+    <string name="editor_dialog_choose_file_template_title">Create File</string>
+ <string name="editor_dialog_create_file_title">Create </string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>

@@ -1,21 +1,18 @@
 package com.dingyi.myluaapp.common.dialog.builder
 
 
-import android.view.View
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.dingyi.myluaapp.common.dialog.BottomDialog
 import com.dingyi.myluaapp.common.dialog.DialogClickListener
 import com.dingyi.myluaapp.common.dialog.layout.BaseBottomDialogLayout
 import com.dingyi.myluaapp.common.kts.getString
-import com.dingyi.myluaapp.common.kts.getStringArray
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
-class BottomDialogBuilder(private val activity: AppCompatActivity) {
+class BottomDialogBuilder(private val context: Context) {
 
 
-    private val bottomDialog = BottomDialog(activity)
+    private val bottomDialog = BottomDialog(context)
 
     private val params = BottomDialog.BottomDialogCreateParams()
 
@@ -33,7 +30,7 @@ class BottomDialogBuilder(private val activity: AppCompatActivity) {
     fun setSingleChoiceItems(
         items: List<Pair<String, Any>>,
         defaultChoice: Int = 0,
-        click: DialogClickListener
+        click: DialogClickListener = defaultClick
     ): BottomDialogBuilder = this.apply {
         params.items = items
         params.choiceType = BottomDialog.BottomDialogCreateParams.ChoiceType.SingleChoice
@@ -95,7 +92,7 @@ class BottomDialogBuilder(private val activity: AppCompatActivity) {
 
 
     companion object {
-        fun with(activity: AppCompatActivity) = BottomDialogBuilder(activity)
+        fun with(activity: Context) = BottomDialogBuilder(activity)
     }
 
 }

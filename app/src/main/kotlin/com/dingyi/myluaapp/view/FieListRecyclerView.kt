@@ -65,6 +65,9 @@ class FieListRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerView
 
     private var lastOpenedDir = ""
 
+    val nowOpenDir: String
+        get() = lastOpenedDir
+
     suspend fun refreshFileList() = loadFileList(lastOpenedDir)
 
     suspend fun loadFileList(path: String) = withContext(Dispatchers.IO) {
