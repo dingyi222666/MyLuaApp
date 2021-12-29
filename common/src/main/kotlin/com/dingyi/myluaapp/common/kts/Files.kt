@@ -16,7 +16,13 @@ fun String.toFile() = File(this)
 fun String.toZipFile() = ZipFile(this)
 
 inline val File.suffix: String
-    get() = name.substring(name.lastIndexOf(".") + 1)
+    get() = if (name.lastIndexOf(".") == -1) "" else name.substring(
+        name.lastIndex.coerceAtMost(
+            name.lastIndexOf(
+                "."
+            ) + 1
+        )
+    )
 
 inline fun File.isDirectory(block: File.() -> Unit) {
     if (this.isDirectory) {

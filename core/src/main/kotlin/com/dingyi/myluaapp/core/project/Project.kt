@@ -214,7 +214,7 @@ class Project(
     ):String {
 
         val suffix = fileTemplate.toFile().suffix
-        val createPath = "$createDir/$fileName.$suffix"
+        val createPath = "$createDir/$fileName${if (suffix.isNotEmpty()) "." else ""}$suffix"
 
         val templatePath = "$templateDir/$fileTemplate"
 

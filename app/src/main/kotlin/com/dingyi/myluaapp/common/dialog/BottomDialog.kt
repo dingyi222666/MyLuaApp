@@ -2,8 +2,10 @@ package com.dingyi.myluaapp.common.dialog
 
 import android.content.Context
 import android.view.View
+import com.dingyi.editor.kts.dp
 import com.dingyi.myluaapp.common.dialog.helper.BaseBottomDialogLayoutHelper
 import com.dingyi.myluaapp.common.dialog.layout.BaseBottomDialogLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlin.properties.Delegates
 
@@ -26,6 +28,10 @@ class BottomDialog(context: Context) : BottomSheetDialog(context) {
     fun show(params:BottomDialogCreateParams) {
         _layoutHelper.apply(params)
         super.show()
+        _layoutHelper.rootView.post {
+            behavior.peekHeight = _layoutHelper.rootView.height - 1.dp
+            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
     }
 
     class BottomDialogCreateParams {
