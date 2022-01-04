@@ -1,7 +1,5 @@
 package com.dingyi.myluaapp.core.project
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -30,15 +28,22 @@ class ProjectController(val projectPath: String) {
         project.selectOpenedFile(it)
     }
 
-    fun getProjectFile(): Project {
+    fun getProject(): Project {
         return project
+    }
+
+    suspend fun deleteFile(path: String) = withContext(Dispatchers.IO) {
+        project.deleteFile(
+            path
+        )
+
     }
 
     val closeOtherFile = project::closeOtherOpenedFile
 
     val getNowOpenedDir = project::getNowOpenedDir
 
-    val closeFile = project::closeOpenedFile
+    val closeFile: (String) -> Unit = project::closeOpenedFile
 
     val openFile = project::openFile
     val postNowOpenedDir = project::postNowOpenedDir
@@ -46,4 +51,6 @@ class ProjectController(val projectPath: String) {
     val getFileTemplates = project::getFileTemplates
 
     val createTemplateFile = project::createTemplateFile
+
+    val rename = project::rename
 }

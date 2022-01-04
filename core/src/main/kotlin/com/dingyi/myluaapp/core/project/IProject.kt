@@ -15,11 +15,14 @@ interface IProject {
     fun getOpenedFiles():Pair<List<ProjectFile>,String>
     fun saveAllOpenedFile():Boolean
     fun saveOpenedFile(path:String): Boolean
-    fun closeOpenedFile(path:String,nowOpenedFile:String)
+
     fun closeOtherOpenedFile(path: String)
     fun getFileTemplates(templatePath:String):List<Pair<String,String>>
+    fun rename(path: String,toPath:String):Boolean
     fun createTemplateFile(fileName: String,
                            createDir:String,
                            templateDir: String,
                            fileTemplate: String):   String
+
+    fun closeOpenedFile(path: String)
 }

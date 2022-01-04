@@ -81,7 +81,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 viewModel.controller.selectOpenedFile(it)
             }
             onCloseFile {
-                viewModel.controller.closeFile(it.first, it.second)
+                viewModel.controller.closeFile(it)
                 viewModel.refreshOpenedFile()
             }
             onCloseOtherFile {

@@ -82,8 +82,9 @@
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/fragment_editor_file_list.xml" value="0.15081521739130435" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_base_dialog_bottom_dialog_default_input.xml" value="0.264" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_bottom_dialog_defaukt_click_list.xml" value="0.21621621621621623" />
-        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_bottom_dialog_default_click_list.xml" value="0.16" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_bottom_dialog_default_click_list.xml" value="0.1" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_bottom_dialog_default_input.xml" value="0.1" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_bottom_dialog_default_message.xml" value="0.72" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_include_toolbar.xml" value="0.1" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_item_bottom_dialog_default_click_item.xml" value="0.21621621621621623" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_item_bottom_dialog_default_click_itrm.xml" value="0.21621621621621623" />
@@ -92,6 +93,7 @@
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_item_main_project.xml" value="0.3859964093357271" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/layout_item_symbol.xml" value="0.20425724637681159" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu-sw600dp/main_toolbar.xml" value="0.1" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu/editor_file_list_long_click.xml" value="0.21621621621621623" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu/editor_file_list_toolbar.xml" value="0.21306306306306305" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu/editor_tab.xml" value="0.24205128205128204" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/menu/editor_toolbar.xml" value="0.1" />

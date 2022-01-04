@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ScrollView
 import androidx.core.os.postDelayed
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -34,6 +33,8 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
     private var projectFile: WeakReference<ProjectFile>? = null
 
     private var lastCodeContentLength = 0
+
+
 
     override fun getViewModelClass(): Class<MainViewModel> {
         return getJavaClass()
@@ -97,7 +98,7 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
     private fun getProjectFile(): ProjectFile {
         return projectFile?.get() ?: ProjectFile(
             arguments?.getString("editor_page_path", "") ?: "",
-            viewModel.controller.getProjectFile()
+            viewModel.controller.getProject()
         ).apply {
             //被回收的话就重新给一个值
             projectFile = WeakReference(this)
@@ -164,12 +165,19 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
 
     override fun onDestroy() {
         super.onDestroy()
+
+        val path = arguments?.getString("editor_page_path", "") ?: ""
+
         //先清空旧的
         projectFile?.clear()
-        //新获取一个
-        getProjectFile().apply {
-            commitChange(viewBinding.codeEditor.text, createEditorData())
-            saveChange()
+
+        //如果没有虚拟文件引用 就是彻底删除了 这时候就不会自动保存
+        if (ProjectFile.checkVirtualProjectPathExists(viewModel.controller.getProject().projectPath,path)) {
+            //新获取一个
+            getProjectFile().apply {
+                commitChange(viewBinding.codeEditor.text, createEditorData())
+                saveChange()
+            }
         }
         //清除引用
         projectFile?.clear()

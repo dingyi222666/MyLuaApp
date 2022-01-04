@@ -45,7 +45,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
         callbackList[0x01] = callback
     }
 
-    val onCloseFile = { callback: (Pair<String, String>) -> Unit ->
+    val onCloseFile = { callback: (String) -> Unit ->
         callbackList[0x02] = callback
     }
 
@@ -198,22 +198,11 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                                 val index = getTabIndex(this)
                                 val deleteProjectFile = oldOpenedFileList[index]
 
-                                val nowOpenedFileList = oldOpenedFileList.toMutableList().apply {
-                                    removeAt(index)
-                                }
 
-                                val targetIndex = 0.coerceAtLeast(
-                                    (selectedTabPosition - 1).coerceAtMost(nowOpenedFileList.size)
-                                )
-
-                                println("targetIndex $index $selectedTabPosition $targetIndex")
-
-                                val projectFile = nowOpenedFileList.getOrNull(targetIndex)
-                                println("projectFile $projectFile")
                                 runCatching {
-                                    callbackList[0x02]?.convertObject<(Pair<String, String>) -> Unit>()
+                                    callbackList[0x02]?.convertObject<(String) -> Unit>()
                                         ?.invoke(
-                                            deleteProjectFile.path to (projectFile?.path ?: "")
+                                            deleteProjectFile.path
                                         )
                                 }
 

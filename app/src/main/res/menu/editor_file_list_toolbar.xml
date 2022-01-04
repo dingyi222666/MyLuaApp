@@ -3,4 +3,7 @@
     <item
         android:id="@+id/editor_file_list_toolbar_action_new_file"
         android:title="@string/editor_menu_file_list_toolbar_new_file" />
+    <item
+        android:title="@string/editor_menu_file_list_toolbar_new_directory"
+        android:id="@+id/editor_file_list_toolbar_action_new_directory" />
 </menu>

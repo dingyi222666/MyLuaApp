@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="28dp"
-        android:text="test"
         android:textColor="#ff000000"
         android:textSize="21sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -34,20 +33,21 @@
         app:tint="@color/theme_default_imageColorFilter"
         tools:ignore="UseAppTint" />
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
-        android:layout_marginLeft="14dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="@id/negativeButton"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="20dp"
+        android:textColor="?theme_hintTextColor"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@id/positiveButton"
+        app:layout_constraintLeft_toLeftOf="@id/title"
         app:layout_constraintRight_toRightOf="@id/close_image"
         app:layout_constraintTop_toBottomOf="@id/title">
 
-    </androidx.recyclerview.widget.RecyclerView>
+    </com.google.android.material.textview.MaterialTextView>
+
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/neutralButton"
@@ -60,14 +60,14 @@
         android:textAllCaps="false"
         app:cornerRadius="4dp"
         app:elevation="0dp"
+        app:rippleColor="?theme_rippleColorOnBackground"
         android:textColor="?colorOnPrimary"
         android:text="test"
-        app:rippleColor="?theme_rippleColorOnBackground"
         android:textSize="14sp"
         app:backgroundTint="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/title"
-        app:layout_constraintTop_toBottomOf="@id/list" />
+        app:layout_constraintLeft_toLeftOf="@id/message"
+        app:layout_constraintTop_toBottomOf="@id/message" />
 
 
     <com.google.android.material.button.MaterialButton
@@ -83,13 +83,14 @@
         app:elevation="0dp"
         android:text="test"
         android:textSize="14sp"
+
         android:textColor="?colorPrimary"
         app:backgroundTint="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/positiveButton"
-        app:layout_constraintTop_toBottomOf="@id/list" />
+        app:layout_constraintTop_toBottomOf="@id/message" />
 
 
     <com.google.android.material.button.MaterialButton
@@ -100,20 +101,18 @@
         android:layout_marginBottom="28dp"
         android:paddingLeft="28dp"
         android:paddingRight="28dp"
+        android:text="test"
         android:textAllCaps="false"
+        android:textColor="?colorOnPrimary"
+        android:textSize="14sp"
+        app:backgroundTint="?colorPrimary"
         app:cornerRadius="4dp"
         app:elevation="0dp"
-        app:rippleColor="?theme_rippleColorOnBackground"
-        android:textColor="?colorOnPrimary"
-        android:text="test"
-        app:backgroundTint="?colorPrimary"
-        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="@id/close_image"
-        app:layout_constraintTop_toBottomOf="@id/list" />
-
-
+        app:layout_constraintRight_toRightOf="@id/message"
+        app:layout_constraintTop_toBottomOf="@id/message"
+        app:rippleColor="?theme_rippleColorOnBackground" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

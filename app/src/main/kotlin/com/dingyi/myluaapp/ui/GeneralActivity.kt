@@ -15,7 +15,7 @@ import com.dingyi.myluaapp.databinding.ActivityGeneralBinding
 /**
  * @author: dingyi
  * @date: 2021/8/4 21:31
- * @description:
+ * @description: a base fragment activity
  **/
 class GeneralActivity : AppCompatActivity() {
 
@@ -52,6 +52,8 @@ class GeneralActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().add(R.id.container, it)
                 .commit()
         }
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -10,6 +10,7 @@ import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.dialog.builder.BottomDialogBuilder
 import com.dingyi.myluaapp.common.dialog.layout.DefaultClickListLayout
 import com.dingyi.myluaapp.common.dialog.layout.DefaultInputLayout
+import com.dingyi.myluaapp.common.dialog.layout.DefaultMessageLayout
 import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.databinding.FragmentEditorFileListBinding
 
@@ -58,6 +59,9 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
             onEnterDir {
                 this@EditorFileListFragment.loadFileList(it)
             }
+            onLongClick { itemView, path ->
+                showLongClickMenu(itemView, path)
+            }
         }
 
 
@@ -69,6 +73,10 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
                     when (it.itemId) {
                         R.id.editor_file_list_toolbar_action_new_file -> {
                             showChooseFileTemplateDialog()
+                            true
+                        }
+                        R.id.editor_file_list_toolbar_action_new_directory -> {
+                            showCreateDirectoryDialog()
                             true
                         }
                         else -> false
@@ -85,16 +93,75 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
         }
     }
 
+    private fun showLongClickMenu(itemView: View, path: String) {
+        R.menu.editor_file_list_long_click.showPopMenu(itemView) { menu ->
+            menu.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.editor_file_list_long_click_action_rename -> {
+                        showRenameDialog(path)
+                        true
+                    }
+                    R.id.editor_file_list_long_click_action_delete -> {
+                        showDeleteDialog(path)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+    }
+
+    private fun showDeleteDialog(path: String) {
+        BottomDialogBuilder.with(requireActivity())
+            .setDialogLayout(DefaultMessageLayout)
+            .setTitle(R.string.editor_dialog_delete_title)
+            .setMessage(R.string.editor_dialog_delete_message)
+            .setPositiveButton(android.R.string.ok.getString()) { _, _ ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.controller.deleteFile(path)
+                    viewModel.refreshOpenedFile()
+                    viewModel.refreshOpenedDir()
+                }
+            }
+            .setNegativeButton(android.R.string.cancel.getString())
+            .show()
+
+    }
+
+    private fun showRenameDialog(path: String) {
+
+    }
+
+    private fun showCreateDirectoryDialog() {
+        BottomDialogBuilder.with(requireActivity())
+            .setDialogLayout(DefaultInputLayout)
+            .setTitle(R.string.editor_dialog_create_directory_title)
+            .setPositiveButton(android.R.string.ok.getString()) { helper, inputText ->
+                val (_, inputName) = inputText.checkNotNull()
+                if (inputName.toString().isEmpty()) {
+                    //拦截不关闭dialog
+                    return@setPositiveButton helper.interceptClose(false)
+                } else {
+                    val createDirectoryPath = "${viewBinding.list.nowOpenDir}/$inputName"
+                    createDirectoryPath.toFile().mkdirs()
+
+                    refreshFileList()
+                    viewModel.controller.postNowOpenedDir(createDirectoryPath)
+                    viewModel.refreshOpenedDir()
+                }
+            }
+            .show()
+    }
 
     private fun showChooseFileTemplateDialog() {
         BottomDialogBuilder.with(requireActivity())
             .setTitle(R.string.editor_dialog_choose_file_template_title)
-            .setPositiveButton(android.R.string.ok.getString()) { helper, item ->
+            .setPositiveButton(android.R.string.ok.getString()) { _, item ->
                 item?.apply {
                     showInputPathDialog(item)
                 }
             }
-            .setDialogLayout(DefaultClickListLayout())
+            .setDialogLayout(DefaultClickListLayout)
             .setSingleChoiceItems(
                 viewModel.controller.getFileTemplates(
                     Paths.projectFileTemplateDir
@@ -107,7 +174,8 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
     private fun showInputPathDialog(item: Pair<String, Any>) {
 
         BottomDialogBuilder.with(requireActivity())
-            .setDialogLayout(DefaultInputLayout())
+            .setTitle("${R.string.editor_dialog_create_file_title.getString()} ${item.first}")
+            .setDialogLayout(DefaultInputLayout)
             .setPositiveButton(android.R.string.ok.getString()) { helper, inputText ->
                 val (_, templateName) = item.checkNotNull()
                 val (_, inputName) = inputText.checkNotNull()

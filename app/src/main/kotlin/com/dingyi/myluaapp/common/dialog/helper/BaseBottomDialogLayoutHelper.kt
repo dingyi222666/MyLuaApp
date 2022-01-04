@@ -25,7 +25,7 @@ abstract class BaseBottomDialogLayoutHelper(val rootView: View, val dialog: Bott
 
 interface IBaseBottomDialogLayoutHelper {
 
-    /***
+    /**
      * if layout has textInputLayout return it
      * @return return textInputLayout if not null
      **/
@@ -51,6 +51,9 @@ interface IBaseBottomDialogLayoutHelper {
 
     fun dismiss()
 
+    /**
+     * intercept close
+     */
     fun interceptClose(close: Boolean)
 
 }

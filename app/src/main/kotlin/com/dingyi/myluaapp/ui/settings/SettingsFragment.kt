@@ -79,9 +79,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 requireActivity().runOnUiThread {
                     R.string.settings_editor_language_restart_toast.getString().showToast()
                 }
-                Thread.sleep(200)
+                Thread.sleep(2)
                 requireActivity().restartApp()
-
             }
         }
     }
@@ -126,7 +125,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         when (requestCode) {
             REQUEST_FONT_SET_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
-
                     data?.data?.let {
                         requireContext().contentResolver.openInputStream(it)?.use { input ->
                             runCatching {

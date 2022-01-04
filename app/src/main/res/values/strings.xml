@@ -68,9 +68,16 @@
     <string name="settings_editor_font_toast_fail">选择字体失败</string>
     <string name="settings_editor_magnifier_summary">在拖动选择文本时放大临近内容</string>
     <string name="settings_editor_magnifier_category">放大镜</string>
+    <string name="editor_menu_file_list_toolbar_new_directory">新建文件夹</string>
     <string name="editor_menu_file_list_toolbar_new_file">新建文件</string>
+    <string name="editor_menu_file_list_long_click_rename">重命名</string>
+    <string name="editor_menu_file_list_long_click_delete">删除</string>
+    <string name="editor_menu_file_list_long_click_show_local_history">查看编辑历史</string>
     <string name="editor_dialog_choose_file_template_title">新建文件</string>
     <string name="editor_dialog_create_file_title">新建 </string>
+    <string name="editor_dialog_delete_title">删除</string>
+    <string name="editor_dialog_delete_message">是否确认删除？删除后不可恢复</string>
+    <string name="editor_dialog_create_directory_title">新建文件夹</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>

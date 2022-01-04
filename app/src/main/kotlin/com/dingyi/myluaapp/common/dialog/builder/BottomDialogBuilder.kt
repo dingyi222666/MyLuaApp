@@ -90,6 +90,12 @@ class BottomDialogBuilder(private val context: Context) {
         return this
     }
 
+    fun setMessage(message: String): BottomDialogBuilder = this.apply {
+        params.message = message
+    }
+
+    fun setMessage(id: Int): BottomDialogBuilder = setMessage(id.getString())
+
 
     companion object {
         fun with(activity: Context) = BottomDialogBuilder(activity)

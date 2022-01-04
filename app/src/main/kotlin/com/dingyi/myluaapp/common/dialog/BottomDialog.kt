@@ -53,8 +53,6 @@ class BottomDialog(context: Context) : BottomSheetDialog(context) {
         var itemsClick = defaultClick
         var choiceType = ChoiceType.None
         var defaultChoiceItem = intArrayOf(0)
-
-
     }
 
 

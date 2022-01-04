@@ -70,7 +70,7 @@
     <string name="settings_editor_magnifier_summary">Zoom in on adjacent content while dragging selected text</string>
     <string name="editor_menu_file_list_toolbar_new_file">Create File</string>
     <string name="editor_dialog_choose_file_template_title">Create File</string>
- <string name="editor_dialog_create_file_title">Create </string>
+    <string name="editor_menu_file_list_toolbar_new_directory">Create Directory</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>
@@ -112,4 +112,12 @@
         <item>落尽梨花春又了。满地残阳，翠色和烟老。</item>
         <item>飞絮飞花何处是，层冰积雪摧残，疏疏一树五更寒。</item>
     </string-array>
+    <string name="editor_dialog_create_file_title">Create</string>
+    <string name="editor_dialog_create_directory_title">Create Directory</string>
+    <string name="editor_menu_file_list_long_click_rename">Rename</string>
+    <string name="editor_menu_file_list_long_click_delete">Delete</string>
+    <string name="editor_menu_file_list_long_click_show_local_history">Show Edit History</string>
+    <string name="editor_dialog_delete_title">Delete</string>
+    <string name="editor_dialog_delete_message">" Are you sure want to delete it? Unrecoverable it after deletion. \\"</string>
+
 </resources>

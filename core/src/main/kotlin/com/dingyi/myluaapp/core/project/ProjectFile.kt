@@ -35,6 +35,13 @@ class ProjectFile(
     private var virtualProjectFile by Delegates.notNull<VirtualProjectFile>()
 
 
+
+    companion object {
+        fun checkVirtualProjectPathExists(projectPath:String,path: String):Boolean {
+            return "$projectPath/.MyLuaApp/cache/virtual_file_${path.toMD5()}".toFile().exists()
+        }
+    }
+
     /**
      * Commit change to cache file
      */
@@ -141,8 +148,8 @@ class ProjectFile(
                 path.toFile().writeText(string.toString())
             }
 
-            fun delete() {
-                path.toFile().delete()
+            fun delete():Boolean {
+                return path.toFile().delete()
             }
 
             fun copyTo(targetPath: String) {
@@ -160,18 +167,16 @@ class ProjectFile(
             }
         }
 
-        fun delete() {
-            historyList.forEach {
+        fun delete():Boolean {
+            return !historyList.map {
                 it.delete()
-            }
+            }.contains(false)
         }
 
     }
 
-    fun deleteFile() {
-        getVirtualProjectFile().delete()
-        virtualProjectFilePath.delete()
-        path.toFile().delete()
+    fun deleteFile():Boolean {
+        return  getVirtualProjectFile().delete() &&  virtualProjectFilePath.delete() && path.toFile().delete()
     }
 
     override fun toString(): String {

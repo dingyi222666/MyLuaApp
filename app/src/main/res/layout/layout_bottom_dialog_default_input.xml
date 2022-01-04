@@ -55,10 +55,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/neutralButton"
-        android:layout_width="78dp"
-        android:layout_height="42dp"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="28dp"
+        android:paddingLeft="28dp"
+        android:paddingRight="28dp"
         android:textAllCaps="false"
         app:cornerRadius="4dp"
         app:elevation="0dp"
@@ -74,10 +76,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/negativeButton"
-        android:layout_width="78dp"
-        android:layout_height="42dp"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="28dp"
+        android:paddingLeft="28dp"
+        android:paddingRight="28dp"
         android:textAllCaps="false"
         app:cornerRadius="4dp"
         app:elevation="0dp"
@@ -94,10 +98,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/positiveButton"
-        android:layout_width="78dp"
-        android:layout_height="42dp"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="28dp"
+        android:paddingLeft="28dp"
+        android:paddingRight="28dp"
         android:textAllCaps="false"
         app:cornerRadius="4dp"
         app:elevation="0dp"

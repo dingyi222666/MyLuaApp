@@ -45,7 +45,41 @@ class Project(
     }
 
     override fun deleteFile(path: String) {
-        ProjectFile(path, this).deleteFile()
+        val projectBean = getOpenedFileBean()
+        val file = path.toFile()
+        if (file.isFile) {
+            closeOpenedFile(getAbsoluteFile(path), projectBean, false)
+            ProjectFile(getAbsoluteFile(path), this).deleteFile()
+        } else {
+
+            file.walkBottomUp()
+                .forEach {
+                    if (it.isFile) {
+                        closeOpenedFile(it.path, projectBean, false)
+                        Log.d("delete","status:${ProjectFile(it.path, this).deleteFile()}")
+                    }
+                }
+
+            file.deleteRecursively()
+
+        }
+
+        projectBean?.let {
+            var openedDir = it.nowOpenedDir.toFile()
+            while (openedDir.name != "") {
+                if (openedDir.exists()) {
+                    break
+                } else {
+                    openedDir =
+                        openedDir.parentFile?.absoluteFile?.absolutePath?.toFile()
+                            ?: "".toFile()
+                }
+            }
+            val nowOpenedDir = openedDir.path
+            it.nowOpenedDir = nowOpenedDir
+            saveOpenedFiles(it)
+
+        }
     }
 
     fun generateAppProject(): AppProject? {
@@ -82,8 +116,10 @@ class Project(
 
     private fun getAbsoluteFile(path: String): String {
         var path = path
+        println("abs",path)
         if (!path.toFile().exists() || path == "") {
             path = "$projectPath/$path"
+
             if (!path.toFile().exists()) throw FileNotFoundException("Not Found File.")
             return path
         }
@@ -168,13 +204,41 @@ class Project(
         return ProjectFile(path, this).saveChange()
     }
 
-    override fun closeOpenedFile(path: String, nowOpenedFile: String) {
-        getOpenedFileBean()?.let { bean ->
-            println("closePath",path,nowOpenedFile)
-            bean.openedFiles.remove(getAbsoluteFile(path))
-            val nowOpenFilePath = getAbsoluteFile(nowOpenedFile)
-            bean.nowOpenFile = nowOpenFilePath
-            saveOpenedFiles(bean)
+    override fun closeOpenedFile(path: String) {
+        closeOpenedFile(path)
+    }
+
+    private fun closeOpenedFile(
+        path: String,
+        bean: OpenedFilesBean? = getOpenedFileBean(),
+        autoSave: Boolean = true
+    ) {
+        val absoluteClosePath = getAbsoluteFile(path)
+        println("abs1",absoluteClosePath,path)
+        bean?.let { bean ->
+
+            if (!bean.openedFiles.contains(absoluteClosePath)) {
+                return
+            }
+
+            val selectIndex = bean.openedFiles.indexOf(getAbsoluteFile(bean.nowOpenFile))
+
+            bean.openedFiles.remove(absoluteClosePath)
+
+            val targetSelectPath =
+                bean.openedFiles
+                    .getOrElse(0.coerceAtLeast((selectIndex - 1).coerceAtMost(bean.openedFiles.size - 1))) {
+                        ""
+                    }
+
+
+            println("select",targetSelectPath)
+
+            bean.nowOpenFile = targetSelectPath
+
+            if (autoSave) {
+                saveOpenedFiles(bean)
+            }
         }
 
     }
@@ -224,6 +288,10 @@ class Project(
         }.writeText(templatePath.toFile().readText())
 
         return createPath
+    }
+
+    override fun rename(path: String, toPath: String): Boolean {
+        return true
     }
 
     override fun backup(exportOutputStream: OutputStream): Boolean {
