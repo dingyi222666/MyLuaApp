@@ -101,10 +101,17 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
         })
 
 
+
+
         println("nowOpenedFile $nowOpenedFile")
 
         oldOpenedFileList = list
 
+
+        if (list.isEmpty()) {
+            actionBar.subtitle = null
+            return
+        }
 
         list.forEachIndexed { index, projectFile ->
             if (projectFile.path == nowOpenedFile) {
@@ -119,6 +126,9 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                 return
             }
         }
+
+
+        actionBar.subtitle = ""
 
 
     }
@@ -155,6 +165,8 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                                 ?.invoke(oldOpenedFileList[index].path)
                         }
                         //不知道为什么有效
+                    } else {
+                        actionBar.subtitle = ""
                     }
 
                 }

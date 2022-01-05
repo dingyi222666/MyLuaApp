@@ -205,7 +205,7 @@ class Project(
     }
 
     override fun closeOpenedFile(path: String) {
-        closeOpenedFile(path)
+        closeOpenedFile(path, autoSave = true)
     }
 
     private fun closeOpenedFile(
@@ -214,7 +214,7 @@ class Project(
         autoSave: Boolean = true
     ) {
         val absoluteClosePath = getAbsoluteFile(path)
-        println("abs1",absoluteClosePath,path)
+        Log.e("test", "abs1 $absoluteClosePath $path")
         bean?.let { bean ->
 
             if (!bean.openedFiles.contains(absoluteClosePath)) {
@@ -223,16 +223,18 @@ class Project(
 
             val selectIndex = bean.openedFiles.indexOf(getAbsoluteFile(bean.nowOpenFile))
 
-            bean.openedFiles.remove(absoluteClosePath)
 
             val targetSelectPath =
                 bean.openedFiles
-                    .getOrElse(0.coerceAtLeast((selectIndex - 1).coerceAtMost(bean.openedFiles.size - 1))) {
+                    .getOrElse(0.coerceAtLeast(selectIndex - 1)) {
                         ""
                     }
 
 
-            println("select",targetSelectPath)
+            bean.openedFiles.remove(absoluteClosePath)
+
+
+            Log.e("test", "select $targetSelectPath")
 
             bean.nowOpenFile = targetSelectPath
 

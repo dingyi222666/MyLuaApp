@@ -162,10 +162,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             }
             viewBinding.editorToastOpenFile.visibility =
                 if (list.isEmpty()) {
-                    viewBinding.toolbar.subtitle = ""
+                    viewBinding.toolbar.subtitle = null
                     View.VISIBLE
                 } else View.GONE
-            if (list.isNotEmpty()) viewBinding.editorTab.postOpenedFiles(list, pair.second)
+
+            viewBinding.editorTab.postOpenedFiles(list, pair.second)
             viewBinding.editorPage.adapter?.notifyDataSetChanged()
         }
 

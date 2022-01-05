@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.core.project
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -43,7 +44,10 @@ class ProjectController(val projectPath: String) {
 
     val getNowOpenedDir = project::getNowOpenedDir
 
-    val closeFile: (String) -> Unit = project::closeOpenedFile
+    val closeFile: (String) -> Unit = { path ->
+        Log.e("call",path)
+        project.closeOpenedFile(path)
+    }
 
     val openFile = project::openFile
     val postNowOpenedDir = project::postNowOpenedDir
@@ -53,4 +57,5 @@ class ProjectController(val projectPath: String) {
     val createTemplateFile = project::createTemplateFile
 
     val rename = project::rename
+
 }
