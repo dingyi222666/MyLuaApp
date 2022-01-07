@@ -103,7 +103,7 @@ fun TextView.setTextIfDifferent(data: String) {
 }
 
 fun String.showToast() =
-    Toast.makeText(MainApplication.instance, this, Toast.LENGTH_LONG).show()
+    Toast.makeText(MainApplication.instance, this, Toast.LENGTH_SHORT).show()
 
 fun String.showSnackBar(view: View) =
     Snackbar.make(view, this, Snackbar.LENGTH_LONG)

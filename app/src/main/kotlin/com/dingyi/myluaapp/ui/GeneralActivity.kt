@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -11,6 +12,7 @@ import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.common.kts.getString
 import com.dingyi.myluaapp.common.kts.showSnackBar
 import com.dingyi.myluaapp.databinding.ActivityGeneralBinding
+import com.hjq.language.MultiLanguages
 
 /**
  * @author: dingyi
@@ -27,6 +29,12 @@ class GeneralActivity : AppCompatActivity() {
     }
 
     protected val themeManager = ThemeManager()
+
+    override fun attachBaseContext(base: Context) {
+        // 绑定语种
+        super.attachBaseContext(MultiLanguages.attach(base))
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

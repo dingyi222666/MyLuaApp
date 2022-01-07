@@ -117,11 +117,7 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
             .setTitle(R.string.editor_dialog_delete_title)
             .setMessage(R.string.editor_dialog_delete_message)
             .setPositiveButton(android.R.string.ok.getString()) { _, _ ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.controller.deleteFile(path)
-                    viewModel.refreshOpenedFile()
-                    viewModel.refreshOpenedDir()
-                }
+                viewModel.deleteFile(path)
             }
             .setNegativeButton(android.R.string.cancel.getString())
             .show()
@@ -129,7 +125,22 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
     }
 
     private fun showRenameDialog(path: String) {
-
+        BottomDialogBuilder.with(requireActivity())
+            .setDialogLayout(DefaultInputLayout)
+            .setTitle(R.string.editor_dialog_rename_title)
+            .setDefaultText(path.toFile().name)
+            .setPositiveButton(android.R.string.ok.getString()) { helper, inputText ->
+                val (_, inputName) = inputText.checkNotNull()
+                if (inputName.toString().isEmpty()) {
+                    //拦截不关闭dialog
+                    return@setPositiveButton helper.interceptClose(false)
+                } else {
+                    val parentPath = path.toFile().parentFile?.path ?: path
+                    viewModel.rename(path,"$parentPath/$inputName")
+                }
+            }
+            .setNegativeButton(android.R.string.cancel.getString())
+            .show()
     }
 
     private fun showCreateDirectoryDialog() {
@@ -150,6 +161,7 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
                     viewModel.refreshOpenedDir()
                 }
             }
+            .setNegativeButton(android.R.string.cancel.getString())
             .show()
     }
 
@@ -167,6 +179,7 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
                     Paths.projectFileTemplateDir
                 ), 0
             )
+            .setNegativeButton(android.R.string.cancel.getString())
             .show()
 
     }
@@ -194,6 +207,7 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
                     viewModel.refreshOpenedFile()
                 }
             }
+            .setNegativeButton(android.R.string.cancel.getString())
             .show()
     }
 

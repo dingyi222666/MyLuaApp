@@ -38,10 +38,9 @@ class DefaultInputLayoutHelper(rootView: View, dialog: BottomDialog) :
         }
 
 
-        if (params.title.isEmpty()) {
-            binding.title.visibility = View.INVISIBLE
-        } else {
-            binding.title.text = params.title
+
+        if (params.defaultText.isNotEmpty()) {
+            binding.inputEditText.setText(params.defaultText)
         }
 
         if (params.positiveButtonText.isNotEmpty()) {

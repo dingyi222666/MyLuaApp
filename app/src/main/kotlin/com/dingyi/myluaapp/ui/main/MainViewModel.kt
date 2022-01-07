@@ -70,4 +70,10 @@ class MainViewModel : ViewModel() {
         projectList.postValue(result)
     }
 
+    suspend fun deleteProject(path: String) {
+        withContext(Dispatchers.IO) {
+            projectManger.deleteProject(Project(path, projectManger))
+        }
+    }
+
 }

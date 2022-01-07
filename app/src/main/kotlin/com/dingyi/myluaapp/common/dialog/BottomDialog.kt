@@ -40,7 +40,8 @@ class BottomDialog(context: Context) : BottomSheetDialog(context) {
             SingleChoice,MultiChoice,None
         }
 
-        private val defaultClick:DialogClickListener = { helper: BaseBottomDialogLayoutHelper,item:Pair<String,Any>? -> }
+        var defaultText: String = ""
+        private val defaultClick:DialogClickListener = { helper: BaseBottomDialogLayoutHelper, item:Pair<String,Any>? -> }
         var title = ""
         var message = ""
         var negativeButtonText = ""

@@ -1,8 +1,6 @@
 package com.dingyi.myluaapp.common.kts
 
 import android.app.Activity
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -38,12 +36,7 @@ fun AppCompatActivity.openDocument(fileType: String, callback: (Uri) -> Unit) {
     }.launch(arrayOf(fileType))
 }
 
-fun Activity.restartApp() {
-    val intent = packageManager
-        .getLaunchIntentForPackage(application.packageName)
-    val restartIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
-    val mgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager?
-    mgr?.set(AlarmManager.RTC, System.currentTimeMillis() + 100, restartIntent) // 1秒钟后重启应用
+fun restartApp() {
     exitProcess(0)
 }
 

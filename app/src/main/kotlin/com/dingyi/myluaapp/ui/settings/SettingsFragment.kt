@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.ui.settings
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
@@ -24,7 +25,8 @@ import kotlin.concurrent.thread
  * @date: 2021/9/4 15:55
  * @description:
  **/
-class SettingsFragment : PreferenceFragmentCompat() {
+class SettingsFragment : PreferenceFragmentCompat(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     companion object {
@@ -43,17 +45,24 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         }
 
+        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
+
     }
 
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+
+    //Preference点击时调用
     override fun onPreferenceTreeClick(_preference: Preference?): Boolean {
 
 
         _preference?.let { preference ->
             when {
-                preference.key == "language" -> {
-                    switchLanguage(preference)
-                }
                 preference.hasKey() -> runSimpleCode(preference.key)
             }
         }
@@ -61,10 +70,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         return super.onPreferenceTreeClick(_preference)
     }
 
-    private fun switchLanguage(preference: Preference) {
+    private fun switchLanguage(language: String) {
 
         val restart =
-            when (preferenceManager.sharedPreferences.getString(preference.key, "default")) {
+            when (language) {
                 "default" -> MultiLanguages.setSystemLanguage(requireContext())
                 "chinese" -> MultiLanguages.setAppLanguage(requireContext(), Locale.CHINESE)
                 "english" -> MultiLanguages.setAppLanguage(requireContext(), Locale.ENGLISH)
@@ -74,13 +83,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
 
         if (restart) {
-            //就算退出了也会运行
             thread {
                 requireActivity().runOnUiThread {
-                    R.string.settings_editor_language_restart_toast.getString().showToast()
+                    R.string.settings_editor_language_restart_toast
+                        .getString()
+                        .showToast()
                 }
-                Thread.sleep(2)
-                requireActivity().restartApp()
+                Thread.sleep(500)
+                android.os.Process.killProcess(android.os.Process.myPid())    //获取PID
             }
         }
     }
@@ -156,6 +166,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         } else {
             preference.icon?.let { DrawableCompat.setTint(it, color) }
+        }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        when (key) {
+            "language" -> {
+                switchLanguage(sharedPreferences?.getString(key, "default") ?: "default")
+            }
         }
     }
 

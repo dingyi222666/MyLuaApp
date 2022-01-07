@@ -41,7 +41,7 @@ class Project(
     )
 
     override fun delete(): Boolean {
-        return true;
+        return projectPath.toFile().deleteRecursively()
     }
 
     override fun deleteFile(path: String) {
@@ -77,6 +77,7 @@ class Project(
             }
             val nowOpenedDir = openedDir.path
             it.nowOpenedDir = nowOpenedDir
+            println(it)
             saveOpenedFiles(it)
 
         }
@@ -292,8 +293,51 @@ class Project(
         return createPath
     }
 
-    override fun rename(path: String, toPath: String): Boolean {
-        return true
+    override fun rename(path: String, toPath: String): Boolean = runCatching {
+        val bean = getOpenedFileBean()
+        bean?.apply {
+            nowOpenedDir = nowOpenedDir.replace(path, toPath)
+        }
+        return if (path.toFile().isFile) {
+            openedFilesRename(path, toPath, bean)
+            ProjectFile(path, this).rename(toPath)
+
+        } else {
+            path.toFile().apply {
+                copyRecursively(toPath.toFile())
+            }.walkBottomUp()
+                .filter { it.isFile }
+                .map {
+                    val targetPath = it.path.replace(path, toPath)
+                    openedFilesRename(
+                        it.path,
+                        targetPath,
+                        bean
+                    )
+                    ProjectFile(it.path, this).rename(targetPath)
+                }
+                .contains(false)
+                .not()
+                .apply {
+                    deleteFile(path)
+                }
+
+        }.apply {
+            bean?.let(::saveOpenedFiles)
+        }
+    }.getOrNull() ?: false
+
+    private fun openedFilesRename(
+        path: String,
+        toPath: String,
+        bean: OpenedFilesBean? = getOpenedFileBean()
+    ) {
+        bean?.apply {
+            nowOpenFile = nowOpenFile.replace(path, toPath)
+            openedFiles.forEachIndexed { index, s ->
+                openedFiles[index] = s.replace(path, toPath)
+            }
+        }
     }
 
     override fun backup(exportOutputStream: OutputStream): Boolean {

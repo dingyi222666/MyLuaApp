@@ -1,6 +1,9 @@
 package com.dingyi.myluaapp.ui.main.model
 
+import android.view.View
 import com.bumptech.glide.Glide
+import com.dingyi.myluaapp.R
+import com.dingyi.myluaapp.common.kts.showPopMenu
 import com.dingyi.myluaapp.core.project.Project
 import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
 import com.drake.brv.BindingAdapter
@@ -22,9 +25,12 @@ class ProjectUiModel(val project: Project.AppProject):ItemBind {
             Glide.with(image)
                 .load(project.iconPath)
                 .into(image)
+
         }
 
 
 
     }
+
+
 }

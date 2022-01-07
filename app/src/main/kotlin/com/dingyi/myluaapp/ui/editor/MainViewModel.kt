@@ -50,6 +50,23 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    fun deleteFile(path: String) {
+        viewModelScope.launch {
+            controller.deleteFile(path)
+            refreshOpenedDir()
+            refreshOpenedFile()
+        }
+    }
+
+    fun rename(path: String, toPath: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                controller.rename(path, toPath)
+                refreshOpenedDir()
+                refreshOpenedFile()
+            }
+        }
+    }
 
 
 }

@@ -39,6 +39,7 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
 
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

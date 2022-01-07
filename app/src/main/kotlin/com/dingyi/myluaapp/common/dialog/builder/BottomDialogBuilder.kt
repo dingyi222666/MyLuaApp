@@ -95,6 +95,9 @@ class BottomDialogBuilder(private val context: Context) {
     }
 
     fun setMessage(id: Int): BottomDialogBuilder = setMessage(id.getString())
+    fun setDefaultText(name: String): BottomDialogBuilder = this.apply {
+        params.defaultText = name
+    }
 
 
     companion object {

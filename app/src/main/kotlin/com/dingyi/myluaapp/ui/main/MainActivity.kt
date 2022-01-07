@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +15,10 @@ import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.dialog.builder.BottomDialogBuilder
 import com.dingyi.myluaapp.common.dialog.layout.DefaultClickListLayout
 import com.dingyi.myluaapp.common.dialog.layout.DefaultInputLayout
+import com.dingyi.myluaapp.common.dialog.layout.DefaultMessageLayout
 import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.kts.getString
+import com.dingyi.myluaapp.common.kts.showPopMenu
 import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
@@ -97,6 +101,12 @@ class MainActivity : BaseActivity<
                 addType<ProjectUiModel>(R.layout.layout_item_main_project)
             }
             .onBind {
+
+                itemView.setOnLongClickListener {
+                    showLongClickMenu(it, this@onBind.getModel<ProjectUiModel>().project.path)
+                    true
+                }
+
                 itemView.setOnClickListener {
                     val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         this@MainActivity,
@@ -114,6 +124,36 @@ class MainActivity : BaseActivity<
 
                 }
             }
+    }
+
+
+    private fun showDeleteDialog(path:String) {
+        BottomDialogBuilder.with(this)
+            .setTitle(R.string.main_dialog_delete_project_title)
+            .setDialogLayout(DefaultMessageLayout)
+            .setMessage(R.string.main_dialog_delete_project_message)
+            .setPositiveButton(android.R.string.ok.getString()) { _,_ ->
+                lifecycleScope.launch {
+                    viewModel.deleteProject(path)
+                    viewModel.refreshProjectList(viewBinding)
+                }
+            }
+            .setNegativeButton(android.R.string.cancel.getString())
+            .show()
+    }
+
+    private fun showLongClickMenu(clickView: View,path: String) {
+        R.menu.main_project_list_long_click.showPopMenu(clickView) { menu ->
+
+            menu.setOnMenuItemClickListener {
+                when (it.itemId) {
+                   R.id.main_project_list_long_click_action_delete_project -> {
+                       showDeleteDialog(path)
+                   }
+                }
+                true
+            }
+        }
     }
 
     //test code here

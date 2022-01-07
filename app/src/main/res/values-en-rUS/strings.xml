@@ -119,5 +119,10 @@
     <string name="editor_menu_file_list_long_click_show_local_history">Show Edit History</string>
     <string name="editor_dialog_delete_title">Delete</string>
     <string name="editor_dialog_delete_message">" Are you sure want to delete it? Unrecoverable it after deletion. \\"</string>
+    <string name="editor_dialog_rename_title">Rename</string>
+    <string name="main_project_list_long_click_delete_project">Delete Project</string>
+    <string name="main_project_list_long_click_backup_project">Backup Project</string>
+    <string name="main_dialog_delete_project_title">Delete Project</string>
+    <string name="main_dialog_delete_project_message">Are you sure want to delete it? Unrecoverable it after deletion.</string>
 
 </resources>

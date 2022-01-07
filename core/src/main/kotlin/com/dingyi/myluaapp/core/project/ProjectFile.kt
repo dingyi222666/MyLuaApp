@@ -45,7 +45,11 @@ class ProjectFile(
     /**
      * Commit change to cache file
      */
-    fun commitChange(text: CharSequence, data: Map<String, Float>) {
+    fun commitChange(
+        text: CharSequence,
+        data: Map<String, Float>,
+        timestamp: Long = System.currentTimeMillis()
+    ) {
 
         val history = getVirtualProjectFile()
 
@@ -54,6 +58,7 @@ class ProjectFile(
                 .delete()
         }
         history.apply {
+
             val defaultValue = { 0f }
             scrollX = data.getOrElse("scrollX", defaultValue).toInt()
             scrollY = data.getOrElse("scrollY", defaultValue).toInt()
@@ -61,7 +66,7 @@ class ProjectFile(
             line = data.getOrElse("line", defaultValue).toInt()
             textSize = data.getOrElse("textSize",defaultValue)
         }
-        val timestamp = System.currentTimeMillis()
+
         val cache = VirtualProjectFile.ProjectFileCache(
             "${project.projectPath}/.MyLuaApp/cache/history_file_${path.toMD5()}_${
                 timestamp.toString().toMD5()
@@ -176,7 +181,8 @@ class ProjectFile(
     }
 
     fun deleteFile():Boolean {
-        return  getVirtualProjectFile().delete() &&  virtualProjectFilePath.delete() && path.toFile().delete()
+        return getVirtualProjectFile().delete() && virtualProjectFilePath.delete() && path.toFile()
+            .delete()
     }
 
     override fun toString(): String {
@@ -186,4 +192,38 @@ class ProjectFile(
     override fun hashCode(): Int {
         return path.hashCode()
     }
+
+    fun rename(toPath: String): Boolean  = runCatching {
+        saveChange()
+
+        toPath.toFile().apply {
+            parentFile?.mkdirs()
+            createNewFile()
+        }.writeText(readText())
+
+        val newProjectFile = ProjectFile(toPath, project)
+        val nowVirtualFile = getVirtualProjectFile()
+        newProjectFile.getVirtualProjectFile().apply {
+            scrollY = nowVirtualFile.scrollY
+            scrollX = nowVirtualFile.scrollX
+            line = nowVirtualFile.line
+            column = nowVirtualFile.column
+            textSize = nowVirtualFile.textSize
+            nowVirtualFile.historyList.reverse()
+            nowVirtualFile.historyList.forEach {
+                val cache = VirtualProjectFile.ProjectFileCache(
+                    "${project.projectPath}/.MyLuaApp/cache/history_file_${toPath.toMD5()}_${
+                        it.timestamp.toString().toMD5()
+                    }",
+                    it.timestamp
+                )
+                cache.saveText(it.readText())
+                this.historyList.add(0,cache)
+            }
+            newProjectFile.virtualProjectFilePath.outputStream().use {
+                save(it)
+            }
+        }
+        deleteFile()
+    }.isSuccess
 }

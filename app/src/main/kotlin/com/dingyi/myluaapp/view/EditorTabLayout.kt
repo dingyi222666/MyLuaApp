@@ -128,9 +128,6 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
         }
 
 
-        actionBar.subtitle = ""
-
-
     }
 
     private fun getTabIndex(tab: Tab): Int {
@@ -165,8 +162,6 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                                 ?.invoke(oldOpenedFileList[index].path)
                         }
                         //不知道为什么有效
-                    } else {
-                        actionBar.subtitle = ""
                     }
 
                 }
