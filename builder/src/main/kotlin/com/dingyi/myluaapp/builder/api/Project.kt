@@ -20,13 +20,13 @@ interface Project {
 
     fun getDependencies(): List<Dependency>
 
+
     fun execScript(script: Script)
 
     fun delete(path: String): Boolean
 
     fun file(path: String): File
 
-    fun getTaskList(): TaskList
 
     fun getRootProject(): Project
 
@@ -38,6 +38,8 @@ interface Project {
     fun getChildProject(): Set<Project>?
 
     fun getBuilder(): Builder
+
+    fun getRunArgments():Map<String,Any>
 
 
 }

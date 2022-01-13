@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.builder.api
 
+import com.dingyi.myluaapp.builder.api.internal.ProjectInternal
 import com.dingyi.myluaapp.builder.api.task.TaskList
 
 import java.io.File
@@ -12,14 +13,6 @@ interface Builder {
     val builderHomeDir: File
 
 
-    val parent: Builder?
-
-
-    val rootProject: Project
-
-    val taskList: TaskList
-
-
     fun logWarn(tag: String, message: String)
 
     fun logInfo(tag: String, message: String)
@@ -30,5 +23,8 @@ interface Builder {
 
     fun logVerbose(tag: String, message: String)
 
-    val gradle: Builder
+
+    fun getRootProject(): Project
+
+
 }

@@ -9,15 +9,16 @@ interface TaskList {
 
     fun after(task: Task, afterTask: Task)
 
-    fun parallel(task: Task, vararg parallelTask: Task): ParallelTask
-
-    fun parallel(task: ParallelTask, vararg parallelTask: Task): ParallelTask
 
     fun replace(name: String, replaceTask: Task)
 
     fun remove(name: String)
 
     fun findByName(name: String): Task
+
+    fun getAllTask():List<Task>
+
+    fun getTasksByGroup(name:String):List<Task>
 
 
 }

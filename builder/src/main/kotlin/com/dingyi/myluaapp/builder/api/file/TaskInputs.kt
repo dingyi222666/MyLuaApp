@@ -12,4 +12,6 @@ interface TaskInputs {
     fun skip(): Boolean
 
     fun getInputFiles(): List<TaskFile>
+
+    fun getIncrementFiles():List<TaskFile>
 }

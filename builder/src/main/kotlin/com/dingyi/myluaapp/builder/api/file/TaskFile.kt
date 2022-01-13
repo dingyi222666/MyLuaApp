@@ -13,4 +13,8 @@ interface TaskFile {
 
     fun skip(): Boolean
 
+    fun getOutput():OutputStream
+
+    fun copyCache(outputStream: OutputStream)
+
 }
