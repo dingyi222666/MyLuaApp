@@ -9,10 +9,10 @@ import java.security.MessageDigest
 import kotlin.experimental.and
 
 
+fun File.getSHA256(): String = inputStream().getSHA256()
 
-
-fun File.getSHA256(): String {
-    return inputStream().use { stream ->
+fun InputStream.getSHA256(): String {
+    return use { stream ->
         val buffer = ByteArray(1024)
         val md5: MessageDigest = MessageDigest.getInstance("SHA-256")
         var numRead = 0

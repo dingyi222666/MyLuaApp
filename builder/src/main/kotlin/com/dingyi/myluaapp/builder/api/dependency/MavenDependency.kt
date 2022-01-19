@@ -1,14 +1,15 @@
 package com.dingyi.myluaapp.builder.api.dependency
 
-import java.io.File
+interface MavenDependency:Dependency {
 
-interface MavenDependency {
+    val groupId:String
 
-    fun getPomPath(mavenUrl: String): String
+    val artfactId:String
 
-    fun checkVersion(mavenUrl: String): String
+    val version:String
+    val type:String
+    fun getDependencies():List<MavenDependency>?
 
-    fun getDependencyFiles(): List<File>
 
 
 }

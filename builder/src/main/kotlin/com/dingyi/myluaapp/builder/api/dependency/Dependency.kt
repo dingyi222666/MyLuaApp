@@ -1,16 +1,10 @@
 package com.dingyi.myluaapp.builder.api.dependency
 
+import java.io.File
+
 interface Dependency {
+    val name:String
 
 
-    fun getGroup(): String
-
-    fun getName(): String
-
-    fun getVersion(): String
-
-
-    fun contentEquals(dependency: Dependency): Boolean
-
-    fun copy(): Dependency
+    fun getDependenciesFile():List<File>
 }
