@@ -1,0 +1,45 @@
+package com.dingyi.myluaapp.build.builder
+
+import com.dingyi.myluaapp.build.api.builder.MainBuilder
+import com.dingyi.myluaapp.build.api.logger.ILogger
+import com.dingyi.myluaapp.build.api.project.Project
+import com.dingyi.myluaapp.build.api.service.ServiceRepository
+import kotlin.properties.Delegates
+
+class MainBuilder(
+    private val initPath: String,
+    private val logger: ILogger,
+    private val repository: ServiceRepository
+) : MainBuilder {
+
+    private var project: Project? = null
+
+
+    fun init() {
+
+        repository.getServices().forEach {
+            val targetProject = it.onCreateProject(initPath)
+
+            if (targetProject != null) {
+                project = targetProject
+                return@forEach
+            }
+        }
+    }
+
+    override fun getLogger(): ILogger {
+        return logger
+    }
+
+    override fun getProject(): Project {
+        return project ?: error("null for project")
+    }
+
+    override fun build(command: String) {
+        val commands = command.split(" ")
+    }
+
+    override fun getServiceRepository(): ServiceRepository {
+        return repository
+    }
+}

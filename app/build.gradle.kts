@@ -62,6 +62,8 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":core"))
 
+    implementation(project(":builder"))
+
     implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 
     //androidx and more

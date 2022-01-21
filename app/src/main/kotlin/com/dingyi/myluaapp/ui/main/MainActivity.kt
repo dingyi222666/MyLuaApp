@@ -12,6 +12,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
+import com.dingyi.myluaapp.build.default.DefaultScript
+import com.dingyi.myluaapp.build.service.ServiceRepository
 import com.dingyi.myluaapp.common.dialog.builder.BottomDialogBuilder
 import com.dingyi.myluaapp.common.dialog.layout.DefaultClickListLayout
 import com.dingyi.myluaapp.common.dialog.layout.DefaultInputLayout
@@ -31,6 +33,7 @@ import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
 import kotlinx.coroutines.launch
+import org.luaj.vm2.LuaTable
 
 /**
  * @author: dingyi
@@ -64,7 +67,7 @@ class MainActivity : BaseActivity<
         initViewBinding()
         initData()
 
-        test()
+        //test()
     }
 
 
@@ -158,15 +161,14 @@ class MainActivity : BaseActivity<
 
     //test code here
     private fun test() {
-        /*
-        BottomDialogBuilder.with(this)
-            .setTitle("test")
-            .setPositiveButton("test")
-            .setSingleChoiceItems(listOf("test" to 0, "666" to 1), 1) { _, _ -> }
-            .setDialogLayout(DefaultClickListLayout())
-            .show()
+        val result = DefaultScript("/sdcard/Android/data/com.dingyi.MyLuaApp/files/project/MyApplication/build.gradle.lua")
+            .apply {
+                run()
+            }
+            .get("buildscript.dependencies")
 
-         */
+        kotlin.io.println((result as LuaTable)[1])
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

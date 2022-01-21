@@ -1,0 +1,8 @@
+{
+ "services": [
+   {
+     "class": "com.dingyi.myluaapp.build.service.AndroidService",
+     "dexPath": null
+   }
+ ]
+}

@@ -51,10 +51,12 @@ fun List<File>.sortBySelf(): List<File> {
 object Paths {
     val mainDir = MainApplication.instance.getExternalFilesDir("")?.absolutePath
     val builderPath = "$mainDir/builder"
+
     val projectDir = "$mainDir/project"
     val fontsDir = "$mainDir/fonts"
     val assetsDir = MainApplication.instance.filesDir.absolutePath
     val resDir = "$assetsDir/res"
+    val buildPath = "$resDir/build"
     val tempateDir  = "$resDir/template"
     val projectFileTemplateDir = "$tempateDir/file"
     val projectTemplateDir = "$tempateDir/project/"

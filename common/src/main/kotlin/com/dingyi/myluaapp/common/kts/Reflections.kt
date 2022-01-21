@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.common.kts
 
+import org.luaj.vm2.LuaJVM
 import org.luaj.vm2.LuajVm
 import kotlin.Pair
 
@@ -74,6 +75,6 @@ data class MutablePair<A, B>(
     override fun toString(): String = "($first, $second)"
 }
 
-typealias LuaJVM = LuajVm
+typealias LuaJVM = org.luaj.vm2.LuaJVM
 
 

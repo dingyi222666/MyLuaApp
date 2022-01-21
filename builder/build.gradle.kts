@@ -32,5 +32,6 @@ android {
 
 dependencies {
     implementation(project(":common"))
-
+    implementation(project(":luaj"))
+    implementation(BuildConfig.Libs.Google.gson)
 }
