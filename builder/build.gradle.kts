@@ -20,6 +20,7 @@ android {
             isMinifyEnabled = false
             proguardFiles (getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -34,4 +35,5 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":luaj"))
     implementation(BuildConfig.Libs.Google.gson)
+    implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
 }

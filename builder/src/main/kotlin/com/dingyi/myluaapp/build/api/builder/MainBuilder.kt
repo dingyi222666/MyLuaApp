@@ -14,4 +14,6 @@ interface MainBuilder {
 
     fun getServiceRepository():ServiceRepository
 
+    fun stop()
+
 }

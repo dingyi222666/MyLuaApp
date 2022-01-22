@@ -225,11 +225,18 @@ class Project(
             val selectIndex = bean.openedFiles.indexOf(getAbsoluteFile(bean.nowOpenFile))
 
 
-            val targetSelectPath =
+            val closeIndex = bean.openedFiles.indexOf(getAbsoluteFile(absoluteClosePath))
+
+            var targetSelectPath =
                 bean.openedFiles
                     .getOrElse(0.coerceAtLeast(selectIndex - 1)) {
                         ""
                     }
+
+
+            if (closeIndex !=selectIndex) {
+                targetSelectPath = bean.nowOpenFile
+            }
 
 
             bean.openedFiles.remove(absoluteClosePath)

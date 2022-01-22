@@ -13,7 +13,7 @@ open class DefaultTask(
 
     }
 
-    override fun run() {
+    override suspend fun run() {
 
     }
 

@@ -19,7 +19,7 @@ class EditorPagerAdapter(fragmentActivity: FragmentActivity, private val viewMod
 
     override fun getItemId(position: Int): Long {
         return (runCatching {
-            viewModel.openFiles.checkNotNull().value.checkNotNull().first[position].hashCode()
+            viewModel.openFiles.checkNotNull().value.checkNotNull().first[position].path.hashCode()
         }.getOrNull() ?: position).toLong()
     }
 

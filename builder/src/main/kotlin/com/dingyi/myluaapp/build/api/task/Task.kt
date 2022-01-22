@@ -5,7 +5,7 @@ interface Task {
 
     fun prepare()
 
-    fun run()
+    suspend fun run()
 
 
 }

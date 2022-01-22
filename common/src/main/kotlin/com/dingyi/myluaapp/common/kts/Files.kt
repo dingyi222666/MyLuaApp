@@ -51,7 +51,9 @@ fun List<File>.sortBySelf(): List<File> {
 object Paths {
     val mainDir = MainApplication.instance.getExternalFilesDir("")?.absolutePath
     val builderPath = "$mainDir/builder"
-
+    val buildCachePath = "$builderPath/cache"
+    val snapshotCachePath = "$buildCachePath/snapshot"
+    val localMavenPath = "$buildCachePath/maven"
     val projectDir = "$mainDir/project"
     val fontsDir = "$mainDir/fonts"
     val assetsDir = MainApplication.instance.filesDir.absolutePath

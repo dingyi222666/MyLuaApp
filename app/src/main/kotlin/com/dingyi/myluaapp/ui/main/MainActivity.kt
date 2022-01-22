@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -12,16 +13,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
-import com.dingyi.myluaapp.build.default.DefaultScript
-import com.dingyi.myluaapp.build.service.ServiceRepository
+import com.dingyi.myluaapp.build.BuildMain
+import com.dingyi.myluaapp.build.script.DefaultScript
 import com.dingyi.myluaapp.common.dialog.builder.BottomDialogBuilder
-import com.dingyi.myluaapp.common.dialog.layout.DefaultClickListLayout
-import com.dingyi.myluaapp.common.dialog.layout.DefaultInputLayout
 import com.dingyi.myluaapp.common.dialog.layout.DefaultMessageLayout
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.getString
 import com.dingyi.myluaapp.common.kts.showPopMenu
 import com.dingyi.myluaapp.common.kts.startActivity
+import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
 import com.dingyi.myluaapp.ui.GeneralActivity
@@ -67,7 +67,7 @@ class MainActivity : BaseActivity<
         initViewBinding()
         initData()
 
-        //test()
+        test()
     }
 
 
@@ -161,13 +161,15 @@ class MainActivity : BaseActivity<
 
     //test code here
     private fun test() {
-        val result = DefaultScript("/sdcard/Android/data/com.dingyi.MyLuaApp/files/project/MyApplication/build.gradle.lua")
-            .apply {
-                run()
-            }
-            .get("buildscript.dependencies")
 
-        kotlin.io.println((result as LuaTable)[1])
+
+        LogBroadcastReceiver(this).addCallback {
+            Log.e("message",it.getStringExtra("message") ?: "")
+        }
+
+
+        BuildMain(application)
+            .build("/sdcard/Android/data/com.dingyi.MyLuaApp/files/project/MyApplication","debug")
 
     }
 

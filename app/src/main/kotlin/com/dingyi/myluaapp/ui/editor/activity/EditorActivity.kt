@@ -1,11 +1,13 @@
 package com.dingyi.myluaapp.ui.editor.activity
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.TextUtils
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.core.view.postDelayed
 import androidx.drawerlayout.widget.DrawerLayout
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
@@ -69,13 +71,18 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     private fun initView() {
 
         viewBinding.editorPage.adapter = EditorPagerAdapter(this, viewModel)
-        viewBinding.drawerPage.adapter = EditorDrawerPagerAdapter(this).apply {
-            notifyDataSetChanged()
-        }
-        viewBinding.editorPage.offscreenPageLimit = 2
+
+        viewBinding.editorPage.offscreenPageLimit = 1
 
         viewBinding.editorTab.apply {
-            bindEditorPager(viewBinding.editorPage)
+            postDelayed(    20) {
+                bindEditorPager(viewBinding.editorPage)
+
+                viewBinding.drawerPage.adapter = EditorDrawerPagerAdapter(this@EditorActivity).apply {
+                    notifyDataSetChanged()
+                }
+
+            }
             projectPath = viewModel.controller.projectPath
             onSelectFile {
                 viewModel.controller.selectOpenedFile(it)
@@ -89,6 +96,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 //清空下
                 viewModel.refreshOpenedFile()
             }
+
         }
 
 

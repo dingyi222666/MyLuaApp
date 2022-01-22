@@ -7,4 +7,6 @@ interface Script {
 
 
     fun close()
+
+    fun put(key: String,value:Any?)
 }

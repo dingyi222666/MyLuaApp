@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.os.postDelayed
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
@@ -40,6 +41,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
 
     private var firstCurrentItem = false
 
+    private val tabNameList = mutableListOf<String>()
 
     val onSelectFile = { callback: (String) -> Unit ->
         callbackList[0x01] = callback
@@ -101,6 +103,10 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
         })
 
 
+        tabNameList.clear()
+        tabNameList.addAll(list.map {
+            it.path.toFile().name
+        })
 
 
         println("nowOpenedFile $nowOpenedFile")
@@ -122,7 +128,10 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                         ?.invoke(projectFile.path)
                 }
                 println(" tab ${getTabAt(index)?.text} ${getTabAt(index)?.position}")
-                selectTab(getTabAt(index))
+
+                post {
+                    selectTab(getTabAt(index)?.let { getTabIndex(it) }?.let { getTabAt(it) })
+                }
                 return
             }
         }
@@ -148,20 +157,25 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     }
 
     init {
+
         addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(selectTab: Tab?) {
                 selectTab?.let { tab ->
                     val index = getTabIndex(tab)
 
-                    editorPage?.setCurrentItem(index, true)
-
                     if (oldOpenedFileList.isNotEmpty()) {
+
+                        editorPage?.setCurrentItem(index, true)
+
                         actionBar.subtitle = getTabText(oldOpenedFileList[index])
+
+
                         runCatching {
                             callbackList[0x01]?.convertObject<(String) -> Unit>()
                                 ?.invoke(oldOpenedFileList[index].path)
                         }
                         //不知道为什么有效
+
                     }
 
                 }
@@ -172,6 +186,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                 this.onTabSelected(tab)
             }
         })
+
     }
 
 
@@ -275,7 +290,20 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
                         || (scrollState == ViewPager2.SCROLL_STATE_SETTLING
                         && previousScrollState == ViewPager2.SCROLL_STATE_IDLE))
                 selectTab(getTabAt(position), updateIndicator)
+            }
 
+
+            if (oldOpenedFileList.isNotEmpty()) {
+
+
+                actionBar.subtitle = getTabText(oldOpenedFileList[position])
+
+
+                runCatching {
+                    callbackList[0x01]?.convertObject<(String) -> Unit>()
+                        ?.invoke(oldOpenedFileList[position].path)
+                }
+                //不知道为什么有效
 
             }
 
@@ -283,10 +311,17 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
     }
 
     fun bindEditorPager(editorPage: ViewPager2) {
-        firstCurrentItem = true
-        this.editorPage?.unregisterOnPageChangeCallback(viewPagerCallback)
-        this.editorPage = editorPage
-        editorPage.registerOnPageChangeCallback(viewPagerCallback)
+
+        TabLayoutMediator(
+            this, editorPage
+        ) { tab, position -> // Styling each tab here
+            tab.text = tabNameList.getOrElse(position) {
+                tab.text
+            }
+
+        }.attach()
+
+
     }
 
 

@@ -19,7 +19,10 @@ class ServiceRepository : ServiceRepository {
             (targetClass.newInstance() as Service).apply {
                 services.add(this)
             }
-        }.getOrNull() ?: error("")
+        }.onFailure {
+            it.printStackTrace()
+        }
+            .getOrNull() ?: error("")
 
     }
 
@@ -30,6 +33,8 @@ class ServiceRepository : ServiceRepository {
             (classLoader.loadClass(className).newInstance() as Service).apply {
                 services.add(this)
             }
+        }.onFailure {
+            it.printStackTrace()
         }.getOrNull() ?: error("")
 
     }
@@ -48,13 +53,11 @@ class ServiceRepository : ServiceRepository {
                 val className = params["class"] ?: ""
                 val dexPath = params["dexPath"]
 
-                val service = if (dexPath == null) {
+                if (dexPath == null) {
                     loadService(className)
                 } else {
                     loadService(className, dexPath.toString())
                 }
-
-                services.add(service)
 
             }
         }.onFailure {

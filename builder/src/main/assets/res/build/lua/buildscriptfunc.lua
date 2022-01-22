@@ -22,6 +22,8 @@ local metatable_g = {
   end
 }
 
+local Log = luajava.bindClass("android.util.Log")
+
 function getDefaultProguardFile(file)
   return "/data/data/com.dingyi.MyLuaApp/files/res/build/" .. file
 end
@@ -30,12 +32,17 @@ function project(name)
   return { type = "project", value = name:match(":(.+)") }
 end
 
+function include(name)
+  _G.includes = includes or {}
+  table.insert(includes, name:match(":(.+)"))
+end
+
 local File = luajava.bindClass "java.io.File"
 
 local function forEachDir(path, tab, types)
   local list = File(path).listFiles()
 
-  for n = 0, #list - 1 do
+  for n = 1, #list do
     local file = list[n]
     local path = file.path
     local name = file.name
@@ -74,10 +81,11 @@ function fileTree(dir, types)
   local project_dir = getNowProjectDir()
   local target_dir = project_dir .. "/" .. dir
   local file = File(target_dir)
+  Log.e("fuck", print_dump(types))
 
-  table.foreach(types, function(k, v)
+  for k, v in pairs(types) do
     types[k] = ".%." .. v:sub(1) .. "$"
-  end)
+  end
 
   if (file.exists()) then
     local fileTable = {}
@@ -150,7 +158,6 @@ function print_dump(data, showMetatable, lastCount, t)
   return table.concat(t)
 end
 
-local Log = luajava.bindClass("android.util.Log")
 
 function forEachTable(t)
   local clone_t = table.clone(t)
@@ -178,12 +185,23 @@ function runScript(path)
   }
   setmetatable(empty_table, metatable_g)
 
+  Log.e("fuck", path)
+
   loadfile(path, "bt", empty_table)()
 
   forEachTable(empty_table)
 
   _G.empty_table = empty_table
 
+end
+
+function putScriptValue(key, value)
+  local t = string.split(key, ".")
+  local result = _G
+  for _, v in ipairs(t) do
+    result = result[v] or result
+  end
+  result[t[#t]] = value
 end
 
 function getScriptValue(key)

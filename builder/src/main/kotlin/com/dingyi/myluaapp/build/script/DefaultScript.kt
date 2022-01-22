@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.build.default
+package com.dingyi.myluaapp.build.script
 
 import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.common.kts.LuaJVM
@@ -37,5 +37,9 @@ class DefaultScript(private val path:String):Script {
 
     override fun close() {
         luaJVM.close()
+    }
+
+    override fun put(key: String, value: Any?) {
+        luaJVM.runFunc("putScriptValue",value)
     }
 }

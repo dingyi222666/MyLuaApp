@@ -3,30 +3,34 @@ package com.dingyi.myluaapp.build.default
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.dependency.Dependency
 import com.dingyi.myluaapp.build.api.file.FileManager
+import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.api.project.Module
+import com.dingyi.myluaapp.build.api.project.Project
 import com.dingyi.myluaapp.build.api.script.Script
+import com.dingyi.myluaapp.build.script.DefaultScript
+import com.dingyi.myluaapp.common.kts.toFile
 import java.io.File
 
 open class DefaultModule(
-    private val project: DefaultProject,
+    private val project: Project,
     private val path:String
 ):Module {
     override val type: String
         get() = "default"
+
+    private val staticName = path.toFile().name
+
     override val name: String
-        get() = "DEFAULT_MODULE"
+        get() = staticName
 
     private val defaultBuilder = DefaultBuilder(this)
 
-    private val defaultSettingsScript = DefaultScript(
-        File(path,"settings.gradle.lua").path
-    )
 
     private val defaultMainBuilderScript = DefaultScript(
-        File(path,"builder.gradle.lua").path
+        File(path,"build.gradle.lua").path
     )
 
-    private val allScript = mutableListOf(defaultMainBuilderScript,defaultSettingsScript)
+    private val allScript = mutableListOf(defaultMainBuilderScript)
 
 
     private val dependencies = mutableListOf<Dependency>()
@@ -38,8 +42,10 @@ open class DefaultModule(
     override fun init() {
         defaultMainBuilderScript.run()
 
-        defaultSettingsScript.run()
+
     }
+
+
 
     override fun getDependencies(): List<Dependency> {
         return dependencies
@@ -49,11 +55,23 @@ open class DefaultModule(
         return project.getFileManager()
     }
 
+    override fun getProject(): Project {
+        return project
+    }
+
+    override fun getLogger(): ILogger {
+        return project.getLogger()
+    }
+
     override fun getMainBuilderScript(): Script {
         return defaultMainBuilderScript
     }
 
     override fun getAllScript(): List<Script> {
         return allScript
+    }
+
+    override fun toString(): String {
+        return "DefaultModule(\npath='$path', \ntype='$type', \nname='$name', \ndefaultBuilder=$defaultBuilder, \ndefaultMainBuilderScript=$defaultMainBuilderScript, \nallScript=$allScript, \ndependencies=$dependencies)"
     }
 }
