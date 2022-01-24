@@ -8,7 +8,7 @@ import kotlin.properties.Delegates
  * @date: 2021/10/8 20:08
  * @description:
  **/
-class DoStatement:StatementNode() {
+class DoStatement : StatementNode() {
 
     var body by Delegates.notNull<BlockNode>()
 

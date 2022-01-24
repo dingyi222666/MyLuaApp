@@ -1,15 +1,14 @@
 package com.dingyi.myluaapp.build.api.dependency
 
-interface MavenDependency:Dependency {
+interface MavenDependency : Dependency {
 
-    val groupId:String
+    var groupId: String
 
-    val artfactId:String
+    var artfactId: String
 
-    val version:String
-    val type:String
-    fun getDependencies():List<MavenDependency>?
-
+    var version: String
+    var type: String
+    fun getDependencies(): List<MavenDependency>?
 
 
 }

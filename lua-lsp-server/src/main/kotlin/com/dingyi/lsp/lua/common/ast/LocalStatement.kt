@@ -6,9 +6,9 @@ package com.dingyi.lsp.lua.common.ast
  * @description:
  **/
 class LocalStatement(
-    val variables:MutableList<ASTNode> = mutableListOf(),
+    val variables: MutableList<ASTNode> = mutableListOf(),
     val init: MutableList<ExpressionNode> = mutableListOf(),
-):StatementNode() {
+) : StatementNode() {
 
     override fun toString(): String {
         return "LocalStatement(variables=$variables, init=$init)"

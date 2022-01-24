@@ -6,7 +6,7 @@ import com.dingyi.myluaapp.build.api.task.Task
 
 open class DefaultBuilder(
     private val module: Module
-): Builder {
+) : Builder {
 
     protected val syncTasks = mutableListOf<Task>()
 
@@ -38,10 +38,8 @@ open class DefaultBuilder(
 
     override fun getTask(name: String): Task {
         return buildTasks.filter { it.name == name }
-            .getOrNull(0) ?:
-        syncTasks.filter { it.name == name }
-            .getOrNull(0) ?:
-        cleanTasks.filter { it.name == name }
+            .getOrNull(0) ?: syncTasks.filter { it.name == name }
+            .getOrNull(0) ?: cleanTasks.filter { it.name == name }
             .getOrNull(0) ?: DEFAULT_TASK
     }
 }

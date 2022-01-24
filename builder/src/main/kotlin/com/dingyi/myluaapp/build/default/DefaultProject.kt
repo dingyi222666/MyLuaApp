@@ -12,6 +12,7 @@ import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.build.api.task.Task
 import com.dingyi.myluaapp.build.dependency.ProjectDependency
 import com.dingyi.myluaapp.build.script.DefaultScript
+import com.dingyi.myluaapp.common.kts.toFile
 import org.luaj.vm2.LuaTable
 import java.io.File
 
@@ -44,7 +45,7 @@ open class DefaultProject(
 
     private val defaultRunner = DefaultRunner(this)
 
-    private var mainModule:Module = DefaultModule(this, "")
+    private var mainModule: Module = DefaultModule(this, "")
 
     private val allModules = mutableListOf<Module>()
 
@@ -70,6 +71,9 @@ open class DefaultProject(
     }
 
     override fun init() {
+
+        indexAllScript()
+
         defaultSettingsScript.run()
 
         indexAllModule()
@@ -77,6 +81,20 @@ open class DefaultProject(
         defaultMainBuilderScript.run()
 
 
+    }
+
+    private fun indexAllScript() {
+        path.toFile().listFiles()?.forEach { childDir ->
+            if (childDir.isDirectory) {
+                childDir.listFiles()?.forEach {
+                    if (it.isFile && it.name.contains(".gradle.lua")) {
+                        allScript.add(DefaultScript(it.path).apply {
+                            run()
+                        })
+                    }
+                }
+            }
+        }
     }
 
     override fun createModulesWeight(): Map<Int, List<Module>> {
@@ -125,12 +143,12 @@ open class DefaultProject(
 
     override fun indexAllModule() {
         println(defaultSettingsScript.get("includes"))
-       val table = defaultSettingsScript.get("includes") as LuaTable
+        val table = defaultSettingsScript.get("includes") as LuaTable
         table.keys().forEach {
             val value = table[it].tojstring().toString()
             indexModule(value)
         }
-        if (allModules.size==1) {
+        if (allModules.size == 1) {
             mainModule = allModules[0]
         }
         allModules.forEach {
@@ -139,16 +157,16 @@ open class DefaultProject(
     }
 
     open fun indexModule(value: String) {
-        val dir = File(path,value)
+        val dir = File(path, value)
         if (dir.isDirectory) {
-             getMainBuilder().getServiceRepository().getServices().forEach {
-                val module = it.onCreateModule(dir.path,this)
-                 if (module!=null) {
-                     if (module.name=="src" || module.name == "app") {
-                         mainModule = module
-                     }
-                     allModules.add(module)
-                 }
+            getMainBuilder().getServiceRepository().getServices().forEach {
+                val module = it.onCreateModule(dir.path, this)
+                if (module != null) {
+                    if (module.name == "src" || module.name == "app") {
+                        mainModule = module
+                    }
+                    allModules.add(module)
+                }
             }
         }
     }
@@ -160,7 +178,6 @@ open class DefaultProject(
     override fun getLogger(): ILogger {
         return mainBuilder.getLogger()
     }
-
 
 
     override fun getModule(name: String): Module {
@@ -178,7 +195,7 @@ open class DefaultProject(
     }
 
     override fun getAllScript(): List<Script> {
-       return allScript
+        return allScript
     }
 
     override fun toString(): String {

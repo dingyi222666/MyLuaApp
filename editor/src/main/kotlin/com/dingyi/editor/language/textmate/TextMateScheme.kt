@@ -30,8 +30,8 @@ class TextMateScheme(
                 }
                 theme.matchSettings("editor.foreground")?.let {
                     setColor(LINE_NUMBER, it)
-                    setColor(BLOCK_LINE,it-0x2f000000)
-                    setColor(BLOCK_LINE_CURRENT,it)
+                    setColor(BLOCK_LINE, it - 0x2f000000)
+                    setColor(BLOCK_LINE_CURRENT, it)
                 }
 
             }
@@ -48,14 +48,12 @@ class TextMateScheme(
     }
 
 
-    fun match(metaData:Int): FontStyle? {
+    fun match(metaData: Int): FontStyle? {
         return when (theme) {
             is VSCodeTheme -> theme.match(metaData)
             else -> null
         }
     }
-
-
 
 
     fun parseColor(colorString: String): Int {

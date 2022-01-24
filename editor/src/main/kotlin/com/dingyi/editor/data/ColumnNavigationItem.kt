@@ -14,10 +14,10 @@ import io.github.rosemoe.sora.data.NavigationItem
  * @param content the item description
  */
 data class ColumnNavigationItem(
-    val column :Int = 0,
-    private val _line :Int,
-    private val _label:String,
-    val type:String
-): NavigationItem(_line,_label) {
+    val column: Int = 0,
+    private val _line: Int,
+    private val _label: String,
+    val type: String
+) : NavigationItem(_line, _label) {
 
 }

@@ -3,9 +3,9 @@
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
+ * <p>
  * SPDX-License-Identifier: EPL-2.0
- *
+ * <p>
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
@@ -27,121 +27,121 @@ import org.eclipse.tm4e.core.theme.ThemeTrieElementRule;
 
 public class ScopeMetadataProvider {
 
-	private static final ScopeMetadata _NULL_SCOPE_METADATA = new ScopeMetadata("", 0, StandardTokenType.Other, null);
+    private static final ScopeMetadata _NULL_SCOPE_METADATA = new ScopeMetadata("", 0, StandardTokenType.Other, null);
 
-	private static final Pattern STANDARD_TOKEN_TYPE_REGEXP = Pattern.compile("\\b(comment|string|regex)\\b");
-	private static final String COMMENT_TOKEN_TYPE = "comment";
-	private static final String STRING_TOKEN_TYPE = "string";
-	private static final String REGEX_TOKEN_TYPE = "regex";
+    private static final Pattern STANDARD_TOKEN_TYPE_REGEXP = Pattern.compile("\\b(comment|string|regex)\\b");
+    private static final String COMMENT_TOKEN_TYPE = "comment";
+    private static final String STRING_TOKEN_TYPE = "string";
+    private static final String REGEX_TOKEN_TYPE = "regex";
 
-	private final int initialLanguage;
-	private final IThemeProvider themeProvider;
-	private final Map<String, ScopeMetadata> cache;
-	private ScopeMetadata defaultMetaData;
-	private final Map<String, Integer> embeddedLanguages;
-	private Pattern embeddedLanguagesRegex;
+    private final int initialLanguage;
+    private final IThemeProvider themeProvider;
+    private final Map<String, ScopeMetadata> cache;
+    private ScopeMetadata defaultMetaData;
+    private final Map<String, Integer> embeddedLanguages;
+    private Pattern embeddedLanguagesRegex;
 
-	public ScopeMetadataProvider(int initialLanguage, IThemeProvider themeProvider,
-			Map<String, Integer> embeddedLanguages) {
-		this.initialLanguage = initialLanguage;
-		this.themeProvider = themeProvider;
-		this.cache = new HashMap<>();
-		this.onDidChangeTheme();
+    public ScopeMetadataProvider(int initialLanguage, IThemeProvider themeProvider,
+                                 Map<String, Integer> embeddedLanguages) {
+        this.initialLanguage = initialLanguage;
+        this.themeProvider = themeProvider;
+        this.cache = new HashMap<>();
+        this.onDidChangeTheme();
 
-		// embeddedLanguages handling
-		this.embeddedLanguages = new HashMap<>();
-		if (embeddedLanguages != null) {
-			// If embeddedLanguages are configured, fill in
-			// `this._embeddedLanguages`
-			Set<Entry<String, Integer>> languages = embeddedLanguages.entrySet();
-			for (Entry<String, Integer> language : languages) {
-				String scope = language.getKey();
-				int languageId = language.getValue();
-				/*
-				 * if (typeof language !== 'number' || language === 0) {
-				 * console.warn('Invalid embedded language found at scope ' +
-				 * scope + ': <<' + language + '>>'); // never hurts to be too
-				 * careful continue; }
-				 */
-				this.embeddedLanguages.put(scope, languageId);
-			}
-		}
+        // embeddedLanguages handling
+        this.embeddedLanguages = new HashMap<>();
+        if (embeddedLanguages != null) {
+            // If embeddedLanguages are configured, fill in
+            // `this._embeddedLanguages`
+            Set<Entry<String, Integer>> languages = embeddedLanguages.entrySet();
+            for (Entry<String, Integer> language : languages) {
+                String scope = language.getKey();
+                int languageId = language.getValue();
+                /*
+                 * if (typeof language !== 'number' || language === 0) {
+                 * console.warn('Invalid embedded language found at scope ' +
+                 * scope + ': <<' + language + '>>'); // never hurts to be too
+                 * careful continue; }
+                 */
+                this.embeddedLanguages.put(scope, languageId);
+            }
+        }
 
-		// create the regex
-		Set<String> escapedScopes = this.embeddedLanguages.keySet().stream()
-				.map(ScopeMetadataProvider::escapeRegExpCharacters)
-				.collect(Collectors.toSet());
-		if (escapedScopes.isEmpty()) {
-			// no scopes registered
-			this.embeddedLanguagesRegex = null;
-		} else {
-			// TODO!!!
-			this.embeddedLanguagesRegex = null;
-			// escapedScopes.sort();
-			// escapedScopes.reverse();
-			// this._embeddedLanguagesRegex = new
-			// RegExp(`^((${escapedScopes.join(')|(')}))($|\\.)`, '');
-		}
-	}
+        // create the regex
+        Set<String> escapedScopes = this.embeddedLanguages.keySet().stream()
+                .map(ScopeMetadataProvider::escapeRegExpCharacters)
+                .collect(Collectors.toSet());
+        if (escapedScopes.isEmpty()) {
+            // no scopes registered
+            this.embeddedLanguagesRegex = null;
+        } else {
+            // TODO!!!
+            this.embeddedLanguagesRegex = null;
+            // escapedScopes.sort();
+            // escapedScopes.reverse();
+            // this._embeddedLanguagesRegex = new
+            // RegExp(`^((${escapedScopes.join(')|(')}))($|\\.)`, '');
+        }
+    }
 
-public void onDidChangeTheme() {
-	this.cache.clear();
-	this.defaultMetaData = new ScopeMetadata(
-		"",
-		this.initialLanguage,
-		StandardTokenType.Other,
-		Arrays.asList(this.themeProvider.getDefaults())
-	);
-}
+    public void onDidChangeTheme() {
+        this.cache.clear();
+        this.defaultMetaData = new ScopeMetadata(
+                "",
+                this.initialLanguage,
+                StandardTokenType.Other,
+                Arrays.asList(this.themeProvider.getDefaults())
+        );
+    }
 
-	public ScopeMetadata getDefaultMetadata() {
-		return this.defaultMetaData;
-	}
+    public ScopeMetadata getDefaultMetadata() {
+        return this.defaultMetaData;
+    }
 
-	/**
-	 * Escapes regular expression characters in a given string
-	 */
-	private static String escapeRegExpCharacters(String value) {
-		// TODO!!!
-		return value; //value.replace(/[\-\\\{\}\*\+\?\|\^\$\.\,\[\]\(\)\#\s]/g, '\\$&');
-	}
+    /**
+     * Escapes regular expression characters in a given string
+     */
+    private static String escapeRegExpCharacters(String value) {
+        // TODO!!!
+        return value; //value.replace(/[\-\\\{\}\*\+\?\|\^\$\.\,\[\]\(\)\#\s]/g, '\\$&');
+    }
 
-	public ScopeMetadata getMetadataForScope(String scopeName) {
-		if (scopeName == null) {
-			return ScopeMetadataProvider._NULL_SCOPE_METADATA;
-		}
-		ScopeMetadata value = this.cache.get(scopeName);
-		if (value != null) {
-			return value;
-		}
-		value = this.doGetMetadataForScope(scopeName);
-		this.cache.put(scopeName, value);
-		return value;
-	}
+    public ScopeMetadata getMetadataForScope(String scopeName) {
+        if (scopeName == null) {
+            return ScopeMetadataProvider._NULL_SCOPE_METADATA;
+        }
+        ScopeMetadata value = this.cache.get(scopeName);
+        if (value != null) {
+            return value;
+        }
+        value = this.doGetMetadataForScope(scopeName);
+        this.cache.put(scopeName, value);
+        return value;
+    }
 
-	private ScopeMetadata doGetMetadataForScope(String scopeName) {
-		int languageId = this.scopeToLanguage(scopeName);
-		int standardTokenType = ScopeMetadataProvider.toStandardTokenType(scopeName);
-		List<ThemeTrieElementRule> themeData = this.themeProvider.themeMatch(scopeName);
+    private ScopeMetadata doGetMetadataForScope(String scopeName) {
+        int languageId = this.scopeToLanguage(scopeName);
+        int standardTokenType = ScopeMetadataProvider.toStandardTokenType(scopeName);
+        List<ThemeTrieElementRule> themeData = this.themeProvider.themeMatch(scopeName);
 
-		return new ScopeMetadata(scopeName, languageId, standardTokenType, themeData);
-	}
+        return new ScopeMetadata(scopeName, languageId, standardTokenType, themeData);
+    }
 
-	/**
-	 * Given a produced TM scope, return the language that token describes or
-	 * null if unknown. e.g. source.html => html, source.css.embedded.html =>
-	 * css, punctuation.definition.tag.html => null
-	 */
-	private int scopeToLanguage(String scope) {
-		if (scope == null) {
-			return 0;
-		}
-		if (this.embeddedLanguagesRegex == null) {
-			// no scopes registered
-			return 0;
-		}
+    /**
+     * Given a produced TM scope, return the language that token describes or
+     * null if unknown. e.g. source.html => html, source.css.embedded.html =>
+     * css, punctuation.definition.tag.html => null
+     */
+    private int scopeToLanguage(String scope) {
+        if (scope == null) {
+            return 0;
+        }
+        if (this.embeddedLanguagesRegex == null) {
+            // no scopes registered
+            return 0;
+        }
 
-		// TODO!!!!
+        // TODO!!!!
 
 		/*let m = scope.match(this._embeddedLanguagesRegex);
 		if (!m) {
@@ -155,23 +155,23 @@ public void onDidChangeTheme() {
 		}
 
 		return language;*/
-		return 0;
-	}
+        return 0;
+    }
 
-	private static int toStandardTokenType(String tokenType) {
-		Matcher m = STANDARD_TOKEN_TYPE_REGEXP.matcher(tokenType); // tokenType.match(ScopeMetadataProvider.STANDARD_TOKEN_TYPE_REGEXP);
-		if (!m.find()) {
-			return StandardTokenType.Other;
-		}
-		String group = m.group();
-		if (COMMENT_TOKEN_TYPE.equals(group)) {
-			return StandardTokenType.Comment;
-		} else if (STRING_TOKEN_TYPE.equals(group)) {
-			return StandardTokenType.String;
-		}
-		if (REGEX_TOKEN_TYPE.equals(group)) {
-			return StandardTokenType.RegEx;
-		}
-		throw new TMException("Unexpected match for standard token type!");
-	}
+    private static int toStandardTokenType(String tokenType) {
+        Matcher m = STANDARD_TOKEN_TYPE_REGEXP.matcher(tokenType); // tokenType.match(ScopeMetadataProvider.STANDARD_TOKEN_TYPE_REGEXP);
+        if (!m.find()) {
+            return StandardTokenType.Other;
+        }
+        String group = m.group();
+        if (COMMENT_TOKEN_TYPE.equals(group)) {
+            return StandardTokenType.Comment;
+        } else if (STRING_TOKEN_TYPE.equals(group)) {
+            return StandardTokenType.String;
+        }
+        if (REGEX_TOKEN_TYPE.equals(group)) {
+            return StandardTokenType.RegEx;
+        }
+        throw new TMException("Unexpected match for standard token type!");
+    }
 }

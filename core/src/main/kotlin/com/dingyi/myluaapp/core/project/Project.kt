@@ -56,7 +56,7 @@ class Project(
                 .forEach {
                     if (it.isFile) {
                         closeOpenedFile(it.path, projectBean, false)
-                        Log.d("delete","status:${ProjectFile(it.path, this).deleteFile()}")
+                        Log.d("delete", "status:${ProjectFile(it.path, this).deleteFile()}")
                     }
                 }
 
@@ -117,7 +117,7 @@ class Project(
 
     private fun getAbsoluteFile(path: String): String {
         var path = path
-        println("abs",path)
+        println("abs", path)
         if (!path.toFile().exists() || path == "") {
             path = "$projectPath/$path"
 
@@ -234,7 +234,7 @@ class Project(
                     }
 
 
-            if (closeIndex !=selectIndex) {
+            if (closeIndex != selectIndex) {
                 targetSelectPath = bean.nowOpenFile
             }
 
@@ -285,7 +285,7 @@ class Project(
         createDir: String,
         templateDir: String,
         fileTemplate: String
-    ):String {
+    ): String {
 
         val suffix = fileTemplate.toFile().suffix
         val createPath = "$createDir/$fileName${if (suffix.isNotEmpty()) "." else ""}$suffix"

@@ -35,9 +35,8 @@ class ProjectFile(
     private var virtualProjectFile by Delegates.notNull<VirtualProjectFile>()
 
 
-
     companion object {
-        fun checkVirtualProjectPathExists(projectPath:String,path: String):Boolean {
+        fun checkVirtualProjectPathExists(projectPath: String, path: String): Boolean {
             return "$projectPath/.MyLuaApp/cache/virtual_file_${path.toMD5()}".toFile().exists()
         }
     }
@@ -64,7 +63,7 @@ class ProjectFile(
             scrollY = data.getOrElse("scrollY", defaultValue).toInt()
             column = data.getOrElse("column", defaultValue).toInt()
             line = data.getOrElse("line", defaultValue).toInt()
-            textSize = data.getOrElse("textSize",defaultValue)
+            textSize = data.getOrElse("textSize", defaultValue)
         }
 
         val cache = VirtualProjectFile.ProjectFileCache(
@@ -153,7 +152,7 @@ class ProjectFile(
                 path.toFile().writeText(string.toString())
             }
 
-            fun delete():Boolean {
+            fun delete(): Boolean {
                 return path.toFile().delete()
             }
 
@@ -172,7 +171,7 @@ class ProjectFile(
             }
         }
 
-        fun delete():Boolean {
+        fun delete(): Boolean {
             return !historyList.map {
                 it.delete()
             }.contains(false)
@@ -180,7 +179,7 @@ class ProjectFile(
 
     }
 
-    fun deleteFile():Boolean {
+    fun deleteFile(): Boolean {
         return getVirtualProjectFile().delete() && virtualProjectFilePath.delete() && path.toFile()
             .delete()
     }
@@ -193,7 +192,7 @@ class ProjectFile(
         return path.hashCode()
     }
 
-    fun rename(toPath: String): Boolean  = runCatching {
+    fun rename(toPath: String): Boolean = runCatching {
         saveChange()
 
         toPath.toFile().apply {
@@ -218,7 +217,7 @@ class ProjectFile(
                     it.timestamp
                 )
                 cache.saveText(it.readText())
-                this.historyList.add(0,cache)
+                this.historyList.add(0, cache)
             }
             newProjectFile.virtualProjectFilePath.outputStream().use {
                 save(it)

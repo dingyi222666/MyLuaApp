@@ -75,12 +75,13 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         viewBinding.editorPage.offscreenPageLimit = 1
 
         viewBinding.editorTab.apply {
-            postDelayed(    20) {
+            postDelayed(20) {
                 bindEditorPager(viewBinding.editorPage)
 
-                viewBinding.drawerPage.adapter = EditorDrawerPagerAdapter(this@EditorActivity).apply {
-                    notifyDataSetChanged()
-                }
+                viewBinding.drawerPage.adapter =
+                    EditorDrawerPagerAdapter(this@EditorActivity).apply {
+                        notifyDataSetChanged()
+                    }
 
             }
             projectPath = viewModel.controller.projectPath
@@ -100,8 +101,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         }
 
 
-        listOf(viewBinding.container,viewBinding.toolbar).forEach {
-            it.addLayoutTransition() }
+        listOf(viewBinding.container, viewBinding.toolbar).forEach {
+            it.addLayoutTransition()
+        }
 
 
 
@@ -165,7 +167,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 viewBinding.editorPage,
                 viewBinding.editorTab,
 
-            ).forEach {
+                ).forEach {
                 it.visibility = visibility
             }
             viewBinding.editorToastOpenFile.visibility =

@@ -42,7 +42,7 @@ class DefaultMessageLayoutHelper(rootView: View, dialog: BottomDialog) :
 
                 setOnClickListener {
                     interceptClose(true)
-                    params.positiveButtonClick(this@DefaultMessageLayoutHelper,null)
+                    params.positiveButtonClick(this@DefaultMessageLayoutHelper, null)
 
                     dismiss()
                 }
@@ -71,7 +71,7 @@ class DefaultMessageLayoutHelper(rootView: View, dialog: BottomDialog) :
 
                 setOnClickListener {
                     interceptClose(true)
-                    params.neutralButtonClick(this@DefaultMessageLayoutHelper,null)
+                    params.neutralButtonClick(this@DefaultMessageLayoutHelper, null)
                     dismiss()
                 }
             }

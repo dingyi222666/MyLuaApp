@@ -22,7 +22,7 @@ class MainBuilder(
     fun init() {
 
         repository.getServices().forEach {
-            val targetProject = it.onCreateProject(initPath,this)
+            val targetProject = it.onCreateProject(initPath, this)
 
             if (targetProject != null) {
                 project = targetProject
@@ -55,7 +55,7 @@ class MainBuilder(
         runJob = when (commands[0]) {
             "clean" -> project?.getRunner()?.run("clean")
             "build" -> {
-                project?.getMainBuilderScript()?.put("build_mode",commands[1])
+                project?.getMainBuilderScript()?.put("build_mode", commands[1])
                 project?.getRunner()?.run("build")
             }
             "sync" -> project?.getRunner()?.run("sync")

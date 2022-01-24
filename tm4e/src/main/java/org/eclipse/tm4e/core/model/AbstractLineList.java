@@ -26,7 +26,6 @@ import java.util.logging.Logger;
  * <li>synchronizes lines with the lines of the editor content when it changed.</li>
  * <li>call {@link AbstractLineList#invalidateLine(int)} with the first changed line.</li>
  * </ul>
- *
  */
 public abstract class AbstractLineList implements IModelLines {
 

@@ -4,11 +4,9 @@ import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 
 interface MavenRepository {
 
-    fun getDependency(string: String):MavenDependency
-
-    fun getPomPath(mavenDependency: MavenDependency):String
+    fun getDependency(string: String): MavenDependency
 
 
-    fun getLastVersion(mavenDependency: MavenDependency):MavenDependency
+    fun getLastVersion(mavenDependency: MavenDependency): MavenDependency
 
 }

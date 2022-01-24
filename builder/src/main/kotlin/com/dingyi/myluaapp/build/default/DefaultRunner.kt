@@ -10,9 +10,9 @@ import kotlinx.coroutines.launch
 
 class DefaultRunner(
     private val project: Project
-):Runner {
+) : Runner {
 
-    override fun run(type: String):Job {
+    override fun run(type: String): Job {
 
 
         val builder = project.getBuilder()
@@ -24,7 +24,6 @@ class DefaultRunner(
             "sync" -> builder.sync()
             else -> builder.getTasks()
         }
-
 
 
         val job = Job()

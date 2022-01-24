@@ -48,9 +48,9 @@ android {
         jvmTarget = "1.11"
     }
 
-    configurations { 
-        all { 
-            exclude(module= "httpclient")
+    configurations {
+        all {
+            exclude(module = "httpclient")
         }
     }
 }

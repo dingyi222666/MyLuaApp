@@ -34,6 +34,7 @@ import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
 import kotlinx.coroutines.launch
 import org.luaj.vm2.LuaTable
+import java.io.File
 
 /**
  * @author: dingyi
@@ -130,12 +131,12 @@ class MainActivity : BaseActivity<
     }
 
 
-    private fun showDeleteDialog(path:String) {
+    private fun showDeleteDialog(path: String) {
         BottomDialogBuilder.with(this)
             .setTitle(R.string.main_dialog_delete_project_title)
             .setDialogLayout(DefaultMessageLayout)
             .setMessage(R.string.main_dialog_delete_project_message)
-            .setPositiveButton(android.R.string.ok.getString()) { _,_ ->
+            .setPositiveButton(android.R.string.ok.getString()) { _, _ ->
                 lifecycleScope.launch {
                     viewModel.deleteProject(path)
                     viewModel.refreshProjectList(viewBinding)
@@ -145,14 +146,14 @@ class MainActivity : BaseActivity<
             .show()
     }
 
-    private fun showLongClickMenu(clickView: View,path: String) {
+    private fun showLongClickMenu(clickView: View, path: String) {
         R.menu.main_project_list_long_click.showPopMenu(clickView) { menu ->
 
             menu.setOnMenuItemClickListener {
                 when (it.itemId) {
-                   R.id.main_project_list_long_click_action_delete_project -> {
-                       showDeleteDialog(path)
-                   }
+                    R.id.main_project_list_long_click_action_delete_project -> {
+                        showDeleteDialog(path)
+                    }
                 }
                 true
             }
@@ -164,13 +165,18 @@ class MainActivity : BaseActivity<
 
 
         LogBroadcastReceiver(this).addCallback {
-            Log.e("message",it.getStringExtra("message") ?: "")
+            Log.e("message", it.getStringExtra("message") ?: "")
         }
 
 
-        BuildMain(application)
-            .build("/sdcard/Android/data/com.dingyi.MyLuaApp/files/project/MyApplication","debug")
+        if (File("/sdcard/Android/data/com.dingyi.MyLuaApp/files/project/MyApplication").isDirectory) {
 
+            BuildMain(application)
+                .build(
+                    "/sdcard/Android/data/com.dingyi.MyLuaApp/files/project/MyApplication",
+                    "debug"
+                )
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

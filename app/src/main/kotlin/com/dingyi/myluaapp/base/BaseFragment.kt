@@ -23,8 +23,6 @@ import com.hjq.language.MultiLanguages
 abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
 
 
-
-
     protected lateinit var viewBinding: V
 
     protected lateinit var viewModel: T
@@ -67,9 +65,6 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
             return null
         }
     }
-
-
-
 
 
 }

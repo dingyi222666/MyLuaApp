@@ -3,9 +3,9 @@
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
+ * <p>
  * SPDX-License-Identifier: EPL-2.0
- *
+ * <p>
  * Contributors:
  * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
@@ -33,21 +33,21 @@ package org.eclipse.tm4e.core.internal.grammar;
  */
 public class MetadataConsts {
 
-	/**
-	 * content should be accessed statically
-	 */
-	private MetadataConsts() {
-	}
+    /**
+     * content should be accessed statically
+     */
+    private MetadataConsts() {
+    }
 
-	public static final int LANGUAGEID_MASK = 0b00000000000000000000000011111111;
-	public static final int TOKEN_TYPE_MASK = 0b00000000000000000000011100000000;
-	public static final int FONT_STYLE_MASK = 0b00000000000000000011100000000000;
-	public static final int FOREGROUND_MASK = 0b00000000011111111100000000000000;
-	public static final int BACKGROUND_MASK = 0b11111111100000000000000000000000;
+    public static final int LANGUAGEID_MASK = 0b00000000000000000000000011111111;
+    public static final int TOKEN_TYPE_MASK = 0b00000000000000000000011100000000;
+    public static final int FONT_STYLE_MASK = 0b00000000000000000011100000000000;
+    public static final int FOREGROUND_MASK = 0b00000000011111111100000000000000;
+    public static final int BACKGROUND_MASK = 0b11111111100000000000000000000000;
 
-	public static final int LANGUAGEID_OFFSET = 0;
-	public static final int TOKEN_TYPE_OFFSET = 8;
-	public static final int FONT_STYLE_OFFSET = 11;
-	public static final int FOREGROUND_OFFSET = 14;
-	public static final int BACKGROUND_OFFSET = 23;
+    public static final int LANGUAGEID_OFFSET = 0;
+    public static final int TOKEN_TYPE_OFFSET = 8;
+    public static final int FONT_STYLE_OFFSET = 11;
+    public static final int FOREGROUND_OFFSET = 14;
+    public static final int BACKGROUND_OFFSET = 23;
 }

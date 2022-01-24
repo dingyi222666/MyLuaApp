@@ -17,7 +17,6 @@ import java.util.List;
 
 /**
  * TextMate model API.
- *
  */
 public interface ITMModel {
 
@@ -26,7 +25,7 @@ public interface ITMModel {
      * document the TextMate tokens.
      *
      * @return the TextMate grammar to use to parse for each lines of the
-     *         document the TextMate tokens.
+     * document the TextMate tokens.
      */
     IGrammar getGrammar();
 
@@ -41,16 +40,14 @@ public interface ITMModel {
     /**
      * Add model tokens changed listener.
      *
-     * @param listener
-     *            to add
+     * @param listener to add
      */
     void addModelTokensChangedListener(IModelTokensChangedListener listener);
 
     /**
      * Remove model tokens changed listener.
      *
-     * @param listener
-     *            to remove
+     * @param listener to remove
      */
     void removeModelTokensChangedListener(IModelTokensChangedListener listener);
 

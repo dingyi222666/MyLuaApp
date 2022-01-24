@@ -37,23 +37,26 @@ class FieListRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerView
                 itemView.setOnClickListener {
                     val model = getModel<FileListModel>()
                     if (model.file.isDirectory || model.file.path == "...") {
-                        callbackMap[0x03]?.convertObject<(String)->Unit>()?.invoke(model.file.path)
+                        callbackMap[0x03]?.convertObject<(String) -> Unit>()
+                            ?.invoke(model.file.path)
                     }
                     if (model.file.isFile) {
-                        callbackMap[0x02]?.convertObject<(String)->Unit>()?.invoke(model.file.path)
+                        callbackMap[0x02]?.convertObject<(String) -> Unit>()
+                            ?.invoke(model.file.path)
                     }
                 }
                 itemView.setOnLongClickListener {
                     val model = getModel<FileListModel>()
                     if (model.file.path != "...") {
-                        callbackMap[0x04]?.convertObject<(View,String)->Unit>()?.invoke(it,model.file.path)
+                        callbackMap[0x04]?.convertObject<(View, String) -> Unit>()
+                            ?.invoke(it, model.file.path)
                     }
                     true
                 }
             }
     }
 
-    private val callbackMap = mutableMapOf<Int,Any>()
+    private val callbackMap = mutableMapOf<Int, Any>()
 
 
     val onEnterFile = { function: (String) -> Unit ->
@@ -103,7 +106,7 @@ class FieListRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerView
                 }
                 .toMutableList()
                 .apply {
-                   if (dir != projectPath) {
+                    if (dir != projectPath) {
                         add(0, File("..."))
                     }
                 }
@@ -116,10 +119,9 @@ class FieListRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerView
                         bindingAdapter.setAnimation(AnimationType.ALPHA)
                         bindingAdapter.animationEnabled = true
                         bindingAdapter.models = list
-                        callbackMap[0x01]?.convertObject<(String)->Unit>()?.invoke(dir)
+                        callbackMap[0x01]?.convertObject<(String) -> Unit>()?.invoke(dir)
                     }
                 }
-
 
 
         }.onFailure {

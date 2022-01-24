@@ -13,8 +13,8 @@ import java.io.File
 
 open class DefaultModule(
     private val project: Project,
-    private val path:String
-):Module {
+    private val path: String
+) : Module {
     override val type: String
         get() = "default"
 
@@ -27,7 +27,7 @@ open class DefaultModule(
 
 
     private val defaultMainBuilderScript = DefaultScript(
-        File(path,"build.gradle.lua").path
+        File(path, "build.gradle.lua").path
     )
 
     private val allScript = mutableListOf(defaultMainBuilderScript)
@@ -44,7 +44,6 @@ open class DefaultModule(
 
 
     }
-
 
 
     override fun getDependencies(): List<Dependency> {

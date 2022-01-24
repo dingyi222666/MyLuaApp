@@ -59,7 +59,7 @@ object Paths {
     val assetsDir = MainApplication.instance.filesDir.absolutePath
     val resDir = "$assetsDir/res"
     val buildPath = "$resDir/build"
-    val tempateDir  = "$resDir/template"
+    val tempateDir = "$resDir/template"
     val projectFileTemplateDir = "$tempateDir/file"
     val projectTemplateDir = "$tempateDir/project/"
 }

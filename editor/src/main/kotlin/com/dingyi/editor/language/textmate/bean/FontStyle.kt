@@ -7,7 +7,7 @@ package com.dingyi.editor.language.textmate.bean
  **/
 data class FontStyle(
     var foreground: String,
-    var fontStyle:String?,
+    var fontStyle: String?,
     var background: String?
 ) {
 }

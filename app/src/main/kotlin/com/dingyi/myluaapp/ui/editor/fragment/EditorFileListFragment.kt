@@ -136,7 +136,7 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
                     return@setPositiveButton helper.interceptClose(false)
                 } else {
                     val parentPath = path.toFile().parentFile?.path ?: path
-                    viewModel.rename(path,"$parentPath/$inputName")
+                    viewModel.rename(path, "$parentPath/$inputName")
                 }
             }
             .setNegativeButton(android.R.string.cancel.getString())

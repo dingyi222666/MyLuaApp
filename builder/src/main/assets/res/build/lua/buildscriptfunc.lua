@@ -108,6 +108,7 @@ print_dump是一个用于调试输出数据的函数，能够打印出nil,boolea
 ]]
 function print_dump(data, showMetatable, lastCount, t)
   local t = t or {}
+
   if type(data) ~= "table" then
     --Value
     if type(data) == "string" then
@@ -123,7 +124,7 @@ function print_dump(data, showMetatable, lastCount, t)
     --Metatable
     if showMetatable then
       for i = 1, count do
-        io.write("\t")
+        table.insert(t, "\t")
       end
       local mt = getmetatable(data)
       table.insert(t, "\"__metatable\" = ")
@@ -133,7 +134,7 @@ function print_dump(data, showMetatable, lastCount, t)
     --Key
     for key, value in pairs(data) do
       for i = 1, count do
-        io.write("\t")
+        table.insert(t, "\t")
       end
       if type(key) == "string" then
         table.insert(t, "\"" .. key .. "\" = ")
@@ -147,7 +148,7 @@ function print_dump(data, showMetatable, lastCount, t)
     end
     --Format
     for i = 1, lastCount or 0 do
-      io.write("\t")
+      table.insert(t, "\t")
     end
     table.insert(t, "}")
   end
@@ -157,7 +158,6 @@ function print_dump(data, showMetatable, lastCount, t)
   end
   return table.concat(t)
 end
-
 
 function forEachTable(t)
   local clone_t = table.clone(t)
@@ -207,7 +207,7 @@ end
 function getScriptValue(key)
   local t = string.split(key, ".")
   local result = _G.empty_table
-  Log.e("test", print_dump(result))
+  Log.e("test", print_dump(empty_table))
   for _, v in ipairs(t) do
 
     result = result[v]

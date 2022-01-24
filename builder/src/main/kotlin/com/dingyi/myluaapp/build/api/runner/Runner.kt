@@ -4,5 +4,5 @@ import kotlinx.coroutines.Job
 
 interface Runner {
 
-    fun run(type:String):Job
+    fun run(type: String): Job
 }

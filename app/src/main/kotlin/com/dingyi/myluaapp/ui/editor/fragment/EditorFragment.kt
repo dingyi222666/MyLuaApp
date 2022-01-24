@@ -35,7 +35,6 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
     private var lastCodeContentLength = 0
 
 
-
     override fun getViewModelClass(): Class<MainViewModel> {
         return getJavaClass()
     }
@@ -128,7 +127,7 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
                         scroller.currX,
                         scroller.currY,
                         data.getValue("scrollX").toInt() - scroller.currX,
-                        data.getValue("scrollY").toInt() - scroller.currY,0
+                        data.getValue("scrollY").toInt() - scroller.currY, 0
                     )
                 }
                 text.cursor.set(
@@ -172,7 +171,11 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
         projectFile?.clear()
 
         //如果没有虚拟文件引用 就是彻底删除了 这时候就不会自动保存
-        if (ProjectFile.checkVirtualProjectPathExists(viewModel.controller.getProject().projectPath,path)) {
+        if (ProjectFile.checkVirtualProjectPathExists(
+                viewModel.controller.getProject().projectPath,
+                path
+            )
+        ) {
             //新获取一个
             getProjectFile().apply {
                 commitChange(viewBinding.codeEditor.text, createEditorData())

@@ -36,7 +36,7 @@ abstract class TextMateBridgeLanguage(
     private val languageConfiguration: LanguageConfiguration?
 
     init {
-        val languageConfig:LanguageConfig by lazy(LazyThreadSafetyMode.NONE) { getLanguageConfig() }
+        val languageConfig: LanguageConfig by lazy(LazyThreadSafetyMode.NONE) { getLanguageConfig() }
 
         grammar = registry.loadGrammarFromPathSync(
             languageConfig.languagePath,
@@ -46,7 +46,7 @@ abstract class TextMateBridgeLanguage(
         languageConfiguration = languageConfig.languageConfigurationInputStream?.reader().use {
             LanguageConfiguration.load(it)
         }
-        
+
     }
 
     data class LanguageConfig(

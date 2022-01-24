@@ -57,7 +57,6 @@ object ZipHelper {
     }
 
 
-
     suspend fun unZipFile(
         zipPath: String,
         inZipPathList: List<String>,
@@ -86,7 +85,7 @@ object ZipHelper {
     }
 
     private fun unSingleZipFile(zipPath: String, inZipPath: String, toPath: String): Boolean {
-        println(zipPath,inZipPath,toPath)
+        println(zipPath, inZipPath, toPath)
         zipPath.toZipFile().use {
             val entry = it.getEntry(inZipPath)
             if (entry.isDirectory) {

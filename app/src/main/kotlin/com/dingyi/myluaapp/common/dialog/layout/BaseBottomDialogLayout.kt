@@ -7,5 +7,5 @@ import com.dingyi.myluaapp.common.dialog.helper.BaseBottomDialogLayoutHelper
 
 interface BaseBottomDialogLayout {
     fun getRootView(inflater: LayoutInflater): View
-    fun getLayoutHelper(rootView: View,dialog: BottomDialog): BaseBottomDialogLayoutHelper
+    fun getLayoutHelper(rootView: View, dialog: BottomDialog): BaseBottomDialogLayoutHelper
 }

@@ -45,8 +45,8 @@ fun ViewGroup.addLayoutTransition() {
 }
 
 
-inline fun Int.showPopMenu(view: View, block:(PopupMenu)->Unit) {
-    val popupMenu = PopupMenu(view.context,view)
+inline fun Int.showPopMenu(view: View, block: (PopupMenu) -> Unit) {
+    val popupMenu = PopupMenu(view.context, view)
     popupMenu.inflate(this)
     block(popupMenu)
     popupMenu.show()
@@ -110,8 +110,6 @@ fun String.showSnackBar(view: View) =
         .apply {
             animationMode = Snackbar.ANIMATION_MODE_SLIDE
         }.show()
-
-
 
 
 inline val Int.dp: Int

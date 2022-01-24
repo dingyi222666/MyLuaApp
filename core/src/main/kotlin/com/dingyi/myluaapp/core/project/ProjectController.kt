@@ -45,7 +45,7 @@ class ProjectController(val projectPath: String) {
     val getNowOpenedDir = project::getNowOpenedDir
 
     val closeFile: (String) -> Unit = { path ->
-        Log.e("call",path)
+        Log.e("call", path)
         project.closeOpenedFile(path)
     }
 

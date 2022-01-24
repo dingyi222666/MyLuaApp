@@ -9,8 +9,8 @@ import com.dingyi.myluaapp.common.kts.Paths
 import java.io.File
 
 class DefaultFileManager(
-    private val path:String,
-):FileManager {
+    private val path: String,
+) : FileManager {
 
 
     private val defaultSnapshotManager = DefaultSnapshotManager(Paths.snapshotCachePath)
@@ -21,7 +21,7 @@ class DefaultFileManager(
 
     override fun resloveFile(name: String, module: Module): File {
         val localDir = "$path/${module.name}"
-        return File(localDir,name)
+        return File(localDir, name)
     }
 
     override fun forEachDirectory(directory: File): List<File> {

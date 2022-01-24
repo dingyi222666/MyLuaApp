@@ -7,7 +7,7 @@ import kotlin.properties.Delegates
  * @date: 2021/10/9 15:00
  * @description:
  **/
-class CallExpression:ExpressionNode() {
+class CallExpression : ExpressionNode() {
     var base by Delegates.notNull<ExpressionNode>()
     val arguments = mutableListOf<ExpressionNode>()
 }

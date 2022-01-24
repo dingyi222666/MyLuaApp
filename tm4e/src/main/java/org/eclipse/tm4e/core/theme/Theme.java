@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 
 /**
  * TextMate theme.
- *
  */
 public class Theme {
 

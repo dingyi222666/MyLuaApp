@@ -15,7 +15,6 @@ package org.eclipse.tm4e.core.theme;
  * Font style definitions.
  *
  * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/theme.ts
- *
  */
 public class FontStyle {
 

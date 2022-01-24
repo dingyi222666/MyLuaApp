@@ -12,13 +12,16 @@ android {
         targetSdk = BuildConfig.Config.Default.targetSdk
 
 
-        consumerProguardFiles ("consumer-rules.pro")
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles (getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -32,14 +35,19 @@ android {
 
 dependencies {
 
-    implementation (fileTree("dir" to "../app/libs", "include" to listOf("*.jar", "*.aar")))//libs jar
+    implementation(
+        fileTree(
+            "dir" to "../app/libs",
+            "include" to listOf("*.jar", "*.aar")
+        )
+    )//libs jar
 
-    implementation (project(":tm4e"))
+    implementation(project(":tm4e"))
 
     //editor
-    implementation (BuildConfig.Libs.AndroidX.appcompat)
-    implementation (BuildConfig.Libs.AndroidX.lifecycle_runtime)
+    implementation(BuildConfig.Libs.AndroidX.appcompat)
+    implementation(BuildConfig.Libs.AndroidX.lifecycle_runtime)
 
-    implementation (BuildConfig.Libs.Views.code_editor)
+    implementation(BuildConfig.Libs.Views.code_editor)
 
 }

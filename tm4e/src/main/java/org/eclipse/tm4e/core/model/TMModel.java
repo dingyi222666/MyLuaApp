@@ -23,12 +23,13 @@ import java.util.logging.Logger;
 
 /**
  * TextMate model class.
- *
  */
 public class TMModel implements ITMModel {
 
     private static final Logger LOGGER = Logger.getLogger(TMModel.class.getName());
-    /** Listener when TextMate model tokens changed **/
+    /**
+     * Listener when TextMate model tokens changed
+     **/
     private final List<IModelTokensChangedListener> listeners;
     private final IModelLines lines;
     Tokenizer tokenizer;
@@ -37,7 +38,9 @@ public class TMModel implements ITMModel {
      * TextMate tokens.
      **/
     private IGrammar grammar;
-    /** The background thread. */
+    /**
+     * The background thread.
+     */
     private TokenizerThread fThread;
     private PriorityBlockingQueue<Integer> invalidLines = new PriorityBlockingQueue<>();
 
@@ -151,7 +154,6 @@ public class TMModel implements ITMModel {
      * and manipulated by the UI part to inform of needs to (re)tokenize area, then the {@link TokenizerThread}
      * processes them and emits events through the model. UI elements are supposed to subscribe and react to the events with
      * {@link TMModel#addModelTokensChangedListener(IModelTokensChangedListener)}.
-     *
      */
     static class TokenizerThread extends Thread {
         private TMModel model;
@@ -161,8 +163,7 @@ public class TMModel implements ITMModel {
          * Creates a new background thread. The thread runs with minimal
          * priority.
          *
-         * @param name
-         *            the thread's name
+         * @param name the thread's name
          */
         public TokenizerThread(String name, TMModel model) {
             super(name);
@@ -197,8 +198,7 @@ public class TMModel implements ITMModel {
         }
 
         /**
-         *
-         * @param startLine 0-based
+         * @param startLine         0-based
          * @param toLineIndexOrNull 0-based
          */
         private void revalidateTokensNow(int startLine, Integer toLineIndexOrNull) {
@@ -253,9 +253,8 @@ public class TMModel implements ITMModel {
         }
 
         /**
-         *
          * @param eventBuilder
-         * @param startIndex 0-based
+         * @param startIndex   0-based
          * @param endLineIndex 0-based
          * @return the first line index (0-based) that was NOT processed by this operation
          */

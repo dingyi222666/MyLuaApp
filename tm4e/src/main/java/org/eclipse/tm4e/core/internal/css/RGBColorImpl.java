@@ -18,65 +18,65 @@ import org.w3c.dom.css.RGBColor;
 
 public class RGBColorImpl extends CSSValueImpl implements RGBColor {
 
-	private CSSPrimitiveValue red;
-	private CSSPrimitiveValue green;
-	private CSSPrimitiveValue blue;
-	
-	public RGBColorImpl(LexicalUnit lexicalUnit) {
-		LexicalUnit nextUnit = lexicalUnit.getParameters();
-		red = new Measure(nextUnit);
-		nextUnit = nextUnit.getNextLexicalUnit().getNextLexicalUnit();
-		green = new Measure(nextUnit);
-		nextUnit = nextUnit.getNextLexicalUnit().getNextLexicalUnit();
-		blue = new Measure(nextUnit);
-	}
+    private CSSPrimitiveValue red;
+    private CSSPrimitiveValue green;
+    private CSSPrimitiveValue blue;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.RGBColor#getRed()
-	 */
-	public CSSPrimitiveValue getRed() {
-		return red;
-	}
+    public RGBColorImpl(LexicalUnit lexicalUnit) {
+        LexicalUnit nextUnit = lexicalUnit.getParameters();
+        red = new Measure(nextUnit);
+        nextUnit = nextUnit.getNextLexicalUnit().getNextLexicalUnit();
+        green = new Measure(nextUnit);
+        nextUnit = nextUnit.getNextLexicalUnit().getNextLexicalUnit();
+        blue = new Measure(nextUnit);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.RGBColor#getGreen()
-	 */
-	public CSSPrimitiveValue getGreen() {
-		return green;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.w3c.dom.css.RGBColor#getRed()
+     */
+    public CSSPrimitiveValue getRed() {
+        return red;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.RGBColor#getBlue()
-	 */
-	public CSSPrimitiveValue getBlue() {
-		return blue;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.w3c.dom.css.RGBColor#getGreen()
+     */
+    public CSSPrimitiveValue getGreen() {
+        return green;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.CSSValue#getRGBColorValue()
-	 */
-	public RGBColor getRGBColorValue() throws DOMException {
-		return this;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.w3c.dom.css.RGBColor#getBlue()
+     */
+    public CSSPrimitiveValue getBlue() {
+        return blue;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.CSSValue#getPrimitiveType()
-	 */
-	public short getPrimitiveType() {
-		return CSS_RGBCOLOR;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.w3c.dom.css.CSSValue#getCssText()
-	 */
-	public String getCssText() {
-		return "rgb(" + red.getCssText() + ", " + green.getCssText() + ", "
-				+ blue.getCssText() + ")";
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.w3c.dom.css.CSSValue#getRGBColorValue()
+     */
+    public RGBColor getRGBColorValue() throws DOMException {
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.w3c.dom.css.CSSValue#getPrimitiveType()
+     */
+    public short getPrimitiveType() {
+        return CSS_RGBCOLOR;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.w3c.dom.css.CSSValue#getCssText()
+     */
+    public String getCssText() {
+        return "rgb(" + red.getCssText() + ", " + green.getCssText() + ", "
+                + blue.getCssText() + ")";
+    }
 }

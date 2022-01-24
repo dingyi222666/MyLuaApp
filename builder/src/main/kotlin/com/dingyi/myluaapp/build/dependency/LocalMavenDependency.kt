@@ -4,23 +4,23 @@ import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 import java.io.File
 
 class LocalMavenDependency(
-    private val pomPath:String
-):MavenDependency {
-    override val groupId: String
-        get() = TODO("Not yet implemented")
-    override val artfactId: String
-        get() = TODO("Not yet implemented")
-    override val version: String
-        get() = TODO("Not yet implemented")
-    override val type: String
-        get() = TODO("Not yet implemented")
+    private val mavenPom: MavenPom,
+    private val pomPath: String
+) : MavenDependency {
+
+
+    override var groupId: String = ""
+    override var artfactId: String = ""
+
+    override var version: String = ""
+
+    override var type: String = ""
 
     override fun getDependencies(): List<MavenDependency>? {
         TODO("Not yet implemented")
     }
 
-    override val name: String
-        get() = TODO("Not yet implemented")
+    override var name: String = ""
 
     override fun getDependenciesFile(): List<File> {
         TODO("Not yet implemented")

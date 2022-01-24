@@ -8,14 +8,16 @@ import com.dingyi.lsp.lua.common.ast.ASTGenerator
 
 
 fun main(args: Array<String>) {
-    val generator  = ASTGenerator()
-    generator.generate("""
+    val generator = ASTGenerator()
+    generator.generate(
+        """
         local d = 12
         local s = d
         while (a) do
           a = 25
         end  
-    """.trimIndent()).run {
+    """.trimIndent()
+    ).run {
         println(this.body)
     }
 }

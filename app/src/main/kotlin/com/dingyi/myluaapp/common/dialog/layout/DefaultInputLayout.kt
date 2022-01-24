@@ -7,12 +7,15 @@ import com.dingyi.myluaapp.common.dialog.helper.BaseBottomDialogLayoutHelper
 import com.dingyi.myluaapp.common.dialog.helper.DefaultInputLayoutHelper
 import com.dingyi.myluaapp.databinding.LayoutBottomDialogDefaultInputBinding
 
-object DefaultInputLayout: BaseBottomDialogLayout {
+object DefaultInputLayout : BaseBottomDialogLayout {
     override fun getRootView(inflater: LayoutInflater): View {
         return LayoutBottomDialogDefaultInputBinding.inflate(inflater).root
     }
 
-    override fun getLayoutHelper(rootView: View,dialog: BottomDialog): BaseBottomDialogLayoutHelper {
-        return DefaultInputLayoutHelper(rootView,dialog)
+    override fun getLayoutHelper(
+        rootView: View,
+        dialog: BottomDialog
+    ): BaseBottomDialogLayoutHelper {
+        return DefaultInputLayoutHelper(rootView, dialog)
     }
 }

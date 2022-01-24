@@ -6,11 +6,11 @@ import java.io.File
 interface FileManager {
 
 
-    fun getSnapshotManager():SnapshotManager
+    fun getSnapshotManager(): SnapshotManager
 
-    fun resloveFile(name:String,module: Module):File
+    fun resloveFile(name: String, module: Module): File
 
-    fun forEachDirectory(directory:File):List<File>
+    fun forEachDirectory(directory: File): List<File>
 
 
 }

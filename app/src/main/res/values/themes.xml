@@ -24,9 +24,7 @@
     </style>
 
 
-    <style
-        name="ThemeOverlay.Corner.BottomSheetDialog"
-        parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+    <style name="ThemeOverlay.Corner.BottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/Widget.Corner.Round.BottomSheet</item>
     </style>
 

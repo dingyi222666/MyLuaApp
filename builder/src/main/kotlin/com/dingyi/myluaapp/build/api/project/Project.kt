@@ -8,33 +8,33 @@ import com.dingyi.myluaapp.build.api.runner.Runner
 import com.dingyi.myluaapp.build.api.script.ProjectScript
 import com.dingyi.myluaapp.build.api.task.Task
 
-interface Project:ProjectScript {
+interface Project : ProjectScript {
 
-    val name:String
+    val name: String
 
-    fun getTasks(type:String):List<Task>
+    fun getTasks(type: String): List<Task>
 
-    fun getModules():List<Module>
+    fun getModules(): List<Module>
 
-    fun getFileManager():FileManager
+    fun getFileManager(): FileManager
 
 
     fun getRunner(): Runner
 
     fun init()
 
-    fun createModulesWeight():Map<Int,List<Module>>
+    fun createModulesWeight(): Map<Int, List<Module>>
 
     fun getBuilder(): Builder
 
-    fun getMainModule():Module
+    fun getMainModule(): Module
 
     fun indexAllModule()
 
-    fun getMainBuilder():MainBuilder
+    fun getMainBuilder(): MainBuilder
 
-    fun getLogger():ILogger
+    fun getLogger(): ILogger
 
-    fun getModule(name:String):Module
+    fun getModule(name: String): Module
 
 }

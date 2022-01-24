@@ -7,9 +7,9 @@ import com.dingyi.myluaapp.build.api.project.Project
 
 interface Service {
 
-    fun onCreateProject(path:String,builder:MainBuilder):Project?
+    fun onCreateProject(path: String, builder: MainBuilder): Project?
 
-    fun onCreateModule(path: String,project: Project):Module?
+    fun onCreateModule(path: String, project: Project): Module?
 
-    fun onCreateBuilder(path: String,module: Module):Builder?
+    fun onCreateBuilder(path: String, module: Module): Builder?
 }

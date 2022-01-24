@@ -6,30 +6,30 @@ import com.dingyi.myluaapp.build.api.file.FileManager
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.api.script.ModuleScript
 
-interface Module:ModuleScript {
+interface Module : ModuleScript {
     /**
      * Get Module Type
      */
-    val type:String
+    val type: String
 
     /**
      * Get Module Name
      */
-    val name:String
+    val name: String
 
 
-    fun getBuilder():Builder
+    fun getBuilder(): Builder
 
     fun init()
 
-    fun getDependencies():List<Dependency>
+    fun getDependencies(): List<Dependency>
 
 
-    fun getFileManager():FileManager
+    fun getFileManager(): FileManager
 
-    fun getProject():Project
+    fun getProject(): Project
 
 
-    fun getLogger():ILogger
+    fun getLogger(): ILogger
 
 }

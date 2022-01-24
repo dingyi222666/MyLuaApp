@@ -5,8 +5,7 @@ import com.dingyi.myluaapp.build.util.getSHA256
 import com.dingyi.myluaapp.common.kts.toMD5
 import java.io.File
 
-class DefaultSnapshotManager(private val tmpPath:String):SnapshotManager {
-
+class DefaultSnapshotManager(private val tmpPath: String) : SnapshotManager {
 
 
     override fun snapshot(snapshotFile: File): Boolean {

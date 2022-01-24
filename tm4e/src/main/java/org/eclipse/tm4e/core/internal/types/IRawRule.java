@@ -1,18 +1,18 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
+ * <p>
  * SPDX-License-Identifier: EPL-2.0
- *
+ * <p>
  * Initial code from https://github.com/Microsoft/vscode-textmate/
  * Initial copyright Copyright (C) Microsoft Corporation. All rights reserved.
  * Initial license: MIT
- *
+ * <p>
  * Contributors:
- *  - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
- *  - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
+ * - Microsoft Corporation: Initial code, written in TypeScript, licensed under MIT license
+ * - Angelo Zerr <angelo.zerr@gmail.com> - translation and adaptation to Java
  */
 package org.eclipse.tm4e.core.internal.types;
 
@@ -20,59 +20,59 @@ import java.util.Collection;
 
 public interface IRawRule {
 
-	Integer getId();
+    Integer getId();
 
-	void setId(Integer id);
+    void setId(Integer id);
 
-	String getInclude();
+    String getInclude();
 
-	void setInclude(String include);
+    void setInclude(String include);
 
-	String getName();
+    String getName();
 
-	void setName(String name);
+    void setName(String name);
 
-	String getContentName();
+    String getContentName();
 
-	void setContentName(String name);
+    void setContentName(String name);
 
-	String getMatch();
+    String getMatch();
 
-	void setMatch(String match);
+    void setMatch(String match);
 
-	IRawCaptures getCaptures();
+    IRawCaptures getCaptures();
 
-	void setCaptures(IRawCaptures captures);
+    void setCaptures(IRawCaptures captures);
 
-	String getBegin();
+    String getBegin();
 
-	void setBegin(String begin);
+    void setBegin(String begin);
 
-	IRawCaptures getBeginCaptures();
+    IRawCaptures getBeginCaptures();
 
-	void setBeginCaptures(IRawCaptures beginCaptures);
+    void setBeginCaptures(IRawCaptures beginCaptures);
 
-	String getEnd();
+    String getEnd();
 
-	void setEnd(String end);
+    void setEnd(String end);
 
-	String getWhile();
-	
-	IRawCaptures getEndCaptures();
+    String getWhile();
 
-	void setEndCaptures(IRawCaptures endCaptures);
+    IRawCaptures getEndCaptures();
 
-	IRawCaptures getWhileCaptures();
+    void setEndCaptures(IRawCaptures endCaptures);
 
-	Collection<IRawRule> getPatterns();
+    IRawCaptures getWhileCaptures();
 
-	void setPatterns(Collection<IRawRule> patterns);
+    Collection<IRawRule> getPatterns();
 
-	IRawRepository getRepository();
+    void setPatterns(Collection<IRawRule> patterns);
 
-	void setRepository(IRawRepository repository);
+    IRawRepository getRepository();
 
-	boolean isApplyEndPatternLast();
+    void setRepository(IRawRepository repository);
 
-	void setApplyEndPatternLast(boolean applyEndPatternLast);
+    boolean isApplyEndPatternLast();
+
+    void setApplyEndPatternLast(boolean applyEndPatternLast);
 }

@@ -7,8 +7,8 @@ import com.dingyi.myluaapp.common.kts.toFile
 import java.io.File
 
 class ProjectDependency(
-     val path:String
-):Dependency {
+    val path: String
+) : Dependency {
 
     private val file = path.toFile()
 
@@ -20,7 +20,7 @@ class ProjectDependency(
         return listOf()
     }
 
-    fun getModule(project: Project):Module {
+    fun getModule(project: Project): Module {
         return project.getModule(name)
     }
 }

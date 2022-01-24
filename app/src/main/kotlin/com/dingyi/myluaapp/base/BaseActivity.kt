@@ -52,7 +52,6 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
     }
 
 
-
     override fun attachBaseContext(base: Context) {
         // 绑定语种
         super.attachBaseContext(MultiLanguages.attach(base))
@@ -74,7 +73,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         return when (keyCode) {
-            KeyEvent.KEYCODE_BACK,KeyEvent.KEYCODE_ESCAPE -> {
+            KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
                 if (System.currentTimeMillis() - lastBackTime > 2000) {
                     R.string.toast_exit_app
                         .getString()

@@ -19,7 +19,8 @@ import io.github.rosemoe.sora.widget.EditorCompletionAdapter
  * @date: 2021/8/15 6:36
  * @description:
  **/
-class AutoCompletionItemAdapter(private val codeEditor: io.github.rosemoe.sora.widget.CodeEditor) : EditorCompletionAdapter() {
+class AutoCompletionItemAdapter(private val codeEditor: io.github.rosemoe.sora.widget.CodeEditor) :
+    EditorCompletionAdapter() {
 
 
     class ViewHolder(val itemView: View) {
@@ -67,12 +68,12 @@ class AutoCompletionItemAdapter(private val codeEditor: io.github.rosemoe.sora.w
                     startIndex, spannableStringBuilder.length,
                     SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
-                title.typeface=codeEditor.typefaceText
+                title.typeface = codeEditor.typefaceText
 
                 title.text = spannableStringBuilder
 
-                if (getItem(position).commit.indexOf("(")!=-1) {
-                    getItem(position).cursorOffset(getItem(position).commit.indexOf("(")+1)
+                if (getItem(position).commit.indexOf("(") != -1) {
+                    getItem(position).cursorOffset(getItem(position).commit.indexOf("(") + 1)
                 } else {
                     getItem(position).cursorOffset(getItem(position).commit.length)
                 }

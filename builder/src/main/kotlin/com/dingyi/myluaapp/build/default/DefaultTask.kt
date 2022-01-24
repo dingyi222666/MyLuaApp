@@ -5,7 +5,7 @@ import com.dingyi.myluaapp.build.api.task.Task
 
 open class DefaultTask(
     private val module: Module
-):Task {
+) : Task {
     override val name: String
         get() = "DEFAULT_TASK"
 

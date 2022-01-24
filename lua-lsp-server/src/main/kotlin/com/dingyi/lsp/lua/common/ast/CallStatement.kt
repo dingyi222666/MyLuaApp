@@ -7,6 +7,6 @@ import kotlin.properties.Delegates
  * @date: 2021/10/9 14:58
  * @description:
  **/
-class CallStatement:StatementNode() {
+class CallStatement : StatementNode() {
     var expression by Delegates.notNull<CallExpression>()
 }

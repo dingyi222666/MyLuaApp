@@ -14,16 +14,16 @@ interface ITheme {
     /**
      * return color index
      */
-    fun parseColor(colorText:String):Int
-    fun getDefaultColor():Int?
+    fun parseColor(colorText: String): Int
+    fun getDefaultColor(): Int?
     fun init() //
 
     /**
      * get color by index
      */
-    fun getColor(index:Int):Int
-    fun matchSettings(settings: String):Int?
-    fun getThemeRaw():org.eclipse.tm4e.core.internal.theme.ThemeRaw
+    fun getColor(index: Int): Int
+    fun matchSettings(settings: String): Int?
+    fun getThemeRaw(): org.eclipse.tm4e.core.internal.theme.ThemeRaw
 }
 
 

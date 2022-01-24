@@ -33,7 +33,8 @@ object AndroidApi {
             if (it.split(".")
                     .run { get(lastIndex) }
                     .lowercase()
-                    .startsWith(name.lowercase())) {
+                    .startsWith(name.lowercase())
+            ) {
                 result.add(it)
             }
         }

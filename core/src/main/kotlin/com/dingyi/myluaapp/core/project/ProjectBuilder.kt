@@ -48,10 +48,14 @@ class ProjectBuilder {
             var allZipList = ZipHelper.getZipFileList(templatePath).map { it.name }
 
             val unPath = Paths.projectDir + "/" + pair.first
-            println(allZipList,unPath,templatePath)
+            println(allZipList, unPath, templatePath)
 
             //解压文件
-            ZipHelper.unZipFile(templatePath, allZipList, toPath = { unPath },unPathFilterPrefix = {"/"})
+            ZipHelper.unZipFile(
+                templatePath,
+                allZipList,
+                toPath = { unPath },
+                unPathFilterPrefix = { "/" })
 
             //过滤一下文件列表
 

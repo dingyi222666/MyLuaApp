@@ -13,9 +13,9 @@ class BlockNode() : ASTNode() {
 
     val statements = mutableListOf<StatementNode>()
 
-    var returnStatement : StatementNode? = null
+    var returnStatement: StatementNode? = null
 
-    fun addStatement(statement:StatementNode) {
+    fun addStatement(statement: StatementNode) {
         statements.add(statement)
     }
 

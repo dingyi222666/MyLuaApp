@@ -1276,7 +1276,6 @@
     },
     "androlua": {
       "LuaAccessibilityService$AccessibilityServiceCallbacks": {},
-
       "GifDecoder$GifFrame": {},
       "LuaAnimation": {},
       "LuaActivityX": {},

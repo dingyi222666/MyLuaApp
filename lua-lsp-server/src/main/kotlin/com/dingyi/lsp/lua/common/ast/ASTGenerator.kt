@@ -86,12 +86,12 @@ class ASTGenerator() {
             return LocalStatement()
         }
 
-       override fun visitWhileStat(ctx:LuaParser.WhileStatContext):StatementNode {
-           val result = WhileStatement()
-           result.condition = ctx.findExp()?.let { visitExp(it) } ?: ConstantsNode()
-           result.body = ctx.findBlock()?.let { visitBlock(it) } ?: BlockNode()
-           return result
-       }
+        override fun visitWhileStat(ctx: LuaParser.WhileStatContext): StatementNode {
+            val result = WhileStatement()
+            result.condition = ctx.findExp()?.let { visitExp(it) } ?: ConstantsNode()
+            result.body = ctx.findBlock()?.let { visitBlock(it) } ?: BlockNode()
+            return result
+        }
 
         private fun visitAttrNameList(ctx: LuaParser.AttnamelistContext): List<ASTNode> {
             val result = mutableListOf<ASTNode>()
@@ -205,8 +205,6 @@ class ASTGenerator() {
         private fun parseCallExpressionBase(ctx: LuaParser.FunctioncallContext): ExpressionNode {
 
 
-            
-
             val list = buildCallExpressionParseList(ctx)
 
 
@@ -233,7 +231,7 @@ class ASTGenerator() {
 
         }
 
-        private fun buildCallExpressionParseList(ctx:LuaParser.FunctioncallContext): MutableList<ParserRuleContext> {
+        private fun buildCallExpressionParseList(ctx: LuaParser.FunctioncallContext): MutableList<ParserRuleContext> {
 
             val result = mutableListOf<ParserRuleContext>()
 

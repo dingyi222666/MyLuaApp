@@ -5,7 +5,7 @@ package com.dingyi.lsp.lua.common.ast
  * @date: 2021/10/7 10:48
  * @description:
  **/
-class Identifier(var name:String = ""):ExpressionNode() {
+class Identifier(var name: String = "") : ExpressionNode() {
     override fun toString(): String {
         return "Identifier(name='$name')"
     }

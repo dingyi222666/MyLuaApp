@@ -29,7 +29,6 @@ import java.util.List;
 
 /**
  * CSS Parser to parse style for TextMate syntax coloration.
- *
  */
 public class CSSParser {
 

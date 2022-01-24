@@ -21,7 +21,6 @@ import java.util.List;
 
 /**
  * Model tokens changed event.
- *
  */
 public class ModelTokensChangedEvent {
 

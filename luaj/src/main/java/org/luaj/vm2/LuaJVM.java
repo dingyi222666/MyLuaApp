@@ -24,13 +24,13 @@ public class LuaJVM {
     }
 
 
-
     public LuaTable loadFile(String str) {
         LuaTable table = LuaValue.tableOf();
 
         try {
             this.state.getGlobals().load(new FileInputStream(str), "@d", "bt", table).invoke();
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         return table;
     }
@@ -56,7 +56,7 @@ public class LuaJVM {
     public Varargs runFunc(String name, Object... array) {
         LuaValue[] values = new LuaValue[array.length];
 
-        for(int i = 0; i < array.length; ++i) {
+        for (int i = 0; i < array.length; ++i) {
             values[i] = LuaValue.valueOf(array[i].toString());
         }
 

@@ -37,7 +37,7 @@ class LogBroadcastReceiver(
                 context?.unregisterReceiver(this)
             }
             Lifecycle.Event.ON_RESUME -> {
-                context?.registerReceiver(this,IntentFilter(javaClass.name))
+                context?.registerReceiver(this, IntentFilter(javaClass.name))
             }
             Lifecycle.Event.ON_DESTROY -> {
                 source.lifecycle.removeObserver(this)

@@ -7,7 +7,7 @@ import kotlin.properties.Delegates
  * @date: 2021/10/20 11:41
  * @description:
  **/
-class WhileStatement:StatementNode() {
+class WhileStatement : StatementNode() {
     var condition by Delegates.notNull<ASTNode>()
     var body by Delegates.notNull<BlockNode>()
 

@@ -12,7 +12,8 @@ import com.dingyi.myluaapp.common.kts.ifNull
 import com.dingyi.myluaapp.databinding.LayoutBottomDialogDefaultClickListBinding
 import com.dingyi.myluaapp.databinding.LayoutItemBottomDialogDefaultClickItemBinding
 
-class DefaultClickListLayoutHelper(rootView: View, dialog: BottomDialog) : BaseBottomDialogLayoutHelper(rootView, dialog) {
+class DefaultClickListLayoutHelper(rootView: View, dialog: BottomDialog) :
+    BaseBottomDialogLayoutHelper(rootView, dialog) {
 
     private val binding = LayoutBottomDialogDefaultClickListBinding.bind(rootView)
 

@@ -7,7 +7,7 @@ import io.github.rosemoe.sora.interfaces.EditorLanguage
  * @date: 2021/8/14 22:25
  * @description:
  **/
-abstract class BaseLanguage: EditorLanguage {
+abstract class BaseLanguage : EditorLanguage {
 
     private val BASIC_C_OPERATORS = charArrayOf(
         '(', ')', '{', '}', '.', ',', ';', '=', '+', '-',
@@ -16,10 +16,10 @@ abstract class BaseLanguage: EditorLanguage {
     )
 
 
-    private val names=mutableListOf<String>()
-    private val basePackages= mutableMapOf<String,Array<String>>()
-    private val keywords=mutableListOf<String>()
-    private var operators= arrayOf<Char>()
+    private val names = mutableListOf<String>()
+    private val basePackages = mutableMapOf<String, Array<String>>()
+    private val keywords = mutableListOf<String>()
+    private var operators = arrayOf<Char>()
 
     fun getNames(): Array<String> {
         return names.toTypedArray()
@@ -57,9 +57,9 @@ abstract class BaseLanguage: EditorLanguage {
     }
 
     private fun generateOperators(operators: CharArray): Array<Char> {
-        val operatorsMap = Array(operators.size){ Char(0)}
+        val operatorsMap = Array(operators.size) { Char(0) }
         for (i in operators.indices) {
-            operatorsMap[i]=operators[i]
+            operatorsMap[i] = operators[i]
         }
         return operatorsMap
     }
@@ -81,15 +81,14 @@ abstract class BaseLanguage: EditorLanguage {
     }
 
     fun getBasePackages(): MutableList<String> {
-        val result=mutableListOf<String>()
+        val result = mutableListOf<String>()
         basePackages.forEach { element ->
-           element.value.map {"${element.key}.$it"}.let {
-               result.addAll(it)
-           }
+            element.value.map { "${element.key}.$it" }.let {
+                result.addAll(it)
+            }
         }
         return result
     }
-
 
 
 }

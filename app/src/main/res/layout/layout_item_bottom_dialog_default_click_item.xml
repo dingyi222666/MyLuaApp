@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:background="@drawable/ripple_mask"
     android:layout_height="wrap_content">
+
     <com.google.android.material.radiobutton.MaterialRadioButton
         android:layout_width="wrap_content"
         android:layout_marginStart="14dp"
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content">
 
     </com.google.android.material.radiobutton.MaterialRadioButton>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,6 +24,5 @@
         android:textSize="17sp"
         android:clickable="false"
         android:focusable="false"
-        android:textColor="?theme_textColor"
-        />
+        android:textColor="?theme_textColor" />
 </androidx.appcompat.widget.LinearLayoutCompat>

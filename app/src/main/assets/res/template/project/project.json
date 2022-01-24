@@ -2,7 +2,7 @@
   "templates": [
     {
       "name": {
-        "default":"空模板",
+        "default": "空模板",
         "english": "Empty Project"
       },
       "path": "zip/empty_project.zip",

@@ -8,5 +8,5 @@ import io.github.rosemoe.sora.data.CompletionItem
  * @description:
  **/
 data class ColorCompletionItem(
-    var colorLabel:CharSequence,
+    var colorLabel: CharSequence,
 ) : CompletionItem("", "")

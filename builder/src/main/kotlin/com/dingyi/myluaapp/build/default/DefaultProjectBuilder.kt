@@ -6,7 +6,7 @@ import com.dingyi.myluaapp.build.api.task.Task
 
 class DefaultProjectBuilder(
     private val project: Project
-): Builder {
+) : Builder {
 
     override fun after(task: Task, afterTask: Task) {
         project.getModules().forEach {

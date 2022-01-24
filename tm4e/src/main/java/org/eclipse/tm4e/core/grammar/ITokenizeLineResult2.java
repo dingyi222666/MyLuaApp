@@ -26,7 +26,6 @@ public interface ITokenizeLineResult2 {
     /**
      * The tokens in binary format. Each token occupies two array indices. For
      * token i: - at offset 2*i => startIndex - at offset 2*i + 1 => metadata
-     *
      */
     int[] getTokens();
 

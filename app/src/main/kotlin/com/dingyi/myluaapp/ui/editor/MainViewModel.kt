@@ -16,18 +16,18 @@ import kotlin.properties.Delegates
  * @date: 2021/11/3 15:38
  * @description:
  **/
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
     var controller by Delegates.notNull<ProjectController>()
 
     private val _appTitle = MutableLiveData("")
-    private val _openFiles = MutableLiveData<Pair<List<ProjectFile>,String>>()
+    private val _openFiles = MutableLiveData<Pair<List<ProjectFile>, String>>()
     private val _openedDir = MutableLiveData<String>()
     val openFiles = _openFiles.map { it }
     val appTitle = _appTitle.map { it }
     val openedDir = _openedDir.map { it }
 
-    fun initProjectController(projectPath:String) {
+    fun initProjectController(projectPath: String) {
         controller = ProjectController(projectPath)
         _appTitle.value = controller.getProjectName()
 

@@ -6,10 +6,10 @@ package com.dingyi.lsp.lua.common.ast
  * @description:
  **/
 
-abstract class StatementNode:ASTNode() {
+abstract class StatementNode : ASTNode() {
 }
 
-abstract class ExpressionNode:ASTNode() {
+abstract class ExpressionNode : ASTNode() {
 }
 
 abstract class ASTNode() {

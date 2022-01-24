@@ -28,7 +28,6 @@ import java.util.Objects;
  * Represents a "pushed" state on the stack (as a linked list element).
  *
  * @see https://github.com/Microsoft/vscode-textmate/blob/master/src/grammar.ts
- *
  */
 public class StackElement {
 

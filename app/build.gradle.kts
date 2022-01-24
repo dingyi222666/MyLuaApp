@@ -20,9 +20,9 @@ android {
     }
 
     sourceSets {
-       getByName("main") {
+        getByName("main") {
             java.srcDirs("src/main/kotlin")
-       }
+        }
     }
 
     buildFeatures {
@@ -31,7 +31,7 @@ android {
     }
 
     buildTypes {
-          release {
+        release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -88,7 +88,6 @@ dependencies {
     implementation(BuildConfig.Libs.Tools.multi_languages)
 
     implementation(BuildConfig.Libs.Default.kotlin_stdlib) //kt
-
 
 
     //glide

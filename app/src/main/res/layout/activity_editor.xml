@@ -85,7 +85,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:text="@string/editor_toast_no_open_file"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/symbolView"

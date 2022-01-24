@@ -1,13 +1,13 @@
 /**
- *  Copyright (c) 2015-2017 Angelo ZERR.
+ * Copyright (c) 2015-2017 Angelo ZERR.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
+ * <p>
  * SPDX-License-Identifier: EPL-2.0
- *
- *  Contributors:
- *  Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
+ * <p>
+ * Contributors:
+ * Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  */
 package org.eclipse.tm4e.core.internal.utils;
 
@@ -26,41 +26,41 @@ import org.eclipse.tm4e.core.internal.types.IRawRepository;
  */
 public class CloneUtils {
 
-	/**
-	 * Helper class, use methods statically
-	 */
-	private CloneUtils() {
+    /**
+     * Helper class, use methods statically
+     */
+    private CloneUtils() {
 
-	}
+    }
 
-	public static Object clone(Object value) {
-		if (value instanceof Raw) {
-			Raw rowToClone = (Raw) value;
-			Raw raw = new Raw();
-			for (Entry<String, Object> entry : rowToClone.entrySet()) {
-				raw.put(entry.getKey(), clone(entry.getValue()));
-			}
-			return raw;
-		} else if (value instanceof List) {
-			return ((List<?>) value).stream().map(CloneUtils::clone).collect(Collectors.toList());
-		} else if (value instanceof String) {
-			return value;
-		} else if (value instanceof Integer) {
-			return value;
-		} else if (value instanceof Boolean) {
-			return value;
-		}
-		return value;
-	}
+    public static Object clone(Object value) {
+        if (value instanceof Raw) {
+            Raw rowToClone = (Raw) value;
+            Raw raw = new Raw();
+            for (Entry<String, Object> entry : rowToClone.entrySet()) {
+                raw.put(entry.getKey(), clone(entry.getValue()));
+            }
+            return raw;
+        } else if (value instanceof List) {
+            return ((List<?>) value).stream().map(CloneUtils::clone).collect(Collectors.toList());
+        } else if (value instanceof String) {
+            return value;
+        } else if (value instanceof Integer) {
+            return value;
+        } else if (value instanceof Boolean) {
+            return value;
+        }
+        return value;
+    }
 
-	public static IRawRepository mergeObjects(IRawRepository... sources) {
-		Raw target = new Raw();
-		for (IRawRepository source : sources) {
-			Set<Entry<String, Object>> entries = ((Map<String, Object>) source).entrySet();
-			for (Entry<String, Object> entry : entries) {
-				target.put(entry.getKey(), entry.getValue());
-			}
-		}
-		return target;
-	}
+    public static IRawRepository mergeObjects(IRawRepository... sources) {
+        Raw target = new Raw();
+        for (IRawRepository source : sources) {
+            Set<Entry<String, Object>> entries = ((Map<String, Object>) source).entrySet();
+            for (Entry<String, Object> entry : entries) {
+                target.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return target;
+    }
 }

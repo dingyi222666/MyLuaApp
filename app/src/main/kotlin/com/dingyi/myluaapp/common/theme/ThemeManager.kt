@@ -48,7 +48,8 @@ class ThemeManager {
         var colorPrimary by Delegates.notNull<Int>()
 
         //获取固定颜色
-        val imageColorFilter = activity.resources.getColor(com.dingyi.myluaapp.R.color.theme_default_imageColorFilter)
+        val imageColorFilter =
+            activity.resources.getColor(com.dingyi.myluaapp.R.color.theme_default_imageColorFilter)
 
         init {
             val typedArray = activity.obtainStyledAttributes(
@@ -65,7 +66,6 @@ class ThemeManager {
 
         }
     }
-
 
 
 }

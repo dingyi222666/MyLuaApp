@@ -7,7 +7,7 @@ import com.dingyi.myluaapp.common.dialog.helper.BaseBottomDialogLayoutHelper
 import com.dingyi.myluaapp.common.dialog.helper.DefaultMessageLayoutHelper
 import com.dingyi.myluaapp.databinding.LayoutBottomDialogDefaultMessageBinding
 
-object DefaultMessageLayout:BaseBottomDialogLayout {
+object DefaultMessageLayout : BaseBottomDialogLayout {
 
 
     override fun getRootView(inflater: LayoutInflater): View {

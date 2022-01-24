@@ -26,7 +26,6 @@ class WelcomeActivity :
     }
 
 
-
     override fun observeViewModel() {
         super.observeViewModel()
         viewModel.jumpFlag.observe(this) {
@@ -59,7 +58,6 @@ class WelcomeActivity :
         super.onCreate(savedInstanceState)
 
     }
-
 
 
 }

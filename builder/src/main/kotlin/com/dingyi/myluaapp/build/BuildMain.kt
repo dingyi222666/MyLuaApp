@@ -12,37 +12,37 @@ class BuildMain(
     private val application: Application
 ) {
 
-    private var logger :Logger? = Logger(application)
+    private var logger: Logger? = Logger(application)
 
     private val repository = ServiceRepository()
 
-    private var nowBuilder:MainBuilder? = null
+    private var nowBuilder: MainBuilder? = null
 
     init {
         repository.init()
     }
 
-    private fun createLogger():Logger {
+    private fun createLogger(): Logger {
         logger = logger ?: Logger(application)
         return logger ?: error("")
     }
 
-    fun build(path:String,command:String) {
-        return MainBuilder(path,createLogger(),repository).apply {
+    fun build(path: String, command: String) {
+        return MainBuilder(path, createLogger(), repository).apply {
             init()
             nowBuilder = this
         }.build("build $command")
     }
 
     fun clean(path: String) {
-        return MainBuilder(path,createLogger(),repository).apply {
+        return MainBuilder(path, createLogger(), repository).apply {
             init()
             nowBuilder = this
         }.build("clean")
     }
 
     fun sync(path: String) {
-        return MainBuilder(path,createLogger(),repository).apply {
+        return MainBuilder(path, createLogger(), repository).apply {
             init()
             nowBuilder = this
         }.build("sync")
@@ -55,11 +55,10 @@ class BuildMain(
     }
 
 
-
 }
 
 
-class CompileError(override val message:String):Exception(message)
+class CompileError(override val message: String) : Exception(message)
 
 
 

@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
  * @date: 2021/10/5 22:46
  * @description:
  **/
-class LuaLanguageServer: LanguageServer {
+class LuaLanguageServer : LanguageServer {
 
     override fun initialize(params: InitializeParams?): CompletableFuture<InitializeResult> {
         TODO("not yet implemented")

@@ -115,5 +115,4 @@
         app:layout_constraintTop_toBottomOf="@id/list" />
 
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
