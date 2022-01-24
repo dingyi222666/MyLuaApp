@@ -7,7 +7,7 @@ English | [中文](https://github.com/dingyi222666/MyLuaApp/tree/master/README_Z
 
 It's ***Work In Progress***. Now the project is in the **alpha** stage and most features are **not completed**(For example,Build Apk).It means the project is not run well.
 
-MyLuaApp is an Android App,use **Lua/Java**  to develop Android apps on Android system. 
+MyLuaApp can write,run and build Lua script on Android and use Lua to develop Android App.
 
 You can use lua to develop Android Apps!The project use [AndroLua_pro](https://github.com/nirenr/AndroLua_pro) as lua running framework to run lua in Android.It's fast than [AndroLua](https://github.com/mkottman/AndroLua)
 
