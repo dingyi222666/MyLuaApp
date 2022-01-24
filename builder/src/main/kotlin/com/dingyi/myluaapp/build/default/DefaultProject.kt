@@ -159,15 +159,15 @@ open class DefaultProject(
     open fun indexModule(value: String) {
         val dir = File(path, value)
         if (dir.isDirectory) {
-            getMainBuilder().getServiceRepository().getServices().forEach {
-                val module = it.onCreateModule(dir.path, this)
-                if (module != null) {
-                    if (module.name == "src" || module.name == "app") {
-                        mainModule = module
-                    }
-                    allModules.add(module)
+
+            val module = getMainBuilder().getServiceRepository().onCreateModule(dir.path, this)
+            if (module != null) {
+                if (module.name == "src" || module.name == "app") {
+                    mainModule = module
                 }
+                allModules.add(module)
             }
+
         }
     }
 

@@ -7,7 +7,7 @@ import com.dingyi.myluaapp.build.api.logger.ILogger
 class Logger(application: Application) : ILogger {
 
 
-    private val connect = LoggerConnect(application)
+    private var connect: LoggerConnect? = LoggerConnect(application)
 
     inner class LoggerConnect(private val application: Application) {
 
@@ -27,19 +27,23 @@ class Logger(application: Application) : ILogger {
 
     }
 
+    fun close() {
+        connect = null
+    }
+
     override fun waring(string: String) {
-        connect.sendMsg("warn", string)
+        connect?.sendMsg("warn", string)
     }
 
     override fun info(string: String) {
-        connect.sendMsg("info", string)
+        connect?.sendMsg("info", string)
     }
 
     override fun debug(string: String) {
-        connect.sendMsg("debug", string)
+        connect?.sendMsg("debug", string)
     }
 
     override fun error(string: String) {
-        connect.sendMsg("error", string)
+        connect?.sendMsg("error", string)
     }
 }

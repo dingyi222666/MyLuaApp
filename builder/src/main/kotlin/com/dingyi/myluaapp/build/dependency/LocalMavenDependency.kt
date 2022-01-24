@@ -1,28 +1,79 @@
 package com.dingyi.myluaapp.build.dependency
 
 import com.dingyi.myluaapp.build.api.dependency.MavenDependency
+import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import java.io.File
+import java.util.*
 
 class LocalMavenDependency(
     private val mavenPom: MavenPom,
-    private val pomPath: String
+    private val allDependencies: List<MavenDependency>,
+    private val repositoryPath: String
 ) : MavenDependency {
+    override val groupId: String
+        get() = mavenPom.groupId
+    override val artifactId: String
+        get() = mavenPom.artifactId
+    override val versionName: String
+        get() = mavenPom.versionName
+    override val type: String
+        get() = mavenPom.packaging
+    override val packaging: String
+        get() = mavenPom.packaging
 
 
-    override var groupId: String = ""
-    override var artfactId: String = ""
-
-    override var version: String = ""
-
-    override var type: String = ""
-
-    override fun getDependencies(): List<MavenDependency>? {
-        TODO("Not yet implemented")
+    override fun getDependencies(): List<MavenDependency> {
+        return allDependencies
     }
 
-    override var name: String = ""
+    override var name: String = mavenPom.name
 
-    override fun getDependenciesFile(): List<File> {
-        TODO("Not yet implemented")
+    override fun getDependenciesFile(): Set<File> {
+        return mutableSetOf<File>().apply {
+            add(getDependencyFile())
+            allDependencies.forEach {
+                addAll(it.getDependenciesFile())
+            }
+        }
+    }
+
+    private fun getDependencyFile(): File {
+        return when (type) {
+            "aar" -> "${repositoryPath}/${getPath()}.aar"
+            "jar" -> "${repositoryPath}/${getPath()}.jar"
+            else -> ""
+        }.let { File(it) }
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(artifactId, groupId)
+    }
+
+
+    fun getFileName(): String {
+        return "$artifactId-$versionName"
+    }
+
+    fun getPath(): String {
+        val path = groupId.replace('.', '/')
+        val artifact = artifactId.replace('.', '/')
+        return "$path/$artifact/$versionName"
+    }
+
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MavenPom
+
+        if (groupId != other.groupId) return false
+        if (artifactId != other.artifactId) return false
+
+        return true
+    }
+
+    override fun toString(): String {
+        return "LocalMavenDependency(groupId='$groupId', artifactId='$artifactId', versionName='$versionName', packaging='$packaging', dependencies=$allDependencies)"
     }
 }

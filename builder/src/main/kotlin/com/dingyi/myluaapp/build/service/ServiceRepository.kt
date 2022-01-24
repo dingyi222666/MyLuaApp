@@ -1,5 +1,9 @@
 package com.dingyi.myluaapp.build.service
 
+import com.dingyi.myluaapp.build.api.builder.Builder
+import com.dingyi.myluaapp.build.api.builder.MainBuilder
+import com.dingyi.myluaapp.build.api.project.Module
+import com.dingyi.myluaapp.build.api.project.Project
 import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.build.api.service.ServiceRepository
 import com.dingyi.myluaapp.common.kts.Paths
@@ -72,5 +76,35 @@ class ServiceRepository : ServiceRepository {
 
     override fun shutdown() {
         services.clear()
+    }
+
+    override fun onCreateProject(path: String, builder: MainBuilder): Project? {
+        services.forEach {
+            val tmp = it.onCreateProject(path, builder)
+            if (tmp!=null) {
+                return tmp
+            }
+        }
+        return null
+    }
+
+    override fun onCreateModule(path: String, project: Project): Module? {
+        services.forEach {
+            val tmp = it.onCreateModule(path, project)
+            if (tmp!=null) {
+                return tmp
+            }
+        }
+        return null
+    }
+
+    override fun onCreateBuilder(path: String, module: Module): Builder? {
+        services.forEach {
+            val tmp = it.onCreateBuilder(path, module)
+            if (tmp!=null) {
+                return tmp
+            }
+        }
+        return null
     }
 }

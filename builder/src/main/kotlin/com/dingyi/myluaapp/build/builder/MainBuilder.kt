@@ -21,14 +21,9 @@ class MainBuilder(
 
     fun init() {
 
-        repository.getServices().forEach {
-            val targetProject = it.onCreateProject(initPath, this)
 
-            if (targetProject != null) {
-                project = targetProject
-                return@forEach
-            }
-        }
+        project = repository.onCreateProject(initPath, this)
+
 
         project?.init()
 

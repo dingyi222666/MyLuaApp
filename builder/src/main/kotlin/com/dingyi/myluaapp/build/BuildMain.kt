@@ -5,8 +5,7 @@ import android.app.Service
 import com.dingyi.myluaapp.build.builder.MainBuilder
 import com.dingyi.myluaapp.build.log.Logger
 import com.dingyi.myluaapp.build.service.ServiceRepository
-
-import kotlin.Exception
+import kotlin.RuntimeException
 
 class BuildMain(
     private val application: Application
@@ -58,7 +57,7 @@ class BuildMain(
 }
 
 
-class CompileError(override val message: String) : Exception(message)
+class CompileError(override val message: String) : RuntimeException(message)
 
 
 

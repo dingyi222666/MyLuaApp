@@ -14,10 +14,11 @@ class ProjectDependency(
 
     override val name: String
         get() = file.name
+    override val type: String
+        get() = "module"
 
-    override fun getDependenciesFile(): List<File> {
-
-        return listOf()
+    override fun getDependenciesFile(): Set<File> {
+        return setOf()
     }
 
     fun getModule(project: Project): Module {

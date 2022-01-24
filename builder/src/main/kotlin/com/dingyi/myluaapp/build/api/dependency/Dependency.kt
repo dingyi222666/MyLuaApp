@@ -5,6 +5,7 @@ import java.io.File
 interface Dependency {
     val name: String
 
+    val type: String
 
-    fun getDependenciesFile(): List<File>
+    fun getDependenciesFile(): Set<File>
 }

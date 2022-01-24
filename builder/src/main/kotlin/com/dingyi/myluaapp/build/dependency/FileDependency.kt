@@ -10,10 +10,13 @@ class FileDependency(
 
     private val file = path.toFile()
 
+    override val type: String
+        get() = file.name
+
     override val name: String
         get() = file.name
 
-    override fun getDependenciesFile(): List<File> {
-        return listOf(file)
+    override fun getDependenciesFile(): Set<File> {
+        return setOf(file)
     }
 }

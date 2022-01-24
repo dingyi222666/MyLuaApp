@@ -1,3 +1,5 @@
+import org.gradle.internal.classpath.Instrumented.systemProperty
+
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -32,6 +34,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -39,4 +45,9 @@ dependencies {
     implementation(project(":luaj"))
     implementation(BuildConfig.Libs.Google.gson)
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
+    // Optional -- Robolectric environment
+    testImplementation("androidx.test:core:1.3.0")
+    testImplementation("junit:junit:4.12")
+    // Optional -- Mockito framework
+    testImplementation("org.robolectric:robolectric:4.2.1")
 }
