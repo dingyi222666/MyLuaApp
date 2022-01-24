@@ -38,11 +38,7 @@ class LocalMavenDependency(
     }
 
     private fun getDependencyFile(): File {
-        return when (type) {
-            "aar" -> "${repositoryPath}/${getPath()}.aar"
-            "jar" -> "${repositoryPath}/${getPath()}.jar"
-            else -> ""
-        }.let { File(it) }
+        return File("${getDependencyFileDirectory()}/${getFileName()}.$type")
     }
 
     override fun hashCode(): Int {
@@ -58,6 +54,12 @@ class LocalMavenDependency(
         val path = groupId.replace('.', '/')
         val artifact = artifactId.replace('.', '/')
         return "$path/$artifact/$versionName"
+    }
+
+    fun getDependencyFileDirectory():String {
+        val path = groupId.replace('.', '/')
+        val artifact = artifactId.replace('.', '/')
+        return "$repositoryPath/$path/$artifact"
     }
 
 
