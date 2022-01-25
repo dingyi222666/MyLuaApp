@@ -3,8 +3,10 @@ package com.dingyi.myluaapp.build
 import android.app.Application
 import android.app.Service
 import com.dingyi.myluaapp.build.builder.MainBuilder
+import com.dingyi.myluaapp.build.dependency.repository.LocalMavenRepository
 import com.dingyi.myluaapp.build.log.Logger
 import com.dingyi.myluaapp.build.service.ServiceRepository
+import com.dingyi.myluaapp.common.kts.Paths
 import kotlin.RuntimeException
 
 class BuildMain(
@@ -17,6 +19,8 @@ class BuildMain(
 
     private var nowBuilder: MainBuilder? = null
 
+    private val mavenRepository = LocalMavenRepository(Paths.localMavenPath)
+
     init {
         repository.init()
     }
@@ -27,21 +31,21 @@ class BuildMain(
     }
 
     fun build(path: String, command: String) {
-        return MainBuilder(path, createLogger(), repository).apply {
+        return MainBuilder(path, createLogger(), repository,mavenRepository).apply {
             init()
             nowBuilder = this
         }.build("build $command")
     }
 
     fun clean(path: String) {
-        return MainBuilder(path, createLogger(), repository).apply {
+        return MainBuilder(path, createLogger(), repository,mavenRepository).apply {
             init()
             nowBuilder = this
         }.build("clean")
     }
 
     fun sync(path: String) {
-        return MainBuilder(path, createLogger(), repository).apply {
+        return MainBuilder(path, createLogger(), repository,mavenRepository).apply {
             init()
             nowBuilder = this
         }.build("sync")

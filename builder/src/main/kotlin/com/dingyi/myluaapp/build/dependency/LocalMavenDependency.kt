@@ -46,7 +46,7 @@ class LocalMavenDependency(
     }
 
 
-    fun getFileName(): String {
+    private fun getFileName(): String {
         return "$artifactId-$versionName"
     }
 
@@ -56,7 +56,7 @@ class LocalMavenDependency(
         return "$path/$artifact/$versionName"
     }
 
-    fun getDependencyFileDirectory():String {
+    private fun getDependencyFileDirectory():String {
         val path = groupId.replace('.', '/')
         val artifact = artifactId.replace('.', '/')
         return "$repositoryPath/$path/$artifact"

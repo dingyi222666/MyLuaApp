@@ -22,6 +22,6 @@ class ProjectDependency(
     }
 
     fun getModule(project: Project): Module {
-        return project.getModule(name)
+        return project.getModule(name) ?: throw Exception("Can't find module")
     }
 }

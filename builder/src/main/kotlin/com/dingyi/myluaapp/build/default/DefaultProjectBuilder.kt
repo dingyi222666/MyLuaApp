@@ -22,6 +22,7 @@ class DefaultProjectBuilder(
 
     override fun getTasks(): List<Task> {
         val weight = project.createModulesWeight()
+        println(weight)
         val keys = weight.keys.toList().sortedDescending()
         val list = mutableListOf<Task>()
         keys.forEach { it ->

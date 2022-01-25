@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.common.theme
 
 import android.annotation.SuppressLint
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.dingyi.myluaapp.MainApplication
@@ -49,7 +50,11 @@ class ThemeManager {
 
         //获取固定颜色
         val imageColorFilter =
-            activity.resources.getColor(com.dingyi.myluaapp.R.color.theme_default_imageColorFilter)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                activity.resources.getColor(com.dingyi.myluaapp.R.color.theme_default_imageColorFilter,activity.theme)
+            } else {
+                activity.resources.getColor(com.dingyi.myluaapp.R.color.theme_default_imageColorFilter)
+            }
 
         init {
             val typedArray = activity.obtainStyledAttributes(

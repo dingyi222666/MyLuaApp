@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.build.api.project
 
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.builder.MainBuilder
+import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import com.dingyi.myluaapp.build.api.file.FileManager
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.api.runner.Runner
@@ -35,6 +36,8 @@ interface Project : ProjectScript {
 
     fun getLogger(): ILogger
 
-    fun getModule(name: String): Module
+    fun getModule(name: String): Module?
+
+    fun getMavenRepository(): MavenRepository
 
 }

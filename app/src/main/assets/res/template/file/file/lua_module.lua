@@ -22,7 +22,7 @@ base.new = function(self, ...)
 end
 
 --construction method(function)
-base.__new = function(self, ...)
+base.__call = function(self, ...)
   return self:new(...)
 end
 

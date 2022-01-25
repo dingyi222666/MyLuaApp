@@ -60,11 +60,6 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
     abstract fun getViewBindingInstance(inflater: LayoutInflater, container: ViewGroup?): V
 
 
-    companion object {
-        fun newInstance(bundle: Bundle): Fragment? {
-            return null
-        }
-    }
 
 
 }

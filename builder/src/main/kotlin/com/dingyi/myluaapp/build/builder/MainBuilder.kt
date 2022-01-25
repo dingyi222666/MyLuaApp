@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.build.builder
 
 import com.dingyi.myluaapp.build.api.builder.MainBuilder
+import com.dingyi.myluaapp.build.api.dependency.MavenDependency
+import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.api.project.Project
 import com.dingyi.myluaapp.build.api.service.ServiceRepository
@@ -11,7 +13,8 @@ import kotlin.properties.Delegates
 class MainBuilder(
     private val initPath: String,
     private val logger: ILogger,
-    private val repository: ServiceRepository
+    private val repository: ServiceRepository,
+    private val mavenRepository: MavenRepository
 ) : MainBuilder {
 
     private var project: Project? = null
@@ -66,5 +69,9 @@ class MainBuilder(
     override fun stop() {
         runJob?.cancel("Stop Build")
         runJob = null
+    }
+
+    override fun getMavenRepository(): MavenRepository {
+        return mavenRepository
     }
 }

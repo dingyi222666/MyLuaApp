@@ -130,7 +130,7 @@ class LuaLanguage(codeEditor: CodeEditor) :
 
 
     override fun getAutoCompleteProvider(): AutoCompleteProvider {
-        return AutoCompleteProvider { prefix, analyzeResult, line, column -> mutableListOf() }
+        return AutoCompleteProvider { _, _, _, _ -> mutableListOf() }
     }
 
 

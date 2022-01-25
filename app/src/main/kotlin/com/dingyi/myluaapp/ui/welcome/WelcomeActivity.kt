@@ -38,7 +38,7 @@ class WelcomeActivity :
 
     }
 
-    @ExperimentalCoroutinesApi
+
     private fun observeUnZip() {
         viewModel.updateMessage.observe(this) {
             if (it == null) {

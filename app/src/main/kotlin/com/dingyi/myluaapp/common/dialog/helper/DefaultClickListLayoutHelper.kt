@@ -143,7 +143,7 @@ class DefaultClickListLayoutHelper(rootView: View, dialog: BottomDialog) :
                 holder.binding.radioButton.toggle()
                 clickCallBack?.invoke(list[position].first, list[position].second)
             }
-            holder.binding.radioButton.setOnCheckedChangeListener { buttonView, isChecked ->
+            holder.binding.radioButton.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     selectIndex = position
                     if (!binding.list.isComputingLayout) {

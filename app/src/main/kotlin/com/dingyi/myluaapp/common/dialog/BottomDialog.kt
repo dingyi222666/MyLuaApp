@@ -42,7 +42,7 @@ class BottomDialog(context: Context) : BottomSheetDialog(context) {
 
         var defaultText: String = ""
         private val defaultClick: DialogClickListener =
-            { helper: BaseBottomDialogLayoutHelper, item: Pair<String, Any>? -> }
+            { _: BaseBottomDialogLayoutHelper, _: Pair<String, Any>? -> }
         var title = ""
         var message = ""
         var negativeButtonText = ""

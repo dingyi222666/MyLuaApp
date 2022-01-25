@@ -34,7 +34,7 @@ class AndroidService : Service {
         if (table is LuaTable) {
             for (key in table.keys()) {
                 val value = table[key].tojstring()
-                if (value == "com.android.application") {
+                if (value == "com.android.application" || value == "com.android.library") {
                     return AndroidModule(project, path)
                 }
             }

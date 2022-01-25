@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.build.default
 import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.builder.MainBuilder
+import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import com.dingyi.myluaapp.build.api.file.FileManager
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.api.project.Module
@@ -106,17 +107,24 @@ open class DefaultProject(
                 if (it is ProjectDependency) {
                     checkEachOther(it, module)
                     val targetModule = it.getModule(this)
-                    val num = tmpMap.getOrDefault(targetModule) { 0 }
-                    tmpMap[targetModule] = num as Int
+                    val num = tmpMap.getOrElse(targetModule) { 0 } + 1
+                    tmpMap[targetModule] = num
+                    tmpMap[module] = ((tmpMap[module] ?: 0) - 1).coerceAtMost(0)
                 }
             }
-            tmpMap.getOrDefault(module) { 0 }
+            if (tmpMap[module] == null) {
+                tmpMap[module] = 0
+            }
         }
         tmpMap.forEach { (a, b) ->
             if (a != getMainModule()) {
-                (result.getOrDefault(b) {
-                    mutableListOf<Module>()
-                } as MutableList<Module>).add(a)
+                (result.getOrElse(b) {
+                    mutableListOf()
+                } as MutableList<Module>)
+                    .apply {
+                        add(a)
+                        result[b] = this
+                    }
             }
         }
         result[-1] = listOf(mainModule)
@@ -127,7 +135,7 @@ open class DefaultProject(
         for (dependency in projectDependency.getModule(this).getDependencies()) {
             if (dependency is ProjectDependency) {
                 if (dependency.getModule(this) == module) {
-                    throw CompileError("Do not interdepend module")
+                    throw CompileError("Do not interdependent module")
                 }
             }
         }
@@ -142,10 +150,11 @@ open class DefaultProject(
     }
 
     override fun indexAllModule() {
-        println(defaultSettingsScript.get("includes"))
+
         val table = defaultSettingsScript.get("includes") as LuaTable
         table.keys().forEach {
             val value = table[it].tojstring().toString()
+            println("index $value")
             indexModule(value)
         }
         if (allModules.size == 1) {
@@ -180,10 +189,14 @@ open class DefaultProject(
     }
 
 
-    override fun getModule(name: String): Module {
+    override fun getModule(name: String): Module? {
         return allModules.filter {
             it.name == name
-        }.getOrNull(0) ?: mainModule
+        }.getOrNull(0)
+    }
+
+    override fun getMavenRepository(): MavenRepository {
+        return mainBuilder.getMavenRepository()
     }
 
     override fun getSettingsScript(): Script {

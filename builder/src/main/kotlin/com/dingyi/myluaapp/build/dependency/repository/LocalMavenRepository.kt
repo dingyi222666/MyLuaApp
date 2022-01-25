@@ -33,8 +33,7 @@ class LocalMavenRepository(
             }${File.separator}${array[1]}-${array[2]}.pom"
 
         if (File(targetPomPath).exists().not()) {
-            System.err.println(RuntimeException("Unable to retrieve POM of $string"))
-
+            throw RuntimeException("Unable to retrieve POM of $string,try sync project to re download POM")
         }
 
         val pom = parser.parse(targetPomPath)

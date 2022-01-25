@@ -13,7 +13,7 @@ local metatable_g = {
         end
       end
 
-      if #arg == 1 then
+      if #arg <= 1 then
         arg = table.unpack(arg)
       end
 
@@ -28,8 +28,10 @@ function getDefaultProguardFile(file)
   return "/data/data/com.dingyi.MyLuaApp/files/res/build/" .. file
 end
 
+
+
 function project(name)
-  return { type = "project", value = name:match(":(.+)") }
+  return { type = "project", value = name:match("%:(.+)") }
 end
 
 function include(name)
@@ -89,8 +91,11 @@ function fileTree(dir, types)
 
   if (file.exists()) then
     local fileTable = {}
+
     forEachDir(target_dir, fileTable, types)
-    return { type = "file", fileTable }
+    Log.e("dump", print_dump(fileTable))
+    return { type = "fileTree", value = fileTable }
+
   end
 end
 
@@ -167,7 +172,15 @@ function forEachTable(t)
         local value = v.value
         t[i] = null
         local key = t[v.type] or {}
-        table.insert(key, value)
+
+        if v.type == "fileTree" and type(value) == "table" then
+          for _, v in ipairs(value) do
+            table.insert(key, v)
+          end
+        else
+          table.insert(key, value)
+        end
+
         t[v.type] = key
         if type(v.value) == "table" then
           forEachTable(value)
@@ -189,9 +202,17 @@ function runScript(path)
 
   loadfile(path, "bt", empty_table)()
 
+  Log.e("test", print_dump(empty_table))
+
   forEachTable(empty_table)
 
+  forEachTable(empty_table)
+
+
+  Log.e("test", print_dump(empty_table))
+
   _G.empty_table = empty_table
+
 
 end
 
@@ -207,11 +228,10 @@ end
 function getScriptValue(key)
   local t = string.split(key, ".")
   local result = _G.empty_table
-  Log.e("test", print_dump(empty_table))
-  for _, v in ipairs(t) do
 
+  for _, v in ipairs(t) do
     result = result[v]
   end
-  Log.e("test", print_dump(result))
+
   return result
 end
