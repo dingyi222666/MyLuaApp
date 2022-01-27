@@ -147,10 +147,7 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
         //否则就更新一次tab位置
         for (i in 0 until tabCount) {
             getTabAt(i)?.setPrivateField<Tab>("position", i)
-            Log.d(
-                "fuck,bug",
-                "name:${getTabAt(i)?.text},nowPosition:${i},tabPosition:${getTabAt(i)?.position}"
-            )
+
         }
         return tab.position
 

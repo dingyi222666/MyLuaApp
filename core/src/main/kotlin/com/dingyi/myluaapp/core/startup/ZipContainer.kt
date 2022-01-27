@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.core.startup
 
 import android.content.Context
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.common.kts.edit
@@ -29,6 +30,11 @@ object ZipContainer {
 
     }
 
+
+    private fun loadBuildSo() {
+
+    }
+
     @ExperimentalCoroutinesApi
     fun unFileToAssets() = channelFlow {
         val context = MainApplication.instance
@@ -39,6 +45,9 @@ object ZipContainer {
         println(unFileList)
         val defaultPath = "${context.filesDir.parentFile?.absolutePath}"
 
+        if (Build.VERSION.SDK_INT<23) {
+            loadBuildSo()
+        }
 
         ZipHelper.UnZipBuilder()
             .apply {

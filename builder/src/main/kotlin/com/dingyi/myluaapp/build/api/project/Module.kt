@@ -7,6 +7,7 @@ import com.dingyi.myluaapp.build.api.file.FileManager
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.api.script.ModuleScript
 
+
 interface Module : ModuleScript {
     /**
      * Get Module Type

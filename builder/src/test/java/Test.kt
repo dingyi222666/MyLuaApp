@@ -22,6 +22,11 @@ class Test {
         val dependency = repository.getDependency("com.google.android.material:material:1.0.0")
 
 
+        val a = mutableListOf(1,2,3)
+
+        a.add(a.indexOf(2)+1,4)
+        println(a)
+
         println(dependency)
         println(dependency.getDependenciesFile())
     }

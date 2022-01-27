@@ -26,7 +26,7 @@ class DefaultProjectBuilder(
         val keys = weight.keys.toList().sortedDescending()
         val list = mutableListOf<Task>()
         keys.forEach { it ->
-            val parallelTask = ParallelTask()
+            val parallelTask = ParallelTask("build")
             weight[it]?.forEach {
                 parallelTask.addModule(it)
             }
@@ -40,8 +40,8 @@ class DefaultProjectBuilder(
         val keys = weight.keys.toList().sortedDescending()
         val list = mutableListOf<Task>()
         keys.forEach { it ->
-            val parallelTask = ParallelTask()
-            parallelTask.mode = "clean"
+            val parallelTask = ParallelTask("clean")
+
             weight[it]?.forEach {
                 parallelTask.addModule(it)
             }
@@ -55,8 +55,7 @@ class DefaultProjectBuilder(
         val keys = weight.keys.toList().sortedDescending()
         val list = mutableListOf<Task>()
         keys.forEach { it ->
-            val parallelTask = ParallelTask()
-            parallelTask.mode = "sync"
+            val parallelTask = ParallelTask("sync")
             weight[it]?.forEach {
                 parallelTask.addModule(it)
             }

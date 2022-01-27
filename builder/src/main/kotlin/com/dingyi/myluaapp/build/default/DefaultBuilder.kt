@@ -17,11 +17,19 @@ open class DefaultBuilder(
     private val DEFAULT_TASK = DefaultTask(module)
 
     override fun after(task: Task, afterTask: Task) {
-        TODO("Not yet implemented")
+        arrayOf(buildTasks,cleanTasks,syncTasks).forEach {
+            if (it.contains(afterTask)) {
+                it.add((it.indexOf(afterTask)+1).coerceAtLeast(0),task)
+            }
+        }
     }
 
     override fun before(task: Task, beforeTask: Task) {
-        TODO("Not yet implemented")
+        arrayOf(buildTasks,cleanTasks,syncTasks).forEach {
+            if (it.contains(beforeTask)) {
+                it.add((it.indexOf(beforeTask)).coerceAtLeast(0),task)
+            }
+        }
     }
 
     override fun getTasks(): List<Task> {

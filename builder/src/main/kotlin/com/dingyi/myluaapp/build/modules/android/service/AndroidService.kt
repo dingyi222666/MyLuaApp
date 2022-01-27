@@ -8,6 +8,7 @@ import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.build.default.DefaultBuilder
 import com.dingyi.myluaapp.build.default.DefaultModule
 import com.dingyi.myluaapp.build.default.DefaultProject
+import com.dingyi.myluaapp.build.modules.android.builder.AndroidLibraryBuilder
 import com.dingyi.myluaapp.build.modules.android.module.AndroidModule
 import com.dingyi.myluaapp.common.kts.toFile
 import org.luaj.vm2.LuaTable
@@ -46,6 +47,18 @@ class AndroidService : Service {
     }
 
     override fun onCreateBuilder(path: String, module: Module): Builder? {
+
+        val table = module.getMainBuilderScript().get("plugins")
+
+        if (table is LuaTable) {
+            for (key in table.keys()) {
+                when (table[key].tojstring()) {
+                    "com.android.library" -> return AndroidLibraryBuilder(module)
+                }
+            }
+        }
+
+
         return DefaultBuilder(module)
     }
 }

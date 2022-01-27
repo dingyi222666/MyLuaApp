@@ -47,7 +47,8 @@ class AndroidModule(
     private val dependencies = mutableListOf<Dependency>()
 
     override fun getBuilder(): Builder {
-        return defaultBuilder
+        return project.getMainBuilder().getServiceRepository()
+            .onCreateBuilder(path,this) ?: defaultBuilder
     }
 
     override fun init() {

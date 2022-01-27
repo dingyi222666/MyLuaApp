@@ -41,9 +41,6 @@ tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generate
     // outputDirectory = File("src/commonAntlr/kotlin")
 }
 
-tasks.register("generateGrammarSource") {
-    //No do
-}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8

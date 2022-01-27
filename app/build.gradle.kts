@@ -23,6 +23,7 @@ android {
         getByName("main") {
             java.srcDirs("src/main/kotlin")
         }
+
     }
 
     buildFeatures {
