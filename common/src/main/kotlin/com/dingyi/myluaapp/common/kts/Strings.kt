@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.common.kts
 
+import java.io.File
 import java.security.MessageDigest
 
 /**
@@ -19,6 +20,10 @@ fun String.endsWith(vararg prefix: String): Boolean {
     return false
 }
 
+fun String.getFileName():String {
+    val index = this.lastIndexOf(File.separatorChar)
+    return this.substring(index + 1)
+}
 
 fun String.toMD5() = kotlin.runCatching {
     val instance = MessageDigest.getInstance("MD5")//获取md5加密对象

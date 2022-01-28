@@ -8,7 +8,7 @@ interface FileManager {
 
     fun getSnapshotManager(): SnapshotManager
 
-    fun resloveFile(name: String, module: Module): File
+    fun resolveFile(name: String, module: Module): File
 
     fun forEachDirectory(directory: File): List<File>
 

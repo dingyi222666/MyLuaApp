@@ -1,12 +1,9 @@
 package com.dingyi.myluaapp.build.modules.android.builder
 
-import com.dingyi.myluaapp.build.api.builder.Builder
+
 import com.dingyi.myluaapp.build.api.project.Module
-import com.dingyi.myluaapp.build.api.task.Task
 import com.dingyi.myluaapp.build.default.DefaultBuilder
-import com.dingyi.myluaapp.build.default.DefaultModule
-import com.dingyi.myluaapp.build.modules.android.tasks.Hello
-import com.dingyi.myluaapp.build.modules.android.tasks.World
+import com.dingyi.myluaapp.build.modules.android.tasks.GenerateResValues
 
 class AndroidLibraryBuilder(
     private val module: Module
@@ -16,8 +13,7 @@ class AndroidLibraryBuilder(
     init {
         buildTasks.addAll(
             arrayOf(
-                Hello(module),
-                World(module)
+                GenerateResValues(module)
             )
         )
     }

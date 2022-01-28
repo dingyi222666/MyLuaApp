@@ -13,13 +13,13 @@ class DefaultFileManager(
 ) : FileManager {
 
 
-    private val defaultSnapshotManager = DefaultSnapshotManager(Paths.snapshotCachePath)
+    private val defaultSnapshotManager = DefaultSnapshotManager("$path/build/snapshot")
 
     override fun getSnapshotManager(): SnapshotManager {
         return defaultSnapshotManager
     }
 
-    override fun resloveFile(name: String, module: Module): File {
+    override fun resolveFile(name: String, module: Module): File {
         val localDir = "$path/${module.name}"
         return File(localDir, name)
     }

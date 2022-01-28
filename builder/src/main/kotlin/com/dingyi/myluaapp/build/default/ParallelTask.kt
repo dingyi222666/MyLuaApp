@@ -26,10 +26,8 @@ class ParallelTask(
     }
 
 
-    override fun prepare() {
+    override suspend fun prepare() = withContext(Dispatchers.IO) {
         allModule.forEach {
-            Log.e("tasks", "${it.getBuilder().getTasks()}")
-
             when (mode) {
                 "build" -> it.getBuilder().getTasks()
                 "clean" -> it.getBuilder().clean()
@@ -45,33 +43,17 @@ class ParallelTask(
         return name
     }
 
-    override suspend fun run() {
-        val job = Job()
-
-        val coroutineDispatcher = Executors.newCachedThreadPool().asCoroutineDispatcher()
-
-        val coroutineScope = CoroutineScope(coroutineDispatcher + job)
-
-        Log.e("tasks for run", "$allTask")
-
-        Log.e("test", "start for paralleltask")
-
-        for (tasks in allTask) {
-            Log.e("for", "$tasks")
-            coroutineScope.launch {
-                Log.e("start", "$tasks")
-
-                tasks.forEach {
-                    Log.e("task", "$it")
-
-                    it.prepare()
-                    it.run()
+    override suspend fun run() = withContext(Dispatchers.IO) {
+        launch(Dispatchers.IO) {
+            for (tasks in allTask) {
+                launch(Dispatchers.IO) {
+                    for (task in tasks) {
+                        task.prepare()
+                        task.run()
+                    }
                 }
             }
-        }
+        }.join()
 
-
-        job.join()
-        coroutineDispatcher.close()
     }
 }

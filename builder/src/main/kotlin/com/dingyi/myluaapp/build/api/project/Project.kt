@@ -40,4 +40,5 @@ interface Project : ProjectScript {
 
     fun getMavenRepository(): MavenRepository
 
+    fun getPath(): String
 }

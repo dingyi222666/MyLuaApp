@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ import com.dingyi.myluaapp.common.kts.showPopMenu
 import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
+import com.dingyi.myluaapp.databinding.LayoutBottomDialogTestBuildLayoutBinding
 import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
 import com.dingyi.myluaapp.ui.GeneralActivity
 import com.dingyi.myluaapp.ui.editor.activity.EditorActivity
@@ -32,6 +34,8 @@ import com.dingyi.myluaapp.ui.settings.SettingsFragment
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.luaj.vm2.LuaTable
 import java.io.File
@@ -161,11 +165,26 @@ class MainActivity : BaseActivity<
     }
 
     //test code here
+    @SuppressLint("SdCardPath")
     private fun test() {
 
 
+        val binding = LayoutBottomDialogTestBuildLayoutBinding.inflate(
+            layoutInflater
+        )
+
+        BottomSheetDialog(this)
+            .apply {
+                setContentView(binding.root)
+            }
+            .show()
+
         LogBroadcastReceiver(this).addCallback {
-            Log.e("message", it.getStringExtra("message") ?: "")
+            val message = it.getStringExtra("message") ?: ""
+            binding.text.append(message)
+            binding.text.append("\n")
+            //binding.scroll.
+            Log.e("compile message", message)
         }
 
 

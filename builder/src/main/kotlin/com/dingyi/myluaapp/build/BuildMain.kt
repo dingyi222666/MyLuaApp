@@ -19,7 +19,7 @@ class BuildMain(
 
     private var nowBuilder: MainBuilder? = null
 
-    private val mavenRepository = LocalMavenRepository(Paths.localMavenPath)
+    private val mavenRepository = LocalMavenRepository(Paths.localMavenDir)
 
     init {
         repository.init()
@@ -31,29 +31,36 @@ class BuildMain(
     }
 
     fun build(path: String, command: String) {
-        return MainBuilder(path, createLogger(), repository,mavenRepository).apply {
+
+        MainBuilder(path, createLogger(), repository, mavenRepository).apply {
             init()
             nowBuilder = this
         }.build("build $command")
+
     }
 
     fun clean(path: String) {
-        return MainBuilder(path, createLogger(), repository,mavenRepository).apply {
+
+        MainBuilder(path, createLogger(), repository, mavenRepository).apply {
             init()
             nowBuilder = this
         }.build("clean")
+
     }
 
     fun sync(path: String) {
-        return MainBuilder(path, createLogger(), repository,mavenRepository).apply {
+
+        MainBuilder(path, createLogger(), repository, mavenRepository).apply {
             init()
             nowBuilder = this
         }.build("sync")
+
     }
 
     fun close() {
         nowBuilder?.stop()
         repository.shutdown()
+        logger?.close()
         logger = null
     }
 

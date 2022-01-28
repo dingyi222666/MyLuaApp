@@ -43,9 +43,7 @@ class LogBroadcastReceiver(
                 source.lifecycle.removeObserver(this)
                 context = null
             }
-            else -> {
-
-            }
+            else -> {}
         }
     }
 

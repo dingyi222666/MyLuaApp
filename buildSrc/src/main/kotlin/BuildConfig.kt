@@ -18,8 +18,8 @@ object BuildConfig {
         }
 
         object App {
-            const val versionCode = 20
-            const val versionName = "0.4.0(alpna)"
+            const val versionCode = 21
+            const val versionName = "0.4.1(alpha)"
             const val packageName = "com.dingyi.MyLuaApp"
 
         }

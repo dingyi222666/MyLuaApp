@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.build.default
 
-import android.provider.Settings
 import android.util.Log
 import com.dingyi.myluaapp.build.api.project.Project
 import com.dingyi.myluaapp.build.api.runner.Runner
@@ -8,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class DefaultRunner(
     private val project: Project
@@ -33,15 +33,47 @@ class DefaultRunner(
         val coroutineScope = CoroutineScope(Dispatchers.IO + job)
 
         coroutineScope.launch(Dispatchers.IO) {
-            tasks.forEach {
-                Log.e("task","$it")
 
-                it.prepare()
-                it.run()
+            project.getLogger().info("run tasks [$type] in project:${project.getPath()}")
+
+            project.getLogger().info("\n")
+
+            val startTime = System.currentTimeMillis()
+
+            runCatching {
+                Log.v("test","print main test start")
+                for (task in tasks) {
+                    task.prepare()
+                    task.run()
+                }
+                Log.v("test","print main test end")
+            }.onFailure {
+                project.getLogger().info("\n")
+                project.getLogger().error(it.stackTraceToString())
+                project.getLogger().info("\n")
+                project.getLogger().error("FAILURE: Build failed with an exception.")
+                endBuild(System.currentTimeMillis() - startTime,false)
+            }.onSuccess {
+                endBuild(System.currentTimeMillis() - startTime)
             }
+
         }
 
         return job
 
+    }
+
+    private fun endBuild(time: Long,buildStatus:Boolean = true) {
+        project.getLogger().info("\n")
+        val second = (time.toFloat() / 1000).roundToInt()
+        if (buildStatus) {
+            project.getLogger().info(
+                "BUILD SUCCESSFUL IN ${second}s"
+            )
+        } else {
+            project.getLogger().error(
+                "BUILD FAILED IN ${second}s"
+            )
+        }
     }
 }

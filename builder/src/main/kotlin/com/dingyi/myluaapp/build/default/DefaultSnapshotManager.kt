@@ -13,7 +13,10 @@ class DefaultSnapshotManager(private val tmpPath: String) : SnapshotManager {
 
         return runCatching {
             File(tmpPath, "${md5Path}_snapshot_file").apply {
-                createNewFile()
+                if (!exists()) {
+                    parentFile?.mkdirs()
+                    createNewFile()
+                }
             }.writeText(snapshotFile.getSHA256())
         }.isSuccess
 
@@ -26,7 +29,10 @@ class DefaultSnapshotManager(private val tmpPath: String) : SnapshotManager {
 
         return runCatching {
             File(tmpPath, "${md5Path}_snapshot_file_full").apply {
-                createNewFile()
+                if (!exists()) {
+                    parentFile?.mkdirs()
+                    createNewFile()
+                }
             }.writeText(snapshotFile.readText())
         }.isSuccess
     }
@@ -36,7 +42,19 @@ class DefaultSnapshotManager(private val tmpPath: String) : SnapshotManager {
 
         val targetSHA256 = snapshotFile.getSHA256()
 
-        return File(tmpPath, "${md5Path}_snapshot_file").readText() == targetSHA256
+        return File(tmpPath, "${md5Path}_snapshot_file")
+            .apply {
+                if (!exists()) {
+                    parentFile?.mkdirs()
+                    createNewFile()
+                }
+            }.readText() == targetSHA256
+    }
+
+    override fun equalsAndSnapshot(snapshotFile: File): Boolean {
+        return equalsSnapshot(snapshotFile).apply {
+            snapshot(snapshotFile)
+        }
     }
 
     override fun getSnapshotFullFile(snapshotFile: File): File {

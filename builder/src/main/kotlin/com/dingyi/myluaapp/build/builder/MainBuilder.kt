@@ -8,6 +8,8 @@ import com.dingyi.myluaapp.build.api.project.Project
 import com.dingyi.myluaapp.build.api.service.ServiceRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
+import java.util.concurrent.CancellationException
 import kotlin.properties.Delegates
 
 class MainBuilder(
@@ -30,8 +32,6 @@ class MainBuilder(
 
         project?.init()
 
-
-        println(project)
     }
 
     override fun getLogger(): ILogger {
@@ -46,8 +46,6 @@ class MainBuilder(
 
 
         val commands = command.split(" ")
-
-
 
 
         runJob = when (commands[0]) {
@@ -67,7 +65,7 @@ class MainBuilder(
     }
 
     override fun stop() {
-        runJob?.cancel("Stop Build")
+        runJob?.cancelChildren(CancellationException("Stop Build"))
         runJob = null
     }
 

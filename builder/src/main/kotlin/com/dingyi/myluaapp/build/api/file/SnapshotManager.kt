@@ -23,6 +23,13 @@ interface SnapshotManager {
      */
     fun equalsSnapshot(snapshotFile: File): Boolean
 
+
+    /**
+     * Compare Snapshot file are equals now file and snapshot
+     * @return is equals
+     */
+    fun equalsAndSnapshot(snapshotFile: File):Boolean
+
     /**
      * Get Full Snapshot File
      */

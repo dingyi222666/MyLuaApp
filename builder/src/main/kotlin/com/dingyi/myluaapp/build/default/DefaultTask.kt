@@ -9,7 +9,7 @@ open class DefaultTask(
     override val name: String
         get() = "DEFAULT_TASK"
 
-    override fun prepare() {
+    override suspend fun prepare() {
 
     }
 

@@ -59,6 +59,10 @@ open class DefaultProject(
         }
     }
 
+    override fun getPath():String {
+        return path
+    }
+
     override fun getModules(): List<Module> {
         return allModules
     }
