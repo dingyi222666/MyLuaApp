@@ -213,24 +213,25 @@ function runScript(path)
 
   _G.empty_table = empty_table
 
+  _ENV.empty_table = empty_table
 
 end
 
 function putScriptValue(key, value)
   local t = string.split(key, ".")
-  local result = _G
+  local result = empty_table or _ENV.empty_table or _G.empty_table
   for _, v in ipairs(t) do
-    result = result[v] or result
+    result = rawget(result, v) or result
   end
   result[t[#t]] = value
 end
 
 function getScriptValue(key)
   local t = string.split(key, ".")
-  local result = _G.empty_table
+  local result = empty_table or _ENV.empty_table or _G.empty_table
 
   for _, v in ipairs(t) do
-    result = result[v]
+      result = result[v]
   end
 
   return result

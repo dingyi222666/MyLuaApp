@@ -5,12 +5,14 @@ import com.dingyi.myluaapp.build.api.task.Task
 import com.dingyi.myluaapp.build.modules.android.compiler.AAPT2Compiler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.luaj.vm2.LuaValue
+import java.util.*
 
 class GenerateResValues(
     private val module: Module
 ):Task {
     override val name: String
-        get() = javaClass.name
+        get() = getType()
 
     private lateinit var compiler: AAPT2Compiler
 
@@ -18,24 +20,45 @@ class GenerateResValues(
 
     private lateinit var compileXmlList: List<String>
 
+
+    private lateinit var type: String
+
+    private fun getType(): String {
+        if (this::type.isInitialized) {
+            return "Generate${type.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}ResValues"
+        }
+        return javaClass.simpleName
+    }
+
+    private val compileDirectory: String
+        get() = "build/intermediates/merged_res/${type}"
+
+
+    private val aarResPackDirectory: String
+        get() = "build/intermediates/aar_pack/${type}/res"
+
+
     override suspend fun prepare() = withContext(Dispatchers.IO) {
+        type =
+            (module.getProject().getMainBuilderScript().get("build_mode") as LuaValue).tojstring()
+
         //create compile
         compiler = AAPT2Compiler()
         outputDirectory = module.getFileManager()
-            .resolveFile("build/res/compile_cache", module).also {
+            .resolveFile(compileDirectory, module).also {
                 it.mkdirs()
             }.path
 
         val compileXmlList = mutableListOf<String>()
 
-        var status = ""
+        var status: Task.State? = null
 
 
         arrayOf(
             module.getFileManager()
-                .resolveFile("src/main/res", module),
+                .resolveFile(aarResPackDirectory, module),
             module.getFileManager()
-                .resolveFile("build/res/compile_aar", module)
+                .resolveFile("src/main/res", module)
         ).forEach { dir ->
             if (dir.isDirectory) {
                 dir.walkBottomUp()
@@ -52,7 +75,7 @@ class GenerateResValues(
                             val compileFile =
                                 module.getFileManager()
                                     .resolveFile(
-                                        "build/res/compile_cache/${it.parentFile?.name}_${
+                                        "$compileDirectory/${it.parentFile?.name}_${
                                             it.name
                                         }.flat", module
                                     )
@@ -60,7 +83,7 @@ class GenerateResValues(
                             val compileFile2 =
                                 module.getFileManager()
                                     .resolveFile(
-                                        "build/res/compile_cache/${it.parentFile?.name}-${
+                                        "$compileDirectory/${it.parentFile?.name}-${
                                             it.name
                                         }.flat", module
                                     )
@@ -73,7 +96,7 @@ class GenerateResValues(
                         if (!incrementStatus) {
                             compileXmlList.add(it.path)
                         } else {
-                            status = "UP-TO-DATE"
+                            status = Task.State.`UP-TO-DATE`
                         }
 
                     }
@@ -81,7 +104,7 @@ class GenerateResValues(
         }
 
         if (compileXmlList.isEmpty()) {
-            status = "NO-SOURCE"
+            status = Task.State.`UP-TO-DATE`
         }
 
         module.getLogger()

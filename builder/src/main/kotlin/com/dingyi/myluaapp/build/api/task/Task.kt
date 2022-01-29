@@ -10,8 +10,12 @@ interface Task {
     suspend fun run()
 
 
-    fun getOutputString(module: Module,outString: String):String {
-        return "> Task :${module.name}:$name $outString"
+    fun getOutputString(module: Module, state: State?): String {
+        return "> Task :${module.name}:$name ${state?.name}"
+    }
+
+    enum class State {
+        `UP-TO-DATE`, `SKIPPED`, `NO-SOURCE`
     }
 
 

@@ -48,7 +48,7 @@ class DefaultScript(private val path: String) : Script {
     }
 
     override fun put(key: String, value: Any?) {
-        luaJVM.runFunc("putScriptValue", value)
+        luaJVM.runFunc("putScriptValue",key, value)
     }
 
     override fun getPath(): String {

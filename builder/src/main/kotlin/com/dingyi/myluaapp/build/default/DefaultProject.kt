@@ -34,7 +34,7 @@ open class DefaultProject(
         File(path, "build.gradle.lua").path
     )
 
-    private val defaultFileManager = DefaultFileManager(path)
+    private val defaultFileManager = DefaultFileManager(this)
 
     private val allScript = mutableListOf(defaultMainBuilderScript, defaultSettingsScript)
 
@@ -85,6 +85,7 @@ open class DefaultProject(
 
         defaultMainBuilderScript.run()
 
+        defaultFileManager.init()
 
     }
 

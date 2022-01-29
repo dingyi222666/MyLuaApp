@@ -44,12 +44,14 @@ class ParallelTask(
     }
 
     override suspend fun run() = withContext(Dispatchers.IO) {
-        launch(Dispatchers.IO) {
+        launch {
             for (tasks in allTask) {
-                launch(Dispatchers.IO) {
+                launch(coroutineContext) {
                     for (task in tasks) {
-                        task.prepare()
-                        task.run()
+                        withContext(Dispatchers.IO) {
+                            task.prepare()
+                            task.run()
+                        }
                     }
                 }
             }

@@ -27,6 +27,8 @@ interface Module : ModuleScript {
     fun getDependencies(): List<Dependency>
 
 
+    fun getPath():String
+
     fun getFileManager(): FileManager
 
     fun getProject(): Project

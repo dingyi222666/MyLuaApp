@@ -142,6 +142,10 @@ class AndroidModule(
         return dependencies
     }
 
+    override fun getPath(): String {
+        return path
+    }
+
     override fun getFileManager(): FileManager {
         return project.getFileManager()
     }

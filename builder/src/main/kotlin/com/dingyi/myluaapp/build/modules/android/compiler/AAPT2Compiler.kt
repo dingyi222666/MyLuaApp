@@ -20,10 +20,6 @@ class AAPT2Compiler {
         otherCommand: Array<String>? = null
     ) {
 
-
-        println(MainApplication.instance.applicationInfo.nativeLibraryDir)
-        println(MainApplication.instance.applicationInfo.nativeLibraryDir.toFile().walkTopDown().toList())
-
         inputFiles.forEach { compileFile ->
             val status = commandRunner.runCommand(
                 aapt2Path,

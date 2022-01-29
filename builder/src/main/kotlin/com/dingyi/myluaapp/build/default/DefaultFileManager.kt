@@ -9,18 +9,19 @@ import com.dingyi.myluaapp.common.kts.Paths
 import java.io.File
 
 class DefaultFileManager(
-    private val path: String,
+    private val project: Project
 ) : FileManager {
 
 
-    private val defaultSnapshotManager = DefaultSnapshotManager("$path/build/snapshot")
+    private lateinit var defaultSnapshotManager :SnapshotManager
+
 
     override fun getSnapshotManager(): SnapshotManager {
         return defaultSnapshotManager
     }
 
     override fun resolveFile(name: String, module: Module): File {
-        val localDir = "$path/${module.name}"
+        val localDir = "${project.getPath()}/${module.name}"
         return File(localDir, name)
     }
 
@@ -28,5 +29,11 @@ class DefaultFileManager(
         return directory.walkBottomUp().toMutableList().apply {
             remove(directory)
         }
+    }
+
+    override fun init() {
+        defaultSnapshotManager = DefaultSnapshotManager(
+            project.getMainModule().getPath()+"/build/snapshot"
+        )
     }
 }

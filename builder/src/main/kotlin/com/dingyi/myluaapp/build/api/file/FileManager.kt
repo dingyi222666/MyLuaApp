@@ -12,5 +12,6 @@ interface FileManager {
 
     fun forEachDirectory(directory: File): List<File>
 
+    fun init()
 
 }

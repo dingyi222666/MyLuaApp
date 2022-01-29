@@ -51,7 +51,9 @@ class MainBuilder(
         runJob = when (commands[0]) {
             "clean" -> project?.getRunner()?.run("clean")
             "build" -> {
+
                 project?.getMainBuilderScript()?.put("build_mode", commands[1])
+                println("type ${project?.getMainBuilderScript()?.get("build_mode")}")
                 project?.getRunner()?.run("build")
             }
             "sync" -> project?.getRunner()?.run("sync")

@@ -10,6 +10,7 @@ android {
 
     buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
 
+
     defaultConfig {
         minSdk = BuildConfig.Config.Default.minSdk
         targetSdk = BuildConfig.Config.Default.targetSdk
