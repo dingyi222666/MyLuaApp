@@ -1,8 +1,8 @@
 package com.dingyi.myluaapp.build.dependency
 
 import com.dingyi.myluaapp.build.api.dependency.Dependency
-import com.dingyi.myluaapp.build.api.project.Module
-import com.dingyi.myluaapp.build.api.project.Project
+import com.dingyi.myluaapp.build.api.Module
+import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.common.kts.toFile
 import java.io.File
 

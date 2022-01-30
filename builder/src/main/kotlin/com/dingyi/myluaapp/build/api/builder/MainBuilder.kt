@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.build.api.builder
 
 import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
-import com.dingyi.myluaapp.build.api.project.Project
+import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.api.service.ServiceRepository
 

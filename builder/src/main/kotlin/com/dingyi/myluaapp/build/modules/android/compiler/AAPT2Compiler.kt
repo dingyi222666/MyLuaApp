@@ -5,6 +5,9 @@ import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.command.CommandRunner
 import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.toFile
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AAPT2Compiler {
 
@@ -18,24 +21,31 @@ class AAPT2Compiler {
         inputFiles: List<String>,
         outputDirectory: String,
         otherCommand: Array<String>? = null
-    ) {
+    ) = withContext(Dispatchers.IO) {
 
-        inputFiles.forEach { compileFile ->
-            val status = commandRunner.runCommand(
-                aapt2Path,
-                arrayOf(
-                    "compile",
-                    //compile File
-                    compileFile,
-                    otherCommand?.joinToString(" ") ?: "",
-                    "-o", outputDirectory
-                )
-            )
+        launch {
 
-            if (status.code!=0) {
-                throw CompileError(status.message)
+            inputFiles.forEach { compileFile ->
+                launch {
+                    val status = commandRunner.runCommand(
+                        aapt2Path,
+                        arrayOf(
+                            "compile",
+                            //compile File
+                            compileFile,
+                            otherCommand?.joinToString(" ") ?: "",
+                            "-o", outputDirectory
+                        )
+                    )
+
+                    if (status.code != 0) {
+                        throw CompileError(status.message)
+                    }
+                }
             }
-        }
+
+        }.join()
+
     }
 
 

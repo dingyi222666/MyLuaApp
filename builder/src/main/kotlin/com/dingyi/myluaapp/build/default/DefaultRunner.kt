@@ -1,12 +1,10 @@
 package com.dingyi.myluaapp.build.default
 
 import android.util.Log
-import com.dingyi.myluaapp.build.api.project.Project
+import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.runner.Runner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import com.dingyi.myluaapp.build.api.Task
+import kotlinx.coroutines.*
 import kotlin.math.roundToInt
 
 class DefaultRunner(
@@ -18,6 +16,7 @@ class DefaultRunner(
 
         val builder = project.getBuilder()
 
+        println(type)
 
         val tasks = when (type) {
             "clean" -> builder.clean()
@@ -41,12 +40,12 @@ class DefaultRunner(
             val startTime = System.currentTimeMillis()
 
             runCatching {
-                Log.v("test","print main test start")
                 for (task in tasks) {
-                    task.prepare()
-                    task.run()
+                    when (task.prepare()) {
+                        Task.State.INCREMENT, Task.State.DEFAULT -> task.run()
+                        else -> {}
+                    }
                 }
-                Log.v("test","print main test end")
             }.onFailure {
                 project.getLogger().info("\n")
                 project.getLogger().error(it.stackTraceToString())

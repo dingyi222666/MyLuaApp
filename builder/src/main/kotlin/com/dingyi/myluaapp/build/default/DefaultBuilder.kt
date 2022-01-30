@@ -1,8 +1,8 @@
 package com.dingyi.myluaapp.build.default
 
 import com.dingyi.myluaapp.build.api.builder.Builder
-import com.dingyi.myluaapp.build.api.project.Module
-import com.dingyi.myluaapp.build.api.task.Task
+import com.dingyi.myluaapp.build.api.Module
+import com.dingyi.myluaapp.build.api.Task
 
 open class DefaultBuilder(
     private val module: Module

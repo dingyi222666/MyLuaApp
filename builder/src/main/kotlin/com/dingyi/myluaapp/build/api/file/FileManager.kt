@@ -1,6 +1,6 @@
 package com.dingyi.myluaapp.build.api.file
 
-import com.dingyi.myluaapp.build.api.project.Module
+import com.dingyi.myluaapp.build.api.Module
 import java.io.File
 
 interface FileManager {

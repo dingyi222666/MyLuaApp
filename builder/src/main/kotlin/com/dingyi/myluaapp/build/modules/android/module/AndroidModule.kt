@@ -7,13 +7,13 @@ import com.dingyi.myluaapp.build.api.dependency.Dependency
 import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import com.dingyi.myluaapp.build.api.file.FileManager
 import com.dingyi.myluaapp.build.api.logger.ILogger
-import com.dingyi.myluaapp.build.api.project.Module
-import com.dingyi.myluaapp.build.api.project.Project
+import com.dingyi.myluaapp.build.api.Module
+import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.build.default.DefaultBuilder
-import com.dingyi.myluaapp.build.default.DefaultModule
 import com.dingyi.myluaapp.build.dependency.FileDependency
 import com.dingyi.myluaapp.build.dependency.ProjectDependency
+import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.script.DefaultScript
 import com.dingyi.myluaapp.common.kts.toFile
 import org.luaj.vm2.LuaTable
@@ -73,6 +73,22 @@ class AndroidModule(
             }
         }
 
+        val applicationId = if (_type == "AndroidApplication") {
+            (defaultMainBuilderScript.get("android.defaultConfig.applicationId") as LuaValue?)?.tojstring()
+                ?: throw CompileError("You have not set applicationId for project")
+        } else {
+            ""
+        }
+
+
+        project.getCache().putCache(
+            "build_config",
+            BuildConfig(
+                applicationId = applicationId,
+                buildVariants = project.getCache().getCache<String>("build_mode")
+            )
+        )
+
 
         initDependencies()
 
@@ -89,10 +105,10 @@ class AndroidModule(
                     Log.e("fuck", "$key ${key.tojstring()}")
                     when (key.tojstring()) {
                         "fileTree" -> {
-                            initFileTree(scriptDependencies[key])
+                            initDependencyFileTree(scriptDependencies[key])
                         }
                         "project" -> {
-                            initModule(scriptDependencies[key])
+                            initDependencyModule(scriptDependencies[key])
                         }
                         else -> {
                             initMavenDependency(scriptDependencies[key])
@@ -107,7 +123,7 @@ class AndroidModule(
 
     }
 
-    private fun initModule(value: LuaValue?) {
+    private fun initDependencyModule(value: LuaValue?) {
         if (value is LuaTable) {
             for (key in value.keys()) {
                 value[key]?.let { _value ->
@@ -122,7 +138,7 @@ class AndroidModule(
         }
     }
 
-    private fun initFileTree(value: LuaValue?) {
+    private fun initDependencyFileTree(value: LuaValue?) {
         if (value is LuaTable) {
             for (key in value.keys()) {
                 value[key]?.let { _value ->

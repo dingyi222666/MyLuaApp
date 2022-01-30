@@ -1,5 +1,6 @@
 import android.util.Xml
 import com.dingyi.myluaapp.build.dependency.repository.LocalMavenRepository
+import com.dingyi.myluaapp.build.modules.public.generator.SimpleJavaCodeGenerator
 import com.dingyi.myluaapp.build.parser.PomParser
 import junit.framework.Assert.assertEquals
 import org.junit.Test
@@ -22,10 +23,23 @@ class Test {
         val dependency = repository.getDependency("com.google.android.material:material:1.0.0")
 
 
-        val a = mutableListOf(1,2,3)
+        val generator =
+            SimpleJavaCodeGenerator(
+                accessType = SimpleJavaCodeGenerator.AccessType.PUBLIC,
+                className = "BuildConfig"
+            )
 
-        a.add(a.indexOf(2)+1,4)
-        println(a)
+        generator.addField(
+            SimpleJavaCodeGenerator.Field(
+                accessType = SimpleJavaCodeGenerator.AccessType.PUBLIC,
+                isStatic = true,
+                fieldName = "DEBUG",
+                fieldType = "boolean",
+                fieldValue = "true"
+            )
+        )
+
+        println(generator.generate())
 
         println(dependency)
         println(dependency.getDependenciesFile())

@@ -1,16 +1,14 @@
 package com.dingyi.myluaapp.build.builder
 
+import android.util.Log
 import com.dingyi.myluaapp.build.api.builder.MainBuilder
-import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import com.dingyi.myluaapp.build.api.logger.ILogger
-import com.dingyi.myluaapp.build.api.project.Project
+import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.service.ServiceRepository
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
 import java.util.concurrent.CancellationException
-import kotlin.properties.Delegates
 
 class MainBuilder(
     private val initPath: String,
@@ -26,11 +24,8 @@ class MainBuilder(
 
     fun init() {
 
-
         project = repository.onCreateProject(initPath, this)
 
-
-        project?.init()
 
     }
 
@@ -44,21 +39,18 @@ class MainBuilder(
 
     override fun build(command: String) {
 
+        println(command)
+
 
         val commands = command.split(" ")
 
-
-        runJob = when (commands[0]) {
-            "clean" -> project?.getRunner()?.run("clean")
-            "build" -> {
-
-                project?.getMainBuilderScript()?.put("build_mode", commands[1])
-                println("type ${project?.getMainBuilderScript()?.get("build_mode")}")
-                project?.getRunner()?.run("build")
-            }
-            "sync" -> project?.getRunner()?.run("sync")
-            else -> project?.getRunner()?.run("")
+        if (commands[0] == "build") {
+            project?.getCache()?.putCache("build_mode", commands[1])
         }
+
+        project?.init()
+
+        runJob = project?.getRunner()?.run(commands[0])
 
     }
 

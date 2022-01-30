@@ -2,11 +2,10 @@ package com.dingyi.myluaapp.build.modules.android.service
 
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.builder.MainBuilder
-import com.dingyi.myluaapp.build.api.project.Module
-import com.dingyi.myluaapp.build.api.project.Project
+import com.dingyi.myluaapp.build.api.Module
+import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.build.default.DefaultBuilder
-import com.dingyi.myluaapp.build.default.DefaultModule
 import com.dingyi.myluaapp.build.default.DefaultProject
 import com.dingyi.myluaapp.build.modules.android.builder.AndroidApplicationBuilder
 import com.dingyi.myluaapp.build.modules.android.builder.AndroidLibraryBuilder

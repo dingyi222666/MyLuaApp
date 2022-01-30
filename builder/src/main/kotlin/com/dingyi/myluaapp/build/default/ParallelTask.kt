@@ -1,10 +1,8 @@
 package com.dingyi.myluaapp.build.default
 
-import android.util.Log
-import com.dingyi.myluaapp.build.api.project.Module
-import com.dingyi.myluaapp.build.api.task.Task
+import com.dingyi.myluaapp.build.api.Module
+import com.dingyi.myluaapp.build.api.Task
 import kotlinx.coroutines.*
-import java.util.concurrent.Executors
 
 class ParallelTask(
     private val mode: String = "build"
@@ -37,6 +35,12 @@ class ParallelTask(
                 allTask.add(this)
             }
         }
+
+        if (allTask.isEmpty()) {
+            Task.State.`NO-SOURCE`
+        } else {
+            Task.State.DEFAULT
+        }
     }
 
     override fun toString(): String {
@@ -49,8 +53,10 @@ class ParallelTask(
                 launch(coroutineContext) {
                     for (task in tasks) {
                         withContext(Dispatchers.IO) {
-                            task.prepare()
-                            task.run()
+                            when (task.prepare()) {
+                                Task.State.INCREMENT, Task.State.DEFAULT -> task.run()
+                                else -> {}
+                            }
                         }
                     }
                 }

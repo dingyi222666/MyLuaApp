@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.build.api.project
+package com.dingyi.myluaapp.build.api
 
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.dependency.Dependency

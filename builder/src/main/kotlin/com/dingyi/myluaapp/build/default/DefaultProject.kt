@@ -1,16 +1,17 @@
 package com.dingyi.myluaapp.build.default
 
 import com.dingyi.myluaapp.build.CompileError
+import com.dingyi.myluaapp.build.api.Cache
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.builder.MainBuilder
 import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import com.dingyi.myluaapp.build.api.file.FileManager
 import com.dingyi.myluaapp.build.api.logger.ILogger
-import com.dingyi.myluaapp.build.api.project.Module
-import com.dingyi.myluaapp.build.api.project.Project
+import com.dingyi.myluaapp.build.api.Module
+import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.runner.Runner
 import com.dingyi.myluaapp.build.api.script.Script
-import com.dingyi.myluaapp.build.api.task.Task
+import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.dependency.ProjectDependency
 import com.dingyi.myluaapp.build.script.DefaultScript
 import com.dingyi.myluaapp.common.kts.toFile
@@ -40,9 +41,8 @@ open class DefaultProject(
 
     private val builder = DefaultProjectBuilder(this)
 
-    private fun getDefaultName(): String {
-        return defaultSettingsScript.get("rootProject.name").toString()
-    }
+
+    private val defaultCache = DefaultCache()
 
     private val defaultRunner = DefaultRunner(this)
 
@@ -58,6 +58,8 @@ open class DefaultProject(
             else -> builder.getTasks()
         }
     }
+
+
 
     override fun getPath():String {
         return path
@@ -101,6 +103,15 @@ open class DefaultProject(
                 }
             }
         }
+    }
+
+    private fun getDefaultName(): String {
+        return defaultSettingsScript.get("rootProject.name").toString()
+    }
+
+
+    override fun getCache(): Cache {
+        return defaultCache
     }
 
     override fun createModulesWeight(): Map<Int, List<Module>> {

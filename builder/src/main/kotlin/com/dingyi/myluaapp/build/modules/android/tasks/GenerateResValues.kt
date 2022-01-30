@@ -1,16 +1,16 @@
 package com.dingyi.myluaapp.build.modules.android.tasks
 
-import com.dingyi.myluaapp.build.api.project.Module
-import com.dingyi.myluaapp.build.api.task.Task
+import com.dingyi.myluaapp.build.api.Module
+import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.modules.android.compiler.AAPT2Compiler
+import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.luaj.vm2.LuaValue
 import java.util.*
 
 class GenerateResValues(
     private val module: Module
-):Task {
+) : Task {
     override val name: String
         get() = getType()
 
@@ -21,26 +21,27 @@ class GenerateResValues(
     private lateinit var compileXmlList: List<String>
 
 
-    private lateinit var type: String
+    private lateinit var buildVariants: String
 
     private fun getType(): String {
-        if (this::type.isInitialized) {
-            return "Generate${type.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}ResValues"
+        if (this::buildVariants.isInitialized) {
+            return "Generate${buildVariants.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}ResValues"
         }
         return javaClass.simpleName
     }
 
     private val compileDirectory: String
-        get() = "build/intermediates/merged_res/${type}"
+        get() = "build/intermediates/merged_res/${buildVariants}"
 
 
     private val aarResPackDirectory: String
-        get() = "build/intermediates/aar_pack/${type}/res"
+        get() = "build/intermediates/aar_pack/${buildVariants}/res"
 
 
     override suspend fun prepare() = withContext(Dispatchers.IO) {
-        type =
-            (module.getProject().getMainBuilderScript().get("build_mode") as LuaValue).tojstring()
+
+        buildVariants = module.getProject()
+            .getCache().getCache<BuildConfig>("build_config").buildVariants
 
         //create compile
         compiler = AAPT2Compiler()
@@ -54,69 +55,78 @@ class GenerateResValues(
         var status: Task.State? = null
 
 
-        arrayOf(
-            module.getFileManager()
-                .resolveFile(aarResPackDirectory, module),
-            module.getFileManager()
-                .resolveFile("src/main/res", module)
-        ).forEach { dir ->
-            if (dir.isDirectory) {
-                dir.walkBottomUp()
-                    .filter { file ->
-                        file.isFile && file.name.endsWith("xml")
-                    }
-                    .forEach {
-                        var incrementStatus = module.getFileManager().getSnapshotManager()
-                            .equalsAndSnapshot(it)
-
-                        println("status:it:$incrementStatus")
-
-                        if (incrementStatus) {
-                            val compileFile =
-                                module.getFileManager()
-                                    .resolveFile(
-                                        "$compileDirectory/${it.parentFile?.name}_${
-                                            it.name
-                                        }.flat", module
-                                    )
-
-                            val compileFile2 =
-                                module.getFileManager()
-                                    .resolveFile(
-                                        "$compileDirectory/${it.parentFile?.name}-${
-                                            it.name
-                                        }.flat", module
-                                    )
-
-                            if (!compileFile.exists() && !compileFile2.exists()) {
-                                incrementStatus = false
-                            }
-                        }
-
-                        if (!incrementStatus) {
-                            compileXmlList.add(it.path)
-                        } else {
-                            status = Task.State.`UP-TO-DATE`
-                        }
-
-                    }
+        val fileList =
+            arrayOf(
+                module.getFileManager()
+                    .resolveFile(aarResPackDirectory, module),
+                module.getFileManager()
+                    .resolveFile("src/main/res", module)
+            ).flatMap { dir ->
+                if (dir.isDirectory) {
+                    dir.walkBottomUp()
+                        .filter { file ->
+                            file.isFile && file.name.endsWith("xml")
+                        }.toList()
+                } else {
+                    listOf()
+                }
             }
+
+        fileList.forEach {
+            var incrementStatus = module.getFileManager().getSnapshotManager()
+                .equalsAndSnapshot(it)
+
+            println("status:it:$incrementStatus")
+
+            if (incrementStatus) {
+                val compileFile =
+                    module.getFileManager()
+                        .resolveFile(
+                            "$compileDirectory/${it.parentFile?.name}_${
+                                it.name
+                            }.flat", module
+                        )
+
+                val compileFile2 =
+                    module.getFileManager()
+                        .resolveFile(
+                            "$compileDirectory/${it.parentFile?.name}-${
+                                it.name
+                            }.flat", module
+                        )
+
+                if (!compileFile.exists() && !compileFile2.exists()) {
+                    incrementStatus = false
+                }
+            }
+
+            if (!incrementStatus) {
+                compileXmlList.add(it.path)
+            } else {
+                status = Task.State.INCREMENT
+            }
+
         }
 
-        if (compileXmlList.isEmpty()) {
+
+        if (fileList.isNotEmpty() && compileXmlList.isEmpty()) {
             status = Task.State.`UP-TO-DATE`
+        } else if (fileList.isEmpty()) {
+            status = Task.State.`NO-SOURCE`
         }
 
         module.getLogger()
             .info(getOutputString(module, status))
 
         this@GenerateResValues.compileXmlList = compileXmlList
+
+        status ?: Task.State.DEFAULT
     }
 
 
     override suspend fun run() {
-        if (compileXmlList.isNotEmpty()) {
-            compiler.compile(compileXmlList, outputDirectory)
-        }
+
+        compiler.compile(compileXmlList, outputDirectory)
+
     }
 }

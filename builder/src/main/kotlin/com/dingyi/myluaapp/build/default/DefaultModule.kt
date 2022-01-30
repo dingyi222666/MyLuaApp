@@ -5,8 +5,8 @@ import com.dingyi.myluaapp.build.api.dependency.Dependency
 import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import com.dingyi.myluaapp.build.api.file.FileManager
 import com.dingyi.myluaapp.build.api.logger.ILogger
-import com.dingyi.myluaapp.build.api.project.Module
-import com.dingyi.myluaapp.build.api.project.Project
+import com.dingyi.myluaapp.build.api.Module
+import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.build.script.DefaultScript
 import com.dingyi.myluaapp.common.kts.toFile

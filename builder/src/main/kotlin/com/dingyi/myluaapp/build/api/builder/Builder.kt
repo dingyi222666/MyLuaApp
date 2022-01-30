@@ -1,6 +1,6 @@
 package com.dingyi.myluaapp.build.api.builder
 
-import com.dingyi.myluaapp.build.api.task.Task
+import com.dingyi.myluaapp.build.api.Task
 
 
 interface Builder {
