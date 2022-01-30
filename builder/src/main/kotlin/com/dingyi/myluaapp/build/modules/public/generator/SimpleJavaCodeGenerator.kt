@@ -4,6 +4,7 @@ import java.sql.Statement
 
 class SimpleJavaCodeGenerator(
     private val accessType: AccessType,
+    private val isFinal: Boolean = false,
     private val className: String
 ) {
 
@@ -12,7 +13,6 @@ class SimpleJavaCodeGenerator(
     private val importClassList = mutableListOf<String>()
 
     private val fieldList = mutableListOf<Field>()
-
 
 
     fun addImportClass(className: String) {
@@ -29,6 +29,7 @@ class SimpleJavaCodeGenerator(
 
     data class Method(
         val accessType: AccessType,
+        val isFinal:Boolean = false,
         val isStatic: Boolean = false,
         val methodName: String,
         val invokeArgs: String = "",
@@ -44,6 +45,10 @@ class SimpleJavaCodeGenerator(
 
             if (isStatic) {
                 builder.append("static").append(" ")
+            }
+
+            if (isFinal) {
+                builder.append("final").append(" ")
             }
 
             builder.append(methodName).append("(")
@@ -90,6 +95,7 @@ class SimpleJavaCodeGenerator(
     data class Field(
         val accessType: AccessType,
         val isStatic: Boolean = false,
+        val isFinal: Boolean = false,
         val fieldName: String,
         val fieldType: String,
         val fieldValue: Any?
@@ -103,6 +109,10 @@ class SimpleJavaCodeGenerator(
 
             if (isStatic) {
                 builder.append("static").append(" ")
+            }
+
+            if (isFinal) {
+                builder.append("final").append(" ")
             }
 
             builder.append(fieldType).append(" ")
@@ -123,6 +133,7 @@ class SimpleJavaCodeGenerator(
             builder.append("package").append(" ")
                 .append(packageName)
                 .append(";")
+                .append("\n")
         }
 
         //import class
@@ -131,19 +142,26 @@ class SimpleJavaCodeGenerator(
                 .append(" ")
                 .append(it)
                 .append(";")
+                .append("\n")
         }
 
         // class header
+
+        builder.append("\n")
 
         builder.append(
             accessType.name.lowercase()
         ).append(" ")
 
+        if (isFinal) {
+            builder.append("final").append(" ")
+        }
+
         builder.append("class").append(" ")
 
         builder.append(className).append(" ")
 
-        builder.append("{")
+        builder.append("{").append("\n")
 
         //body
 

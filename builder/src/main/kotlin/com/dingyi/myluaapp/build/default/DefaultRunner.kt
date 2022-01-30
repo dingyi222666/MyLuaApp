@@ -16,8 +16,6 @@ class DefaultRunner(
 
         val builder = project.getBuilder()
 
-        println(type)
-
         val tasks = when (type) {
             "clean" -> builder.clean()
             "build" -> builder.getTasks()
@@ -33,7 +31,7 @@ class DefaultRunner(
 
         coroutineScope.launch(Dispatchers.IO) {
 
-            project.getLogger().info("run tasks [$type] in project:${project.getPath()}")
+            project.getLogger().info("run tasks [:$type] in project:${project.getPath()}")
 
             project.getLogger().info("\n")
 

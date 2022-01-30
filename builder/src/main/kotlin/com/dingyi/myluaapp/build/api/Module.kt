@@ -33,6 +33,7 @@ interface Module : ModuleScript {
 
     fun getProject(): Project
 
+    fun getCache():Cache
 
     fun getLogger(): ILogger
 

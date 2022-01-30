@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.build.modules.android.module
 
 import android.util.Log
 import com.dingyi.myluaapp.build.CompileError
+import com.dingyi.myluaapp.build.api.Cache
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.dependency.Dependency
 import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
@@ -75,17 +76,16 @@ class AndroidModule(
 
         val applicationId = if (_type == "AndroidApplication") {
             (defaultMainBuilderScript.get("android.defaultConfig.applicationId") as LuaValue?)?.tojstring()
-                ?: throw CompileError("You have not set applicationId for project")
         } else {
-            ""
+            null
         }
 
 
-        project.getCache().putCache(
-            "build_config",
+        getCache().putCache(
+            "${name}_build_config",
             BuildConfig(
                 applicationId = applicationId,
-                buildVariants = project.getCache().getCache<String>("build_mode")
+                buildVariants = getCache().getCache("build_mode")
             )
         )
 
@@ -160,6 +160,10 @@ class AndroidModule(
 
     override fun getPath(): String {
         return path
+    }
+
+    override fun getCache(): Cache {
+        return project.getCache()
     }
 
     override fun getFileManager(): FileManager {

@@ -42,7 +42,9 @@ open class DefaultProject(
     private val builder = DefaultProjectBuilder(this)
 
 
-    private val defaultCache = DefaultCache()
+    private val defaultCache = DefaultCache(
+        "$path/build/cache"
+    )
 
     private val defaultRunner = DefaultRunner(this)
 

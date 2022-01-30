@@ -9,6 +9,9 @@ class DefaultSnapshotManager(private val tmpPath: String) : SnapshotManager {
 
 
     override fun snapshot(snapshotFile: File): Boolean {
+        if (!snapshotFile.exists()) {
+            return false
+        }
         val md5Path = snapshotFile.path.toMD5()
 
         return runCatching {
@@ -23,6 +26,9 @@ class DefaultSnapshotManager(private val tmpPath: String) : SnapshotManager {
     }
 
     override fun snapshotFull(snapshotFile: File): Boolean {
+        if (!snapshotFile.exists()) {
+            return false
+        }
         val md5Path = snapshotFile.path.toMD5()
 
         snapshot(snapshotFile)
@@ -38,9 +44,16 @@ class DefaultSnapshotManager(private val tmpPath: String) : SnapshotManager {
     }
 
     override fun equalsSnapshot(snapshotFile: File): Boolean {
+
+        if (!snapshotFile.exists()) {
+            return false
+        }
+
         val md5Path = snapshotFile.path.toMD5()
 
+
         val targetSHA256 = snapshotFile.getSHA256()
+
 
         return File(tmpPath, "${md5Path}_snapshot_file")
             .apply {
@@ -52,12 +65,16 @@ class DefaultSnapshotManager(private val tmpPath: String) : SnapshotManager {
     }
 
     override fun equalsAndSnapshot(snapshotFile: File): Boolean {
+        if (!snapshotFile.exists()) {
+            return false
+        }
         return equalsSnapshot(snapshotFile).apply {
             snapshot(snapshotFile)
         }
     }
 
     override fun getSnapshotFullFile(snapshotFile: File): File {
+
         val md5Path = snapshotFile.path.toMD5()
 
         return File(tmpPath, "${md5Path}_snapshot_file_full")

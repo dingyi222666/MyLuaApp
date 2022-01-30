@@ -4,6 +4,7 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.modules.android.compiler.AAPT2Compiler
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
+import com.dingyi.myluaapp.common.kts.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -40,8 +41,7 @@ class GenerateResValues(
 
     override suspend fun prepare() = withContext(Dispatchers.IO) {
 
-        buildVariants = module.getProject()
-            .getCache().getCache<BuildConfig>("build_config").buildVariants
+        buildVariants = module.getCache().getCache<BuildConfig>("${module.name}_build_config").buildVariants
 
         //create compile
         compiler = AAPT2Compiler()
@@ -95,7 +95,11 @@ class GenerateResValues(
                             }.flat", module
                         )
 
-                if (!compileFile.exists() && !compileFile2.exists()) {
+                val snapshotManager = module.getFileManager().getSnapshotManager()
+                if (snapshotManager.equalsSnapshot(compileFile) || snapshotManager.equalsSnapshot(
+                        compileFile2
+                    )
+                ) {
                     incrementStatus = false
                 }
             }
@@ -127,6 +131,15 @@ class GenerateResValues(
     override suspend fun run() {
 
         compiler.compile(compileXmlList, outputDirectory)
+
+        withContext(Dispatchers.IO) {
+            outputDirectory.toFile().walkBottomUp()
+                .filter { it.isFile }
+                .forEach {
+                    module.getFileManager().getSnapshotManager().snapshot(it)
+                }
+        }
+
 
     }
 }

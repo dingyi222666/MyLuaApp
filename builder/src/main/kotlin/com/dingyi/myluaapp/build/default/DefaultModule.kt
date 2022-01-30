@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.build.default
 
+import com.dingyi.myluaapp.build.api.Cache
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.dependency.Dependency
 import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
@@ -77,6 +78,10 @@ open class DefaultModule(
 
     override fun getAllScript(): List<Script> {
         return allScript
+    }
+
+    override fun getCache(): Cache {
+        return project.getCache()
     }
 
     override fun toString(): String {

@@ -6,4 +6,9 @@ interface Cache {
 
     fun putCache(key: String,value:Any)
 
+
+    fun saveCacheToDisk(key: String,value: String)
+
+    fun readCacheFromDisk(key: String): String?
+
 }
