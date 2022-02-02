@@ -52,10 +52,19 @@ android {
 }
 
 dependencies {
+
+    implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
+    
     implementation(project(":common"))
     implementation(project(":luaj"))
+
+    implementation(BuildConfig.Libs.Tools.zip4j)
+
     implementation(BuildConfig.Libs.Google.gson)
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
+
+    implementation(BuildConfig.Libs.Tools.btree_4j)
+
     // Optional -- Robolectric environment
     testImplementation("androidx.test:core:1.3.0")
     testImplementation("junit:junit:4.12")

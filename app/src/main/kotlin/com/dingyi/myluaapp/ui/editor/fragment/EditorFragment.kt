@@ -122,14 +122,14 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
                 if (textSize > 0) {
                     textSizePx = textSize
                 }
-                handler.postDelayed(0) {
-                    scroller.startScroll(
-                        scroller.currX,
-                        scroller.currY,
-                        data.getValue("scrollX").toInt() - scroller.currX,
-                        data.getValue("scrollY").toInt() - scroller.currY, 0
-                    )
-                }
+
+                scroller.startScroll(
+                    scroller.currX,
+                    scroller.currY,
+                    data.getValue("scrollX").toInt() - scroller.currX,
+                    data.getValue("scrollY").toInt() - scroller.currY, 0
+                )
+
                 text.cursor.set(
                     data.getValue("line").toInt(),
                     data.getValue("column").toInt()

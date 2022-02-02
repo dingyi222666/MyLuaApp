@@ -12,7 +12,7 @@ object BuildConfig {
         object Default {
 
             const val targetSdk = 30
-            const val minSdk = 21
+            const val minSdk = 26
             const val buildToolsVersion = "31.0.0"
             const val compileSdk = 31
         }
@@ -52,6 +52,8 @@ object BuildConfig {
         const val core_ktx_version = "1.7.0-rc01"
         const val brv_version = "1.3.37"
         const val multi_languages_version = "6.9"
+        const val btree4j_version = "0.9.1"
+        const val zip4j_version = "2.9.1"
     }
 
     object Libs {
@@ -127,6 +129,10 @@ object BuildConfig {
             const val brv = "com.github.liangjingkanji:BRV:${Versions.brv_version}"
             const val multi_languages =
                 "com.github.getActivity:MultiLanguages:${Versions.multi_languages_version}"
+
+            const val btree_4j = "io.github.myui:btree4j:${Versions.btree4j_version}"
+
+            const val zip4j = "net.lingala.zip4j:zip4j:${Versions.zip4j_version}"
         }
 
         object Views {

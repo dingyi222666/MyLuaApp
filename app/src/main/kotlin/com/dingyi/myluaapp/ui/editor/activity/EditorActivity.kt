@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.ui.editor.activity
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.TextUtils
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -19,6 +20,7 @@ import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
+import com.dingyi.myluaapp.common.kts.println
 
 
 /**
@@ -74,18 +76,23 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         viewBinding.editorPage.offscreenPageLimit = 1
 
-        viewBinding.editorTab.apply {
-            postDelayed(20) {
-                bindEditorPager(viewBinding.editorPage)
-
-                viewBinding.drawerPage.adapter =
-                    EditorDrawerPagerAdapter(this@EditorActivity).apply {
-                        notifyDataSetChanged()
-                    }
-
+        viewBinding.drawerPage.adapter =
+            EditorDrawerPagerAdapter(this@EditorActivity).apply {
+                notifyDataSetChanged()
             }
+
+
+        viewBinding.editorTab.apply {
+
+
+
+            bindEditorPager(viewBinding.editorPage)
+
             projectPath = viewModel.controller.projectPath
             onSelectFile {
+
+                Log.e("select",it)
+
                 viewModel.controller.selectOpenedFile(it)
             }
             onCloseFile {
@@ -104,7 +111,6 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         listOf(viewBinding.container, viewBinding.toolbar).forEach {
             it.addLayoutTransition()
         }
-
 
 
         supportActionBar?.let { actionBar ->
@@ -176,8 +182,10 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                     View.VISIBLE
                 } else View.GONE
 
+
             viewBinding.editorTab.postOpenedFiles(list, pair.second)
-            viewBinding.editorPage.adapter?.notifyDataSetChanged()
+
+
         }
 
     }

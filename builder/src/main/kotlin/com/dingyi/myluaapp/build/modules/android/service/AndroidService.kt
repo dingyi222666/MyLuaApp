@@ -28,8 +28,6 @@ class AndroidService : Service {
             }
             .getOrNull(0)
 
-        println("${targetScript?.getPath()} $path")
-
         val table = targetScript?.get("plugins")
 
         if (table is LuaTable) {

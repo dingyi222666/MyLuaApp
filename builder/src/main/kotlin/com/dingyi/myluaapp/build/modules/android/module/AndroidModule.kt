@@ -17,6 +17,7 @@ import com.dingyi.myluaapp.build.dependency.ProjectDependency
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.script.DefaultScript
 import com.dingyi.myluaapp.common.kts.toFile
+import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import java.io.File
@@ -119,8 +120,10 @@ class AndroidModule(
         }
     }
 
-    private fun initMavenDependency(string: LuaValue?) {
-
+    private fun initMavenDependency(value: LuaValue?) {
+        if (value is LuaString) {
+            dependencies.addAll(getMavenRepository().getDependency(value.tojstring()))
+        }
     }
 
     private fun initDependencyModule(value: LuaValue?) {

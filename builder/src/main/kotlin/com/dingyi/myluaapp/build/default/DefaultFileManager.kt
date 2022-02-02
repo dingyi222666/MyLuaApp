@@ -31,7 +31,7 @@ class DefaultFileManager(
 
     override fun init() {
         defaultSnapshotManager = DefaultSnapshotManager(
-            project.getMainModule().getPath()+"/build/snapshot"
+            project.getCache()
         )
     }
 }

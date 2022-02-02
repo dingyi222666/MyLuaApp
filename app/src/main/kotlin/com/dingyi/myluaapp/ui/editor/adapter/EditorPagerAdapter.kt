@@ -3,13 +3,17 @@ package com.dingyi.myluaapp.ui.editor.adapter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.dingyi.myluaapp.common.kts.checkNotNull
+import com.dingyi.myluaapp.core.project.ProjectFile
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.fragment.EditorFragment
 
 class EditorPagerAdapter(fragmentActivity: FragmentActivity, private val viewModel: MainViewModel) :
     FragmentStateAdapter(fragmentActivity) {
+
+    private var data = listOf<ProjectFile>()
 
     override fun getItemCount(): Int {
         return viewModel.openFiles.value?.run {
@@ -18,13 +22,37 @@ class EditorPagerAdapter(fragmentActivity: FragmentActivity, private val viewMod
     }
 
     override fun getItemId(position: Int): Long {
-        return (runCatching {
-            viewModel.openFiles.checkNotNull().value.checkNotNull().first[position].path.hashCode()
-        }.getOrNull() ?: position).toLong()
+        return (viewModel.openFiles.value?.first?.get(position)?.hashCode() ?: position).toLong()
     }
 
     override fun containsItem(itemId: Long): Boolean {
-        return true
+        return viewModel.openFiles.value?.first?.any { it.path.hashCode().toLong() == itemId }
+            ?: true
+    }
+
+    fun submitList(list: List<ProjectFile>) {
+
+        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int {
+                return data.size
+            }
+
+            override fun getNewListSize(): Int {
+                return list.size
+            }
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return data[oldItemPosition] == list[newItemPosition]
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return data[oldItemPosition] == list[newItemPosition]
+            }
+
+        }).dispatchUpdatesTo(this)
+
+        data = list
+
     }
 
     override fun createFragment(position: Int): Fragment {

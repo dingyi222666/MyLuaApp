@@ -38,6 +38,7 @@ class DefaultScript(private val path: String) : Script {
     override fun run() {
         if (!runStatus) {
             runStatus = true
+
             luaJVM.runFunc("runScript", path)
         }
     }

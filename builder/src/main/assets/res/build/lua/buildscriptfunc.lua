@@ -28,7 +28,15 @@ function getDefaultProguardFile(file)
   return "/data/data/com.dingyi.MyLuaApp/files/res/build/" .. file
 end
 
-
+JavaVersion = {
+  VERSION_1_6 = "6",
+  VERSION_1_7 = "7",
+  VERSION_1_8 = "8",
+  VERSION_1_9 = "9",
+  VERSION_10 = "10",
+  VERSION_11 = "11",
+  VERSION_12 = "12",
+}
 
 function project(name)
   return { type = "project", value = name:match("%:(.+)") }

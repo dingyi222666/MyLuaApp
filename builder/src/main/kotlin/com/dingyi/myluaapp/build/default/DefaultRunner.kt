@@ -26,10 +26,11 @@ class DefaultRunner(
 
         Log.e("tasks","$tasks")
 
+
         val job = Job()
         val coroutineScope = CoroutineScope(Dispatchers.IO + job)
 
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch(coroutineScope.coroutineContext) {
 
             project.getLogger().info("run tasks [:$type] in project:${project.getPath()}")
 
@@ -72,5 +73,7 @@ class DefaultRunner(
                 "BUILD FAILED IN ${second}s"
             )
         }
+
+        project.getMainBuilder().stop()
     }
 }

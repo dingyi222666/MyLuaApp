@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.build.parser
 
+import android.util.Log
 import android.util.Xml
 import com.dingyi.myluaapp.build.dependency.MavenPom
 import org.xmlpull.v1.XmlPullParser
@@ -9,6 +10,8 @@ class PomParser(
 ) {
 
     fun parse(path: String): MavenPom {
+
+        Log.e("parse pom",path)
 
         val pullParser = Xml.newPullParser()
 
@@ -72,11 +75,17 @@ class PomParser(
             when (eventType) {
                 XmlPullParser.START_TAG -> {
 
+                    val name  = pullParser.name
+
                     if (inDependencyTag) {
-                        tmpMap[pullParser.name] = pullParser.nextText()
+
+                        if (pullParser.next() == XmlPullParser.TEXT) {
+
+                            tmpMap[name] = pullParser.text
+                        }
                     }
 
-                    if (pullParser.name == "dependency") {
+                    if (name == "dependency") {
                         inDependencyTag = true
                     }
 

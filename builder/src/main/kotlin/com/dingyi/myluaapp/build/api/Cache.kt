@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.build.api
 
-interface Cache {
+import java.io.Closeable
+
+interface Cache:Closeable {
 
     fun <T> getCache(key:String):T
 

@@ -49,6 +49,9 @@ class GenerateBuildConfig(
     private lateinit var manifestInfo: AndroidManifestSimpleParser.AndroidManifestInfo
 
     private lateinit var buildConfig: BuildConfig
+
+    private lateinit var buildConfigString: String
+
     override suspend fun prepare(): Task.State {
 
         var state: Task.State? = null
@@ -71,6 +74,19 @@ class GenerateBuildConfig(
             buildVariants = buildConfig.buildVariants
         )
 
+        val versionCode =
+            (module.getMainBuilderScript().get("android.defaultConfig.versionCode"))
+                ?: manifestInfo.versionCode
+
+
+        val versionName =
+            module.getMainBuilderScript().get("android.defaultConfig.versionName")
+                ?: manifestInfo.versionName
+
+
+        buildConfigString =
+            buildConfig.toString() + if (moduleType == "Application") versionCode.toString() + versionName.toString() else ""
+
         val lastBuildConfig = module.getCache().readCacheFromDisk("${module.name}_build_config")
 
         buildConfigFile =
@@ -78,7 +94,7 @@ class GenerateBuildConfig(
 
         println("$lastBuildConfig $buildConfig")
 
-        if (lastBuildConfig == buildConfig.toString()) {
+        if (lastBuildConfig == buildConfigString) {
             if (module.getFileManager().getSnapshotManager()
                     .equalsSnapshot(
                         module.getFileManager().resolveFile(buildConfigFile, module)
@@ -88,7 +104,6 @@ class GenerateBuildConfig(
             }
         }
 
-        module.getLogger().info(getOutputString(module, state))
 
         return state ?: Task.State.DEFAULT
 
@@ -120,8 +135,8 @@ class GenerateBuildConfig(
                 isStatic = true,
                 isFinal = true,
                 fieldType = "String",
-                fieldName = "\"${if (moduleType == "Application") "APPLICATION_ID" else "LIBRARY_PACKAGE_NAME"}\"",
-                fieldValue = javaCodeGenerator.packageName
+                fieldName = if (moduleType == "Application") "APPLICATION_ID" else "LIBRARY_PACKAGE_NAME",
+                fieldValue = "\"${javaCodeGenerator.packageName}\""
             )
         )
 
@@ -151,7 +166,8 @@ class GenerateBuildConfig(
 
         if (moduleType == "Application") {
             val versionCode =
-                (module.getMainBuilderScript().get("versionCode")) ?: manifestInfo.versionCode
+                (module.getMainBuilderScript().get("android.defaultConfig.versionCode"))
+                    ?: manifestInfo.versionCode
 
 
             if (versionCode != null) {
@@ -174,7 +190,8 @@ class GenerateBuildConfig(
             }
 
             val versionName =
-                module.getMainBuilderScript().get("versionName") ?: manifestInfo.versionName
+                module.getMainBuilderScript().get("android.defaultConfig.versionName")
+                    ?: manifestInfo.versionName
 
             if (versionName != null) {
                 runCatching {
@@ -220,7 +237,7 @@ class GenerateBuildConfig(
         module.getFileManager().getSnapshotManager()
             .snapshot(configFile)
 
-        module.getCache().saveCacheToDisk("${module.name}_build_config", buildConfig.toString())
+        module.getCache().saveCacheToDisk("${module.name}_build_config", buildConfigString)
 
 
     }

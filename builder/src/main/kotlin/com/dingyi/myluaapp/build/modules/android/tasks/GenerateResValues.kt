@@ -76,8 +76,6 @@ class GenerateResValues(
             var incrementStatus = module.getFileManager().getSnapshotManager()
                 .equalsAndSnapshot(it)
 
-            println("status:it:$incrementStatus")
-
             if (incrementStatus) {
                 val compileFile =
                     module.getFileManager()
@@ -115,12 +113,10 @@ class GenerateResValues(
 
         if (fileList.isNotEmpty() && compileXmlList.isEmpty()) {
             status = Task.State.`UP-TO-DATE`
-        } else if (fileList.isEmpty()) {
+        } else if (fileList.isEmpty() && compileXmlList.isEmpty()) {
             status = Task.State.`NO-SOURCE`
         }
 
-        module.getLogger()
-            .info(getOutputString(module, status))
 
         this@GenerateResValues.compileXmlList = compileXmlList
 

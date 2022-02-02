@@ -39,8 +39,9 @@ class MainBuilder(
 
     override fun build(command: String) {
 
-        println(command)
 
+
+        logger.info("Init Project")
 
         val commands = command.split(" ")
 
@@ -50,7 +51,15 @@ class MainBuilder(
 
         project?.init()
 
+        logger.info("Start Build...")
+
+
+        logger.info("\n")
+
+
         runJob = project?.getRunner()?.run(commands[0])
+
+
 
     }
 
@@ -61,6 +70,8 @@ class MainBuilder(
     override fun stop() {
         runJob?.cancelChildren(CancellationException("Stop Build"))
         runJob = null
+        project?.getCache()?.close()
+        println("stop!")
     }
 
     override fun getMavenRepository(): MavenRepository {

@@ -49,7 +49,6 @@ android {
         }
     }
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -102,8 +101,6 @@ dependencies {
     // 网络请求框架：https://hub.fastgit.org/liangjingkanji/Net
     implementation(BuildConfig.Libs.Network.net)
 
-
-    coreLibraryDesugaring(BuildConfig.Libs.Tools.desugar_jdk_libs)
 
 
 }

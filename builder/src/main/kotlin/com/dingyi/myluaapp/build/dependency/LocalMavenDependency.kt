@@ -26,6 +26,10 @@ class LocalMavenDependency(
         return allDependencies
     }
 
+    override fun getDeclarationString(): String {
+        return mavenPom.toString()
+    }
+
     override var name: String = mavenPom.name
 
     override fun getDependenciesFile(): Set<File> {
@@ -37,7 +41,7 @@ class LocalMavenDependency(
         }
     }
 
-    private fun getDependencyFile(): File {
+    override fun getDependencyFile(): File {
         return File("${getDependencyFileDirectory()}/${getFileName()}.$type")
     }
 
@@ -57,9 +61,7 @@ class LocalMavenDependency(
     }
 
     private fun getDependencyFileDirectory():String {
-        val path = groupId.replace('.', '/')
-        val artifact = artifactId.replace('.', '/')
-        return "$repositoryPath/$path/$artifact"
+        return "$repositoryPath/${getPath()}"
     }
 
 
