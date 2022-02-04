@@ -18,30 +18,11 @@ class Test {
     @Test
     fun main() {
 
-        val repository = LocalMavenRepository("G:\\TestMaven")
+        //val repository = LocalMavenRepository("G:\\TestMaven")
 
-        val dependency = repository.getDependency("com.google.android.material:material:1.0.0")
+        //val dependency = repository.getDependency("com.google.android.material:material:1.0.0")
 
 
-        val generator =
-            SimpleJavaCodeGenerator(
-                accessType = SimpleJavaCodeGenerator.AccessType.PUBLIC,
-                className = "BuildConfig"
-            )
-
-        generator.addField(
-            SimpleJavaCodeGenerator.Field(
-                accessType = SimpleJavaCodeGenerator.AccessType.PUBLIC,
-                isStatic = true,
-                fieldName = "DEBUG",
-                fieldType = "boolean",
-                fieldValue = "true"
-            )
-        )
-
-        println(generator.generate())
-
-        println(dependency)
-        println(dependency.getDependenciesFile())
+        //println(dependency.getDependenciesFile())
     }
 }

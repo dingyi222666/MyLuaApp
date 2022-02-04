@@ -72,6 +72,12 @@ open class DefaultModule(
         return project.getMavenRepository()
     }
 
+    override fun close() {
+        allScript.forEach {
+            it.close()
+        }
+    }
+
     override fun getMainBuilderScript(): Script {
         return defaultMainBuilderScript
     }

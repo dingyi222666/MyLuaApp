@@ -2,6 +2,8 @@ package com.dingyi.myluaapp.build.command
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.lang.RuntimeException
@@ -27,6 +29,8 @@ class CommandRunner {
             val process = Runtime.getRuntime().exec(
                 command, transformEnvToArray()
             )
+
+
             process.waitFor()
 
             val status = process.exitValue()

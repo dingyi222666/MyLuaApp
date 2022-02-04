@@ -3,9 +3,7 @@ package com.dingyi.myluaapp.build.modules.android.builder
 
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.default.DefaultBuilder
-import com.dingyi.myluaapp.build.modules.android.tasks.ExplodedAndroidArchive
-import com.dingyi.myluaapp.build.modules.android.tasks.GenerateBuildConfig
-import com.dingyi.myluaapp.build.modules.android.tasks.GenerateResValues
+import com.dingyi.myluaapp.build.modules.android.tasks.*
 
 class AndroidLibraryBuilder(
     private val module: Module
@@ -13,13 +11,20 @@ class AndroidLibraryBuilder(
 
 
     init {
-        buildTasks.addAll(
-            arrayOf(
-                GenerateBuildConfig(module),
-                GenerateResValues(module),
-                ExplodedAndroidArchive(module)
-            )
-        )
+
+        //Check Manifest exists
+        addTask(CheckManifest(module),buildTasks)
+
+        //Package Resources
+        addTask(PackageResources(module),buildTasks)
+
+
+        //Compile Libraries Resources
+        addTask(CompileLibrariesResources(module),buildTasks)
+
+        //Generate BuildConfig.java
+        addTask(GenerateBuildConfig(module),buildTasks)
+
     }
 
 

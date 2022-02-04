@@ -131,6 +131,10 @@ class AndroidModule(
             for (key in value.keys()) {
                 value[key]?.let { _value ->
                     val name = _value.tojstring()
+                        .let {
+                            it.substring(it.lastIndexOf('/')+1)
+                        }
+
                     if (getProject().getModule(name) != null) {
                         dependencies.add(ProjectDependency(name))
                     } else {
@@ -183,6 +187,12 @@ class AndroidModule(
 
     override fun getMavenRepository(): MavenRepository {
         return project.getMavenRepository()
+    }
+
+    override fun close() {
+        allScript.forEach {
+            it.close()
+        }
     }
 
     override fun getMainBuilderScript(): Script {

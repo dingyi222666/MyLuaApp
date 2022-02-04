@@ -40,4 +40,5 @@ interface Module : ModuleScript {
     fun getMavenRepository(): MavenRepository
 
 
+    fun close()
 }

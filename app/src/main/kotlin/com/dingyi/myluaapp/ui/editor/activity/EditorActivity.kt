@@ -122,8 +122,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             toggle.syncState()
         }
         viewBinding.drawer.apply {
-            setScrimColor(0)
-            drawerElevation = 0f
+            //setScrimColor(0)
+            drawerElevation = 1f
             addDrawerListener(
                 onDrawerClosed = {
                     setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)

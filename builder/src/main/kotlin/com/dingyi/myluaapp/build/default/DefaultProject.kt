@@ -116,6 +116,18 @@ open class DefaultProject(
         return defaultCache
     }
 
+    override fun close() {
+
+        allModules.forEach {
+            it.close()
+        }
+
+        allScript.forEach {
+            it.close()
+        }
+
+    }
+
     override fun createModulesWeight(): Map<Int, List<Module>> {
         val result = mutableMapOf<Int, List<Module>>()
         val tmpMap = mutableMapOf<Module, Int>()
@@ -184,6 +196,7 @@ open class DefaultProject(
     }
 
     open fun indexModule(value: String) {
+
         val dir = File(path, value)
         if (dir.isDirectory) {
 

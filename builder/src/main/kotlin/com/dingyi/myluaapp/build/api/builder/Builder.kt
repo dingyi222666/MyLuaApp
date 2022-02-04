@@ -5,12 +5,10 @@ import com.dingyi.myluaapp.build.api.Task
 
 interface Builder {
 
-    fun after(task: Task, afterTask: Task)
-
-    fun before(task: Task, beforeTask: Task)
+    fun dependsOn(task:Task,dependsTask: Task)
 
     fun getTasks(): List<Task>
     fun clean(): List<Task>
     fun sync(): List<Task>
-    fun getTask(name: String): Task
+    fun getTaskByName(name: String): Task
 }

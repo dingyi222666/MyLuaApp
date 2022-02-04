@@ -36,7 +36,7 @@ object BuildConfig {
         const val lifecycle_version = "2.4.0"
         const val preference_ktx_version = "1.1.1"
         const val constraintlayout_version = "2.0.4"
-        const val litepal_version = "3.2.3"
+
         const val glide_version = "4.11.0"
         const val net_version = "3.0.25"
         const val okhttp3_version = "4.9.0"
@@ -52,8 +52,9 @@ object BuildConfig {
         const val core_ktx_version = "1.7.0-rc01"
         const val brv_version = "1.3.37"
         const val multi_languages_version = "6.9"
-        const val btree4j_version = "0.9.1"
+
         const val zip4j_version = "2.9.1"
+        const val javapoet_version = "1.13.0"
     }
 
     object Libs {
@@ -106,7 +107,6 @@ object BuildConfig {
             const val desugar_jdk_libs =
                 "com.android.tools:desugar_jdk_libs:${Versions.desugar_jdk_libs_version}"
 
-            const val litepal = "org.litepal.guolindev:core:${Versions.litepal_version}"
 
             const val channel = "com.github.liangjingkanji:Channel:${Versions.channel_version}"
 
@@ -130,9 +130,10 @@ object BuildConfig {
             const val multi_languages =
                 "com.github.getActivity:MultiLanguages:${Versions.multi_languages_version}"
 
-            const val btree_4j = "io.github.myui:btree4j:${Versions.btree4j_version}"
 
             const val zip4j = "net.lingala.zip4j:zip4j:${Versions.zip4j_version}"
+
+            const val javapoet = "com.squareup:javapoet:${Versions.javapoet_version}"
         }
 
         object Views {

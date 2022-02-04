@@ -63,11 +63,13 @@ dependencies {
     implementation(BuildConfig.Libs.Google.gson)
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
 
-    implementation(BuildConfig.Libs.Tools.btree_4j)
+
+    implementation(BuildConfig.Libs.Tools.javapoet)
 
     // Optional -- Robolectric environment
     testImplementation("androidx.test:core:1.3.0")
     testImplementation("junit:junit:4.12")
     // Optional -- Mockito framework
     testImplementation("org.robolectric:robolectric:4.2.1")
+
 }

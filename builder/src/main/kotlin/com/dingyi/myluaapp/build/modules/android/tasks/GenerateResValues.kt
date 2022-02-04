@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.build.modules.android.tasks
 
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
+import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.compiler.AAPT2Compiler
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.common.kts.toFile
@@ -9,9 +10,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
 
+@Deprecated("Migrate to another build task")
+//TODO Delete it
 class GenerateResValues(
     private val module: Module
-) : Task {
+) : DefaultTask(module) {
     override val name: String
         get() = getType()
 
@@ -44,7 +47,7 @@ class GenerateResValues(
         buildVariants = module.getCache().getCache<BuildConfig>("${module.name}_build_config").buildVariants
 
         //create compile
-        compiler = AAPT2Compiler()
+        compiler = AAPT2Compiler(module.getLogger())
         outputDirectory = module.getFileManager()
             .resolveFile(compileDirectory, module).also {
                 it.mkdirs()

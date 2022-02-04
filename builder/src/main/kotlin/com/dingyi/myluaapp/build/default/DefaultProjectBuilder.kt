@@ -8,15 +8,10 @@ class DefaultProjectBuilder(
     private val project: Project
 ) : Builder {
 
-    override fun after(task: Task, afterTask: Task) {
-        project.getModules().forEach {
-            it.getBuilder().after(task, afterTask)
-        }
-    }
 
-    override fun before(task: Task, beforeTask: Task) {
-        project.getModules().forEach {
-            it.getBuilder().before(task, beforeTask)
+    override fun dependsOn(task: Task, dependsTask: Task) {
+        for (module in project.getModules()) {
+            module.getBuilder().dependsOn(task, dependsTask)
         }
     }
 
@@ -64,7 +59,7 @@ class DefaultProjectBuilder(
         return list
     }
 
-    override fun getTask(name: String): Task {
-        return project.getMainModule().getBuilder().getTask(name)
+    override fun getTaskByName(name: String): Task {
+        return project.getMainModule().getBuilder().getTaskByName(name)
     }
 }

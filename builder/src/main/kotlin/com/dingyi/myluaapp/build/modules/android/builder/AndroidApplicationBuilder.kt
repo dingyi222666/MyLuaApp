@@ -2,22 +2,31 @@ package com.dingyi.myluaapp.build.modules.android.builder
 
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.default.DefaultBuilder
-import com.dingyi.myluaapp.build.modules.android.tasks.ExplodedAndroidArchive
-import com.dingyi.myluaapp.build.modules.android.tasks.GenerateBuildConfig
-import com.dingyi.myluaapp.build.modules.android.tasks.GenerateResValues
+import com.dingyi.myluaapp.build.modules.android.tasks.*
 
 class AndroidApplicationBuilder(
     private val module: Module
 ):DefaultBuilder(module) {
 
     init {
-        buildTasks.addAll(
-            arrayOf(
-                GenerateBuildConfig(module),
-                GenerateResValues(module),
-                ExplodedAndroidArchive(module)
-            )
-        )
+
+        //Check Manifest exists
+        addTask(CheckManifest(module),buildTasks)
+
+        //Exploded AndroidArchive
+        addTask(ExplodedAndroidArchive(module),buildTasks)
+
+        //Compile Libraries Resources
+        addTask(CompileLibrariesResources(module),buildTasks)
+
+        //Merge Resources
+        addTask(MergeResources(module),buildTasks)
+
+        //Generate BuildConfig.java
+        addTask(GenerateBuildConfig(module),buildTasks)
+
+
+
     }
 
 }

@@ -39,12 +39,14 @@ JavaVersion = {
 }
 
 function project(name)
-  return { type = "project", value = name:match("%:(.+)") }
+  local name = name:gsub(":",'/')
+  return { type = "project", value = name }
 end
 
 function include(name)
   _G.includes = includes or {}
-  table.insert(includes, name:match(":(.+)"))
+  name = name:gsub(":",'/')
+  table.insert(includes, name)
 end
 
 local File = luajava.bindClass "java.io.File"

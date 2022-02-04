@@ -1,9 +1,6 @@
 package com.dingyi.myluaapp.build.default
 
-import btree4j.BTree
-import btree4j.BTreeIndex
-import btree4j.Value
-import btree4j.utils.lang.StringUtils
+
 import com.dingyi.myluaapp.build.api.Cache
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.google.gson.Gson
@@ -11,18 +8,15 @@ import java.io.Closeable
 import java.io.File
 
 class DefaultCache(
-    cacheDir: String
+    private val cacheDir: String
 ):Cache {
 
-    private val btree = BTreeIndex(File("$cacheDir/cache.bin"), false)
-        .apply {
-            if (!file.exists()) {
-                file.parentFile?.mkdirs()
-                this.create(false)
-            }
-        }
 
     private val map = mutableMapOf<String, Any>()
+
+    private var gson: Gson? = Gson()
+
+    private val cacheDiskMap = mutableMapOf<String, String>()
 
     //local cache
     override fun <T> getCache(key: String): T {
@@ -34,25 +28,54 @@ class DefaultCache(
     }
 
     override fun saveCacheToDisk(key: String, value: String) {
-        btree.apply {
-            init(false)
-        }
-            .putValue(Value(key), Value(value))
+        cacheDiskMap[key] = value
+        saveAllCacheToDisk()
+    }
 
+
+    override fun readCacheFromDisk(key: String): String? {
+        val memoryCache = cacheDiskMap[key]
+
+        if (memoryCache != null) {
+            return memoryCache
+        }
+
+        readAllCacheFromDisk()
+
+        return cacheDiskMap[key]
 
     }
 
-    override fun readCacheFromDisk(key: String): String? {
-        return btree.apply {
-            init(false)
-        }.getValue(Value(key))?.data?.let {
-            StringUtils.toString(it)
+    private fun readAllCacheFromDisk() {
+        val file = File(cacheDir, "cache.json")
+        if (!file.isFile) {
+            file.parentFile?.mkdirs()
+            file.createNewFile()
+            file.writeText("{}")
         }
+        val readMap = gson?.fromJson(
+            file.readText(),
+            getJavaClass<Map<String, String>>()
+        )
+
+        readMap?.let {
+            cacheDiskMap.putAll(it)
+        }
+
+    }
+
+    private fun saveAllCacheToDisk() {
+        val file = File(cacheDir, "cache.json")
+        if (!file.isFile) {
+            file.parentFile?.mkdirs()
+            file.createNewFile()
+
+        }
+        gson?.toJson(cacheDiskMap)?.let { file.writeText(it) }
     }
 
     override fun close() {
-        btree.flush()
-        btree.close()
+        gson = null
         map.clear()
     }
 

@@ -17,6 +17,7 @@ class DefaultSnapshotManager(
         }
         val md5Path = snapshotFile.path.toMD5()
 
+        //Use lastModified,faster than calculate hash
         return runCatching {
             cache.saveCacheToDisk("${md5Path}_snapshot_file", snapshotFile.getSHA256())
         }.isSuccess
@@ -33,13 +34,14 @@ class DefaultSnapshotManager(
 
         val md5Path = snapshotFile.path.toMD5()
 
-        val targetSHA256 = snapshotFile.getSHA256()
+        val lastModifiedTime = snapshotFile.getSHA256()
 
-        return cache.readCacheFromDisk("${md5Path}_snapshot_file") == targetSHA256
+        return cache.readCacheFromDisk("${md5Path}_snapshot_file") == lastModifiedTime
     }
 
     override fun equalsAndSnapshot(snapshotFile: File): Boolean {
         if (!snapshotFile.exists()) {
+            // not snapshot,always return false
             return false
         }
         return equalsSnapshot(snapshotFile).apply {
