@@ -10,6 +10,7 @@ import com.dingyi.myluaapp.common.kts.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class AAPT2Compiler(private val logger: ILogger) {
 
@@ -54,6 +55,7 @@ class AAPT2Compiler(private val logger: ILogger) {
 
     private suspend fun doCompile(otherCommand: Array<String>?, outputDirectory: String) {
         println("$otherCommand $outputDirectory")
+
         val status = commandRunner.runCommand(
             aapt2Path,
             arrayOf(
