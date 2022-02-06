@@ -74,20 +74,10 @@ class GenerateBuildConfig(
         manifestInfo = readManifest()
 
 
-        buildConfig = BuildConfig(
-            applicationId = manifestInfo.packageId ?: buildConfig.applicationId
-            ?: throw CompileError("Not Found applicationId!"),
-            buildVariants = buildConfig.buildVariants
-        )
-
-        val versionCode =
-            (module.getMainBuilderScript().get("android.defaultConfig.versionCode"))
-                ?: manifestInfo.versionCode
+        val versionCode = manifestInfo.versionCode
 
 
-        val versionName =
-            module.getMainBuilderScript().get("android.defaultConfig.versionName")
-                ?: manifestInfo.versionName
+        val versionName = manifestInfo.versionName
 
 
         buildConfigString =
@@ -118,7 +108,7 @@ class GenerateBuildConfig(
     private fun readManifest(): AndroidManifestSimpleParser.AndroidManifestInfo {
         return AndroidManifestSimpleParser().parse(
             module.getFileManager()
-                .resolveFile("src/main/AndroidManifest.xml", module).path
+                .resolveFile("build/intermediates/merged_manifest/AndroidManifest.xml", module).path
         )
     }
 
@@ -167,17 +157,11 @@ class GenerateBuildConfig(
 
         if (moduleType == "Application") {
             val versionCode =
-                (module.getMainBuilderScript().get("android.defaultConfig.versionCode"))
-                    ?: manifestInfo.versionCode
+                manifestInfo.versionCode
 
 
             if (versionCode != null) {
 
-                val versionCodeValue = if (versionCode is LuaValue && versionCode !is LuaNil) {
-                    versionCode.toint()
-                } else {
-                    versionCode as Int
-                }
 
                 classBuilder
                     .addField(
@@ -188,23 +172,16 @@ class GenerateBuildConfig(
                                 Modifier.PUBLIC,
                                 Modifier.FINAL
                             )
-                            .initializer("\$L", versionCodeValue)
+                            .initializer("\$L", versionCode)
                             .build()
                     )
 
             }
 
             val versionName =
-                module.getMainBuilderScript().get("android.defaultConfig.versionName")
-                    ?: manifestInfo.versionName
+                manifestInfo.versionName
 
             if (versionName != null) {
-
-                val versionNameValue = if (versionName is LuaValue && versionName !is LuaNil) {
-                    versionName.tojstring()
-                } else {
-                    versionName.toString()
-                }
 
                 classBuilder
                     .addField(
@@ -215,7 +192,7 @@ class GenerateBuildConfig(
                                 Modifier.PUBLIC,
                                 Modifier.FINAL
                             )
-                            .initializer("\$S", versionNameValue)
+                            .initializer("\$S", versionName)
                             .build()
                     )
             }

@@ -55,7 +55,7 @@ class CompileLibrariesResources(private val module: Module) : DefaultTask(module
 
 
         return when {
-           incrementalLibraryList.isEmpty() -> Task.State.`UP-TO-DATE`
+            incrementalLibraryList.isEmpty() -> Task.State.`UP-TO-DATE`
             incrementalLibraryList.size > libraryFileList.size -> Task.State.INCREMENT
             incrementalLibraryList.size == libraryFileList.size -> Task.State.DEFAULT
             else -> Task.State.DEFAULT

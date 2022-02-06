@@ -22,15 +22,16 @@ class AndroidApplicationBuilder(
         //Merge Resources
         addTask(MergeResources(module),buildTasks)
 
-        //Generate BuildConfig.java
-        addTask(GenerateBuildConfig(module),buildTasks)
 
         // Merge Manifest
         addTask(MergeManifest(module),buildTasks)
 
         //Process Resources
-
         addTask(ProcessResources(module),buildTasks)
+
+        //Generate BuildConfig.java
+        addTask(GenerateBuildConfig(module),buildTasks)
+
 
     }
 

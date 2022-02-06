@@ -3,7 +3,6 @@ package com.dingyi.myluaapp.build.modules.android.tasks
 import com.android.manifmerger.ManifestMerger2
 import com.android.manifmerger.ManifestSystemProperty
 import com.android.manifmerger.MergingReport
-
 import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
@@ -17,27 +16,15 @@ import kotlinx.coroutines.withContext
 import org.luaj.vm2.LuaValue
 import java.io.File
 
-import java.util.*
 
-class MergeManifest(private val applicationModule:Module): DefaultTask(applicationModule){
+
+class MergeLibraryManifest(private val module: Module): DefaultTask(module){
     override val name: String
-        get() = getType()
+        get() = this.javaClass.simpleName
 
     private lateinit var buildVariants: String
 
 
-    private fun getType(): String {
-        if (this::buildVariants.isInitialized) {
-            return "Merge${
-                buildVariants.replaceFirstChar {
-                    if (it.isLowerCase()) it.titlecase(
-                        Locale.getDefault()
-                    ) else it.toString()
-                }
-            }AndroidManifest"
-        }
-        return javaClass.simpleName
-    }
 
     private val mainManifestFile = "src/main/AndroidManifest.xml"
 
@@ -47,7 +34,7 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
     override suspend fun prepare(): Task.State {
 
         buildConfig =
-            applicationModule.getCache().getCache("${applicationModule.name}_build_config")
+            module.getCache().getCache("${module.name}_build_config")
 
 
         return Task.State.DEFAULT
@@ -56,28 +43,17 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
     override suspend fun run() = withContext(Dispatchers.IO) {
 
         val manifestMergerInvoker = ManifestMerger2.newMerger(
-            applicationModule.getFileManager().resolveFile(mainManifestFile, applicationModule),
-            applicationModule.getLogger(),
-            ManifestMerger2.MergeType.APPLICATION
+            module.getFileManager().resolveFile(mainManifestFile, module),
+            module.getLogger(),
+            ManifestMerger2.MergeType.LIBRARY
         ).withFeatures(ManifestMerger2.Invoker.Feature.REMOVE_TOOLS_DECLARATIONS)
             .withFeatures(ManifestMerger2.Invoker.Feature.MAKE_AAPT_SAFE)
 
 
-        val buildScript = applicationModule.getMainBuilderScript()
+        val buildScript = module.getMainBuilderScript()
 
-        applicationModule.getProject()
-            .getModules()
-            .filterNot { it == applicationModule }
-            .mapNotNull {
-                findManifestFile(it)
-            }.forEach {
-                manifestMergerInvoker.addLibraryManifest(it)
-            }
-
-
-        applicationModule
-            .getProject()
-            .getAllDependencies()
+        module
+            .getDependencies()
             .filter {
                 it.type == "aar"
             }
@@ -122,7 +98,7 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
                 manifestMergerInvoker
                     .setOverride(it.second, it.first)
             } else {
-                applicationModule.getLogger()
+                module.getLogger()
                     .warning("The Script Value ${it.second.toCamelCase()} is null")
             }
 
@@ -130,29 +106,29 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
 
 
 
-        val outMergedManifestLocation = applicationModule
+        val outMergedManifestLocation = module
             .getFileManager()
             .resolveFile(
                 "build/intermediates/merged_manifest/AndroidManifest.xml",
-                applicationModule
+                module
             )
 
         val mergingReport = manifestMergerInvoker.merge()
 
         if (mergingReport.result == MergingReport.Result.ERROR) {
-            mergingReport.log(applicationModule.getLogger())
+            mergingReport.log(module.getLogger())
             throw RuntimeException(mergingReport.reportString)
         }
         if (mergingReport.result == MergingReport.Result.WARNING) {
-            mergingReport.log(applicationModule.getLogger())
+            mergingReport.log(module.getLogger())
         }
 
         val annotatedDocument =
             mergingReport.getMergedDocument(MergingReport.MergedManifestKind.BLAME)
         if (annotatedDocument != null) {
-            applicationModule.getLogger().verbose(annotatedDocument)
+            module.getLogger().verbose(annotatedDocument)
         }
-        applicationModule.getLogger()
+        module.getLogger()
             .verbose("Merged manifest saved to ${outMergedManifestLocation.path}")
 
         val outString = mergingReport.getMergedDocument(MergingReport.MergedManifestKind.MERGED)
@@ -163,27 +139,6 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
         if (outString != null) {
             outMergedManifestLocation.writeText(outString)
         }
-
-    }
-
-
-    private fun findManifestFile(module: Module): File? {
-
-        if (module.type == "AndroidLibrary") {
-
-            val file = module
-                .getFileManager()
-                .resolveFile("build/intermediates/merged_manifest/AndroidManifest.xml", module)
-
-            if (!file.exists()) {
-                throw CompileError("missing manifest for ${module.name}")
-            }
-
-            return file
-        }
-
-        return null
-
 
     }
 

@@ -25,8 +25,13 @@ class AndroidLibraryBuilder(
         //Compile Libraries Resources
         addTask(CompileLibrariesResources(module),buildTasks)
 
+
+        //Merge libraries manifest
+        addTask(MergeLibraryManifest(module),buildTasks)
+
         //Generate BuildConfig.java
         addTask(GenerateBuildConfig(module),buildTasks)
+
 
     }
 
