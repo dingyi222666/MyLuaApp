@@ -88,7 +88,7 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
                     as LuaValue).tojstring() to ManifestSystemProperty.MIN_SDK_VERSION,
             (buildScript.get("android.defaultConfig.targetSdkVersion")
                     as LuaValue).tojstring() to ManifestSystemProperty.TARGET_SDK_VERSION,
-            (buildScript.get("android.defaultConfig.targetSdkVersion")
+            (buildScript.get("android.defaultConfig.maxSdkVersion")
                     as LuaValue).tojstring() to ManifestSystemProperty.MAX_SDK_VERSION
 
         ).forEach {
