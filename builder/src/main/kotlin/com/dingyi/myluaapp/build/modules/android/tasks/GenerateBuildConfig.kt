@@ -86,7 +86,7 @@ class GenerateBuildConfig(
         val lastBuildConfig = module.getCache().readCacheFromDisk("${module.name}_build_config")
 
         buildConfigFile =
-            "${buildConfigDir}/${buildConfig.applicationId?.replace(".", "/")}/BuildConfig.java"
+            "${buildConfigDir}/${manifestInfo.packageId?.replace(".", "/")}/BuildConfig.java"
 
         println("$lastBuildConfig $buildConfig")
 
@@ -130,7 +130,7 @@ class GenerateBuildConfig(
                             if (moduleType == "Application") "APPLICATION_ID" else "LIBRARY_PACKAGE_NAME",
                             Modifier.PUBLIC, Modifier.FINAL
                         )
-                        .initializer("\$S", buildConfig.applicationId.toString())
+                        .initializer("\$S", manifestInfo.packageId)
                         .build()
                 ).addField(
                     //debug
@@ -211,7 +211,7 @@ class GenerateBuildConfig(
         withContext(Dispatchers.IO) {
             runCatching {
                 JavaFile
-                    .builder(buildConfig.applicationId.toString(), classBuilder.build())
+                    .builder(manifestInfo.packageId, classBuilder.build())
                     .build()
                     .writeTo(module.getFileManager().resolveFile(buildConfigDir,module))
             }.getOrThrow()

@@ -125,8 +125,8 @@ class MergeResources(private val module: Module) : DefaultTask(module) {
             compileXmlList,
             outputDirectory.path,
             arrayOf(
-                "--legacy", //"--output-text-symbols",
-                //symbolOutputFile.path
+                "--legacy", "--output-text-symbols",
+                symbolOutputFile.path
             )
         )
 
