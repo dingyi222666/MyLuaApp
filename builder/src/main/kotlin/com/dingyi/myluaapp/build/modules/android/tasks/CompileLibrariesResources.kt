@@ -55,7 +55,7 @@ class CompileLibrariesResources(private val module: Module) : DefaultTask(module
 
 
         return when {
-            incrementalLibraryList.isEmpty() -> Task.State.`UP-TO-DATE`
+           incrementalLibraryList.isEmpty() -> Task.State.`UP-TO-DATE`
             incrementalLibraryList.size > libraryFileList.size -> Task.State.INCREMENT
             incrementalLibraryList.size == libraryFileList.size -> Task.State.DEFAULT
             else -> Task.State.DEFAULT
@@ -73,7 +73,7 @@ class CompileLibrariesResources(private val module: Module) : DefaultTask(module
 
             val compileXmlList = libraryFile.walkBottomUp()
                 .filter {
-                    it.isFile && it.name.endsWith("xml") && it.name != "AndroidManifest.xml"
+                    it.isFile && it.name != "AndroidManifest.xml"
                 }.toList()
 
 
@@ -82,14 +82,17 @@ class CompileLibrariesResources(private val module: Module) : DefaultTask(module
                     otherCommand = arrayOf(
                         "--dir",
                         File(libraryFile, "res").absolutePath,
-                        "--legacy", //"--output-text-symbols",
-                        //File(libraryFile,"compile_r.txt").absolutePath
+                        "--legacy", "--output-text-symbols",
+                        File(libraryFile,"compile_r.txt").absolutePath
                     ),
                     outputDirectory = File(libraryFile, "compile_res.zip").apply {
                         if (exists()) delete()
                         createNewFile()
                     }.absolutePath
                 )
+                module
+                    .getFileManager()
+                    .snapshot(File(libraryFile, "compile_res.zip"))
             }
 
         }

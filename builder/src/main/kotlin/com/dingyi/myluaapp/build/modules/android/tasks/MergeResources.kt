@@ -62,7 +62,7 @@ class MergeResources(private val module: Module) : DefaultTask(module) {
 
         val allCompileXmlFileList = buildDirectoryFile.walkBottomUp()
             .filter {
-                it.isFile and it.name.endsWith("xml")
+                it.isFile
             }
             .toList()
 
@@ -135,6 +135,9 @@ class MergeResources(private val module: Module) : DefaultTask(module) {
         if (outputDirectory.walkBottomUp().filter { it.isFile }.toList().isEmpty()) {
             throw CompileError("Unable to compile xml file! View log for get more details")
         }
+
+
+
 
         withContext(Dispatchers.IO) {
             outputDirectory.walkBottomUp()

@@ -11,10 +11,10 @@ import kotlinx.coroutines.withContext
 import net.lingala.zip4j.ZipFile
 import java.io.File
 
-//TODO:will Added to sync tasks
-class ExplodedAndroidArchive(private val module: Module) : DefaultTask(module) {
+//TODO:Add to sync tasks
+class ExtractAndroidArchive(private val module: Module) : DefaultTask(module) {
     override val name: String
-        get() = "ExplodedAndroidArchive"
+        get() = "ExtractAndroidArchive"
 
     private lateinit var mavenDependencyList: List<File>
 
@@ -46,6 +46,7 @@ class ExplodedAndroidArchive(private val module: Module) : DefaultTask(module) {
         this.mavenDependencyList = incrementalDependencyList
 
         return when {
+
             incrementalDependencyList.isEmpty() -> Task.State.`UP-TO-DATE`
             incrementalDependencyList.size > mavenDependencyList.size -> Task.State.INCREMENT
             incrementalDependencyList.size == mavenDependencyList.size -> Task.State.DEFAULT

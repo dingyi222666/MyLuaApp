@@ -57,9 +57,6 @@ class AndroidManifestSimpleParser {
     }
 
 
-    fun deParser(androidManifestInfo: AndroidManifestInfo): String {
-        TODO()
-    }
 
     class AndroidManifestInfo(
         var packageId: String?,

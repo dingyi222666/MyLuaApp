@@ -16,7 +16,7 @@ class AndroidLibraryBuilder(
         addTask(CheckManifest(module),buildTasks)
 
         //Exploded AndroidArchive
-        addTask(ExplodedAndroidArchive(module),buildTasks)
+        addTask(ExtractAndroidArchive(module),buildTasks)
 
         //Package Resources
         addTask(PackageResources(module),buildTasks)

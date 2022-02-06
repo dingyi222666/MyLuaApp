@@ -12,6 +12,7 @@ import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.runner.Runner
 import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.build.api.Task
+import com.dingyi.myluaapp.build.api.dependency.Dependency
 import com.dingyi.myluaapp.build.dependency.ProjectDependency
 import com.dingyi.myluaapp.build.script.DefaultScript
 import com.dingyi.myluaapp.common.kts.toFile
@@ -224,6 +225,19 @@ open class DefaultProject(
         return allModules.filter {
             it.name == name
         }.getOrNull(0)
+    }
+
+    //TODO:Compare Dependency Version
+    override fun getAllDependencies(): List<Dependency> {
+        return mutableSetOf<Dependency>()
+            .apply {
+                allModules.flatMap {
+                    it.getDependencies()
+                }.let {
+                    this.addAll(it)
+                }
+            }
+            .toList()
     }
 
     override fun getMavenRepository(): MavenRepository {

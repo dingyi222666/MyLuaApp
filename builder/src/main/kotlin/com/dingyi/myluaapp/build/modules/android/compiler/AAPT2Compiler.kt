@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.Collections.addAll
 
 class AAPT2Compiler(private val logger: ILogger) {
 
@@ -53,8 +54,52 @@ class AAPT2Compiler(private val logger: ILogger) {
 
     }
 
+    suspend fun link(
+        inputFiles: List<String>,
+        outputDirectory: String,
+        otherCommand: Array<String>? = null
+    ) = withContext(Dispatchers.IO) {
+
+        launch {
+
+
+            doLink(
+                inputFiles.toMutableList()
+                    .apply { addAll(otherCommand ?: arrayOf()) }.toTypedArray(),
+                outputDirectory
+            )
+
+        }.join()
+
+    }
+
+
+    private suspend fun doLink(otherCommand: Array<String>?, outputDirectory: String) {
+        val status = commandRunner
+            .runCommand(
+                aapt2Path,
+                arrayOf(
+                    "link",
+                    otherCommand?.joinToString(" ") ?: "",
+                    "-o", outputDirectory
+                )
+            )
+
+
+        if (BuildConfig.DEBUG) {
+            logger.info("\n")
+            logger.info(status.message)
+            logger.info("\n")
+            //logger.info("Source File:${compileFile}")
+        }
+
+        if (status.code != 0) {
+            throw CompileError(status.message)
+        }
+    }
+
     private suspend fun doCompile(otherCommand: Array<String>?, outputDirectory: String) {
-        println("$otherCommand $outputDirectory")
+        //println("$otherCommand $outputDirectory")
 
         val status = commandRunner.runCommand(
             aapt2Path,
@@ -64,8 +109,6 @@ class AAPT2Compiler(private val logger: ILogger) {
                 "-o", outputDirectory
             )
         )
-
-
 
         if (BuildConfig.DEBUG) {
             logger.info("\n")

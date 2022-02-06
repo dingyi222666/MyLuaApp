@@ -14,7 +14,7 @@ class AndroidApplicationBuilder(
         addTask(CheckManifest(module),buildTasks)
 
         //Exploded AndroidArchive
-        addTask(ExplodedAndroidArchive(module),buildTasks)
+        addTask(ExtractAndroidArchive(module),buildTasks)
 
         //Compile Libraries Resources
         addTask(CompileLibrariesResources(module),buildTasks)
@@ -26,9 +26,11 @@ class AndroidApplicationBuilder(
         addTask(GenerateBuildConfig(module),buildTasks)
 
         // Merge Manifest
-
-
         addTask(MergeManifest(module),buildTasks)
+
+        //Process Resources
+
+        addTask(ProcessResources(module),buildTasks)
 
     }
 

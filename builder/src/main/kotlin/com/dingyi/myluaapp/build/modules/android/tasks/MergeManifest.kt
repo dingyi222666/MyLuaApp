@@ -9,6 +9,9 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
+import com.dingyi.myluaapp.common.kts.Paths
+import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.kts.toMD5
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.luaj.vm2.LuaValue
@@ -56,22 +59,45 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
             applicationModule.getFileManager().resolveFile(mainManifestFile, applicationModule),
             applicationModule.getLogger(),
             ManifestMerger2.MergeType.APPLICATION
-        ).addLibraryManifests(
-            *applicationModule.getProject()
-                .getModules()
-                .filterNot { it == applicationModule }
-                .mapNotNull {
-                    findManifestFile(it)
-                }
-                .toTypedArray()
-        )
+        ).withFeatures(ManifestMerger2.Invoker.Feature.REMOVE_TOOLS_DECLARATIONS)
+            .withFeatures(ManifestMerger2.Invoker.Feature.MAKE_AAPT_SAFE)
+
 
         val buildScript = applicationModule.getMainBuilderScript()
 
+        applicationModule.getProject()
+            .getModules()
+            .filterNot { it == applicationModule }
+            .mapNotNull {
+                findManifestFile(it)
+            }.forEach {
+                manifestMergerInvoker.addLibraryManifest(it)
+            }
 
-        manifestMergerInvoker
-            .withFeatures(ManifestMerger2.Invoker.Feature.REMOVE_TOOLS_DECLARATIONS)
-            .withFeatures(ManifestMerger2.Invoker.Feature.MAKE_AAPT_SAFE)
+
+        applicationModule
+            .getProject()
+            .getAllDependencies()
+            .filter {
+                it.type == "aar"
+            }
+            .flatMap {
+                it.getDependenciesFile()
+            }
+            .toSet()
+            .map {
+                File(
+                    "${Paths.explodedAarDir}${File.separator}${
+                        it.path.toMD5()
+                    }".toFile(), "AndroidManifest.xml"
+                )
+            }
+            .filter {
+                it.isFile
+            }.forEach {
+                manifestMergerInvoker.addLibraryManifest(it)
+            }
+
 
         if (buildConfig.buildVariants == "debug") {
             manifestMergerInvoker.withFeatures(ManifestMerger2.Invoker.Feature.DEBUGGABLE)
@@ -92,7 +118,7 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
                     as LuaValue).tojstring() to ManifestSystemProperty.MAX_SDK_VERSION
 
         ).forEach {
-            if (it.first != "null") {
+            if (it.first != "nil") {
                 manifestMergerInvoker
                     .setOverride(it.second, it.first)
             } else {
@@ -101,6 +127,7 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
             }
 
         }
+
 
 
         val outMergedManifestLocation = applicationModule
@@ -142,7 +169,7 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
 
     private fun findManifestFile(module: Module): File? {
 
-        if (module.name == "AndroidApplication") {
+        if (module.type == "AndroidLibrary") {
 
             val file = module
                 .getFileManager()

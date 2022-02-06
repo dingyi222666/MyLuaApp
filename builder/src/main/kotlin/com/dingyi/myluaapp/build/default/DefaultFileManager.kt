@@ -34,4 +34,16 @@ class DefaultFileManager(
             project.getCache()
         )
     }
+
+    override fun snapshot(snapshotFile: File): Boolean {
+        return defaultSnapshotManager.snapshot(snapshotFile)
+    }
+
+    override fun equalsSnapshot(snapshotFile: File): Boolean {
+        return defaultSnapshotManager.equalsSnapshot(snapshotFile)
+    }
+
+    override fun equalsAndSnapshot(snapshotFile: File): Boolean {
+        return defaultSnapshotManager.equalsAndSnapshot(snapshotFile)
+    }
 }
