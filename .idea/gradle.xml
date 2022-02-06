@@ -19,8 +19,12 @@
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/editor" />
+            <option value="$PROJECT_DIR$/jaxp" />
+            <option value="$PROJECT_DIR$/jaxp-dom" />
             <option value="$PROJECT_DIR$/lua-lsp-server" />
             <option value="$PROJECT_DIR$/luaj" />
+            <option value="$PROJECT_DIR$/manifest-merger" />
+            <option value="$PROJECT_DIR$/manifest-merger2" />
             <option value="$PROJECT_DIR$/tm4e" />
           </set>
         </option>

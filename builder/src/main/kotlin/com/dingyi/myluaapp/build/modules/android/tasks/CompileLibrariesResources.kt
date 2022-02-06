@@ -81,7 +81,9 @@ class CompileLibrariesResources(private val module: Module) : DefaultTask(module
                 aapt2Compiler.compile(
                     otherCommand = arrayOf(
                         "--dir",
-                        File(libraryFile, "res").absolutePath
+                        File(libraryFile, "res").absolutePath,
+                        "--legacy", //"--output-text-symbols",
+                        //File(libraryFile,"compile_r.txt").absolutePath
                     ),
                     outputDirectory = File(libraryFile, "compile_res.zip").apply {
                         if (exists()) delete()

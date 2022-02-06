@@ -1,5 +1,3 @@
-import org.gradle.internal.classpath.Instrumented.systemProperty
-
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -46,6 +44,8 @@ android {
         jvmTarget = "1.8"
     }
 
+
+
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
@@ -54,17 +54,25 @@ android {
 dependencies {
 
     implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
-    
+
     implementation(project(":common"))
     implementation(project(":luaj"))
 
+
+    implementation("com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava")
     implementation(BuildConfig.Libs.Tools.zip4j)
 
     implementation(BuildConfig.Libs.Google.gson)
+    implementation(BuildConfig.Libs.BuildTools.kxml2)
+    implementation(BuildConfig.Libs.Google.guava)
+    implementation(BuildConfig.Libs.Annotation.build_tools_annotation)
+
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
 
 
-    implementation(BuildConfig.Libs.Tools.javapoet)
+
+    implementation(BuildConfig.Libs.BuildTools.javapoet)
+
 
     // Optional -- Robolectric environment
     testImplementation("androidx.test:core:1.3.0")

@@ -2,13 +2,14 @@ package com.dingyi.myluaapp.build.modules.public.compiler
 
 
 import com.dingyi.myluaapp.build.CompileError
-import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.common.kts.Paths
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.eclipse.jdt.internal.compiler.tool.EclipseCompiler
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.PrintWriter
 import java.nio.charset.Charset
 import java.util.*
 import javax.tools.*
@@ -35,7 +36,7 @@ class JavaCompiler(
                     throw CompileError("Java Compiler Error: ${diagnostic.getMessage(Locale.getDefault())}")
                 }
                 Diagnostic.Kind.WARNING -> {
-                    logger.waring(wrapDiagnostic(diagnostic))
+                    logger.warning(wrapDiagnostic(diagnostic))
                 }
                 Diagnostic.Kind.NOTE -> {
                     logger.debug(wrapDiagnostic(diagnostic))
@@ -74,8 +75,10 @@ class JavaCompiler(
 
         }.getOrThrow()
 
+        val errorStream = ByteArrayOutputStream()
+
         val task = javaCompiler.getTask(
-            null,
+            PrintWriter(errorStream),
             standardJavaFileManager, javaCompiler.diagnosticListener,
             option.toList(),
             null,
@@ -85,8 +88,11 @@ class JavaCompiler(
         val result = withContext(Dispatchers.IO) { task.call() }
 
         if (!result) {
+            logger.error("e: ${errorStream.toByteArray().decodeToString()}")
             throw CompileError("Compile Java Error!")
         }
+
+        errorStream.close()
 
     }
 

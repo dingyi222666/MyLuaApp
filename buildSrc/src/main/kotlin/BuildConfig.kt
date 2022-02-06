@@ -38,8 +38,8 @@ object BuildConfig {
         const val constraintlayout_version = "2.0.4"
 
         const val glide_version = "4.11.0"
-        const val net_version = "3.0.25"
-        const val okhttp3_version = "4.9.0"
+        const val net_version = "3.1.2"
+        const val okhttp3_version = "4.9.1"
         const val channel_version = "1.1.4"
         const val swiperefreshlayout_version = "1.2.0-alpha01"
         const val desugar_jdk_libs_version = "1.1.5"
@@ -50,14 +50,24 @@ object BuildConfig {
         const val dom_version = "2.3.0-jaxb-1.0.6"
         const val kotlinx_coroutines_android_version = "1.5.1"
         const val core_ktx_version = "1.7.0-rc01"
-        const val brv_version = "1.3.37"
+        const val brv_version = "1.3.51"
         const val multi_languages_version = "6.9"
 
         const val zip4j_version = "2.9.1"
         const val javapoet_version = "1.13.0"
+
+
+        const val android_build_tools_version = "26.0.0"
+
+        const val guava_version = "24.0-android"
+
     }
 
     object Libs {
+
+        object Annotation {
+            const val build_tools_annotation = "com.android.tools:annotations:26.0.0"
+        }
 
         object Plugin {
             const val kotlin_gradle_plugin =
@@ -70,6 +80,7 @@ object BuildConfig {
 
         object Google {
             const val gson = "com.google.code.gson:gson:${Versions.gson_version}"
+            const val guava = "com.google.guava:guava:${Versions.guava_version}"
             const val material = "com.google.android.material:material:${Versions.material_version}"
         }
 
@@ -133,7 +144,15 @@ object BuildConfig {
 
             const val zip4j = "net.lingala.zip4j:zip4j:${Versions.zip4j_version}"
 
+
+        }
+
+        object BuildTools {
+            const val kxml2 = "net.sf.kxml:kxml2:2.3.0"
             const val javapoet = "com.squareup:javapoet:${Versions.javapoet_version}"
+
+            const val build_tools_common =
+                "com.android.tools:common:${Versions.android_build_tools_version}"
         }
 
         object Views {

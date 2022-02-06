@@ -6,6 +6,7 @@ import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.compiler.AAPT2Compiler
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
+import com.dingyi.myluaapp.common.kts.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -37,6 +38,8 @@ class MergeResources(private val module: Module) : DefaultTask(module) {
     private val outputDirectory: String
         get() = "build/intermediates/merged_res/${buildVariants}"
 
+    private val symbolOutputFile: String
+        get() = "build/intermediates/compile_local_symbol_list/${buildVariants}/R.txt"
 
     private val buildDirectory: String
         get() = "src/main/res"
@@ -67,14 +70,25 @@ class MergeResources(private val module: Module) : DefaultTask(module) {
             return Task.State.`NO-SOURCE`
         }
 
+        val flatFiles = outputDirectory.toFile().walkBottomUp()
+            .filter {
+                it.isFile and it.name.endsWith("flat")
+            }
+            .filter {
+                module.getFileManager()
+                    .getSnapshotManager()
+                    .equalsAndSnapshot(it)
+                    .not()
+            }.toList()
 
-        val incrementalCompileXmlFileList =
+        val incrementalCompileXmlFileList = if (flatFiles.isEmpty()) {
             allCompileXmlFileList.filter {
                 module.getFileManager()
                     .getSnapshotManager()
                     .equalsAndSnapshot(it)
-                    .not() or checkOutputFile(it)
+                    .not()
             }.map { it.path }
+        } else compileXmlList
 
 
         this.compileXmlList = incrementalCompileXmlFileList
@@ -98,10 +112,22 @@ class MergeResources(private val module: Module) : DefaultTask(module) {
             outputDirectory.mkdirs()
         }
 
+        val symbolOutputFile = module.getFileManager().resolveFile(
+            symbolOutputFile, module
+        )
+
+        if (!symbolOutputFile.exists()) {
+            symbolOutputFile.parentFile?.mkdirs()
+            symbolOutputFile.createNewFile()
+        }
 
         aapt2Compiler.compile(
             compileXmlList,
-            outputDirectory.path
+            outputDirectory.path,
+            arrayOf(
+                "--legacy", //"--output-text-symbols",
+                //symbolOutputFile.path
+            )
         )
 
         aapt2Compiler.close()
@@ -120,24 +146,5 @@ class MergeResources(private val module: Module) : DefaultTask(module) {
 
     }
 
-    private fun checkOutputFile(file: File): Boolean {
-        return arrayOf(
-            "$outputDirectory/${file.parentFile?.name}-${
-                file.name
-            }.flat", "$outputDirectory/${file.parentFile?.name}_${
-                file.name
-            }.flat", "$outputDirectory/${file.parentFile?.name}_${
-                file.name
-            }.arsc.flat", "$outputDirectory/${file.parentFile?.name}-${
-                file.name
-            }.arsc.flat"
-        ).filter {
-            module
-                .getFileManager()
-                .getSnapshotManager()
-                .equalsAndSnapshot(
-                    module.getFileManager().resolveFile(it, module)
-                ).not()
-        }.size == 4
-    }
+
 }

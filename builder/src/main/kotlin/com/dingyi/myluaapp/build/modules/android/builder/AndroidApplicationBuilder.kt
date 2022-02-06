@@ -25,7 +25,10 @@ class AndroidApplicationBuilder(
         //Generate BuildConfig.java
         addTask(GenerateBuildConfig(module),buildTasks)
 
+        // Merge Manifest
 
+
+        addTask(MergeManifest(module),buildTasks)
 
     }
 

@@ -47,7 +47,7 @@ dependencies {
     //editor
     implementation(BuildConfig.Libs.AndroidX.appcompat)
     implementation(BuildConfig.Libs.AndroidX.lifecycle_runtime)
-
+    implementation(BuildConfig.Libs.Google.gson)
     implementation(BuildConfig.Libs.Views.code_editor)
 
 }

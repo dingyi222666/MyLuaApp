@@ -48,6 +48,9 @@ android {
             }
         }
     }
+    packagingOptions {
+        resources.excludes.addAll(listOf("META-INF/*","xsd/catalog.xml","license/*"))
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

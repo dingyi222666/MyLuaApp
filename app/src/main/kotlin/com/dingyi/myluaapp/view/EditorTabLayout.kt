@@ -68,9 +68,6 @@ class EditorTabLayout(context: Context, attrs: AttributeSet?) : TabLayout(contex
 
                 editorPage?.setCurrentItem(index, true)
 
-                println("now indexed $index ${editorPage?.adapter} ${editorPage?.adapter?.itemCount}")
-
-
                 return
             }
         }

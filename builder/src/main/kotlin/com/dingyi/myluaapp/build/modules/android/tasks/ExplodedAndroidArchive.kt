@@ -7,7 +7,6 @@ import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.common.kts.toMD5
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.lingala.zip4j.ZipFile
 import java.io.File
@@ -63,9 +62,8 @@ class ExplodedAndroidArchive(private val module: Module) : DefaultTask(module) {
     }
 
     override suspend fun run() = withContext(Dispatchers.IO) {
-        launch {
-            mavenDependencyList.forEach {
-                launch {
+
+        mavenDependencyList.forEach {
                     withContext(Dispatchers.IO) {
                         val file = ZipFile(it)
 
@@ -80,14 +78,11 @@ class ExplodedAndroidArchive(private val module: Module) : DefaultTask(module) {
                         }.onFailure {
                             module
                                 .getLogger()
-                                .waring("Failed to extract dependency(${file.file.name}):${it.message}")
+                                .warning("Failed to extract dependency(${file.file.name}):${it.message}")
                             System.err.println(it)
                         }
                     }
-
-                }
             }
-        }.join()
 
 
     }

@@ -73,7 +73,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     private fun initView() {
 
         viewBinding.editorPage.adapter = EditorPagerAdapter(this, viewModel)
-
+        viewBinding.editorPage.isUserInputEnabled = false
         viewBinding.editorPage.offscreenPageLimit = 1
 
         viewBinding.drawerPage.adapter =

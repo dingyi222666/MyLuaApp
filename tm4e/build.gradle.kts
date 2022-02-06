@@ -1,6 +1,3 @@
-import android.annotation.SuppressLint
-import com.android.build.api.dsl.LintOptions
-
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -37,8 +34,6 @@ android {
     }
 
     compileOptions {
-        // Flag to enable support for the new language APIs
-        isCoreLibraryDesugaringEnabled = true
 
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -48,9 +43,11 @@ android {
         jvmTarget = "1.11"
     }
 
+
     configurations {
         all {
             exclude(module = "httpclient")
+
         }
     }
 }
@@ -58,9 +55,7 @@ android {
 dependencies {
     implementation(BuildConfig.Libs.Tools.joni)
     implementation(BuildConfig.Libs.Tools.jcodings)
-    api(BuildConfig.Libs.Google.gson)
+    implementation(BuildConfig.Libs.Google.gson)
     implementation(BuildConfig.Libs.Tools.batik_css)
     implementation(BuildConfig.Libs.Tools.batik_util)
-    implementation(BuildConfig.Libs.Tools.dom)
-    coreLibraryDesugaring(BuildConfig.Libs.Tools.desugar_jdk_libs)
 }

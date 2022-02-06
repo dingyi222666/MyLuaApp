@@ -14,4 +14,9 @@
       <module name="MyLuaApp2.buildSrc" target="11" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="MyLuaApp.manifest-merger2" options="--add-exports java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED --add-exports java.xml/com.sun.org.apache.xml.internal.dtm=ALL-UNNAMED" />
+    </option>
+  </component>
 </project>

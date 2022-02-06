@@ -31,7 +31,7 @@ class Logger(application: Application) : ILogger {
         link = null
     }
 
-    override fun waring(string: String) {
+    override fun warning(string: String) {
         link?.sendMsg("warn", string)
     }
 

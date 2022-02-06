@@ -1,8 +1,6 @@
 package com.dingyi.myluaapp.build.dependency.repository
 
 import android.util.Log
-import com.dingyi.myluaapp.build.CompileError
-import com.dingyi.myluaapp.build.api.dependency.Dependency
 import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import com.dingyi.myluaapp.build.api.logger.ILogger
@@ -10,7 +8,6 @@ import com.dingyi.myluaapp.build.dependency.LocalMavenDependency
 import com.dingyi.myluaapp.build.parser.PomParser
 import com.dingyi.myluaapp.common.kts.toFile
 import java.io.File
-import java.lang.RuntimeException
 
 class LocalMavenRepository(
     private val repositoryPath: String,
@@ -69,7 +66,7 @@ class LocalMavenRepository(
 
         targetPomPathList.forEach {
             if (File(it).exists().not()) {
-                logger.waring("Unable to retrieve dependency of $string,try sync project to re download dependency")
+                logger.warning("Unable to retrieve dependency of $string,try sync project to re download dependency")
                 logger.info("\n")
             }
         }
