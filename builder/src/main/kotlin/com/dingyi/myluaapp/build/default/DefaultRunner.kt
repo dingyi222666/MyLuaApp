@@ -1,11 +1,14 @@
 package com.dingyi.myluaapp.build.default
 
 import android.util.Log
+import android.util.TimeUtils
 import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.runner.Runner
 import com.dingyi.myluaapp.build.api.Task
 import kotlinx.coroutines.*
-import kotlin.math.roundToInt
+import java.time.Duration
+import java.util.concurrent.TimeUnit
+
 
 class DefaultRunner(
     private val project: Project
@@ -39,10 +42,12 @@ class DefaultRunner(
             val startTime = System.currentTimeMillis()
 
             runCatching {
-                for (task in tasks) {
-                    when (task.prepare()) {
-                        Task.State.INCREMENT, Task.State.DEFAULT -> task.run()
-                        else -> {}
+                withContext(Dispatchers.IO) {
+                    for (task in tasks) {
+                        when (task.prepare()) {
+                            Task.State.INCREMENT, Task.State.DEFAULT -> task.run()
+                            else -> {}
+                        }
                     }
                 }
             }.onFailure {
@@ -61,16 +66,43 @@ class DefaultRunner(
 
     }
 
-    private fun endBuild(time: Long,buildStatus:Boolean = true) {
+    private fun formatTime(millis: Long): String {
+
+
+        val hours = TimeUnit.MILLISECONDS.toHours(millis) % 24
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60
+        val milliseconds = millis % 1000
+
+        return when {
+            hours > 0 -> {
+                "$hours h, $minutes min, $seconds sec,$milliseconds ms"
+            }
+            hours == 0L && minutes > 0 -> {
+                "$minutes min, $seconds sec,$milliseconds ms"
+            }
+            hours == 0L && minutes == 0L && seconds > 0 -> {
+                "$seconds sec,$milliseconds ms"
+            }
+            hours == 0L && minutes == 0L && seconds == 0L && milliseconds > 0 -> {
+                "$milliseconds ms"
+            }
+            else -> "$minutes min, $seconds sec,$milliseconds ms"
+        }
+
+
+    }
+
+    private fun endBuild(time: Long, buildStatus: Boolean = true) {
         project.getLogger().info("\n")
-        val second = (time.toFloat() / 1000).roundToInt()
+
         if (buildStatus) {
             project.getLogger().info(
-                "BUILD SUCCESSFUL IN ${second}s"
+                "BUILD SUCCESSFUL IN ${formatTime(time)}"
             )
         } else {
             project.getLogger().error(
-                "BUILD FAILED IN ${second}s"
+                "BUILD FAILED IN ${formatTime(time)}"
             )
         }
 

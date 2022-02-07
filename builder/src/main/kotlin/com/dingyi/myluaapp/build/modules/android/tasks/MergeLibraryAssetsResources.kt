@@ -6,6 +6,8 @@ import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.util.getSHA256
 import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.toMD5
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class MergeLibraryAssetsResources(
@@ -92,9 +94,10 @@ class MergeLibraryAssetsResources(
     override suspend fun run() {
         mergeAssetsFile
             .forEach {
-                it.second.copyTo(getMergeAssetsPath(it))
+                withContext(Dispatchers.IO) {
+                    it.second.copyTo(getMergeAssetsPath(it))
+                }
             }
-
     }
 
     private fun getMergeAssetsPath(pair: Pair<File, File>): File {

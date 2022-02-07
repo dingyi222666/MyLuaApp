@@ -48,16 +48,15 @@ class ParallelTask(
     }
 
     override suspend fun run() = withContext(Dispatchers.IO) {
+        val module = allModule.getOrNull(0)
+        val logger = module?.getLogger()
         launch {
             for (tasks in allTask) {
                 launch(coroutineContext) {
                     for (task in tasks) {
                         withContext(Dispatchers.IO) {
                             val status = task.prepare()
-                            allModule.getOrNull(0)?.let { module ->
-                                module.getLogger()
-                                    .info(task.getOutputString(module, status))
-                            }
+                            logger?.info(task.getOutputString(module, status))
                             when (status) {
                                 Task.State.INCREMENT, Task.State.DEFAULT -> task.run()
                                 else -> {}
