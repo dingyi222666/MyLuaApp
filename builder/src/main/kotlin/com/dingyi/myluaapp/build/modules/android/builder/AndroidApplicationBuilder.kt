@@ -38,6 +38,8 @@ class AndroidApplicationBuilder(
         //Compile Java
         addTask(CompileApplicationJava(module),buildTasks)
 
+        //Merge Library Assets Resources
+        addTask(MergeLibraryAssetsResources(module),buildTasks)
 
 
     }
