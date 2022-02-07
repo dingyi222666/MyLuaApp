@@ -41,6 +41,8 @@ class AndroidApplicationBuilder(
         //Merge Library Assets Resources
         addTask(MergeLibraryAssetsResources(module),buildTasks)
 
+        //Merge Library jniLibs
+        addTask(MergeLibraryJniLibs(module),buildTasks)
 
     }
 
