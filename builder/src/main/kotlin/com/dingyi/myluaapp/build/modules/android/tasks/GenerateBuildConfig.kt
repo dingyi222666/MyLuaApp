@@ -91,11 +91,7 @@ class GenerateBuildConfig(
         println("$lastBuildConfig $buildConfig")
 
         if (lastBuildConfig == buildConfigString) {
-            if (module.getFileManager().getSnapshotManager()
-                    .equalsSnapshot(
-                        module.getFileManager().resolveFile(buildConfigFile, module)
-                    )
-            ) {
+            if (module.getFileManager().resolveFile(buildConfigFile, module).isFile) {
                 state = Task.State.`UP-TO-DATE`
             }
         }
@@ -216,9 +212,6 @@ class GenerateBuildConfig(
                     .writeTo(module.getFileManager().resolveFile(buildConfigDir,module))
             }.getOrThrow()
         }
-
-        module.getFileManager().getSnapshotManager()
-            .snapshot(configFile)
 
         module.getCache().saveCacheToDisk("${module.name}_build_config", buildConfigString)
 

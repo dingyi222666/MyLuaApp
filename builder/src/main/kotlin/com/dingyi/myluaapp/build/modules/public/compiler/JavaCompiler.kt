@@ -4,6 +4,7 @@ package com.dingyi.myluaapp.build.modules.public.compiler
 import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.common.kts.Paths
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.eclipse.jdt.internal.compiler.tool.EclipseCompiler
@@ -24,16 +25,18 @@ class JavaCompiler(
         classPaths: List<File>,
         option: Option,
         outputDir: File,
-    ) {
+    ) = withContext(Dispatchers.IO) {
 
+
+        logger.error("$inputFiles $outputDir")
 
         val javaCompiler = EclipseCompiler()
 
-        javaCompiler.diagnosticListener = DiagnosticListener { diagnostic ->
+        val diagnosticListener = DiagnosticListener<JavaFileObject> { diagnostic ->
             when (diagnostic.kind) {
                 Diagnostic.Kind.ERROR -> {
                     logger.error(wrapDiagnostic(diagnostic))
-                    throw CompileError("Java Compiler Error: ${diagnostic.getMessage(Locale.getDefault())}")
+                    throw CompileError("Java Compile Error: ${diagnostic.getMessage(Locale.getDefault())}")
                 }
                 Diagnostic.Kind.WARNING -> {
                     logger.warning(wrapDiagnostic(diagnostic))
@@ -48,47 +51,56 @@ class JavaCompiler(
         }
 
         val standardJavaFileManager = javaCompiler.getStandardFileManager(
-            javaCompiler.diagnosticListener,
+            diagnosticListener,
             Locale.getDefault(),
             Charset.defaultCharset()
         )
 
-        runCatching {
-            standardJavaFileManager.setLocation(
-                StandardLocation.CLASS_OUTPUT, listOf(outputDir)
-            )
-            standardJavaFileManager.setLocation(
-                StandardLocation.PLATFORM_CLASS_PATH,
-                mutableListOf(
-                    File(Paths.buildPath, "jar/android.jar")
-                ).apply {
-                    //default target version == java 8
-                    if ((option.findOption("target")?.toInt() ?: 8) >= 8) {
-                        add(File(Paths.buildPath, "jar/core-lambda-stubs.jar"))
-                    }
-                }
-            )
-            standardJavaFileManager.setLocation(
-                StandardLocation.CLASS_PATH,
-                classPaths
-            )
 
-        }.getOrThrow()
+        standardJavaFileManager.setLocation(
+            StandardLocation.CLASS_OUTPUT, listOf(outputDir)
+        )
+
+        standardJavaFileManager.setLocation(
+            StandardLocation.SOURCE_PATH, classPaths
+        )
+
+
+        standardJavaFileManager.setLocation(
+            StandardLocation.PLATFORM_CLASS_PATH,
+            mutableListOf(
+                File(Paths.buildPath, "jar/android.jar")
+            ).apply {
+                //default target version == java 8
+                if ((option.findOption("target")?.toInt() ?: 8) >= 8) {
+                    add(File(Paths.buildPath, "jar/core-lambda-stubs.jar"))
+                }
+            }
+        )
+
+
+        standardJavaFileManager.setLocation(
+            StandardLocation.CLASS_PATH,
+            classPaths
+        )
+
 
         val errorStream = ByteArrayOutputStream()
 
         val task = javaCompiler.getTask(
             PrintWriter(errorStream),
-            standardJavaFileManager, javaCompiler.diagnosticListener,
+            standardJavaFileManager, diagnosticListener,
             option.toList(),
             null,
             standardJavaFileManager.getJavaFileObjectsFromFiles(inputFiles)
         )
 
-        val result = withContext(Dispatchers.IO) { task.call() }
+
+        val result = task.call()
 
         if (!result) {
             logger.error("e: ${errorStream.toByteArray().decodeToString()}")
+            errorStream.close()
             throw CompileError("Compile Java Error!")
         }
 
@@ -107,7 +119,7 @@ class JavaCompiler(
     class Option {
         private val map = mutableMapOf<String, String>()
 
-        fun addOption(key: String, value: String) {
+        fun addOption(key: String, value: String = "") {
             map[key] = value
         }
 

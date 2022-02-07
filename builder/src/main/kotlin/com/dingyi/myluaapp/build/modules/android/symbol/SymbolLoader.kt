@@ -13,11 +13,23 @@ class SymbolLoader(
 
     private val symbols = mutableListOf<Symbol>()
 
+    private fun String.splitSymbol():List<String> {
+        val pos = indexOf(' ')
+        val type = substring(0, pos)
+        val pos2= indexOf(' ', pos + 1)
+        val className = substring(pos + 1, pos2)
+        val pos3 =indexOf(' ', pos2 + 1)
+        val name = substring(pos2 + 1, pos3)
+        val value = substring(pos3 + 1)
+
+        return listOf(type,className,name,value)
+    }
+
     fun load(): SymbolLoader {
 
         loadFile.useLines { lines ->
             lines.forEach {
-                val splitArray = it.split(" ")
+                val splitArray = it.splitSymbol()
 
                 val symbol = if (splitArray[0] == "default") {
                     readDefaultSymbol(splitArray)
@@ -34,9 +46,9 @@ class SymbolLoader(
     private fun readSymbol(splitArray: List<String>): Symbol {
         return Symbol(
             type = splitArray[0],
-            value = splitArray[3],
             innerClass = splitArray[1],
-            name = splitArray[2]
+            name = splitArray[2],
+            value = splitArray[3]
         )
     }
 
@@ -49,9 +61,9 @@ class SymbolLoader(
     private fun readDefaultSymbol(splitArray: List<String>): Symbol {
         return Symbol(
             type = splitArray[1],
-            value = defaultSymbolTypeMap[splitArray[1]],
             innerClass = splitArray[2],
-            name = splitArray[3]
+            name = splitArray[3],
+            value = defaultSymbolTypeMap[splitArray[1]]
         )
     }
 

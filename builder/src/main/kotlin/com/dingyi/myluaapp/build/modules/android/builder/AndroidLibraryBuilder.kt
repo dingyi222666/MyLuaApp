@@ -32,6 +32,9 @@ class AndroidLibraryBuilder(
         //Generate BuildConfig.java
         addTask(GenerateBuildConfig(module),buildTasks)
 
+        //Compile Java
+
+        addTask(CompileLibraryJava(module),buildTasks)
 
     }
 
