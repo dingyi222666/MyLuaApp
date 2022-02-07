@@ -87,7 +87,7 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
             .toSet()
             .map {
                 File(
-                    "${Paths.explodedAarDir}${File.separator}${
+                    "${Paths.extractAarDir}${File.separator}${
                         it.path.toMD5()
                     }".toFile(), "AndroidManifest.xml"
                 )

@@ -8,8 +8,6 @@ import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.common.kts.toMD5
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.DisposableHandle
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -29,7 +27,7 @@ class CompileLibrariesResources(private val module: Module) : DefaultTask(module
             }.filter {
                 it.isFile and it.name.endsWith("aar")
             }.map {
-                "${Paths.explodedAarDir}${File.separator}${
+                "${Paths.extractAarDir}${File.separator}${
                     it.path.toMD5()
                 }".toFile()
             }.filter {

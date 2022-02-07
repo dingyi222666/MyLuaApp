@@ -56,7 +56,7 @@ class ExtractAndroidArchive(private val module: Module) : DefaultTask(module) {
     }
 
     private fun checkExplodedFiles(file: File): Boolean {
-        return ("${Paths.explodedAarDir}${File.separator}${
+        return ("${Paths.extractAarDir}${File.separator}${
             file.path.toMD5()
         }".toFile().listFiles()?.size ?: 0) <= 1
 
@@ -69,7 +69,7 @@ class ExtractAndroidArchive(private val module: Module) : DefaultTask(module) {
                         val file = ZipFile(it)
 
                         val explodedDir =
-                            "${Paths.explodedAarDir}${File.separator}${
+                            "${Paths.extractAarDir}${File.separator}${
                                 it.path.toMD5()
                             }"
 

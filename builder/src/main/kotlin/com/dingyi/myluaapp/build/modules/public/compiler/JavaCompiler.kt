@@ -28,7 +28,6 @@ class JavaCompiler(
     ) = withContext(Dispatchers.IO) {
 
 
-        logger.error("$inputFiles $outputDir")
 
         val javaCompiler = EclipseCompiler()
 

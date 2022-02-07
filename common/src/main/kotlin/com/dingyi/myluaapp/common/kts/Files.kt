@@ -54,7 +54,7 @@ object Paths {
     val builderDir = "$cacheDir/builder"
     val nativeLibraryDir = MainApplication.instance.applicationInfo.nativeLibraryDir
     val localMavenDir = "$builderDir/maven"
-    val explodedAarDir = "$builderDir/exploded-aar"
+    val extractAarDir = "$builderDir/extract-aar"
     val projectDir = "$mainDir/project"
     val fontsDir = "$mainDir/fonts"
     val assetsDir = MainApplication.instance.filesDir.absolutePath

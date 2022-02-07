@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.build.modules.android.tasks
 
-import android.util.Log
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
@@ -10,7 +9,6 @@ import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.common.kts.toMD5
 import java.io.File
-import com.dingyi.myluaapp.common.kts.println
 
 class ProcessResources(private val module: Module) : DefaultTask(module) {
 
@@ -93,7 +91,7 @@ class ProcessResources(private val module: Module) : DefaultTask(module) {
             .toSet()
             .map {
                 File(
-                    "${Paths.explodedAarDir}${File.separator}${
+                    "${Paths.extractAarDir}${File.separator}${
                         it.path.toMD5()
                     }".toFile(), "compile_res.zip"
                 )

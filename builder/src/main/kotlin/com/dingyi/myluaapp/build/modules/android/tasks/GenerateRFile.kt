@@ -77,7 +77,7 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
             .toSet()
             .map {
                 File(
-                    "${Paths.explodedAarDir}${File.separator}${
+                    "${Paths.extractAarDir}${File.separator}${
                         it.path.toMD5()
                     }", "compile_r.txt"
                 )

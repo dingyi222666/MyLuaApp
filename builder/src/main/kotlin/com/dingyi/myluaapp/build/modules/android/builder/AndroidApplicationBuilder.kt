@@ -33,8 +33,11 @@ class AndroidApplicationBuilder(
         addTask(GenerateBuildConfig(module),buildTasks)
 
         //Generate R.java
-
         addTask(GenerateRFile(module),buildTasks)
+
+        //Compile Java
+        addTask(CompileApplicationJava(module),buildTasks)
+
 
 
     }

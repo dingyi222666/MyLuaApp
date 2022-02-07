@@ -3,7 +3,6 @@ package com.dingyi.myluaapp.build.modules.android.tasks
 import com.android.manifmerger.ManifestMerger2
 import com.android.manifmerger.ManifestSystemProperty
 import com.android.manifmerger.MergingReport
-import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
@@ -63,7 +62,7 @@ class MergeLibraryManifest(private val module: Module): DefaultTask(module){
             .toSet()
             .map {
                 File(
-                    "${Paths.explodedAarDir}${File.separator}${
+                    "${Paths.extractAarDir}${File.separator}${
                         it.path.toMD5()
                     }".toFile(), "AndroidManifest.xml"
                 )

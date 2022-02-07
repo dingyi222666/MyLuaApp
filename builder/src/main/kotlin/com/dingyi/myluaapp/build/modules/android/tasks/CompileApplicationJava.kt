@@ -13,7 +13,7 @@ import org.luaj.vm2.LuaTable
 import java.io.File
 import java.util.*
 
-class CompileLibraryJava(private val module: Module) : DefaultTask(module) {
+class CompileApplicationJava(private val module: Module) : DefaultTask(module) {
     override val name: String
         get() = getType()
 
@@ -52,9 +52,21 @@ class CompileLibraryJava(private val module: Module) : DefaultTask(module) {
                 .filter {
                     it.isFile && it.name.endsWith("java")
                 }
-        }.filterNot {
-            it.name == "R.java" && it.path.contains("ap_generated_source")
-        }
+        }.toMutableList()
+
+        val moduleCompileJavaFile = module.getProject()
+            .getModules()
+            .filterNot { it == module }
+            .flatMap { subModule ->
+                subModule.getFileManager()
+                    .resolveFile(compileJavaDirectory[1], subModule)
+                    .walkBottomUp()
+                    .filter {
+                        it.name == "R.java" && it.path.contains("ap_generated_source")
+                    }
+            }
+
+        allCompileJavaFile.addAll(moduleCompileJavaFile)
 
         if (allCompileJavaFile.isEmpty()) {
             return Task.State.`NO-SOURCE`

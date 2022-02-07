@@ -33,7 +33,6 @@ class AndroidLibraryBuilder(
         addTask(GenerateBuildConfig(module),buildTasks)
 
         //Compile Java
-
         addTask(CompileLibraryJava(module),buildTasks)
 
     }
