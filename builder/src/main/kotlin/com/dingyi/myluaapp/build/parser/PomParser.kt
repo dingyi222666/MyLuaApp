@@ -11,7 +11,6 @@ class PomParser(
 
     fun parse(path: String): MavenPom {
 
-        Log.e("parse pom",path)
 
         val pullParser = Xml.newPullParser()
 
@@ -20,7 +19,7 @@ class PomParser(
         return parse(pullParser)
     }
 
-    fun parse(pullParser: XmlPullParser): MavenPom {
+    private fun parse(pullParser: XmlPullParser): MavenPom {
 
         var eventType = pullParser.eventType
 

@@ -74,7 +74,7 @@ class MergeLibraryJniLibs(
 
         val incrementalMergeJniLibsFile = allMergeJniLibsFile
             .filterNot {
-                val mergeAssetsFile = getMergeAssetsPath(it)
+                val mergeAssetsFile = getMergeJniLibsPath(it)
                 mergeAssetsFile.isFile && mergeAssetsFile
                     .getSHA256() == it.second.getSHA256()
             }
@@ -96,12 +96,12 @@ class MergeLibraryJniLibs(
         mergeAssetsFile
             .forEach {
                 withContext(Dispatchers.IO) {
-                    it.second.copyTo(getMergeAssetsPath(it))
+                    it.second.copyTo(getMergeJniLibsPath(it))
                 }
             }
     }
 
-    private fun getMergeAssetsPath(pair: Pair<File, File>): File {
+    private fun getMergeJniLibsPath(pair: Pair<File, File>): File {
         val (directory, file) = pair
 
         return module

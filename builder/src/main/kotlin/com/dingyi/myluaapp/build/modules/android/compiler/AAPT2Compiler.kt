@@ -59,18 +59,11 @@ class AAPT2Compiler(private val logger: ILogger) {
         outputDirectory: String,
         otherCommand: Array<String>? = null
     ) = withContext(Dispatchers.IO) {
-
-        launch {
-
-
             doLink(
                 inputFiles.toMutableList()
                     .apply { addAll(otherCommand ?: arrayOf()) }.toTypedArray(),
                 outputDirectory
             )
-
-        }.join()
-
     }
 
 
