@@ -8,7 +8,7 @@ interface Task {
     suspend fun run()
 
 
-    fun getOutputString(module: Module, state: State?): String {
+    fun getOutputString(module: Module,state: State?): String {
         var state = state
         if (state==State.DEFAULT) {
             state = null

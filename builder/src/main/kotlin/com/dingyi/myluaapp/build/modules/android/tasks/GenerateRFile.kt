@@ -104,7 +104,6 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
         }
 
         incrementalLibraries.forEach {
-
             generateLibraries.add(it.parentFile)
         }
 
