@@ -13,6 +13,8 @@ You can use lua to develop Android software!The project use [AndroLua_pro](https
 
 If you've never used Lua before, that's fine. You can still use Java to develop software, which support java or mixed of Lua and Java to develop, but there is no support plan for ndk for the time being.
 
+This project uses Lua to parse the project configuration script. Based on the flexibility of lua, it may even be possible to dynamically add packaging tasks to the build system in the future.
+
 ## Features
 - [ ] JavaC support (ecj)
 - [ ] AAPT2 support
