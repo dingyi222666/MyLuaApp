@@ -30,9 +30,5 @@ class MainViewModel : ViewModel() {
         emit(ZipContainer.checkVersion())
     }
 
-    fun startup() {
-
-    }
-
 
 }

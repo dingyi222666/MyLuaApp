@@ -1,116 +1,142 @@
 package com.dingyi.myluaapp.build.modules.android.tasks
 
+import com.dingyi.myluaapp.build.CompileError
 
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
+import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.util.getSHA256
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.toMD5
+import com.dingyi.myluaapp.common.kts.println
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class MergeLibraryJniLibs(
-    private val module: Module
-) : DefaultTask(module) {
+class MergeLibraryJniLibs(private val applicationModule: Module) :
+    DefaultTask(applicationModule) {
+
 
     override val name: String
-        get() = "MergeLibraryJniLibs"
+        get() = javaClass.simpleName
+
+    private val libraryMergeAssetsResourceDirectory: String
+        get() = "build/intermediates/library_jni/$buildVariants"
+
+    private val mergeAssetsOutputDirectory: String
+        get() = "build/intermediates/merged_jni/$buildVariants"
 
 
-    private val mergeDirectory = arrayOf(
-        "src/main/jniLibs", //main sources
-        "lib" // aar
-    )
+    private val mergeAssetsResourceFiles = mutableListOf<Pair<File, File>>()
 
-    private lateinit var mergeAssetsFile: List<Pair<File, File>>
+    private lateinit var buildVariants: String
+
 
     override suspend fun prepare(): Task.State {
 
-        val mergeDirectoryWithLibrary = mutableListOf(
-            module
-                .getFileManager()
-                .resolveFile(mergeDirectory[0], module)
-        )
+        buildVariants =
+            applicationModule.getCache()
+                .getCache<BuildConfig>("${applicationModule.name}_build_config").buildVariants
+
+        val allModule =
+            applicationModule
+                .getProject()
+                .getModules()
 
 
-        module
-            .getDependencies()
-            .filter { it.type == "aar" }
-            .flatMap {
-                it.getDependenciesFile()
-            }
-            .map { file ->
-                File(
-                    "${Paths.extractAarDir}${File.separator}${
-                        file.path.toMD5()
-                    }", "jni"
-                )
-            }.filter {
-                it.isDirectory
-            }
-            .let {
-                mergeDirectoryWithLibrary.addAll(it)
-            }
-
-
-        val allMergeJniLibsFile = mergeDirectoryWithLibrary
-            .flatMap { directory ->
-                directory.walkBottomUp()
-                    .filter {
-                        it.isFile
-                    }.map {
-                        directory to it
-                    }
-                    .toList()
-            }
-
-
-
-        if (allMergeJniLibsFile.isEmpty()) {
+        if (allModule.isEmpty()) {
             return Task.State.SKIPPED
         }
 
-        val incrementalMergeJniLibsFile = allMergeJniLibsFile
-            .filterNot {
-                val mergeAssetsFile = getMergeJniLibsPath(it)
-                mergeAssetsFile.isFile && mergeAssetsFile
-                    .getSHA256() == it.second.getSHA256()
+        val allMergeAssetsResourceFiles = mutableListOf<Pair<File, File>>()
+
+        val applicationModuleLibraryMergeDirectory = applicationModule.getFileManager()
+            .resolveFile(libraryMergeAssetsResourceDirectory, applicationModule)
+
+        allModule.forEach { module ->
+            val libraryMergeDirectory = module.getFileManager()
+                .resolveFile(libraryMergeAssetsResourceDirectory, module)
+
+            libraryMergeDirectory
+                .walkBottomUp()
+                .filter { it.isFile }
+                .forEach {
+
+                    if (module != applicationModule) {
+                        val applicationModuleFile =
+                            File(
+                                applicationModuleLibraryMergeDirectory,
+                                it.path.substring(libraryMergeDirectory.path.length + 1)
+                            )
+
+                        if (applicationModuleFile.isFile) {
+                            if (applicationModuleFile.getSHA256() != it.getSHA256()) {
+                                throw CompileError("Duplicate JniLib File ${it.name}(${it.path}) found in modules (${applicationModule.name},${module.name})")
+                            }
+                        }
+                    }
+
+                    allMergeAssetsResourceFiles.add(libraryMergeDirectory to it)
+
+                }
+        }
+
+
+        if (allMergeAssetsResourceFiles.isEmpty()) {
+            return Task.State.SKIPPED
+        }
+
+
+        val targetMergeAssetsResourceDirectory = applicationModule
+            .getFileManager()
+            .resolveFile(mergeAssetsOutputDirectory, applicationModule)
+
+        val incrementalAssetsResourceFiles = allMergeAssetsResourceFiles
+            .filter {
+                val targetFile = File(
+                    targetMergeAssetsResourceDirectory,
+                    it.second.path.substring(it.first.path.length + 1)
+                )
+
+
+                if (targetFile.isFile) targetFile.getSHA256() != it.second.getSHA256() else true
+
             }
 
-        mergeAssetsFile = incrementalMergeJniLibsFile
+        mergeAssetsResourceFiles.addAll(incrementalAssetsResourceFiles)
 
         return when {
-            incrementalMergeJniLibsFile.isEmpty() -> Task.State.`UP-TO-DATE`
-            incrementalMergeJniLibsFile.size < allMergeJniLibsFile.size -> Task.State.INCREMENT
-            incrementalMergeJniLibsFile.size == allMergeJniLibsFile.size -> Task.State.DEFAULT
+            incrementalAssetsResourceFiles.isEmpty() -> Task.State.`UP-TO-DATE`
+            incrementalAssetsResourceFiles.size < allMergeAssetsResourceFiles.size -> Task.State.INCREMENT
+            incrementalAssetsResourceFiles.size == allMergeAssetsResourceFiles.size -> Task.State.DEFAULT
             else -> Task.State.DEFAULT
         }
 
 
     }
 
+    override suspend fun run() = withContext(Dispatchers.IO) {
+        val targetMergeAssetsResourceDirectory = applicationModule
+            .getFileManager()
+            .resolveFile(mergeAssetsOutputDirectory, applicationModule)
 
-    override suspend fun run() {
-        mergeAssetsFile
-            .forEach {
-                withContext(Dispatchers.IO) {
-                    it.second.copyTo(getMergeJniLibsPath(it))
+        launch {
+            mergeAssetsResourceFiles.forEach {
+                launch {
+                    val targetFile = File(
+                        targetMergeAssetsResourceDirectory,
+                        it.second.path.substring(it.first.path.length + 1)
+                    )
+                    targetFile.parentFile?.mkdirs()
+
+                    //TODO:Duplicate File
+                    if (!targetFile.isFile) {
+                        it.second.copyTo(targetFile)
+                    }
                 }
             }
-    }
+        }.join()
 
-    private fun getMergeJniLibsPath(pair: Pair<File, File>): File {
-        val (directory, file) = pair
-
-        return module
-            .getFileManager()
-            .resolveFile("build/intermediates/merged_native_libs", module)
-            .let {
-                File(it, file.path.substring(directory.path.length + 1))
-            }
 
     }
-
 }

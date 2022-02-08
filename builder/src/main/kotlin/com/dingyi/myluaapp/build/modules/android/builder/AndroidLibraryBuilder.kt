@@ -35,15 +35,15 @@ class AndroidLibraryBuilder(
         //Compile Java
         addTask(CompileLibraryJava(module),buildTasks)
 
-        //Merge Library Assets Resources
-        addTask(MergeLibraryAssetsResources(module),buildTasks)
+        //Merge Assets Resources
+        addTask(MergeAssetsResources(module),buildTasks)
 
-        //Merge Library jniLibs
-        addTask(MergeLibraryJniLibs(module),buildTasks)
+        //Merge jniLibs
+        addTask(MergeJniLibs(module),buildTasks)
 
+        //Merge Java Resources
+        addTask(MergeJavaResources(module),buildTasks)
 
-        //Merge Library Java Resources
-        addTask(MergeLibraryJavaResources(module),buildTasks)
 
     }
 

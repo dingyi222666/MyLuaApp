@@ -1,6 +1,5 @@
 import android.util.Xml
 import com.dingyi.myluaapp.build.dependency.repository.LocalMavenRepository
-import com.dingyi.myluaapp.build.modules.public.generator.SimpleJavaCodeGenerator
 import com.dingyi.myluaapp.build.parser.PomParser
 import junit.framework.Assert.assertEquals
 import org.junit.Test

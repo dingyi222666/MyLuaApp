@@ -30,11 +30,6 @@ object ZipContainer {
 
     }
 
-
-    private fun loadBuildSo() {
-
-    }
-
     @ExperimentalCoroutinesApi
     fun unFileToAssets() = channelFlow {
         val context = MainApplication.instance
@@ -45,9 +40,6 @@ object ZipContainer {
         println(unFileList)
         val defaultPath = "${context.filesDir.parentFile?.absolutePath}"
 
-        if (Build.VERSION.SDK_INT<23) {
-            loadBuildSo()
-        }
 
         ZipHelper.UnZipBuilder()
             .apply {

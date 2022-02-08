@@ -38,16 +38,24 @@ class AndroidApplicationBuilder(
         //Compile Java
         addTask(CompileApplicationJava(module),buildTasks)
 
-        //Merge Library Assets Resources
+        //Merge Assets Resources
+        addTask(MergeAssetsResources(module),buildTasks)
+
+        //Merge jniLibs
+        addTask(MergeJniLibs(module),buildTasks)
+
+
+        //Merge Java Resources
+        addTask(MergeJavaResources(module),buildTasks)
+
+        //Merge Library Java Resources
         addTask(MergeLibraryAssetsResources(module),buildTasks)
 
-        //Merge Library jniLibs
+        //Merge Library JniLibs
         addTask(MergeLibraryJniLibs(module),buildTasks)
-
 
         //Merge Library Java Resources
         addTask(MergeLibraryJavaResources(module),buildTasks)
-
     }
 
 }

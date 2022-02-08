@@ -4,164 +4,133 @@ import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
+import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.util.getSHA256
-import com.dingyi.myluaapp.common.kts.*
-import com.google.gson.Gson
+import com.dingyi.myluaapp.common.kts.println
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.lingala.zip4j.ZipFile
-import net.lingala.zip4j.model.FileHeader
 import java.io.File
 
+class MergeLibraryJavaResources(private val applicationModule: Module) :
+    DefaultTask(applicationModule) {
 
-class MergeLibraryJavaResources(
-    private val module: Module
-) : DefaultTask(module) {
 
     override val name: String
-        get() = "MergeLibraryJavaResources"
+        get() = javaClass.simpleName
 
-    private val unpackingJavaResourceFiles = mutableListOf<File>()
+    private val libraryMergeAssetsResourceDirectory:String
+    get() = "build/intermediates/library_java_res/$buildVariants"
 
-    private val unpackingJarResourceFiles = mutableMapOf<ZipFile, List<FileHeader>>()
+    private val mergeAssetsOutputDirectory:String
+    get() = "build/intermediates/merged_java_res/$buildVariants"
 
-    private val hashFile = "build/tmp/merge_java_resources/hash.json"
 
-    private val defaultJavaResourceDirectory = "src/main/resources"
+    private val mergeAssetsResourceFiles = mutableListOf<Pair<File, File>>()
 
-    private val skipResourceFileList = arrayOf("META-INF/MANIFEST.MF")
+    private lateinit var buildVariants: String
 
-    private val outputDirectory = "build/intermediates/merged_resources"
 
     override suspend fun prepare(): Task.State {
 
+        buildVariants =
+            applicationModule.getCache().getCache<BuildConfig>("${applicationModule.name}_build_config").buildVariants
 
-        val allJavaResources = module
-            .getFileManager()
-            .resolveFile(defaultJavaResourceDirectory, module)
-            .walkBottomUp()
-            .filter {
-                it.isFile
-            }.toList()
+        val allModule =
+            applicationModule
+                .getProject()
+                .getModules()
 
-        val allJarResources = module
-            .getDependencies()
-            .flatMap { it.getDependenciesFile() }
-            .filter {
-                it.isFile && it.name.endsWith("aar", "jar")
-            }
-            .flatMap { aarFile ->
-                if (aarFile.name.endsWith("aar")) {
-                    "${Paths.extractAarDir}${File.separator}${
-                        aarFile.path.toMD5()
-                    }".toFile()
-                        .walkBottomUp()
-                        .filter {
-                            it.isFile && it.name.endsWith("jar")
-                        }.toList()
-                } else {
-                    listOf(aarFile)
-                }
-            }
-            .map { file ->
-                val zipFile = ZipFile(file)
-                zipFile to zipFile.fileHeaders
-                    .filterNot {
-                        it.fileName.endsWith("class") || it.isDirectory || skipResourceFileList.contains(
-                            it.fileName
-                        )
-                    }
-            }
-            .toMap()
 
-        if (allJavaResources.isEmpty() && allJarResources.values.none { it.isNotEmpty() }) {
+        if (allModule.isEmpty()) {
             return Task.State.SKIPPED
         }
 
-        val outputDirectory = module.getFileManager().resolveFile(outputDirectory, module)
+        val allMergeAssetsResourceFiles = mutableListOf<Pair<File, File>>()
 
-        val defaultJavaResourceDirectory = module
-            .getFileManager()
-            .resolveFile(defaultJavaResourceDirectory, module)
+        val applicationModuleLibraryMergeDirectory = applicationModule.getFileManager()
+            .resolveFile(libraryMergeAssetsResourceDirectory, applicationModule)
 
+        allModule.forEach { module ->
+            val libraryMergeDirectory = module.getFileManager()
+                .resolveFile(libraryMergeAssetsResourceDirectory, module)
 
-        val incrementalJavaResources = allJavaResources
-            .filter {
-                val tmpFile = File(
-                    outputDirectory,
-                    it.path.substring(defaultJavaResourceDirectory.path.length + 1)
-                )
-                if (!tmpFile.isFile) true else it.getSHA256() != tmpFile.getSHA256()
-            }
+            libraryMergeDirectory
+                .walkBottomUp()
+                .filter { it.isFile }
+                .forEach {
 
-        val incrementalJarResources = allJarResources
-            .map { (zipFile, zipList) ->
-                zipFile to zipList.filter { fileHeader ->
-                    val tmpFile = File(outputDirectory, fileHeader.fileName)
+                    if (module != applicationModule) {
+                        val applicationModuleFile =
+                            File(
+                                applicationModuleLibraryMergeDirectory,
+                                it.path.substring(libraryMergeDirectory.path.length + 1)
+                            )
 
-                    if (!tmpFile.isFile) true else zipFile.getInputStream(fileHeader)
-                        .getSHA256() != tmpFile.getSHA256()
+                        if (applicationModuleFile.isFile) {
+                            if (applicationModuleFile.getSHA256() != it.getSHA256()) {
+                                throw CompileError("Duplicate Java Resource File ${it.name}(${it.path}) found in modules (${applicationModule.name},${module.name})")
+                            }
+                        }
+                    }
+
+                    allMergeAssetsResourceFiles.add(libraryMergeDirectory to it)
+
                 }
+        }
+
+
+        if (allMergeAssetsResourceFiles.isEmpty()) {
+            return Task.State.SKIPPED
+        }
+
+
+        val targetMergeAssetsResourceDirectory = applicationModule
+            .getFileManager()
+            .resolveFile(mergeAssetsOutputDirectory, applicationModule)
+
+        val incrementalAssetsResourceFiles = allMergeAssetsResourceFiles
+            .filter {
+                val targetFile = File(
+                    targetMergeAssetsResourceDirectory,
+                    it.second.path.substring(it.first.path.length + 1)
+                )
+
+
+                if (targetFile.isFile) targetFile.getSHA256() != it.second.getSHA256() else true
+
             }
-            .filter { (_, v) -> v.isNotEmpty() }
-            .toMap()
 
-        unpackingJavaResourceFiles.addAll(incrementalJavaResources)
-        unpackingJarResourceFiles.putAll(incrementalJarResources)
-
+        mergeAssetsResourceFiles.addAll(incrementalAssetsResourceFiles)
 
         return when {
-            incrementalJarResources.values.none { it.isNotEmpty() } && incrementalJavaResources.isEmpty() -> Task.State.`UP-TO-DATE`
-
-            incrementalJarResources.values.size < allJarResources.values.size ||
-                    incrementalJavaResources.size < allJavaResources.size -> Task.State.INCREMENT
+            incrementalAssetsResourceFiles.isEmpty() -> Task.State.`UP-TO-DATE`
+            incrementalAssetsResourceFiles.size < allMergeAssetsResourceFiles.size -> Task.State.INCREMENT
+            incrementalAssetsResourceFiles.size == allMergeAssetsResourceFiles.size -> Task.State.DEFAULT
             else -> Task.State.DEFAULT
         }
+
+
     }
 
     override suspend fun run() = withContext(Dispatchers.IO) {
+        val targetMergeAssetsResourceDirectory = applicationModule
+            .getFileManager()
+            .resolveFile(mergeAssetsOutputDirectory, applicationModule)
 
         launch {
-            val outputDirectory = module.getFileManager().resolveFile(outputDirectory, module)
-
-            val defaultJavaResourceDirectory = module
-                .getFileManager()
-                .resolveFile(defaultJavaResourceDirectory, module)
-
-            unpackingJavaResourceFiles
-                .forEach {
-                    launch {
-                        it.copyTo(
-                            File(
-                                outputDirectory,
-                                it.path.substring(defaultJavaResourceDirectory.path.length + 1)
-                            )
-                        )
-                    }
-                }
-
-            unpackingJarResourceFiles.forEach { (zipFile, zipList) ->
+            mergeAssetsResourceFiles.forEach {
                 launch {
-                    zipList.forEach { fileHeader ->
-                        val inputStream = zipFile.getInputStream(fileHeader)
-
-                        val outputFile = File(outputDirectory, fileHeader.fileName)
-
-                        outputFile.parentFile?.mkdirs()
-
-                        outputFile.createNewFile()
-
-                        outputFile.outputStream().use {
-                            inputStream.copyTo(it)
-                        }
-
-                    }
+                    val targetFile = File(
+                        targetMergeAssetsResourceDirectory,
+                        it.second.path.substring(it.first.path.length + 1)
+                    )
+                    targetFile.parentFile?.mkdirs()
+                    it.second.copyTo(targetFile)
                 }
             }
-
         }.join()
+
+
     }
-
-
 }

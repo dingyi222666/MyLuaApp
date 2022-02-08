@@ -57,9 +57,9 @@ object BuildConfig {
         const val javapoet_version = "1.13.0"
 
 
-        const val android_build_tools_version = "26.0.0"
-
         const val guava_version = "24.0-android"
+
+        const val r8_version = "3.0.73"
 
     }
 
@@ -115,9 +115,6 @@ object BuildConfig {
 
         object Tools {
 
-            const val desugar_jdk_libs =
-                "com.android.tools:desugar_jdk_libs:${Versions.desugar_jdk_libs_version}"
-
 
             const val channel = "com.github.liangjingkanji:Channel:${Versions.channel_version}"
 
@@ -151,8 +148,8 @@ object BuildConfig {
             const val kxml2 = "net.sf.kxml:kxml2:2.3.0"
             const val javapoet = "com.squareup:javapoet:${Versions.javapoet_version}"
 
-            const val build_tools_common =
-                "com.android.tools:common:${Versions.android_build_tools_version}"
+            const val r8 =
+                "com.android.tools:r8:${Versions.r8_version}"
         }
 
         object Views {
