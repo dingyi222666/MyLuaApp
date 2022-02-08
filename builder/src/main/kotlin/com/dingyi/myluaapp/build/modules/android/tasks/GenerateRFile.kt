@@ -80,7 +80,7 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
                 File(
                     "${Paths.extractAarDir}${File.separator}${
                         it.path.toMD5()
-                    }", "compile_r.txt"
+                    }", "R.txt"
                 )
             }
             .filter {
@@ -108,8 +108,6 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
             generateLibraries.add(it.parentFile)
         }
 
-        println("Librarties R File",allLibraries)
-
         return when {
             incrementalModule.isEmpty() && incrementalLibraries.isEmpty() -> Task.State.`UP-TO-DATE`
             allLibraries.size > incrementalLibraries.size ||
@@ -127,12 +125,32 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
         generateLibraries.forEach {
             generateLibrariesRFile(it)
         }
+
+        generateModules
+            .forEach {
+                val file = it.getFileManager()
+                    .resolveFile(
+                        "build/intermediates/compile_local_symbol_list/${buildVariants}/R.txt",
+                        it
+                    )
+
+                it.getFileManager()
+                    .snapshot(file)
+            }
+
+        generateLibraries
+            .filter {
+                applicationModule
+                    .getFileManager()
+                    .snapshot(it)
+            }
+
     }
 
     private suspend fun generateLibrariesRFile(file: File) = withContext(Dispatchers.IO) {
         val symbolLoader =
             SymbolLoader.load(
-                File(file, "compile_r.txt")
+                File(file, "R.txt")
             )
 
         symbolLoader.merge(
@@ -192,25 +210,6 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
                 .resolveFile(outputDirectory, module)
         )
 
-
-        generateModules
-            .forEach {
-                val file = it.getFileManager()
-                    .resolveFile(
-                        "build/intermediates/compile_local_symbol_list/${buildVariants}/R.txt",
-                        it
-                    )
-
-                it.getFileManager()
-                    .snapshot(file)
-            }
-
-        generateLibraries
-            .filter {
-                applicationModule
-                    .getFileManager()
-                    .snapshot(it)
-            }
 
     }
 

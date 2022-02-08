@@ -14,8 +14,6 @@ class SymbolWriter(
         val file = File(path, packageName.replace(".", "/") + "/R.java")
 
 
-        println("path",file)
-
         file.parentFile?.mkdirs()
 
         file.createNewFile()

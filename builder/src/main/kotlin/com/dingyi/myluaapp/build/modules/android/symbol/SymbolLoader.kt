@@ -31,7 +31,7 @@ class SymbolLoader(
         loadFile.useLines { lines ->
             lines.forEach {
                 val splitArray = it.splitSymbol()
-                println("read symbol", splitArray)
+
                 val symbol = if (defaultSymbolTypeMap[splitArray[0]] == null) {
                     readDefaultSymbol(splitArray)
                 } else {

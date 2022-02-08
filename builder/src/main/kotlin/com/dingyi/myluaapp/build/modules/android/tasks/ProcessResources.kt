@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.build.modules.android.tasks
 
+import com.dingyi.myluaapp.build.R
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
@@ -104,7 +105,9 @@ class ProcessResources(private val module: Module) : DefaultTask(module) {
         if (librariesResourceList.isEmpty() && moduleResourceList.isEmpty() &&
             mainCompileResourceList.isEmpty()
         ) {
+
             return Task.State.SKIPPED
+
         }
 
 
