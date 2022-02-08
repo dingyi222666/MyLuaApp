@@ -16,13 +16,11 @@ import org.luaj.vm2.LuaValue
 import java.io.File
 
 
-
-class MergeLibraryManifest(private val module: Module): DefaultTask(module){
+class MergeLibraryManifest(private val module: Module) : DefaultTask(module) {
     override val name: String
         get() = this.javaClass.simpleName
 
     private lateinit var buildVariants: String
-
 
 
     private val mainManifestFile = "src/main/AndroidManifest.xml"
@@ -102,7 +100,6 @@ class MergeLibraryManifest(private val module: Module): DefaultTask(module){
             }
 
         }
-
 
 
         val outMergedManifestLocation = module

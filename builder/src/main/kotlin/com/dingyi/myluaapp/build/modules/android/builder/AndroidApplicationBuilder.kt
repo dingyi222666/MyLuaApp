@@ -6,56 +6,56 @@ import com.dingyi.myluaapp.build.modules.android.tasks.*
 
 class AndroidApplicationBuilder(
     private val module: Module
-):DefaultBuilder(module) {
+) : DefaultBuilder(module) {
 
     init {
 
         //Check Manifest exists
-        addTask(CheckManifest(module),buildTasks)
+        addTask(CheckManifest(module), buildTasks)
 
         //Exploded AndroidArchive
-        addTask(ExtractAndroidArchive(module),buildTasks)
+        addTask(ExtractAndroidArchive(module), buildTasks)
 
         //Compile Libraries Resources
-        addTask(CompileLibrariesResources(module),buildTasks)
+        addTask(CompileLibrariesResources(module), buildTasks)
 
         //Merge Resources
-        addTask(MergeResources(module),buildTasks)
+        addTask(MergeResources(module), buildTasks)
 
 
         // Merge Manifest
-        addTask(MergeManifest(module),buildTasks)
+        addTask(MergeManifest(module), buildTasks)
 
         //Process Resources
-        addTask(ProcessResources(module),buildTasks)
+        addTask(ProcessResources(module), buildTasks)
 
         //Generate BuildConfig.java
-        addTask(GenerateBuildConfig(module),buildTasks)
+        addTask(GenerateBuildConfig(module), buildTasks)
 
         //Generate R.java
-        addTask(GenerateRFile(module),buildTasks)
+        addTask(GenerateRFile(module), buildTasks)
 
         //Compile Java
-        addTask(CompileApplicationJava(module),buildTasks)
+        addTask(CompileApplicationJava(module), buildTasks)
 
         //Merge Assets Resources
-        addTask(MergeAssetsResources(module),buildTasks)
+        addTask(MergeAssetsResources(module), buildTasks)
 
         //Merge jniLibs
-        addTask(MergeJniLibs(module),buildTasks)
+        addTask(MergeJniLibs(module), buildTasks)
 
 
         //Merge Java Resources
-        addTask(MergeJavaResources(module),buildTasks)
+        addTask(MergeJavaResources(module), buildTasks)
 
         //Merge Library Java Resources
-        addTask(MergeLibraryAssetsResources(module),buildTasks)
+        addTask(MergeLibraryAssetsResources(module), buildTasks)
 
         //Merge Library JniLibs
-        addTask(MergeLibraryJniLibs(module),buildTasks)
+        addTask(MergeLibraryJniLibs(module), buildTasks)
 
         //Merge Library Java Resources
-        addTask(MergeLibraryJavaResources(module),buildTasks)
+        addTask(MergeLibraryJavaResources(module), buildTasks)
     }
 
 }

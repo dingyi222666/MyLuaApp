@@ -17,17 +17,16 @@ open class DefaultBuilder(
     private val DEFAULT_TASK = DefaultTask(module)
 
 
-
     override fun dependsOn(task: Task, dependsTask: Task) {
-        arrayOf(buildTasks,cleanTasks,syncTasks).forEach {
+        arrayOf(buildTasks, cleanTasks, syncTasks).forEach {
             if (it.contains(dependsTask)) {
-                it.add((it.indexOf(dependsTask)).coerceAtLeast(0),task)
+                it.add((it.indexOf(dependsTask)).coerceAtLeast(0), task)
             }
         }
     }
 
     //Only call in sub class
-    protected fun addTask(task: Task,mutableList: MutableList<Task>) {
+    protected fun addTask(task: Task, mutableList: MutableList<Task>) {
         mutableList.add(task)
     }
 
@@ -42,7 +41,6 @@ open class DefaultBuilder(
     override fun sync(): List<Task> {
         return syncTasks
     }
-
 
 
     override fun getTaskByName(name: String): Task {

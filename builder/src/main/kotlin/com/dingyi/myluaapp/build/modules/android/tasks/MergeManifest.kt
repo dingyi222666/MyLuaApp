@@ -19,7 +19,7 @@ import java.io.File
 
 import java.util.*
 
-class MergeManifest(private val applicationModule:Module): DefaultTask(applicationModule){
+class MergeManifest(private val applicationModule: Module) : DefaultTask(applicationModule) {
     override val name: String
         get() = getType()
 
@@ -127,7 +127,6 @@ class MergeManifest(private val applicationModule:Module): DefaultTask(applicati
             }
 
         }
-
 
 
         val outMergedManifestLocation = applicationModule

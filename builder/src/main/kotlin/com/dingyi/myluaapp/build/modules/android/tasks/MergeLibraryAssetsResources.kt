@@ -19,11 +19,11 @@ class MergeLibraryAssetsResources(private val applicationModule: Module) :
     override val name: String
         get() = javaClass.simpleName
 
-    private val libraryMergeAssetsResourceDirectory:String
-    get() = "build/intermediates/library_assets/$buildVariants"
+    private val libraryMergeAssetsResourceDirectory: String
+        get() = "build/intermediates/library_assets/$buildVariants"
 
-    private val mergeAssetsOutputDirectory:String
-    get() = "build/intermediates/merged_assets/$buildVariants"
+    private val mergeAssetsOutputDirectory: String
+        get() = "build/intermediates/merged_assets/$buildVariants"
 
 
     private val mergeAssetsResourceFiles = mutableListOf<Pair<File, File>>()
@@ -34,7 +34,8 @@ class MergeLibraryAssetsResources(private val applicationModule: Module) :
     override suspend fun prepare(): Task.State {
 
         buildVariants =
-            applicationModule.getCache().getCache<BuildConfig>("${applicationModule.name}_build_config").buildVariants
+            applicationModule.getCache()
+                .getCache<BuildConfig>("${applicationModule.name}_build_config").buildVariants
 
 
         val allModule =

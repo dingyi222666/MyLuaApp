@@ -8,18 +8,17 @@ interface Task {
     suspend fun run()
 
 
-    fun getOutputString(module: Module,state: State?): String {
+    fun getOutputString(module: Module, state: State?): String {
         var state = state
-        if (state==State.DEFAULT) {
+        if (state == State.DEFAULT) {
             state = null
         }
         return "> Task :${module.name}:$name ${state?.name ?: ""}"
     }
 
     enum class State {
-        `UP-TO-DATE`, SKIPPED, `NO-SOURCE`,INCREMENT,DEFAULT
+        `UP-TO-DATE`, SKIPPED, `NO-SOURCE`, INCREMENT, DEFAULT
     }
-
 
 
 }

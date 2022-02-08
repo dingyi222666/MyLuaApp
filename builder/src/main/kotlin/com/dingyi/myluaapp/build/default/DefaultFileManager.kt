@@ -11,7 +11,7 @@ class DefaultFileManager(
 ) : FileManager {
 
 
-    private lateinit var defaultSnapshotManager :SnapshotManager
+    private lateinit var defaultSnapshotManager: SnapshotManager
 
 
     override fun getSnapshotManager(): SnapshotManager {

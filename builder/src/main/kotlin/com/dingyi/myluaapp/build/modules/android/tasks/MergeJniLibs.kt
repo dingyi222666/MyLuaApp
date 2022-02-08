@@ -36,7 +36,6 @@ class MergeJniLibs(
             module.getCache().getCache<BuildConfig>("${module.name}_build_config").buildVariants
 
 
-
         val mergeDirectoryWithLibrary = mutableListOf(
             module
                 .getFileManager()

@@ -80,7 +80,7 @@ class ServiceRepository : ServiceRepository {
     override fun onCreateProject(path: String, builder: MainBuilder): Project? {
         services.forEach {
             val tmp = it.onCreateProject(path, builder)
-            if (tmp!=null) {
+            if (tmp != null) {
                 return tmp
             }
         }
@@ -90,7 +90,7 @@ class ServiceRepository : ServiceRepository {
     override fun onCreateModule(path: String, project: Project): Module? {
         services.forEach {
             val tmp = it.onCreateModule(path, project)
-            if (tmp!=null) {
+            if (tmp != null) {
                 return tmp
             }
         }
@@ -100,7 +100,7 @@ class ServiceRepository : ServiceRepository {
     override fun onCreateBuilder(path: String, module: Module): Builder? {
         services.forEach {
             val tmp = it.onCreateBuilder(path, module)
-            if (tmp!=null) {
+            if (tmp != null) {
                 return tmp
             }
         }

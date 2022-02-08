@@ -10,10 +10,10 @@ interface MavenDependency : Dependency {
 
     val versionName: String
 
-    val packaging:String
+    val packaging: String
     fun getDependencies(): List<MavenDependency>?
 
-    fun getDeclarationString():String
+    fun getDeclarationString(): String
 
     fun getDependencyFile(): File
 }

@@ -11,7 +11,7 @@ import java.io.File
 
 class LocalMavenRepository(
     private val repositoryPath: String,
-    private val logger:ILogger
+    private val logger: ILogger
 ) : MavenRepository {
 
     init {
@@ -28,7 +28,7 @@ class LocalMavenRepository(
         return getDependency(string, mutableSetOf())
     }
 
-    private fun getDefaultPomPath(groupId:String,artifactId:String,version:String):String {
+    private fun getDefaultPomPath(groupId: String, artifactId: String, version: String): String {
         return "$repositoryPath${File.separator}${
             groupId.replace(
                 ".",
@@ -40,14 +40,17 @@ class LocalMavenRepository(
 
     }
 
-    private fun getDependency(string: String, containsList: MutableSet<String>): List<MavenDependency> {
+    private fun getDependency(
+        string: String,
+        containsList: MutableSet<String>
+    ): List<MavenDependency> {
         val array = string.split(":")
         containsList.add(string)
 
         val targetPomPathList = mutableListOf<String>()
-        Log.e("parse",array.joinToString())
-        if (array[1]=="*") {
-            val pomDir =  "$repositoryPath${File.separator}${
+        Log.e("parse", array.joinToString())
+        if (array[1] == "*") {
+            val pomDir = "$repositoryPath${File.separator}${
                 array[0].replace(
                     ".",
                     File.separator
@@ -55,13 +58,13 @@ class LocalMavenRepository(
             }${File.separator}"
 
             pomDir.toFile().listFiles()?.forEach {
-              targetPomPathList.add(
-                  getDefaultPomPath(array[0],it.name,array[2])
-              )
+                targetPomPathList.add(
+                    getDefaultPomPath(array[0], it.name, array[2])
+                )
             }
 
         } else {
-            targetPomPathList.add(getDefaultPomPath(array[0],array[1],array[2]))
+            targetPomPathList.add(getDefaultPomPath(array[0], array[1], array[2]))
         }
 
         targetPomPathList.forEach {

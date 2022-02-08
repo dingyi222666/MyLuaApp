@@ -81,7 +81,7 @@ class CompileLibrariesResources(private val module: Module) : DefaultTask(module
                         "--dir",
                         File(libraryFile, "res").absolutePath,
                         "--legacy", "--output-text-symbols",
-                        File(libraryFile,"compile_r.txt").absolutePath
+                        File(libraryFile, "compile_r.txt").absolutePath
                     ),
                     outputDirectory = File(libraryFile, "compile_res.zip").apply {
                         if (exists()) delete()

@@ -6,8 +6,7 @@ import com.dingyi.myluaapp.build.dependency.MavenPom
 import org.xmlpull.v1.XmlPullParser
 import java.io.FileReader
 
-class PomParser(
-) {
+class PomParser {
 
     fun parse(path: String): MavenPom {
 
@@ -74,7 +73,7 @@ class PomParser(
             when (eventType) {
                 XmlPullParser.START_TAG -> {
 
-                    val name  = pullParser.name
+                    val name = pullParser.name
 
                     if (inDependencyTag) {
 

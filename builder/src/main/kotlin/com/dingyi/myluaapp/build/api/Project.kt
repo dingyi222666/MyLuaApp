@@ -52,7 +52,7 @@ interface Project : ProjectScript {
 
     fun getPath(): String
 
-    fun getCache():Cache
+    fun getCache(): Cache
 
     fun close()
 }

@@ -27,7 +27,7 @@ class DefaultRunner(
         }
 
 
-        Log.e("tasks","$tasks")
+        Log.e("tasks", "$tasks")
 
 
         val job = Job()
@@ -55,7 +55,7 @@ class DefaultRunner(
                 project.getLogger().error(it.stackTraceToString())
                 project.getLogger().info("\n")
                 project.getLogger().error("FAILURE: Build failed with an exception.")
-                endBuild(System.currentTimeMillis() - startTime,false)
+                endBuild(System.currentTimeMillis() - startTime, false)
             }.onSuccess {
                 endBuild(System.currentTimeMillis() - startTime)
             }

@@ -13,36 +13,36 @@ class AndroidLibraryBuilder(
     init {
 
         //Check Manifest exists
-        addTask(CheckManifest(module),buildTasks)
+        addTask(CheckManifest(module), buildTasks)
 
         //Exploded AndroidArchive
-        addTask(ExtractAndroidArchive(module),buildTasks)
+        addTask(ExtractAndroidArchive(module), buildTasks)
 
         //Package Resources
-        addTask(PackageResources(module),buildTasks)
+        addTask(PackageResources(module), buildTasks)
 
 
         //Compile Libraries Resources
-        addTask(CompileLibrariesResources(module),buildTasks)
+        addTask(CompileLibrariesResources(module), buildTasks)
 
 
         //Merge libraries manifest
-        addTask(MergeLibraryManifest(module),buildTasks)
+        addTask(MergeLibraryManifest(module), buildTasks)
 
         //Generate BuildConfig.java
-        addTask(GenerateBuildConfig(module),buildTasks)
+        addTask(GenerateBuildConfig(module), buildTasks)
 
         //Compile Java
-        addTask(CompileLibraryJava(module),buildTasks)
+        addTask(CompileLibraryJava(module), buildTasks)
 
         //Merge Assets Resources
-        addTask(MergeAssetsResources(module),buildTasks)
+        addTask(MergeAssetsResources(module), buildTasks)
 
         //Merge jniLibs
-        addTask(MergeJniLibs(module),buildTasks)
+        addTask(MergeJniLibs(module), buildTasks)
 
         //Merge Java Resources
-        addTask(MergeJavaResources(module),buildTasks)
+        addTask(MergeJavaResources(module), buildTasks)
 
 
     }

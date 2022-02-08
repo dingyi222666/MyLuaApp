@@ -6,11 +6,11 @@ import java.lang.StringBuilder
 import java.security.MessageDigest
 
 
-fun File.getSHA256(): String  {
+fun File.getSHA256(): String {
     return inputStream().getSHA256()
 }
 
-fun InputStream.getSHA256(): String{
+fun InputStream.getSHA256(): String {
     return use { stream ->
         val buffer = ByteArray(1024)
         val md5: MessageDigest = MessageDigest.getInstance("SHA-256")

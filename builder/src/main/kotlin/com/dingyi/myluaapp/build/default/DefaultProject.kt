@@ -63,8 +63,7 @@ open class DefaultProject(
     }
 
 
-
-    override fun getPath():String {
+    override fun getPath(): String {
         return path
     }
 

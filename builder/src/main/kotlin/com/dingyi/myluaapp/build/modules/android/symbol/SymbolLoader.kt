@@ -9,21 +9,21 @@ import java.lang.reflect.Type
 import javax.lang.model.type.TypeMirror
 
 class SymbolLoader(
-    private val loadFile:File
+    private val loadFile: File
 ) {
 
     private val symbols = mutableListOf<Symbol>()
 
-    private fun String.splitSymbol():List<String> {
+    private fun String.splitSymbol(): List<String> {
         val pos = indexOf(' ')
         val type = substring(0, pos)
-        val pos2= indexOf(' ', pos + 1)
+        val pos2 = indexOf(' ', pos + 1)
         val className = substring(pos + 1, pos2)
-        val pos3 =indexOf(' ', pos2 + 1)
+        val pos3 = indexOf(' ', pos2 + 1)
         val name = substring(pos2 + 1, pos3)
         val value = substring(pos3 + 1)
 
-        return listOf(type,className,name,value)
+        return listOf(type, className, name, value)
     }
 
     fun load(): SymbolLoader {
@@ -48,7 +48,7 @@ class SymbolLoader(
         return Symbol(
             type = splitArray[0],
             innerClass = splitArray[1],
-            name = splitArray[2].replace(".","_"),
+            name = splitArray[2].replace(".", "_"),
             value = splitArray[3]
         )
     }
@@ -63,7 +63,7 @@ class SymbolLoader(
         return Symbol(
             type = splitArray[1],
             innerClass = splitArray[2],
-            name = splitArray[3].replace(".","_"),
+            name = splitArray[3].replace(".", "_"),
             value = defaultSymbolTypeMap[splitArray[1]]
         )
     }

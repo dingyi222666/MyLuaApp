@@ -4,7 +4,7 @@ import com.android.utils.ILogger
 import java.util.Formatter
 import java.util.Locale
 
-interface ILogger : ILogger  {
+interface ILogger : ILogger {
 
     fun warning(string: String)
 

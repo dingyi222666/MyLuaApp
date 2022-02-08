@@ -9,7 +9,7 @@ import java.io.File
 
 class DefaultCache(
     private val cacheDir: String
-):Cache {
+) : Cache {
 
 
     private val map = mutableMapOf<String, Any>()

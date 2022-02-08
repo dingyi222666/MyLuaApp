@@ -19,7 +19,7 @@ class BuildMain(
 
     private var nowBuilder: MainBuilder? = null
 
-    private val mavenRepository = LocalMavenRepository(Paths.localMavenDir,createLogger())
+    private val mavenRepository = LocalMavenRepository(Paths.localMavenDir, createLogger())
 
     init {
         repository.init()

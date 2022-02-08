@@ -65,25 +65,25 @@ class ExtractAndroidArchive(private val module: Module) : DefaultTask(module) {
     override suspend fun run() = withContext(Dispatchers.IO) {
 
         mavenDependencyList.forEach {
-                    withContext(Dispatchers.IO) {
-                        val file = ZipFile(it)
+            withContext(Dispatchers.IO) {
+                val file = ZipFile(it)
 
-                        val explodedDir =
-                            "${Paths.extractAarDir}${File.separator}${
-                                it.path.toMD5()
-                            }"
+                val explodedDir =
+                    "${Paths.extractAarDir}${File.separator}${
+                        it.path.toMD5()
+                    }"
 
-                        runCatching {
-                            file.extractAll(explodedDir)
-                            file.close()
-                        }.onFailure {
-                            module
-                                .getLogger()
-                                .warning("Failed to extract dependency(${file.file.name}):${it.message}")
-                            System.err.println(it)
-                        }
-                    }
+                runCatching {
+                    file.extractAll(explodedDir)
+                    file.close()
+                }.onFailure {
+                    module
+                        .getLogger()
+                        .warning("Failed to extract dependency(${file.file.name}):${it.message}")
+                    System.err.println(it)
+                }
             }
+        }
 
 
     }

@@ -25,7 +25,6 @@ class DefaultSnapshotManager(
     }
 
 
-
     override fun equalsSnapshot(snapshotFile: File): Boolean {
 
         if (!snapshotFile.exists()) {

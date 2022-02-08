@@ -17,6 +17,6 @@ interface MainBuilder {
 
     fun stop()
 
-    fun getMavenRepository():MavenRepository
+    fun getMavenRepository(): MavenRepository
 
 }

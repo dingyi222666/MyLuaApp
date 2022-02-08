@@ -39,13 +39,13 @@ JavaVersion = {
 }
 
 function project(name)
-  local name = name:gsub(":",'/')
+  local name = name:gsub(":", '/')
   return { type = "project", value = name }
 end
 
 function include(name)
   _G.includes = includes or {}
-  name = name:gsub(":",'/')
+  name = name:gsub(":", '/')
   table.insert(includes, name)
 end
 
@@ -218,7 +218,6 @@ function runScript(path)
 
   forEachTable(empty_table)
 
-
   Log.e("test", print_dump(empty_table))
 
   _G.empty_table = empty_table
@@ -241,7 +240,7 @@ function getScriptValue(key)
   local result = empty_table or _ENV.empty_table or _G.empty_table
 
   for _, v in ipairs(t) do
-      result = result[v]
+    result = result[v]
   end
 
   return result

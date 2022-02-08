@@ -5,7 +5,7 @@ import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.builder.MainBuilder
 
-interface HookService:Service {
+interface HookService : Service {
 
     fun onCreateModule(module: Module)
 

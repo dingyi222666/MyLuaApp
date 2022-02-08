@@ -60,7 +60,7 @@ class LocalMavenDependency(
         return "$path/$artifact/$versionName"
     }
 
-    private fun getDependencyFileDirectory():String {
+    private fun getDependencyFileDirectory(): String {
         return "$repositoryPath/${getPath()}"
     }
 

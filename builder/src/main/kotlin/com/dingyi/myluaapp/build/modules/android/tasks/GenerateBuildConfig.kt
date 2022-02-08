@@ -115,7 +115,7 @@ class GenerateBuildConfig(
         //JavaFile.builder(buildConfig.applicationId.toString(),
         val classBuilder =
             TypeSpec.classBuilder("BuildConfig")
-                .addJavadoc("\$N","Automatically generated file. DO NOT MODIFY")
+                .addJavadoc("\$N", "Automatically generated file. DO NOT MODIFY")
                 //public final
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addField(
@@ -209,7 +209,7 @@ class GenerateBuildConfig(
                 JavaFile
                     .builder(manifestInfo.packageId, classBuilder.build())
                     .build()
-                    .writeTo(module.getFileManager().resolveFile(buildConfigDir,module))
+                    .writeTo(module.getFileManager().resolveFile(buildConfigDir, module))
             }.getOrThrow()
         }
 

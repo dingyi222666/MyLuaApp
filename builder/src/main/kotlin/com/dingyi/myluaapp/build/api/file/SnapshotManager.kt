@@ -22,7 +22,7 @@ interface SnapshotManager {
      * Compare Snapshot file are equals now file and snapshot
      * @return is equals
      */
-    fun equalsAndSnapshot(snapshotFile: File):Boolean
+    fun equalsAndSnapshot(snapshotFile: File): Boolean
 
 
 }

@@ -34,8 +34,8 @@ class MergeJavaResources(
 
     private val skipResourceFileList = arrayOf("META-INF/MANIFEST.MF")
 
-    private val outputDirectory:String
-    get() = "build/intermediates/library_java_res/$buildVariants"
+    private val outputDirectory: String
+        get() = "build/intermediates/library_java_res/$buildVariants"
 
     override suspend fun prepare(): Task.State {
 

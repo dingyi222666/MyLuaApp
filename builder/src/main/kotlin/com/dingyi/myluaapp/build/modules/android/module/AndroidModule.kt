@@ -50,7 +50,7 @@ class AndroidModule(
 
     override fun getBuilder(): Builder {
         return project.getMainBuilder().getServiceRepository()
-            .onCreateBuilder(path,this) ?: defaultBuilder
+            .onCreateBuilder(path, this) ?: defaultBuilder
     }
 
     override fun init() {
@@ -132,7 +132,7 @@ class AndroidModule(
                 value[key]?.let { _value ->
                     val name = _value.tojstring()
                         .let {
-                            it.substring(it.lastIndexOf('/')+1)
+                            it.substring(it.lastIndexOf('/') + 1)
                         }
 
                     if (getProject().getModule(name) != null) {

@@ -10,11 +10,11 @@ class AndroidManifestSimpleParser {
     fun parse(path: String): AndroidManifestInfo {
         val xmlPullParser = Xml.newPullParser()
         xmlPullParser.setInput(FileReader(path))
-        return parse(xmlPullParser,path.toFile().readText())
+        return parse(xmlPullParser, path.toFile().readText())
     }
 
 
-    fun parse(pullParser: XmlPullParser,source:String): AndroidManifestInfo {
+    fun parse(pullParser: XmlPullParser, source: String): AndroidManifestInfo {
 
 
         var eventType = pullParser.eventType
@@ -55,7 +55,6 @@ class AndroidManifestSimpleParser {
         }
 
     }
-
 
 
     class AndroidManifestInfo(

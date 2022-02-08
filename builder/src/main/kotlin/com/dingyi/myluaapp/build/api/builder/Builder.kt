@@ -5,7 +5,7 @@ import com.dingyi.myluaapp.build.api.Task
 
 interface Builder {
 
-    fun dependsOn(task:Task,dependsTask: Task)
+    fun dependsOn(task: Task, dependsTask: Task)
 
     fun getTasks(): List<Task>
     fun clean(): List<Task>

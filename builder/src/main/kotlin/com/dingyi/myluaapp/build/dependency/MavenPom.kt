@@ -9,7 +9,7 @@ data class MavenPom(
     val versionName: String,
     val name: String,
     val packaging: String,
-    val dependencies:List<String>
+    val dependencies: List<String>
 ) {
 
 
@@ -32,8 +32,6 @@ data class MavenPom(
     }
 
 
-
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -46,7 +44,7 @@ data class MavenPom(
         return true
     }
 
-     fun getDeclarationString(): String {
+    fun getDeclarationString(): String {
         return "MavenPom(groupId='$groupId', artifactId='$artifactId', versionName='$versionName', packaging='$packaging', dependencies=$dependencies)"
     }
 
