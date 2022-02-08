@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.build.modules.android.symbol
 
+import com.dingyi.myluaapp.common.kts.println
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
@@ -30,8 +31,8 @@ class SymbolLoader(
         loadFile.useLines { lines ->
             lines.forEach {
                 val splitArray = it.splitSymbol()
-
-                val symbol = if (splitArray[0] == "default") {
+                println("read symbol", splitArray)
+                val symbol = if (defaultSymbolTypeMap[splitArray[0]] == null) {
                     readDefaultSymbol(splitArray)
                 } else {
                     readSymbol(splitArray)
@@ -47,7 +48,7 @@ class SymbolLoader(
         return Symbol(
             type = splitArray[0],
             innerClass = splitArray[1],
-            name = splitArray[2],
+            name = splitArray[2].replace(".","_"),
             value = splitArray[3]
         )
     }
@@ -62,7 +63,7 @@ class SymbolLoader(
         return Symbol(
             type = splitArray[1],
             innerClass = splitArray[2],
-            name = splitArray[3],
+            name = splitArray[3].replace(".","_"),
             value = defaultSymbolTypeMap[splitArray[1]]
         )
     }

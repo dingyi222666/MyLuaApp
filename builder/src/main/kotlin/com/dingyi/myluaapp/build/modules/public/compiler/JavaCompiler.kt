@@ -108,7 +108,7 @@ class JavaCompiler(
     }
 
     private fun wrapDiagnostic(diagnostic: Diagnostic<out JavaFileObject>): String {
-        return "${diagnostic.source.name}: (${diagnostic.lineNumber},${diagnostic.startPosition}): ${
+        return "${diagnostic.source?.name}: (${diagnostic.lineNumber},${diagnostic.startPosition}): ${
             diagnostic.getMessage(
                 Locale.getDefault()
             )

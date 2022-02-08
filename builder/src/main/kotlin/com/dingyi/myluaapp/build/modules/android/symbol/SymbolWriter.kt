@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.build.modules.android.symbol
 
+import com.dingyi.myluaapp.common.kts.println
 import java.io.File
 import java.io.OutputStreamWriter
 
@@ -11,6 +12,9 @@ class SymbolWriter(
 
 
         val file = File(path, packageName.replace(".", "/") + "/R.java")
+
+
+        println("path",file)
 
         file.parentFile?.mkdirs()
 
@@ -61,6 +65,7 @@ class SymbolWriter(
         writer.write("\n")
         symbolList.forEach {
             writeSymbol(writer,it)
+
         }
         writer.write("\n")
         writer.write("    ") // 3 spaces
@@ -79,6 +84,7 @@ class SymbolWriter(
         writer.write(" = ")
         writer.write(symbol.value)
         writer.write(";")
+        writer.write("\n")
     }
 
 }

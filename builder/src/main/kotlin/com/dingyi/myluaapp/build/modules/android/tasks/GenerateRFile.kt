@@ -8,6 +8,7 @@ import com.dingyi.myluaapp.build.modules.android.parser.AndroidManifestSimplePar
 import com.dingyi.myluaapp.build.modules.android.symbol.SymbolLoader
 import com.dingyi.myluaapp.build.modules.android.symbol.SymbolWriter
 import com.dingyi.myluaapp.common.kts.Paths
+import com.dingyi.myluaapp.common.kts.println
 import com.dingyi.myluaapp.common.kts.toMD5
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -62,7 +63,7 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
                     )
 
                 it.getFileManager()
-                    .equalsAndSnapshot(file)
+                    .equalsSnapshot(file)
             }
 
         val allLibraries = applicationModule
@@ -88,10 +89,10 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
 
         val incrementalLibraries =
             allLibraries
-                .filter {
+                .filterNot {
                     applicationModule
                         .getFileManager()
-                        .equalsAndSnapshot(it)
+                        .equalsSnapshot(it)
                 }
 
         if (allLibraries.isEmpty() && allModule.isEmpty()) {
@@ -103,8 +104,11 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
         }
 
         incrementalLibraries.forEach {
-            generateLibraries.add(it)
+
+            generateLibraries.add(it.parentFile)
         }
+
+        println("Librarties R File",allLibraries)
 
         return when {
             incrementalModule.isEmpty() && incrementalLibraries.isEmpty() -> Task.State.`UP-TO-DATE`
@@ -141,6 +145,7 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
             .parse(
                 File(file, "AndroidManifest.xml").path
             )
+
 
         SymbolWriter(
             manifestInfo.packageId ?: ""
@@ -186,6 +191,26 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
                 .getFileManager()
                 .resolveFile(outputDirectory, module)
         )
+
+
+        generateModules
+            .forEach {
+                val file = it.getFileManager()
+                    .resolveFile(
+                        "build/intermediates/compile_local_symbol_list/${buildVariants}/R.txt",
+                        it
+                    )
+
+                it.getFileManager()
+                    .snapshot(file)
+            }
+
+        generateLibraries
+            .filter {
+                applicationModule
+                    .getFileManager()
+                    .snapshot(it)
+            }
 
     }
 
