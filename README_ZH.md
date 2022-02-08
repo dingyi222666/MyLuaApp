@@ -7,7 +7,7 @@
 
 目前该项目仍在***开发中***. 项目还处在**alpha** 阶段，大部分功能都**没有实现**(比如构建系统)。目前本软件还不能完全运行。
 
-MyLuaApp 使用**Lua或者Java** 来开发安卓软件。
+MyLuaApp 使用**Lua或者Lua和Java混合** 来开发安卓软件。
 
 是的，你可以使用Lua来开发安卓软件!本项目使用了
 [AndroLua_pro](https://github.com/nirenr/AndroLua_pro)作为软件的lua运行时环境，它比原版[AndroLua](https://github.com/mkottman/AndroLua)的运行速度要快不少。
@@ -33,7 +33,7 @@ MyLuaApp 使用**Lua或者Java** 来开发安卓软件。
 
 
 ## 测试版本
-使用github actions,每次提交都可以自动打包以生成测试软件。点击[这里](https://github.com/dingyi222666/MyLuaApp/actions)
+使用github actions,每次提交都可以自动打包测试版本的软件。点击[这里](https://github.com/dingyi222666/MyLuaApp/actions)
 来获取上次提交所生成出来的预览测试版本软件
 
 ## 讨论组
