@@ -31,10 +31,10 @@ MyLuaApp 使用**Lua或者Lua和Java混合** 来开发安卓软件。
  - [ ] 项目模板
 
 
-
 ## 测试版本
 使用github actions,每次提交都可以自动打包测试版本的软件。点击[这里](https://github.com/dingyi222666/MyLuaApp/actions)
 来获取上次提交所生成出来的预览测试版本软件
+
 
 ## 讨论组
  - QQ群:[1020019846](https://jq.qq.com/?_wv=1027&k=zGdBLMr8)

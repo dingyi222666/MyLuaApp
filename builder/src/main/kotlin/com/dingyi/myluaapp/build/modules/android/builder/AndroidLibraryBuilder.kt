@@ -25,7 +25,6 @@ class AndroidLibraryBuilder(
         //Compile Libraries Resources
         addTask(CompileLibrariesResources(module), buildTasks)
 
-
         //Merge libraries manifest
         addTask(MergeLibraryManifest(module), buildTasks)
 
@@ -34,6 +33,9 @@ class AndroidLibraryBuilder(
 
         //Compile Java
         addTask(CompileLibraryJava(module), buildTasks)
+
+        //Transform Class to Dex
+        addTask(TransformClassToDex(module),buildTasks)
 
         //Merge Assets Resources
         addTask(MergeAssetsResources(module), buildTasks)

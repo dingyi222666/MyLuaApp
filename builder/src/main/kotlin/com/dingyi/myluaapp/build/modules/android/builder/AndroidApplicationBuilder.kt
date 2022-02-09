@@ -38,12 +38,14 @@ class AndroidApplicationBuilder(
         //Compile Java
         addTask(CompileApplicationJava(module), buildTasks)
 
+        //Transform Class to Dex
+        addTask(TransformClassToDex(module),buildTasks)
+
         //Merge Assets Resources
         addTask(MergeAssetsResources(module), buildTasks)
 
         //Merge jniLibs
         addTask(MergeJniLibs(module), buildTasks)
-
 
         //Merge Java Resources
         addTask(MergeJavaResources(module), buildTasks)

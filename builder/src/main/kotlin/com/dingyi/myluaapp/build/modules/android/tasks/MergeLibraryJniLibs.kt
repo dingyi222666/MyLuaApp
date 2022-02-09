@@ -129,10 +129,9 @@ class MergeLibraryJniLibs(private val applicationModule: Module) :
                     )
                     targetFile.parentFile?.mkdirs()
 
-                    //TODO:Duplicate File
-                    if (!targetFile.isFile) {
-                        it.second.copyTo(targetFile)
-                    }
+
+                    it.second.copyTo(targetFile)
+
                 }
             }
         }.join()

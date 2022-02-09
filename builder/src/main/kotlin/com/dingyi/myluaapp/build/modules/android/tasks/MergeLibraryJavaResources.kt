@@ -127,7 +127,10 @@ class MergeLibraryJavaResources(private val applicationModule: Module) :
                         it.second.path.substring(it.first.path.length + 1)
                     )
                     targetFile.parentFile?.mkdirs()
-                    it.second.copyTo(targetFile)
+                    //TODO:Duplicate File
+                    if (!targetFile.isFile) {
+                        it.second.copyTo(targetFile)
+                    }
                 }
             }
         }.join()
