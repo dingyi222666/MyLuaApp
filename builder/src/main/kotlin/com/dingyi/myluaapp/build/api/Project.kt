@@ -18,7 +18,7 @@ interface Project : ProjectScript {
 
     fun getTasks(type: String): List<Task>
 
-    fun getModules(): List<Module>
+    fun getAllModule(): List<Module>
 
     fun getFileManager(): FileManager
 
@@ -45,7 +45,7 @@ interface Project : ProjectScript {
 
     fun getModule(name: String): Module?
 
-    fun getAllDependencies(): List<Dependency>
+    fun getAllDependency(): List<Dependency>
 
 
     fun getMavenRepository(): MavenRepository

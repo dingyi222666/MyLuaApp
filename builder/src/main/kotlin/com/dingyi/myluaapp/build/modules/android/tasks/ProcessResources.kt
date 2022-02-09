@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.build.modules.android.tasks
 
-import com.dingyi.myluaapp.build.R
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
@@ -54,7 +53,7 @@ class ProcessResources(private val module: Module) : DefaultTask(module) {
         //Check Other Module Resources
 
         val moduleResourceList = module.getProject()
-            .getModules()
+            .getAllModule()
             .filter { it != module && it.type == "AndroidLibrary" }
             .map { libraryModule ->
                 libraryModule
@@ -82,7 +81,7 @@ class ProcessResources(private val module: Module) : DefaultTask(module) {
 
         val librariesResourceList = module
             .getProject()
-            .getAllDependencies()
+            .getAllDependency()
             .filter {
                 it.type == "aar"
             }

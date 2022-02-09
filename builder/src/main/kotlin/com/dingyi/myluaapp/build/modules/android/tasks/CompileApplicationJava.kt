@@ -55,7 +55,7 @@ class CompileApplicationJava(private val module: Module) : DefaultTask(module) {
         }.toMutableList()
 
         val moduleCompileJavaFile = module.getProject()
-            .getModules()
+            .getAllModule()
             .filterNot { it == module }
             .flatMap { subModule ->
                 subModule.getFileManager()

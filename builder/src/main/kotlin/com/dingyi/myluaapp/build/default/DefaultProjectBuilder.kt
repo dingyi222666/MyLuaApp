@@ -10,7 +10,7 @@ class DefaultProjectBuilder(
 
 
     override fun dependsOn(task: Task, dependsTask: Task) {
-        for (module in project.getModules()) {
+        for (module in project.getAllModule()) {
             module.getBuilder().dependsOn(task, dependsTask)
         }
     }

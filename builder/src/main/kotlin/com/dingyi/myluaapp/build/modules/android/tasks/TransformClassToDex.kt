@@ -139,15 +139,6 @@ class TransformClassToDex(private val module: Module) : DefaultTask(module) {
 
         D8.run(command)
 
-        module.getFileManager()
-            .resolveFile(outputDirectory, module)
-            .walkBottomUp()
-            .filter { it.isFile }
-            .forEach {
-                module
-                    .getFileManager()
-                    .snapshot(it)
-            }
 
         module.getFileManager()
             .resolveFile(classCompileDirectory, module)

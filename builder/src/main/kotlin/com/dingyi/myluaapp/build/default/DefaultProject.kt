@@ -13,8 +13,10 @@ import com.dingyi.myluaapp.build.api.runner.Runner
 import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.api.dependency.Dependency
+import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 import com.dingyi.myluaapp.build.dependency.ProjectDependency
 import com.dingyi.myluaapp.build.script.DefaultScript
+import com.dingyi.myluaapp.build.util.ComparableVersion
 import com.dingyi.myluaapp.common.kts.toFile
 import org.luaj.vm2.LuaTable
 import java.io.File
@@ -67,7 +69,7 @@ open class DefaultProject(
         return path
     }
 
-    override fun getModules(): List<Module> {
+    override fun getAllModule(): List<Module> {
         return allModules
     }
 
@@ -226,9 +228,21 @@ open class DefaultProject(
         }.getOrNull(0)
     }
 
-    //TODO:Compare Dependency Version
-    override fun getAllDependencies(): List<Dependency> {
-        return mutableSetOf<Dependency>()
+
+    private fun addToDependencyList(
+        dependency: MavenDependency,
+        dependencyList: MutableSet<Dependency>
+    ) {
+        if (dependencyList.add(dependency)) {
+            dependency.getDependencies()?.forEach { it ->
+                addToDependencyList(it, dependencyList)
+            }
+        }
+    }
+
+
+    override fun getAllDependency(): List<Dependency> {
+        val allDependency = mutableSetOf<Dependency>()
             .apply {
                 allModules.flatMap {
                     it.getDependencies()
@@ -236,7 +250,40 @@ open class DefaultProject(
                     this.addAll(it)
                 }
             }
-            .toList()
+            .toMutableList()
+
+        val dependencyList = mutableSetOf<Dependency>()
+
+        //unpack dependency
+        allDependency.forEach { dependency ->
+            if (dependency is MavenDependency) {
+                addToDependencyList(dependency, dependencyList)
+            } else dependencyList.add(dependency)
+        }
+
+        allDependency.clear()
+        allDependency.addAll(dependencyList)
+        dependencyList.clear()
+
+
+        val groupList = allDependency
+            .filterIsInstance<MavenDependency>()
+            .groupBy { it.groupId + ":" + it.artifactId }
+            .filterValues { it.size > 1 }
+            .values
+            .map {
+                it.sortedWith { o1, o2 ->
+                    ComparableVersion(o2.getDeclarationString())
+                        .compareTo(ComparableVersion(o1.getDeclarationString()))
+                }
+            }
+
+        groupList.forEach {
+            allDependency.removeAll(it)
+            allDependency.add(it[0])
+        }
+
+        return allDependency
     }
 
     override fun getMavenRepository(): MavenRepository {

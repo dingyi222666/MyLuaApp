@@ -48,7 +48,6 @@ class LocalMavenRepository(
         containsList.add(string)
 
         val targetPomPathList = mutableListOf<String>()
-        Log.e("parse", array.joinToString())
         if (array[1] == "*") {
             val pomDir = "$repositoryPath${File.separator}${
                 array[0].replace(

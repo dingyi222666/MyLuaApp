@@ -93,7 +93,7 @@ function fileTree(dir, types)
   local project_dir = getNowProjectDir()
   local target_dir = project_dir .. "/" .. dir
   local file = File(target_dir)
-  Log.e("fuck", print_dump(types))
+  --Log.e("fuck", print_dump(types))
 
   for k, v in pairs(types) do
     types[k] = ".%." .. v:sub(1) .. "$"
@@ -103,7 +103,7 @@ function fileTree(dir, types)
     local fileTable = {}
 
     forEachDir(target_dir, fileTable, types)
-    Log.e("dump", print_dump(fileTable))
+    --Log.e("dump", print_dump(fileTable))
     return { type = "fileTree", value = fileTable }
 
   end
@@ -208,17 +208,17 @@ function runScript(path)
   }
   setmetatable(empty_table, metatable_g)
 
-  Log.e("fuck", path)
+  --Log.e("fuck", path)
 
   loadfile(path, "bt", empty_table)()
 
-  Log.e("test", print_dump(empty_table))
+  --Log.e("test", print_dump(empty_table))
 
   forEachTable(empty_table)
 
   forEachTable(empty_table)
 
-  Log.e("test", print_dump(empty_table))
+  --Log.e("test", print_dump(empty_table))
 
   _G.empty_table = empty_table
 

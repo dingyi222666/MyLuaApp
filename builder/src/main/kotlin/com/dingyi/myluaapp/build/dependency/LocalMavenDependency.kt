@@ -10,6 +10,7 @@ class LocalMavenDependency(
     private val allDependencies: List<MavenDependency>,
     private val repositoryPath: String
 ) : MavenDependency {
+
     override val groupId: String
         get() = mavenPom.groupId
     override val artifactId: String
@@ -33,12 +34,15 @@ class LocalMavenDependency(
     override var name: String = mavenPom.name
 
     override fun getDependenciesFile(): Set<File> {
+        return setOf(getDependencyFile())
+        //不要去一直引用下层依赖
+        /*
         return mutableSetOf<File>().apply {
             add(getDependencyFile())
             allDependencies.forEach {
                 addAll(it.getDependenciesFile())
             }
-        }
+        } */
     }
 
     override fun getDependencyFile(): File {
@@ -69,15 +73,16 @@ class LocalMavenDependency(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as MavenPom
+        other as MavenDependency
 
         if (groupId != other.groupId) return false
         if (artifactId != other.artifactId) return false
-
+        if (versionName != other.versionName) return false
         return true
     }
 
     override fun toString(): String {
-        return "LocalMavenDependency(groupId='$groupId', artifactId='$artifactId', versionName='$versionName', packaging='$packaging', dependencies=$allDependencies)"
+        return "LocalMavenDependency(groupId='$groupId', artifactId='$artifactId', versionName='$versionName', packaging='$packaging')"
+        //return "LocalMavenDependency(groupId='$groupId', artifactId='$artifactId', versionName='$versionName', packaging='$packaging', dependencies=$allDependencies)"
     }
 }

@@ -6,7 +6,6 @@ import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.util.getSHA256
-import com.dingyi.myluaapp.common.kts.println
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,7 +39,7 @@ class MergeLibraryJavaResources(private val applicationModule: Module) :
         val allModule =
             applicationModule
                 .getProject()
-                .getModules()
+                .getAllModule()
 
 
         if (allModule.isEmpty()) {

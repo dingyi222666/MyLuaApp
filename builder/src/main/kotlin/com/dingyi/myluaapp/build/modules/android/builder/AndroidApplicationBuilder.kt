@@ -62,6 +62,9 @@ class AndroidApplicationBuilder(
         //Merge Library Java Resources
         addTask(MergeLibraryJavaResources(module), buildTasks)
 
+        //Merge Ext Dex
+
+        addTask(MergeExtDex(module),buildTasks)
 
     }
 

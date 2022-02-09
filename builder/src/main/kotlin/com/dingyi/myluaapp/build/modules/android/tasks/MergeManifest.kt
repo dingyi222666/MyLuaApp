@@ -66,7 +66,7 @@ class MergeManifest(private val applicationModule: Module) : DefaultTask(applica
         val buildScript = applicationModule.getMainBuilderScript()
 
         applicationModule.getProject()
-            .getModules()
+            .getAllModule()
             .filterNot { it == applicationModule }
             .mapNotNull {
                 findManifestFile(it)
@@ -77,7 +77,7 @@ class MergeManifest(private val applicationModule: Module) : DefaultTask(applica
 
         applicationModule
             .getProject()
-            .getAllDependencies()
+            .getAllDependency()
             .filter {
                 it.type == "aar"
             }

@@ -38,7 +38,7 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
 
         val allModule = applicationModule
             .getProject()
-            .getModules()
+            .getAllModule()
             .filterNot { it == applicationModule }
             .filter {
                 val file = it.getFileManager()
@@ -68,7 +68,7 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
 
         val allLibraries = applicationModule
             .getProject()
-            .getAllDependencies()
+            .getAllDependency()
             .filter {
                 it.type == "aar"
             }

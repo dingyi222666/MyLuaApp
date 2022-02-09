@@ -10,12 +10,15 @@ import com.dingyi.myluaapp.build.api.file.FileManager
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Project
+import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.build.default.DefaultBuilder
 import com.dingyi.myluaapp.build.dependency.FileDependency
 import com.dingyi.myluaapp.build.dependency.ProjectDependency
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.script.DefaultScript
+import com.dingyi.myluaapp.build.util.ComparableVersion
+import com.dingyi.myluaapp.common.kts.println
 import com.dingyi.myluaapp.common.kts.toFile
 import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaTable
@@ -103,7 +106,6 @@ class AndroidModule(
         )) {
             if (scriptDependencies is LuaTable) {
                 for (key in scriptDependencies.keys()) {
-                    Log.e("fuck", "$key ${key.tojstring()}")
                     when (key.tojstring()) {
                         "fileTree" -> {
                             initDependencyFileTree(scriptDependencies[key])
@@ -116,6 +118,50 @@ class AndroidModule(
                         }
                     }
                 }
+            }
+        }
+
+
+        val dependencyList = mutableSetOf<Dependency>()
+
+        //unpack dependency
+        dependencies.forEach { dependency ->
+            if (dependency is MavenDependency) {
+                addToDependencyList(dependency, dependencyList)
+            } else dependencyList.add(dependency)
+        }
+
+        dependencies.clear()
+        dependencies.addAll(dependencyList)
+        dependencyList.clear()
+
+
+        val groupList = dependencies
+            .filterIsInstance<MavenDependency>()
+            .groupBy { it.groupId + ":" + it.artifactId }
+            .filterValues { it.size > 1 }
+            .values
+            .map {
+                it.sortedWith { o1, o2 ->
+                    ComparableVersion(o2.getDeclarationString())
+                        .compareTo(ComparableVersion(o1.getDeclarationString()))
+                }
+            }
+
+        groupList.forEach {
+            dependencies.removeAll(it)
+            dependencies.add(it[0])
+        }
+
+    }
+
+    private fun addToDependencyList(
+        dependency: MavenDependency,
+        dependencyList: MutableSet<Dependency>
+    ) {
+        if (dependencyList.add(dependency)) {
+            dependency.getDependencies()?.forEach { it ->
+                addToDependencyList(it, dependencyList)
             }
         }
     }

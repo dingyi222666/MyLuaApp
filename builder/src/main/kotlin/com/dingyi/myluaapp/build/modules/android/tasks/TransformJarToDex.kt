@@ -134,14 +134,7 @@ class TransformJarToDex(private val module: Module) : DefaultTask(module) {
                 .snapshot(it)
         }
 
-        module.getFileManager()
-            .resolveFile(outputDirectory,module)
-            .walkBottomUp()
-            .filter { it.isFile && it.name.endsWith("dex") }
-            .forEach {
-                module.getFileManager()
-                    .snapshot(it)
-            }
+
 
     }
 
