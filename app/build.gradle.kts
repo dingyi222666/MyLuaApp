@@ -7,7 +7,7 @@ plugins {
 android {
 
     compileSdk = BuildConfig.Config.Default.compileSdk
-    buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
+    buildToolsVersion = "31.0.0"
 
     defaultConfig {
         applicationId = BuildConfig.Config.App.packageName

@@ -64,7 +64,7 @@ class SignApk(private val module: Module) : DefaultTask(module) {
     }
 
 
-    override suspend fun run(): Unit = withContext(Dispatchers.IO) {
+    override suspend fun run() {
 
         val args = mutableListOf<String>()
 
@@ -90,10 +90,13 @@ class SignApk(private val module: Module) : DefaultTask(module) {
         args.add(module.getFileManager().resolveFile(outputPath, module).path)
         args.add(inputPath.path)
 
-        ApkSignerTool
-            .main(args.toTypedArray())
 
-        inputPath.delete()
+        withContext(Dispatchers.IO) {
+            ApkSignerTool
+                .main(args.toTypedArray())
+        }
+
+        //inputPath.deleteRecursively()
 
     }
 }

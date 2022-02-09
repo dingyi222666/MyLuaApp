@@ -71,6 +71,9 @@ class AndroidApplicationBuilder(
         //Package Apk
         addTask(PackageApk(module),buildTasks)
 
+        //ZipAlign Apk
+        addTask(ZipAlignApk(module),buildTasks)
+
         //Sign Apk
         addTask(SignApk(module),buildTasks)
 

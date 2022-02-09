@@ -158,7 +158,7 @@ class PackageApk(private val module: Module) : DefaultTask(module) {
                     FullFileSource(
                         it.first.toPath(),
                         "assets/"+it.first.path.substring(it.second.path.length + 1),
-                        Deflater.NO_COMPRESSION
+                        Deflater.BEST_COMPRESSION
                     )
                 )
             }
@@ -168,7 +168,7 @@ class PackageApk(private val module: Module) : DefaultTask(module) {
                     FullFileSource(
                         it.first.toPath(),
                         "lib/"+it.first.path.substring(it.second.path.length + 1),
-                        Deflater.NO_COMPRESSION
+                        Deflater.DEFAULT_COMPRESSION
                     )
                 )
             }
@@ -178,7 +178,7 @@ class PackageApk(private val module: Module) : DefaultTask(module) {
                     FullFileSource(
                         it.first.toPath(),
                         it.first.path.substring(it.second.path.length + 1),
-                        Deflater.NO_COMPRESSION
+                        Deflater.DEFAULT_COMPRESSION
                     )
                 )
             }
@@ -188,7 +188,7 @@ class PackageApk(private val module: Module) : DefaultTask(module) {
                     FullFileSource(
                         it.toPath(),
                         it.name,
-                        Deflater.NO_COMPRESSION
+                        Deflater.DEFAULT_COMPRESSION
                     )
                 )
             }

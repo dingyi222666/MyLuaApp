@@ -183,6 +183,9 @@ class MainActivity : BaseActivity<
             val message = it.getStringExtra("message") ?: ""
             binding.text.append(message)
             binding.text.append("\n")
+            binding.scrollView.post {
+                binding.scrollView.fullScroll(View.FOCUS_DOWN)
+            }
             //binding.scroll.
             Log.e("compile message", message)
         }
