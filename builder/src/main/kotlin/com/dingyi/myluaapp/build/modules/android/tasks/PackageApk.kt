@@ -55,7 +55,7 @@ class PackageApk(private val module: Module) : DefaultTask(module) {
     private lateinit var aaptResourceApk: File
 
     private val outputPath: String
-        get() = "build/outputs/apk/$buildVariants/app-$buildVariants-unsign.apk"
+        get() = "build/outputs/apk/$buildVariants/app-$buildVariants-unsigned.apk"
 
     override suspend fun prepare(): Task.State {
 
@@ -167,7 +167,7 @@ class PackageApk(private val module: Module) : DefaultTask(module) {
                 archive.add(
                     FullFileSource(
                         it.first.toPath(),
-                        "libs/"+it.first.path.substring(it.second.path.length + 1),
+                        "lib/"+it.first.path.substring(it.second.path.length + 1),
                         Deflater.NO_COMPRESSION
                     )
                 )

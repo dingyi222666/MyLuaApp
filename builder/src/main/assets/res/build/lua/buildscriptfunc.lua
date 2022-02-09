@@ -240,6 +240,9 @@ function getScriptValue(key)
   local result = empty_table or _ENV.empty_table or _G.empty_table
 
   for _, v in ipairs(t) do
+    if result == nil then
+      return result
+    end
     result = result[v]
   end
 

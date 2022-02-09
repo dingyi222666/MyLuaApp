@@ -153,11 +153,10 @@ object BuildConfig {
             const val r8 =
                 "com.android.tools:r8:${Versions.r8_version}"
 
-            const val sign_flinger = "com.android:signflinger:${Versions.android_build_tool_version}"
 
             const val zip_flinger = "com.android:zipflinger:${Versions.android_build_tool_version}"
 
-            const val apksig = "com.android.tools.build:apksig:${Versions.android_build_tool_version}"
+
         }
 
         object Views {

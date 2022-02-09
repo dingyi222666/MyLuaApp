@@ -118,6 +118,23 @@ class DexBuilder(private val module: Module) : DefaultTask(module) {
         } else {
             doRelease()
         }
+
+        mergeDexFiles.forEach {
+            module
+                .getFileManager()
+                .snapshot(it)
+        }
+
+        module.getFileManager()
+            .resolveFile(outputDirectory, module)
+            .walkBottomUp()
+            .filter { it.isFile && it.name.endsWith("dex") }
+            .forEach {
+                module
+                    .getFileManager()
+                    .snapshot(it)
+            }
+
     }
 
     private fun doDebug() {
@@ -145,20 +162,6 @@ class DexBuilder(private val module: Module) : DefaultTask(module) {
             }
         }
 
-        mergeDexFiles.forEach {
-            module
-                .getFileManager()
-                .snapshot(it)
-        }
-
-        outputDirectory
-            .walkBottomUp()
-            .filter { it.isFile && it.name.endsWith("dex") }
-            .forEach {
-                module
-                    .getFileManager()
-                    .snapshot(it)
-            }
 
 
     }

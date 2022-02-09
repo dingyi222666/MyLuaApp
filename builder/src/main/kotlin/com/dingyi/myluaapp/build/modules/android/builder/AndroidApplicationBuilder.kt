@@ -68,8 +68,11 @@ class AndroidApplicationBuilder(
         //Merge Ext Dex
         addTask(DexBuilder(module),buildTasks)
 
-        //PackageApk
+        //Package Apk
         addTask(PackageApk(module),buildTasks)
+
+        //Sign Apk
+        addTask(SignApk(module),buildTasks)
 
     }
 
