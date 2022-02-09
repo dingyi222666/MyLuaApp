@@ -64,6 +64,14 @@ dependencies {
 
     implementation(BuildConfig.Libs.Google.gson)
     implementation(BuildConfig.Libs.Google.guava)
+
+    implementation(BuildConfig.Libs.BuildTools.sign_flinger) {
+        exclude(group = "com.android.tools",module = "annotations")
+    }
+    implementation(BuildConfig.Libs.BuildTools.apksig)
+    implementation(BuildConfig.Libs.BuildTools.zip_flinger) {
+        exclude(group = "com.android.tools",module = "annotations")
+    }
     implementation(BuildConfig.Libs.BuildTools.r8)
     implementation(BuildConfig.Libs.Annotation.build_tools_annotation)
 

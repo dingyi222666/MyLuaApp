@@ -61,6 +61,9 @@ object BuildConfig {
 
         const val r8_version = "3.0.73"
 
+
+        const val android_build_tool_version = "7.1.1"
+
     }
 
     object Libs {
@@ -145,11 +148,16 @@ object BuildConfig {
         }
 
         object BuildTools {
-            const val kxml2 = "net.sf.kxml:kxml2:2.3.0"
             const val javapoet = "com.squareup:javapoet:${Versions.javapoet_version}"
 
             const val r8 =
                 "com.android.tools:r8:${Versions.r8_version}"
+
+            const val sign_flinger = "com.android:signflinger:${Versions.android_build_tool_version}"
+
+            const val zip_flinger = "com.android:zipflinger:${Versions.android_build_tool_version}"
+
+            const val apksig = "com.android.tools.build:apksig:${Versions.android_build_tool_version}"
         }
 
         object Views {

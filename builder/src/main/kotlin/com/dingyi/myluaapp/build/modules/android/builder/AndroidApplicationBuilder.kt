@@ -38,11 +38,14 @@ class AndroidApplicationBuilder(
         //Compile Java
         addTask(CompileApplicationJava(module), buildTasks)
 
+        //Transform Class to Dex
+        addTask(TransformClassToDex(module),buildTasks)
+
         //Transform Jar to Dex
         addTask(TransformJarToDex(module),buildTasks)
 
-        //Transform Class to Dex
-        addTask(TransformClassToDex(module),buildTasks)
+        //Merge Ext Dex
+        addTask(MergeExtDex(module),buildTasks)
 
         //Merge Assets Resources
         addTask(MergeAssetsResources(module), buildTasks)
@@ -63,8 +66,10 @@ class AndroidApplicationBuilder(
         addTask(MergeLibraryJavaResources(module), buildTasks)
 
         //Merge Ext Dex
+        addTask(DexBuilder(module),buildTasks)
 
-        addTask(MergeExtDex(module),buildTasks)
+        //PackageApk
+        addTask(PackageApk(module),buildTasks)
 
     }
 

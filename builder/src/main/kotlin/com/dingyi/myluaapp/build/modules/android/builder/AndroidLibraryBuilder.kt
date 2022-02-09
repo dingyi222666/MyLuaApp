@@ -34,11 +34,14 @@ class AndroidLibraryBuilder(
         //Compile Java
         addTask(CompileLibraryJava(module), buildTasks)
 
+        //Transform Class to Dex
+        addTask(TransformClassToDex(module),buildTasks)
+
         //Transform Jar to Dex
         addTask(TransformJarToDex(module),buildTasks)
 
-        //Transform Class to Dex
-        addTask(TransformClassToDex(module),buildTasks)
+        //Merge Ext Dex
+        addTask(MergeExtDex(module),buildTasks)
 
         //Merge Assets Resources
         addTask(MergeAssetsResources(module), buildTasks)
