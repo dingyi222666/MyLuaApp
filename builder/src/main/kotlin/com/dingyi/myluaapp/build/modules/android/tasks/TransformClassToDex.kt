@@ -49,6 +49,7 @@ class TransformClassToDex(private val module: Module) : DefaultTask(module) {
     private val outputDirectory: String
         get() = "build/intermediates/dex_archive/$buildVariants"
 
+
     override suspend fun prepare(): Task.State {
 
         buildVariants = module.getCache().getCache<BuildConfig>("${module.name}_build_config")
@@ -77,8 +78,6 @@ class TransformClassToDex(private val module: Module) : DefaultTask(module) {
 
 
         transformDexFiles.addAll(incrementalTransformDexFiles)
-
-        println("transformDex", transformDexFiles)
 
         return when {
             incrementalTransformDexFiles.isEmpty() -> Task.State.`UP-TO-DATE`
@@ -111,7 +110,8 @@ class TransformClassToDex(private val module: Module) : DefaultTask(module) {
                 }
             }.filter {
                 it.name.endsWith("jar") && it.exists()
-            }.map { it.toPath() }
+            }.toMutableList()
+            .map { it.toPath() }
     }
 
     override suspend fun run(): Unit = withContext(Dispatchers.IO) {

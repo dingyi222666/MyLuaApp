@@ -63,7 +63,6 @@ dependencies {
     implementation(BuildConfig.Libs.Tools.zip4j)
 
     implementation(BuildConfig.Libs.Google.gson)
-    implementation(BuildConfig.Libs.BuildTools.kxml2)
     implementation(BuildConfig.Libs.Google.guava)
     implementation(BuildConfig.Libs.BuildTools.r8)
     implementation(BuildConfig.Libs.Annotation.build_tools_annotation)

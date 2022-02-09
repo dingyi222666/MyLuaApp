@@ -144,6 +144,9 @@ class CompileApplicationJava(private val module: Module) : DefaultTask(module) {
                 option.addOption("target", targetCompatibility)
             }
 
+        } else {
+            option.addOption("source", "8")
+            option.addOption("target", "8")
         }
 
         javaCompiler

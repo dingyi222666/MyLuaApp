@@ -34,6 +34,9 @@ class AndroidLibraryBuilder(
         //Compile Java
         addTask(CompileLibraryJava(module), buildTasks)
 
+        //Transform Jar to Dex
+        addTask(TransformJarToDex(module),buildTasks)
+
         //Transform Class to Dex
         addTask(TransformClassToDex(module),buildTasks)
 
