@@ -5,23 +5,26 @@ import com.dingyi.myluaapp.build.api.file.InputFile
 
 import com.dingyi.myluaapp.build.api.file.TaskInput
 import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.kts.readFormGZIP
 import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.kts.writeUseGZIP
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 import java.io.File
+import java.util.zip.GZIPOutputStream
 
 class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
 
     private val inputSnapShotFile =
-        "build/cache/${task.javaClass.simpleName}-InputSnapshot.json"
+        "build/cache/${task.javaClass.simpleName}-InputSnapshot.bin"
 
     private val outputSnapShotFile =
-        "build/cache/${task.javaClass.simpleName}-OutputSnapshot.json"
+        "build/cache/${task.javaClass.simpleName}-OutputSnapshot.bin"
 
     private val inputMappingOutputFile =
-        "build/cache/${task.javaClass.simpleName}-Mapping.json"
+        "build/cache/${task.javaClass.simpleName}-Mapping.bin"
 
 
     private val gson = Gson()
@@ -48,11 +51,11 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
             .resolveFile(inputSnapShotFile, task.applyModule)
 
         if (inputSnapShotFile.isFile) {
-            inputSnapShotFile.reader().use {
-                inputSnapShotMap.putAll(
-                    gson.fromJson(it, getJavaClass())
-                )
-            }
+
+            inputSnapShotMap.putAll(
+                gson.fromJson(inputSnapShotFile.inputStream().readFormGZIP(), getJavaClass())
+            )
+
         }
 
         val outputSnapShotFile = task.applyModule
@@ -60,11 +63,11 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
             .resolveFile(outputSnapShotFile, task.applyModule)
 
         if (outputSnapShotFile.isFile) {
-            outputSnapShotFile.reader().use {
-                outputSnapShotMap.putAll(
-                    gson.fromJson(it, getJavaClass())
-                )
-            }
+
+            outputSnapShotMap.putAll(
+                gson.fromJson(outputSnapShotFile.inputStream().readFormGZIP(), getJavaClass())
+            )
+
         }
 
         val inputMappingOutputFile = task.applyModule
@@ -72,11 +75,11 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
             .resolveFile(inputMappingOutputFile, task.applyModule)
 
         if (inputMappingOutputFile.isFile) {
-            inputMappingOutputFile.reader().use {
-                inputMappingOutputMap.putAll(
-                    gson.fromJson(it, getJavaClass())
-                )
-            }
+
+            inputMappingOutputMap.putAll(
+                gson.fromJson(inputMappingOutputFile.inputStream().readFormGZIP(), getJavaClass())
+            )
+
         }
 
     }
@@ -229,9 +232,10 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
             }
         }
 
-        inputSnapShotFile.writeText(gson.toJson(inputSnapShotMap))
-        outputSnapShotFile.writeText(gson.toJson(outputSnapShotMap))
-        inputMappingOutputFile.writeText(gson.toJson(inputMappingOutputMap))
+        inputSnapShotFile.outputStream().writeUseGZIP(gson.toJson(inputSnapShotMap))
+
+        outputSnapShotFile.outputStream().writeUseGZIP(gson.toJson(outputSnapShotMap))
+        inputMappingOutputFile.outputStream().writeUseGZIP(gson.toJson(inputMappingOutputMap))
 
         inputMappingOutputMap.clear()
         inputFileDirectory.clear()

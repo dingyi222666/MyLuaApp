@@ -57,7 +57,7 @@ class AndroidApplicationBuilder(
         addTask(MergeExtDexTest(module),buildTasks)
 
         //Merge Assets Resources
-        addTask(MergeAssetsResources(module), buildTasks)
+        addTask(MergeAssetsResourcesTest(module), buildTasks)
 
         //Merge jniLibs
         addTask(MergeJniLibs(module), buildTasks)

@@ -50,7 +50,6 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
                 file.exists() && file.length() > 0
             }
 
-        println(allModule)
 
         //Check Module
 
