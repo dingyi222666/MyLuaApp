@@ -10,6 +10,9 @@ interface InputFile {
 
     fun getFileHash():String
 
+    fun getBindOutputFile(): File?
 
+
+    fun getSourceDirectory():String
 
 }

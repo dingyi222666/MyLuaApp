@@ -3,18 +3,58 @@ package com.dingyi.myluaapp.build.modules.android.builder
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.default.DefaultBuilder
 import com.dingyi.myluaapp.build.modules.android.tasks.*
+import com.dingyi.myluaapp.build.modules.android.tasks.test.*
+import com.dingyi.myluaapp.common.kts.Paths
+import com.dingyi.myluaapp.common.kts.println
+import com.dingyi.myluaapp.common.kts.toFile
 
 class AndroidApplicationBuilder(
     private val module: Module
 ) : DefaultBuilder(module) {
 
+
+    private fun addCheckManifestTask() {
+        val checkManifestTask = CheckManifest(module)
+        checkManifestTask.getTaskInput()
+            .addInputFile(
+                module.getFileManager().resolveFile(
+                    "src/main/AndroidManifest.xml", module
+                )
+            )
+
+    }
+
+    private fun addExtractAndroidArchiveTask() {
+        val extractAndroidArchive = ExtractAndroidArchiveTest(module)
+
+        extractAndroidArchive.getTaskInput()
+            .let { input ->
+               module.getDependencies()
+                    .flatMap {
+                        it.getDependenciesFile()
+                    }.filter {
+                        it.isFile and it.name.endsWith("aar")
+                    }.forEach {
+                        input.addInputFile(it)
+                    }
+            }
+
+        extractAndroidArchive.getTaskInput()
+            .addOutputDirectory(Paths.extractAarDir.toFile())
+
+        println(extractAndroidArchive
+            .getTaskInput())
+
+        addTask(extractAndroidArchive,buildTasks)
+    }
+
     init {
 
         //Check Manifest exists
-        addTask(CheckManifest(module), buildTasks)
+        addCheckManifestTask()
 
-        //Exploded AndroidArchive
-        addTask(ExtractAndroidArchive(module), buildTasks)
+        //Extract AndroidArchive
+        addExtractAndroidArchiveTask()
 
         //Compile Libraries Resources
         addTask(CompileLibrariesResources(module), buildTasks)

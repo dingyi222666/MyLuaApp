@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.build.default
 
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
+import com.dingyi.myluaapp.build.api.file.TaskInput
 import kotlinx.coroutines.*
 
 class ParallelTask(
@@ -67,5 +68,9 @@ class ParallelTask(
             }
         }.join()
 
+    }
+
+    override fun getTaskInput(): TaskInput? {
+        return null
     }
 }

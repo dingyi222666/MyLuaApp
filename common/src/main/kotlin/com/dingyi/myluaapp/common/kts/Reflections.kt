@@ -56,7 +56,7 @@ inline fun <reified T> getJavaClass(): Class<T> {
     return T::class.java
 }
 
-inline fun println(vararg args: Any) {
+inline fun println(vararg args: Any?) {
     val buffer = StringBuilder()
     for (arg in args) {
         buffer.append(arg.toString()).append(" ")
@@ -73,6 +73,8 @@ data class MutablePair<A, B>(
      * Returns string representation of the [Pair] including its [first] and [second] values.
      */
     override fun toString(): String = "($first, $second)"
+
+
 }
 
 typealias LuaJVM = org.luaj.vm2.LuaJVM

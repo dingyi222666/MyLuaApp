@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.build.default
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
+import com.dingyi.myluaapp.common.kts.checkNotNull
 
 open class DefaultBuilder(
     private val module: Module
@@ -13,8 +14,6 @@ open class DefaultBuilder(
     protected val cleanTasks = mutableListOf<Task>()
 
     protected val buildTasks = mutableListOf<Task>()
-
-    private val DEFAULT_TASK = DefaultTask(module)
 
 
     override fun dependsOn(task: Task, dependsTask: Task) {
@@ -47,6 +46,6 @@ open class DefaultBuilder(
         return buildTasks.filter { it.name == name }
             .getOrNull(0) ?: syncTasks.filter { it.name == name }
             .getOrNull(0) ?: cleanTasks.filter { it.name == name }
-            .getOrNull(0) ?: DEFAULT_TASK
+            .getOrNull(0).checkNotNull()
     }
 }
