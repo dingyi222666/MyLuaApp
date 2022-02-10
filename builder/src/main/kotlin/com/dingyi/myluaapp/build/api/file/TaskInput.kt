@@ -19,7 +19,8 @@ interface TaskInput {
 
     fun bindOutputFile(inputFile: InputFile,outputFile: File)
 
-    fun bindOutputDirectory(inputDirectory: File,outputDirectory: File,match:(File,File)->Boolean)
+    fun bindOutputFiles(inputFile: InputFile,outputFile: List<File>)
+
 
     suspend fun isIncremental():Boolean
 
@@ -34,4 +35,5 @@ interface TaskInput {
 
     fun snapshot()
 
+    fun transformDirectoryToFile()
 }

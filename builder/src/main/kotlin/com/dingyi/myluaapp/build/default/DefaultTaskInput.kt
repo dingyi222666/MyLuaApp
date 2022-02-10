@@ -5,7 +5,6 @@ import com.dingyi.myluaapp.build.api.file.InputFile
 
 import com.dingyi.myluaapp.build.api.file.TaskInput
 import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.println
 import com.dingyi.myluaapp.common.kts.toFile
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -16,13 +15,13 @@ import java.io.File
 class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
 
     private val inputSnapShotFile =
-        "build/cache/${task.javaClass.simpleName.lowercase()}-task-input-snapshot.json"
+        "build/cache/${task.javaClass.simpleName}-InputSnapshot.json"
 
     private val outputSnapShotFile =
-        "build/cache/${task.javaClass.simpleName.lowercase()}-task-output-snapshot.json"
+        "build/cache/${task.javaClass.simpleName}-OutputSnapshot.json"
 
     private val inputMappingOutputFile =
-        "build/cache/${task.javaClass.simpleName.lowercase()}-task-mapping.json"
+        "build/cache/${task.javaClass.simpleName}-Mapping.json"
 
 
     private val gson = Gson()
@@ -32,7 +31,7 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
 
     private val outputSnapShotMap = mutableMapOf<String, String>()
 
-    private val inputMappingOutputMap = mutableMapOf<String, String>()
+    private val inputMappingOutputMap = mutableMapOf<String, MutableList<String>>()
 
     private val inputFileList = mutableListOf<InputFile>()
 
@@ -95,7 +94,7 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
     }
 
     override fun getInputFile(file: File): InputFile {
-        return inputFileList.find { it.getPath().path == file.path } ?: DefaultInputFile(
+        return inputFileList.find { it.toFile().path == file.path } ?: DefaultInputFile(
             this,
             file,
             file.parentFile.path
@@ -105,14 +104,13 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
     override fun getInputFileFormDirectory(file: File): List<InputFile> {
         val path = file.path
         return inputFileList.filter {
-            it.getPath().path.substring(path.length) == path
+            it.toFile().path.substring(path.length) == path
         }
     }
 
     override fun transformDirectoryToFile(block: (File) -> Boolean) {
         inputFileDirectory.forEach { directory ->
             directory.walkBottomUp()
-                .filter { it.isFile }
                 .filter(block)
                 .forEach {
                     inputFileList.add(
@@ -120,45 +118,51 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
                     )
                 }
         }
+        inputFileDirectory.clear()
+    }
+
+    override fun transformDirectoryToFile() {
+        inputFileDirectory.forEach { directory ->
+            inputFileList.add(
+                DefaultInputFile(this, directory, directory.path)
+            )
+        }
+        inputFileDirectory.clear()
     }
 
     override fun bindOutputFile(inputFile: InputFile, outputFile: File) {
-        inputMappingOutputMap[inputFile.getPath().path] = outputFile.path
-    }
-
-    override fun bindOutputDirectory(
-        inputDirectory: File,
-        outputDirectory: File,
-        match: (File, File) -> Boolean
-    ) {
-        val inputFileList = inputDirectory.walkBottomUp()
-            .filter { it.isFile }
-            .toList()
-
-        val outputFileList = outputDirectory.walkBottomUp()
-            .filter { it.isFile }
-            .toList()
-
-        for (input in inputFileList) {
-            for (output in outputFileList) {
-                if (match(input, output)) {
-                    inputMappingOutputMap[input.path] = output.path
-                    break
-                }
-            }
+        inputMappingOutputMap.getOrDefault(
+            inputFile.toFile().path,
+            mutableListOf()
+        ).apply {
+            add(outputFile.path)
+        }.let {
+            inputMappingOutputMap[inputFile.toFile().path] = it
         }
-
-
     }
+
+    override fun bindOutputFiles(inputFile: InputFile, outputFile: List<File>) {
+        inputMappingOutputMap.getOrDefault(
+            inputFile.toFile().path,
+            mutableListOf()
+        ).apply {
+            addAll(outputFile.map { it.path })
+        }.let {
+            inputMappingOutputMap[inputFile.toFile().path] = it
+        }
+    }
+
 
     override suspend fun isIncremental(): Boolean = withContext(Dispatchers.IO) {
 
         readConfig()
 
         inputMappingOutputMap.forEach { (t, u) ->
-            val (file1, file2) = t.toFile() to u.toFile()
+            val file1 = t.toFile()
             if (!file1.exists() || getSnapShotHash(file1) != file1.lastModified().toString()) {
-                file2.deleteRecursively()
+                u.forEach {
+                    it.toFile().deleteRecursively()
+                }
             }
         }
 
@@ -170,14 +174,15 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
     }
 
     override fun getIncrementalInputFile(): List<InputFile> {
-        return inputFileList.filter {
+        return inputFileList.filter { inputFile ->
+            val outputFile = inputFile.getBindOutputFile() ?: return@filter true
 
-            println(inputMappingOutputMap,it,it.getBindOutputFile()?.path,"test")
+            val all = outputFile.filterNot {
+                it.exists().not() || it.lastModified().toString() != getSnapShotHash(it)
+            }
 
-            val outputFile = it.getBindOutputFile()
-            it.getFileHash() != it.getSnapShotHash() &&
-                    (outputFile?.isFile ?: false) && (outputFile?.lastModified() ?: "00")
-                .toString() != outputFile?.let { it1 -> getSnapShotHash(it1) }
+            inputFile.getFileHash() != inputFile.getSnapShotHash() ||
+                    all.isEmpty()
 
         }
     }
@@ -216,14 +221,22 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
 
 
         inputMappingOutputMap.forEach { (t, u) ->
-            val (file1, file2) = t.toFile() to u.toFile()
+            val file1 = t.toFile()
             inputSnapShotMap[t] = file1.lastModified().toString()
-            outputSnapShotMap[u] = file2.lastModified().toString()
+            u.forEach {
+                val file2 = it.toFile()
+                outputSnapShotMap[it] = file2.lastModified().toString()
+            }
         }
 
         inputSnapShotFile.writeText(gson.toJson(inputSnapShotMap))
         outputSnapShotFile.writeText(gson.toJson(outputSnapShotMap))
         inputMappingOutputFile.writeText(gson.toJson(inputMappingOutputMap))
+
+        inputMappingOutputMap.clear()
+        inputFileDirectory.clear()
+        inputSnapShotMap.clear()
+        outputSnapShotMap.clear()
 
     }
 
@@ -233,15 +246,13 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
             return "0"
         }
 
-        println(path,"hash",inputSnapShotMap,outputSnapShotMap)
-
         return inputSnapShotMap[path.path] ?: outputSnapShotMap[path.path] ?: "0"
     }
 
-    fun getBindOutputFile(defaultInputFile: DefaultInputFile): File? {
+    fun getBindOutputFile(defaultInputFile: DefaultInputFile): List<File>? {
         return defaultInputFile
-            .getPath().let {
-                inputMappingOutputMap[it.path]?.toFile()
+            .toFile().let {
+                inputMappingOutputMap[it.path]?.map { it.toFile() }
             }
 
     }

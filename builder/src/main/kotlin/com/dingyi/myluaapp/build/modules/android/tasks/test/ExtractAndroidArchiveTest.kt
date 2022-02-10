@@ -10,47 +10,42 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.lingala.zip4j.ZipFile
 import java.io.File
-import kotlin.properties.Delegates
 
 //TODO:Add to sync tasks
 class ExtractAndroidArchiveTest(private val module: Module) : DefaultTask(module) {
     override val name: String
         get() = "ExtractAndroidArchive"
 
-    private var isIncremental by Delegates.notNull<Boolean>()
 
     override suspend fun prepare(): Task.State {
-
-
-        if (getTaskInput().getAllInputFile().isEmpty()) {
-            return Task.State.SKIPPED
-        }
-
-        isIncremental = getTaskInput().isIncremental()
-
-        return if (isIncremental) {
-            if (getTaskInput().getIncrementalInputFile().isEmpty()) {
-                Task.State.`UP-TO-DATE`
-            } else {
-                Task.State.INCREMENT
+        getTaskInput()
+            .let { input ->
+                module.getDependencies()
+                    .flatMap {
+                        it.getDependenciesFile()
+                    }.filter {
+                        it.isFile and it.name.endsWith("aar")
+                    }.forEach {
+                        input.addInputFile(it)
+                    }
             }
-        } else {
-            Task.State.DEFAULT
-        }
 
+        getTaskInput()
+            .addOutputDirectory(Paths.extractAarDir.toFile())
+
+        return super.prepare()
     }
-
 
     override suspend fun run() = withContext(Dispatchers.IO) {
 
         getTaskInput().let {
             if (isIncremental) it.getIncrementalInputFile() else it.getAllInputFile()
         }.forEach {
-            val file = ZipFile(it.getPath())
+            val file = ZipFile(it.toFile())
 
             val explodedDir =
                 "${getTaskInput().getOutputDirectory()[0]}${File.separator}${
-                    it.getPath().path.toMD5()
+                    it.toFile().path.toMD5()
                 }"
 
             runCatching {

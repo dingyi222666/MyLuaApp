@@ -15,7 +15,7 @@ class DefaultInputFile(
         return input.getSnapShotHash(path)
     }
 
-    override fun getPath(): File {
+    override fun toFile(): File {
         return path
     }
 
@@ -23,7 +23,7 @@ class DefaultInputFile(
         return path.lastModified().toString()
     }
 
-    override fun getBindOutputFile(): File? {
+    override fun getBindOutputFile(): List<File>? {
         return input.getBindOutputFile(this)
     }
 

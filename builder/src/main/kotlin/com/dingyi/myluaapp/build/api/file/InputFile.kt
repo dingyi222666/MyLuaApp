@@ -6,11 +6,11 @@ interface InputFile {
 
     fun getSnapShotHash():String
 
-    fun getPath():File
+    fun toFile():File
 
     fun getFileHash():String
 
-    fun getBindOutputFile(): File?
+    fun getBindOutputFile(): List<File>?
 
 
     fun getSourceDirectory():String

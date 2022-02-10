@@ -48,4 +48,11 @@ open class DefaultBuilder(
             .getOrNull(0) ?: cleanTasks.filter { it.name == name }
             .getOrNull(0).checkNotNull()
     }
+
+    override fun clear() {
+        arrayOf(syncTasks, buildTasks, cleanTasks).forEach {
+            it.clear()
+        }
+        System.gc()
+    }
 }

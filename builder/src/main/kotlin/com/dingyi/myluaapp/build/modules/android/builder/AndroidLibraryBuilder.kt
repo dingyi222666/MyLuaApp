@@ -3,68 +3,31 @@ package com.dingyi.myluaapp.build.modules.android.builder
 
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.default.DefaultBuilder
+import com.dingyi.myluaapp.build.default.DefaultInputFile
+import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.modules.android.tasks.*
-import com.dingyi.myluaapp.build.modules.android.tasks.test.ExtractAndroidArchiveTest
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.build.modules.android.tasks.test.*
+
 
 class AndroidLibraryBuilder(
     private val module: Module
 ) : DefaultBuilder(module) {
 
 
-    private fun addCheckManifestTask() {
-        val checkManifestTask = CheckManifest(module)
-        checkManifestTask.getTaskInput()
-            .addInputFile(
-                module.getFileManager().resolveFile(
-                    "src/main/AndroidManifest.xml", module
-                )
-            )
-
-        addTask(checkManifestTask,buildTasks)
-    }
-
-    private fun addExtractAndroidArchiveTask() {
-        val extractAndroidArchive = ExtractAndroidArchiveTest(module)
-
-        extractAndroidArchive.getTaskInput()
-            .let { input ->
-                module.getDependencies()
-                    .flatMap {
-                        it.getDependenciesFile()
-                    }.filter {
-                        it.isFile and it.name.endsWith("aar")
-                    }.forEach {
-                        input.addInputFile(it)
-                    }
-            }
-
-        extractAndroidArchive.getTaskInput()
-            .addOutputDirectory(Paths.extractAarDir.toFile())
-
-        com.dingyi.myluaapp.common.kts.println(
-            extractAndroidArchive
-                .getTaskInput()
-        )
-
-        addTask(extractAndroidArchive,buildTasks)
-    }
-
     init {
 
+
         //Check Manifest exists
-        addCheckManifestTask()
+        addTask(CheckManifest(module), buildTasks)
 
         //Extract AndroidArchive
-        addExtractAndroidArchiveTask()
+        addTask(ExtractAndroidArchiveTest(module), buildTasks)
 
         //Package Resources
-        addTask(PackageResources(module), buildTasks)
-
+        addTask(PackageResourcesTest(module), buildTasks)
 
         //Compile Libraries Resources
-        addTask(CompileLibrariesResources(module), buildTasks)
+        addTask(CompileLibrariesResourcesTest(module), buildTasks)
 
         //Merge libraries manifest
         addTask(MergeLibraryManifest(module), buildTasks)
@@ -73,16 +36,16 @@ class AndroidLibraryBuilder(
         addTask(GenerateBuildConfig(module), buildTasks)
 
         //Compile Java
-        addTask(CompileLibraryJava(module), buildTasks)
+        addTask(CompileLibraryJavaTest(module), buildTasks)
 
         //Transform Class to Dex
-        addTask(TransformClassToDex(module),buildTasks)
+        addTask(TransformClassToDexTest(module),buildTasks)
 
         //Transform Jar to Dex
-        addTask(TransformJarToDex(module),buildTasks)
+        addTask(TransformJarToDexTest(module),buildTasks)
 
         //Merge Ext Dex
-        addTask(MergeExtDex(module),buildTasks)
+        addTask(MergeExtDexTest(module),buildTasks)
 
         //Merge Assets Resources
         addTask(MergeAssetsResources(module), buildTasks)

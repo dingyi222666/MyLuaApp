@@ -27,6 +27,8 @@ class DefaultRunner(
         }
 
 
+
+
         Log.e("tasks", "$tasks")
 
 
@@ -60,6 +62,7 @@ class DefaultRunner(
                 endBuild(System.currentTimeMillis() - startTime)
             }
 
+            builder.clear()
         }
 
         return job
