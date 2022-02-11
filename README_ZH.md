@@ -19,7 +19,7 @@ MyLuaApp 使用**Lua或者Lua和Java混合** 来开发安卓软件。
 ## 功能
  - [ ] ecj支持(javac)
  - [ ] aapt2支持
- - [ ] d8支持
+ - [ ] d8,r8支持
  - [ ] 多模块支持
  - [ ] maven支持
  - [ ] TextMate 支持(tm4e)

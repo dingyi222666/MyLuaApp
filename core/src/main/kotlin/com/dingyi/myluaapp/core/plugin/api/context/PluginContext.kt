@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.core.plugin.api.context
 
+import android.content.Context
 import com.dingyi.myluaapp.core.plugin.api.Plugin
 import com.dingyi.myluaapp.core.plugin.api.action.ActionService
 import com.dingyi.myluaapp.core.plugin.api.build.BuildService
@@ -26,5 +27,6 @@ interface PluginContext {
 
     fun getUiService():UiService
 
+    fun getAndroidContext():Context
 
 }

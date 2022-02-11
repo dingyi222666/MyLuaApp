@@ -74,12 +74,13 @@ object Paths {
     val cacheDir = "${mainDir?.toFile()?.parentFile?.path}/cache"
     val builderDir = "$cacheDir/builder"
     val nativeLibraryDir = MainApplication.instance.applicationInfo.nativeLibraryDir
+    val assetsDir = MainApplication.instance.filesDir.absolutePath
     val localMavenDir = "$builderDir/maven"
     val extractAarDir = "$builderDir/extract-aar"
     val projectDir = "$mainDir/project"
     val fontsDir = "$mainDir/fonts"
-    val pluginDir = "$mainDir/plugin"
-    val assetsDir = MainApplication.instance.filesDir.absolutePath
+    val pluginDir = "$assetsDir/plugin"
+
     val resDir = "$assetsDir/res"
     val buildPath = "$resDir/build"
     val tempateDir = "$resDir/template"

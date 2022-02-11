@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.core.plugin.runtime.plugin
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
+import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.core.plugin.api.Plugin
 import com.dingyi.myluaapp.core.plugin.api.PluginModule
 import com.dingyi.myluaapp.core.plugin.api.action.ActionService
@@ -17,6 +19,7 @@ class PluginModule:PluginModule {
 
     override fun init(activity: AppCompatActivity) {
        currentActivity = activity
+        pluginManager?.init()
     }
 
     override fun loadPlugin(pluginId: String) {
@@ -33,6 +36,10 @@ class PluginModule:PluginModule {
 
     override fun uninstallPlugin(pluginId: String) {
         pluginManager?.uninstallPlugin(pluginId)
+    }
+
+    override fun getAllPlugin(): List<Plugin> {
+        return pluginManager?.getAllPlugin() ?: listOf()
     }
 
     override fun stop() {
@@ -66,5 +73,9 @@ class PluginModule:PluginModule {
 
     override fun getUiService(): UiService {
         TODO("Not yet implemented")
+    }
+
+    override fun getAndroidContext(): Context {
+        return MainApplication.instance
     }
 }

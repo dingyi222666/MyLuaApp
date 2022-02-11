@@ -88,6 +88,8 @@ dependencies {
 
     implementation(BuildConfig.Libs.Tools.channel)
     implementation(BuildConfig.Libs.Tools.brv)
+    implementation(BuildConfig.Libs.Tools.zip4j)
+
     implementation(BuildConfig.Libs.Tools.multi_languages)
 
     implementation(BuildConfig.Libs.Default.kotlin_stdlib) //kt

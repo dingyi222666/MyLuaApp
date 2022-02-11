@@ -24,4 +24,6 @@ interface Plugin {
     val pluginVersion:String
 
     val pluginAuthor:String
+
+    val pluginDescription:String
 }

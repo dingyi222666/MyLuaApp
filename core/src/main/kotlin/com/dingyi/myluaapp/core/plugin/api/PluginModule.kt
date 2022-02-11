@@ -20,6 +20,8 @@ interface PluginModule:PluginContext {
 
     fun uninstallPlugin(pluginId: String)
 
+    fun getAllPlugin():List<Plugin>
+
     fun stop()
 
 }
