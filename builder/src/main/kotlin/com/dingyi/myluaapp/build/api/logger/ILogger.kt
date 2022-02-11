@@ -27,12 +27,12 @@ interface ILogger : ILogger {
 
     override fun info(msgFormat: String, vararg args: Any?) {
         val formatString = Formatter(Locale.getDefault()).format(msgFormat, args)
-        info(formatString.toString())
+        debug(formatString.toString())
     }
 
     override fun verbose(msgFormat: String, vararg args: Any?) {
         val formatString = Formatter(Locale.getDefault()).format(msgFormat, args)
-        info(formatString.toString())
+        debug(formatString.toString())
     }
 
     override fun warning(msgFormat: String, vararg args: Any?) {

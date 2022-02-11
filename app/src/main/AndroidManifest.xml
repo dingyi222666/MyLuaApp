@@ -21,24 +21,6 @@
         tools:ignore="UnusedAttribute">
 
 
-        <activity
-            android:name=".ui.welcome.WelcomeActivity"
-            android:exported="true">
-
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-
-                <action android:name="android.intent.action.ACTION_VIEW" />
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-
-        <activity android:name=".ui.newproject.NewProjectActivity" />
-
-        <activity android:name=".ui.main.MainActivity" />
-        <activity android:name=".ui.GeneralActivity" />
-        <activity android:name=".ui.editor.activity.EditorActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

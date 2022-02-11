@@ -78,6 +78,7 @@ object Paths {
     val extractAarDir = "$builderDir/extract-aar"
     val projectDir = "$mainDir/project"
     val fontsDir = "$mainDir/fonts"
+    val pluginDir = "$mainDir/plugin"
     val assetsDir = MainApplication.instance.filesDir.absolutePath
     val resDir = "$assetsDir/res"
     val buildPath = "$resDir/build"
