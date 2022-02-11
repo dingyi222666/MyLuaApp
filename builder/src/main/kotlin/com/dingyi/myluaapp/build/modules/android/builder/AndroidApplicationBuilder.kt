@@ -42,7 +42,7 @@ class AndroidApplicationBuilder(
         addTask(GenerateBuildConfig(module), buildTasks)
 
         //Generate R.java
-        addTask(GenerateRFile(module), buildTasks)
+        addTask(GenerateRFileTest(module), buildTasks)
 
         //Compile Java
         addTask(CompileApplicationJavaTest(module), buildTasks)
@@ -60,22 +60,22 @@ class AndroidApplicationBuilder(
         addTask(MergeAssetsResourcesTest(module), buildTasks)
 
         //Merge jniLibs
-        addTask(MergeJniLibs(module), buildTasks)
+        addTask(MergeJniLibsTest(module), buildTasks)
 
         //Merge Java Resources
-        addTask(MergeJavaResources(module), buildTasks)
+        addTask(MergeJavaResourcesTest(module), buildTasks)
 
         //Merge Library Java Resources
-        addTask(MergeLibraryAssetsResources(module), buildTasks)
+        addTask(MergeLibraryAssetsResourcesTest(module), buildTasks)
 
         //Merge Library JniLibs
-        addTask(MergeLibraryJniLibs(module), buildTasks)
+        addTask(MergeLibraryJniLibsTest(module), buildTasks)
 
         //Merge Library Java Resources
-        addTask(MergeLibraryJavaResources(module), buildTasks)
+        addTask(MergeLibraryJavaResourcesTest(module), buildTasks)
 
         //Merge Ext Dex
-        addTask(DexBuilder(module),buildTasks)
+        addTask(DexBuilderTest(module),buildTasks)
 
         //Package Apk
         addTask(PackageApk(module),buildTasks)

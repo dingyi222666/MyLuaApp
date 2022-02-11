@@ -51,10 +51,10 @@ class AndroidLibraryBuilder(
         addTask(MergeAssetsResourcesTest(module), buildTasks)
 
         //Merge jniLibs
-        addTask(MergeJniLibs(module), buildTasks)
+        addTask(MergeJniLibsTest(module), buildTasks)
 
         //Merge Java Resources
-        addTask(MergeJavaResources(module), buildTasks)
+        addTask(MergeJavaResourcesTest(module), buildTasks)
 
 
     }

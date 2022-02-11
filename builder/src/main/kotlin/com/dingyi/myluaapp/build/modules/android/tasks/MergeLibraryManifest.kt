@@ -20,8 +20,6 @@ class MergeLibraryManifest(private val module: Module) : DefaultTask(module) {
     override val name: String
         get() = this.javaClass.simpleName
 
-    private lateinit var buildVariants: String
-
 
     private val mainManifestFile = "src/main/AndroidManifest.xml"
 
