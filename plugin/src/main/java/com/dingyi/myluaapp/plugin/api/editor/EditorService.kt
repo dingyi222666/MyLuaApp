@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.plugin.api.editor
 
+import com.dingyi.myluaapp.plugin.api.project.Project
 import java.io.File
 
 interface EditorService {
@@ -10,12 +11,13 @@ interface EditorService {
 
     fun getEditorProvider(): EditorProvider
 
-    fun openEditor(editorPath:File)
+    fun openEditor(editorPath:File):Editor
 
     fun closeEditor(editor: Editor)
 
+    //Clear All Editor
     fun saveEditorServiceState()
 
-    fun loadEditorServiceState()
+    fun loadEditorServiceState(project: Project)
 
 }

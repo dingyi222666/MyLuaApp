@@ -18,7 +18,10 @@ class ProjectService(
     private val allCreateProjectProvider = mutableListOf<CreateProjectProvider>()
 
     override suspend fun getAllProject(): List<Project> {
-        TODO("Not yet implemented")
+        return Paths.projectDir.toFile()
+            .listFiles()?.mapNotNull {
+                getProject(it)
+            } ?: listOf()
     }
 
     override fun addProjectProvider(projectProvider: ProjectProvider) {
@@ -40,7 +43,6 @@ class ProjectService(
                 it.startsWith("MyApplication")
             }.size
 
-
         val name = "MyApplication" + (if (size > 0) (size + 1).toString() else "")
 
         return MutablePair(name, "com.MyLuaApp.application")
@@ -50,5 +52,15 @@ class ProjectService(
         return (Paths.projectDir + "/$name").toFile().isDirectory &&
                 (Paths.projectDir + "/$name").toFile().absolutePath !=
                 Paths.projectDir.toFile().absolutePath
+    }
+
+    override suspend fun getProject(projectPath: File): Project {
+        for (projectProvider in allProjectProvider) {
+            val project = projectProvider.indexProject(projectPath.path)
+            if (project != null) {
+                return project
+            }
+        }
+        error("Unable to Index Project: $projectPath")
     }
 }

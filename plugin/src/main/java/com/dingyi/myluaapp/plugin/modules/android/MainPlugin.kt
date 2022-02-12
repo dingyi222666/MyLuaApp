@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.plugin.modules.android
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.modules.android.project.AndroidCreateProjectProvider
+import com.dingyi.myluaapp.plugin.modules.android.project.AndroidProjectProvider
 
 class MainPlugin: Plugin {
 
@@ -19,6 +20,11 @@ class MainPlugin: Plugin {
         context
             .getProjectService()
             .addCreateProjectProvider(AndroidCreateProjectProvider())
+
+        context
+            .getProjectService()
+            .addProjectProvider(AndroidProjectProvider())
+
 
     }
 

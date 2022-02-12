@@ -17,12 +17,13 @@ interface Project {
     fun walkProjectFile():FileTreeWalk
 
 
-
     val name:String
 
     val packageName:String?
 
     val path:File
+
+    val iconPath:String?
 
 
 }
