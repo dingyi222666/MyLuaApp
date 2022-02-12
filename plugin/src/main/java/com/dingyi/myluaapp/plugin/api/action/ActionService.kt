@@ -12,7 +12,9 @@ interface ActionService {
 
     fun createActionArgument():ActionArgument
 
-    fun registerAction(actionClass:Class<Action>, eventId:Int)
+    fun registerAction(actionClass:Class<Action>, key:ActionKey)
 
-    fun callAction(actionArgument: ActionArgument, eventId: Int)
+    fun callAction(actionArgument: ActionArgument, key: ActionKey)
+
+    fun registerActionKey(actionKey: ActionKey)
 }
