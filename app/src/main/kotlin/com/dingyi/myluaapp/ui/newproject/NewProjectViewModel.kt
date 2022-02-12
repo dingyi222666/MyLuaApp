@@ -44,7 +44,7 @@ class NewProjectViewModel : ViewModel() {
         showProgressBar.value = true
         withContext(Dispatchers.IO) {
             template.create(
-                projectPath = File(Paths.projectDir, pair.second),
+                projectPath = File(Paths.projectDir, pair.first),
                 name = pair.first,
                 packageName = pair.second
             )

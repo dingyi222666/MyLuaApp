@@ -39,3 +39,19 @@ fun String.toMD5() = kotlin.runCatching {
     }
     return sb.toString()
 }.getOrNull() ?: ""
+
+/**
+ * replace string
+ */
+fun replaceString(
+    context: String,
+    pair: MutablePair<String, String>,
+    usePath: Boolean = false
+): String {
+    return context.replace("\$app_name", pair.first)
+        .replace(
+            "\$app_package_name",
+            if (usePath) pair.second.replace(".", "/") else pair.second
+        )
+}
+
