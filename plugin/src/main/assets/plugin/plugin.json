@@ -1,0 +1,10 @@
+[
+  {
+    "pluginPath": "null",
+    "pluginMainClass": "com.dingyi.myluaapp.plugin.modules.default.MainPlugin"
+  },
+  {
+    "pluginPath": "null",
+    "pluginMainClass": "com.dingyi.myluaapp.plugin.modules.android.MainPlugin"
+  }
+]

@@ -20,10 +20,10 @@ This project uses Lua to parse the project configuration script. Based on the fl
 - [ ] AAPT2 support
 - [ ] D8 and R8 support
 - [ ] Multi-module support
-- [ ] Maven support
+- [ ] Maven Dependency Index support
 - [ ] TextMate support (tm4e)
-- [ ] Plugin system
-- [ ] Build system
+- [ ] Plugin Module
+- [ ] Build Module
 - [ ] Auto completion support for Lua
 - [ ] Auto completion support for Java
 - [ ] Auto completion support for Xml

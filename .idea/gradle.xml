@@ -20,6 +20,7 @@
             <option value="$PROJECT_DIR$/editor" />
             <option value="$PROJECT_DIR$/lua-lsp-server" />
             <option value="$PROJECT_DIR$/luaj" />
+            <option value="$PROJECT_DIR$/plugin" />
             <option value="$PROJECT_DIR$/tm4e" />
           </set>
         </option>

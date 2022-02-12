@@ -1,0 +1,16 @@
+{
+  "templates": [
+    {
+      "name": {
+        "default": "Lua Java 空模板",
+        "english": "Lua And Java Empty Project"
+      },
+      "path": "zip/empty_project.zip",
+      "replaces": [
+        "xml",
+        "lua",
+        "json"
+      ]
+    }
+  ]
+}

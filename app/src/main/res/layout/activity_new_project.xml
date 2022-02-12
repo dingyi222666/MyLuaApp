@@ -111,43 +111,5 @@
 
     </com.google.android.material.chip.ChipGroup>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/base_other_title"
-        style="@style/TextAppearance.MaterialComponents.Subtitle2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/new_project_base_other_title"
-        android:textColor="?colorPrimary"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chip_group" />
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-
-        android:gravity="left|center"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/base_other_title">
-
-        <com.google.android.material.textview.MaterialTextView
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:text="@string/new_project_use_androidx" />
-
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:enabled="false" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

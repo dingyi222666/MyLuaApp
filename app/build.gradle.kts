@@ -64,6 +64,7 @@ dependencies {
     implementation(project(":luaj"))
     implementation(project(":common"))
     implementation(project(":core"))
+    implementation(project(":plugin"))
 
     implementation(project(":builder"))
 

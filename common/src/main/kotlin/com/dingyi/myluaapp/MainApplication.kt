@@ -14,12 +14,12 @@ import com.hjq.language.MultiLanguages
  **/
 class MainApplication : Application() {
 
+
     override fun onCreate() {
 
         super.onCreate()
 
         instance = this
-
 
         // 初始化语种切换框架
         MultiLanguages.init(this);

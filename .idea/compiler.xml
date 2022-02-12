@@ -10,6 +10,7 @@
       <module name="MyLuaApp.core" target="11" />
       <module name="MyLuaApp.editor" target="11" />
       <module name="MyLuaApp.LuaLibrary" target="11" />
+      <module name="MyLuaApp.plugin" target="11" />
       <module name="MyLuaApp.tm4e" target="11" />
       <module name="MyLuaApp2.buildSrc" target="11" />
     </bytecodeTargetLevel>
