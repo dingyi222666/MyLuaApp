@@ -1,4 +1,4 @@
-package com.dingyi.editor.kts
+package com.dingyi.myluaapp.editor.kts
 
 import android.content.res.Resources
 

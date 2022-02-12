@@ -1,8 +1,7 @@
 package com.dingyi.myluaapp.common.dialog
 
 import android.content.Context
-import android.view.View
-import com.dingyi.editor.kts.dp
+import com.dingyi.myluaapp.editor.kts.dp
 import com.dingyi.myluaapp.common.dialog.helper.BaseBottomDialogLayoutHelper
 import com.dingyi.myluaapp.common.dialog.layout.BaseBottomDialogLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior

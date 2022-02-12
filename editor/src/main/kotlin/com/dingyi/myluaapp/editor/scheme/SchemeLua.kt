@@ -1,4 +1,4 @@
-package com.dingyi.editor.scheme
+package com.dingyi.myluaapp.editor.scheme
 
 import io.github.rosemoe.sora.widget.EditorColorScheme
 

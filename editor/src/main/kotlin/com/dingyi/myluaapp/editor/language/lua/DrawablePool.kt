@@ -1,4 +1,4 @@
-package com.dingyi.editor.language.lua
+package com.dingyi.myluaapp.editor.language.lua
 
 import android.content.Context
 import android.graphics.drawable.Drawable

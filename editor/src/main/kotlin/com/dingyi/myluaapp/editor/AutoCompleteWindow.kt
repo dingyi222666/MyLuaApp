@@ -1,12 +1,10 @@
-package com.dingyi.editor
+package com.dingyi.myluaapp.editor
 
 import android.graphics.drawable.GradientDrawable
 import android.view.ViewGroup
-import android.widget.ListView
 import android.widget.RelativeLayout
-import com.dingyi.editor.kts.dp
+import com.dingyi.myluaapp.editor.kts.dp
 import io.github.rosemoe.sora.widget.EditorAutoCompleteWindow
-import io.github.rosemoe.sora.widget.EditorCompletionAdapter
 
 /**
  * @author: dingyi

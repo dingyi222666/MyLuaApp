@@ -1,4 +1,4 @@
-package com.dingyi.editor.language.java
+package com.dingyi.myluaapp.editor.language.java
 
 import com.dingyi.editor.language.textmate.TextMateBridgeLanguage
 import com.dingyi.editor.language.textmate.TextMateGlobal

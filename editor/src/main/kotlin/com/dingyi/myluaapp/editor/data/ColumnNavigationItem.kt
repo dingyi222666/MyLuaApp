@@ -1,4 +1,4 @@
-package com.dingyi.editor.data
+package com.dingyi.myluaapp.editor.data
 
 import io.github.rosemoe.sora.data.NavigationItem
 

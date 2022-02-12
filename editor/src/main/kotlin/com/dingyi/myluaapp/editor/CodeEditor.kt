@@ -1,11 +1,10 @@
-package com.dingyi.editor
+package com.dingyi.myluaapp.editor
 
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.view.MotionEvent
 
-import com.dingyi.editor.kts.dp
+import com.dingyi.myluaapp.editor.kts.dp
 import io.github.rosemoe.sora.widget.CodeEditor
 import java.io.File
 

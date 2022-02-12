@@ -1,18 +1,14 @@
-package com.dingyi.editor.language.lua
+package com.dingyi.myluaapp.editor.language.lua
 
 
-import com.dingyi.editor.language.BaseLanguage
+import com.dingyi.myluaapp.editor.language.BaseLanguage
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider
 import io.github.rosemoe.sora.interfaces.CodeAnalyzer
 import io.github.rosemoe.sora.interfaces.NewlineHandler
 import io.github.rosemoe.sora.interfaces.NewlineHandler.HandleResult
 import io.github.rosemoe.sora.langs.internal.MyCharacter
-import io.github.rosemoe.sora.text.Content
-import io.github.rosemoe.sora.text.ContentListener
 import io.github.rosemoe.sora.text.TextUtils
-import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.SymbolPairMatch
-import java.io.FileInputStream
 
 
 /**

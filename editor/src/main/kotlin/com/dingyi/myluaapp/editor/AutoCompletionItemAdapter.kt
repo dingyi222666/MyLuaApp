@@ -1,4 +1,4 @@
-package com.dingyi.editor
+package com.dingyi.myluaapp.editor
 
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.dingyi.editor.kts.dp
-import com.dingyi.editor.data.ColorCompletionItem
+import com.dingyi.myluaapp.editor.kts.dp
+import com.dingyi.myluaapp.editor.data.ColorCompletionItem
 import io.github.rosemoe.sora.widget.EditorCompletionAdapter
 
 

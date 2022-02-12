@@ -1,4 +1,4 @@
-package com.dingyi.editor.language
+package com.dingyi.myluaapp.editor.language
 
 import io.github.rosemoe.sora.interfaces.EditorLanguage
 
