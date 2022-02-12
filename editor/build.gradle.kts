@@ -42,8 +42,6 @@ dependencies {
         )
     )//libs jar
 
-    implementation(project(":tm4e"))
-
     //editor
     implementation(BuildConfig.Libs.AndroidX.appcompat)
     implementation(BuildConfig.Libs.AndroidX.lifecycle_runtime)

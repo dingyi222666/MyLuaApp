@@ -42,12 +42,8 @@ object BuildConfig {
         const val okhttp3_version = "4.9.1"
         const val channel_version = "1.1.4"
         const val swiperefreshlayout_version = "1.2.0-alpha01"
-        const val desugar_jdk_libs_version = "1.1.5"
         const val lsp4j_version = "0.12.0"
-        const val joni_version = "2.1.11"
-        const val jcodings_version = "1.0.18"
-        const val xmlgraphics_version = "1.14"
-        const val dom_version = "2.3.0-jaxb-1.0.6"
+
         const val kotlinx_coroutines_android_version = "1.5.1"
         const val core_ktx_version = "1.7.0-rc01"
         const val brv_version = "1.3.51"
@@ -129,14 +125,6 @@ object BuildConfig {
             const val antlr_kotlin_target =
                 "com.strumenta.antlr-kotlin:antlr-kotlin-target:${Versions.antlr_kotlin_version}"
 
-            const val joni = "org.jruby.joni:joni:${Versions.joni_version}"
-
-            const val jcodings = "org.jruby.jcodings:jcodings:${Versions.jcodings_version}"
-
-            const val batik_css = "org.apache.xmlgraphics:batik-css:${Versions.xmlgraphics_version}"
-            const val batik_util =
-                "org.apache.xmlgraphics:batik-util:${Versions.xmlgraphics_version}"
-            const val dom = "org.w3c:dom:${Versions.dom_version}"
             const val brv = "com.github.liangjingkanji:BRV:${Versions.brv_version}"
             const val multi_languages =
                 "com.github.getActivity:MultiLanguages:${Versions.multi_languages_version}"
@@ -163,6 +151,7 @@ object BuildConfig {
             const val code_editor =
                 "io.github.Rosemoe.sora-editor:editor:${Versions.code_editor_version}"
 
+           
         }
 
         object Network {

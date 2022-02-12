@@ -1,9 +1,9 @@
 package com.dingyi.editor.language.lua
 
-import com.dingyi.editor.language.textmate.TextMateBridgeLanguage
-import com.dingyi.editor.language.textmate.TextMateGlobal
-import com.dingyi.editor.language.textmate.theme.VSCodeTheme
+
+import com.dingyi.editor.language.BaseLanguage
 import io.github.rosemoe.sora.interfaces.AutoCompleteProvider
+import io.github.rosemoe.sora.interfaces.CodeAnalyzer
 import io.github.rosemoe.sora.interfaces.NewlineHandler
 import io.github.rosemoe.sora.interfaces.NewlineHandler.HandleResult
 import io.github.rosemoe.sora.langs.internal.MyCharacter
@@ -21,8 +21,8 @@ import java.io.FileInputStream
  * @description:
  * @param codeEditor The language must binding editor to get color scheme and analyze code
  **/
-class LuaLanguage(codeEditor: CodeEditor) :
-    TextMateBridgeLanguage(codeEditor), ContentListener {
+class LuaLanguage(codeEditor: io.github.rosemoe.sora.widget.CodeEditor) :
+    BaseLanguage() {
 
     private val keywordTarget =
         "and|break|case|catch|continue|default|defer|do|else|elseif|end|false|finally|for|function|goto|if|in|lambda|local|nil|not|or|repeat|return|switch|then|true|try|until|when|while"
@@ -63,16 +63,11 @@ class LuaLanguage(codeEditor: CodeEditor) :
         '?', '~', '%', '^'
     )
 
-    private var mContent: Content? = null
 
 
     init {
 
-        codeEditor.colorScheme = TextMateGlobal.loadTheme("light") {
-            VSCodeTheme("light.json") {
-                FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/theme/light.json")
-            }
-        }
+
 
         super.setOperators(LUA_OPERATORS)
         super.setKeywords(__keywords)
@@ -91,41 +86,8 @@ class LuaLanguage(codeEditor: CodeEditor) :
 
     }
 
-
-    override fun beforeReplace(content: Content?) {
-        println(content)
-    }
-
-    override fun afterInsert(
-        content: Content?,
-        startLine: Int,
-        startColumn: Int,
-        endLine: Int,
-        endColumn: Int,
-        insertedContent: CharSequence?
-    ) {
-
-    }
-
-    override fun afterDelete(
-        content: Content?,
-        startLine: Int,
-        startColumn: Int,
-        endLine: Int,
-        endColumn: Int,
-        deletedContent: CharSequence?
-    ) {
-
-    }
-
-
-    override fun getLanguageConfig(): LanguageConfig {
-        return LanguageConfig(
-            language = "lua",
-            languagePath = "lua.tmLanguage.json",
-            languageConfigurationInputStream = FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/lua/language-configuration.json"),
-            languageGrammarInputStream = FileInputStream(codeEditor.context.filesDir.path + "/res/textmate/lua/lua.tmLanguage.json")
-        )
+    override fun getAnalyzer(): CodeAnalyzer {
+        TODO("Not yet implemented")
     }
 
 
@@ -142,6 +104,10 @@ class LuaLanguage(codeEditor: CodeEditor) :
                     || ch == '_' || MyCharacter.isJavaIdentifierPart(ch.code);
     }
 
+    override fun getIndentAdvance(content: String?): Int {
+        TODO("Not yet implemented")
+    }
+
 
     override fun useTab(): Boolean {
         return true;
@@ -153,6 +119,10 @@ class LuaLanguage(codeEditor: CodeEditor) :
 
     override fun getSymbolPairs(): SymbolPairMatch {
         return SymbolPairMatch.DefaultSymbolPairs();
+    }
+
+    override fun getNewlineHandlers(): Array<NewlineHandler> {
+        TODO("Not yet implemented")
     }
 
     private val newlineHandlers = arrayOf(BraceHandler())

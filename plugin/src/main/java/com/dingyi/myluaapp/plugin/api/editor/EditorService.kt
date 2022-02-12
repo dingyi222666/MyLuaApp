@@ -9,7 +9,6 @@ interface EditorService {
 
     fun getAllEditor():List<Editor>
 
-    fun getEditorProvider(): EditorProvider
 
     fun openEditor(editorPath:File):Editor
 
