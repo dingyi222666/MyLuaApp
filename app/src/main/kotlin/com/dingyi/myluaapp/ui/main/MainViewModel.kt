@@ -63,6 +63,7 @@ class MainViewModel : ViewModel() {
 
 
         }.onFailure {
+            System.err.println(it)
             showErrorMessage(binding)
         }
 

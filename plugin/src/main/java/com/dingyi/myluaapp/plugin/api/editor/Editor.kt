@@ -19,9 +19,9 @@ interface Editor {
 
     fun getId():Int
 
-    fun saveState(): com.dingyi.myluaapp.plugin.api.editor.EditorState
+    fun <T:EditorState> saveState(): T
 
-    fun restoreState(editorState: com.dingyi.myluaapp.plugin.api.editor.EditorState)
+    fun <T:EditorState> restoreState(editorState: T)
 
     fun getFile():File
 

@@ -45,7 +45,6 @@ object PluginModule: PluginModule {
     }
 
     override fun stop() {
-
         pluginManager?.stop()
         pluginManager = null
     }

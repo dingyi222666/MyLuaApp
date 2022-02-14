@@ -7,7 +7,7 @@ import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.google.gson.Gson
 import java.io.File
 
-class PluginManager(private val context: com.dingyi.myluaapp.plugin.api.context.PluginContext) {
+class PluginManager(private val context: PluginContext) {
 
 
     private val allPlugin = mutableListOf<Plugin>()
