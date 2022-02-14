@@ -11,7 +11,7 @@ interface EditorService {
 
     fun addEditorProvider(editorProvider: EditorProvider)
 
-
+    fun refreshEditorServiceState()
 
     fun openEditor(editorPath:File): Editor<*>?
 

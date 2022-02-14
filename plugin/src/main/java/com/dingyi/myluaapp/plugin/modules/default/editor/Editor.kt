@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.plugin.modules.default.editor
 import android.content.Context
 import android.view.View
 import com.dingyi.myluaapp.common.kts.toFile
-import com.dingyi.myluaapp.editor.CodeEditor
+import io.github.rosemoe.sora.widget.CodeEditor
 
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 
@@ -11,20 +11,19 @@ import com.dingyi.myluaapp.plugin.api.editor.language.Language
 import com.dingyi.myluaapp.plugin.modules.default.editor.language.EmptyLanguage
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
 import java.io.File
-import java.lang.ref.WeakReference
-
+import java.io.FileNotFoundException
 class Editor(
-    private val context: Context,
+
     private val path: File,
     private val id: Int
 ) : Editor<EditorState> {
 
 
-    private val currentContext = WeakReference(context)
-
     private var currentLanguage: Language = EmptyLanguage()
 
-    private val currentEditor = CodeEditor(context)
+    private lateinit var currentEditor: CodeEditor
+
+    private var currentEditorState = EditorState(path.path, 0, 0, 0, 0, 0f)
 
     private var currentText: CharSequence = ""
 
@@ -58,19 +57,28 @@ class Editor(
 
 
     override fun saveState(): EditorState {
-        return EditorState(
-            path = path.path,
-            line = getCurrentLine(),
-            column = getCurrentColumn(),
-            scrollX = currentEditor.scroller.currX,
-            scrollY = currentEditor.scroller.currY,
-            textSize = currentEditor.textSizePx
-        )
+
+        if (this::currentEditor.isInitialized) {
+
+            currentEditorState = EditorState(
+                path = path.path,
+                line = getCurrentLine(),
+                column = getCurrentColumn(),
+                scrollX = currentEditor.scroller.currX,
+                scrollY = currentEditor.scroller.currY,
+                textSize = currentEditor.textSizePx
+            )
+        }
+
+        return currentEditorState
     }
 
     override fun restoreState(editorState: EditorState) {
+        currentEditorState = editorState
+    }
+
+    private fun doRestoreState(editorState: EditorState) {
         currentEditor.apply {
-            this@Editor.setText(editorState.path.toFile().readText())
             text.cursor.set(editorState.line, editorState.column)
             scroller.startScroll(
                 scroller.currX,
@@ -83,6 +91,7 @@ class Editor(
             }
         }
     }
+
 
     override fun getFile(): File {
         return path
@@ -102,6 +111,40 @@ class Editor(
 
     override fun getCurrentView(): View {
         return currentEditor
+    }
+
+    override fun save() {
+        if (!path.isFile) {
+            throw FileNotFoundException("The File was deleted.")
+        }
+        path.writeText(currentEditor.text.toString())
+    }
+
+    override fun binCurrentView(r: CodeEditor) {
+        currentEditor = r
+    }
+
+    override fun read() {
+        if (!path.isFile) {
+            throw FileNotFoundException("The File was deleted.")
+        }
+        currentEditor.setText(path.readText())
+        doRestoreState(currentEditorState)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as com.dingyi.myluaapp.plugin.modules.default.editor.Editor
+
+        if (path.path != other.path.path) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return path.path.hashCode()
     }
 
 

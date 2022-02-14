@@ -47,8 +47,7 @@
                     app:tabGravity="start"
                     app:tabIndicator="@drawable/default_tab_indicator"
                     app:tabMode="scrollable"
-                    app:tabTextAppearance="@style/BaseTableLayoutStyle"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                    app:tabTextAppearance="@style/BaseTableLayoutStyle" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         </com.google.android.material.appbar.AppBarLayout>

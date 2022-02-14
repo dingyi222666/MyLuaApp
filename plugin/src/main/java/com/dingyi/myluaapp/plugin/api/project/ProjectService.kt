@@ -6,7 +6,7 @@ import java.io.File
 interface ProjectService {
 
 
-    suspend fun getAllProject():List<Project>
+    fun getAllProject():List<Project>
 
     fun addProjectProvider(projectProvider: ProjectProvider)
 
@@ -17,6 +17,6 @@ interface ProjectService {
     fun getDefaultCreateProjectInfo():MutablePair<String,String>
     fun checkCreateProjectName(name: String): Boolean
 
-    suspend fun getProject(projectPath:File):Project
+    fun getProject(projectPath:File):Project
 
 }

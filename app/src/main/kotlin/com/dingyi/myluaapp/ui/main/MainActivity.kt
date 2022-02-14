@@ -45,13 +45,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // load plugin module
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                PluginModule.init()
-                PluginModule.loadAllPlugin()
-            }
-        }
+
 
         setSupportActionBar(viewBinding.toolbarInclude.toolbar)
 

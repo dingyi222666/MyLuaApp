@@ -34,6 +34,9 @@ class WelcomeActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
+
+                // load plugin module
+
                 val apkPath = packageResourcePath
 
                 val file = ZipFile(apkPath)
@@ -49,7 +52,16 @@ class WelcomeActivity : AppCompatActivity() {
                             file.extractFile(it, path, it.fileName.substring("assets/".length))
                         }
                     }
+
+
+                PluginModule.init()
+                PluginModule.loadAllPlugin()
+
+
+
             }
+
+
 
             viewBinding.title.text = "MyLuaApp by dingyi"
 

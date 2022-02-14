@@ -10,6 +10,7 @@ import com.dingyi.myluaapp.plugin.api.editor.EditorService
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.google.gson.Gson
 import java.io.File
+import java.io.FileNotFoundException
 
 class EditorService : EditorService {
 
@@ -36,12 +37,25 @@ class EditorService : EditorService {
     }
 
     override fun openEditor(editorPath: File): Editor<*>? {
+
+        if (!editorPath.isFile) {
+            throw FileNotFoundException("The file ${editorPath.path} was deleted.")
+        }
+
+        for (openedEditor in allEditor) {
+            if (openedEditor.getFile().path == editorPath.path) {
+                currentEditor = openedEditor
+                currentEditorServiceState.lastOpenPath = openedEditor.getFile().path
+                return currentEditor
+            }
+        }
+
         for (it in allEditorProvider) {
             val editor = it.createEditor(editorPath)
             if (editor != null) {
-
                 allEditor.add(editor)
                 currentEditor = editor
+                currentEditorServiceState.lastOpenPath = editor.getFile().path
                 currentEditorServiceState.editors.add(editor.saveState() as EditorState)
                 return editor
             }
@@ -75,28 +89,42 @@ class EditorService : EditorService {
     }
 
     override fun saveEditorServiceState() {
-        val projectEditorStateFile = File(currentProject.path, ".MyLuaApp/editor_config.json")
+        val projectEditorStateFile = File(currentProject.path, ".MyLuaApp/editor_config.bin")
 
         val text = Gson()
             .toJson(currentEditorServiceState)
 
 
-        projectEditorStateFile.outputStream().writeUseGZIP(text)
+        if (!projectEditorStateFile.isFile) {
+            projectEditorStateFile.parentFile?.mkdirs()
+            projectEditorStateFile.createNewFile()
+        }
+
+        // projectEditorStateFile.outputStream().writeUseGZIP(text)
+
+        projectEditorStateFile.writeText(text)
 
         allEditor.clear()
 
 
     }
 
+    override fun refreshEditorServiceState() {
+        allEditor.clear()
+        indexAllEditor()
+    }
+
     override fun loadEditorServiceState(project: Project) {
         currentProject = project
 
-        val projectEditorStateFile = File(project.path, ".MyLuaApp/editor_config.json")
+        val projectEditorStateFile = File(project.path, ".MyLuaApp/editor_config.bin")
 
         currentEditorServiceState = if (projectEditorStateFile.isFile) {
             Gson()
                 .fromJson(
-                    projectEditorStateFile.inputStream().readFormGZIP(), getJavaClass()
+                    projectEditorStateFile.readText()
+                    //projectEditorStateFile.inputStream().readFormGZIP()
+                    , getJavaClass()
                 )
 
         } else {
@@ -118,7 +146,6 @@ class EditorService : EditorService {
                 val editor = it.createEditor(editorState.path.toFile())
                 if (editor != null) {
                     (editor as Editor<EditorState>).restoreState(editorState)
-                    allEditor.add(editor)
 
                     if (currentEditorServiceState.lastOpenPath == editorState.path) {
                         currentEditor = editor
@@ -128,9 +155,6 @@ class EditorService : EditorService {
             }
         }
 
-        if (currentEditor == null && allEditor.isNotEmpty()) {
-            currentEditor = allEditor[0]
-        }
 
     }
 

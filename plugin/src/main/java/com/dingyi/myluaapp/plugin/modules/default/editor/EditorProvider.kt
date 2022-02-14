@@ -5,6 +5,7 @@ import com.dingyi.myluaapp.plugin.api.context.PluginContext
 
 import com.dingyi.myluaapp.plugin.api.editor.EditorProvider
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import io.github.rosemoe.sora.widget.CodeEditor
 import java.io.File
 
 class EditorProvider(
@@ -13,17 +14,10 @@ class EditorProvider(
 
     private var id = 0
 
-    override fun createEditor(editorPath: File): com.dingyi.myluaapp.plugin.api.editor.Editor<*>? {
-        val context = pluginContext
-            .getActionService()
-            .callAction<Context>(
-                pluginContext.getActionService().createActionArgument()
-                    .addArgument(editorPath),
-                DefaultActionKey.CREATE_EDITOR_ACTION
-            )
+    override fun createEditor(editorPath: File): Editor {
 
         id++
 
-        return context?.let { Editor(it, editorPath, id) }
+        return Editor(editorPath, id)
     }
 }

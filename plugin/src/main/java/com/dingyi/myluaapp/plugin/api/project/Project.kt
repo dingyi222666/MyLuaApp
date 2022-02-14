@@ -10,9 +10,6 @@ interface Project {
     fun deleteFile(targetFile:File)
 
 
-    fun openFile(file:String)
-
-
 
     fun walkProjectFile():FileTreeWalk
 

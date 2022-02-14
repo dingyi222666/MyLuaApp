@@ -17,7 +17,7 @@ class ProjectService(
 
     private val allCreateProjectProvider = mutableListOf<CreateProjectProvider>()
 
-    override suspend fun getAllProject(): List<Project> {
+    override fun getAllProject(): List<Project> {
         return Paths.projectDir.toFile()
             .listFiles()?.mapNotNull {
                 getProject(it)
@@ -54,7 +54,7 @@ class ProjectService(
                 Paths.projectDir.toFile().absolutePath
     }
 
-    override suspend fun getProject(projectPath: File): Project {
+    override fun getProject(projectPath: File): Project {
         for (projectProvider in allProjectProvider) {
             val project = projectProvider.indexProject(projectPath.path)
             if (project != null) {

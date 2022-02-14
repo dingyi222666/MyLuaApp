@@ -30,7 +30,7 @@ object BuildConfig {
         const val android_gradle_plugin_version = "7.0.2"
         const val antlr_kotlin_version = "6304d5c1c4"
         const val gson_version = "2.8.8"
-        const val material_version = "1.6.0-alpha02"
+        const val material_version = "1.6.0-alpha01"
         const val appcompat_version = "1.4.1"
         const val code_editor_version = "0.8.4"
         const val lifecycle_version = "2.4.0"

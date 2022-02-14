@@ -26,9 +26,6 @@ class AndroidProject(
         TODO("Not yet implemented")
     }
 
-    override fun openFile(file: String) {
-        TODO("Not yet implemented")
-    }
 
     override fun walkProjectFile(): FileTreeWalk {
         TODO("Not yet implemented")
