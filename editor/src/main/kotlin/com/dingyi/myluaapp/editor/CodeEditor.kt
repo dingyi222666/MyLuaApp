@@ -15,11 +15,11 @@ import java.io.File
  * @description:
  **/
 
-class CodeEditor(context: Context, attributeSet: AttributeSet) :
+class CodeEditor(context: Context, attributeSet: AttributeSet?) :
     CodeEditor(context, attributeSet) {
 
 
-
+    constructor(context: Context):this(context,null)
 
     init {
         Typeface.BOLD

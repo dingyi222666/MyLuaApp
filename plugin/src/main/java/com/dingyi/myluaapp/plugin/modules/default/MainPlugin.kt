@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.plugin.modules.default
 import android.util.Log
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
+import com.dingyi.myluaapp.plugin.modules.default.editor.EditorProvider
 
 class MainPlugin: Plugin {
 
@@ -15,7 +16,12 @@ class MainPlugin: Plugin {
     }
 
     override fun onStart(context: PluginContext) {
-        Log.e("test","Hello Plugin")
+
+
+        context
+            .getEditorService()
+            .addEditorProvider(EditorProvider(context))
+
     }
 
     override fun onStop(context: PluginContext) {

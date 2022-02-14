@@ -4,5 +4,5 @@ import java.io.File
 
 interface EditorProvider {
 
-    fun createEditor(editorPath:File):Editor?
+    fun createEditor(editorPath:File):Editor<*>?
 }

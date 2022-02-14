@@ -2,9 +2,9 @@ package com.dingyi.myluaapp.plugin.api
 
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 
-interface Action {
+interface Action<T> {
 
-    fun callAction(argument: ActionArgument)
+    fun <T> callAction(argument: ActionArgument):T?
 
     val name:String
 

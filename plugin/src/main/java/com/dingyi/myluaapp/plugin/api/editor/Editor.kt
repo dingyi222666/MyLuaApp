@@ -1,9 +1,10 @@
 package com.dingyi.myluaapp.plugin.api.editor
 
 import android.view.View
+import com.dingyi.myluaapp.plugin.api.editor.language.Language
 import java.io.File
 
-interface Editor {
+interface Editor<T>  {
 
     fun getText():CharSequence
 
@@ -15,19 +16,20 @@ interface Editor {
 
     fun appendText(charSequence: CharSequence)
 
-    fun getHighlightProvider()
-
     fun getId():Int
 
-    fun <T:EditorState> saveState(): T
+    fun saveState(): T
 
-    fun <T:EditorState> restoreState(editorState: T)
+    fun restoreState(editorState: T)
 
     fun getFile():File
 
     fun isModify():Boolean
 
-    fun getLanguage():String
+    fun getLanguage():Language
+
+    fun setLanguage(language: Language)
+
 
     fun getCurrentView():View
 

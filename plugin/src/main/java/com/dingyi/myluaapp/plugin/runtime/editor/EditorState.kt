@@ -6,7 +6,7 @@ data class EditorState(
     var path:String,
     var line:Int,
     var column:Int,
-    var scrollX:Float,
-    var scrollY:Float,
+    var scrollX: Int,
+    var scrollY: Int,
     var textSize:Float,
 ):EditorState

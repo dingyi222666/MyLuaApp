@@ -15,19 +15,19 @@ class EditorService : EditorService {
 
     private lateinit var currentProject: Project
 
-    private val allEditor = mutableListOf<Editor>()
+    private val allEditor = mutableListOf<Editor<*>>()
 
     private val allEditorProvider = mutableListOf<EditorProvider>()
 
-    private var currentEditor: Editor? = null
+    private var currentEditor: Editor<*>? = null
 
     private lateinit var currentEditorServiceState: EditorServiceState
 
-    override fun getCurrentEditor(): Editor? {
+    override fun  getCurrentEditor(): Editor<*>? {
         return currentEditor
     }
 
-    override fun getAllEditor(): List<Editor> {
+    override fun getAllEditor(): List<Editor<*>> {
         return allEditor
     }
 
@@ -35,21 +35,21 @@ class EditorService : EditorService {
         allEditorProvider.add(editorProvider)
     }
 
-    override fun openEditor(editorPath: File): Editor? {
+    override fun openEditor(editorPath: File): Editor<*>? {
         for (it in allEditorProvider) {
             val editor = it.createEditor(editorPath)
             if (editor != null) {
 
                 allEditor.add(editor)
                 currentEditor = editor
-                currentEditorServiceState.editors.add(editor.saveState())
+                currentEditorServiceState.editors.add(editor.saveState() as EditorState)
                 return editor
             }
         }
         return null
     }
 
-    override fun closeEditor(editor: Editor) {
+    override fun closeEditor(editor: Editor<*>) {
         val indexOfEditor = allEditor.indexOf(editor)
 
         val targetIndex = when {
@@ -62,7 +62,9 @@ class EditorService : EditorService {
         allEditor.removeAt(indexOfEditor)
 
         currentEditor = allEditor.getOrNull(targetIndex ?: 0)
+
         currentEditorServiceState.lastOpenPath = currentEditor?.getFile()?.path
+
         currentEditorServiceState.editors.removeIf { it.path == editor.getFile().path }
 
 
@@ -115,7 +117,7 @@ class EditorService : EditorService {
             for (it in allEditorProvider) {
                 val editor = it.createEditor(editorState.path.toFile())
                 if (editor != null) {
-                    editor.restoreState(editorState)
+                    (editor as Editor<EditorState>).restoreState(editorState)
                     allEditor.add(editor)
 
                     if (currentEditorServiceState.lastOpenPath == editorState.path) {
@@ -132,18 +134,18 @@ class EditorService : EditorService {
 
     }
 
-    override fun closeOtherEditor(editor: Editor) {
+    override fun closeOtherEditor(editor: Editor<*>) {
         currentEditorServiceState
             .editors
             .clear()
 
         currentEditorServiceState.editors
-            .add(editor.saveState())
+            .add(editor.saveState() as EditorState)
 
         currentEditorServiceState.lastOpenPath = editor.getFile().path
     }
 
-    override fun getEditor(filePath: File): Editor? {
+    override fun getEditor(filePath: File): Editor<*>? {
         return allEditor.find { it.getFile().path == filePath.path }
     }
 }

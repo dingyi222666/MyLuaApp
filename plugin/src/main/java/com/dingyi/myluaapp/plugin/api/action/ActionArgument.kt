@@ -3,11 +3,11 @@ package com.dingyi.myluaapp.plugin.api.action
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 
 interface ActionArgument {
-    fun <T> getArgument():T
 
-    fun <T> addArgument(arg:T)
+    fun addArgument(arg:Any):ActionArgument
 
     fun clear()
 
     fun getPluginContext(): PluginContext
+    fun <T> getArgument(i: Int): T
 }

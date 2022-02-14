@@ -57,6 +57,9 @@ dependencies {
 
     implementation(project(":common"))
 
+    implementation(project(":editor"))
+
+    implementation(BuildConfig.Libs.Views.code_editor)
 
     implementation(BuildConfig.Libs.Tools.zip4j)
 
@@ -65,5 +68,5 @@ dependencies {
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
 
 
-    
+
 }
