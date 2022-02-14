@@ -36,6 +36,7 @@
 
         <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.newproject.NewProjectActivity" />
+        <activity android:name=".ui.editor.activity.EditorActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

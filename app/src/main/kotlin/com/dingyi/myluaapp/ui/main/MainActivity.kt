@@ -1,8 +1,10 @@
 package com.dingyi.myluaapp.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -12,7 +14,9 @@ import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
+import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
+import com.dingyi.myluaapp.ui.editor.activity.EditorActivity
 import com.dingyi.myluaapp.ui.main.model.ProjectUiModel
 import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
 import com.drake.brv.utils.bindingAdapter
@@ -73,7 +77,22 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                 addType<ProjectUiModel>(R.layout.layout_item_main_project)
             }
             .onBind {
+                itemView.setOnClickListener {
+                    val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this@MainActivity,
+                        LayoutItemMainProjectBinding.bind(itemView).appName,
+                        "project_name_transition"
+                    ).toBundle()
+                    this@MainActivity.startActivity(
+                        Intent(this@MainActivity, getJavaClass<EditorActivity>()).apply {
+                            putExtra(
+                                "project_path",
+                                this@onBind.getModel<ProjectUiModel>().project.path.path
+                            )
+                        }, bundle
+                    )
 
+                }
             }
     }
 
