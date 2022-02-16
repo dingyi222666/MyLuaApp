@@ -2,7 +2,6 @@ package com.dingyi.myluaapp.ui.editor.activity
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
@@ -23,6 +22,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
@@ -35,6 +35,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         return ActivityEditorBinding.inflate(layoutInflater)
     }
 
+    private var isCreated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -43,18 +44,13 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         super.onCreate(savedInstanceState)
 
+
         setSupportActionBar(viewBinding.toolbar)
 
 
-        lifecycleScope.launch {
-            viewModel.openProject((intent.getStringExtra("project_path") ?: "").toFile())
+        viewModel.openProject((intent.getStringExtra("project_path") ?: "").toFile())
 
-            supportActionBar?.title = viewModel.project.value?.name.toString()
-
-            viewModel.initEditor()
-
-
-        }
+        supportActionBar?.title = viewModel.project.value?.name.toString()
 
 
         //反射获取控件和启用过渡动画
@@ -64,23 +60,39 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
             ellipsize = TextUtils.TruncateAt.END
 
+
         }
 
+        startPostponedEnterTransition()
 
         initView()
 
 
+        viewModel.initEditor()
 
+        isCreated = true
 
     }
 
-    private fun updateTab(tab: TabLayout.Tab, index: Int) {
+    private fun updateTab(tab: TabLayout.Tab, index: Int, choose: Boolean = false) {
         tab.text = PluginModule
             .getEditorService()
             .getAllEditor().getOrNull(index)?.getFile()?.name
+
+        if (choose) {
+            PluginModule
+                .getEditorService()
+                .getAllEditor().getOrNull(index)?.getFile()?.path?.let {
+                    val projectPath = viewModel.project.value?.path?.path.toString()
+
+                    viewModel.openFile(it.substring(projectPath.length + 1))
+
+                }
+        }
+
     }
 
-    private fun getCurrentEditor(tab: TabLayout.Tab?): Editor<*>? {
+    private fun getCurrentEditor(tab: TabLayout.Tab?): Editor? {
         return tab?.let {
             PluginModule
                 .getEditorService()
@@ -98,11 +110,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             .editorTab as TabLayout)
             .addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-
                     tab?.let {
-                        updateTab(it, it.position)
+                        updateTab(it, it.position, true)
 
                     }
+
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -171,8 +183,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         super.observeViewModel()
 
 
+        viewModel.allEditor.observe(this) { pair ->
 
-        viewModel.allEditor.observe(this) { list ->
+            val (list, editor) = pair
 
             val visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
 
@@ -190,8 +203,22 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 } else View.GONE
 
 
-            (viewBinding.editorPage.adapter as EditorPagerAdapter)
-                .submitList(list)
+
+            (viewBinding.editorPage.adapter as EditorPagerAdapter)?.let { adapter ->
+                adapter.submitList(list)
+
+                val index = list.indexOf(editor)
+
+                if (viewBinding.editorPage.currentItem!=index) {
+
+                    lifecycleScope.launch {
+                        delay(20)
+                        viewBinding.editorPage.setCurrentItem(
+                            if (index == -1) viewBinding.editorPage.currentItem else index, false
+                        )
+                    }
+                }
+            }
 
 
         }
@@ -200,16 +227,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             supportActionBar?.subtitle = title
         }
 
-        viewModel.currentEditor.observe(this) { editor ->
 
-            Log.e("test","start")
-
-            viewBinding.editorPage.currentItem = viewModel.allEditor.value?.indexOf(editor)
-                ?: viewBinding.editorPage.currentItem
-
-            Log.e("test","end")
-
-        }
 
     }
 
@@ -228,12 +246,29 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        if (this.isCreated) {
+
+            PluginModule
+                .getEditorService()
+                .saveEditorServiceState()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (this.isCreated) {
+
+            viewModel.initEditor()
+        }
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-
-        PluginModule
-            .getEditorService()
-            .saveEditorServiceState()
 
 
     }

@@ -5,27 +5,14 @@ import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.postDelayed
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceManager
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.core.project.ProjectFile
 import com.dingyi.myluaapp.databinding.FragmentEditorEditPagerBinding
-import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
 import com.dingyi.myluaapp.ui.editor.MainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.ref.WeakReference
-import kotlin.math.absoluteValue
 
 /**
  * @email : dingyi222666@foxmail.com
@@ -36,7 +23,7 @@ import kotlin.math.absoluteValue
 class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewModel>() {
 
 
-    private lateinit var editor: Editor<EditorState>
+    private lateinit var editor: Editor
 
     override fun getViewModelClass(): Class<MainViewModel> {
         return getJavaClass()
@@ -81,7 +68,7 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
         editor = (PluginModule
             .getEditorService()
             .getEditor(path.toFile())
-            ?: error("Unable to get editor for path:$path")) as Editor<EditorState>
+            ?: error("Unable to get editor for path:$path")) as Editor
 
 
         editor.binCurrentView(viewBinding.codeEditor)
@@ -96,8 +83,6 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
 
     override fun onDestroy() {
         super.onDestroy()
-
-        val path = arguments?.getString("editor_page_path", "") ?: ""
 
         editor.save()
 

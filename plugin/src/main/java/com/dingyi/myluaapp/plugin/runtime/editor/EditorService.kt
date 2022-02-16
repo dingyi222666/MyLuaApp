@@ -1,9 +1,8 @@
 package com.dingyi.myluaapp.plugin.runtime.editor
 
+import android.util.Log
 import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.readFormGZIP
 import com.dingyi.myluaapp.common.kts.toFile
-import com.dingyi.myluaapp.common.kts.writeUseGZIP
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.editor.EditorProvider
 import com.dingyi.myluaapp.plugin.api.editor.EditorService
@@ -16,19 +15,19 @@ class EditorService : EditorService {
 
     private lateinit var currentProject: Project
 
-    private val allEditor = mutableListOf<Editor<*>>()
+    private val allEditor = mutableListOf<Editor>()
 
     private val allEditorProvider = mutableListOf<EditorProvider>()
 
-    private var currentEditor: Editor<*>? = null
+    private var currentEditor: Editor? = null
 
     private lateinit var currentEditorServiceState: EditorServiceState
 
-    override fun  getCurrentEditor(): Editor<*>? {
+    override fun  getCurrentEditor(): Editor? {
         return currentEditor
     }
 
-    override fun getAllEditor(): List<Editor<*>> {
+    override fun getAllEditor(): List<Editor> {
         return allEditor
     }
 
@@ -36,14 +35,14 @@ class EditorService : EditorService {
         allEditorProvider.add(editorProvider)
     }
 
-    override fun openEditor(editorPath: File): Editor<*>? {
+    override fun openEditor(editorPath: File): Editor? {
 
         if (!editorPath.isFile) {
             throw FileNotFoundException("The file ${editorPath.path} was deleted.")
         }
 
         for (openedEditor in allEditor) {
-            if (openedEditor.getFile().path == editorPath.path) {
+            if (openedEditor.getFile().absolutePath == editorPath.absolutePath) {
                 currentEditor = openedEditor
                 currentEditorServiceState.lastOpenPath = openedEditor.getFile().path
                 return currentEditor
@@ -55,15 +54,21 @@ class EditorService : EditorService {
             if (editor != null) {
                 allEditor.add(editor)
                 currentEditor = editor
-                currentEditorServiceState.lastOpenPath = editor.getFile().path
-                currentEditorServiceState.editors.add(editor.saveState() as EditorState)
+                currentEditorServiceState.lastOpenPath = editor.getFile().absolutePath
+
+                val find =
+                    currentEditorServiceState.editors.find { it.path == editorPath.absolutePath }
+
+                if (find == null) {
+                    currentEditorServiceState.editors.add(editor.saveState() as EditorState)
+                }
                 return editor
             }
         }
         return null
     }
 
-    override fun closeEditor(editor: Editor<*>) {
+    override fun closeEditor(editor: Editor) {
         val indexOfEditor = allEditor.indexOf(editor)
 
         val targetIndex = when {
@@ -77,9 +82,9 @@ class EditorService : EditorService {
 
         currentEditor = allEditor.getOrNull(targetIndex ?: 0)
 
-        currentEditorServiceState.lastOpenPath = currentEditor?.getFile()?.path
+        currentEditorServiceState.lastOpenPath = currentEditor?.getFile()?.absolutePath
 
-        currentEditorServiceState.editors.removeIf { it.path == editor.getFile().path }
+        currentEditorServiceState.editors.removeIf { it.path == editor.getFile().absolutePath }
 
 
     }
@@ -89,6 +94,20 @@ class EditorService : EditorService {
     }
 
     override fun saveEditorServiceState() {
+
+        currentEditorServiceState.editors.clear()
+
+        Log.e("test", currentEditorServiceState.toString())
+
+
+
+        allEditor.forEach {
+            currentEditorServiceState.editors.add(it.saveState() as EditorState)
+        }
+
+        Log.e("all", currentEditorServiceState.toString())
+
+
         val projectEditorStateFile = File(currentProject.path, ".MyLuaApp/editor_config.bin")
 
         val text = Gson()
@@ -104,8 +123,6 @@ class EditorService : EditorService {
 
         projectEditorStateFile.writeText(text)
 
-        allEditor.clear()
-
 
     }
 
@@ -119,37 +136,59 @@ class EditorService : EditorService {
 
         val projectEditorStateFile = File(project.path, ".MyLuaApp/editor_config.bin")
 
-        currentEditorServiceState = if (projectEditorStateFile.isFile) {
+
+        currentEditorServiceState = runCatching {
             Gson()
                 .fromJson(
                     projectEditorStateFile.readText()
                     //projectEditorStateFile.inputStream().readFormGZIP()
-                    , getJavaClass()
+                    , getJavaClass<EditorServiceState>()
                 )
+        }.getOrElse {
 
-        } else {
+            Log.e("error", it.stackTraceToString())
+
             EditorServiceState(
                 lastOpenPath = null,
                 editors = mutableListOf()
             )
         }
 
+
         //index all editor
 
+        Log.e("test", currentEditorServiceState.toString())
+
         indexAllEditor()
+
+        Log.e("all", allEditorProvider.toString())
 
     }
 
     private fun indexAllEditor() {
-        currentEditorServiceState.editors.forEach { editorState ->
+
+        for (editorState in currentEditorServiceState.editors) {
+
+
+            val findEditor = allEditor.find { it.getFile().absolutePath == editorState.path }
+
+            if (findEditor != null) {
+                if (currentEditorServiceState.lastOpenPath == editorState.path) {
+                    currentEditor = findEditor
+                }
+                continue
+            }
+
             for (it in allEditorProvider) {
                 val editor = it.createEditor(editorState.path.toFile())
                 if (editor != null) {
-                    (editor as Editor<EditorState>).restoreState(editorState)
+                    editor.restoreState(editorState)
 
                     if (currentEditorServiceState.lastOpenPath == editorState.path) {
                         currentEditor = editor
                     }
+
+                    allEditor.add(editor)
                     break
                 }
             }
@@ -158,7 +197,7 @@ class EditorService : EditorService {
 
     }
 
-    override fun closeOtherEditor(editor: Editor<*>) {
+    override fun closeOtherEditor(editor: Editor) {
         currentEditorServiceState
             .editors
             .clear()
@@ -169,7 +208,7 @@ class EditorService : EditorService {
         currentEditorServiceState.lastOpenPath = editor.getFile().path
     }
 
-    override fun getEditor(filePath: File): Editor<*>? {
+    override fun getEditor(filePath: File): Editor? {
         return allEditor.find { it.getFile().path == filePath.path }
     }
 }

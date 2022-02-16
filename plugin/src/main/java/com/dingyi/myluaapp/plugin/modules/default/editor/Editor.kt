@@ -16,7 +16,7 @@ class Editor(
 
     private val path: File,
     private val id: Int
-) : Editor<EditorState> {
+) : Editor {
 
 
     private var currentLanguage: Language = EmptyLanguage()
@@ -114,6 +114,11 @@ class Editor(
     }
 
     override fun save() {
+
+        if (!::currentEditor.isInitialized) {
+            return
+        }
+
         if (!path.isFile) {
             throw FileNotFoundException("The File was deleted.")
         }
@@ -125,6 +130,9 @@ class Editor(
     }
 
     override fun read() {
+        if (!::currentEditor.isInitialized) {
+            return
+        }
         if (!path.isFile) {
             throw FileNotFoundException("The File was deleted.")
         }

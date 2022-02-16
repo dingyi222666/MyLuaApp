@@ -58,7 +58,5 @@ dependencies {
     annotationProcessor(BuildConfig.Libs.Default.glide_compiler)
     implementation(BuildConfig.Libs.Google.gson)
 
-    implementation ("com.github.anrwatchdog:anrwatchdog:1.4.0")
-
 
 }

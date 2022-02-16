@@ -5,17 +5,17 @@ import java.io.File
 
 interface EditorService {
 
-    fun getCurrentEditor(): Editor<*>?
+    fun getCurrentEditor(): Editor?
 
-    fun getAllEditor():List<Editor<*>>
+    fun getAllEditor():List<Editor>
 
     fun addEditorProvider(editorProvider: EditorProvider)
 
     fun refreshEditorServiceState()
 
-    fun openEditor(editorPath:File): Editor<*>?
+    fun openEditor(editorPath:File): Editor?
 
-    fun closeEditor(editor: Editor<*>)
+    fun closeEditor(editor: Editor)
 
     fun closeAllEditor()
 
@@ -24,7 +24,7 @@ interface EditorService {
 
     fun loadEditorServiceState(project: Project)
 
-    fun closeOtherEditor(editor: Editor<*>)
+    fun closeOtherEditor(editor: Editor)
 
-    fun getEditor(filePath:File): Editor<*>?
+    fun getEditor(filePath:File): Editor?
 }

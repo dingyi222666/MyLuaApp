@@ -2,7 +2,7 @@ package com.dingyi.myluaapp
 
 import android.app.Application
 import android.content.Context
-import com.github.anrwatchdog.ANRWatchDog
+
 
 import kotlin.properties.Delegates
 import com.hjq.language.MultiLanguages
@@ -25,8 +25,6 @@ class MainApplication : Application() {
         // 初始化语种切换框架
         MultiLanguages.init(this);
 
-        //Anr Check
-        ANRWatchDog().start()
 
     }
 

@@ -3,9 +3,10 @@ package com.dingyi.myluaapp.plugin.api.editor
 import android.view.View
 import com.dingyi.myluaapp.plugin.api.editor.language.Language
 import io.github.rosemoe.sora.widget.CodeEditor
+import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
 import java.io.File
 
-interface Editor<T>  {
+interface Editor {
 
     fun getText():CharSequence
 
@@ -19,7 +20,7 @@ interface Editor<T>  {
 
     fun getId():Int
 
-    fun saveState(): T
+    fun saveState(): EditorState
 
     fun save()
 
@@ -27,7 +28,7 @@ interface Editor<T>  {
 
     fun binCurrentView(r:CodeEditor)
 
-    fun restoreState(editorState: T)
+    fun restoreState(editorState: EditorState)
 
     fun getFile():File
 

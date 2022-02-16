@@ -5,16 +5,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.dingyi.myluaapp.common.kts.checkNotNull
-import com.dingyi.myluaapp.core.project.ProjectFile
 import com.dingyi.myluaapp.plugin.api.editor.Editor
-import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.fragment.EditorFragment
 
 class EditorPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
 
-    private var data = listOf<Editor<*>>()
+    private var data = listOf<Editor>()
 
     override fun getItemCount(): Int {
         return data.size
@@ -25,7 +22,7 @@ class EditorPagerAdapter(fragmentActivity: FragmentActivity) :
     }
 
 
-    fun submitList(list: List<Editor<*>>) {
+    fun submitList(list: List<Editor>) {
 
         DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
