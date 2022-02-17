@@ -10,6 +10,8 @@ import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.editor.language.Language
 import com.dingyi.myluaapp.plugin.modules.default.editor.language.EmptyLanguage
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
 class Editor(
@@ -129,15 +131,18 @@ class Editor(
         currentEditor = r
     }
 
-    override fun read() {
+    override suspend fun read():Unit = withContext(Dispatchers.IO) {
         if (!::currentEditor.isInitialized) {
-            return
+            return@withContext
         }
         if (!path.isFile) {
             throw FileNotFoundException("The File was deleted.")
         }
-        currentEditor.setText(path.readText())
-        doRestoreState(currentEditorState)
+        val text = path.readText()
+        withContext(Dispatchers.Main) {
+            currentEditor.setText(text)
+            doRestoreState(currentEditorState)
+        }
     }
 
     override fun equals(other: Any?): Boolean {

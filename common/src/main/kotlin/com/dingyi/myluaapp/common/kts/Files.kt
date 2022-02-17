@@ -54,9 +54,6 @@ inline fun File.isDirectory(block: File.() -> Unit) {
 fun Array<File>.sortBySelf(): List<File> {
     return this.sortedWith { a, b ->
         when {
-            a.isDirectory && b.isDirectory -> {
-                a.name.compareTo(b.name)
-            }
             a.isDirectory && b.isFile -> {
                 -1
             }

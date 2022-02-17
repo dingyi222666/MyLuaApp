@@ -8,7 +8,7 @@ interface ActionService {
 
     fun createActionArgument():ActionArgument
 
-    fun registerAction(actionClass:Class<Action<*>>, key:ActionKey)
+    fun <T:Action<*>> registerAction(actionClass:Class<T>, key:ActionKey)
 
     fun clearAction(key: ActionKey)
 

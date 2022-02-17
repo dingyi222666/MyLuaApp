@@ -14,16 +14,17 @@ import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.plugin.api.editor.Editor
+import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
+import com.dingyi.myluaapp.ui.editor.action.OpenTreeFileAction
 import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
@@ -66,13 +67,24 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         startPostponedEnterTransition()
 
+        initAction()
+
         initView()
 
 
-        viewModel.initEditor()
-
+        viewModel.progressMonitor.runAfterTaskRunning {
+            lifecycleScope.launch {
+                viewModel.initEditor()
+            }
+        }
         isCreated = true
 
+    }
+
+    private fun initAction() {
+        PluginModule
+            .getActionService()
+            .registerAction(getJavaClass<OpenTreeFileAction>(),DefaultActionKey.CLICK_TREE_VIEW_FILE)
     }
 
     private fun updateTab(tab: TabLayout.Tab, index: Int, choose: Boolean = false) {
@@ -84,10 +96,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             PluginModule
                 .getEditorService()
                 .getAllEditor().getOrNull(index)?.getFile()?.path?.let {
-                    val projectPath = viewModel.project.value?.path?.path.toString()
-
-                    viewModel.openFile(it.substring(projectPath.length + 1))
-
+                    viewModel.openFile(it)
                 }
         }
 
@@ -134,13 +143,14 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             })
 
         TabLayoutMediator(
-            viewBinding.editorTab as TabLayout,
+            viewBinding.editorTab,
             viewBinding.editorPage, true, true, ::updateTab
         ).attach()
 
+        /*
         listOf(viewBinding.container, viewBinding.toolbar).forEach {
             it.addLayoutTransition()
-        }
+        } */
 
         supportActionBar?.let { actionBar ->
 
@@ -189,6 +199,10 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         super.observeViewModel()
 
 
+        viewModel.progressMonitor.getProgressState().observe(this) { boolean ->
+            viewBinding.progress.visibility = if (boolean) View.VISIBLE else View.INVISIBLE
+        }
+
         viewModel.allEditor.observe(this) { pair ->
 
             val (list, editor) = pair
@@ -210,7 +224,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
 
 
-            (viewBinding.editorPage.adapter as EditorPagerAdapter)?.let { adapter ->
+            (viewBinding.editorPage.adapter as EditorPagerAdapter).let { adapter ->
                 adapter.submitList(list)
 
                 val index = list.indexOf(editor)
@@ -218,7 +232,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 if (viewBinding.editorPage.currentItem!=index) {
 
                     lifecycleScope.launch {
-                        delay(20)
+                        delay(30)
                         viewBinding.editorPage.setCurrentItem(
                             if (index == -1) viewBinding.editorPage.currentItem else index, false
                         )
@@ -267,14 +281,20 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         super.onResume()
 
         if (this.isCreated) {
-
-            viewModel.initEditor()
+            lifecycleScope.launch {
+                viewModel.initEditor()
+            }
         }
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
+
+
+        PluginModule
+            .getEditorService()
+            .clearAllEditor()
 
 
     }

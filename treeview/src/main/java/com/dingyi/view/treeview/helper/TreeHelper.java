@@ -287,4 +287,9 @@ public class TreeHelper {
         }
         return false;
     }
+
+    public static void deleteAllChild(TreeNode node) {
+        node.getChildren().forEach( (v) -> deleteAllChild(node));
+        node.getChildren().clear();
+    }
 }

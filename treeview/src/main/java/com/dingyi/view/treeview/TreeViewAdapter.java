@@ -15,14 +15,10 @@
 package com.dingyi.view.treeview;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +27,9 @@ import com.dingyi.view.treeview.base.BaseNodeViewBinder;
 import com.dingyi.view.treeview.base.BaseNodeViewFactory;
 import com.dingyi.view.treeview.base.CheckableNodeViewBinder;
 import com.dingyi.view.treeview.helper.TreeHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xinyuanzhong on 2017/4/21.
@@ -48,6 +47,7 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private TreeView treeView;
 
+
     TreeViewAdapter(Context context, TreeNode root,
                     @NonNull BaseNodeViewFactory baseNodeViewFactory) {
         this.context = context;
@@ -55,6 +55,7 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.baseNodeViewFactory = baseNodeViewFactory;
 
         this.expandedNodeList = new ArrayList<>();
+
 
         buildExpandedNodeList();
     }
@@ -273,4 +274,6 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     void setTreeView(TreeView treeView) {
         this.treeView = treeView;
     }
+
+
 }

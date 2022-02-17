@@ -62,6 +62,11 @@ public class TreeView implements SelectableTreeAction {
         return rootView;
     }
 
+
+    public TreeNode getRootNode() {
+        return root;
+    }
+
     @NonNull
     private RecyclerView buildRootView() {
         RecyclerView recyclerView = new RecyclerView(context);
@@ -201,5 +206,7 @@ public class TreeView implements SelectableTreeAction {
     public void setItemSelectable(boolean itemSelectable) {
         this.itemSelectable = itemSelectable;
     }
+
+
 
 }

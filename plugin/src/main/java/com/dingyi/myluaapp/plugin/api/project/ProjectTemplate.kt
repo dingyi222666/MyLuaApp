@@ -9,5 +9,5 @@ interface ProjectTemplate {
 
     val path:String
 
-    fun create(projectPath: File, packageName:String, name:String)
+    suspend fun create(projectPath: File, packageName:String, name:String)
 }

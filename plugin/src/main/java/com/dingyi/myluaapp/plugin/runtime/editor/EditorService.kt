@@ -21,6 +21,8 @@ class EditorService : EditorService {
 
     private var currentEditor: Editor? = null
 
+    private val supportLanguages = mutableListOf<String>()
+
     private lateinit var currentEditorServiceState: EditorServiceState
 
     override fun  getCurrentEditor(): Editor? {
@@ -89,7 +91,7 @@ class EditorService : EditorService {
 
     }
 
-    override fun closeAllEditor() {
+    override fun clearAllEditor() {
         allEditor.clear()
     }
 
@@ -210,5 +212,13 @@ class EditorService : EditorService {
 
     override fun getEditor(filePath: File): Editor? {
         return allEditor.find { it.getFile().path == filePath.path }
+    }
+
+    override fun getSupportLanguages(): List<String> {
+        return supportLanguages
+    }
+
+    override fun addSupportLanguages(vararg language: String) {
+        supportLanguages.addAll(language)
     }
 }

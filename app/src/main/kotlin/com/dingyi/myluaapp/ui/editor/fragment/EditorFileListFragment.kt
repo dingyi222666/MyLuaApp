@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.getJavaClass
@@ -15,6 +16,12 @@ import com.dingyi.view.treeview.TreeNode
 import com.dingyi.view.treeview.TreeView
 import com.dingyi.view.treeview.base.BaseNodeViewBinder
 import com.dingyi.view.treeview.base.BaseNodeViewFactory
+import com.dingyi.view.treeview.helper.TreeHelper
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainViewModel>() {
 
@@ -40,7 +47,7 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
 
         treeView = TreeView(rootNode, requireContext(), object : BaseNodeViewFactory() {
             override fun getNodeViewBinder(view: View, viewType: Int): BaseNodeViewBinder {
-                return EditorNodeBinder(view)
+                return EditorNodeBinder(view,viewModel)
             }
 
             override fun getNodeLayoutId(level: Int): Int {
@@ -48,18 +55,27 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
             }
         })
 
-        rootNode.addChild(
-            TreeNode(
-                viewModel
-                    .project.value?.path
-            )
-        )
+
 
         viewBinding
             .root
             .addView(treeView.view, LinearLayoutCompat.LayoutParams(-1, -1))
 
+        viewBinding
+            .title
+            .text = viewModel.project.value?.path?.path.toString()
 
-        treeView.refreshTreeView()
+        viewModel.rootNode.observe(viewLifecycleOwner) {
+            treeView.rootNode.children.clear()
+            treeView.rootNode.addChild(it)
+            treeView.refreshTreeView()
+        }
+
+        viewModel.refreshFileList()
+
     }
+
+
+
+
 }

@@ -20,7 +20,10 @@ class MainPlugin: Plugin {
 
         context
             .getEditorService()
-            .addEditorProvider(EditorProvider(context))
+            .apply {
+                addEditorProvider(EditorProvider(context))
+                addSupportLanguages("lua", "java", "aly", "xml")
+            }
 
     }
 

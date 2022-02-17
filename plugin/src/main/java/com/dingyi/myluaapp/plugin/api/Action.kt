@@ -2,13 +2,13 @@ package com.dingyi.myluaapp.plugin.api
 
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 
-interface Action<T> {
+interface Action<out T> {
 
-    fun <T> callAction(argument: ActionArgument):T?
+    abstract fun callAction(argument: ActionArgument):T?
 
-    val name:String
+    abstract val name:String
 
-    val id:String
+    abstract val id:String
 
 
 }

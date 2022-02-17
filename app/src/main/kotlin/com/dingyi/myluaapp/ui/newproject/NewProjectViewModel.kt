@@ -42,13 +42,13 @@ class NewProjectViewModel : ViewModel() {
                 .getString().showToast()
         }
         showProgressBar.value = true
-        withContext(Dispatchers.IO) {
-            template.create(
+
+        template.create(
                 projectPath = File(Paths.projectDir, pair.first),
                 name = pair.first,
                 packageName = pair.second
-            )
-        }
+        )
+
 
     }
 

@@ -17,7 +17,7 @@ interface EditorService {
 
     fun closeEditor(editor: Editor)
 
-    fun closeAllEditor()
+    fun clearAllEditor()
 
     //Clear All Editor
     fun saveEditorServiceState()
@@ -27,4 +27,8 @@ interface EditorService {
     fun closeOtherEditor(editor: Editor)
 
     fun getEditor(filePath:File): Editor?
+
+    fun getSupportLanguages(): List<String>
+
+    fun addSupportLanguages(vararg language:String)
 }

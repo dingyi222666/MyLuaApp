@@ -40,6 +40,8 @@ public class TreeNode {
 
     private boolean itemClickEnable = true;
 
+    private boolean isLeaf = false;
+
     public TreeNode(Object value) {
         this.value = value;
         this.children = new ArrayList<>();
@@ -80,6 +82,14 @@ public class TreeNode {
         }
         List<TreeNode> children = parent.getChildren();
         return children.size() > 0 && children.indexOf(this) == children.size() - 1;
+    }
+
+    public boolean isLeaf() {
+        return isLeaf;
+    }
+
+    public void setLeaf(boolean leaf) {
+        isLeaf = leaf;
     }
 
     public boolean isRoot() {

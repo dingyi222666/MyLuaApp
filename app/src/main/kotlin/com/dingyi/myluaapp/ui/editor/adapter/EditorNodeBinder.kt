@@ -12,12 +12,18 @@ import com.dingyi.myluaapp.common.kts.sortBySelf
 import com.dingyi.myluaapp.common.kts.suffix
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.databinding.LayoutItemEditorFileListBinding
+import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
+import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.view.treeview.TreeNode
 import com.dingyi.view.treeview.TreeView
 import com.dingyi.view.treeview.base.BaseNodeViewBinder
 import java.io.File
 
-class EditorNodeBinder(itemView: View) : BaseNodeViewBinder(itemView) {
+class EditorNodeBinder(
+    itemView: View,
+    private val viewModel: MainViewModel
+) : BaseNodeViewBinder(itemView) {
 
     private lateinit var binding: LayoutItemEditorFileListBinding
 
@@ -34,7 +40,7 @@ class EditorNodeBinder(itemView: View) : BaseNodeViewBinder(itemView) {
         itemView.layoutParams =
             ((itemView as ViewGroup).layoutParams as ViewGroup.MarginLayoutParams)
                 .apply {
-                    this.leftMargin = treeNode.level * 15.dp
+                    this.leftMargin = treeNode.level * 7.dp
                 }
 
         binding.arrow.visibility = if (file.isFile) {
@@ -52,14 +58,20 @@ class EditorNodeBinder(itemView: View) : BaseNodeViewBinder(itemView) {
 
 
         if (file.isFile) {
-
+            PluginModule
+                .getActionService()
+                .callAction<Unit>(
+                    PluginModule.getActionService().createActionArgument()
+                        .addArgument(file)
+                        .addArgument(viewModel), DefaultActionKey.CLICK_TREE_VIEW_FILE
+                )
         } else {
 
             binding
                 .arrow
                 .animate()
                 .rotation(if (expand) 90f else 0f)
-                .setDuration(150)
+                .setDuration(120)
                 .start()
 
         }
@@ -67,11 +79,6 @@ class EditorNodeBinder(itemView: View) : BaseNodeViewBinder(itemView) {
     }
 
 
-    private fun getChildTreeNode(file: File, treeNode: TreeNode): MutableList<TreeNode> {
-        return file.listFiles()?.sortBySelf()?.map {
-            TreeNode(it, treeNode.level + 1)
-        }?.toMutableList() ?: mutableListOf()
-    }
 
     companion object {
         private var imageData = mapOf(

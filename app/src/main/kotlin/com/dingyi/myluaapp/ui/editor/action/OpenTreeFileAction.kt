@@ -1,0 +1,35 @@
+package com.dingyi.myluaapp.ui.editor.action
+
+import com.dingyi.myluaapp.common.kts.endsWith
+import com.dingyi.myluaapp.plugin.api.Action
+import com.dingyi.myluaapp.plugin.api.action.ActionArgument
+import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
+import com.dingyi.myluaapp.ui.editor.MainViewModel
+import java.io.File
+
+class OpenTreeFileAction : Action<Unit> {
+
+
+    override val name: String
+        get() = "OpenTreeFile"
+    override val id: String
+        get() = "com.dingyi.myluapp.plugin.default.action1"
+
+    override fun callAction(argument: ActionArgument): Unit? {
+        val file = argument.getArgument<File>(0)
+        val viewModel = argument.getArgument<MainViewModel>(1)
+
+        if (file.name.endsWith(
+                *PluginModule
+                    .getEditorService()
+                    .getSupportLanguages().toTypedArray()
+            )
+        ) {
+            viewModel.openFile(file.path)
+        }
+
+        return null
+    }
+
+
+}

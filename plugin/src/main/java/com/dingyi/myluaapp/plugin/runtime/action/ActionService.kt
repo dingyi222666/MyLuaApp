@@ -8,19 +8,21 @@ import com.dingyi.myluaapp.plugin.api.context.PluginContext
 
 class ActionService(private val pluginContext: PluginContext) : ActionService {
 
-    private val allAction = mutableMapOf<ActionKey, MutableList<Class<Action<*>>>>()
+    private val allAction = mutableMapOf<ActionKey, MutableList<Class<*>>>()
 
     override fun createActionArgument(): ActionArgument {
         return DefaultActionArgument()
     }
 
-    override fun registerAction(actionClass: Class<Action<*>>, key: ActionKey) {
+    override fun <T : Action<*>> registerAction(actionClass: Class<T>, key: ActionKey) {
         val keyAction = allAction.getOrDefault(key, mutableListOf())
         if (key.isRepeat().not() && keyAction.isNotEmpty()) {
             error("The key can not repeat add")
         }
         keyAction.add(actionClass)
+        allAction[key] = keyAction
     }
+
 
     override fun clearAction(key: ActionKey) {
         allAction[key]?.clear()
@@ -31,9 +33,9 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
 
         if (list != null) {
             for (action in list) {
-                val result = action.newInstance().callAction<T>(actionArgument)
+                val result = (action.newInstance() as Action<*>).callAction(actionArgument)
                 if (result != null) {
-                    return result
+                    return result as T
                 }
             }
         }

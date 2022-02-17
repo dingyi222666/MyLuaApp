@@ -6,6 +6,8 @@ import com.dingyi.myluaapp.common.kts.endsWith
 import com.dingyi.myluaapp.common.kts.replaceString
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.plugin.api.project.ProjectTemplate
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.lingala.zip4j.ZipFile
 import java.io.File
 
@@ -31,7 +33,7 @@ class AndroidProjectTemplate(
     override val path: String
         get() = templateData.path
 
-    override fun create(projectPath: File, packageName: String, name: String) {
+    override suspend fun create(projectPath: File, packageName: String, name: String) = withContext(Dispatchers.IO) {
         val regexAppName = "\$app_name"
         val regexAppPackageName = "\$app_package_name"
 

@@ -24,7 +24,7 @@ interface Editor {
 
     fun save()
 
-    fun read()
+    suspend fun read()
 
     fun binCurrentView(r:CodeEditor)
 

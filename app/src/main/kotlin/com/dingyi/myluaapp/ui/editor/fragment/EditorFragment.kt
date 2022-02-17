@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.databinding.FragmentEditorEditPagerBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
+import kotlinx.coroutines.launch
 
 /**
  * @email : dingyi222666@foxmail.com
@@ -74,7 +76,9 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
         editor.binCurrentView(viewBinding.codeEditor)
 
 
-        editor.read()
+        lifecycleScope.launch {
+            editor.read()
+        }
 
 
 
