@@ -1,5 +1,5 @@
-include(":app")
 rootProject.name = "MyLuaApp"
+include(":app")
 include(":editor")
 include(":lua-lsp-server")
 include(":builder")

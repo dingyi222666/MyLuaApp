@@ -27,7 +27,7 @@ object BuildConfig {
 
     object Versions {
         const val kotlin_version = "1.6.10"
-        const val android_gradle_plugin_version = "7.0.2"
+        const val android_gradle_plugin_version = "7.0.3"
         const val antlr_kotlin_version = "6304d5c1c4"
         const val gson_version = "2.8.8"
         const val material_version = "1.6.0-alpha01"
