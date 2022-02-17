@@ -52,10 +52,8 @@ dependencies {
 
     implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 
-    implementation(project(":common"))
-
-
     implementation(BuildConfig.Libs.AndroidX.appcompat)
+    implementation(BuildConfig.Libs.Google.material)
 
 
 }
