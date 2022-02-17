@@ -69,7 +69,7 @@ public class TreeNode {
         if (treeNode == null || getChildren().size() < 1) {
             return;
         }
-        if (getChildren().indexOf(treeNode) != -1) {
+        if (getChildren().contains(treeNode)) {
             getChildren().remove(treeNode);
         }
     }

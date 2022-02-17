@@ -43,8 +43,6 @@ class EditorNodeBinder(itemView: View) : BaseNodeViewBinder(itemView) {
             View.VISIBLE
         }
 
-        treeNode.updateChildren(getChildTreeNode(file, treeNode))
-
     }
 
 
@@ -65,11 +63,6 @@ class EditorNodeBinder(itemView: View) : BaseNodeViewBinder(itemView) {
                 .start()
 
         }
-
-        if (!expand && file.isDirectory) {
-            treeNode.updateChildren(getChildTreeNode(file, treeNode))
-        }
-
 
     }
 
