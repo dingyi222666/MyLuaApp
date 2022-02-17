@@ -21,6 +21,7 @@
             <option value="$PROJECT_DIR$/lua-lsp-server" />
             <option value="$PROJECT_DIR$/luaj" />
             <option value="$PROJECT_DIR$/plugin" />
+            <option value="$PROJECT_DIR$/treeview" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
