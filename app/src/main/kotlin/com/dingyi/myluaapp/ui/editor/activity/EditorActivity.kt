@@ -17,6 +17,7 @@ import com.dingyi.myluaapp.plugin.api.editor.Editor
 
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
+import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -105,6 +106,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         viewBinding.editorPage.adapter = EditorPagerAdapter(this)
         viewBinding.editorPage.isUserInputEnabled = false
 
+        viewBinding
+            .drawerPage
+            .adapter = EditorDrawerPagerAdapter(this).apply {
+                notifyDataSetChanged()
+        }
 
         (viewBinding
             .editorTab as TabLayout)

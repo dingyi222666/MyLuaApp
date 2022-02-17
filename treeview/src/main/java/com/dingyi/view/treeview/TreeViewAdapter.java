@@ -107,21 +107,15 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             View triggerToggleView = nodeView.findViewById(viewBinder.getToggleTriggerViewId());
 
             if (triggerToggleView != null) {
-                triggerToggleView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onNodeToggled(treeNode);
-                        viewBinder.onNodeToggled(treeNode, treeNode.isExpanded());
-                    }
+                triggerToggleView.setOnClickListener(v -> {
+                    onNodeToggled(treeNode);
+                    viewBinder.onNodeToggled(treeNode, treeNode.isExpanded());
                 });
             }
         } else if (treeNode.isItemClickEnable()) {
-            nodeView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onNodeToggled(treeNode);
-                    viewBinder.onNodeToggled(treeNode, treeNode.isExpanded());
-                }
+            nodeView.setOnClickListener(v -> {
+                onNodeToggled(treeNode);
+                viewBinder.onNodeToggled(treeNode, treeNode.isExpanded());
             });
         }
 

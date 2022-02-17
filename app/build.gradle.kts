@@ -65,6 +65,8 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":core"))
     implementation(project(":plugin"))
+    implementation(project(":treeview"))
+
 
     implementation(project(":builder"))
 
