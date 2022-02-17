@@ -15,6 +15,7 @@
 package com.dingyi.view.treeview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,13 +111,17 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 triggerToggleView.setOnClickListener(v -> {
                     onNodeToggled(treeNode);
                     viewBinder.onNodeToggled(treeNode, treeNode.isExpanded());
+
                 });
             }
+
         } else if (treeNode.isItemClickEnable()) {
             nodeView.setOnClickListener(v -> {
                 onNodeToggled(treeNode);
                 viewBinder.onNodeToggled(treeNode, treeNode.isExpanded());
+
             });
+
         }
 
         if (viewBinder instanceof CheckableNodeViewBinder) {

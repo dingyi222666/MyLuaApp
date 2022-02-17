@@ -51,7 +51,7 @@ inline fun File.isDirectory(block: File.() -> Unit) {
     }
 }
 
-fun List<File>.sortBySelf(): List<File> {
+fun Array<File>.sortBySelf(): List<File> {
     return this.sortedWith { a, b ->
         when {
             a.isDirectory && b.isDirectory -> {

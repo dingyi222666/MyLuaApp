@@ -8,6 +8,7 @@ import androidx.core.view.marginLeft
 import com.bumptech.glide.Glide
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.dp
+import com.dingyi.myluaapp.common.kts.sortBySelf
 import com.dingyi.myluaapp.common.kts.suffix
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.databinding.LayoutItemEditorFileListBinding
@@ -36,41 +37,45 @@ class EditorNodeBinder(itemView: View) : BaseNodeViewBinder(itemView) {
                     this.leftMargin = treeNode.level * 15.dp
                 }
 
-        itemView.setOnClickListener {
-            if (file.isFile) {
-
-            } else {
-                treeNode.updateChildren(getChildTreeNode(file, treeNode))
-                treeNode.isExpanded = treeNode.isExpanded.not()
-                treeView.refreshTreeView()
-            }
-        }
-
-        if (file.isFile) {
-            binding.arrow.visibility = View.GONE
+        binding.arrow.visibility = if (file.isFile) {
+            View.INVISIBLE
         } else {
-            binding.arrow.visibility = View.VISIBLE
+            View.VISIBLE
         }
+
+        treeNode.updateChildren(getChildTreeNode(file, treeNode))
 
     }
 
-    override fun onNodeToggled(treeNode: TreeNode, expand: Boolean) {
-        super.onNodeToggled(treeNode, expand)
 
-        if ((treeNode.value as File).isDirectory) {
+    override fun onNodeToggled(treeNode: TreeNode, expand: Boolean) {
+
+        val file = treeNode.value as File
+
+
+        if (file.isFile) {
+
+        } else {
+
             binding
                 .arrow
                 .animate()
                 .rotation(if (expand) 90f else 0f)
+                .setDuration(150)
                 .start()
+
         }
+
+        if (!expand && file.isDirectory) {
+            treeNode.updateChildren(getChildTreeNode(file, treeNode))
+        }
+
 
     }
 
 
-
     private fun getChildTreeNode(file: File, treeNode: TreeNode): MutableList<TreeNode> {
-        return file.listFiles()?.map {
+        return file.listFiles()?.sortBySelf()?.map {
             TreeNode(it, treeNode.level + 1)
         }?.toMutableList() ?: mutableListOf()
     }
