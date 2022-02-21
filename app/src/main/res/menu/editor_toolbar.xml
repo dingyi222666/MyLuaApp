@@ -35,23 +35,7 @@
         app:showAsAction="withText|ifRoom"
 
         android:title="@string/editor_menu_code">
-        <menu>
-            <item
-                android:id="@+id/find"
-                android:title="@string/editor_menu_find" />
-            <item
-                android:id="@+id/format"
-                android:title="@string/editor_menu_format" />
-            <item
-                android:id="@+id/goto_menu"
-                android:title="@string/editor_menu_goto" />
-            <item
-                android:id="@+id/error"
-                android:title="@string/editor_menu_error" />
-            <item
-                android:id="@+id/import_code"
-                android:title="@string/editor_menu_import_fix" />
-        </menu>
+
     </item>
     <item
         android:id="@+id/editor_action_plugin"

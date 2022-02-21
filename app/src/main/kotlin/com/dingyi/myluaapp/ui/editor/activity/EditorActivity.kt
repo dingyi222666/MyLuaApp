@@ -2,14 +2,13 @@ package com.dingyi.myluaapp.ui.editor.activity
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.KeyEvent
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
+import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
@@ -184,6 +183,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.editor_toolbar,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -215,6 +219,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             arrayOf(
                 viewBinding.editorPage,
                 viewBinding.editorTab,
+                viewBinding.symbolView
             ).forEach {
                 it.visibility = visibility
             }
