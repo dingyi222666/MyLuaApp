@@ -205,7 +205,7 @@ class EditorService : EditorService {
             .clear()
 
         currentEditorServiceState.editors
-            .add(editor.saveState() as EditorState)
+            .add(editor.saveState())
 
         currentEditorServiceState.lastOpenPath = editor.getFile().path
     }

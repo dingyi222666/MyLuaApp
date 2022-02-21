@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.dingyi.myluaapp.build.util.getSHA256
 import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.startActivity
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
@@ -49,7 +50,23 @@ class WelcomeActivity : AppCompatActivity() {
                             withContext(Dispatchers.Main) {
                                 viewBinding.title.text = "unzip:${it.fileName}"
                             }
-                            file.extractFile(it, path, it.fileName.substring("assets/".length))
+                            val targetPath = File(path, it.fileName.substring("assets/".length))
+
+                            if (targetPath.exists()) {
+                                val targetPathHash = targetPath.inputStream().getSHA256()
+                                val zipFileHash = file.getInputStream(it).getSHA256()
+
+                                if (targetPathHash != zipFileHash) {
+                                    file.extractFile(
+                                        it,
+                                        path,
+                                        it.fileName.substring("assets/".length)
+                                    )
+                                }
+
+                            } else {
+                                file.extractFile(it, path, it.fileName.substring("assets/".length))
+                            }
                         }
                     }
 

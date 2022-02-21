@@ -37,6 +37,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         return ActivityEditorBinding.inflate(layoutInflater)
     }
 
+    private lateinit var tabLayoutMediator: TabLayoutMediator
     private var isCreated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,16 +119,15 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         viewBinding
             .drawerPage
             .adapter = EditorDrawerPagerAdapter(this).apply {
-                notifyDataSetChanged()
+            notifyDataSetChanged()
         }
 
-        (viewBinding
-            .editorTab as TabLayout)
+        viewBinding
+            .editorTab
             .addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     tab?.let {
                         updateTab(it, it.position, true)
-
                     }
 
                 }
@@ -142,15 +142,18 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
             })
 
-        TabLayoutMediator(
+        tabLayoutMediator = TabLayoutMediator(
             viewBinding.editorTab,
-            viewBinding.editorPage, true, true, ::updateTab
-        ).attach()
+            viewBinding.editorPage, true, true
+        ) { tab, index ->
+            updateTab(tab, index)
+        }
 
-        /*
+        tabLayoutMediator.attach()
+
         listOf(viewBinding.container, viewBinding.toolbar).forEach {
             it.addLayoutTransition()
-        } */
+        }
 
         supportActionBar?.let { actionBar ->
 
@@ -224,13 +227,15 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
 
 
+
             (viewBinding.editorPage.adapter as EditorPagerAdapter).let { adapter ->
-                adapter.submitList(list)
+
+                adapter.submitList(list.toList())
 
                 val index = list.indexOf(editor)
 
-                if (viewBinding.editorPage.currentItem!=index) {
 
+                if (viewBinding.editorPage.currentItem != index) {
                     lifecycleScope.launch {
                         delay(30)
                         viewBinding.editorPage.setCurrentItem(
@@ -238,6 +243,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                         )
                     }
                 }
+
+
             }
 
 

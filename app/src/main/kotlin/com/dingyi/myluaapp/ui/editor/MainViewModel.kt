@@ -46,11 +46,8 @@ class MainViewModel : ViewModel() {
     private fun refresh() {
 
         allEditor
-            .value = PluginModule
-            .getEditorService()
-            .getAllEditor() to PluginModule
-            .getEditorService()
-            .getCurrentEditor()
+            .value =
+            PluginModule.getEditorService().let { it.getAllEditor() to it.getCurrentEditor() }
 
     }
 

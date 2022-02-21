@@ -16,15 +16,19 @@ class OpenTreeFileAction : Action<Unit> {
         get() = "com.dingyi.myluapp.plugin.default.action1"
 
     override fun callAction(argument: ActionArgument): Unit? {
+        //get file
         val file = argument.getArgument<File>(0)
+        //get view model
         val viewModel = argument.getArgument<MainViewModel>(1)
 
+        //if match file type
         if (file.name.endsWith(
                 *PluginModule
                     .getEditorService()
                     .getSupportLanguages().toTypedArray()
             )
         ) {
+            //open file
             viewModel.openFile(file.path)
         }
 
