@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.widget.view
+package com.dingyi.myluaapp.view
 
 import android.content.Context
 import android.util.AttributeSet

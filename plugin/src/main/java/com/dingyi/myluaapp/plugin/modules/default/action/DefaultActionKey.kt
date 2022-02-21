@@ -9,4 +9,10 @@ object DefaultActionKey {
     val CREATE_EDITOR_ACTION = ActionKey(0x2,false)
 
     val CLICK_TREE_VIEW_FILE = ActionKey(0x3,true)
+
+
+    val CLICK_SYMBOL_VIEW = ActionKey(0x4,false)
+
+    val ADD_PROJECT_MENU = ActionKey(0x5,true)
+
 }

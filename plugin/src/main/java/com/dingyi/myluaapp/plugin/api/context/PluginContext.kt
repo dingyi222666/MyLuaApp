@@ -16,7 +16,7 @@ interface PluginContext {
 
     fun getActionService(): ActionService
 
-    fun getBuildService(): BuildService
+    fun getBuildService(): BuildService<*>
 
     fun getResourceManager(plugin: Plugin)
 

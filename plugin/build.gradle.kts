@@ -59,6 +59,9 @@ dependencies {
 
     implementation(project(":editor"))
 
+    implementation(project(":builder"))
+
+
     implementation(BuildConfig.Libs.Views.code_editor)
 
     implementation(BuildConfig.Libs.Tools.zip4j)

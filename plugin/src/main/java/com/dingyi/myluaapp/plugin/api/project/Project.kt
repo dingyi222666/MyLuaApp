@@ -22,5 +22,7 @@ interface Project {
 
     val iconPath:String?
 
+    val type:String
+
 
 }

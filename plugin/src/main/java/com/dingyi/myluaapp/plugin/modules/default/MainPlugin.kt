@@ -1,8 +1,11 @@
 package com.dingyi.myluaapp.plugin.modules.default
 
 import android.util.Log
+import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
+import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.SymbolClickAction
 import com.dingyi.myluaapp.plugin.modules.default.editor.EditorProvider
 
 class MainPlugin: Plugin {
@@ -25,6 +28,14 @@ class MainPlugin: Plugin {
                 addSupportLanguages("lua", "java", "aly", "xml")
             }
 
+        context
+            .getActionService()
+            .apply {
+                registerAction(
+                    getJavaClass<SymbolClickAction>(),
+                    DefaultActionKey.CLICK_SYMBOL_VIEW
+                )
+            }
     }
 
     override fun onStop(context: PluginContext) {

@@ -77,6 +77,11 @@ class ServiceRepository : ServiceRepository {
         services.clear()
     }
 
+    override fun refresh() {
+        services.clear()
+        init()
+    }
+
     override fun onCreateProject(path: String, builder: MainBuilder): Project? {
         services.forEach {
             val tmp = it.onCreateProject(path, builder)

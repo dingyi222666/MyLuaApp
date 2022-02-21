@@ -22,14 +22,14 @@ class OpenTreeFileAction : Action<Unit> {
         val viewModel = argument.getArgument<MainViewModel>(1)
 
         //if match file type
-        if (file.name.endsWith(
+        if (file?.name?.endsWith(
                 *PluginModule
                     .getEditorService()
                     .getSupportLanguages().toTypedArray()
-            )
+            ) == true
         ) {
             //open file
-            viewModel.openFile(file.path)
+            viewModel?.openFile(file.path)
         }
 
         return null

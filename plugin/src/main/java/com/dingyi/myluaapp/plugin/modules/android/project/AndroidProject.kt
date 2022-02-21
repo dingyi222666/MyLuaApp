@@ -39,4 +39,8 @@ class AndroidProject(
         get() = projectPath
     override val iconPath: String?
         get() = projectPath.path + "/" + configMap["iconPath"]
+
+    override val type: String
+        get() = "AndroidProject"
+
 }

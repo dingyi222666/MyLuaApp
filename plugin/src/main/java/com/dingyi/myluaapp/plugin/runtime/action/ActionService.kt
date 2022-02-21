@@ -45,13 +45,13 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
 
     private inner class DefaultActionArgument : ActionArgument {
 
-        private val argument = mutableListOf<Any>()
+        private val argument = mutableListOf<Any?>()
 
-        override fun <T> getArgument(i: Int): T {
-            return argument[i] as T
+        override fun <T> getArgument(i: Int): T? {
+            return argument[i] as T?
         }
 
-        override fun addArgument(arg: Any): ActionArgument {
+        override fun addArgument(arg: Any?): ActionArgument {
             argument.add(arg)
             return this
         }

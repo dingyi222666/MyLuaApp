@@ -39,6 +39,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     private lateinit var tabLayoutMediator: TabLayoutMediator
     private var isCreated = false
 
+    private var isCallMenu = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //先不启用过渡动画
@@ -51,6 +53,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
 
         viewModel.openProject((intent.getStringExtra("project_path") ?: "").toFile())
+
 
         supportActionBar?.title = viewModel.project.value?.name.toString()
 
@@ -78,6 +81,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             }
         }
         isCreated = true
+
 
     }
 
@@ -147,11 +151,19 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         ) { tab, index ->
             updateTab(tab, index)
         }
-
         tabLayoutMediator.attach()
 
         listOf(viewBinding.container, viewBinding.toolbar).forEach {
             it.addLayoutTransition()
+        }
+
+
+        viewBinding.symbolView.setOnClickListener {
+            PluginModule.getActionService()
+                .callAction<Unit>(
+                    PluginModule.getActionService().createActionArgument()
+                        .addArgument(it), DefaultActionKey.CLICK_SYMBOL_VIEW
+                )
         }
 
         supportActionBar?.let { actionBar ->
@@ -182,10 +194,34 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.editor_toolbar,menu)
+        menuInflater.inflate(R.menu.editor_toolbar, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+
+        if (!isCallMenu) {
+
+            val projectMenu = menu?.findItem(R.id.editor_action_project) as MenuItem
+
+            PluginModule
+                .getActionService()
+                .callAction<Unit>(
+                    PluginModule
+                        .getActionService()
+                        .createActionArgument()
+                        .addArgument(viewModel.project.value)
+                        .addArgument(projectMenu),
+                    DefaultActionKey
+                        .ADD_PROJECT_MENU
+                )
+
+            isCallMenu = true
+        }
+
+
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -308,6 +344,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             .getEditorService()
             .clearAllEditor()
 
+        tabLayoutMediator.detach()
 
     }
 

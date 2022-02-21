@@ -1,9 +1,12 @@
 package com.dingyi.myluaapp.plugin.modules.android
 
+import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
+import com.dingyi.myluaapp.plugin.modules.android.action.ProjectMenuAction
 import com.dingyi.myluaapp.plugin.modules.android.project.AndroidCreateProjectProvider
 import com.dingyi.myluaapp.plugin.modules.android.project.AndroidProjectProvider
+import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 
 class MainPlugin: Plugin {
 
@@ -18,12 +21,19 @@ class MainPlugin: Plugin {
     override fun onStart(context: PluginContext) {
 
         context
-            .getProjectService()
-            .addCreateProjectProvider(AndroidCreateProjectProvider())
+            .getProjectService().apply {
+                addCreateProjectProvider(AndroidCreateProjectProvider())
+                addProjectProvider(AndroidProjectProvider())
+            }
 
-        context
-            .getProjectService()
-            .addProjectProvider(AndroidProjectProvider())
+
+        context.getActionService()
+            .apply {
+                registerAction(
+                    getJavaClass<ProjectMenuAction>(),
+                    DefaultActionKey.ADD_PROJECT_MENU
+                )
+            }
 
 
     }

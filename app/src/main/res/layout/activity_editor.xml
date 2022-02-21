@@ -98,7 +98,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:text="@string/editor_toast_no_open_file" />
 
-                <com.dingyi.myluaapp.widget.view.SymbolView
+                <com.dingyi.myluaapp.view.SymbolView
                     android:id="@+id/symbol_view"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"

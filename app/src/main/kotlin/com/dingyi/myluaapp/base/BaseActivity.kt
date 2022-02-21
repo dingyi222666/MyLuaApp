@@ -61,7 +61,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
         this.optionsMenu = menu
         //call iconColor when call support method
         menu?.iconColor(getAttributeColor(R.attr.theme_hintTextColor))
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
 
     private fun getViewBindingImp(): V {

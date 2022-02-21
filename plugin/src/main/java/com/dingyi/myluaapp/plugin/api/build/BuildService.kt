@@ -1,9 +1,14 @@
 package com.dingyi.myluaapp.plugin.api.build
 
-interface BuildService {
+import com.dingyi.myluaapp.plugin.api.project.Project
 
-    fun addBuildService(className: String)
+interface BuildService<T> {
 
-    fun getAllBuildService():List<String>
+    fun addBuildService(type: T)
 
+    fun getAllBuildService():List<T>
+
+    fun build(project: Project, command:String)
+
+    fun stop()
 }

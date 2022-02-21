@@ -64,6 +64,10 @@ class BuildMain(
         logger = null
     }
 
+    fun refreshService() {
+        repository.refresh()
+    }
+
 
 }
 

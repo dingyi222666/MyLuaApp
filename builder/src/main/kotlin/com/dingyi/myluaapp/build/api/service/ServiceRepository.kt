@@ -10,4 +10,5 @@ interface ServiceRepository : Service {
     fun getServices(): List<Service>
 
     fun shutdown()
+    fun refresh()
 }

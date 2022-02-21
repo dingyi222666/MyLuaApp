@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.plugin.runtime.plugin
 import android.content.Context
 
 import com.dingyi.myluaapp.MainApplication
+import com.dingyi.myluaapp.build.BuildMain
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.PluginModule
 import com.dingyi.myluaapp.plugin.api.build.BuildService
@@ -24,6 +25,10 @@ object PluginModule: PluginModule {
     private val defaultActionService = ActionService(this)
 
     private val defaultEditorService = EditorService()
+
+    private val defaultBuildService =
+        com.dingyi.myluaapp.plugin.runtime.build.BuildService()
+
 
     override fun init() {
         pluginManager?.init()
@@ -50,6 +55,7 @@ object PluginModule: PluginModule {
     }
 
     override fun stop() {
+        defaultBuildService.stop()
         pluginManager?.stop()
         pluginManager = null
     }
@@ -66,8 +72,8 @@ object PluginModule: PluginModule {
         return defaultActionService
     }
 
-    override fun getBuildService(): BuildService {
-        TODO("Not yet implemented")
+    override fun getBuildService(): com.dingyi.myluaapp.plugin.runtime.build.BuildService {
+        return defaultBuildService
     }
 
     override fun getResourceManager(plugin: Plugin) {
