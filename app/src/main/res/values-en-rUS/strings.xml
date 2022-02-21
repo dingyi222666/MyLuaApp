@@ -124,5 +124,6 @@
     <string name="main_project_list_long_click_backup_project">Backup Project</string>
     <string name="main_dialog_delete_project_title">Delete Project</string>
     <string name="main_dialog_delete_project_message">Are you sure want to delete it? Unrecoverable it after deletion.</string>
+    <string name="editor_build_log_title">Build Log</string>
 
 </resources>

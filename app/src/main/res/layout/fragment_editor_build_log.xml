@@ -24,7 +24,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:padding="6dp"
-                android:src="@drawable/ic_baseline_format_list_numbered_24"
+                android:src="@drawable/ic_twotone_build_24"
                 app:tint="?theme_hintTextColor" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -37,10 +37,24 @@
             android:layout_weight="1"
             android:ellipsize="start"
             android:singleLine="true"
-            android:text="@string/editor_navigation_title"
+            android:text="@string/editor_build_log_title"
             android:textColor="?theme_textColor"
             android:textSize="16sp" />
+        <LinearLayout
+            android:id="@+id/more"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/ripple"
+            android:clickable="true"
+            android:gravity="center">
 
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:padding="6dp"
+                android:src="@drawable/ic_twotone_more_vert_24"
+                app:tint="?theme_hintTextColor" />
+        </LinearLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <View

@@ -5,18 +5,20 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 
 class LogBroadcastReceiver(
-    private var context: AppCompatActivity?
+    private val lifecycleOwner: Lifecycle,
+    private var context: ComponentActivity?
 ) : BroadcastReceiver(), LifecycleEventObserver {
 
     private val callbackList = mutableListOf<(Intent) -> Unit>()
 
 
     init {
-        context?.lifecycle?.addObserver(this)
+        lifecycleOwner.addObserver(this)
         context?.registerReceiver(this, IntentFilter(javaClass.name))
     }
 

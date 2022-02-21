@@ -6,4 +6,8 @@
     <attr name="theme_textColor" format="color|reference" />
     <attr name="theme_hintTextColor" format="reference|color" />
     <attr name="theme_rippleColorOnBackground" format="reference|color" />
+    <attr name="theme_log_debug_color" format="color|reference" />
+    <attr name="theme_log_info_color" format="color|reference" />
+    <attr name="theme_log_warn_color" format="color|reference" />
+    <attr name="theme_log_error_color" format="color|reference" />
 </resources>

@@ -39,7 +39,6 @@ class DefaultRunner(
 
             project.getLogger().info("run tasks [:$type] in project:${project.getPath()}")
 
-            project.getLogger().info("\n")
 
             val startTime = System.currentTimeMillis()
 
@@ -53,9 +52,9 @@ class DefaultRunner(
                     }
                 }
             }.onFailure {
-                project.getLogger().info("\n")
+
                 project.getLogger().error(it.stackTraceToString())
-                project.getLogger().info("\n")
+
                 project.getLogger().error("FAILURE: Build failed with an exception.")
                 endBuild(System.currentTimeMillis() - startTime, false)
             }.onSuccess {

@@ -20,6 +20,10 @@
         <item name="theme_textColor">@color/theme_default_textColor</item>
         <item name="theme_hintTextColor">@color/theme_default_hintTextColor</item>
         <item name="theme_rippleColorOnBackground">@color/theme_white_rippleColor</item>
+        <item name="theme_log_debug_color">@color/theme_default_log_debug_color</item>
+        <item name="theme_log_info_color">@color/theme_default_log_info_color</item>
+        <item name="theme_log_warn_color">@color/theme_default_log_warn_color</item>
+        <item name="theme_log_error_color">@color/theme_default_log_error_color</item>
         <!-- Customize your theme here. -->
     </style>
 

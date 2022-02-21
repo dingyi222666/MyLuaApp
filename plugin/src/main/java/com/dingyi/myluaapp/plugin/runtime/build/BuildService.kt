@@ -50,7 +50,15 @@ class BuildService() : BuildService<com.dingyi.myluaapp.plugin.runtime.build.Bui
     }
 
     override fun build(project: Project, command: String) {
-
+        val array = command.split(" ")
+        when (array[0]) {
+            "build" -> buildMain.build(
+                project.path.path,
+                array.slice(1..array.lastIndex).joinToString(separator = "")
+            )
+            "clean" -> buildMain.clean(project.path.path)
+            "sync" -> buildMain.sync(project.path.path)
+        }
     }
 
     data class ServicesBean(

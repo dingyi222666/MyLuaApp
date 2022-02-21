@@ -5,6 +5,8 @@ import android.view.SubMenu
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 import com.dingyi.myluaapp.plugin.api.project.Project
+import com.dingyi.myluaapp.plugin.dsl.menu.click
+import com.dingyi.myluaapp.plugin.dsl.menu.dsl
 
 class ProjectMenuAction : Action<Unit> {
 
@@ -13,10 +15,23 @@ class ProjectMenuAction : Action<Unit> {
         val menu = argument.getArgument<MenuItem>(1)
 
         if (project?.type == "AndroidProject" && menu?.hasSubMenu() == true) {
-            menu.subMenu.let {
-                it.add("刷新构建").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                it.add("打包项目").setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            menu.dsl {
+
+                menu("刷新构建")
+
+                submenu("构建项目") {
+
+                    menu("构建debug包") {
+                        argument.getPluginContext()
+                            .getBuildService()
+                            .build(project, "build debug")
+                    }
+
+                    menu("构建release包")
+
+                }
             }
+
         }
         return null
 
