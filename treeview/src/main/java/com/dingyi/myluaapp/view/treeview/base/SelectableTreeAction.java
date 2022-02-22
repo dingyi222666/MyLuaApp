@@ -12,39 +12,24 @@
  * permissions and limitations under.
  */
 
-package com.dingyi.view.treeview.base;
+package com.dingyi.myluaapp.view.treeview.base;
 
 import java.util.List;
 
-import com.dingyi.view.treeview.TreeNode;
+import com.dingyi.myluaapp.view.treeview.TreeNode;
 
 /**
- * Created by xinyuanzhong on 2017/4/20.
+ * Created by xinyuanzhong on 2017/4/27.
  */
 
-public interface BaseTreeAction {
-    void expandAll();
+public interface SelectableTreeAction extends BaseTreeAction {
+    void selectNode(TreeNode treeNode);
 
-    void expandNode(TreeNode treeNode);
+    void deselectNode(TreeNode treeNode);
 
-    void expandLevel(int level);
+    void selectAll();
 
-    void collapseAll();
+    void deselectAll();
 
-    void collapseNode(TreeNode treeNode);
-
-    void collapseLevel(int level);
-
-    void toggleNode(TreeNode treeNode);
-
-    void deleteNode(TreeNode node);
-
-    void addNode(TreeNode parent, TreeNode treeNode);
-
-    List<TreeNode> getAllNodes();
-
-    // TODO: 17/4/30
-    // 1.add node at position
-    // 2.add slide delete or other operations
-
+    List<TreeNode> getSelectedNodes();
 }

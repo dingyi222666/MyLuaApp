@@ -5,6 +5,7 @@ import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.FileTagMenuAction
 import com.dingyi.myluaapp.plugin.modules.default.action.SymbolClickAction
 import com.dingyi.myluaapp.plugin.modules.default.editor.EditorProvider
 
@@ -34,6 +35,10 @@ class MainPlugin: Plugin {
                 registerAction(
                     getJavaClass<SymbolClickAction>(),
                     DefaultActionKey.CLICK_SYMBOL_VIEW
+                )
+                registerAction(
+                    getJavaClass<FileTagMenuAction>(),
+                    DefaultActionKey.SHOW_FILE_TAG_MENU
                 )
             }
     }

@@ -10,7 +10,7 @@ import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.helper.TreeHelper
-import com.dingyi.view.treeview.TreeNode
+import com.dingyi.myluaapp.view.treeview.TreeNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -28,7 +28,7 @@ class MainViewModel : ViewModel() {
             project.value?.let {
                 editor.getFile()
                     .path.substring(it.path.path.length + 1)
-            }
+            } ?: ""
         } ?: ""
     }
 

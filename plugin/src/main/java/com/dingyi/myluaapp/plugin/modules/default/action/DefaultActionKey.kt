@@ -4,6 +4,7 @@ import android.app.Notification
 
 object DefaultActionKey {
 
+
     val PROJECT_LIST_MENU_ACTION = ActionKey(0x1, false)
 
     val CREATE_EDITOR_ACTION = ActionKey(0x2,false)
@@ -15,4 +16,5 @@ object DefaultActionKey {
 
     val ADD_PROJECT_MENU = ActionKey(0x5,true)
 
+    val SHOW_FILE_TAG_MENU = ActionKey(0x6, true)
 }

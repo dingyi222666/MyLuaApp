@@ -8,8 +8,11 @@ fun MenuItem.dsl(dsl: MenuItemConfig.() -> Unit) {
     dsl(config)
 }
 
-fun MenuItem.click(click:(MenuItem)->Boolean) {
-    this.setOnMenuItemClickListener(click)
+fun MenuItem.click(click:(MenuItem)->Unit) {
+    this.setOnMenuItemClickListener {
+        click(it)
+        true
+    }
 }
 
 class MenuItemConfig {

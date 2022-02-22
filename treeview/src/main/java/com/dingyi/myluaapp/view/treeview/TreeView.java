@@ -12,7 +12,7 @@
  * permissions and limitations under.
  */
 
-package com.dingyi.view.treeview;
+package com.dingyi.myluaapp.view.treeview;
 
 import android.content.Context;
 import android.view.View;
@@ -24,9 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
-import com.dingyi.view.treeview.base.BaseNodeViewFactory;
-import com.dingyi.view.treeview.base.SelectableTreeAction;
-import com.dingyi.view.treeview.helper.TreeHelper;
+import com.dingyi.myluaapp.view.treeview.base.BaseNodeViewFactory;
+import com.dingyi.myluaapp.view.treeview.base.SelectableTreeAction;
+import com.dingyi.myluaapp.view.treeview.helper.TreeHelper;
 
 /**
  * Created by xinyuanzhong on 2017/4/20.

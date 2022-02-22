@@ -12,11 +12,11 @@
  * permissions and limitations under.
  */
 
-package com.dingyi.view.treeview.base;
+package com.dingyi.myluaapp.view.treeview.base;
 
 import android.view.View;
 
-import com.dingyi.view.treeview.TreeNode;
+import com.dingyi.myluaapp.view.treeview.TreeNode;
 
 /**
  * Created by zxy on 17/4/23.

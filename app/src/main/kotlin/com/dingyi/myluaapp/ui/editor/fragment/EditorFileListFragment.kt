@@ -14,16 +14,15 @@ import com.dingyi.myluaapp.databinding.FragmentEditorFileListBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.adapter.EditorNodeBinder
 import com.dingyi.myluaapp.ui.editor.helper.TreeHelper
-import com.dingyi.view.treeview.TreeNode
-import com.dingyi.view.treeview.TreeView
-import com.dingyi.view.treeview.base.BaseNodeViewBinder
-import com.dingyi.view.treeview.base.BaseNodeViewFactory
+import com.dingyi.myluaapp.view.treeview.TreeNode
+import com.dingyi.myluaapp.view.treeview.TreeView
+import com.dingyi.myluaapp.view.treeview.base.BaseNodeViewBinder
+import com.dingyi.myluaapp.view.treeview.base.BaseNodeViewFactory
 
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainViewModel>() {
 
@@ -47,15 +46,22 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
 
         rootNode = TreeNode.root()
 
-        treeView = TreeView(rootNode, requireContext(), object : BaseNodeViewFactory() {
-            override fun getNodeViewBinder(view: View, viewType: Int): BaseNodeViewBinder {
-                return EditorNodeBinder(view,viewModel)
-            }
+        treeView = TreeView(
+            rootNode,
+            requireContext(),
+            object :
+                BaseNodeViewFactory() {
+                override fun getNodeViewBinder(
+                    view: View,
+                    viewType: Int
+                ): BaseNodeViewBinder {
+                    return EditorNodeBinder(view, viewModel)
+                }
 
-            override fun getNodeLayoutId(level: Int): Int {
-                return R.layout.layout_item_editor_file_list
-            }
-        })
+                override fun getNodeLayoutId(level: Int): Int {
+                    return R.layout.layout_item_editor_file_list
+                }
+            })
 
 
 

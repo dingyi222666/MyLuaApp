@@ -70,6 +70,9 @@ dependencies {
 
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
 
+    implementation(BuildConfig.Libs.AndroidX.appcompat)
+
+    implementation(BuildConfig.Libs.Google.material)
 
 
 }

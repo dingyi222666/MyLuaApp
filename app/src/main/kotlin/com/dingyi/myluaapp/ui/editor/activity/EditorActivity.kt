@@ -144,7 +144,15 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
-
+                    PluginModule.getActionService()
+                        .callAction<Unit>(
+                            PluginModule.getActionService().createActionArgument()
+                                .addArgument(tab)
+                                .addArgument(getCurrentEditor(tab))
+                                .addArgument({
+                                    viewModel.refreshEditor()
+                                }), DefaultActionKey.SHOW_FILE_TAG_MENU
+                        )
                 }
 
             })
@@ -157,7 +165,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         }
         tabLayoutMediator.attach()
 
-        listOf(viewBinding.container, viewBinding.toolbar).forEach {
+        listOf(viewBinding.main,viewBinding.container, viewBinding.toolbar).forEach {
             it.addLayoutTransition()
         }
 
@@ -296,7 +304,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         }
 
         viewModel.subTitle.observe(this) { title ->
-            supportActionBar?.subtitle = title
+            if (title.isEmpty()) {
+                supportActionBar?.subtitle = null
+            } else {
+                supportActionBar?.subtitle = title
+            }
         }
 
 

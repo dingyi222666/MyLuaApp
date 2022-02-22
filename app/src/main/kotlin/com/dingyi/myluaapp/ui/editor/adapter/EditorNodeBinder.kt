@@ -1,23 +1,18 @@
 package com.dingyi.myluaapp.ui.editor.adapter
 
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.marginBottom
-import androidx.core.view.marginLeft
 import com.bumptech.glide.Glide
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.dp
-import com.dingyi.myluaapp.common.kts.sortBySelf
 import com.dingyi.myluaapp.common.kts.suffix
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.databinding.LayoutItemEditorFileListBinding
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
-import com.dingyi.view.treeview.TreeNode
-import com.dingyi.view.treeview.TreeView
-import com.dingyi.view.treeview.base.BaseNodeViewBinder
+import com.dingyi.myluaapp.view.treeview.TreeNode
+import com.dingyi.myluaapp.view.treeview.base.BaseNodeViewBinder
 import java.io.File
 
 class EditorNodeBinder(

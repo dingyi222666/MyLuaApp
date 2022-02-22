@@ -12,12 +12,12 @@
  * permissions and limitations under.
  */
 
-package com.dingyi.view.treeview.helper;
+package com.dingyi.myluaapp.view.treeview.helper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dingyi.view.treeview.TreeNode;
+import com.dingyi.myluaapp.view.treeview.TreeNode;
 
 /**
  * Created by xinyuanzhong on 2017/4/27.

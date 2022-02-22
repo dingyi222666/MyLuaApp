@@ -31,4 +31,5 @@ interface EditorService {
     fun getSupportLanguages(): List<String>
 
     fun addSupportLanguages(vararg language:String)
+    fun closeAllEditor()
 }

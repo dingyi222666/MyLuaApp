@@ -1,8 +1,8 @@
 package com.dingyi.myluaapp.ui.editor.helper
 
 import com.dingyi.myluaapp.common.kts.sortBySelf
-import com.dingyi.view.treeview.TreeNode
-import com.dingyi.view.treeview.helper.TreeHelper
+import com.dingyi.myluaapp.view.treeview.TreeNode
+import com.dingyi.myluaapp.view.treeview.helper.TreeHelper
 import java.io.File
 
 object TreeHelper {
@@ -18,7 +18,7 @@ object TreeHelper {
     }
 
 
-    fun updateNode(node:TreeNode?):TreeNode? {
+    fun updateNode(node: TreeNode?): TreeNode? {
 
         if (node == null) {
             return null
@@ -46,7 +46,10 @@ object TreeHelper {
         (main.value as File)
             .listFiles()
             ?.sortBySelf()?.forEach {
-                val node = TreeNode(it, level + 1)
+                val node = TreeNode(
+                    it,
+                    level + 1
+                )
                 main.addChild(node)
             }
 

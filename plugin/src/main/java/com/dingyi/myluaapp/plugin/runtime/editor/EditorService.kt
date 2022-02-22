@@ -10,6 +10,7 @@ import com.dingyi.myluaapp.plugin.api.project.Project
 import com.google.gson.Gson
 import java.io.File
 import java.io.FileNotFoundException
+import java.net.NetworkInterface
 
 class EditorService : EditorService {
 
@@ -74,9 +75,10 @@ class EditorService : EditorService {
         val indexOfEditor = allEditor.indexOf(editor)
 
         val targetIndex = when {
-            indexOfEditor == allEditor.size -> indexOfEditor - 1
-
+            indexOfEditor+1 == allEditor.size -> indexOfEditor - 1
             indexOfEditor == 0 && allEditor.size == 1 -> null
+            indexOfEditor == -1 -> null
+            allEditor.size == 1 -> null
             else -> indexOfEditor
         }
 
@@ -87,6 +89,9 @@ class EditorService : EditorService {
         currentEditorServiceState.lastOpenPath = currentEditor?.getFile()?.absolutePath
 
         currentEditorServiceState.editors.removeIf { it.path == editor.getFile().absolutePath }
+
+
+        NetworkInterface.getNetworkInterfaces()
 
 
     }
@@ -208,6 +213,8 @@ class EditorService : EditorService {
             .add(editor.saveState())
 
         currentEditorServiceState.lastOpenPath = editor.getFile().path
+        allEditor.clear()
+        allEditor.add(editor)
     }
 
     override fun getEditor(filePath: File): Editor? {
@@ -220,5 +227,12 @@ class EditorService : EditorService {
 
     override fun addSupportLanguages(vararg language: String) {
         supportLanguages.addAll(language)
+    }
+
+    override fun closeAllEditor() {
+        currentEditorServiceState.editors.clear()
+        allEditor.clear()
+        currentEditorServiceState.lastOpenPath = null
+        saveEditorServiceState()
     }
 }

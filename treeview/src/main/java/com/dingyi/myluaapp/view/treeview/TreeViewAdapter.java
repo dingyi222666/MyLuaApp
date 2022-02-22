@@ -12,7 +12,7 @@
  * permissions and limitations under.
  */
 
-package com.dingyi.view.treeview;
+package com.dingyi.myluaapp.view.treeview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,10 +23,10 @@ import android.widget.Checkable;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dingyi.view.treeview.base.BaseNodeViewBinder;
-import com.dingyi.view.treeview.base.BaseNodeViewFactory;
-import com.dingyi.view.treeview.base.CheckableNodeViewBinder;
-import com.dingyi.view.treeview.helper.TreeHelper;
+import com.dingyi.myluaapp.view.treeview.base.BaseNodeViewBinder;
+import com.dingyi.myluaapp.view.treeview.base.BaseNodeViewFactory;
+import com.dingyi.myluaapp.view.treeview.base.CheckableNodeViewBinder;
+import com.dingyi.myluaapp.view.treeview.helper.TreeHelper;
 
 import java.util.ArrayList;
 import java.util.List;
