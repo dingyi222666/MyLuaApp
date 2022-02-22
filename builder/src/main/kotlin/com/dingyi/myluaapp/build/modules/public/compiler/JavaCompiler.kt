@@ -43,7 +43,7 @@ class JavaCompiler(
                     logger.debug(wrapDiagnostic(diagnostic))
                 }
                 else -> {
-                    logger.info(wrapDiagnostic(diagnostic))
+                    logger.debug(wrapDiagnostic(diagnostic))
                 }
             }
         }

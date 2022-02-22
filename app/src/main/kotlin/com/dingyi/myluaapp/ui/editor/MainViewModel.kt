@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.core.helper.ProgressMonitor
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.project.Project
@@ -16,6 +17,7 @@ import java.io.File
 
 class MainViewModel : ViewModel() {
 
+    val logBroadcastReceiver = MutableLiveData<LogBroadcastReceiver>()
     val allEditor = MutableLiveData<Pair<List<Editor>,Editor?>>()
     val project = MutableLiveData<Project>()
 

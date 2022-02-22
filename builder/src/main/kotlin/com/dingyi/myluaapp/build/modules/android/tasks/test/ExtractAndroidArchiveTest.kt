@@ -54,7 +54,7 @@ class ExtractAndroidArchiveTest(private val module: Module) : DefaultTask(module
             }.onFailure {
                 module
                     .getLogger()
-                    .warning("Failed to extract dependency(${file.file.name}):${it.message}")
+                    .warning("w:Failed to extract dependency(${file.file.name}):${it.message}")
                 System.err.println(it)
             }
 

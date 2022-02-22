@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.ui.welcome
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.build.util.getSHA256
@@ -30,6 +31,18 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
 
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
 
         setContentView(viewBinding.root)
 
@@ -47,9 +60,7 @@ class WelcomeActivity : AppCompatActivity() {
                 file.fileHeaders
                     .forEach {
                         if (it.fileName.startsWith("assets/")) {
-                            withContext(Dispatchers.Main) {
-                                viewBinding.title.text = "unzip:${it.fileName}"
-                            }
+
                             val targetPath = File(path, it.fileName.substring("assets/".length))
 
                             if (targetPath.exists()) {
@@ -57,6 +68,9 @@ class WelcomeActivity : AppCompatActivity() {
                                 val zipFileHash = file.getInputStream(it).getSHA256()
 
                                 if (targetPathHash != zipFileHash) {
+                                    withContext(Dispatchers.Main) {
+                                        viewBinding.title.text = "unzip:${it.fileName}"
+                                    }
                                     file.extractFile(
                                         it,
                                         path,
@@ -65,6 +79,9 @@ class WelcomeActivity : AppCompatActivity() {
                                 }
 
                             } else {
+                                withContext(Dispatchers.Main) {
+                                    viewBinding.title.text = "unzip:${it.fileName}"
+                                }
                                 file.extractFile(it, path, it.fileName.substring("assets/".length))
                             }
                         }
@@ -74,8 +91,6 @@ class WelcomeActivity : AppCompatActivity() {
                 PluginModule.init()
                 PluginModule.loadAllPlugin()
 
-
-
             }
 
 
@@ -84,6 +99,8 @@ class WelcomeActivity : AppCompatActivity() {
 
 
             startActivity<MainActivity>()
+
+            finish()
 
         }
 

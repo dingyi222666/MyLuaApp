@@ -17,6 +17,7 @@ class PluginManager(private val context: PluginContext) {
     fun getAllPlugin() = allPlugin
 
     fun init() {
+
         val pluginConfigPath = File(Paths.pluginDir, "plugin.json")
 
         val configList = Gson()
@@ -50,6 +51,7 @@ class PluginManager(private val context: PluginContext) {
 
     fun loadPlugin(pluginId: String) {
         allPlugin.find { it.pluginId == pluginId }
+            ?.let { preLoadPlugin -> if (loadPlugin.find { it.pluginId == preLoadPlugin.pluginId } == null) preLoadPlugin else null }
             ?.apply {
                 loadPlugin.add(this)
             }
@@ -57,8 +59,10 @@ class PluginManager(private val context: PluginContext) {
     }
 
     fun loadAllPlugin() {
-        allPlugin.forEach {
-            it.onStart(context)
+        allPlugin.forEach { preloadPlugin ->
+            if (loadPlugin.find { it.pluginId == preloadPlugin.pluginId } == null) {
+                preloadPlugin.onStart(context)
+            }
         }
         loadPlugin.addAll(allPlugin)
     }

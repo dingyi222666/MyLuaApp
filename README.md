@@ -5,7 +5,7 @@
 
 English | [中文](https://github.com/dingyi222666/MyLuaApp/tree/master/README_ZH.md)
 
-It's ***Work In Progress***.The project is still in the **alpha** stage, and most of the Features are **not implemented** (such as build system). At present, this project can not be fully run.
+It's ***Work In Progress***.The project is still in the **alpha** stage, and most of the Features are **not implemented** (such as build module). At present, this project can not be fully run.
 
 MyLuaApp uses **Lua or a mixture of Lua and Java** to develop Android software.
 

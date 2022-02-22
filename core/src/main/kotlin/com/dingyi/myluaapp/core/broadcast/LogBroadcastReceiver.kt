@@ -14,21 +14,44 @@ class LogBroadcastReceiver(
     private var context: ComponentActivity?
 ) : BroadcastReceiver(), LifecycleEventObserver {
 
-    private val callbackList = mutableListOf<(Intent) -> Unit>()
+    private val callbackList = mutableListOf<(Log) -> Unit>()
 
+    private val logList = mutableListOf<Log>()
+
+
+    data class Log(
+        val level: String,
+        val message: String
+    )
 
     init {
         lifecycleOwner.addObserver(this)
         context?.registerReceiver(this, IntentFilter(javaClass.name))
     }
 
-    fun addCallback(block: (Intent) -> Unit) {
+    fun addCallback(block: (Log) -> Unit) {
         callbackList.add(block)
+        logList.forEach {
+            block(it)
+        }
+    }
+
+    fun clear() {
+        logList.clear()
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        callbackList.forEach {
-            intent?.let { intent -> it.invoke(intent) }
+        getLog(intent)?.let { log ->
+            callbackList.forEach {
+                it(log)
+            }
+            logList.add(log)
+        }
+    }
+
+    private fun getLog(intent: Intent?): Log? {
+        return intent?.let {
+            Log(it.getStringExtra("tag").toString(), it.getStringExtra("message").toString())
         }
     }
 
@@ -47,6 +70,10 @@ class LogBroadcastReceiver(
             }
             else -> {}
         }
+    }
+
+    fun removeCallback(callback: (Log) -> Unit) {
+        callbackList.remove(callback)
     }
 
 

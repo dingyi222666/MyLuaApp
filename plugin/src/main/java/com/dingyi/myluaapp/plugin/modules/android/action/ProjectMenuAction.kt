@@ -21,10 +21,11 @@ class ProjectMenuAction : Action<Unit> {
 
                 submenu("构建项目") {
 
-                    menu("构建debug包") {
+                    menu("构建debug包").click {
                         argument.getPluginContext()
                             .getBuildService()
                             .build(project, "build debug")
+                        true
                     }
 
                     menu("构建release包")

@@ -5,7 +5,7 @@
 
 [English](https://github.com/dingyi222666/MyLuaApp/tree/master/README.md) | 中文
 
-目前该项目仍在***开发中***. 项目还处在**alpha** 阶段，大部分功能都**没有实现**(比如构建系统)。目前本软件还不能完全运行。
+目前该项目仍在***开发中***. 项目还处在**alpha** 阶段，大部分功能都**没有实现**(比如构建模块)。目前本软件还不能完全运行。
 
 MyLuaApp 使用**Lua或者Lua和Java混合** 来开发安卓软件。
 

@@ -94,7 +94,7 @@ class MergeLibraryManifest(private val module: Module) : DefaultTask(module) {
                     .setOverride(it.second, it.first)
             } else {
                 module.getLogger()
-                    .warning("The Script Value ${it.second.toCamelCase()} is null")
+                    .warning("w:build script property android.defaultConfig.${it.second.toCamelCase()} is null")
             }
 
         }

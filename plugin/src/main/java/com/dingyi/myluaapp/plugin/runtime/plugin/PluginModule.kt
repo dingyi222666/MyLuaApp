@@ -30,7 +30,7 @@ object PluginModule: PluginModule {
         com.dingyi.myluaapp.plugin.runtime.build.BuildService()
 
 
-    override fun init() {
+      override fun init() {
         pluginManager?.init()
     }
 

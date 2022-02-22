@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.*
+import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
@@ -80,6 +81,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 viewModel.initEditor()
             }
         }
+
+        viewModel.logBroadcastReceiver.value = LogBroadcastReceiver(lifecycle, this)
+
         isCreated = true
 
 

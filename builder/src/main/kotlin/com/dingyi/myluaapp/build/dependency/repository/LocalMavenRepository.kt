@@ -68,7 +68,7 @@ class LocalMavenRepository(
 
         targetPomPathList.forEach {
             if (File(it).exists().not()) {
-                logger.warning("Unable to retrieve dependency of $string,try sync project to re download dependency")
+                logger.warning("w:Unable to retrieve dependency of $string,try sync project to re download dependency")
                 logger.info("\n")
             }
         }

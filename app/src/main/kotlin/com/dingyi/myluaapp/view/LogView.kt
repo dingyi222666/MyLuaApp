@@ -6,7 +6,10 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
+import android.view.View
+import android.widget.ScrollView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.widget.NestedScrollView
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.helper.EventHelper
 import com.dingyi.myluaapp.common.kts.getAttributeColor
@@ -26,10 +29,10 @@ class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(contex
                 null
         }
 
-        if (file != null) {
-            typeface = Typeface.createFromFile(file)
+        typeface = if (file != null) {
+            Typeface.createFromFile(file)
         } else {
-            typeface = Typeface.MONOSPACE
+            Typeface.MONOSPACE
         }
 
     }
@@ -37,11 +40,16 @@ class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(contex
     private val eventHelper = EventHelper()
 
 
-    fun sendLog(text: CharSequence, color: Int) {
+    private fun sendLog(text: CharSequence, color: Int) {
         val span = generateSpan(text, color)
         append(span)
         append("\n")
-
+        if (parent is NestedScrollView) {
+            val parent = parent as NestedScrollView
+            parent.post {
+                parent.fullScroll(View.FOCUS_DOWN);
+            }
+        }
     }
 
     private fun generateSpan(text: CharSequence, color: Int): CharSequence {
@@ -55,7 +63,6 @@ class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(contex
     fun sendLog(level: String, text: String) {
         val color = when (level) {
             "warn" -> context.getAttributeColor(R.attr.theme_log_warn_color)
-
             "error" -> context.getAttributeColor(R.attr.theme_log_error_color)
             "info" -> context.getAttributeColor(R.attr.theme_log_info_color)
             "debug" -> context.getAttributeColor(R.attr.theme_log_debug_color)
@@ -63,6 +70,10 @@ class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(contex
         }
 
         sendLog(text, color)
+    }
+
+    fun clear() {
+        text = ""
     }
 
 }

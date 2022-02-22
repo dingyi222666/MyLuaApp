@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dingyi.myluaapp.base.BaseFragment
+import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.databinding.FragmentEditorBuildLogBinding
@@ -19,6 +20,8 @@ class EditorBuildLogFragment : BaseFragment<FragmentEditorBuildLogBinding, MainV
         return getJavaClass()
     }
 
+    private var buildEndFlag = false
+
     override fun getViewBindingInstance(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -26,19 +29,35 @@ class EditorBuildLogFragment : BaseFragment<FragmentEditorBuildLogBinding, MainV
         return FragmentEditorBuildLogBinding.inflate(inflater, container, false)
     }
 
+    private val callback = { it: LogBroadcastReceiver.Log ->
+        if (it.message == "BUILD END FLAG") {
+            buildEndFlag = true
+        }
+        if (it.message != "BUILD END FLAG" && buildEndFlag) {
+            viewBinding.logView.clear()
+            logReceiver.clear()
+            buildEndFlag = false
+        }
+        if (it.message != "BUILD END FLAG") {
+            viewBinding
+                .logView
+                .sendLog(it.level, it.message)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        logReceiver = LogBroadcastReceiver(viewLifecycleOwner.lifecycle, requireActivity())
+        logReceiver = viewModel.logBroadcastReceiver.value.checkNotNull()
 
-        logReceiver.addCallback {
+        logReceiver.addCallback(callback)
 
-            viewBinding
-                .logView
-                .sendLog(it.getStringExtra("tag").toString(),it.getStringExtra("message").toString())
-        }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        logReceiver.removeCallback(callback)
     }
 
 
