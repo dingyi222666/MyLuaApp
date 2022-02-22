@@ -125,4 +125,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PluginModule.stop()
+    }
 }

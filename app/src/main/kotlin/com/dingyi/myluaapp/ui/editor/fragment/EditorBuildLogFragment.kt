@@ -32,6 +32,7 @@ class EditorBuildLogFragment : BaseFragment<FragmentEditorBuildLogBinding, MainV
     private val callback = { it: LogBroadcastReceiver.Log ->
         if (it.message == "BUILD END FLAG") {
             buildEndFlag = true
+            System.gc()
         }
         if (it.message != "BUILD END FLAG" && buildEndFlag) {
             viewBinding.logView.clear()

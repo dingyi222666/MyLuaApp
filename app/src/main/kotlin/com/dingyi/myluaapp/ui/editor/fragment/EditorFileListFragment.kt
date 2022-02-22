@@ -8,15 +8,17 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseFragment
+import com.dingyi.myluaapp.common.kts.getAttributeColor
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.databinding.FragmentEditorFileListBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.adapter.EditorNodeBinder
+import com.dingyi.myluaapp.ui.editor.helper.TreeHelper
 import com.dingyi.view.treeview.TreeNode
 import com.dingyi.view.treeview.TreeView
 import com.dingyi.view.treeview.base.BaseNodeViewBinder
 import com.dingyi.view.treeview.base.BaseNodeViewFactory
-import com.dingyi.view.treeview.helper.TreeHelper
+
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,13 +59,23 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
 
 
 
-        viewBinding
-            .root
-            .addView(treeView.view, LinearLayoutCompat.LayoutParams(-1, -1))
+        viewBinding.apply {
+            root
+                .addView(treeView.view, LinearLayoutCompat.LayoutParams(-1, -1))
 
-        viewBinding
-            .title
-            .text = viewModel.project.value?.path?.path.toString()
+            title
+                .text = viewModel.project.value?.path?.path.toString()
+
+            refresh.apply {
+                setOnRefreshListener {
+                    refreshFileList()
+                }
+                setColorSchemeColors(requireContext().getAttributeColor(R.attr.colorPrimary))
+            }
+        }
+
+
+
 
         viewModel.rootNode.observe(viewLifecycleOwner) {
 
@@ -76,7 +88,17 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
 
     }
 
+    private fun refreshFileList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewBinding.refresh.isRefreshing = true
+            val node = withContext(Dispatchers.IO) {
+                TreeHelper.updateNode(viewModel.rootNode.value)
+            }
 
+            viewModel.rootNode.value = node
+            viewBinding.refresh.isRefreshing = false
+        }
+    }
 
 
 }

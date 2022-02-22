@@ -272,6 +272,26 @@ public class TreeHelper {
     }
 
     /**
+     * Get all expand nodes
+     */
+    public static List<TreeNode> getExpandNodes(TreeNode treeNode) {
+        List<TreeNode> expandNodes = new ArrayList<>();
+        if (treeNode == null) {
+            return expandNodes;
+        }
+
+        if (treeNode.isExpanded() && treeNode.getParent() != null) expandNodes.add(treeNode);
+
+        for (TreeNode child : treeNode.getChildren()) {
+            if (child.isExpanded()) {
+                expandNodes.add(child);
+                expandNodes.addAll(getExpandNodes(child));
+            }
+        }
+        return expandNodes;
+    }
+
+    /**
      * Return true when the node has one selected child(recurse all children) at least,
      * otherwise return false
      */
@@ -289,7 +309,9 @@ public class TreeHelper {
     }
 
     public static void deleteAllChild(TreeNode node) {
-        node.getChildren().forEach( (v) -> deleteAllChild(node));
+        List<TreeNode> cloneList = new ArrayList<>(node.getChildren());
         node.getChildren().clear();
+        cloneList.forEach(TreeHelper::deleteAllChild);
+        cloneList.clear();
     }
 }

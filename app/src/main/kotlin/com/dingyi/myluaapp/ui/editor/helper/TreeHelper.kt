@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.ui.editor.helper
 
 import com.dingyi.myluaapp.common.kts.sortBySelf
 import com.dingyi.view.treeview.TreeNode
+import com.dingyi.view.treeview.helper.TreeHelper
 import java.io.File
 
 object TreeHelper {
@@ -16,7 +17,32 @@ object TreeHelper {
 
     }
 
-     fun addChildNode(main: TreeNode, level: Int) {
+
+    fun updateNode(node:TreeNode?):TreeNode? {
+
+        if (node == null) {
+            return null
+        }
+
+        val allExpandPath = TreeHelper.getExpandNodes(node).map { it.value as File }
+
+        TreeHelper.deleteAllChild(node)
+
+
+        addChildNode(node,node.level+1)
+
+
+        TreeHelper.getAllNodes(node)
+            .filter { allExpandPath.contains(it.value as File) }
+            .forEach {
+                it.isExpanded = true
+            }
+
+        return node
+
+    }
+
+     private fun addChildNode(main: TreeNode, level: Int) {
         (main.value as File)
             .listFiles()
             ?.sortBySelf()?.forEach {
