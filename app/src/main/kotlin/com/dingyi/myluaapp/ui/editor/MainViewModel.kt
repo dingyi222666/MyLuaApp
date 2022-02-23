@@ -17,14 +17,18 @@ import java.io.File
 
 class MainViewModel : ViewModel() {
 
+
     val logBroadcastReceiver = MutableLiveData<LogBroadcastReceiver>()
-    val allEditor = MutableLiveData<Pair<List<Editor>,Editor?>>()
+    val allEditor = MutableLiveData<List<Editor>>()
     val project = MutableLiveData<Project>()
 
     val rootNode = MutableLiveData<TreeNode>()
 
-    val subTitle = allEditor.map { it ->
-        it.second?.let { editor ->
+    val currentEditor = MutableLiveData<Editor?>()
+
+
+    val subTitle = currentEditor.map { it ->
+        it?.let { editor ->
             project.value?.let {
                 editor.getFile()
                     .path.substring(it.path.path.length + 1)
@@ -47,11 +51,17 @@ class MainViewModel : ViewModel() {
 
     private fun refresh() {
 
-        allEditor
-            .value =
-            PluginModule.getEditorService().let { it.getAllEditor() to it.getCurrentEditor() }
+        PluginModule.getEditorService().let { editorService ->
+            currentEditor.value = editorService.getCurrentEditor()
+
+            allEditor.value = editorService.getAllEditor()
+        }
+
 
     }
+
+
+
 
     suspend fun initEditor() = withContext(Dispatchers.IO) {
 
@@ -60,13 +70,12 @@ class MainViewModel : ViewModel() {
                 .getEditorService()
                 .loadEditorServiceState(it)
 
-           withContext(Dispatchers.Main) { refresh() }
+            withContext(Dispatchers.Main) { refresh() }
 
         }
     }
 
     fun refreshEditor() {
-
         PluginModule
             .getEditorService()
             .refreshEditorServiceState()
@@ -81,10 +90,6 @@ class MainViewModel : ViewModel() {
 
         if (!file.exists()) {
             file = File(project.value?.path, path)
-        }
-
-        if (allEditor.value?.second?.getFile() == file) {
-            return
         }
 
         PluginModule
@@ -110,7 +115,21 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun setCurrentEditor(path: String) {
+        var file = File(path)
 
+        if (!file.exists()) {
+            file = File(project.value?.path, path)
+        }
+
+        PluginModule
+            .getEditorService()
+            .setCurrentEditor(file)
+
+        currentEditor.value = PluginModule.getEditorService().getCurrentEditor()
+
+
+    }
 
 
 }

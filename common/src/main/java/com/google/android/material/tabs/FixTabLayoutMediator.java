@@ -273,7 +273,7 @@ public final class FixTabLayoutMediator {
 
         @Override
         public void onTabSelected(@NonNull TabLayout.Tab tab) {
-            viewPager.post(() -> viewPager.setCurrentItem(tab.getPosition(), smoothScroll));
+             viewPager.setCurrentItem(tab.getPosition(), smoothScroll);
         }
 
         @Override

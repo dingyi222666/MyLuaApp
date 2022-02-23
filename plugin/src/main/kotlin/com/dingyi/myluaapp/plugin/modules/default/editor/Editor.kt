@@ -59,6 +59,7 @@ class Editor(
     }
 
 
+
     override fun saveState(): EditorState {
 
         if (currentEditor.get() != null) {
@@ -72,6 +73,11 @@ class Editor(
                     textSize = it.textSizePx
                 )
             }
+        } else {
+            currentEditorState = EditorState(
+                path = path.path,
+                0, 0, 0, 0, 0f
+            )
         }
 
         return currentEditorState
@@ -156,13 +162,13 @@ class Editor(
 
         other as com.dingyi.myluaapp.plugin.modules.default.editor.Editor
 
-        if (path.path != other.path.path) return false
+        if (path.absolutePath == other.path.absolutePath) return true
 
-        return true
+        return false
     }
 
     override fun hashCode(): Int {
-        return path.path.hashCode()
+        return path.absolutePath.hashCode()
     }
 
 

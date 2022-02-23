@@ -11,16 +11,17 @@ class Logger(application: Application) : ILogger {
 
     inner class LoggerSender(private val application: Application) {
 
-        fun sendMsg(tag: String, message: String) {
-            sendBroadcast(tag, message)
+        fun sendMsg(tag: String, message: String,extra:String?) {
+            sendBroadcast(tag, message,extra)
         }
 
-        private fun sendBroadcast(tag: String, message: String) {
+        private fun sendBroadcast(tag: String, message: String, extra: String?) {
             application.sendBroadcast(
                 Intent().apply {
                     action = "com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver"
                     putExtra("message", message)
                     putExtra("tag", tag)
+                    putExtra("extra",extra)
                 }
             )
         }
@@ -31,19 +32,19 @@ class Logger(application: Application) : ILogger {
         link = null
     }
 
-    override fun warning(string: String) {
-        link?.sendMsg("warn", string)
+    override fun warning(string: String,extra: String?) {
+        link?.sendMsg("warn", string,extra)
     }
 
-    override fun info(string: String) {
-        link?.sendMsg("info", string)
+    override fun info(string: String,extra: String?) {
+        link?.sendMsg("info", string,extra)
     }
 
-    override fun debug(string: String) {
-        link?.sendMsg("debug", string)
+    override fun debug(string: String,extra: String?) {
+        link?.sendMsg("debug", string,extra)
     }
 
-    override fun error(string: String) {
-        link?.sendMsg("error", string)
+    override fun error(string: String,extra: String?) {
+        link?.sendMsg("error", string,extra)
     }
 }

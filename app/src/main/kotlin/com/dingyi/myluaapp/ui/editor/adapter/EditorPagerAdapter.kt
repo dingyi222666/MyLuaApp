@@ -45,9 +45,8 @@ class EditorPagerAdapter(fragmentActivity: FragmentActivity) :
 
     }
 
-    fun submitList(list: List<Editor>, callBack:Runnable) {
-        differ.submitList(list,callBack)
-
+    fun submitList(list: List<Editor>,callback:Runnable) {
+        differ.submitList(list,callback)
     }
 
     override fun createFragment(position: Int): Fragment {

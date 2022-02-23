@@ -2,6 +2,9 @@ package com.dingyi.myluaapp.ui.editor.adapter
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.Glide
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.dp
@@ -32,18 +35,22 @@ class EditorNodeBinder(
             .load(getImageResId(file.path))
             .into(binding.image)
 
-        itemView.layoutParams =
-            ((itemView as ViewGroup).layoutParams as ViewGroup.MarginLayoutParams)
-                .apply {
-                    this.leftMargin = treeNode.level * 7.dp
-                }
-
-        binding.arrow.visibility = if (file.isFile) {
-            View.INVISIBLE
-        } else {
-            View.VISIBLE
+        itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            leftMargin = treeNode.level * 7.dp
         }
 
+        binding.arrow.isInvisible = file.isFile
+
+
+        if (treeNode.isExpanded) {
+            binding
+                .arrow
+                .animate()
+                .rotation(90f)
+                .setDuration(0)
+                .start()
+
+        }
     }
 
 
@@ -91,6 +98,10 @@ class EditorNodeBinder(
             if (path == "...")
                 return R.drawable.ic_twotone_undo_24
 
+
+            if (file.suffix.isEmpty()) {
+                return imageData.getValue("default")
+            }
 
             imageData.forEach {
                 if (it.key.lastIndexOf(file.suffix) != -1) {

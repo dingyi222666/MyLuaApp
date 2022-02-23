@@ -47,12 +47,13 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             throw FileNotFoundException("The file ${editorPath.path} was deleted.")
         }
 
-        for (openedEditor in allEditor) {
-            if (openedEditor.getFile().absolutePath == editorPath.absolutePath) {
-                currentEditor = openedEditor
-                currentEditorServiceState.lastOpenPath = openedEditor.getFile().path
-                return currentEditor
-            }
+
+        val findEditor = allEditor.find { it.getFile().path == editorPath.path }
+
+        if (findEditor!=null) {
+            currentEditor = findEditor
+            currentEditorServiceState.lastOpenPath = findEditor.getFile().path
+            return currentEditor
         }
 
         for (it in allEditorProvider) {
@@ -60,13 +61,13 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             if (editor != null) {
                 allEditor.add(editor)
                 currentEditor = editor
-                currentEditorServiceState.lastOpenPath = editor.getFile().absolutePath
+                currentEditorServiceState.lastOpenPath = editorPath.path
 
                 val find =
-                    currentEditorServiceState.editors.find { it.path == editorPath.absolutePath }
+                    currentEditorServiceState.editors.find { it.path == editorPath.path }
 
                 if (find == null) {
-                    currentEditorServiceState.editors.add(editor.saveState() as EditorState)
+                    currentEditorServiceState.editors.add(editor.saveState())
                 }
                 return editor
             }
@@ -89,9 +90,9 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
         currentEditor = allEditor.getOrNull(targetIndex ?: 0)
 
-        currentEditorServiceState.lastOpenPath = currentEditor?.getFile()?.absolutePath
+        currentEditorServiceState.lastOpenPath = currentEditor?.getFile()?.path
 
-        currentEditorServiceState.editors.removeIf { it.path == editor.getFile().absolutePath }
+        currentEditorServiceState.editors.removeIf { it.path == editor.getFile().path }
 
 
     }
@@ -125,10 +126,6 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
         currentEditorServiceState.editors.clear()
 
-        Log.e("test", currentEditorServiceState.toString())
-
-
-
         allEditor.forEach {
             currentEditorServiceState.editors.add(it.saveState() as EditorState)
         }
@@ -155,8 +152,49 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
     }
 
     override fun refreshEditorServiceState() {
-        allEditor.clear()
-        indexAllEditor()
+        for (i in currentEditorServiceState.editors.indices) {
+
+            val editorState = currentEditorServiceState.editors[i]
+
+            val file = editorState.path.toFile()
+
+            if (!file.exists()) {
+                pluginContext
+                    .getActionService()
+                    .callAction<Unit>(
+                        pluginContext
+                            .getActionService()
+                            .createActionArgument()
+                            .addArgument(file), DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST
+                    )
+                closeEditor(file)
+                continue
+            }
+
+            val findEditor = allEditor.find { it.getFile().path == editorState.path }
+
+            if (findEditor != null) {
+                if (currentEditorServiceState.lastOpenPath == editorState.path) {
+                    currentEditor = findEditor
+                }
+                continue
+            }
+
+            for (it in allEditorProvider) {
+                val editor = it.createEditor(file)
+                if (editor != null) {
+                    editor.restoreState(editorState)
+
+                    if (currentEditorServiceState.lastOpenPath == editorState.path) {
+                        currentEditor = editor
+                    }
+
+                    allEditor.add(i - 1, editor)
+                    break
+                }
+            }
+        }
+
     }
 
     override fun loadEditorServiceState(project: Project) {
@@ -212,7 +250,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
                 continue
             }
 
-            val findEditor = allEditor.find { it.getFile().absolutePath == editorState.path }
+            val findEditor = allEditor.find { it.getFile().path == editorState.path }
 
             if (findEditor != null) {
                 if (currentEditorServiceState.lastOpenPath == editorState.path) {
@@ -264,9 +302,14 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
         supportLanguages.addAll(language)
     }
 
+    override fun setCurrentEditor(file: File) {
+        openEditor(file)
+    }
+
     override fun closeAllEditor() {
         currentEditorServiceState.editors.clear()
         allEditor.clear()
+        currentEditor = null
         currentEditorServiceState.lastOpenPath = null
         saveEditorServiceState()
     }

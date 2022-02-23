@@ -82,9 +82,12 @@ dependencies {
     implementation(BuildConfig.Libs.AndroidX.constraintlayout)
     implementation(BuildConfig.Libs.AndroidX.preference_ktx)
 
+    implementation(BuildConfig.Libs.AndroidX.viewpager2)
 
     //google
-    implementation(BuildConfig.Libs.Google.material)
+    implementation(BuildConfig.Libs.Google.material) {
+        exclude(group = "androidx.viewpager2", module = "viewpager2")
+    }
     implementation(BuildConfig.Libs.Google.gson)
 
     implementation(BuildConfig.Libs.Views.code_editor)

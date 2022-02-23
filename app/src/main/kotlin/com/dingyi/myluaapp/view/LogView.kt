@@ -14,6 +14,7 @@ import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.helper.EventHelper
 import com.dingyi.myluaapp.common.kts.getAttributeColor
 import java.io.File
+import java.io.ObjectInput
 import java.nio.charset.CharsetEncoder
 
 class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs) {
@@ -37,13 +38,51 @@ class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(contex
 
     }
 
-    private val eventHelper = EventHelper()
+    data class Log(
+        val text: SpannableString,
+        val level: String,
+        val color: Int,
+        val extra:Any?
+    )
+
+    interface LogListener {
+        fun interceptLog(log: Log): Log
+    }
 
 
-    private fun sendLog(text: CharSequence, color: Int) {
-        val span = generateSpan(text, color)
-        append(span)
+    private val allLog = mutableListOf<Log>()
+
+    private val eventList = mutableListOf<LogListener>()
+
+    fun addLogListener(listener: LogListener) {
+        eventList.add(listener)
+    }
+
+    fun removeLogListener(listener: LogListener) {
+        eventList.remove(listener)
+    }
+
+    private fun interceptLog(log: Log): Log {
+        return eventList.fold(log) { t, listener ->
+            listener.interceptLog(t)
+        }
+    }
+
+    private fun sendLog(text: CharSequence, level: String, color: Int,extra: Any?) {
+
+        if (allLog.size >= 200) {
+            val slice = allLog.slice(100..allLog.lastIndex)
+            allLog.clear()
+            allLog.addAll(slice)
+            addLogList(allLog)
+        }
+
+        val log = interceptLog(generateLog(text, level, color,extra))
+        append(log.text)
+        allLog.add(log)
         append("\n")
+
+
         if (parent is NestedScrollView) {
             val parent = parent as NestedScrollView
             parent.post {
@@ -52,15 +91,22 @@ class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(contex
         }
     }
 
-    private fun generateSpan(text: CharSequence, color: Int): CharSequence {
+    private fun addLogList(allLog: MutableList<Log>) {
+        allLog.forEach {
+            append(it.text)
+            append("\n")
+        }
+    }
+
+    private fun generateLog(text: CharSequence, level: String, color: Int,extra: Any?): Log {
         val span = SpannableString(text)
 
         span.setSpan(ForegroundColorSpan(color), 0, text.length, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
 
-        return span
+        return Log(span, level, color,extra)
     }
 
-    fun sendLog(level: String, text: String) {
+    fun sendLog(level: String, text: String,extra: Any? = null) {
         val color = when (level) {
             "warn" -> context.getAttributeColor(R.attr.theme_log_warn_color)
             "error" -> context.getAttributeColor(R.attr.theme_log_error_color)
@@ -69,10 +115,11 @@ class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(contex
             else -> context.getAttributeColor(R.attr.theme_log_info_color)
         }
 
-        sendLog(text, color)
+        sendLog(text, level, color,extra)
     }
 
     fun clear() {
+        allLog.clear()
         text = ""
     }
 

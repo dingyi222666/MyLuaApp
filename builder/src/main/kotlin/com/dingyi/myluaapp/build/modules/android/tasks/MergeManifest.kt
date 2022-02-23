@@ -103,6 +103,11 @@ class MergeManifest(private val applicationModule: Module) : DefaultTask(applica
             manifestMergerInvoker.withFeatures(ManifestMerger2.Invoker.Feature.DEBUGGABLE)
         }
 
+
+        applyModule.getLogger()
+            .info("\n")
+
+
         arrayOf(
             (buildScript.get("android.defaultConfig.applicationId")
                     as LuaValue).tojstring() to ManifestSystemProperty.PACKAGE,

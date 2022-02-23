@@ -26,12 +26,13 @@ class CodeEditor(context: Context, attributeSet: AttributeSet?) :
         typefaceText = Typeface.MONOSPACE;
         typefaceLineNumber = typefaceText
         val newCompleteWindow = AutoCompleteWindow(this)
-        val completeWindowField = Class.forName("io.github.rosemoe.sora.widget.CodeEditor")
-            .getDeclaredField("mCompletionWindow").apply {
-                isAccessible = true
-            }
 
-        completeWindowField.set(this, newCompleteWindow)//换掉显示窗口
+        Class.forName("io.github.rosemoe.sora.widget.CodeEditor")
+            .getDeclaredField("mCompletionWindow")
+            .apply {
+                isAccessible = true
+            }.set(this, newCompleteWindow)//换掉显示窗口
+
         setAutoCompletionItemAdapter(AutoCompletionItemAdapter(this))
         setTextActionMode(TextActionMode.ACTION_MODE)
         setPinLineNumber(false)

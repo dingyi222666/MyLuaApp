@@ -24,6 +24,7 @@
         <item name="theme_log_info_color">@color/theme_default_log_info_color</item>
         <item name="theme_log_warn_color">@color/theme_default_log_warn_color</item>
         <item name="theme_log_error_color">@color/theme_default_log_error_color</item>
+        <item name="theme_log_click_color">@color/theme_default_log_click_color</item>
         <!-- Customize your theme here. -->
     </style>
 

@@ -9,6 +9,7 @@ import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
+import com.dingyi.myluaapp.core.log.listener.InstallListener
 import com.dingyi.myluaapp.databinding.FragmentEditorBuildLogBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 
@@ -49,10 +50,12 @@ class EditorBuildLogFragment : BaseFragment<FragmentEditorBuildLogBinding, MainV
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         logReceiver = viewModel.logBroadcastReceiver.value.checkNotNull()
 
         logReceiver.addCallback(callback)
+
+        viewBinding.logView
+            .addLogListener(InstallListener(requireContext()))
 
     }
 

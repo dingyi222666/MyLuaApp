@@ -23,10 +23,7 @@ import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.FixTabLayoutMediator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
@@ -106,11 +103,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     }
 
     private fun updateTab(tab: TabLayout.Tab, index: Int, choose: Boolean = false) {
-        var name = PluginModule
-            .getEditorService()
-            .getAllEditor().getOrNull(index)?.getFile()?.name ?: "Unknown"
+        var name = viewModel.allEditor.value?.getOrNull(index)?.getFile()?.name ?: "Unknown"
 
-        val currentEditor = viewModel.allEditor.value?.second
+        val currentEditor = viewModel.currentEditor.value
         if (currentEditor?.isModified() == true) {
             name = "*$name"
         }
@@ -118,8 +113,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         tab.text = name
 
         if (choose) {
-            viewModel.allEditor.value?.first?.getOrNull(index)?.getFile()?.path?.let {
-                viewModel.openFile(it)
+            viewModel.allEditor.value?.getOrNull(index)?.getFile()?.path?.let {
+                viewModel.setCurrentEditor(it)
             }
         }
 
@@ -127,16 +122,17 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
     private fun getCurrentEditor(tab: TabLayout.Tab?): Editor? {
         return tab?.let {
-            PluginModule
-                .getEditorService()
-                .getAllEditor().getOrNull(it.position)
+            viewModel.allEditor.value?.getOrNull(it.position)
         }
 
     }
 
     private fun initView() {
+
         viewBinding.editorPage.adapter = EditorPagerAdapter(this)
+
         viewBinding.editorPage.isUserInputEnabled = false
+
 
         viewBinding
             .drawerPage
@@ -151,13 +147,16 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                     tab?.let {
                         updateTab(it, it.position, true)
                     }
-
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) { getCurrentEditor(tab)?.save() }
+                        tab?.let {
+                            updateTab(it, it.position)
+                        }
                     }
+
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -170,22 +169,29 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                                     viewModel.refreshEditor()
                                 }), DefaultActionKey.SHOW_FILE_TAG_MENU
                         )
+
+                    tab?.let {
+                        updateTab(it, it.position, true)
+                    }
                 }
 
             })
 
         tabLayoutMediator = FixTabLayoutMediator(
             viewBinding.editorTab,
-            viewBinding.editorPage, true, true
+            viewBinding.editorPage, true, false
         ) { tab, index ->
             updateTab(tab, index)
         }
         tabLayoutMediator.attach()
 
 
-        listOf(viewBinding.main,viewBinding.container, viewBinding.toolbar).forEach {
+
+        listOf(viewBinding.appbarLayout, viewBinding.container, viewBinding.toolbar).forEach {
             it.addLayoutTransition()
         }
+
+
 
 
         viewBinding.symbolView.setOnClickListener {
@@ -276,9 +282,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             viewBinding.progress.visibility = if (boolean) View.VISIBLE else View.INVISIBLE
         }
 
-        viewModel.allEditor.observe(this) { pair ->
+        viewModel.allEditor.observe(this) { list ->
 
-            val (list, editor) = pair
 
             val visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
 
@@ -300,25 +305,25 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
 
             (viewBinding.editorPage.adapter as EditorPagerAdapter).let { adapter ->
+                adapter.submitList(list.toList()) {
+                    lifecycleScope.launch {
+                        val index = list.indexOf(viewModel.currentEditor.value)
 
-                val index = list.indexOf(editor)
-
-                adapter.submitList(
-                    mutableListOf<Editor>().apply { addAll(list) }) {
-                    if (viewBinding.editorPage.currentItem != index) {
-                        lifecycleScope.launch {
-                            delay(50)
+                        delay(50)
+                        viewBinding.editorPage.post {
                             viewBinding.editorPage.setCurrentItem(
-                                if (index == -1) viewBinding.editorPage.currentItem else index, true
+                                if (index == -1) viewBinding.editorPage.currentItem else index,
+                                false
                             )
                         }
+
                     }
                 }
-
             }
 
-
         }
+
+
 
         viewModel.subTitle.observe(this) { title ->
             if (title.isEmpty()) {

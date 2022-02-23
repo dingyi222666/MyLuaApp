@@ -19,7 +19,8 @@
     <color name="theme_default_rippleColor">#27000000</color>
     <color name="theme_default_log_error_color">#FF5370</color>
     <color name="theme_default_log_warn_color">#F8DA3F</color>
-    <color name="theme_default_log_info_color">#55E350</color>
+    <color name="theme_default_log_info_color">#FF018786</color>
+    <color name="theme_default_log_click_color">#1E88E9</color>
     <color name="theme_default_log_debug_color">#54CEE3</color>
     <color name="theme_blue_colorPrimary">#1E88E5</color>
     <color name="theme_white_rippleColor">#3fffffff</color>

@@ -40,7 +40,7 @@ class MainBuilder(
     override fun build(command: String) {
 
 
-        logger.info("Init Project")
+        logger.info("Index Project...")
 
         val commands = command.split(" ")
 
@@ -50,11 +50,12 @@ class MainBuilder(
 
         project?.init()
 
-        logger.info("Start Build...")
-
-
         logger.info("\n")
 
+
+        logger.info("Start Build Module...")
+
+        logger.info("\n")
 
         runJob = project?.getRunner()?.run(commands[0])
 

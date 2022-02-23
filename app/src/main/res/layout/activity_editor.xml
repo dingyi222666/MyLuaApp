@@ -44,7 +44,7 @@
                     android:layout_marginTop="56dp"
                     android:background="?theme_backgroundColor"
                     app:tabInlineLabel="true"
-                    app:tabGravity="start"
+                    app:tabIndicatorColor="?colorPrimary"
                     app:tabIndicator="@drawable/default_tab_indicator"
                     app:tabMode="scrollable"
                     app:tabTextAppearance="@style/BaseTableLayoutStyle" />

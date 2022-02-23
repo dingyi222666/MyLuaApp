@@ -32,4 +32,5 @@ interface EditorService {
 
     fun addSupportLanguages(vararg language:String)
     fun closeAllEditor()
+    fun setCurrentEditor(file: File)
 }

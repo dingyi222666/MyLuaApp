@@ -6,13 +6,13 @@ import java.util.Locale
 
 interface ILogger : ILogger {
 
-    fun warning(string: String)
+    fun warning(string: String,extra: String? = null)
 
-    fun info(string: String)
+    fun info(string: String,extra: String? = null)
 
-    fun debug(string: String)
+    fun debug(string: String,extra: String? = null)
 
-    fun error(string: String)
+    fun error(string: String,extra: String? = null)
 
 
     override fun error(t: Throwable?, msgFormat: String?, vararg args: Any?) {
