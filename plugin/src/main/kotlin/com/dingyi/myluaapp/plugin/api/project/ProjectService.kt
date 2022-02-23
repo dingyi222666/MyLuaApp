@@ -6,7 +6,7 @@ import java.io.File
 interface ProjectService {
 
 
-    fun getAllProject():List<Project>
+    fun getAllProject(): Pair<List<Project>, String>
 
     fun addProjectProvider(projectProvider: ProjectProvider)
 

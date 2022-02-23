@@ -96,7 +96,17 @@ class SignApk(private val module: Module) : DefaultTask(module) {
                 .main(args.toTypedArray())
         }
 
-        //inputPath.deleteRecursively()
+
+
+        inputPath.deleteRecursively()
+
+        module
+            .getLogger()
+            .info("\n")
+
+        module
+            .getLogger()
+            .info("APK generated successfully for project:${module.getProject().name},[install] or [open] APK")
 
     }
 }

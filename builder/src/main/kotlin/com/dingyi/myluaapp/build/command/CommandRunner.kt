@@ -25,15 +25,18 @@ class CommandRunner {
 
     private suspend fun runCommand(command: String): Status = withContext(Dispatchers.IO) {
 
-        runCatching {
-            val process = Runtime.getRuntime().exec(
-                command, transformEnvToArray()
-            )
+        val process = Runtime.getRuntime().exec(
+            command, transformEnvToArray()
+        )
+
+        val status = runCatching {
+
 
 
             process.waitFor()
 
             val status = process.exitValue()
+
 
             Status(
                 code = status,
@@ -46,6 +49,9 @@ class CommandRunner {
             )
         }
 
+        process.destroyForcibly().destroy()
+
+        status
     }
 
 

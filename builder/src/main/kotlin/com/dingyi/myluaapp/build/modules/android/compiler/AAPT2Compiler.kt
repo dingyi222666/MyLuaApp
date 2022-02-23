@@ -80,9 +80,9 @@ class AAPT2Compiler(private val logger: ILogger) {
 
 
         if (BuildConfig.DEBUG) {
-            logger.info("\n")
-            logger.info(status.message)
-            logger.info("\n")
+            logger.debug("\n")
+            logger.debug(status.message)
+            logger.debug("\n")
             //logger.info("Source File:${compileFile}")
         }
 
@@ -104,9 +104,9 @@ class AAPT2Compiler(private val logger: ILogger) {
         )
 
         if (BuildConfig.DEBUG) {
-            logger.info("\n")
-            logger.info("AAPT2 Compile Message:${status.message}")
-            logger.info("\n")
+            logger.debug("\n")
+            logger.debug("AAPT2 Compile Message:${status.message}")
+            logger.debug("\n")
             //logger.info("Source File:${compileFile}")
         }
 

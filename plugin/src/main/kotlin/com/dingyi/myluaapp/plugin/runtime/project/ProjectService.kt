@@ -17,11 +17,16 @@ class ProjectService(
 
     private val allCreateProjectProvider = mutableListOf<ProjectCreatorProvider>()
 
-    override fun getAllProject(): List<Project> {
-        return Paths.projectDir.toFile()
+    override fun getAllProject(): Pair<List<Project>, String> {
+        val errorBuilder = StringBuilder()
+        return (Paths.projectDir.toFile()
             .listFiles()?.mapNotNull {
-                getProject(it)
-            } ?: listOf()
+                runCatching {
+                    getProject(it)
+                }.onFailure {
+                    errorBuilder.append(it.stackTraceToString())
+                }.getOrNull()
+            } ?: listOf()) to errorBuilder.toString()
     }
 
     override fun addProjectProvider(projectProvider: ProjectProvider) {

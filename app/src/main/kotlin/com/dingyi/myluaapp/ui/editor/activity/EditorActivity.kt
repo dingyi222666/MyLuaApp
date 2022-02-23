@@ -23,8 +23,8 @@ import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.FixTabLayoutMediator
-import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -118,11 +118,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         tab.text = name
 
         if (choose) {
-            PluginModule
-                .getEditorService()
-                .getAllEditor().getOrNull(index)?.getFile()?.path?.let {
-                    viewModel.openFile(it)
-                }
+            viewModel.allEditor.value?.first?.getOrNull(index)?.getFile()?.path?.let {
+                viewModel.openFile(it)
+            }
         }
 
     }
@@ -131,7 +129,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         return tab?.let {
             PluginModule
                 .getEditorService()
-                .getAllEditor()[it.position]
+                .getAllEditor().getOrNull(it.position)
         }
 
     }
@@ -303,20 +301,19 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
             (viewBinding.editorPage.adapter as EditorPagerAdapter).let { adapter ->
 
-                adapter.submitList(list.toList())
-
                 val index = list.indexOf(editor)
 
-
-                if (viewBinding.editorPage.currentItem != index) {
-                    viewBinding.editorPage.post {
-                        viewBinding.editorPage.setCurrentItem(
-                            if (index == -1) viewBinding.editorPage.currentItem else index, true
-                        )
-
+                adapter.submitList(
+                    mutableListOf<Editor>().apply { addAll(list) }) {
+                    if (viewBinding.editorPage.currentItem != index) {
+                        lifecycleScope.launch {
+                            delay(50)
+                            viewBinding.editorPage.setCurrentItem(
+                                if (index == -1) viewBinding.editorPage.currentItem else index, true
+                            )
+                        }
                     }
                 }
-
 
             }
 

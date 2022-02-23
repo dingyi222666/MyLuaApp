@@ -29,8 +29,6 @@ class Editor(
 
     private var currentEditorState = EditorState(path.path, 0, 0, 0, 0, 0f)
 
-    private var currentText: CharSequence = ""
-
     override fun getText(): CharSequence? {
         return currentEditor.get()?.text
     }
@@ -44,7 +42,6 @@ class Editor(
     }
 
     override fun setText(charSequence: CharSequence) {
-        currentText = charSequence
         currentEditor.get()?.setText(charSequence)
     }
 
@@ -105,7 +102,7 @@ class Editor(
     }
 
     override fun isModified(): Boolean {
-        return currentEditor.get()?.text?.length == currentText.length
+        return currentEditor.get()?.text.toString() == path.readText()
     }
 
     override fun getLanguage(): Language {
@@ -129,8 +126,10 @@ class Editor(
         if (!path.isFile) {
             throw FileNotFoundException("The File was deleted.")
         }
-        currentText = currentEditor.get()?.text.toString()
-        path.writeText(currentText.toString())
+
+        currentEditor.get()?.let {
+            path.writeText(it.text.toString())
+        }
     }
 
     override fun binCurrentView(r: CodeEditor) {
@@ -146,7 +145,7 @@ class Editor(
         }
         val text = path.readText()
         withContext(Dispatchers.Main) {
-            currentEditor.get()?.setText(text)
+            setText(text)
             doRestoreState(currentEditorState)
         }
     }

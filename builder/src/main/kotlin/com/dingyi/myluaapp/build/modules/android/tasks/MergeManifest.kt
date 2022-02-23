@@ -130,12 +130,17 @@ class MergeManifest(private val applicationModule: Module) : DefaultTask(applica
         }
 
 
+
+
         val outMergedManifestLocation = applicationModule
             .getFileManager()
             .resolveFile(
                 "build/intermediates/merged_manifest/AndroidManifest.xml",
                 applicationModule
             )
+
+        applyModule.getLogger()
+            .info("\n")
 
         val mergingReport = manifestMergerInvoker.merge()
 
@@ -163,6 +168,9 @@ class MergeManifest(private val applicationModule: Module) : DefaultTask(applica
         if (outString != null) {
             outMergedManifestLocation.writeText(outString)
         }
+
+        applyModule.getLogger()
+            .info("\n")
 
     }
 

@@ -55,12 +55,16 @@ class MainViewModel : ViewModel() {
         runCatching {
 
             withContext(Dispatchers.IO) {
-                val result = PluginModule.getProjectService()
+                val (result, errorString) = PluginModule.getProjectService()
                     .getAllProject()
 
                 projectList.postValue(result)
-            }
 
+                if (errorString.isNotEmpty()) {
+                    error(errorString)
+                }
+
+            }
 
         }.onFailure {
             System.err.println(it)

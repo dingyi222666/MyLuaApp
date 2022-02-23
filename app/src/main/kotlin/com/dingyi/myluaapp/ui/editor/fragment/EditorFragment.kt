@@ -55,6 +55,12 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        editor.binCurrentView(viewBinding.codeEditor)
+    }
+
+
     private fun initEditor() {
 
 

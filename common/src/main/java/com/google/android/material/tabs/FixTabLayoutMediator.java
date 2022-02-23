@@ -189,7 +189,7 @@ public final class FixTabLayoutMediator {
                 int lastItem = tabLayout.getTabCount() - 1;
                 int currItem = Math.min(viewPager.getCurrentItem(), lastItem);
                 if (currItem != tabLayout.getSelectedTabPosition()) {
-                    tabLayout.selectTab(tabLayout.getTabAt(currItem));
+                    tabLayout.selectTab(tabLayout.getTabAt(currItem),true);
                 }
             }
         }

@@ -100,6 +100,9 @@ class MergeLibraryManifest(private val module: Module) : DefaultTask(module) {
         }
 
 
+        applyModule.getLogger()
+            .info("\n")
+
         val outMergedManifestLocation = module
             .getFileManager()
             .resolveFile(
@@ -133,6 +136,9 @@ class MergeLibraryManifest(private val module: Module) : DefaultTask(module) {
         if (outString != null) {
             outMergedManifestLocation.writeText(outString)
         }
+
+        applyModule.getLogger()
+            .info("\n")
 
     }
 

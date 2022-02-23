@@ -83,6 +83,10 @@ class MainViewModel : ViewModel() {
             file = File(project.value?.path, path)
         }
 
+        if (allEditor.value?.second?.getFile() == file) {
+            return
+        }
+
         PluginModule
             .getEditorService()
             .openEditor(file)
@@ -105,6 +109,8 @@ class MainViewModel : ViewModel() {
             it.changeProgressState(false)
         }
     }
+
+
 
 
 }

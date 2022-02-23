@@ -1,11 +1,14 @@
 package com.dingyi.myluaapp.ui.editor.adapter
 
 import android.os.Bundle
+import android.os.SystemClock
+import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.ui.editor.fragment.EditorFragment
 
@@ -42,8 +45,9 @@ class EditorPagerAdapter(fragmentActivity: FragmentActivity) :
 
     }
 
-    fun submitList(list: List<Editor>) {
-        differ.submitList(list)
+    fun submitList(list: List<Editor>, callBack:Runnable) {
+        differ.submitList(list,callBack)
+
     }
 
     override fun createFragment(position: Int): Fragment {
