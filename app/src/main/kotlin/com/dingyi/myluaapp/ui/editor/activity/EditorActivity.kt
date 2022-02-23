@@ -22,9 +22,11 @@ import com.dingyi.myluaapp.ui.editor.action.OpenTreeFileAction
 import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.FixTabLayoutMediator
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
@@ -37,7 +39,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         return ActivityEditorBinding.inflate(layoutInflater)
     }
 
-    private lateinit var tabLayoutMediator: TabLayoutMediator
+    private lateinit var tabLayoutMediator: FixTabLayoutMediator
     private var isCreated = false
 
     private var isCallMenu = false
@@ -91,14 +93,29 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
     private fun initAction() {
         PluginModule
-            .getActionService()
-            .registerAction(getJavaClass<OpenTreeFileAction>(),DefaultActionKey.CLICK_TREE_VIEW_FILE)
+            .getActionService().apply {
+                registerAction(
+                    getJavaClass<OpenTreeFileAction>(),
+                    DefaultActionKey.CLICK_TREE_VIEW_FILE
+                )
+
+                registerForwardAction(DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST) {
+                    it.addArgument(viewBinding.root)
+                }
+            }
     }
 
     private fun updateTab(tab: TabLayout.Tab, index: Int, choose: Boolean = false) {
-        tab.text = PluginModule
+        var name = PluginModule
             .getEditorService()
-            .getAllEditor().getOrNull(index)?.getFile()?.name
+            .getAllEditor().getOrNull(index)?.getFile()?.name ?: "Unknown"
+
+        val currentEditor = viewModel.allEditor.value?.second
+        if (currentEditor?.isModified() == true) {
+            name = "*$name"
+        }
+
+        tab.text = name
 
         if (choose) {
             PluginModule
@@ -140,7 +157,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    getCurrentEditor(tab)?.save()
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) { getCurrentEditor(tab)?.save() }
+                    }
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -157,13 +176,14 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
             })
 
-        tabLayoutMediator = TabLayoutMediator(
+        tabLayoutMediator = FixTabLayoutMediator(
             viewBinding.editorTab,
             viewBinding.editorPage, true, true
         ) { tab, index ->
             updateTab(tab, index)
         }
         tabLayoutMediator.attach()
+
 
         listOf(viewBinding.main,viewBinding.container, viewBinding.toolbar).forEach {
             it.addLayoutTransition()
@@ -289,11 +309,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
 
                 if (viewBinding.editorPage.currentItem != index) {
-                    lifecycleScope.launch {
-                        delay(30)
+                    viewBinding.editorPage.post {
                         viewBinding.editorPage.setCurrentItem(
-                            if (index == -1) viewBinding.editorPage.currentItem else index, false
+                            if (index == -1) viewBinding.editorPage.currentItem else index, true
                         )
+
                     }
                 }
 

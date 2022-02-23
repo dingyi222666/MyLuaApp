@@ -25,6 +25,7 @@ class MainApplication : Application() {
         // 初始化语种切换框架
         MultiLanguages.init(this);
 
+        CrashHandler.init(this)
 
     }
 
