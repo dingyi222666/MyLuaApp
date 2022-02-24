@@ -109,7 +109,9 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             else -> indexOfEditor
         }
 
-        currentEditorServiceState.editors.removeAt(indexOfEditor)
+        runCatching {
+            currentEditorServiceState.editors.removeAt(indexOfEditor)
+        }
 
         val currentState = currentEditorServiceState.editors.getOrNull(targetIndex ?: 0)
 

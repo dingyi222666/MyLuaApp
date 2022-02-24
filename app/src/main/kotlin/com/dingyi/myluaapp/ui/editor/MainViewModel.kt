@@ -131,7 +131,7 @@ class MainViewModel : ViewModel() {
 
     }
 
-    fun deleteFile(file: File) {
+    suspend fun deleteFile(file: File) {
         project
             .value
             ?.deleteFile(file)

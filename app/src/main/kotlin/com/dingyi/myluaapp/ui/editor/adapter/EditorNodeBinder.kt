@@ -96,7 +96,7 @@ class EditorNodeBinder(
             )?.invoke {
                 activity.lifecycleScope.launch {
                     withContext(Dispatchers.IO) {
-                        TreeHelper.updateNode(treeNode)
+                        TreeHelper.updateNode(treeNode.parent)
                     }
                     viewModel.rootNode.value = viewModel.rootNode.value
                 }

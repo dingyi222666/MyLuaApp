@@ -6,6 +6,8 @@ import com.dingyi.myluaapp.plugin.api.project.FileTemplate
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class AndroidProject(
@@ -26,13 +28,11 @@ class AndroidProject(
         TODO("Not yet implemented")
     }
 
-    override fun deleteFile(targetFile: File) {
+    override suspend fun deleteFile(targetFile: File): Unit = withContext(Dispatchers.IO) {
         if (targetFile.isFile) {
             pluginContext
                 .getEditorService()
                 .closeEditor(targetFile)
-
-            targetFile.deleteRecursively()
         } else {
             targetFile
                 .walkBottomUp()
@@ -50,8 +50,10 @@ class AndroidProject(
                         .closeEditor(it)
                 }
 
-            targetFile.deleteRecursively()
+
         }
+
+        targetFile.deleteRecursively()
 
     }
 

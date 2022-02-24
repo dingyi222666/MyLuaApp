@@ -7,7 +7,7 @@ interface Project {
     fun backup(exportPath:File)
 
 
-    fun deleteFile(targetFile:File)
+    suspend fun deleteFile(targetFile:File)
 
 
 

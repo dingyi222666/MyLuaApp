@@ -45,7 +45,9 @@ class TreeListOnLongClickAction : Action<(() -> Unit) -> Unit> {
                             argument.getPluginContext().getActionService().createActionArgument()
                                 .addArgument(treeNode?.value),
                             DefaultActionKey.DELETE_PROJECT_FILE
-                        )?.invoke { block?.invoke() }
+                        )?.invoke {
+                            block?.invoke()
+                        }
                     else -> false
                 }
                 true

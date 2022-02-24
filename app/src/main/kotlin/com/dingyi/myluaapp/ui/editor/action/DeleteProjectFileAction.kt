@@ -33,14 +33,15 @@ class DeleteProjectFileAction:Action<(() -> Unit) -> Unit> {
             .setDialogLayout(DefaultMessageLayout)
             .setTitle(R.string.editor_dialog_delete_title)
             .setMessage(R.string.editor_dialog_delete_message)
-            .setPositiveButton(android.R.string.ok.getString()) { _, _ ->
+            .setPositiveButton(android.R.string.ok.getString()) { helper, _ ->
+                helper.interceptClose(false)
                 activity.lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        viewModel?.deleteFile(
+                    viewModel?.deleteFile(
                             file ?: error("Want Delete Null")
-                        )
-                    }
+                    )
                     block?.invoke()
+                    helper.interceptClose(true)
+                    helper.dismiss()
                 }
             }
             .setNegativeButton(android.R.string.cancel.getString())

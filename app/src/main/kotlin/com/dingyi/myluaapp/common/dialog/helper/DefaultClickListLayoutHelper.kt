@@ -48,7 +48,7 @@ class DefaultClickListLayoutHelper(rootView: View, dialog: BottomDialog) :
                 params.negativeButtonClick(
                     this, getSelectItemValue(params)
                 )
-                dialog.dismiss()
+                dismiss()
             }
         } else {
             binding.negativeButton.visibility = View.GONE
