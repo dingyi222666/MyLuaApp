@@ -119,14 +119,16 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     }
 
     private fun updateTab(tab: TabLayout.Tab, index: Int, choose: Boolean = false) {
-        val name = viewModel.allEditor.value?.getOrNull(index)?.getFile()?.name ?: "Unknown"
+        val currentEditor = viewModel.allEditor.value?.getOrNull(index)
+
+        val name = currentEditor?.getFile()?.name ?: "Unknown"
 
         /*
-        val currentEditor = viewModel.currentEditor.value
         if (currentEditor?.isModified() == true) {
             name = "*$name"
-        }
-         */
+        } */
+
+
         //抖动
         if (tab.text != name) {
             tab.text = name
