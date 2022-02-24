@@ -40,12 +40,12 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.dingyi.myluaapp"
+            android:authorities="com.dingyi.MyLuaApp"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/myluaapp_filepaths" />
+                android:resource="@xml/provider_paths" />
         </provider>
     </application>
 

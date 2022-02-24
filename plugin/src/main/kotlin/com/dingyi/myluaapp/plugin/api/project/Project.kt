@@ -13,6 +13,7 @@ interface Project {
 
     fun walkProjectFile():FileTreeWalk
 
+    fun runProject()
 
     val name:String
 

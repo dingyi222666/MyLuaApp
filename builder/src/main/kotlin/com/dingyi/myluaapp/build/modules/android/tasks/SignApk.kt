@@ -106,8 +106,10 @@ class SignApk(private val module: Module) : DefaultTask(module) {
 
         module
             .getLogger()
-            .info("APK generated successfully for project ${module.getProject().name},[install] or [open] APK",
-                module.getFileManager().resolveFile(outputPath, module).path)
+            .info(
+                string = "APK generated successfully for project ${module.getProject().name},[install] or [open] APK",
+                extra = module.getFileManager().resolveFile(outputPath, module).path
+            )
 
     }
 }

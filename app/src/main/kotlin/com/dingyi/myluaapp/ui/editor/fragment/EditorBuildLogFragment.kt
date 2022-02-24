@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.ui.editor.fragment
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,7 @@ import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
-import com.dingyi.myluaapp.core.log.listener.InstallListener
+import com.dingyi.myluaapp.core.log.listener.ApkInstaller
 import com.dingyi.myluaapp.databinding.FragmentEditorBuildLogBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 
@@ -43,7 +42,7 @@ class EditorBuildLogFragment : BaseFragment<FragmentEditorBuildLogBinding, MainV
         if (it.message != "BUILD END FLAG") {
             viewBinding
                 .logView
-                .sendLog(it.level, it.message)
+                .sendLog(it.level, it.message, it.extra)
         }
     }
 
@@ -55,7 +54,7 @@ class EditorBuildLogFragment : BaseFragment<FragmentEditorBuildLogBinding, MainV
         logReceiver.addCallback(callback)
 
         viewBinding.logView
-            .addLogListener(InstallListener(requireContext()))
+            .addLogListener(ApkInstaller(requireContext()))
 
     }
 

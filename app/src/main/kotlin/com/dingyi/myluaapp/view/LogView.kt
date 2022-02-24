@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.view.View
@@ -36,6 +37,8 @@ class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(contex
             Typeface.MONOSPACE
         }
 
+
+        movementMethod = LinkMovementMethod.getInstance()
     }
 
     data class Log(

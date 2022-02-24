@@ -19,4 +19,6 @@ object DefaultActionKey {
     val SHOW_FILE_TAG_MENU = ActionKey(0x6, true)
 
     val OPEN_EDITOR_FILE_DELETE_TOAST = ActionKey(0x7,false)
+
+    val OPEN_LOG_FRAGMENT = ActionKey(0x8,false)
 }

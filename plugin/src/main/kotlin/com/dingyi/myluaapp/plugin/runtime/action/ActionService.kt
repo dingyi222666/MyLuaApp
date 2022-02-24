@@ -20,7 +20,9 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
     override fun <T : Action<*>> registerAction(actionClass: Class<T>, key: ActionKey) {
         val keyAction = allAction.getOrDefault(key, mutableListOf())
         if (key.isRepeat().not() && keyAction.isNotEmpty()) {
-            error("The key can not repeat add")
+            if (keyAction[0] !=actionClass) {
+                error("The key can not repeat add")
+            }
         }
         keyAction.add(actionClass)
         allAction[key] = keyAction
@@ -33,7 +35,7 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
 
     override fun <T> callAction(actionArgument: ActionArgument, key: ActionKey): T? {
         val list = allAction[key]
-        val targetActionArgument = forwardAction(actionArgument, key)
+        val targetActionArgument = forwardActionArgument(actionArgument, key)
         if (list != null) {
             for (action in list) {
                 val result = (action.newInstance() as Action<*>).callAction(targetActionArgument)
@@ -46,13 +48,13 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
 
     }
 
-    override fun registerForwardAction( key: ActionKey,block: (ActionArgument) -> ActionArgument) {
+    override fun registerForwardArgument(key: ActionKey, block: (ActionArgument) -> ActionArgument) {
         val keyAction = allForwardAction.getOrDefault(key, mutableListOf())
         keyAction.add(block)
         allForwardAction[key] = keyAction
     }
 
-    override fun forwardAction(actionArgument: ActionArgument, key: ActionKey): ActionArgument {
+    override fun forwardActionArgument(actionArgument: ActionArgument, key: ActionKey): ActionArgument {
         val keyAction = allForwardAction.getOrDefault(key, mutableListOf())
 
         allForwardAction[key] = keyAction

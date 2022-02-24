@@ -1,12 +1,15 @@
 package com.dingyi.myluaapp.plugin.modules.android.project
 
 import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.project.Project
+import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.google.gson.Gson
 import java.io.File
 
 class AndroidProject(
-    private val projectPath:File
+    private val projectPath: File,
+    private val pluginContext: PluginContext
 ):Project {
 
     private val configMap = mutableMapOf<String,String>()
@@ -29,6 +32,21 @@ class AndroidProject(
 
     override fun walkProjectFile(): FileTreeWalk {
         TODO("Not yet implemented")
+    }
+
+    override fun runProject() {
+        pluginContext
+            .getBuildService()
+            .build(this, "build debug")
+
+        pluginContext
+            .getActionService()
+            .callAction<Unit>(
+                pluginContext
+                    .getActionService()
+                    .createActionArgument(), DefaultActionKey.OPEN_LOG_FRAGMENT
+            )
+
     }
 
     override val name: String

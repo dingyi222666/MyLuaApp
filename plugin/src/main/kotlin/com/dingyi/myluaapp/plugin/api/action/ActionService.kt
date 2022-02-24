@@ -14,6 +14,7 @@ interface ActionService {
 
     fun <T> callAction(actionArgument: ActionArgument, key: ActionKey): T?
 
-    fun forwardAction(actionArgument: ActionArgument,key: ActionKey):ActionArgument
-    fun registerForwardAction(key: ActionKey, block: (ActionArgument) -> ActionArgument)
+
+    fun forwardActionArgument(actionArgument: ActionArgument, key: ActionKey):ActionArgument
+    fun registerForwardArgument(key: ActionKey, block: (ActionArgument) -> ActionArgument)
 }

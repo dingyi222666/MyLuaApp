@@ -21,7 +21,8 @@ class LogBroadcastReceiver(
 
     data class Log(
         val level: String,
-        val message: String
+        val message: String,
+        val extra: String
     )
 
     init {
@@ -51,7 +52,11 @@ class LogBroadcastReceiver(
 
     private fun getLog(intent: Intent?): Log? {
         return intent?.let {
-            Log(it.getStringExtra("tag").toString(), it.getStringExtra("message").toString())
+            Log(
+                it.getStringExtra("tag").toString(),
+                it.getStringExtra("message").toString(),
+                it.getStringExtra("extra").toString()
+            )
         }
     }
 

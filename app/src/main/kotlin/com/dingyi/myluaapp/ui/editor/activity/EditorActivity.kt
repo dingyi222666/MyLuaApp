@@ -2,7 +2,10 @@ package com.dingyi.myluaapp.ui.editor.activity
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.*
+import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -15,15 +18,18 @@ import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
-
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
+import com.dingyi.myluaapp.ui.editor.action.OpenLogFragmentAction
 import com.dingyi.myluaapp.ui.editor.action.OpenTreeFileAction
 import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.FixTabLayoutMediator
-import kotlinx.coroutines.*
+import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
@@ -36,7 +42,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         return ActivityEditorBinding.inflate(layoutInflater)
     }
 
-    private lateinit var tabLayoutMediator: FixTabLayoutMediator
+    private lateinit var tabLayoutMediator: TabLayoutMediator
     private var isCreated = false
 
     private var isCallMenu = false
@@ -96,8 +102,17 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                     DefaultActionKey.CLICK_TREE_VIEW_FILE
                 )
 
-                registerForwardAction(DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST) {
+                registerAction(
+                    getJavaClass<OpenLogFragmentAction>(),
+                    DefaultActionKey.OPEN_LOG_FRAGMENT
+                )
+
+                registerForwardArgument(DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST) {
                     it.addArgument(viewBinding.root)
+                }
+
+                registerForwardArgument(DefaultActionKey.OPEN_LOG_FRAGMENT) {
+                    it.addArgument(viewBinding)
                 }
             }
     }
@@ -177,7 +192,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
             })
 
-        tabLayoutMediator = FixTabLayoutMediator(
+        tabLayoutMediator = TabLayoutMediator(
             viewBinding.editorTab,
             viewBinding.editorPage, true, false
         ) { tab, index ->
@@ -235,6 +250,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         return super.onCreateOptionsMenu(menu)
     }
 
+
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
 
         if (!isCallMenu) {
@@ -270,8 +286,10 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                         openDrawer(GravityCompat.START)
                 }
             }
+            R.id.editor_action_run -> viewModel.project.value?.runProject()
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun observeViewModel() {

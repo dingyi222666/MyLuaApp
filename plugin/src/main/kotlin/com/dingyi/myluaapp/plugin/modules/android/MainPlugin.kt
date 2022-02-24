@@ -3,7 +3,8 @@ package com.dingyi.myluaapp.plugin.modules.android
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
-import com.dingyi.myluaapp.plugin.modules.android.action.ProjectMenuAction
+import com.dingyi.myluaapp.plugin.modules.android.action.AndroidProjectMenuAction
+
 import com.dingyi.myluaapp.plugin.modules.android.project.AndroidProjectCreatorProvider
 import com.dingyi.myluaapp.plugin.modules.android.project.AndroidProjectProvider
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
@@ -23,14 +24,14 @@ class MainPlugin: Plugin {
         context
             .getProjectService().apply {
                 addProjectCreatorProvider(AndroidProjectCreatorProvider())
-                addProjectProvider(AndroidProjectProvider())
+                addProjectProvider(AndroidProjectProvider(context))
             }
 
 
         context.getActionService()
             .apply {
                 registerAction(
-                    getJavaClass<ProjectMenuAction>(),
+                    getJavaClass<AndroidProjectMenuAction>(),
                     DefaultActionKey.ADD_PROJECT_MENU
                 )
             }
