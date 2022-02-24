@@ -108,6 +108,9 @@ class Editor(
     }
 
     override fun isModified(): Boolean {
+        if (currentEditor.get() == null) {
+            return false
+        }
         return currentEditor.get()?.text.toString() == path.readText()
     }
 

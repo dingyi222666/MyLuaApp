@@ -7,6 +7,7 @@ import java.io.OutputStream
  * @date: 2021/10/23 15:26
  * @description:
  **/
+@Deprecated("Now Use Plugin Service to manager project")
 interface IProject {
     fun backup(exportOutputStream: OutputStream): Boolean
     fun delete(): Boolean

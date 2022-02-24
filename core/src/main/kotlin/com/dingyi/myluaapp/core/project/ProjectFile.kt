@@ -14,6 +14,7 @@ import kotlin.properties.Delegates
  * @date: 2021/10/20 14:40
  * @description:
  **/
+@Deprecated("Now Use Plugin Service to manager project")
 class ProjectFile(
     val path: String,
     private val project: Project

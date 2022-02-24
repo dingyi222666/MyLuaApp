@@ -92,7 +92,7 @@ class MainViewModel : ViewModel() {
             file = File(project.value?.path, path)
         }
 
-        PluginModule
+        currentEditor.value = PluginModule
             .getEditorService()
             .openEditor(file)
 

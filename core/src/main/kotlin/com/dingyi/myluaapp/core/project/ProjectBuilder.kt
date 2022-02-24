@@ -14,6 +14,7 @@ import kotlin.properties.Delegates
  * @date: 2021/10/26 9:54
  * @description:
  **/
+@Deprecated("Now Use Plugin Service to manager project")
 class ProjectBuilder {
 
 

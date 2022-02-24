@@ -29,6 +29,7 @@ inline fun <reified T> Any?.setPrivateField(name: String, obj: Any?) {
     }.set(this, obj)
 }
 
+
 /**
  * Throws an [IllegalStateException] if self is null. Otherwise
  * returns the not null value.

@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
@@ -118,14 +119,18 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     }
 
     private fun updateTab(tab: TabLayout.Tab, index: Int, choose: Boolean = false) {
-        var name = viewModel.allEditor.value?.getOrNull(index)?.getFile()?.name ?: "Unknown"
+        val name = viewModel.allEditor.value?.getOrNull(index)?.getFile()?.name ?: "Unknown"
 
+        /*
         val currentEditor = viewModel.currentEditor.value
         if (currentEditor?.isModified() == true) {
             name = "*$name"
         }
-
-        tab.text = name
+         */
+        //抖动
+        if (tab.text != name) {
+            tab.text = name
+        }
 
         if (choose) {
             viewModel.allEditor.value?.getOrNull(index)?.getFile()?.path?.let {
@@ -145,8 +150,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     private fun initView() {
 
         viewBinding.editorPage.adapter = EditorPagerAdapter(this)
-
-        viewBinding.editorPage.isUserInputEnabled = false
+        viewBinding.drawerPage.offscreenPageLimit = 1
+        // viewBinding.editorPage.isUserInputEnabled = false
 
 
         viewBinding
@@ -154,6 +159,15 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             .adapter = EditorDrawerPagerAdapter(this).apply {
             notifyDataSetChanged()
         }
+
+        tabLayoutMediator = TabLayoutMediator(
+            viewBinding.editorTab,
+            viewBinding.editorPage, false
+        ) { tab, index ->
+            updateTab(tab, index)
+        }
+        tabLayoutMediator.attach()
+
 
         viewBinding
             .editorTab
@@ -167,9 +181,6 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     lifecycleScope.launch {
                         withContext(Dispatchers.IO) { getCurrentEditor(tab)?.save() }
-                        tab?.let {
-                            updateTab(it, it.position)
-                        }
                     }
 
                 }
@@ -185,28 +196,20 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                                 }), DefaultActionKey.SHOW_FILE_TAG_MENU
                         )
 
-                    tab?.let {
-                        updateTab(it, it.position, true)
-                    }
                 }
 
             })
 
-        tabLayoutMediator = TabLayoutMediator(
-            viewBinding.editorTab,
-            viewBinding.editorPage, true, false
-        ) { tab, index ->
-            updateTab(tab, index)
-        }
-        tabLayoutMediator.attach()
 
 
 
-        listOf(viewBinding.appbarLayout, viewBinding.container, viewBinding.toolbar).forEach {
+        listOf(
+            viewBinding.appbarLayout,
+            viewBinding.container,
+            viewBinding.main
+        ).forEach {
             it.addLayoutTransition()
         }
-
-
 
 
         viewBinding.symbolView.setOnClickListener {
@@ -297,50 +300,40 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
 
         viewModel.progressMonitor.getProgressState().observe(this) { boolean ->
-            viewBinding.progress.visibility = if (boolean) View.VISIBLE else View.INVISIBLE
+            viewBinding.progress.isVisible = boolean
         }
 
         viewModel.allEditor.observe(this) { list ->
-
-
-            val visibility = if (list.isNotEmpty()) View.VISIBLE else View.GONE
 
             arrayOf(
                 viewBinding.editorPage,
                 viewBinding.editorTab,
                 viewBinding.symbolView
             ).forEach {
-                it.visibility = visibility
+                it.isVisible = list.isNotEmpty()
             }
 
-            viewBinding.editorToastOpenFile.visibility =
-                if (list.isEmpty()) {
-                    viewBinding.toolbar.subtitle = null
-                    View.VISIBLE
-                } else View.GONE
-
-
+            viewBinding.editorToastOpenFile.isVisible = list.isEmpty()
 
 
             (viewBinding.editorPage.adapter as EditorPagerAdapter).let { adapter ->
                 adapter.submitList(list.toList()) {
-                    lifecycleScope.launch {
-                        val index = list.indexOf(viewModel.currentEditor.value)
+                    val index = list.indexOf(viewModel.currentEditor.value)
+                    viewBinding.editorPage.currentItem =
+                        if (index == -1) viewBinding.editorPage.currentItem else index
 
-                        delay(50)
-                        viewBinding.editorPage.post {
-                            viewBinding.editorPage.setCurrentItem(
-                                if (index == -1) viewBinding.editorPage.currentItem else index,
-                                false
-                            )
+                    tabLayoutMediator.javaClass
+                        .getDeclaredMethod("populateTabsFromPagerAdapter")
+                        .apply {
+                            isAccessible = true
                         }
+                        .invoke(tabLayoutMediator)
 
-                    }
+
                 }
             }
 
         }
-
 
 
         viewModel.subTitle.observe(this) { title ->

@@ -13,6 +13,7 @@ import java.io.OutputStream
  * @description: a project manager
  * @param projectRootPath root project path
  **/
+@Deprecated("Now Use Plugin Service to manager project")
 class ProjectManager(private val projectRootPath: String) {
 
 

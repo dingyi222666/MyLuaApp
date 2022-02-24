@@ -303,7 +303,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
     }
 
     override fun setCurrentEditor(file: File) {
-        openEditor(file)
+        currentEditor = openEditor(file)
     }
 
     override fun closeAllEditor() {

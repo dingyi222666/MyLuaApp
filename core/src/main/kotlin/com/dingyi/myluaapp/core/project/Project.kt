@@ -18,6 +18,7 @@ import java.io.OutputStream
  * @date: 2021/10/12 20:10
  * @description: project bean class
  **/
+@Deprecated("Now Use Plugin Service to manager project")
 class Project(
     val projectPath: String = "",
     private val projectManager: ProjectManager = ProjectManager(

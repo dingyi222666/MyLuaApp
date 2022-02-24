@@ -28,11 +28,11 @@ class EditorPagerAdapter(fragmentActivity: FragmentActivity) :
         return differ.currentList.map { it.getId() }.contains(itemId.toInt())
     }
 
+    
     private val differ = AsyncListDiffer(this, DiffItemCallBack)
 
     object DiffItemCallBack :
         DiffUtil.ItemCallback<Editor>() {
-
 
         override fun areItemsTheSame(oldItem: Editor, newItem: Editor): Boolean {
             return oldItem.getFile().path == newItem.getFile().path
@@ -41,7 +41,6 @@ class EditorPagerAdapter(fragmentActivity: FragmentActivity) :
         override fun areContentsTheSame(oldItem: Editor, newItem: Editor): Boolean {
             return oldItem.getFile().path == newItem.getFile().path
         }
-
 
     }
 
