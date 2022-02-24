@@ -131,5 +131,11 @@ class MainViewModel : ViewModel() {
 
     }
 
+    fun deleteFile(file: File) {
+        project
+            .value
+            ?.deleteFile(file)
+    }
+
 
 }

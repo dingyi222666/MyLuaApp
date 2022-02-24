@@ -65,4 +65,14 @@ public abstract class BaseNodeViewBinder extends RecyclerView.ViewHolder {
     public void onNodeToggled(TreeNode treeNode, boolean expand) {
         //empty
     }
+
+    /**
+     * Callback when a action long click (only by clicked)
+     * @param treeNode The click node
+     * @return is handle click event
+     */
+    public boolean onNodeLongClick(TreeNode treeNode) {
+        //empty
+        return false;
+    }
 }

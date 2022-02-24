@@ -21,8 +21,10 @@ import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
+import com.dingyi.myluaapp.ui.editor.action.DeleteProjectFileAction
 import com.dingyi.myluaapp.ui.editor.action.OpenLogFragmentAction
 import com.dingyi.myluaapp.ui.editor.action.OpenTreeFileAction
+import com.dingyi.myluaapp.ui.editor.action.TreeListOnLongClickAction
 import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.google.android.material.tabs.TabLayout
@@ -102,16 +104,25 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                     getJavaClass<OpenTreeFileAction>(),
                     DefaultActionKey.CLICK_TREE_VIEW_FILE
                 )
-
                 registerAction(
                     getJavaClass<OpenLogFragmentAction>(),
                     DefaultActionKey.OPEN_LOG_FRAGMENT
                 )
-
+                registerAction(
+                    getJavaClass<TreeListOnLongClickAction>(),
+                    DefaultActionKey.TREE_LIST_ON_LONG_CLICK
+                )
+                registerAction(
+                    getJavaClass<DeleteProjectFileAction>(),
+                    DefaultActionKey.DELETE_PROJECT_FILE
+                )
+                registerForwardArgument(DefaultActionKey.DELETE_PROJECT_FILE) {
+                    it.addArgument(this@EditorActivity)
+                        .addArgument(viewModel)
+                }
                 registerForwardArgument(DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST) {
                     it.addArgument(viewBinding.root)
                 }
-
                 registerForwardArgument(DefaultActionKey.OPEN_LOG_FRAGMENT) {
                     it.addArgument(viewBinding)
                 }
@@ -363,6 +374,13 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             }
             else -> super.onKeyUp(keyCode, event)
         }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        PluginModule
+            .init()
+        PluginModule
+            .loadAllPlugin()
     }
 
     override fun onPause() {

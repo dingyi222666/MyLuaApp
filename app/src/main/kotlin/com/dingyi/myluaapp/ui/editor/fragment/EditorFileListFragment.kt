@@ -55,7 +55,7 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
                     view: View,
                     viewType: Int
                 ): BaseNodeViewBinder {
-                    return EditorNodeBinder(view, viewModel)
+                    return EditorNodeBinder(view, viewModel, requireActivity())
                 }
 
                 override fun getNodeLayoutId(level: Int): Int {

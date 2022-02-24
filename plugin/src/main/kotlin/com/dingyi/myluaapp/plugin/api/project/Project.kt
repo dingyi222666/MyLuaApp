@@ -15,6 +15,8 @@ interface Project {
 
     fun runProject()
 
+    fun getFileTemplates():List<FileTemplate>
+
     val name:String
 
     val packageName:String?

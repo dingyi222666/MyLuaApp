@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.plugin.modules.android.project
 
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
+import com.dingyi.myluaapp.plugin.api.project.FileTemplate
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.google.gson.Gson
@@ -26,7 +27,32 @@ class AndroidProject(
     }
 
     override fun deleteFile(targetFile: File) {
-        TODO("Not yet implemented")
+        if (targetFile.isFile) {
+            pluginContext
+                .getEditorService()
+                .closeEditor(targetFile)
+
+            targetFile.deleteRecursively()
+        } else {
+            targetFile
+                .walkBottomUp()
+                .filter { it.isFile }
+                .filter { file ->
+                    pluginContext.getEditorService()
+                        .getAllEditor().find { editor ->
+                            editor
+                                .getFile().path == file.path
+                        } != null
+                }
+                .forEach {
+                    pluginContext
+                        .getEditorService()
+                        .closeEditor(it)
+                }
+
+            targetFile.deleteRecursively()
+        }
+
     }
 
 
@@ -47,6 +73,10 @@ class AndroidProject(
                     .createActionArgument(), DefaultActionKey.OPEN_LOG_FRAGMENT
             )
 
+    }
+
+    override fun getFileTemplates(): List<FileTemplate> {
+        return mutableListOf()
     }
 
     override val name: String

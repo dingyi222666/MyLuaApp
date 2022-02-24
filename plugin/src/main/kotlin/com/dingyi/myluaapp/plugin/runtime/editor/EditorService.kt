@@ -2,7 +2,6 @@ package com.dingyi.myluaapp.plugin.runtime.editor
 
 import android.util.Log
 import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.showToast
 import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.editor.Editor
@@ -97,15 +96,16 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
     }
 
-    private fun closeEditor(file: File) {
+
+    override fun closeEditor(editor: File) {
         val indexOfEditor = currentEditorServiceState
-            .editors.indexOf(currentEditorServiceState.editors.find { it.path == file.path })
+            .editors.indexOf(currentEditorServiceState.editors.find { it.path == editor.path })
 
         val targetIndex = when {
-            indexOfEditor + 1 == allEditor.size -> indexOfEditor - 1
-            indexOfEditor == 0 && allEditor.size == 1 -> null
+            indexOfEditor + 1 == currentEditorServiceState.editors.size -> indexOfEditor - 1
+            indexOfEditor == 0 && currentEditorServiceState.editors.size == 1 -> null
             indexOfEditor == -1 -> null
-            allEditor.size == 1 -> null
+            currentEditorServiceState.editors.size == 1 -> null
             else -> indexOfEditor
         }
 
@@ -114,6 +114,10 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
         val currentState = currentEditorServiceState.editors.getOrNull(targetIndex ?: 0)
 
         currentEditorServiceState.lastOpenPath = currentState?.path
+
+        allEditor.removeIf { it.getFile().path == editor.path }
+
+        currentEditor = allEditor.getOrNull(targetIndex ?: 0)
 
 
     }

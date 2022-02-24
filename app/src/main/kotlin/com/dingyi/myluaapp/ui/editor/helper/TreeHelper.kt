@@ -10,7 +10,6 @@ object TreeHelper {
 
         val main = TreeNode(path)
 
-
         addChildNode(main, main.level + 1)
 
         return main
@@ -24,12 +23,17 @@ object TreeHelper {
             return null
         }
 
+        if (!node.isLeaf) {
+            updateNode(node.parent)
+            return node
+        }
+
         val allExpandPath = TreeHelper.getExpandNodes(node).map { it.value as File }
 
         TreeHelper.deleteAllChild(node)
 
 
-        addChildNode(node,node.level+1)
+        addChildNode(node, node.level + 1)
 
 
         TreeHelper.getAllNodes(node)
@@ -43,23 +47,26 @@ object TreeHelper {
     }
 
      private fun addChildNode(main: TreeNode, level: Int) {
-        (main.value as File)
-            .listFiles()
-            ?.sortBySelf()?.forEach {
-                val node = TreeNode(
-                    it,
-                    level + 1
-                )
-                main.addChild(node)
-            }
+         (main.value as File)
+             .listFiles()
+             ?.sortBySelf()?.forEach {
+                 val node = TreeNode(
+                     it,
+                     level + 1
+                 )
+                 main.addChild(node)
+             }
 
-        main.children.forEach {
-            val file = it.value as File
+         main.isLeaf = true
 
-            if (file.isDirectory) {
-                addChildNode(it, it.level+1)
-            }
+         main.children.forEach {
+             val file = it.value as File
 
-        }
-    }
+             if (file.isDirectory) {
+                 it.isLeaf = true
+                 addChildNode(it, it.level + 1)
+             }
+
+         }
+     }
 }

@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.dp
@@ -14,13 +16,18 @@ import com.dingyi.myluaapp.databinding.LayoutItemEditorFileListBinding
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
+import com.dingyi.myluaapp.ui.editor.helper.TreeHelper
 import com.dingyi.myluaapp.view.treeview.TreeNode
 import com.dingyi.myluaapp.view.treeview.base.BaseNodeViewBinder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class EditorNodeBinder(
     itemView: View,
-    private val viewModel: MainViewModel
+    private val viewModel: MainViewModel,
+    private val activity:FragmentActivity
 ) : BaseNodeViewBinder(itemView) {
 
     private lateinit var binding: LayoutItemEditorFileListBinding
@@ -56,30 +63,47 @@ class EditorNodeBinder(
 
     override fun onNodeToggled(treeNode: TreeNode, expand: Boolean) {
 
-        val file = treeNode.value as File
-
-
-        if (file.isFile) {
+        if (!treeNode.isLeaf) {
             PluginModule
                 .getActionService()
                 .callAction<Unit>(
                     PluginModule.getActionService().createActionArgument()
-                        .addArgument(file)
+                        .addArgument(treeNode.value as File)
                         .addArgument(viewModel), DefaultActionKey.CLICK_TREE_VIEW_FILE
                 )
         } else {
-
             binding
                 .arrow
                 .animate()
                 .rotation(if (expand) 90f else 0f)
                 .setDuration(120)
                 .start()
-
         }
 
     }
 
+
+    override fun onNodeLongClick(treeNode: TreeNode): Boolean {
+
+        PluginModule
+            .getActionService()
+            .callAction<(() -> Unit) -> Unit>(
+                PluginModule
+                    .getActionService()
+                    .createActionArgument()
+                    .addArgument(treeNode)
+                    .addArgument(itemView), DefaultActionKey.TREE_LIST_ON_LONG_CLICK
+            )?.invoke {
+                activity.lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        TreeHelper.updateNode(treeNode)
+                    }
+                    viewModel.rootNode.value = viewModel.rootNode.value
+                }
+            }
+
+        return true;
+    }
 
 
     companion object {

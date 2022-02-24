@@ -63,6 +63,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        PluginModule
+            .init()
+        PluginModule
+            .loadAllPlugin()
+    }
 
     private fun initViewBinding() {
         viewBinding.list
