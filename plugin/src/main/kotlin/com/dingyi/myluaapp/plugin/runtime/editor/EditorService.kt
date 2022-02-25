@@ -78,7 +78,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
         val indexOfEditor = allEditor.indexOf(editor)
 
         val targetIndex = when {
-            indexOfEditor+1 == allEditor.size -> indexOfEditor - 1
+            indexOfEditor + 1 == allEditor.size && indexOfEditor != 0 -> indexOfEditor - 1
             indexOfEditor == 0 && allEditor.size == 1 -> null
             indexOfEditor == -1 -> null
             allEditor.size == 1 -> null
@@ -102,7 +102,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             .editors.indexOf(currentEditorServiceState.editors.find { it.path == editor.path })
 
         val targetIndex = when {
-            indexOfEditor + 1 == currentEditorServiceState.editors.size -> indexOfEditor - 1
+            indexOfEditor + 1 == currentEditorServiceState.editors.size && indexOfEditor != 0 -> indexOfEditor - 1
             indexOfEditor == 0 && currentEditorServiceState.editors.size == 1 -> null
             indexOfEditor == -1 -> null
             currentEditorServiceState.editors.size == 1 -> null

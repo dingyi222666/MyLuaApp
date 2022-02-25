@@ -6,5 +6,5 @@ interface FileTemplate {
     val name:String
 
 
-    fun create(directory:File,name:String):Boolean
+    suspend fun create(directory:File,name:String):Boolean
 }

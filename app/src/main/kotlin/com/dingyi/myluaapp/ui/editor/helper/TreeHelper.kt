@@ -8,8 +8,7 @@ import java.io.File
 object TreeHelper {
      fun getAllNode(path: File?): TreeNode {
 
-        val main = TreeNode(path)
-
+        val main = TreeNode(path, 0)
         addChildNode(main, main.level + 1)
 
         return main
@@ -31,7 +30,6 @@ object TreeHelper {
         val allExpandPath = TreeHelper.getExpandNodes(node).map { it.value as File }
 
         TreeHelper.deleteAllChild(node)
-
 
         addChildNode(node, node.level + 1)
 

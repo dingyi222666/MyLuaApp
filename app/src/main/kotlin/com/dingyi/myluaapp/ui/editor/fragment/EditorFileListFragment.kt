@@ -84,7 +84,6 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
 
 
         viewModel.rootNode.observe(viewLifecycleOwner) {
-
             treeView.rootNode.children.clear()
             treeView.rootNode.addChild(it)
             treeView.refreshTreeView()

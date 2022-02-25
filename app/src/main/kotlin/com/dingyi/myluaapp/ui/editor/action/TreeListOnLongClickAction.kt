@@ -38,6 +38,17 @@ class TreeListOnLongClickAction : Action<(() -> Unit) -> Unit> {
             menu.show()
             menu.setOnMenuItemClickListener {
                 when (it.itemId) {
+                    R.id.editor_file_list_toolbar_action_new_file ->
+                        argument
+                            .getPluginContext()
+                            .getActionService()
+                            .callAction<((() -> Unit) -> Unit)>(
+                                argument.getPluginContext().getActionService().createActionArgument()
+                                    .addArgument(treeNode?.value),
+                                DefaultActionKey.CREATE_PROJECT_FILE
+                            )?.invoke {
+                                block?.invoke()
+                            }
                     R.id.editor_file_list_long_click_action_delete -> argument
                         .getPluginContext()
                         .getActionService()
@@ -57,13 +68,7 @@ class TreeListOnLongClickAction : Action<(() -> Unit) -> Unit> {
         return result
     }
 
-    private fun callAction(pluginContext: PluginContext,actionKey: ActionKey,block:()->Unit) {
-        pluginContext
-            .getActionService()
-            .callAction<((() -> Unit) -> Unit)>(pluginContext
-                .getActionService()
-                .createActionArgument(),actionKey)
-    }
+
 
     override val name: String
         get() = "TreeListOnLongClickAction"

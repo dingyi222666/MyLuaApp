@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.plugin.runtime.plugin
 
 import android.content.Context
+import android.content.res.AssetManager
 
 import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.build.BuildMain
@@ -76,9 +77,16 @@ object PluginModule: PluginModule {
         return defaultBuildService
     }
 
-    override fun getResourceManager(plugin: Plugin) {
-        TODO("Not yet implemented")
+    override fun getAssetManager(plugin: Plugin): AssetManager {
+        val path = pluginManager?.getPluginPath(plugin)
+        if (path == "null") {
+            return getAndroidContext()
+                .assets
+        }
+        return getAndroidContext()
+            .assets
     }
+
 
     override fun getProperties() {
         TODO("Not yet implemented")

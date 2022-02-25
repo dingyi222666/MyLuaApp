@@ -5,7 +5,8 @@ import android.app.Notification
 object DefaultActionKey {
 
 
-    val DELETE_PROJECT_FILE = ActionKey(0x10,false)
+    val CREATE_PROJECT_FILE = ActionKey(0x11, false)
+    val DELETE_PROJECT_FILE = ActionKey(0x10, false)
     val PROJECT_LIST_MENU_ACTION = ActionKey(0x1, false)
 
     val CREATE_EDITOR_ACTION = ActionKey(0x2,false)

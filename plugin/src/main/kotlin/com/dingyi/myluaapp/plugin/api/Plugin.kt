@@ -24,4 +24,7 @@ interface Plugin {
     val pluginAuthor:String
 
     val pluginDescription:String
+
+    val targetApiVersion: Int
+        get() = 1
 }

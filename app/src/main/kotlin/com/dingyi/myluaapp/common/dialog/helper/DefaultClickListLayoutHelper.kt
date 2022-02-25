@@ -145,9 +145,12 @@ class DefaultClickListLayoutHelper(rootView: View, dialog: BottomDialog) :
             }
             holder.binding.radioButton.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
+                    val lastSelectIndex = selectIndex
+
                     selectIndex = position
                     if (!binding.list.isComputingLayout) {
-                        notifyDataSetChanged()
+                        notifyItemChanged(lastSelectIndex)
+                        notifyItemChanged(position)
                     }
                 }
             }
@@ -159,8 +162,10 @@ class DefaultClickListLayoutHelper(rootView: View, dialog: BottomDialog) :
         }
 
         fun setChecked(index: Int) {
+            val lastSelectIndex = selectIndex
             selectIndex = index
-            notifyDataSetChanged()
+            notifyItemChanged(lastSelectIndex)
+            notifyItemChanged(index)
         }
 
     }

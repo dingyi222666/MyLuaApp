@@ -21,10 +21,7 @@ import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
-import com.dingyi.myluaapp.ui.editor.action.DeleteProjectFileAction
-import com.dingyi.myluaapp.ui.editor.action.OpenLogFragmentAction
-import com.dingyi.myluaapp.ui.editor.action.OpenTreeFileAction
-import com.dingyi.myluaapp.ui.editor.action.TreeListOnLongClickAction
+import com.dingyi.myluaapp.ui.editor.action.*
 import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.google.android.material.tabs.TabLayout
@@ -116,7 +113,15 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                     getJavaClass<DeleteProjectFileAction>(),
                     DefaultActionKey.DELETE_PROJECT_FILE
                 )
+                registerAction(
+                    getJavaClass<CreateProjectFileAction>(),
+                    DefaultActionKey.CREATE_PROJECT_FILE
+                )
                 registerForwardArgument(DefaultActionKey.DELETE_PROJECT_FILE) {
+                    it.addArgument(this@EditorActivity)
+                        .addArgument(viewModel)
+                }
+                registerForwardArgument(DefaultActionKey.CREATE_PROJECT_FILE) {
                     it.addArgument(this@EditorActivity)
                         .addArgument(viewModel)
                 }
@@ -164,7 +169,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         viewBinding.editorPage.adapter = EditorPagerAdapter(this)
         viewBinding.drawerPage.offscreenPageLimit = 1
-        // viewBinding.editorPage.isUserInputEnabled = false
+        viewBinding.editorPage.isUserInputEnabled = false
 
 
         viewBinding

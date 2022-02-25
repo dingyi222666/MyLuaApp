@@ -49,7 +49,7 @@
                 app:tabIndicator="@drawable/default_tab_indicator"
                 app:tabIndicatorColor="?colorPrimary"
                 app:tabMode="scrollable"
-                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorFullWidth="true"
                 app:tabTextAppearance="@style/BaseTableLayoutStyle" />
 
             <ProgressBar

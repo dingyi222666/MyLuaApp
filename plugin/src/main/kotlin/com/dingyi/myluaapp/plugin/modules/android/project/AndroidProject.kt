@@ -1,10 +1,12 @@
 package com.dingyi.myluaapp.plugin.modules.android.project
 
+import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.getJavaClass
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.project.FileTemplate
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.runtime.project.DefaultFileTemplate
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -77,8 +79,29 @@ class AndroidProject(
 
     }
 
+
     override fun getFileTemplates(): List<FileTemplate> {
-        return mutableListOf()
+        return readDefaultFileTemplates(
+            File(Paths.assetsDir, "plugin/default_template.json"),
+            File(Paths.assetsDir, "plugin/lua_project_template.json")
+        )
+    }
+
+    private fun readDefaultFileTemplates(vararg file: File): List<FileTemplate> {
+        return file.map { nowFile ->
+            Gson().fromJson(nowFile.readText(), getJavaClass<FileTemplateBean>()) to nowFile
+        }.flatMap { pair ->
+            pair.first.map {
+                DefaultFileTemplate(pair.second.parentFile?.path + "/" + it.templatePath, it.templateName)
+            }
+        }
+    }
+
+     class FileTemplateBean: ArrayList<FileTemplateBean.FileTemplateBeanItem>() {
+        data class FileTemplateBeanItem(
+            val templateName: String, // Lua Empty Layout
+            val templatePath: String // file/lua_empty_layout.aly'
+        )
     }
 
     override val name: String

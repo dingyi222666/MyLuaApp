@@ -1,0 +1,14 @@
+[
+  {
+    "templateName": "Lua Empty Activity",
+    "templatePath": "file/lua_empty_activity.lua"
+  },
+  {
+    "templateName": "Lua Module",
+    "templatePath": "file/lua_module.lua"
+  },
+  {
+    "templateName": "Lua Empty Layout",
+    "templatePath": "file/lua_empty_layout.aly"
+  }
+]

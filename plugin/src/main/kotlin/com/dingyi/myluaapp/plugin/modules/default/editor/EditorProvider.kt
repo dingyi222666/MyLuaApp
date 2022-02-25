@@ -18,6 +18,6 @@ class EditorProvider(
 
         id++
 
-        return Editor(editorPath, id)
+        return Editor(editorPath, id,pluginContext)
     }
 }

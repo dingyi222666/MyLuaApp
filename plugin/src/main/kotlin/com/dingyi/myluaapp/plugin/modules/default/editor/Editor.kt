@@ -3,9 +3,11 @@ package com.dingyi.myluaapp.plugin.modules.default.editor
 import android.content.Context
 import android.view.View
 import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import io.github.rosemoe.sora.widget.CodeEditor
 
 import com.dingyi.myluaapp.plugin.api.editor.Editor
+import com.dingyi.myluaapp.plugin.api.editor.EditorService
 
 import com.dingyi.myluaapp.plugin.api.editor.language.Language
 import com.dingyi.myluaapp.plugin.modules.default.editor.language.EmptyLanguage
@@ -19,7 +21,8 @@ import java.lang.ref.WeakReference
 class Editor(
 
     private val path: File,
-    private val id: Int
+    private val id: Int,
+    private val pluginContext: PluginContext
 ) : Editor {
 
 
@@ -133,6 +136,7 @@ class Editor(
         }
 
         if (!path.isFile) {
+            pluginContext.getEditorService().closeEditor(this)
             throw FileNotFoundException("The File was deleted.")
         }
 
@@ -150,6 +154,7 @@ class Editor(
             return@withContext
         }
         if (!path.isFile) {
+            pluginContext.getEditorService().closeEditor(this@Editor)
             throw FileNotFoundException("The File was deleted.")
         }
         val text = path.readText()

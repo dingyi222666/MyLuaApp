@@ -95,16 +95,31 @@ class EditorNodeBinder(
                     .addArgument(itemView), DefaultActionKey.TREE_LIST_ON_LONG_CLICK
             )?.invoke {
                 activity.lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        TreeHelper.updateNode(treeNode.parent)
+
+                    val newTreeNode = updateNode(treeNode)
+
+                    viewModel.refreshEditor()
+
+                    activity.runOnUiThread {
+                        if (treeNode == viewModel.rootNode.value) {
+                            viewModel.rootNode.value = newTreeNode
+                        } else {
+                            viewModel.rootNode.value = viewModel.rootNode.value
+                        }
                     }
-                    viewModel.rootNode.value = viewModel.rootNode.value
                 }
             }
 
         return true;
     }
 
+    private suspend fun updateNode(treeNode: TreeNode) = withContext(Dispatchers.IO) {
+        if (treeNode.parent.isRoot) {
+            TreeHelper.updateNode(treeNode)
+        } else {
+            TreeHelper.updateNode(treeNode.parent)
+        }
+    }
 
     companion object {
         private var imageData = mapOf(

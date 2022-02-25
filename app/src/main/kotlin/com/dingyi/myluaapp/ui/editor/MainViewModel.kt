@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.core.helper.ProgressMonitor
 import com.dingyi.myluaapp.plugin.api.editor.Editor
+import com.dingyi.myluaapp.plugin.api.project.FileTemplate
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.helper.TreeHelper
@@ -135,6 +136,10 @@ class MainViewModel : ViewModel() {
         project
             .value
             ?.deleteFile(file)
+    }
+
+    suspend fun createFile(fileTemplate: FileTemplate, file: File, inputName: String) {
+        fileTemplate.create(file,inputName)
     }
 
 
