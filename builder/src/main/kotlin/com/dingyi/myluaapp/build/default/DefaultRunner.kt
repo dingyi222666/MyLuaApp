@@ -32,7 +32,7 @@ class DefaultRunner(
         Log.e("tasks", "$tasks")
 
 
-        val job = Job()
+        val job = SupervisorJob()
         val coroutineScope = CoroutineScope(Dispatchers.IO + job)
 
         project.getLogger().info(

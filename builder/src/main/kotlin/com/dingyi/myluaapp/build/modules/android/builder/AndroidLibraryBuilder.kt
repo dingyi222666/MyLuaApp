@@ -3,10 +3,7 @@ package com.dingyi.myluaapp.build.modules.android.builder
 
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.default.DefaultBuilder
-import com.dingyi.myluaapp.build.default.DefaultInputFile
-import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
-import com.dingyi.myluaapp.build.modules.android.tasks.*
-import com.dingyi.myluaapp.build.modules.android.tasks.test.*
+import com.dingyi.myluaapp.build.modules.android.tasks.build.*
 
 
 class AndroidLibraryBuilder(
@@ -15,19 +12,23 @@ class AndroidLibraryBuilder(
 
 
     init {
+        addBuildTasks()
+    }
+
+    private fun addBuildTasks() {
 
 
         //Check Manifest exists
         addTask(CheckManifest(module), buildTasks)
 
         //Extract AndroidArchive
-        addTask(ExtractAndroidArchiveTest(module), buildTasks)
+        addTask(ExtractAndroidArchive(module), buildTasks)
 
         //Package Resources
-        addTask(PackageResourcesTest(module), buildTasks)
+        addTask(PackageResources(module), buildTasks)
 
         //Compile Libraries Resources
-        addTask(CompileLibrariesResourcesTest(module), buildTasks)
+        addTask(CompileLibrariesResources(module), buildTasks)
 
         //Merge libraries manifest
         addTask(MergeLibraryManifest(module), buildTasks)
@@ -36,25 +37,25 @@ class AndroidLibraryBuilder(
         addTask(GenerateBuildConfig(module), buildTasks)
 
         //Compile Java
-        addTask(CompileLibraryJavaTest(module), buildTasks)
+        addTask(CompileLibraryJava(module), buildTasks)
 
         //Transform Class to Dex
-        addTask(TransformClassToDexTest(module),buildTasks)
+        addTask(TransformClassToDex(module), buildTasks)
 
         //Transform Jar to Dex
-        addTask(TransformJarToDexTest(module),buildTasks)
+        addTask(TransformJarToDex(module), buildTasks)
 
         //Merge Ext Dex
-        addTask(MergeExtDexTest(module),buildTasks)
+        addTask(MergeExtDex(module), buildTasks)
 
         //Merge Assets Resources
-        addTask(MergeAssetsResourcesTest(module), buildTasks)
+        addTask(MergeAssetsResources(module), buildTasks)
 
         //Merge jniLibs
-        addTask(MergeJniLibsTest(module), buildTasks)
+        addTask(MergeJniLibs(module), buildTasks)
 
         //Merge Java Resources
-        addTask(MergeJavaResourcesTest(module), buildTasks)
+        addTask(MergeJavaResources(module), buildTasks)
 
 
     }
