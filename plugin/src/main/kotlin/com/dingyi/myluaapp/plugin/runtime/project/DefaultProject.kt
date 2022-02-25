@@ -70,7 +70,7 @@ abstract class DefaultProject(
 
         }
 
-    override fun createDirectory(targetPath: File) {
+    override suspend fun createDirectory(targetPath: File): Unit = withContext(Dispatchers.IO) {
         targetPath.mkdirs()
     }
 

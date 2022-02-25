@@ -148,7 +148,7 @@ class MainViewModel : ViewModel() {
         fileTemplate.create(file,inputName)
     }
 
-    suspend fun createDirectory(targetPath: File) {
+    suspend fun createDirectory(targetPath: File ) {
         project
             .value
             ?.createDirectory(targetPath)

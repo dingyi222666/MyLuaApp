@@ -18,7 +18,7 @@ interface Project {
 
     suspend fun renameFile(file: File, targetFile: File)
 
-    fun createDirectory(targetPath: File)
+    suspend fun createDirectory(targetPath: File)
 
     val name: String
 

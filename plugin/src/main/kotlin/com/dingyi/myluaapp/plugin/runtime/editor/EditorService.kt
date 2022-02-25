@@ -49,84 +49,115 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
         val findEditor = allEditor.find { it.getFile().path == editorPath.path }
 
-        if (findEditor!=null) {
+        if (findEditor != null) {
             currentEditor = findEditor
             currentEditorServiceState.lastOpenPath = findEditor.getFile().path
             return currentEditor
         }
 
-        for (it in allEditorProvider) {
-            val editor = createEditor(editorPath, it)
+
+        val editor = createEditor(editorPath)
+        if (editor != null) {
+            allEditor.add(editor)
+            currentEditor = editor
+            currentEditorServiceState.lastOpenPath = editorPath.path
+
+            val find =
+                currentEditorServiceState.editors.find { it.path == editorPath.path }
+
+            if (find == null) {
+                currentEditorServiceState.editors.add(editor.saveState())
+            }
+            return editor
+        }
+
+        return null
+    }
+
+
+    private fun createEditor(editorPath: File): Editor? {
+        for (i in allEditorProvider) {
+            val editor = i.createEditor(editorPath)
             if (editor != null) {
-                allEditor.add(editor)
-                currentEditor = editor
-                currentEditorServiceState.lastOpenPath = editorPath.path
-
-                val find =
-                    currentEditorServiceState.editors.find { it.path == editorPath.path }
-
-                if (find == null) {
-                    currentEditorServiceState.editors.add(editor.saveState())
-                }
                 return editor
             }
         }
         return null
     }
 
-
-    private fun createEditor(editorPath: File, editorProvider: EditorProvider): Editor? {
-        return editorProvider.createEditor(editorPath)
-    }
-
     override fun closeEditor(editor: Editor) {
         val indexOfEditor = allEditor.indexOf(editor)
 
-        val targetIndex = when {
-            indexOfEditor + 1 == allEditor.size && indexOfEditor != 0 -> indexOfEditor - 1
-            indexOfEditor == 0 && allEditor.size == 1 -> null
-            indexOfEditor == -1 -> null
-            allEditor.size == 1 -> null
-            else -> indexOfEditor
-        }
+
+
+
 
         if (indexOfEditor != -1) {
             allEditor.removeAt(indexOfEditor)
         }
 
-        currentEditor = allEditor.getOrNull(targetIndex ?: 0)
+        if (currentEditor == editor) {
 
-        currentEditorServiceState.lastOpenPath = currentEditor?.getFile()?.path
+            val targetIndex = when {
+                indexOfEditor + 1 == allEditor.size && indexOfEditor != 0 -> indexOfEditor - 1
+                indexOfEditor == 0 && allEditor.size == 1 -> null
+                indexOfEditor == -1 -> null
+                allEditor.size == 1 -> null
+                else -> indexOfEditor
+            }
 
-        currentEditorServiceState.editors.removeIf { it.path == editor.getFile().path }
+            currentEditor = allEditor.getOrNull(targetIndex ?: 0)
+            currentEditorServiceState.lastOpenPath = currentEditor?.getFile()?.path
+        }
 
+
+        for (i in currentEditorServiceState.editors) {
+            if (i.path == editor.getFile().path) {
+                currentEditorServiceState.editors.remove(i)
+                break
+            }
+        }
 
     }
 
 
     override fun closeEditor(editor: File) {
-        val indexOfEditor = currentEditorServiceState
-            .editors.indexOf(currentEditorServiceState.editors.find { it.path == editor.path })
 
-        val targetIndex = when {
-            indexOfEditor + 1 == currentEditorServiceState.editors.size && indexOfEditor != 0 -> indexOfEditor - 1
-            indexOfEditor == 0 && currentEditorServiceState.editors.size == 1 -> null
-            indexOfEditor == -1 -> null
-            currentEditorServiceState.editors.size == 1 -> null
-            else -> indexOfEditor
-        }
+        val targetEditorState = currentEditorServiceState.editors.find { it.path == editor.path }
+
+        val indexOfEditor = currentEditorServiceState
+            .editors.indexOf(targetEditorState)
+
+
 
         if (indexOfEditor != -1) {
             currentEditorServiceState.editors.removeAt(indexOfEditor)
         }
 
-        val currentState = currentEditorServiceState.editors.getOrNull(targetIndex ?: 0)
+        if (currentEditorServiceState.lastOpenPath == editor.path) {
 
-        currentEditorServiceState.lastOpenPath = currentState?.path
+            val targetIndex = when {
+                indexOfEditor + 1 == currentEditorServiceState.editors.size && indexOfEditor != 0 -> indexOfEditor - 1
+                indexOfEditor == 0 && currentEditorServiceState.editors.size == 1 -> null
+                indexOfEditor == -1 -> null
+                currentEditorServiceState.editors.size == 1 -> null
+                else -> indexOfEditor
+            }
 
-        allEditor.removeIf { it.getFile().path == editor.path }
+            val currentState = currentEditorServiceState.editors.getOrNull(targetIndex ?: 0)
 
-        currentEditor = allEditor.getOrNull(targetIndex ?: 0)
+            currentEditorServiceState.lastOpenPath = currentState?.path
+
+            currentEditor = allEditor.getOrNull(targetIndex ?: 0)
+
+        }
+
+        for (i in allEditor) {
+            if (i.getFile().path == editor.path) {
+                allEditor.remove(i)
+                return
+            }
+        }
 
 
     }
@@ -139,14 +170,13 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             ?.let { editorState ->
                 editorState.path = targetPath.path
 
-                allEditor.forEachIndexed { index, editor ->
+                for (index in allEditor.indices) {
+                    val editor = allEditor[index]
                     if (editor.getFile() == renamePath) {
-                        for (i in allEditorProvider) {
-                            val newEditor = createEditor(targetPath, i)
-                            if (newEditor != null) {
-                                allEditor[index] = newEditor
-                                return@forEachIndexed
-                            }
+                        val newEditor = createEditor(targetPath)
+                        if (newEditor != null) {
+                            allEditor[index] = newEditor
+                            break
                         }
                     }
                 }
