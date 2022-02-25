@@ -117,14 +117,24 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                     getJavaClass<CreateProjectFileAction>(),
                     DefaultActionKey.CREATE_PROJECT_FILE
                 )
-                registerForwardArgument(DefaultActionKey.DELETE_PROJECT_FILE) {
+                registerAction(
+                    getJavaClass<RenameProjectFileAction>(),
+                    DefaultActionKey.RENAME_PROJECT_FILE
+                )
+                registerAction(
+                    getJavaClass<CreateProjectDirectoryAction>(),
+                    DefaultActionKey.CREATE_PROJECT_DIRECTORY
+                )
+                registerForwardArgument(
+                    DefaultActionKey.DELETE_PROJECT_FILE,
+                    DefaultActionKey.CREATE_PROJECT_FILE,
+                    DefaultActionKey.RENAME_PROJECT_FILE,
+                    DefaultActionKey.CREATE_PROJECT_DIRECTORY
+                ) {
                     it.addArgument(this@EditorActivity)
                         .addArgument(viewModel)
                 }
-                registerForwardArgument(DefaultActionKey.CREATE_PROJECT_FILE) {
-                    it.addArgument(this@EditorActivity)
-                        .addArgument(viewModel)
-                }
+
                 registerForwardArgument(DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST) {
                     it.addArgument(viewBinding.root)
                 }

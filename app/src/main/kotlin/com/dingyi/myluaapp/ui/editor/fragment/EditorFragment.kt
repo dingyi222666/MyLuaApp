@@ -83,18 +83,36 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
 
 
         lifecycleScope.launch {
-            editor.read()
+            runCatching {
+                editor.read()
+            }.onFailure {
+                System.err.println(it)
+                closeAndRefreshEditor(editor)
+            }
         }
-
 
 
     }
 
 
+    private fun closeAndRefreshEditor(editor: Editor) {
+        PluginModule
+            .getEditorService()
+            .closeEditor(editor)
+
+        viewModel
+            .refreshEditor()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
-        editor.save()
+        runCatching {
+            editor.save()
+        }.onFailure {
+            System.err.println(it)
+            closeAndRefreshEditor(editor)
+        }
 
     }
 

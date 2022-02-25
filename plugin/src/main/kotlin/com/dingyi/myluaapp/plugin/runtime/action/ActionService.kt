@@ -48,13 +48,28 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
 
     }
 
-    override fun registerForwardArgument(key: ActionKey, block: (ActionArgument) -> ActionArgument) {
+    override fun registerForwardArgument(
+        key: ActionKey,
+        block: (ActionArgument) -> ActionArgument
+    ) {
         val keyAction = allForwardAction.getOrDefault(key, mutableListOf())
         keyAction.add(block)
         allForwardAction[key] = keyAction
     }
 
-    override fun forwardActionArgument(actionArgument: ActionArgument, key: ActionKey): ActionArgument {
+    override fun registerForwardArgument(
+        vararg key: ActionKey,
+        block: (ActionArgument) -> ActionArgument
+    ) {
+        key.forEach {
+            registerForwardArgument(it, block)
+        }
+    }
+
+    override fun forwardActionArgument(
+        actionArgument: ActionArgument,
+        key: ActionKey
+    ): ActionArgument {
         val keyAction = allForwardAction.getOrDefault(key, mutableListOf())
 
         allForwardAction[key] = keyAction

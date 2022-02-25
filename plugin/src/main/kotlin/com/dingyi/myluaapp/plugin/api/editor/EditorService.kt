@@ -17,6 +17,8 @@ interface EditorService {
 
     fun closeEditor(editor: Editor)
 
+    fun renameEditor(renamePath:File,targetPath:File)
+
     fun clearAllEditor()
 
     //Clear All Editor
@@ -32,6 +34,8 @@ interface EditorService {
 
     fun addSupportLanguages(vararg language:String)
     fun closeAllEditor()
+
     fun setCurrentEditor(file: File)
+
     fun closeEditor(editor: File)
 }

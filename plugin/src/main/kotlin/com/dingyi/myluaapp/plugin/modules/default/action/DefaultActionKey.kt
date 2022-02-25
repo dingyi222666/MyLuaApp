@@ -5,6 +5,9 @@ import android.app.Notification
 object DefaultActionKey {
 
 
+    val CREATE_PROJECT_DIRECTORY = ActionKey(0x13,false)
+    val RENAME_PROJECT_FILE = ActionKey(0x12,false)
+
     val CREATE_PROJECT_FILE = ActionKey(0x11, false)
     val DELETE_PROJECT_FILE = ActionKey(0x10, false)
     val PROJECT_LIST_MENU_ACTION = ActionKey(0x1, false)

@@ -138,8 +138,20 @@ class MainViewModel : ViewModel() {
             ?.deleteFile(file)
     }
 
+    suspend fun renameFile(file: File,targetFile:File) {
+        project
+            .value
+            ?.renameFile(file,targetFile)
+    }
+
     suspend fun createFile(fileTemplate: FileTemplate, file: File, inputName: String) {
         fileTemplate.create(file,inputName)
+    }
+
+    suspend fun createDirectory(targetPath: File) {
+        project
+            .value
+            ?.createDirectory(targetPath)
     }
 
 

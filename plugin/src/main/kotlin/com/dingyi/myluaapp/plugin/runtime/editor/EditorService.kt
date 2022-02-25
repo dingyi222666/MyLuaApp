@@ -56,7 +56,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
         }
 
         for (it in allEditorProvider) {
-            val editor = it.createEditor(editorPath)
+            val editor = createEditor(editorPath, it)
             if (editor != null) {
                 allEditor.add(editor)
                 currentEditor = editor
@@ -74,6 +74,11 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
         return null
     }
 
+
+    private fun createEditor(editorPath: File, editorProvider: EditorProvider): Editor? {
+        return editorProvider.createEditor(editorPath)
+    }
+
     override fun closeEditor(editor: Editor) {
         val indexOfEditor = allEditor.indexOf(editor)
 
@@ -85,7 +90,9 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             else -> indexOfEditor
         }
 
-        allEditor.removeAt(indexOfEditor)
+        if (indexOfEditor != -1) {
+            allEditor.removeAt(indexOfEditor)
+        }
 
         currentEditor = allEditor.getOrNull(targetIndex ?: 0)
 
@@ -109,7 +116,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             else -> indexOfEditor
         }
 
-        runCatching {
+        if (indexOfEditor != -1) {
             currentEditorServiceState.editors.removeAt(indexOfEditor)
         }
 
@@ -121,6 +128,30 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
         currentEditor = allEditor.getOrNull(targetIndex ?: 0)
 
+
+    }
+
+    override fun renameEditor(renamePath: File, targetPath: File) {
+
+        currentEditorServiceState
+            .editors
+            .find { it.path == renamePath.path }
+            ?.let { editorState ->
+                editorState.path = targetPath.path
+
+                allEditor.forEachIndexed { index, editor ->
+                    if (editor.getFile() == renamePath) {
+                        for (i in allEditorProvider) {
+                            val newEditor = createEditor(targetPath, i)
+                            if (newEditor != null) {
+                                allEditor[index] = newEditor
+                                return@forEachIndexed
+                            }
+                        }
+                    }
+                }
+
+            }
 
     }
 

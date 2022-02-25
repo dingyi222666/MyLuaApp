@@ -17,4 +17,6 @@ interface ActionService {
 
     fun forwardActionArgument(actionArgument: ActionArgument, key: ActionKey):ActionArgument
     fun registerForwardArgument(key: ActionKey, block: (ActionArgument) -> ActionArgument)
+
+    fun registerForwardArgument(vararg key: ActionKey, block: (ActionArgument) -> ActionArgument)
 }

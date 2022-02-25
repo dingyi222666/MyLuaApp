@@ -7,25 +7,28 @@ interface Project {
     fun backup(exportPath:File)
 
 
-    suspend fun deleteFile(targetFile:File)
+    suspend fun deleteFile(targetFile: File)
 
 
-
-    fun walkProjectFile():FileTreeWalk
+    fun walkProjectFile(): FileTreeWalk
 
     fun runProject()
 
-    fun getFileTemplates():List<FileTemplate>
+    fun getFileTemplates(): List<FileTemplate>
 
-    val name:String
+    suspend fun renameFile(file: File, targetFile: File)
 
-    val packageName:String?
+    fun createDirectory(targetPath: File)
 
-    val path:File
+    val name: String
 
-    val iconPath:String?
+    val packageName: String?
 
-    val type:String
+    val path: File
+
+    val iconPath: String?
+
+    val type: String
 
 
 }

@@ -7,6 +7,7 @@ import com.dingyi.myluaapp.plugin.api.project.FileTemplate
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.dingyi.myluaapp.plugin.runtime.project.DefaultFileTemplate
+import com.dingyi.myluaapp.plugin.runtime.project.DefaultProject
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,7 +16,7 @@ import java.io.File
 class AndroidProject(
     private val projectPath: File,
     private val pluginContext: PluginContext
-):Project {
+):DefaultProject(pluginContext) {
 
     private val configMap = mutableMapOf<String,String>()
 
@@ -30,34 +31,7 @@ class AndroidProject(
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteFile(targetFile: File): Unit = withContext(Dispatchers.IO) {
-        if (targetFile.isFile) {
-            pluginContext
-                .getEditorService()
-                .closeEditor(targetFile)
-        } else {
-            targetFile
-                .walkBottomUp()
-                .filter { it.isFile }
-                .filter { file ->
-                    pluginContext.getEditorService()
-                        .getAllEditor().find { editor ->
-                            editor
-                                .getFile().path == file.path
-                        } != null
-                }
-                .forEach {
-                    pluginContext
-                        .getEditorService()
-                        .closeEditor(it)
-                }
 
-
-        }
-
-        targetFile.deleteRecursively()
-
-    }
 
 
     override fun walkProjectFile(): FileTreeWalk {
@@ -87,6 +61,7 @@ class AndroidProject(
         )
     }
 
+
     private fun readDefaultFileTemplates(vararg file: File): List<FileTemplate> {
         return file.map { nowFile ->
             Gson().fromJson(nowFile.readText(), getJavaClass<FileTemplateBean>()) to nowFile
@@ -106,7 +81,7 @@ class AndroidProject(
 
     override val name: String
         get() = configMap["appName"] ?: projectPath.name
-    override val packageName: String?
+    override val packageName: String
         get() = configMap["appPackageName"].toString()
     override val path: File
         get() = projectPath
