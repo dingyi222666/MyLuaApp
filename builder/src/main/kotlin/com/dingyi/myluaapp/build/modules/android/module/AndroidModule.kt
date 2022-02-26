@@ -84,14 +84,15 @@ class AndroidModule(
             null
         }
 
-
-        getCache().putCache(
-            "${name}_build_config",
-            BuildConfig(
-                applicationId = applicationId,
-                buildVariants = getCache().getCache("build_mode")
+        if (getCache().getCache<String?>("build_mode")!=null) {
+            getCache().putCache(
+                "${name}_build_config",
+                BuildConfig(
+                    applicationId = applicationId,
+                    buildVariants = getCache().getCache("build_mode")
+                )
             )
-        )
+        }
 
 
         initDependencies()
@@ -168,7 +169,7 @@ class AndroidModule(
 
     private fun initMavenDependency(value: LuaValue?) {
         if (value is LuaString) {
-            dependencies.addAll(getMavenRepository().getDependency(value.tojstring()))
+            dependencies.add(getMavenRepository().getDependency(value.tojstring()))
         }
     }
 

@@ -27,7 +27,6 @@ class LogBroadcastReceiver(
 
     init {
         lifecycleOwner.addObserver(this)
-        context?.registerReceiver(this, IntentFilter(javaClass.name))
     }
 
     fun addCallback(block: (Log) -> Unit) {

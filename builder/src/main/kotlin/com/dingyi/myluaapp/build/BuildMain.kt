@@ -32,33 +32,59 @@ class BuildMain(
 
     fun build(path: String, command: String) {
 
+        if (nowBuilder != null) {
+            return
+        }
+
         MainBuilder(path, createLogger(), repository, mavenRepository).apply {
             init()
             nowBuilder = this
+            setBuildCompleteListener {
+                nowBuilder = null
+            }
         }.build("build $command")
+
 
     }
 
     fun clean(path: String) {
 
+        if (nowBuilder != null) {
+            return
+        }
+
         MainBuilder(path, createLogger(), repository, mavenRepository).apply {
             init()
             nowBuilder = this
+            setBuildCompleteListener {
+                nowBuilder = null
+            }
         }.build("clean")
+
 
     }
 
     fun sync(path: String) {
 
+
+        if (nowBuilder != null) {
+            return
+        }
+
         MainBuilder(path, createLogger(), repository, mavenRepository).apply {
             init()
             nowBuilder = this
+            setBuildCompleteListener {
+                nowBuilder = null
+            }
         }.build("sync")
+
 
     }
 
     fun close() {
         nowBuilder?.stop()
+
         repository.shutdown()
         logger?.close()
         logger = null

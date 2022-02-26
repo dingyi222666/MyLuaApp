@@ -55,7 +55,7 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
                     view: View,
                     viewType: Int
                 ): BaseNodeViewBinder {
-                    return EditorNodeBinder(view, viewModel, requireActivity())
+                    return EditorNodeBinder(view, viewModel)
                 }
 
                 override fun getNodeLayoutId(level: Int): Int {
@@ -89,19 +89,20 @@ class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainV
             treeView.refreshTreeView()
         }
 
-        viewModel.refreshFileList()
-
     }
 
     private fun refreshFileList() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewBinding.refresh.isRefreshing = true
-            val node = withContext(Dispatchers.IO) {
-                TreeHelper.updateNode(viewModel.rootNode.value)
+        viewModel.progressMonitor.postAsyncTask {
+            withContext(Dispatchers.Main) {
+                viewBinding.refresh.isRefreshing = true
             }
+            val node =
+                TreeHelper.updateNode(viewModel.rootNode.value)
 
-            viewModel.rootNode.value = node
-            viewBinding.refresh.isRefreshing = false
+            withContext(Dispatchers.Main) {
+                viewModel.rootNode.value = node
+                viewBinding.refresh.isRefreshing = false
+            }
         }
     }
 

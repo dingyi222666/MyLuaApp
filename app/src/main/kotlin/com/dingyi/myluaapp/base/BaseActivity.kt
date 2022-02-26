@@ -9,11 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.dingyi.myluaapp.R
-import com.dingyi.myluaapp.common.theme.ThemeManager
 import com.dingyi.myluaapp.common.kts.getAttributeColor
 import com.dingyi.myluaapp.common.kts.getString
 import com.dingyi.myluaapp.common.kts.iconColor
 import com.dingyi.myluaapp.common.kts.showSnackBar
+import com.dingyi.myluaapp.common.theme.ThemeManager
 import com.hjq.language.MultiLanguages
 
 /**
@@ -29,9 +29,9 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
 
     protected var optionsMenu: Menu? = null
 
-    protected lateinit var viewBinding: V
+    lateinit var viewBinding: V
 
-    protected lateinit var viewModel: T
+    lateinit var viewModel: T
 
     val themeManager = ThemeManager()
 
@@ -44,7 +44,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
         setContentView(getViewBindingImp().root)
 
 
-        viewModel = ViewModelProvider(this)[getViewModelClass()]
+        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory.instance)[getViewModelClass()]
 
 
         observeViewModel()

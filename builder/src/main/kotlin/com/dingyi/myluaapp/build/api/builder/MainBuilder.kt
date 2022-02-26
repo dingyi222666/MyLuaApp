@@ -19,5 +19,7 @@ interface MainBuilder {
 
     fun getMavenRepository(): MavenRepository
 
+    fun setBuildCompleteListener(listener:()->Unit)
+
 
 }

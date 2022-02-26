@@ -26,8 +26,7 @@ import java.io.File
 
 class EditorNodeBinder(
     itemView: View,
-    private val viewModel: MainViewModel,
-    private val activity:FragmentActivity
+    private val viewModel: MainViewModel
 ) : BaseNodeViewBinder(itemView) {
 
     private lateinit var binding: LayoutItemEditorFileListBinding
@@ -53,7 +52,7 @@ class EditorNodeBinder(
             binding
                 .arrow
                 .animate()
-                .rotation(90f)
+                .rotationBy(90f)
                 .setDuration(0)
                 .start()
 
@@ -75,7 +74,7 @@ class EditorNodeBinder(
             binding
                 .arrow
                 .animate()
-                .rotation(if (expand) 90f else 0f)
+                .rotationBy(if (expand) 90f else 0f)
                 .setDuration(120)
                 .start()
         }
@@ -94,32 +93,13 @@ class EditorNodeBinder(
                     .addArgument(treeNode)
                     .addArgument(itemView), DefaultActionKey.TREE_LIST_ON_LONG_CLICK
             )?.invoke {
-                activity.lifecycleScope.launch {
-
-                    val newTreeNode = updateNode(treeNode)
-
-                    viewModel.refreshEditor()
-
-                    activity.runOnUiThread {
-                        if (treeNode == viewModel.rootNode.value) {
-                            viewModel.rootNode.value = newTreeNode
-                        } else {
-                            viewModel.rootNode.value = viewModel.rootNode.value
-                        }
-                    }
-                }
+               viewModel.updateNode(treeNode)
             }
 
         return true;
     }
 
-    private suspend fun updateNode(treeNode: TreeNode) = withContext(Dispatchers.IO) {
-        if (treeNode.parent.isRoot) {
-            TreeHelper.updateNode(treeNode)
-        } else {
-            TreeHelper.updateNode(treeNode.parent)
-        }
-    }
+
 
     companion object {
         private var imageData = mapOf(

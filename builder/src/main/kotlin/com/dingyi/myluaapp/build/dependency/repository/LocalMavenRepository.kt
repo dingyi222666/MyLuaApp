@@ -1,11 +1,14 @@
 package com.dingyi.myluaapp.build.dependency.repository
 
-import android.util.Log
 import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 import com.dingyi.myluaapp.build.api.dependency.repository.MavenRepository
 import com.dingyi.myluaapp.build.api.logger.ILogger
+import com.dingyi.myluaapp.build.dependency.EmptyMavenDependency
 import com.dingyi.myluaapp.build.dependency.LocalMavenDependency
+import com.dingyi.myluaapp.build.dependency.MavenPom
+import com.dingyi.myluaapp.build.parser.MavenMetaDataParser
 import com.dingyi.myluaapp.build.parser.PomParser
+import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.common.kts.toFile
 import java.io.File
 
@@ -22,13 +25,75 @@ class LocalMavenRepository(
         }
     }
 
+    private val parsedPom = mutableMapOf<MavenPom, MavenDependency>()
+
     private val parser = PomParser()
 
-    override fun getDependency(string: String): List<MavenDependency> {
-        return getDependency(string, mutableSetOf())
+    private val metaDataParser = MavenMetaDataParser()
+
+
+    override fun getDependency(string: String): MavenDependency {
+
+        val (groupId, artifactId, versionName) = string.split(":")
+
+        val mavenMetaData = metaDataParser.parse(
+            repositoryPath + File.separator + groupId.replaceNameToPath()
+                    + File.separator + artifactId.replaceNameToPath() + File.separator + "/maven-metadata.xml"
+        )
+
+        val pom = if (versionName == "latest") {
+            getMavenPom(
+                groupId,
+                artifactId,
+                mavenMetaData.versioning.latest.toString()
+            )
+        } //TODO: support resolve xx:xx:xx.+
+        else {
+            getMavenPom(groupId, artifactId, versionName)
+        }
+
+        if (pom == null) {
+            return EmptyMavenDependency(
+                repositoryPath = this.repositoryPath,
+                groupId = groupId,
+                artifactId = artifactId,
+                versionName = versionName
+            )
+        }
+
+        return getMavenDependency(pom, mutableSetOf())
     }
 
-    private fun getDefaultPomPath(groupId: String, artifactId: String, version: String): String {
+
+    private fun getMavenPom(
+        groupId: String,
+        artifactId: String,
+        versionName: String,
+    ): MavenPom? {
+        val pomPath = getDefaultPomPath(groupId, artifactId, versionName)
+
+        if (!pomPath.toFile().exists()) {
+            logger.warning("\n")
+            logger.warning("w:Unable to retrieve dependency of $groupId:$artifactId:$versionName,try sync project to re download dependency")
+
+            return null
+        }
+
+
+        return parser.parse(pomPath)
+
+
+    }
+
+    private fun String.replaceNameToPath(): String {
+        return replace(".", File.separator)
+    }
+
+    private fun getDefaultPomPath(
+        groupId: String,
+        artifactId: String,
+        version: String
+    ): String {
         return "$repositoryPath${File.separator}${
             groupId.replace(
                 ".",
@@ -40,62 +105,104 @@ class LocalMavenRepository(
 
     }
 
-    private fun getDependency(
-        string: String,
-        containsList: MutableSet<String>
-    ): List<MavenDependency> {
-        val array = string.split(":")
-        containsList.add(string)
+    private fun getMavenDependency(
+        dependency: MavenPom,
+        exclusionList: MutableSet<String>
+    ): MavenDependency {
 
-        val targetPomPathList = mutableListOf<String>()
-        if (array[1] == "*") {
-            val pomDir = "$repositoryPath${File.separator}${
-                array[0].replace(
-                    ".",
-                    File.separator
-                )
-            }${File.separator}"
-
-            pomDir.toFile().listFiles()?.forEach {
-                targetPomPathList.add(
-                    getDefaultPomPath(array[0], it.name, array[2])
-                )
-            }
-
-        } else {
-            targetPomPathList.add(getDefaultPomPath(array[0], array[1], array[2]))
+        if (parsedPom.keys.contains(dependency)) {
+            return parsedPom.getValue(dependency)
         }
 
-        targetPomPathList.forEach {
-            if (File(it).exists().not()) {
-                logger.warning("w:Unable to retrieve dependency of $string,try sync project to re download dependency")
-                logger.info("\n")
+        val dependencies = mutableListOf<MavenDependency>()
+
+        dependency
+            .dependencies
+            .filterNot {
+                exclusionList.contains(it.dependencyId)
             }
-        }
+            .mapNotNull {
+                val targetExclusionList = exclusionList.toMutableSet()
+                    .apply { addAll(it.exclusions) }
+                val (groupId, artifactId, versionName) = it.dependencyId.split(":")
+                val pom = getMavenPom(groupId, artifactId, versionName)
 
-        return targetPomPathList.mapNotNull { pomPath ->
+                if (pom != null) {
 
-            if (!pomPath.toFile().exists()) {
-                return@mapNotNull null
-            }
-
-            val pom = parser.parse(pomPath)
-
-            val allDependencies = mutableListOf<MavenDependency>().apply {
-                pom.dependencies.forEach {
-                    if (!containsList.contains(it)) {
-                        addAll(getDependency(it, containsList))
-                    }
-                }
+                    getMavenDependency(pom, targetExclusionList)
+                } else null
+            }.forEach {
+                dependencies.add(it)
             }
 
-            LocalMavenDependency(pom, allDependencies, repositoryPath)
-        }
+        return LocalMavenDependency(dependency, dependencies, repositoryPath)
 
     }
 
 
+/*
+private fun getDependency(
+    string: String,
+    containsList: MutableSet<String>
+): List<MavenDependency> {
+    val array = string.split(":")
+    containsList.add(string)
+
+    val pomPathList = mutableListOf<String>()
+    if (array[1] == "*") {
+        val pomDir = "$repositoryPath${File.separator}${
+            array[0].replace(
+                ".",
+                File.separator
+            )
+        }${File.separator}"
+
+        pomDir.toFile().listFiles()?.forEach {
+            pomPathList.add(
+                getDefaultPomPath(array[0], it.name, array[2])
+            )
+        }
+
+    } else {
+        pomPathList.add(getDefaultPomPath(array[0], array[1], array[2]))
+    }
+
+    pomPathList.forEach {
+        if (File(it).exists().not()) {
+            logger.warning("w:Unable to retrieve dependency of $string,try sync project to re download dependency")
+            logger.info("\n")
+        }
+    }
+
+    return pomPathList.mapNotNull { pomPath ->
+
+        if (!pomPath.toFile().exists()) {
+            return@mapNotNull null
+        }
+
+        val pom = parser.parse(pomPath)
+
+        val allDependencies = mutableListOf<MavenDependency>().apply {
+            pom.dependencies.forEach {
+                if (!containsList.contains(it)) {
+                    addAll(getDependency(it, containsList))
+                }
+            }
+        }
+
+        LocalMavenDependency(pom, allDependencies, repositoryPath)
+    }
+
+}
+
+ */
+
+
     override fun getLastVersion(mavenDependency: MavenDependency): MavenDependency {
         TODO("Not yet implemented")
+    }
+
+    override fun clear() {
+        parsedPom.clear()
     }
 }

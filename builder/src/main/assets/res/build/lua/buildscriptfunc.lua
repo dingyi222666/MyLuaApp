@@ -38,6 +38,22 @@ JavaVersion = {
   VERSION_12 = "12",
 }
 
+function mavenLocal()
+  return nil -- 不需要任何处理 本来就是启用的
+end
+
+function maven(url)
+  return { type = "maven", value = url }
+end
+
+function google()
+  return maven("https://dl.google.com/dl/android/maven2/")
+end
+
+function mavenCentral()
+  return maven("https://repo1.maven.org/maven2/")
+end
+
 function project(name)
   local name = name:gsub(":", '/')
   return { type = "project", value = name }

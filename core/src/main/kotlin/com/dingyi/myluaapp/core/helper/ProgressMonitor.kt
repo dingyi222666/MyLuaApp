@@ -1,61 +1,65 @@
 package com.dingyi.myluaapp.core.helper
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
+import java.util.concurrent.atomic.AtomicInteger
 
 class ProgressMonitor(
-    private val scope: CoroutineScope,
+
 ) {
 
-    private var progressRunningState = MutableLiveData(false)
+    private var progressRunningState = MutableLiveData(true)
 
-    private var allJob = mutableListOf<Job>()
-
-    fun changeProgressState(boolean: Boolean) {
+    private val count = AtomicInteger(0)
+    private suspend fun changeProgressState(boolean: Boolean) = withContext(Dispatchers.Main) {
         progressRunningState.value = boolean
     }
 
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    private var isRunning = false
+
+    private val afterTask = mutableListOf<suspend () -> Unit>()
+
     fun getProgressState(): LiveData<Boolean> = progressRunningState
 
-    fun postAsyncTask(block: suspend (ProgressMonitor) -> Unit) {
-        allJob.add(
-            scope.launch {
-                block(this@ProgressMonitor)
+    fun postAsyncTask(block: suspend () -> Unit) {
+        scope.launch {
+            count.getAndIncrement()
+            changeProgressState(true)
+            block.invoke()
+            count.getAndDecrement()
+        }.invokeOnCompletion {
+            if (!isRunning) {
+                runAfterTask()
+                isRunning = true
             }
-        )
+        }
+
     }
 
-    fun runAfterTaskRunning(block: () -> Unit) {
+    fun close() {
+        scope.cancel()
+        afterTask.clear()
+    }
+
+    private fun runAfterTask() {
         scope.launch {
-
-            withContext(Dispatchers.IO) {
-                while (true) {
-                    if (allJob.isEmpty()) {
-                        delay(10)
-                    } else {
-                        break
-                    }
-                }
+            while (count.get() > 0) {
+                delay(50)
             }
-
-            withContext(Dispatchers.IO) {
-                while (true) {
-                    allJob = allJob.mapNotNull { if (it.isCompleted) null else it }
-                        .toMutableList()
-
-                    if (allJob.isEmpty()) {
-                        break
-                    } else {
-                        delay(100)
-                    }
-
-                }
-
+            for (it in afterTask) {
+                it.invoke()
+                afterTask.remove(it)
             }
-            block()
+            changeProgressState(false)
+            isRunning = false
         }
+    }
+
+    fun runAfterTaskRunning(block: suspend () -> Unit) {
+        afterTask.add(block)
     }
 
 

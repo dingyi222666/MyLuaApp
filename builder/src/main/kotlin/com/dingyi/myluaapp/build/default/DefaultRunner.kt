@@ -28,21 +28,13 @@ class DefaultRunner(
 
 
 
-
         Log.e("tasks", "$tasks")
 
 
         val job = SupervisorJob()
         val coroutineScope = CoroutineScope(Dispatchers.IO + job)
 
-        project.getLogger().info(
-            """
-            Welcome to MyLuaApp Build Tools! The Build Tools is running lasted version(0.0.1).
-            
-            MyLuaApp Build Tools is based kotlin,a light and increment build tools to build MyLuaApp Project.
-            
-            """.trimIndent()
-        )
+
 
         coroutineScope.launch(coroutineScope.coroutineContext) {
 

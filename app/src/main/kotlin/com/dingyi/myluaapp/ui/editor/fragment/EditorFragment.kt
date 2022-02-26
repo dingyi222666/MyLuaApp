@@ -66,7 +66,7 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
 
         viewBinding.codeEditor.apply {
             isMagnifierEnabled =
-                PreferenceManager.getDefaultSharedPreferences(requireActivity()).getBoolean(
+                PreferenceManager.getDefaultSharedPreferences(requireContext()).getBoolean(
                     "magnifier_set", true
                 )
         }

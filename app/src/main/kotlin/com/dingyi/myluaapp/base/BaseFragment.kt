@@ -33,7 +33,7 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel = ViewModelProvider(requireActivity())[getViewModelClass()]
+        viewModel = ViewModelProvider(requireActivity(),ViewModelProvider.NewInstanceFactory.instance)[getViewModelClass()]
 
 
     }

@@ -1,9 +1,7 @@
 package com.dingyi.myluaapp.ui.editor
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.core.helper.ProgressMonitor
 import com.dingyi.myluaapp.plugin.api.editor.Editor
@@ -13,6 +11,7 @@ import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.helper.TreeHelper
 import com.dingyi.myluaapp.view.treeview.TreeNode
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -37,7 +36,7 @@ class MainViewModel : ViewModel() {
         } ?: ""
     }
 
-    val progressMonitor = ProgressMonitor(viewModelScope)
+    val progressMonitor = ProgressMonitor()
 
     fun openProject(projectPath: File): Project {
         val project = PluginModule
@@ -60,8 +59,6 @@ class MainViewModel : ViewModel() {
 
 
     }
-
-
 
 
     suspend fun initEditor() = withContext(Dispatchers.IO) {
@@ -103,7 +100,7 @@ class MainViewModel : ViewModel() {
 
     fun refreshFileList() {
         progressMonitor.postAsyncTask {
-            it.changeProgressState(true)
+
             val allNode = withContext(Dispatchers.IO) {
                 TreeHelper.getAllNode(
                     project.value?.path
@@ -112,7 +109,7 @@ class MainViewModel : ViewModel() {
             withContext(Dispatchers.Main) {
                 rootNode.value = allNode
             }
-            it.changeProgressState(false)
+
         }
     }
 
@@ -138,21 +135,44 @@ class MainViewModel : ViewModel() {
             ?.deleteFile(file)
     }
 
-    suspend fun renameFile(file: File,targetFile:File) {
+    suspend fun renameFile(file: File, targetFile: File) {
         project
             .value
-            ?.renameFile(file,targetFile)
+            ?.renameFile(file, targetFile)
     }
 
     suspend fun createFile(fileTemplate: FileTemplate, file: File, inputName: String) {
-        fileTemplate.create(file,inputName)
+        fileTemplate.create(file, inputName)
     }
 
-    suspend fun createDirectory(targetPath: File ) {
+    suspend fun createDirectory(targetPath: File) {
         project
             .value
             ?.createDirectory(targetPath)
     }
 
+    fun updateNode(treeNode: TreeNode) {
+        viewModelScope.launch {
 
+            val newTreeNode = withContext(Dispatchers.IO) {
+                if (treeNode.parent.isRoot) {
+                    TreeHelper.updateNode(treeNode)
+                } else {
+                    TreeHelper.updateNode(treeNode.parent)
+                }
+            }.checkNotNull()
+
+            refreshEditor()
+
+            withContext(Dispatchers.IO) {
+                if (treeNode == rootNode.value) {
+                    rootNode.value = newTreeNode
+                } else {
+                    rootNode.value = rootNode.value
+                }
+            }
+        }
+
+
+    }
 }

@@ -9,9 +9,13 @@ data class MavenPom(
     val versionName: String,
     val name: String,
     val packaging: String,
-    val dependencies: List<String>
+    val dependencies: List<Dependency>
 ) {
 
+    data class Dependency(
+        val dependencyId:String,
+        val exclusions:List<String>
+    )
 
     override fun hashCode(): Int {
         return Objects.hash(artifactId, groupId)

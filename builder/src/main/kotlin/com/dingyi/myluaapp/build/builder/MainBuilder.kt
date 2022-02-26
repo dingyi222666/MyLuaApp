@@ -17,6 +17,7 @@ class MainBuilder(
     private val mavenRepository: MavenRepository
 ) : MainBuilder {
 
+    private lateinit var buildCompleteListener: () -> Unit
     private var project: Project? = null
 
 
@@ -40,7 +41,16 @@ class MainBuilder(
     override fun build(command: String) {
 
 
-        logger.info("Index Project...")
+        getLogger().info(
+            """
+            Welcome to MyLuaApp Build Tools! The Build Tools is running lasted version(0.0.1).
+            
+            MyLuaApp Build Tools is based kotlin,a light and increment build tools to build MyLuaApp Project.
+            
+            """.trimIndent()
+        )
+
+        logger.info("index all module...")
 
         val commands = command.split(" ")
 
@@ -53,7 +63,7 @@ class MainBuilder(
         logger.info("\n")
 
 
-        logger.info("Start Build Module...")
+        logger.info("run ${commands[0]} for all module...")
 
         logger.info("\n")
 
@@ -70,10 +80,16 @@ class MainBuilder(
         runJob?.cancelChildren(CancellationException("Stop Build"))
         runJob = null
         project?.getCache()?.close()
+        mavenRepository.clear()
+        buildCompleteListener.invoke()
         println("stop!")
     }
 
     override fun getMavenRepository(): MavenRepository {
         return mavenRepository
+    }
+
+    override fun setBuildCompleteListener(listener: () -> Unit) {
+        buildCompleteListener = listener
     }
 }

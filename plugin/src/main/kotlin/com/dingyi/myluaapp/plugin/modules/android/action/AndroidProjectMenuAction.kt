@@ -20,7 +20,15 @@ class AndroidProjectMenuAction : Action<Unit> {
         if (project?.type == "AndroidProject" && menu?.hasSubMenu() == true) {
             menu.dsl {
 
-                menu("刷新构建")
+                menu("刷新构建").click {
+                    argument.getPluginContext()
+                        .getBuildService()
+                        .build(project, "sync")
+
+                    openLogFragment(argument.getPluginContext())
+
+                    true
+                }
 
                 submenu("构建项目") {
 

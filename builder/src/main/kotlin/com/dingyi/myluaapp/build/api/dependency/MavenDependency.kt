@@ -16,4 +16,6 @@ interface MavenDependency : Dependency {
     fun getDeclarationString(): String
 
     fun getDependencyFile(): File
+
+
 }

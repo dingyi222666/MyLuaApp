@@ -16,20 +16,24 @@ import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.kts.*
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
+import com.dingyi.myluaapp.core.helper.ProgressMonitor
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.runtime.plugin.PluginManager
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.action.*
 import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
+import com.dingyi.myluaapp.ui.editor.helper.ActionHelper
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.atomic.AtomicBoolean
 
 class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
@@ -74,74 +78,64 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         }
 
+
         startPostponedEnterTransition()
+
+        viewModel.logBroadcastReceiver.value = LogBroadcastReceiver(lifecycle, this)
+
 
         initAction()
 
         initView()
 
+        viewModel.progressMonitor.postAsyncTask(this::syncProject)
 
-        viewModel.progressMonitor.runAfterTaskRunning {
-            lifecycleScope.launch {
-                viewModel.initEditor()
-            }
-        }
-
-        viewModel.logBroadcastReceiver.value = LogBroadcastReceiver(lifecycle, this)
 
         isCreated = true
 
 
     }
 
-    private fun initAction() {
-        PluginModule
-            .getActionService().apply {
-                registerAction(
-                    getJavaClass<OpenTreeFileAction>(),
-                    DefaultActionKey.CLICK_TREE_VIEW_FILE
-                )
-                registerAction(
-                    getJavaClass<OpenLogFragmentAction>(),
-                    DefaultActionKey.OPEN_LOG_FRAGMENT
-                )
-                registerAction(
-                    getJavaClass<TreeListOnLongClickAction>(),
-                    DefaultActionKey.TREE_LIST_ON_LONG_CLICK
-                )
-                registerAction(
-                    getJavaClass<DeleteProjectFileAction>(),
-                    DefaultActionKey.DELETE_PROJECT_FILE
-                )
-                registerAction(
-                    getJavaClass<CreateProjectFileAction>(),
-                    DefaultActionKey.CREATE_PROJECT_FILE
-                )
-                registerAction(
-                    getJavaClass<RenameProjectFileAction>(),
-                    DefaultActionKey.RENAME_PROJECT_FILE
-                )
-                registerAction(
-                    getJavaClass<CreateProjectDirectoryAction>(),
-                    DefaultActionKey.CREATE_PROJECT_DIRECTORY
-                )
-                registerForwardArgument(
-                    DefaultActionKey.DELETE_PROJECT_FILE,
-                    DefaultActionKey.CREATE_PROJECT_FILE,
-                    DefaultActionKey.RENAME_PROJECT_FILE,
-                    DefaultActionKey.CREATE_PROJECT_DIRECTORY
-                ) {
-                    it.addArgument(this@EditorActivity)
-                        .addArgument(viewModel)
-                }
+    private suspend fun syncProject() {
 
-                registerForwardArgument(DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST) {
-                    it.addArgument(viewBinding.root)
-                }
-                registerForwardArgument(DefaultActionKey.OPEN_LOG_FRAGMENT) {
-                    it.addArgument(viewBinding)
-                }
+        val status = AtomicBoolean(true)
+
+        val callBack = { log: LogBroadcastReceiver.Log ->
+            if (log.message == "BUILD END FLAG") {
+                status.set(false)
             }
+
+        }
+        viewModel.logBroadcastReceiver.value?.addCallback(callBack)
+
+
+        viewModel.project.value?.let {
+            PluginModule
+                .getBuildService()
+                .build(it, "sync")
+        }
+
+
+        while (status.get()) {
+            delay(100)
+        }
+
+        viewModel.logBroadcastReceiver.value?.removeCallback(callBack)
+
+
+    }
+
+    private suspend fun initViewAfterSync() {
+
+        viewModel.initEditor()
+
+        viewModel.refreshFileList()
+
+    }
+
+    private fun initAction() {
+        ActionHelper
+            .initEditorActivity(this)
     }
 
     private fun updateTab(tab: TabLayout.Tab, index: Int, choose: Boolean = false) {
@@ -184,7 +178,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         viewBinding
             .drawerPage
-            .adapter = EditorDrawerPagerAdapter(this).apply {
+            .adapter = EditorDrawerPagerAdapter(this@EditorActivity).apply {
             notifyDataSetChanged()
         }
 
@@ -327,9 +321,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         super.observeViewModel()
 
 
-        viewModel.progressMonitor.getProgressState().observe(this) { boolean ->
-            viewBinding.progress.isVisible = boolean
-        }
+        viewModel.progressMonitor
+            .getProgressState()
+            .observe(this) { boolean ->
+                viewBinding.progress.isVisible = boolean
+            }
 
         viewModel.allEditor.observe(this) { list ->
 
@@ -402,10 +398,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         super.onPause()
 
         if (this.isCreated) {
-
-            PluginModule
-                .getEditorService()
-                .saveEditorServiceState()
+            viewModel.progressMonitor.runAfterTaskRunning {
+                PluginModule
+                    .getEditorService()
+                    .saveEditorServiceState()
+            }
         }
     }
 
@@ -413,9 +410,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         super.onResume()
 
         if (this.isCreated) {
-            lifecycleScope.launch {
-                viewModel.initEditor()
-            }
+            viewModel.progressMonitor.runAfterTaskRunning(this::initViewAfterSync)
         }
 
     }
@@ -429,6 +424,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             .clearAllEditor()
 
         tabLayoutMediator.detach()
+
+        viewModel.progressMonitor.close()
 
     }
 
