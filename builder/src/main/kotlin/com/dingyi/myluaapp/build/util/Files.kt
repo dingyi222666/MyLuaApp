@@ -10,6 +10,33 @@ fun File.getSHA256(): String {
     return inputStream().getSHA256()
 }
 
+fun File.getMD5():String {
+    return inputStream().getMD5()
+}
+
+fun InputStream.getMD5(): String {
+    return use { stream ->
+        val buffer = ByteArray(1024)
+        val md5: MessageDigest = MessageDigest.getInstance("MD5")
+        var numRead = 0
+        while (stream.read(buffer).also { numRead = it } > 0) {
+            md5.update(buffer, 0, numRead)
+        }
+        val bytes = md5.digest()
+        val sb = StringBuilder()
+        for (aB in bytes) {
+            val hex = Integer.toHexString(aB.toInt() and 0xFF).run {
+                if (length<2) {
+                    "0$this"
+                } else this
+            }
+            sb.append(hex)
+        }
+        sb.toString()
+    }
+}
+
+
 fun InputStream.getSHA256(): String {
     return use { stream ->
         val buffer = ByteArray(1024)

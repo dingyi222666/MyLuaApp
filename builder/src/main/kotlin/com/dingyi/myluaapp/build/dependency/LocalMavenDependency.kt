@@ -22,6 +22,8 @@ class LocalMavenDependency(
     override val packaging: String
         get() = mavenPom.packaging
 
+    override var isDynamicVersion: Boolean = false
+
 
     override fun getDependencies(): List<MavenDependency> {
         return allDependencies

@@ -49,6 +49,7 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
 
         observeViewModel()
 
+        viewModelStore
     }
 
 

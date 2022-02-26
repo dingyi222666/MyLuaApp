@@ -240,17 +240,22 @@ class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
         inputMappingOutputMap.clear()
         inputFileDirectory.clear()
         inputSnapShotMap.clear()
+        inputFileList.clear()
         outputSnapShotMap.clear()
+        outputFileDirectory.clear()
+
 
     }
+
+
 
     fun getSnapShotHash(path: File): String {
 
         if (!path.exists()) {
-            return "0"
+            return "00"
         }
 
-        return inputSnapShotMap[path.path] ?: outputSnapShotMap[path.path] ?: "0"
+        return inputSnapShotMap[path.path] ?: outputSnapShotMap[path.path] ?: "00"
     }
 
     fun getBindOutputFile(defaultInputFile: DefaultInputFile): List<File>? {

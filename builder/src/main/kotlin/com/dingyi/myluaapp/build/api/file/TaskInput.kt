@@ -36,4 +36,5 @@ interface TaskInput {
     fun snapshot()
 
     fun transformDirectoryToFile()
+
 }

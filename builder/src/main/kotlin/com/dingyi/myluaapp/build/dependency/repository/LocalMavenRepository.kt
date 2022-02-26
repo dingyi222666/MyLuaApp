@@ -8,7 +8,6 @@ import com.dingyi.myluaapp.build.dependency.LocalMavenDependency
 import com.dingyi.myluaapp.build.dependency.MavenPom
 import com.dingyi.myluaapp.build.parser.MavenMetaDataParser
 import com.dingyi.myluaapp.build.parser.PomParser
-import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.common.kts.toFile
 import java.io.File
 
@@ -31,17 +30,39 @@ class LocalMavenRepository(
 
     private val metaDataParser = MavenMetaDataParser()
 
-
     override fun getDependency(string: String): MavenDependency {
+        return getDependency(string, mutableSetOf())
+    }
+
+    override fun getDependency(string: String, exclusionList: MutableSet<String>): MavenDependency {
 
         val (groupId, artifactId, versionName) = string.split(":")
 
-        val mavenMetaData = metaDataParser.parse(
-            repositoryPath + File.separator + groupId.replaceNameToPath()
-                    + File.separator + artifactId.replaceNameToPath() + File.separator + "/maven-metadata.xml"
-        )
+        val mavenMetaData = kotlin.runCatching {
+            metaDataParser.parse(
+                repositoryPath + File.separator + groupId.replaceNameToPath()
+                        + File.separator + artifactId.replaceNameToPath() + File.separator + "/maven-metadata.xml"
+            )
+        }.getOrNull()
+
+
+        var dynamicVersion = false
+
 
         val pom = if (versionName == "latest") {
+            dynamicVersion = true
+
+            if (mavenMetaData==null) {
+               return EmptyMavenDependency(
+                    repositoryPath = this.repositoryPath,
+                    groupId = groupId,
+                    artifactId = artifactId,
+                    versionName = versionName
+                ).apply {
+                    this.isDynamicVersion = dynamicVersion
+                }
+            }
+
             getMavenPom(
                 groupId,
                 artifactId,
@@ -58,10 +79,14 @@ class LocalMavenRepository(
                 groupId = groupId,
                 artifactId = artifactId,
                 versionName = versionName
-            )
+            ).apply {
+                this.isDynamicVersion = dynamicVersion
+            }
         }
 
-        return getMavenDependency(pom, mutableSetOf())
+        return getMavenDependency(pom, exclusionList).apply {
+            this.isDynamicVersion = dynamicVersion
+        }
     }
 
 
@@ -121,16 +146,20 @@ class LocalMavenRepository(
             .filterNot {
                 exclusionList.contains(it.dependencyId)
             }
-            .mapNotNull {
+            .map {
                 val targetExclusionList = exclusionList.toMutableSet()
                     .apply { addAll(it.exclusions) }
                 val (groupId, artifactId, versionName) = it.dependencyId.split(":")
                 val pom = getMavenPom(groupId, artifactId, versionName)
 
                 if (pom != null) {
-
                     getMavenDependency(pom, targetExclusionList)
-                } else null
+                } else EmptyMavenDependency(
+                    repositoryPath = this.repositoryPath,
+                    groupId = groupId,
+                    artifactId = artifactId,
+                    versionName = versionName
+                )
             }.forEach {
                 dependencies.add(it)
             }

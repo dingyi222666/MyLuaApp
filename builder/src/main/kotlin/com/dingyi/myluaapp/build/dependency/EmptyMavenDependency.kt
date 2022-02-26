@@ -10,7 +10,8 @@ class EmptyMavenDependency(
     private val repositoryPath: String,
     override val groupId: String,
     override val artifactId: String,
-    override val versionName: String
+    override val versionName: String,
+
 ) : MavenDependency {
 
     override val type: String
@@ -28,8 +29,11 @@ class EmptyMavenDependency(
     }
 
     override fun getDependencyFile(): File {
-        return File("")
+        return File(repositoryPath,getPath())
     }
+
+    override var isDynamicVersion: Boolean = false
+
 
     override var name: String = "empty"
 
@@ -41,18 +45,10 @@ class EmptyMavenDependency(
         return Objects.hash(artifactId, groupId)
     }
 
-    private fun getFileName(): String {
-        return "$artifactId-$versionName"
-    }
-
     fun getPath(): String {
         val path = groupId.replace('.', '/')
         val artifact = artifactId.replace('.', '/')
         return "$path/$artifact/$versionName"
-    }
-
-    private fun getDependencyFileDirectory(): String {
-        return "$repositoryPath/${getPath()}"
     }
 
 

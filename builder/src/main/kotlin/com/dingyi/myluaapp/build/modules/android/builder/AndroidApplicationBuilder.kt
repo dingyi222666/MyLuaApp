@@ -1,9 +1,12 @@
 package com.dingyi.myluaapp.build.modules.android.builder
 
+import ResolveDependencyResource
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.default.DefaultBuilder
 import com.dingyi.myluaapp.build.modules.android.tasks.build.*
 import com.dingyi.myluaapp.build.modules.android.tasks.sync.RefreshConfig
+import com.dingyi.myluaapp.build.modules.android.tasks.sync.ResolveDependencyMavenMetaData
+import com.dingyi.myluaapp.build.modules.android.tasks.sync.ResolveDependencyPom
 import com.dingyi.myluaapp.build.modules.android.tasks.sync.ResolveRepositoryUrl
 
 class AndroidApplicationBuilder(
@@ -22,8 +25,16 @@ class AndroidApplicationBuilder(
     }
 
     private fun addSyncTasks() {
+
         addTask(RefreshConfig(module),syncTasks)
-        addTask(ResolveRepositoryUrl(module),syncTasks)
+
+        addTask(ResolveRepositoryUrl(module), syncTasks)
+
+        addTask(ResolveDependencyMavenMetaData(module), syncTasks)
+
+        addTask(ResolveDependencyPom(module),syncTasks)
+
+        addTask(ResolveDependencyResource(module),syncTasks)
     }
 
     private fun addBuildTasks() {

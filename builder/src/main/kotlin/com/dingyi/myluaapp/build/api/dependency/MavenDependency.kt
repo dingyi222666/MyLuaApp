@@ -18,4 +18,7 @@ interface MavenDependency : Dependency {
     fun getDependencyFile(): File
 
 
+    var isDynamicVersion:Boolean
+
+
 }

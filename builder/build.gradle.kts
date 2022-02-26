@@ -74,14 +74,20 @@ dependencies {
 
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
 
+    // OkHttp 框架：https://github.com/square/okhttp
+    // noinspection GradleDependency
+    implementation(BuildConfig.Libs.Network.okhttp3)
+    // 网络请求框架：https://hub.fastgit.org/liangjingkanji/Net
+    implementation(BuildConfig.Libs.Network.net)
+
 
 
     implementation(BuildConfig.Libs.BuildTools.javapoet)
 
 
     // Optional -- Robolectric environment
-    testImplementation("androidx.test:core:1.3.0")
-    testImplementation("junit:junit:4.12")
+    testImplementation("androidx.test:core:1.4.0")
+    testImplementation("junit:junit:4.13.2")
     // Optional -- Mockito framework
     testImplementation("org.robolectric:robolectric:4.2.1")
 

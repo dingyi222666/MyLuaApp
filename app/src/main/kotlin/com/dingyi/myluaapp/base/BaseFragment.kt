@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.getString
 import com.dingyi.myluaapp.common.kts.showSnackBar
+import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.hjq.language.MultiLanguages
 
 /**
@@ -34,6 +36,8 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
 
 
         viewModel = ViewModelProvider(requireActivity(),ViewModelProvider.NewInstanceFactory.instance)[getViewModelClass()]
+
+
 
 
     }

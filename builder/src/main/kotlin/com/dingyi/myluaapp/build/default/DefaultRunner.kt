@@ -110,7 +110,7 @@ class DefaultRunner(
             )
         }
 
-        project.getLogger().info("BUILD END FLAG")
+
         project.getMainBuilder().stop()
     }
 }

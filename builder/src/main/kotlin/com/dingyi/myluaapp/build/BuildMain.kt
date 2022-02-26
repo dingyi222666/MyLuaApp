@@ -33,6 +33,7 @@ class BuildMain(
     fun build(path: String, command: String) {
 
         if (nowBuilder != null) {
+            nowBuilder?.stop()
             return
         }
 
@@ -50,6 +51,7 @@ class BuildMain(
     fun clean(path: String) {
 
         if (nowBuilder != null) {
+            nowBuilder?.stop()
             return
         }
 
@@ -68,6 +70,7 @@ class BuildMain(
 
 
         if (nowBuilder != null) {
+            nowBuilder?.stop()
             return
         }
 

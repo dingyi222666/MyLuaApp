@@ -20,6 +20,9 @@ class DefaultInputFile(
     }
 
     override fun getFileHash(): String {
+        if (!path.exists()) {
+            return "0"
+        }
         return path.lastModified().toString()
     }
 
