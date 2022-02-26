@@ -38,6 +38,10 @@ object ActionHelper {
                     getJavaClass<CreateProjectDirectoryAction>(),
                     DefaultActionKey.CREATE_PROJECT_DIRECTORY
                 )
+                registerAction(
+                    getJavaClass<BuildListenerAction>(),
+                    DefaultActionKey.BUILD_STARTED_KEY
+                )
                 registerForwardArgument(
                     DefaultActionKey.DELETE_PROJECT_FILE,
                     DefaultActionKey.CREATE_PROJECT_FILE,
@@ -47,7 +51,9 @@ object ActionHelper {
                     it.addArgument(activity)
                         .addArgument(activity.viewModel)
                 }
-
+                registerForwardArgument(DefaultActionKey.BUILD_STARTED_KEY) {
+                    it.addArgument(activity.viewModel)
+                }
                 registerForwardArgument(DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST) {
                     it.addArgument(activity.viewBinding.root)
                 }

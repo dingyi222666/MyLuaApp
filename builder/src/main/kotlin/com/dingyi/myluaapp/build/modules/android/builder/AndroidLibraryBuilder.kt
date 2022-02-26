@@ -21,9 +21,6 @@ class AndroidLibraryBuilder(
         //Check Manifest exists
         addTask(CheckManifest(module), buildTasks)
 
-        //Extract AndroidArchive
-        addTask(ExtractAndroidArchive(module), buildTasks)
-
         //Package Resources
         addTask(PackageResources(module), buildTasks)
 

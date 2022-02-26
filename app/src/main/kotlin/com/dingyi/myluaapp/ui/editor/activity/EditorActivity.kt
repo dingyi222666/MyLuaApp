@@ -88,7 +88,19 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         initView()
 
-        viewModel.progressMonitor.postAsyncTask(this::syncProject)
+        viewModel.progressMonitor.postAsyncTask {
+            viewModel.project.value?.let {
+                PluginModule
+                    .getBuildService()
+                    .build(it, "sync")
+            }
+            PluginModule
+                .getActionService()
+                .callAction<Unit>(PluginModule
+                    .getActionService()
+                    .createActionArgument(),DefaultActionKey.BUILD_STARTED_KEY)
+
+        }
 
 
         isCreated = true
@@ -96,34 +108,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
     }
 
-    private suspend fun syncProject() {
 
-        val status = AtomicBoolean(true)
-
-        val callBack = { log: LogBroadcastReceiver.Log ->
-            if (log.message == "BUILD END FLAG") {
-                status.set(false)
-            }
-
-        }
-        viewModel.logBroadcastReceiver.value?.addCallback(callBack)
-
-
-        viewModel.project.value?.let {
-            PluginModule
-                .getBuildService()
-                .build(it, "sync")
-        }
-
-
-        while (status.get()) {
-            delay(100)
-        }
-
-        viewModel.logBroadcastReceiver.value?.removeCallback(callBack)
-
-
-    }
 
     private suspend fun initViewAfterSync() {
 

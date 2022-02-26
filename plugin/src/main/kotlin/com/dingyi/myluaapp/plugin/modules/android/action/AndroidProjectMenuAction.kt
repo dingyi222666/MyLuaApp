@@ -9,6 +9,7 @@ import com.dingyi.myluaapp.plugin.api.project.Project
 import com.dingyi.myluaapp.plugin.dsl.menu.click
 import com.dingyi.myluaapp.plugin.dsl.menu.dsl
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 
 class AndroidProjectMenuAction : Action<Unit> {
 
@@ -53,11 +54,21 @@ class AndroidProjectMenuAction : Action<Unit> {
     }
 
     private fun openLogFragment(pluginContext: PluginContext) {
+
+        PluginModule
+            .getActionService()
+            .callAction<Unit>(
+                PluginModule
+                    .getActionService()
+                    .createActionArgument(),DefaultActionKey.BUILD_STARTED_KEY)
+
         pluginContext
             .getActionService()
             .callAction<Unit>(pluginContext
                 .getActionService()
                 .createActionArgument(),DefaultActionKey.OPEN_LOG_FRAGMENT)
+
+
     }
 
 

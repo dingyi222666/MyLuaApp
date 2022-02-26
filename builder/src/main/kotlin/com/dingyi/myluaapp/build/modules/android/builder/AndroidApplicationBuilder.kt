@@ -26,23 +26,25 @@ class AndroidApplicationBuilder(
 
     private fun addSyncTasks() {
 
-        addTask(RefreshConfig(module),syncTasks)
+        addTask(RefreshConfig(module), syncTasks)
 
         addTask(ResolveRepositoryUrl(module), syncTasks)
 
         addTask(ResolveDependencyMavenMetaData(module), syncTasks)
 
-        addTask(ResolveDependencyPom(module),syncTasks)
+        addTask(ResolveDependencyPom(module), syncTasks)
 
-        addTask(ResolveDependencyResource(module),syncTasks)
+        addTask(ResolveDependencyResource(module), syncTasks)
+
+        //Extract AndroidArchive
+        addTask(ExtractAndroidArchive(module), syncTasks)
+
     }
 
     private fun addBuildTasks() {
         //Check Manifest exists
         addTask(CheckManifest(module),buildTasks)
 
-        //Extract AndroidArchive
-        addTask(ExtractAndroidArchive(module),buildTasks)
 
         //Compile Libraries Resources
         addTask(CompileLibrariesResources(module),buildTasks)
