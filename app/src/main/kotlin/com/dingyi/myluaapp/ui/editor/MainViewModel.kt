@@ -1,7 +1,10 @@
 package com.dingyi.myluaapp.ui.editor
 
 import androidx.lifecycle.*
+import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.kts.checkNotNull
+import com.dingyi.myluaapp.common.kts.getString
+import com.dingyi.myluaapp.common.kts.showToast
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.core.helper.ProgressMonitor
 import com.dingyi.myluaapp.plugin.api.editor.Editor
@@ -174,5 +177,19 @@ class MainViewModel : ViewModel() {
         }
 
 
+    }
+
+    fun saveEditor() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                PluginModule
+                    .getEditorService()
+                    .saveEditorServiceState()
+            }
+
+            R.string.editor_menu_save_success
+                .getString().showToast()
+
+        }
     }
 }

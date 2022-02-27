@@ -37,6 +37,7 @@
     <string name="editor_menu_plugin">插件</string>
     <string name="editor_menu_more">更多</string>
     <string name="editor_menu_tab_save">保存</string>
+    <string name="editor_menu_save_success">保存成功</string>
     <string name="editor_menu_tab_close">关闭</string>
     <string name="editor_menu_tab_close_other">关闭其他</string>
     <string name="editor_navigation_title">代码导航</string>

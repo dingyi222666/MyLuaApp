@@ -23,7 +23,7 @@ class OpenTreeFileAction : Action<Unit> {
 
         //if match file type
         if (file?.name?.endsWith(
-                *PluginModule
+                *argument.getPluginContext()
                     .getEditorService()
                     .getSupportLanguages().toTypedArray()
             ) == true

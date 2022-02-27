@@ -129,6 +129,14 @@ class Editor(
         return currentEditor.get()
     }
 
+    override fun undo() {
+        currentEditor.get()?.undo()
+    }
+
+    override fun redo() {
+        currentEditor.get()?.redo()
+    }
+
     override fun save() {
 
         if (currentEditor.get() == null) {

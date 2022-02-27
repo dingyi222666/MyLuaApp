@@ -30,6 +30,7 @@
     <string name="editor_menu_project">Project</string>
     <string name="editor_menu_code">Code</string>
     <string name="editor_menu_find">Find</string>
+    <string name="editor_menu_save_success">Save Success</string>
     <string name="editor_menu_format">Format</string>
     <string name="editor_menu_goto">Goto</string>
     <string name="editor_menu_error">Check error</string>

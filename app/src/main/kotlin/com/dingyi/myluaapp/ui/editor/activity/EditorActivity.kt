@@ -29,10 +29,7 @@ import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.dingyi.myluaapp.ui.editor.helper.ActionHelper
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
@@ -88,19 +85,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         initView()
 
-        viewModel.progressMonitor.postAsyncTask {
-            viewModel.project.value?.let {
-                PluginModule
-                    .getBuildService()
-                    .build(it, "sync")
-            }
-            PluginModule
-                .getActionService()
-                .callAction<Unit>(PluginModule
-                    .getActionService()
-                    .createActionArgument(),DefaultActionKey.BUILD_STARTED_KEY)
-
-        }
+        lifecycleScope.launch { syncProject() }
 
 
         isCreated = true
@@ -109,13 +94,30 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     }
 
 
-
     private suspend fun initViewAfterSync() {
 
         viewModel.initEditor()
 
         viewModel.refreshFileList()
 
+    }
+
+    private suspend fun syncProject() {
+        PluginModule
+            .getActionService()
+            .callAction<Unit>(
+                PluginModule
+                    .getActionService()
+                    .createActionArgument(), DefaultActionKey.BUILD_STARTED_KEY
+            )
+
+        delay(50)
+
+        viewModel.project.value?.let {
+            PluginModule
+                .getBuildService()
+                .build(it, "sync")
+        }
     }
 
     private fun initAction() {
@@ -296,6 +298,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                         openDrawer(GravityCompat.START)
                 }
             }
+            R.id.editor_action_save -> viewModel.saveEditor()
+            R.id.editor_action_undo -> viewModel.currentEditor.value?.undo()
+            R.id.editor_action_redo -> viewModel.currentEditor.value?.redo()
             R.id.editor_action_run -> viewModel.project.value?.runProject()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -328,9 +333,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             (viewBinding.editorPage.adapter as EditorPagerAdapter).let { adapter ->
                 adapter.submitList(list.toList()) {
                     val index = list.indexOf(viewModel.currentEditor.value)
-                    viewBinding.editorPage.currentItem =
-                        if (index == -1) viewBinding.editorPage.currentItem else index
-
+                    viewBinding.editorPage.post {
+                        viewBinding.editorPage.setCurrentItem(
+                            if (index == -1) viewBinding.editorPage.currentItem else index, false
+                        )
+                    }
                     tabLayoutMediator.javaClass
                         .getDeclaredMethod("populateTabsFromPagerAdapter")
                         .apply {

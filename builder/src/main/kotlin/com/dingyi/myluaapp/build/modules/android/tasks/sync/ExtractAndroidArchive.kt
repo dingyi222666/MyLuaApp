@@ -2,6 +2,8 @@ package com.dingyi.myluaapp.build.modules.android.tasks.sync
 
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
+import com.dingyi.myluaapp.build.api.dependency.Dependency
+import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.common.kts.Paths
 import com.dingyi.myluaapp.common.kts.toFile
@@ -11,7 +13,6 @@ import kotlinx.coroutines.withContext
 import net.lingala.zip4j.ZipFile
 import java.io.File
 
-//TODO:Add to sync tasks
 class ExtractAndroidArchive(private val module: Module) : DefaultTask(module) {
     override val name: String
         get() = "ExtractAndroidArchive"
@@ -19,7 +20,17 @@ class ExtractAndroidArchive(private val module: Module) : DefaultTask(module) {
 
     override suspend fun prepare(): Task.State {
 
-        val mavenDependencyList = module.getDependencies()
+        val mavenDependencyList = module
+            .getProject()
+            .getAllDependency()
+            .map {
+                if (it is MavenDependency) {
+                    module.getMavenRepository()
+                        .getDependency(it.getDeclarationString())
+                } else it
+            }
+            .toMutableList()
+            .filterDependency()
             .flatMap {
                 it.getDependenciesFile()
             }.filter {
@@ -64,8 +75,38 @@ class ExtractAndroidArchive(private val module: Module) : DefaultTask(module) {
             }
         }
 
+        getTaskInput().snapshot()
 
     }
 
+    private fun addToDependencyList(
+        dependency: MavenDependency,
+        dependencyList: MutableSet<Dependency>
+    ) {
+        if (dependencyList.add(dependency)) {
+            dependency.getDependencies()?.forEach { it ->
+                addToDependencyList(it, dependencyList)
+            }
+        }
+    }
+
+
+    private fun MutableList<Dependency>.filterDependency(): List<Dependency> {
+        val dependencyList = mutableSetOf<Dependency>()
+
+        //unpack dependency
+        this.forEach { dependency ->
+            if (dependency is MavenDependency) {
+                addToDependencyList(dependency, dependencyList)
+            }
+        }
+
+        this.clear()
+        this.addAll(dependencyList)
+        dependencyList.clear()
+
+        return this
+
+    }
 
 }

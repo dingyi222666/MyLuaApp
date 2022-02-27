@@ -30,13 +30,14 @@ class ProgressMonitor(
             changeProgressState(true)
             block.invoke()
             count.getAndDecrement()
-        }.invokeOnCompletion {
-            if (!isRunning) {
+
+            if (!isRunning && count.get() == 0) {
                 runAfterTask()
                 isRunning = true
             }
-        }
 
+
+        }
     }
 
     fun close() {
@@ -60,6 +61,9 @@ class ProgressMonitor(
 
     fun runAfterTaskRunning(block: suspend () -> Unit) {
         afterTask.add(block)
+        if (count.get() == 0 && !isRunning) {
+            runAfterTask()
+        }
     }
 
 

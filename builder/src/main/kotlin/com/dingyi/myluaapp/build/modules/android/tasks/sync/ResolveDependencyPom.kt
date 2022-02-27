@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.build.modules.android.tasks.sync
 
+import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.api.dependency.Dependency
@@ -38,6 +39,22 @@ class ResolveDependencyPom(private val module: Module) : DefaultTask(module) {
             )["repositories"].checkNotNull()
         )
 
+
+        val isSuccess = kotlin.runCatching {
+            withContext(Dispatchers.IO) {
+                Net.get("https://www.baidu.com")
+                    .apply {
+                        setGroup("test")
+                    }
+                    .execute<String>()
+            }
+
+        }.isSuccess
+
+        if (!isSuccess) {
+            Net.cancelGroup("test")
+            throw CompileError("No Network to download dependency!")
+        }
 
         val dependencies = module
             .getProject()
@@ -119,6 +136,10 @@ class ResolveDependencyPom(private val module: Module) : DefaultTask(module) {
         Net.cancelGroup(this.javaClass.simpleName)
 
 
+        module
+            .getLogger()
+            .info("\n")
+
     }
 
     private fun getMavenDependencyUrl(
@@ -161,7 +182,7 @@ class ResolveDependencyPom(private val module: Module) : DefaultTask(module) {
     private suspend fun downloadPom(mavenDependency: MavenDependency, md5File: File): File? =
         withContext(Dispatchers.IO) {
 
-            val pomFile = if (mavenDependency.getDependencyFile().isDirectory) File(
+            val pomFile = if (mavenDependency.type=="default") File(
                 mavenDependency.getDependencyFile(),
                 mavenDependency.artifactId + '-' + mavenDependency.versionName + ".pom"
             ) else

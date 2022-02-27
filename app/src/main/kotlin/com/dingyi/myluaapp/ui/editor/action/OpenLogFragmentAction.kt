@@ -10,9 +10,14 @@ class OpenLogFragmentAction : Action<Unit> {
         val viewBinding = argument
             .getArgument<ActivityEditorBinding>(0)
 
+
         viewBinding?.let {
-            it.drawer.openDrawer(GravityCompat.START)
-            it.drawerPage.setCurrentItem(1, true)
+            it.drawer.post {
+                it.drawer.openDrawer(GravityCompat.START)
+                it.drawerPage.post {
+                    it.drawerPage.setCurrentItem(1, true)
+                }
+            }
         }
 
         return null

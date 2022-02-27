@@ -1,13 +1,10 @@
 package com.dingyi.myluaapp.build.modules.android.builder
 
-import ResolveDependencyResource
+
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.default.DefaultBuilder
 import com.dingyi.myluaapp.build.modules.android.tasks.build.*
-import com.dingyi.myluaapp.build.modules.android.tasks.sync.RefreshConfig
-import com.dingyi.myluaapp.build.modules.android.tasks.sync.ResolveDependencyMavenMetaData
-import com.dingyi.myluaapp.build.modules.android.tasks.sync.ResolveDependencyPom
-import com.dingyi.myluaapp.build.modules.android.tasks.sync.ResolveRepositoryUrl
+import com.dingyi.myluaapp.build.modules.android.tasks.sync.*
 
 class AndroidApplicationBuilder(
     private val module: Module

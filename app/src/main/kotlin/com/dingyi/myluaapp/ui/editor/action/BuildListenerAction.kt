@@ -4,7 +4,7 @@ import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
-import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
+import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import kotlinx.coroutines.delay
 import java.util.concurrent.atomic.AtomicBoolean
@@ -19,6 +19,17 @@ class BuildListenerAction : Action<Unit> {
             .postAsyncTask {
                 syncProject(viewModel)
             }
+
+        argument
+            .getPluginContext()
+            .getActionService()
+            .callAction<Unit>(
+                argument
+                    .getPluginContext()
+                    .getActionService()
+                    .createActionArgument(), DefaultActionKey.OPEN_LOG_FRAGMENT
+            )
+
         return null
     }
 
@@ -34,9 +45,8 @@ class BuildListenerAction : Action<Unit> {
         }
         viewModel.logBroadcastReceiver.value?.addCallback(callBack)
 
-
         while (status.get()) {
-            delay(300)
+            delay(1000)
         }
 
         viewModel.logBroadcastReceiver.value?.removeCallback(callBack)

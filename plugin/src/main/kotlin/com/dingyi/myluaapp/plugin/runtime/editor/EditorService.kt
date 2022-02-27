@@ -194,6 +194,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
         currentEditorServiceState.editors.clear()
 
         allEditor.forEach {
+            it.save()
             currentEditorServiceState.editors.add(it.saveState() as EditorState)
         }
 

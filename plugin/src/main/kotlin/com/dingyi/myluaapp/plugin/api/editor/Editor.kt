@@ -40,5 +40,8 @@ interface Editor {
 
 
     fun getCurrentView(): View?
+    fun undo()
+
+    fun redo()
 
 }
