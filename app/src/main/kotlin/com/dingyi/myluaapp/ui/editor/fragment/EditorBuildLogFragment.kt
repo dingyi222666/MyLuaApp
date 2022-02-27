@@ -20,8 +20,6 @@ class EditorBuildLogFragment : BaseFragment<FragmentEditorBuildLogBinding, MainV
         return getJavaClass()
     }
 
-    private var buildEndFlag = false
-
     override fun getViewBindingInstance(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -29,17 +27,17 @@ class EditorBuildLogFragment : BaseFragment<FragmentEditorBuildLogBinding, MainV
         return FragmentEditorBuildLogBinding.inflate(inflater, container, false)
     }
 
+    private var isCompleted = false
+
     private val callback = { it: LogBroadcastReceiver.Log ->
-        if (it.message == "BUILD END FLAG") {
-            buildEndFlag = true
-            System.gc()
-        }
-        if (it.message != "BUILD END FLAG" && buildEndFlag) {
+        if (isCompleted) {
             viewBinding.logView.clear()
-            logReceiver.clear()
-            buildEndFlag = false
+            isCompleted = false
         }
-        if (it.message != "BUILD END FLAG") {
+        if (logReceiver.isCompleted()) {
+            isCompleted = true
+        }
+        if (it.message != "BUILD COMPLETED FLAG") {
             viewBinding
                 .logView
                 .sendLog(it.level, it.message, it.extra)

@@ -159,7 +159,7 @@ class ResolveDependencyMavenMetaData(private val module: Module) : DefaultTask(m
             }.isSuccess
         }
 
-    override suspend fun run() = withContext(Dispatchers.IO) {
+    override suspend fun run(): Unit = withContext(Dispatchers.IO) {
 
         launch {
 
@@ -205,11 +205,19 @@ class ResolveDependencyMavenMetaData(private val module: Module) : DefaultTask(m
         }.join()
 
 
-        Net.cancelGroup(this.javaClass.simpleName)
 
         getTaskInput().snapshot()
 
         mavenDependencyMap.clear()
+
+
+        val state = prepare()
+
+        if (state == Task.State.DEFAULT || state == Task.State.INCREMENT) {
+            run()
+        }
+
+        Net.cancelGroup(this.javaClass.simpleName)
 
         module
             .getLogger()

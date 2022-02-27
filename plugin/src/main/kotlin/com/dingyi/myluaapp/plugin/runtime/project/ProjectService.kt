@@ -20,7 +20,9 @@ class ProjectService(
     override fun getAllProject(): Pair<List<Project>, String> {
         val errorBuilder = StringBuilder()
         return (Paths.projectDir.toFile()
-            .listFiles()?.mapNotNull {
+            .listFiles()
+            ?.sortedByDescending { it?.lastModified() }
+            ?.mapNotNull {
                 runCatching {
                     getProject(it)
                 }.onFailure {

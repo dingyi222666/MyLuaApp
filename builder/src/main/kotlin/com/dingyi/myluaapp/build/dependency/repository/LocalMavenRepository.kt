@@ -169,64 +169,6 @@ class LocalMavenRepository(
     }
 
 
-/*
-private fun getDependency(
-    string: String,
-    containsList: MutableSet<String>
-): List<MavenDependency> {
-    val array = string.split(":")
-    containsList.add(string)
-
-    val pomPathList = mutableListOf<String>()
-    if (array[1] == "*") {
-        val pomDir = "$repositoryPath${File.separator}${
-            array[0].replace(
-                ".",
-                File.separator
-            )
-        }${File.separator}"
-
-        pomDir.toFile().listFiles()?.forEach {
-            pomPathList.add(
-                getDefaultPomPath(array[0], it.name, array[2])
-            )
-        }
-
-    } else {
-        pomPathList.add(getDefaultPomPath(array[0], array[1], array[2]))
-    }
-
-    pomPathList.forEach {
-        if (File(it).exists().not()) {
-            logger.warning("w:Unable to retrieve dependency of $string,try sync project to re download dependency")
-            logger.info("\n")
-        }
-    }
-
-    return pomPathList.mapNotNull { pomPath ->
-
-        if (!pomPath.toFile().exists()) {
-            return@mapNotNull null
-        }
-
-        val pom = parser.parse(pomPath)
-
-        val allDependencies = mutableListOf<MavenDependency>().apply {
-            pom.dependencies.forEach {
-                if (!containsList.contains(it)) {
-                    addAll(getDependency(it, containsList))
-                }
-            }
-        }
-
-        LocalMavenDependency(pom, allDependencies, repositoryPath)
-    }
-
-}
-
- */
-
-
     override fun getLastVersion(mavenDependency: MavenDependency): MavenDependency {
         TODO("Not yet implemented")
     }

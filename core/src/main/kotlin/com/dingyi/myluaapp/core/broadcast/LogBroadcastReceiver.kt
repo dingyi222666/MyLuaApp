@@ -19,6 +19,8 @@ class LogBroadcastReceiver(
     private val logList = mutableListOf<Log>()
 
 
+    private var isCompleted = false
+
     data class Log(
         val level: String,
         val message: String,
@@ -36,16 +38,28 @@ class LogBroadcastReceiver(
         }
     }
 
-    fun clear() {
+    private fun clear() {
         logList.clear()
+    }
+
+    fun isCompleted(): Boolean {
+        return isCompleted
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
         getLog(intent)?.let { log ->
+            if (isCompleted) {
+                isCompleted = false
+            }
+            logList.add(log)
+            if (log.message == "BUILD COMPLETED FLAG") {
+                isCompleted = true
+                clear()
+            }
             callbackList.forEach {
                 it(log)
             }
-            logList.add(log)
+
         }
     }
 

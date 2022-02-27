@@ -112,11 +112,19 @@ class ResolveDependencyResource(private val module: Module) : DefaultTask(module
         }.join()
 
 
-        Net.cancelGroup(this.javaClass.simpleName)
 
         getTaskInput().snapshot()
 
         mavenDependencyMap.clear()
+
+
+        val state = prepare()
+
+        if (state == Task.State.DEFAULT || state == Task.State.INCREMENT) {
+            run()
+        }
+
+        Net.cancelGroup(this.javaClass.simpleName)
 
         module
             .getLogger()

@@ -47,6 +47,7 @@ class ProgressMonitor(
 
     private fun runAfterTask() {
         scope.launch {
+            delay(100)
             while (count.get() > 0) {
                 delay(50)
             }

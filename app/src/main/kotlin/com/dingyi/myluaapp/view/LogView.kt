@@ -74,8 +74,8 @@ class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(contex
     private fun sendLog(text: CharSequence, level: String, color: Int,extra: Any?) {
 
         if (allLog.size >= 200) {
-            val slice = allLog.slice(100..allLog.lastIndex)
-            allLog.clear()
+            val slice = allLog.slice(100..allLog.size)
+            clear()
             allLog.addAll(slice)
             addLogList(allLog)
         }

@@ -85,11 +85,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         initView()
 
-        lifecycleScope.launch { syncProject() }
+
+        syncProject()
 
 
         isCreated = true
-
 
     }
 
@@ -102,22 +102,28 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
     }
 
-    private suspend fun syncProject() {
-        PluginModule
-            .getActionService()
-            .callAction<Unit>(
-                PluginModule
-                    .getActionService()
-                    .createActionArgument(), DefaultActionKey.BUILD_STARTED_KEY
-            )
+    private fun syncProject() {
 
-        delay(50)
+        lifecycleScope.launch {
 
-        viewModel.project.value?.let {
             PluginModule
-                .getBuildService()
-                .build(it, "sync")
+                .getActionService()
+                .callAction<Unit>(
+                    PluginModule
+                        .getActionService()
+                        .createActionArgument(), DefaultActionKey.BUILD_STARTED_KEY
+                )
+
+            delay(20)
+
+            viewModel.project.value?.let {
+                PluginModule
+                    .getBuildService()
+                    .build(it, "sync")
+            }
         }
+
+
     }
 
     private fun initAction() {
@@ -166,7 +172,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         viewBinding
             .drawerPage
             .adapter = EditorDrawerPagerAdapter(this@EditorActivity).apply {
-            notifyDataSetChanged()
+            notifyItemRangeInserted(0, viewBinding.drawerPage.adapter?.itemCount ?: 2)
         }
 
         tabLayoutMediator = TabLayoutMediator(

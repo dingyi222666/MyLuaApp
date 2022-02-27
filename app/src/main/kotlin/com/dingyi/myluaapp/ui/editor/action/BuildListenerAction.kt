@@ -34,23 +34,13 @@ class BuildListenerAction : Action<Unit> {
     }
 
     private suspend fun syncProject(viewModel: MainViewModel) {
-
-        val status = AtomicBoolean(true)
-
-        val callBack = { log: LogBroadcastReceiver.Log ->
-            if (log.message == "BUILD END FLAG") {
-                status.set(false)
-            }
-
-        }
-        viewModel.logBroadcastReceiver.value?.addCallback(callBack)
-
-        while (status.get()) {
+        
+        while (true) {
             delay(1000)
+            if (viewModel.logBroadcastReceiver.value?.isCompleted() == true) {
+                break
+            }
         }
-
-        viewModel.logBroadcastReceiver.value?.removeCallback(callBack)
-
 
     }
 

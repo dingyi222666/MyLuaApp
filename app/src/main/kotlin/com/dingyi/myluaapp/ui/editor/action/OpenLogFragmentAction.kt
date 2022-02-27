@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.ui.editor.action
 
+import android.os.SystemClock
 import androidx.core.view.GravityCompat
+import androidx.core.view.postDelayed
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
@@ -12,9 +14,10 @@ class OpenLogFragmentAction : Action<Unit> {
 
 
         viewBinding?.let {
+
             it.drawer.post {
                 it.drawer.openDrawer(GravityCompat.START)
-                it.drawerPage.post {
+                it.drawerPage.postDelayed(SystemClock.uptimeMillis()+500) {
                     it.drawerPage.setCurrentItem(1, true)
                 }
             }

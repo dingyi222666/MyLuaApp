@@ -77,7 +77,7 @@ class MainBuilder(
     }
 
     override fun stop() {
-        getLogger().info("BUILD END FLAG")
+        getLogger().info("BUILD COMPLETED FLAG")
         runJob?.cancel(CancellationException("Stop Build"))
         runJob?.cancelChildren(CancellationException("Stop Build"))
         runJob = null
