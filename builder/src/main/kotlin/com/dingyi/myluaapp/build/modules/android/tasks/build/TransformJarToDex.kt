@@ -93,23 +93,24 @@ class TransformJarToDex(private val module: Module) : DefaultTask(module) {
 
             targetDirectory.mkdirs()
 
-            val command = D8Command.builder()
+             D8Command.builder()
                 //.addClasspathFiles(getLibraryFiles())
                 .addLibraryFiles(
                     File(Paths.buildPath, "jar/core-lambda-stubs.jar").toPath(),
                     File(Paths.buildPath, "jar/android.jar").toPath()
                 )
-                .addProgramFiles(jarFile.toPath())
-                .setIntermediate(true)
-                .setMinApiLevel(getMinSdk())
-                .setMode(if (buildVariants == "debug") CompilationMode.DEBUG else CompilationMode.RELEASE)
-                .setOutput(
-                    targetDirectory.toPath(), OutputMode.DexIndexed
-                )
-                .build()
+                 .addProgramFiles(jarFile.toPath())
+                 .setIntermediate(true)
+                 .setMinApiLevel(getMinSdk())
+                 .setMode(if (buildVariants == "debug") CompilationMode.DEBUG else CompilationMode.RELEASE)
+                 .setOutput(
+                     targetDirectory.toPath(), OutputMode.DexIndexed
+                 )
+                 .build()
+                 .apply {
+                     D8.run(this)
+                 }
 
-
-            D8.run(command)
 
             getJarTransformDexDirectory(jarFile)
                 .walkBottomUp()

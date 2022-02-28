@@ -11,7 +11,7 @@ open class DefaultBuilder(
 
     protected val syncTasks = mutableListOf<Task>()
 
-    protected val cleanTasks = mutableListOf<Task>()
+    protected val cleanTasks = mutableListOf<Task>(CleanTask(module))
 
     protected val buildTasks = mutableListOf<Task>()
 

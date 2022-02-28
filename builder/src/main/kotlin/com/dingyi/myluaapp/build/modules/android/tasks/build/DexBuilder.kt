@@ -152,7 +152,7 @@ class DexBuilder(private val module: Module) : DefaultTask(module) {
         val minSdk = getMinSdk()
 
 
-        val command = D8Command
+         D8Command
             .builder()
             .addLibraryFiles(
                 File(Paths.buildPath, "jar/core-lambda-stubs.jar").toPath(),
@@ -168,15 +168,16 @@ class DexBuilder(private val module: Module) : DefaultTask(module) {
                     )
                 }
             }
-            .addProgramFiles(mergeDexFiles.map { it.toFile().toPath() })
-            .setMinApiLevel(getMinSdk())
-            .setMode(if (buildVariants == "debug") CompilationMode.DEBUG else CompilationMode.RELEASE)
-            .setOutput(
-                outputDirectory.toPath(), OutputMode.DexIndexed
-            )
-            .build()
-
-        D8.run(command)
+             .addProgramFiles(mergeDexFiles.map { it.toFile().toPath() })
+             .setMinApiLevel(getMinSdk())
+             .setMode(if (buildVariants == "debug") CompilationMode.DEBUG else CompilationMode.RELEASE)
+             .setOutput(
+                 outputDirectory.toPath(), OutputMode.DexIndexed
+             )
+             .build()
+             .apply {
+                 D8.run(this)
+             }
 
         val allOutputFile = outputDirectory
             .walkBottomUp()

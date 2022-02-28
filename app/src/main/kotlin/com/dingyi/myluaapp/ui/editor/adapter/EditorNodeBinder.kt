@@ -52,7 +52,7 @@ class EditorNodeBinder(
             binding
                 .arrow
                 .animate()
-                .rotationBy(90f)
+                .rotation(90f)
                 .setDuration(0)
                 .start()
 
@@ -74,7 +74,7 @@ class EditorNodeBinder(
             binding
                 .arrow
                 .animate()
-                .rotationBy(if (expand) 90f else 0f)
+                .rotation(if (expand) 90f else 0f)
                 .setDuration(120)
                 .start()
         }

@@ -40,6 +40,21 @@ class ResolveDependencyPom(private val module: Module) : DefaultTask(module) {
         )
 
 
+
+
+
+        val dependencies = module
+            .getProject()
+            .getAllDependency()
+            .filterIsInstance<MavenDependency>()
+            .map {
+                module.getMavenRepository()
+                    .getDependency(it.getDeclarationString())
+            }
+            .toMutableList()
+            .filterDependency()
+
+
         val isSuccess = kotlin.runCatching {
             withContext(Dispatchers.IO) {
                 Net.get("https://www.baidu.com")
@@ -56,18 +71,10 @@ class ResolveDependencyPom(private val module: Module) : DefaultTask(module) {
             throw CompileError("No Network to download dependency!")
         }
 
-        val dependencies = module
-            .getProject()
-            .getAllDependency()
-            .filterIsInstance<MavenDependency>()
-            .map {
-                module.getMavenRepository()
-                    .getDependency(it.getDeclarationString())
-            }
-            .toMutableList()
-            .filterDependency()
 
-
+        if (dependencies.isEmpty()) {
+            return Task.State.SKIPPED
+        }
 
         dependencies.map { dependency ->
             val file = dependency.getDependencyFile().let {

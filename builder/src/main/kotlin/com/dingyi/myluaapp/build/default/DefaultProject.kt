@@ -225,9 +225,9 @@ open class DefaultProject(
 
 
     override fun getModule(name: String): Module? {
-        return allModules.filter {
+        return allModules.find {
             it.name == name
-        }.getOrNull(0)
+        }
     }
 
 

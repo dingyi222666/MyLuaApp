@@ -37,6 +37,20 @@ class ResolveDependencyResource(private val module: Module) : DefaultTask(module
             )["repositories"].checkNotNull()
         )
 
+
+
+        val dependencies = module
+            .getProject()
+            .getAllDependency()
+            .filterIsInstance<MavenDependency>()
+            .map {
+                module.getMavenRepository()
+                    .getDependency(it.getDeclarationString())
+            }
+            .toMutableList()
+            .filterDependency()
+
+
         val isSuccess = kotlin.runCatching {
             withContext(Dispatchers.IO) {
                 Net.get("https://www.baidu.com")
@@ -52,19 +66,6 @@ class ResolveDependencyResource(private val module: Module) : DefaultTask(module
             Net.cancelGroup("test")
             throw CompileError("No Network to download dependency!")
         }
-
-        val dependencies = module
-            .getProject()
-            .getAllDependency()
-            .filterIsInstance<MavenDependency>()
-            .map {
-                module.getMavenRepository()
-                    .getDependency(it.getDeclarationString())
-            }
-            .toMutableList()
-            .filterDependency()
-
-
 
         dependencies.map { dependency ->
             val file = dependency.getDependencyFile().let {

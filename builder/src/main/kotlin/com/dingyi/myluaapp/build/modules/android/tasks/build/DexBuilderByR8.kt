@@ -1,9 +1,8 @@
 package com.dingyi.myluaapp.build.modules.android.tasks.build
 
-import com.android.tools.r8.CompatProguardCommandBuilder
-import com.android.tools.r8.CompilationMode
-import com.android.tools.r8.OutputMode
-import com.android.tools.r8.R8Command
+import android.util.Log
+import com.android.tools.r8.*
+import com.android.tools.r8.origin.Origin
 import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
@@ -48,6 +47,10 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
     private val outputDirectory: String
         get() = "build/intermediates/merge_project_dex/$buildVariants"
 
+    private val mappingOutputDirectory: String
+        get() = "build/outputs/mapping/$buildVariants"
+
+
     private val proguardFiles = mutableListOf<File>()
 
     override suspend fun prepare(): Task.State {
@@ -77,7 +80,7 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
                                     if (it.name == "proguard.txt") {
                                         proguardFiles.add(it)
                                     }
-                                    it.isFile && it.name.endsWith("jar")
+                                    true
                                 }
                                 .toList()
                         } else {
@@ -119,6 +122,16 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
                         }
                     }
 
+                val aaptOut = module
+                    .getFileManager()
+                    .resolveFile("build/generated/proguard/$buildVariants/out", module)
+
+                if (aaptOut.isDirectory) {
+                    aaptOut.walkBottomUp()
+                        .filter { it.isFile }
+                        .forEach { proguardFiles.add(it) }
+                }
+
                 proguardFiles.addAll(subModuleProguardFiles)
 
 
@@ -144,23 +157,34 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
 
         val outputDirectory = module.getFileManager()
             .resolveFile(outputDirectory, module)
-            .apply {
-                mkdirs()
-            }
 
-        outputDirectory.deleteRecursively()
+        if (outputDirectory.isFile) {
+            outputDirectory.deleteRecursively()
+        }
+
+        Log.e("allFile", allInputFile.distinctBy { it.toFile().path }
+            .map { it.toFile().toPath() }.joinToString())
 
         outputDirectory.mkdirs()
 
         val minSdk = getMinSdk()
 
-        R8Command
+        val command = R8Command
             .builder()
             .apply {
                 if (minSdk < 21) {
                     addMainDexRulesFiles(Path(Paths.buildPath, "proguard/mainDexClasses.rules"))
                 }
             }
+            .setProguardMapOutputPath(
+                module
+                    .getFileManager()
+                    .resolveFile(mappingOutputDirectory, module)
+                    .apply {
+                        mkdirs()
+                    }
+                    .toPath()
+            )
             .addProguardConfigurationFiles(proguardFiles.map { it.toPath() })
             .addLibraryFiles(
                 File(Paths.buildPath, "jar/core-lambda-stubs.jar").toPath(),
@@ -169,11 +193,13 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
             .addProgramFiles(allInputFile.distinctBy { it.toFile().path }
                 .map { it.toFile().toPath() })
             .setMinApiLevel(minSdk)
-            .setMode(if (buildVariants == "debug") CompilationMode.DEBUG else CompilationMode.RELEASE)
+            .setMode(CompilationMode.RELEASE)
             .setOutput(
                 outputDirectory.toPath(), OutputMode.DexIndexed
             )
             .build()
+
+        R8.run(command)
 
 
         proguardFiles.clear()

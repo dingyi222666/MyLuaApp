@@ -30,11 +30,6 @@ class ProcessResources(private val module: Module) : DefaultTask(module) {
 
     private lateinit var buildConfig: BuildConfig
 
-    private val librariesCompileResources = mutableListOf<File>()
-
-    private val mainCompileResources = mutableListOf<File>()
-
-    private val moduleCompileResources = mutableListOf<File>()
 
     override suspend fun prepare(): Task.State {
         buildConfig = module.getCache().getCache("${module.name}_build_config")

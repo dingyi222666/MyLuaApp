@@ -102,23 +102,25 @@ class TransformClassToDex(private val module: Module) : DefaultTask(module) {
                 mkdirs()
             }
 
-        val command = D8Command
+       D8Command
             .builder()
             .addClasspathFiles(getLibraryFiles())
             .addLibraryFiles(
                 File(Paths.buildPath, "jar/core-lambda-stubs.jar").toPath(),
                 File(Paths.buildPath, "jar/android.jar").toPath()
             )
-            .addProgramFiles(transformDexFiles.map { it.toFile().toPath() })
-            .setIntermediate(true)
-            .setMinApiLevel(getMinSdk())
-            .setMode(if (buildVariants == "debug") CompilationMode.DEBUG else CompilationMode.RELEASE)
-            .setOutput(
-                outputDirectory.toPath(), OutputMode.DexFilePerClassFile
-            )
-            .build()
+           .addProgramFiles(transformDexFiles.map { it.toFile().toPath() })
+           .setIntermediate(true)
+           .setMinApiLevel(getMinSdk())
+           .setMode(if (buildVariants == "debug") CompilationMode.DEBUG else CompilationMode.RELEASE)
+           .setOutput(
+               outputDirectory.toPath(), OutputMode.DexFilePerClassFile
+           )
+           .build()
+           .apply {
+               D8.run(this)
+           }
 
-        D8.run(command)
 
         transformDexFiles.forEach {
             val name = it.toFile().path

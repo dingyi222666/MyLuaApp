@@ -56,7 +56,7 @@ class DefaultRunner(
                     }
                 }
             }.onFailure {
-
+                Log.e("build error",it.stackTraceToString())
                 project.getLogger().error(it.stackTraceToString())
 
                 project.getLogger().error("FAILURE: Build failed with an exception.")

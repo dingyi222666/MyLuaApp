@@ -33,21 +33,7 @@ class ResolveDependencyMavenMetaData(private val module: Module) : DefaultTask(m
             )["repositories"].checkNotNull()
         )
 
-        val isSuccess = kotlin.runCatching {
-            withContext(Dispatchers.IO) {
-                Net.get("https://www.baidu.com")
-                    .apply {
-                        setGroup("test")
-                    }
-                    .execute<String>()
-            }
 
-        }.isSuccess
-
-        if (!isSuccess) {
-            Net.cancelGroup("test")
-            throw CompileError("No Network to download dependency!")
-        }
 
         val mavenDependencyList = module
             .getProject()
@@ -64,6 +50,24 @@ class ResolveDependencyMavenMetaData(private val module: Module) : DefaultTask(m
 
         if (mavenDependencyList.isEmpty()) {
             return@withContext Task.State.SKIPPED
+        }
+
+
+        val isSuccess = kotlin.runCatching {
+            withContext(Dispatchers.IO) {
+                Net.get("https://www.baidu.com")
+                    .apply {
+                        setGroup("test")
+                    }
+                    .execute<String>()
+            }
+
+        }.isSuccess
+
+
+        if (!isSuccess) {
+            Net.cancelGroup("test")
+            throw CompileError("No Network to download dependency!")
         }
 
         val size = mavenDependencyList.size / Runtime.getRuntime().availableProcessors() / 3
