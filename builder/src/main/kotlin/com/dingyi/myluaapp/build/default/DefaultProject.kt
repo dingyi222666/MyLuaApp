@@ -87,6 +87,7 @@ open class DefaultProject(
 
         defaultSettingsScript.run()
 
+
         indexAllModule()
 
         defaultMainBuilderScript.run()
@@ -195,6 +196,7 @@ open class DefaultProject(
         allModules.forEach {
             it.init()
         }
+
     }
 
     open fun indexModule(value: String) {

@@ -12,5 +12,7 @@ interface Builder {
     fun sync(): List<Task>
     fun getTaskByName(name: String): Task
 
+    fun init()
+
     fun clear()
 }

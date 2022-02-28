@@ -54,6 +54,7 @@ class DefaultScript(private val path: String) : Script {
         luaJVM.runFunc("putScriptValue", key, value)
     }
 
+
     override fun getPath(): String {
         return path
     }

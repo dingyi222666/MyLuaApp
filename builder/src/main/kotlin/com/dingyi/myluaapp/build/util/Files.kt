@@ -14,6 +14,8 @@ fun File.getMD5():String {
     return inputStream().getMD5()
 }
 
+
+
 fun InputStream.getMD5(): String {
     return use { stream ->
         val buffer = ByteArray(1024)

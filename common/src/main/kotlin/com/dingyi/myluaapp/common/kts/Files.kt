@@ -45,13 +45,8 @@ fun InputStream.readFormGZIP(): String {
     }
 }
 
-inline fun File.isDirectory(block: File.() -> Unit) {
-    if (this.isDirectory) {
-        block()
-    }
-}
 
-fun Array<File>.sortBySelf(): List<File> {
+fun Array<File>.sortFile(): List<File> {
     return this.sortedWith { a, b ->
         when {
             a.isDirectory && b.isFile -> {

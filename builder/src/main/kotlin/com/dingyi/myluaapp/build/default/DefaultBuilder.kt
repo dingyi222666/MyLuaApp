@@ -42,6 +42,10 @@ open class DefaultBuilder(
     }
 
 
+    override fun init() {
+
+    }
+
     override fun getTaskByName(name: String): Task {
         return buildTasks.filter { it.name == name }
             .getOrNull(0) ?: syncTasks.filter { it.name == name }

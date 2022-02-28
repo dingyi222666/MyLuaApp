@@ -1,6 +1,6 @@
 package com.dingyi.myluaapp.ui.editor.helper
 
-import com.dingyi.myluaapp.common.kts.sortBySelf
+import com.dingyi.myluaapp.common.kts.sortFile
 import com.dingyi.myluaapp.view.treeview.TreeNode
 import com.dingyi.myluaapp.view.treeview.helper.TreeHelper
 import java.io.File
@@ -47,7 +47,7 @@ object TreeHelper {
      private fun addChildNode(main: TreeNode, level: Int) {
          (main.value as File)
              .listFiles()
-             ?.sortBySelf()?.forEach {
+             ?.sortFile()?.forEach {
                  val node = TreeNode(
                      it,
                      level + 1

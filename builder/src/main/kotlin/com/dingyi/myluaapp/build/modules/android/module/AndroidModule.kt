@@ -18,6 +18,7 @@ import com.dingyi.myluaapp.build.dependency.ProjectDependency
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.script.DefaultScript
 import com.dingyi.myluaapp.build.util.ComparableVersion
+import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.common.kts.println
 import com.dingyi.myluaapp.common.kts.toFile
 import org.luaj.vm2.LuaString
@@ -39,7 +40,7 @@ class AndroidModule(
     override val name: String
         get() = staticName
 
-    private val defaultBuilder = DefaultBuilder(this)
+    private var defaultBuilder: Builder? = null
 
 
     private val defaultMainBuilderScript = DefaultScript(
@@ -52,8 +53,9 @@ class AndroidModule(
     private val dependencies = mutableListOf<Dependency>()
 
     override fun getBuilder(): Builder {
-        return project.getMainBuilder().getServiceRepository()
-            .onCreateBuilder(path, this) ?: defaultBuilder
+        defaultBuilder = defaultBuilder ?: project.getMainBuilder().getServiceRepository()
+            .onCreateBuilder(path, this) ?: DefaultBuilder(this)
+        return defaultBuilder.checkNotNull()
     }
 
     override fun init() {

@@ -22,7 +22,9 @@ class MainViewModel : ViewModel() {
 
 
     val logBroadcastReceiver = MutableLiveData<LogBroadcastReceiver>()
+
     val allEditor = MutableLiveData<List<Editor>>()
+
     val project = MutableLiveData<Project>()
 
     val rootNode = MutableLiveData<TreeNode>()

@@ -63,6 +63,12 @@ class DefaultProjectBuilder(
         return project.getMainModule().getBuilder().getTaskByName(name)
     }
 
+    override fun init() {
+        project.getAllModule().forEach {
+            it.getBuilder().init()
+        }
+    }
+
     override fun clear() {
         project.getAllModule().forEach {
             it.getBuilder().clear()

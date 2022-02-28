@@ -25,7 +25,7 @@ local metatable_g = {
 local Log = luajava.bindClass("android.util.Log")
 
 function getDefaultProguardFile(file)
-  return "/data/data/com.dingyi.MyLuaApp/files/res/build/" .. file
+  return "/data/data/com.dingyi.MyLuaApp/files/res/build/proguard/" .. file
 end
 
 JavaVersion = {
@@ -85,6 +85,15 @@ local function forEachDir(path, tab, types)
       forEachDir(path, tab, types)
     end
     :: CONTINUE ::
+  end
+end
+
+local __print = print
+function print(...)
+  if (logger~=nil) then
+    logger.info(table.concat({...}," "))
+    else
+    __print(...)
   end
 end
 

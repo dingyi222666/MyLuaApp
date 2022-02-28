@@ -3,22 +3,20 @@ package com.dingyi.myluaapp.build.modules.android.builder
 
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.default.DefaultBuilder
+import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.modules.android.tasks.build.*
 import com.dingyi.myluaapp.build.modules.android.tasks.sync.*
+import org.luaj.vm2.LuaBoolean
+import org.luaj.vm2.LuaValue
 
 class AndroidApplicationBuilder(
     private val module: Module
 ) : DefaultBuilder(module) {
 
 
-
-
-
-    init {
-
-       addBuildTasks()
-       addSyncTasks()
-
+    override fun init() {
+        addBuildTasks()
+        addSyncTasks()
     }
 
     private fun addSyncTasks() {
@@ -39,12 +37,15 @@ class AndroidApplicationBuilder(
     }
 
     private fun addBuildTasks() {
+
+        var useR8 = false
+
         //Check Manifest exists
-        addTask(CheckManifest(module),buildTasks)
+        addTask(CheckManifest(module), buildTasks)
 
 
         //Compile Libraries Resources
-        addTask(CompileLibrariesResources(module),buildTasks)
+        addTask(CompileLibrariesResources(module), buildTasks)
 
         //Merge Resources
         addTask(MergeResources(module), buildTasks)
@@ -64,14 +65,39 @@ class AndroidApplicationBuilder(
         //Compile Java
         addTask(CompileApplicationJava(module), buildTasks)
 
-        //Transform Class to Dex
-        addTask(TransformClassToDex(module),buildTasks)
+        val buildConfig = module.getCache().getCache<BuildConfig?>(
+            "${
+                module.getProject().getMainModule().name
+            }_build_config"
+        )
 
-        //Transform Jar to Dex
-        addTask(TransformJarToDex(module),buildTasks)
+        if (buildConfig != null) {
 
-        //Merge Ext Dex
-        addTask(MergeExtDex(module),buildTasks)
+            val minifyEnabledValue = module
+                .getMainBuilderScript()
+                .get(
+                    "android.buildTypes.${
+                        buildConfig.buildVariants
+                    }.minifyEnabled"
+                )
+
+            if (minifyEnabledValue is LuaBoolean && minifyEnabledValue.booleanValue()) {
+                useR8 = true
+                addTask(DexBuilderByR8(module),buildTasks)
+            }
+        }
+
+        if (!useR8) {
+
+            //Transform Class to Dex
+            addTask(TransformClassToDex(module), buildTasks)
+
+            //Transform Jar to Dex
+            addTask(TransformJarToDex(module), buildTasks)
+
+            //Merge Ext Dex
+            addTask(MergeExtDex(module), buildTasks)
+        }
 
         //Merge Assets Resources
         addTask(MergeAssetsResources(module), buildTasks)
@@ -91,17 +117,20 @@ class AndroidApplicationBuilder(
         //Merge Library Java Resources
         addTask(MergeLibraryJavaResources(module), buildTasks)
 
-        //Merge Ext Dex
-        addTask(DexBuilder(module),buildTasks)
+        if (!useR8) {
+
+            //Merge Ext Dex
+            addTask(DexBuilder(module), buildTasks)
+        }
 
         //Package Apk
-        addTask(PackageApk(module),buildTasks)
+        addTask(PackageApk(module), buildTasks)
 
         //ZipAlign Apk
-        addTask(ZipAlignApk(module),buildTasks)
+        addTask(ZipAlignApk(module), buildTasks)
 
         //Sign Apk
-        addTask(SignApk(module),buildTasks)
+        addTask(SignApk(module), buildTasks)
 
     }
 

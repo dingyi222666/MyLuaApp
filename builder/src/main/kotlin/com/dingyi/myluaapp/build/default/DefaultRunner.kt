@@ -19,6 +19,8 @@ class DefaultRunner(
 
         val builder = project.getBuilder()
 
+        builder.init()
+
         val tasks = when (type) {
             "clean" -> builder.clean()
             "build" -> builder.getTasks()

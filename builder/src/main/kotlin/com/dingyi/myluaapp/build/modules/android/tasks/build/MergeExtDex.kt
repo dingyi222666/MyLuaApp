@@ -74,13 +74,13 @@ class MergeExtDex(private val module: Module) : DefaultTask(module) {
                 mkdirs()
             }
 
+
         val command = D8Command
             .builder()
             .addLibraryFiles(
                 File(Paths.buildPath, "jar/core-lambda-stubs.jar").toPath(),
                 File(Paths.buildPath, "jar/android.jar").toPath()
             )
-            .addMainDexRulesFiles(File(Paths.buildPath, "proguard/mainDexClasses.rules").toPath())
             .addProgramFiles(mergeDexFiles.map { it.toFile().toPath() })
             .setMinApiLevel(getMinSdk())
             .setMode(if (buildVariants == "debug") CompilationMode.DEBUG else CompilationMode.RELEASE)
