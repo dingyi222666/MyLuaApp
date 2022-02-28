@@ -235,7 +235,13 @@ function runScript(path)
 
   --Log.e("fuck", path)
 
-  loadfile(path, "bt", empty_table)()
+  local f,error_message = loadfile(path, "bt", empty_table)
+
+  if f then
+    f()
+  else
+    error(error_message)
+  end
 
   --Log.e("test", print_dump(empty_table))
 

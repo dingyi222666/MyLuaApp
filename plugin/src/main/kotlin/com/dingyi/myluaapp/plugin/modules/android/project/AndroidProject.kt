@@ -48,7 +48,7 @@ class AndroidProject(
             .callAction<Unit>(
                 pluginContext
                     .getActionService()
-                    .createActionArgument(), DefaultActionKey.OPEN_LOG_FRAGMENT
+                    .createActionArgument(), DefaultActionKey.BUILD_STARTED_KEY
             )
 
     }

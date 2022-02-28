@@ -17,7 +17,7 @@ class OpenLogFragmentAction : Action<Unit> {
 
             it.drawer.post {
                 it.drawer.openDrawer(GravityCompat.START)
-                it.drawerPage.postDelayed(SystemClock.uptimeMillis()+500) {
+                it.drawerPage.postDelayed(50) {
                     it.drawerPage.setCurrentItem(1, true)
                 }
             }

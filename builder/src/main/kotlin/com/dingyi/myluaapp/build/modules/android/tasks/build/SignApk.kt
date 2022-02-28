@@ -2,16 +2,22 @@ package com.dingyi.myluaapp.build.modules.android.tasks.build
 
 
 import com.android.apksigner.ApkSignerTool
+import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.common.kts.Paths
+import com.dingyi.myluaapp.common.kts.checkNotNull
 import com.dingyi.myluaapp.common.kts.toFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.luaj.vm2.LuaBoolean
+import org.luaj.vm2.LuaNil
 import org.luaj.vm2.LuaTable
+import org.luaj.vm2.LuaValue
 import java.io.File
+import java.security.KeyStore
 import java.util.*
 
 class SignApk(private val module: Module) : DefaultTask(module) {
@@ -75,16 +81,72 @@ class SignApk(private val module: Module) : DefaultTask(module) {
         args.add("sign")
 
 
+        var configSign = false
 
         if (signerConfig is LuaTable) {
-            //TODO
-        } else {
+            args.add("--v1-signing-enabled")
+            args.add((signerConfig["v1SigningEnabled"]
+                ?.let {
+                    if (it is LuaBoolean) it.booleanValue() else true
+                }
+                ?: true).toString())
+
+            args.add("--v2-signing-enabled")
+            args.add((signerConfig["v2SigningEnabled"]
+                ?.let {
+                    if (it is LuaBoolean) it.booleanValue() else true
+                }
+                ?: true).toString())
+
+            args.add("--v3-signing-enabled")
+            args.add((signerConfig["v3SigningEnabled"]
+                ?.let {
+                    if (it is LuaBoolean) it.booleanValue() else true
+                }
+                ?: true).toString())
+
+            args.add("--v4-signing-enabled")
+            args.add((signerConfig["v4SigningEnabled"]
+                ?.let {
+                    if (it is LuaBoolean) it.booleanValue() else false
+                }
+                ?: true).toString())
+
+            val storeFile = signerConfig["storeFile"]
+
+
+            if (storeFile == null || storeFile is LuaNil) {
+                configSign = false
+            } else {
+
+                args.add("--ks")
+                args.add(getFile(storeFile.tojstring()).checkNotNull())
+
+                args.add("--ks-key-alias")
+                args.add(check(signerConfig["keyAlias"], "keyAlias"))
+
+                args.add("--ks-pass")
+                args.add(checkFile(check(signerConfig["storePassword"], "storePassword"), "pass:"))
+
+                args.add("--key-pass")
+                args.add(checkFile(check(signerConfig["keyPassword"], "keyPassword"), "pass:"))
+
+                configSign = true
+
+            }
+
+        }
+
+
+        if (!configSign) {
             args.add("--key")
             args.add(File(Paths.assetsDir.toFile(), "keys/testkey.pk8").path)
 
             args.add("--cert")
             args.add(File(Paths.assetsDir.toFile(), "keys/testkey.x509.pem").path)
         }
+
+
 
         args.add("--out")
         args.add(module.getFileManager().resolveFile(outputPath, module).path)
@@ -111,5 +173,35 @@ class SignApk(private val module: Module) : DefaultTask(module) {
                 extra = module.getFileManager().resolveFile(outputPath, module).path
             )
 
+    }
+
+    private fun checkFile(check: String, s: String): String {
+        val file = getFile(check)
+        return file ?: s + check
+    }
+
+    private fun check(value: LuaValue, errorName: String): String {
+        if (value is LuaNil) {
+            throw CompileError("missing signConfig $errorName")
+        }
+        return value.tojstring()
+    }
+
+    private fun getFile(string: String): String? {
+
+        val file = File(string)
+
+        if (file.isFile) {
+            return string
+        }
+
+        return module
+            .getFileManager()
+            .resolveFile(string, module)
+            .let {
+                if (it.isFile) {
+                    it.path
+                } else null
+            }
     }
 }
