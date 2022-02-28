@@ -162,9 +162,6 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
             outputDirectory.deleteRecursively()
         }
 
-        Log.e("allFile", allInputFile.distinctBy { it.toFile().path }
-            .map { it.toFile().toPath() }.joinToString())
-
         outputDirectory.mkdirs()
 
         val minSdk = getMinSdk()
@@ -201,6 +198,8 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
 
         R8.run(command)
 
+
+        Log.e("bug",proguardFiles.map { it.toPath() }.toString())
 
         proguardFiles.clear()
 

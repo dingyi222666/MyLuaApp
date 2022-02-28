@@ -35,13 +35,13 @@ object BuildConfig {
         const val code_editor_version = "0.8.4"
         const val lifecycle_version = "2.4.0"
         const val preference_ktx_version = "1.1.1"
-        const val constraintlayout_version = "2.0.4"
+        const val constraint_layout_version = "2.0.4"
 
         const val glide_version = "4.11.0"
         const val net_version = "3.1.2"
         const val okhttp3_version = "4.9.1"
         const val channel_version = "1.1.4"
-        const val swiperefreshlayout_version = "1.2.0-alpha01"
+        const val swipe_refresh_layout_version = "1.2.0-alpha01"
         const val lsp4j_version = "0.12.0"
 
         const val kotlinx_coroutines_android_version = "1.5.1"
@@ -91,13 +91,13 @@ object BuildConfig {
                 "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle_version}"
             const val lifecycle_runtime =
                 "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle_version}"
-            const val constraintlayout =
-                "androidx.constraintlayout:constraintlayout:${Versions.constraintlayout_version}"
+            const val constraint_layout =
+                "androidx.constraintlayout:constraintlayout:${Versions.constraint_layout_version}"
             const val appcompat = "androidx.appcompat:appcompat:${Versions.appcompat_version}"
             const val preference_ktx =
                 "androidx.preference:preference-ktx:${Versions.preference_ktx_version}"
             const val swiperefreshlayout =
-                "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swiperefreshlayout_version}"
+                "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipe_refresh_layout_version}"
             const val viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
 
         }

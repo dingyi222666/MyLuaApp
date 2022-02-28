@@ -16,8 +16,8 @@ If you've never used Lua before, that's fine. You can still use Java to develop 
 This project used Lua to parse the project configuration script. Based on the flexibility of lua, it may even be possible to dynamically add packaging tasks to the build system in the future.
 
 ## Features
-- [-] JavaC supports (ecj)
-- [-] AAPT2 supports
+- [x] JavaC supports (ecj)
+- [x] AAPT2 supports
 - [ ] D8 and R8 supports
 - [ ] Multi-module supports
 - [ ] Maven Dependency resolution supports

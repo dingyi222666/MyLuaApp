@@ -79,7 +79,7 @@ dependencies {
     implementation(BuildConfig.Libs.AndroidX.lifecycle_viewmodel)
     implementation(BuildConfig.Libs.AndroidX.lifecycle_livedata)
     implementation(BuildConfig.Libs.AndroidX.lifecycle_runtime)
-    implementation(BuildConfig.Libs.AndroidX.constraintlayout)
+    implementation(BuildConfig.Libs.AndroidX.constraint_layout)
     implementation(BuildConfig.Libs.AndroidX.preference_ktx)
 
 
