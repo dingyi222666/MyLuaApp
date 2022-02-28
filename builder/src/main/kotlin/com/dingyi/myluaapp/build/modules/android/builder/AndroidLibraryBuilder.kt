@@ -59,7 +59,7 @@ class AndroidLibraryBuilder(
 
             if (minifyEnabledValue is LuaBoolean && minifyEnabledValue.booleanValue()) {
                 useR8 = true
-                //addTask(MergeExtDexByR8(module,buildTasks))
+
             }
         }
 

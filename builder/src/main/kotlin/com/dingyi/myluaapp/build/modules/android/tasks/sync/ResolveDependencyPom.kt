@@ -40,9 +40,6 @@ class ResolveDependencyPom(private val module: Module) : DefaultTask(module) {
         )
 
 
-
-
-
         val dependencies = module
             .getProject()
             .getAllDependency()
@@ -54,6 +51,10 @@ class ResolveDependencyPom(private val module: Module) : DefaultTask(module) {
             .toMutableList()
             .filterDependency()
 
+
+        if (dependencies.isEmpty()) {
+            return Task.State.SKIPPED
+        }
 
         val isSuccess = kotlin.runCatching {
             withContext(Dispatchers.IO) {
@@ -72,9 +73,6 @@ class ResolveDependencyPom(private val module: Module) : DefaultTask(module) {
         }
 
 
-        if (dependencies.isEmpty()) {
-            return Task.State.SKIPPED
-        }
 
         dependencies.map { dependency ->
             val file = dependency.getDependencyFile().let {

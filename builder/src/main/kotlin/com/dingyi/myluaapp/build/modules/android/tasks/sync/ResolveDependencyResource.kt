@@ -51,6 +51,11 @@ class ResolveDependencyResource(private val module: Module) : DefaultTask(module
             .filterDependency()
 
 
+
+        if (dependencies.isEmpty()) {
+            return Task.State.SKIPPED
+        }
+
         val isSuccess = kotlin.runCatching {
             withContext(Dispatchers.IO) {
                 Net.get("https://www.baidu.com")

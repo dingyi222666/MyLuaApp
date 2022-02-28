@@ -48,7 +48,7 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
         get() = "build/intermediates/merge_project_dex/$buildVariants"
 
     private val mappingOutputDirectory: String
-        get() = "build/outputs/mapping/$buildVariants"
+        get() = "build/outputs/mapping/$buildVariants/mapping.txt"
 
 
     private val proguardFiles = mutableListOf<File>()
@@ -58,16 +58,13 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
         buildVariants = module.getCache().getCache<BuildConfig>("${module.name}_build_config")
             .buildVariants
 
-        Log.e("bug", module
-            .getProject()
-            .getAllModule().toString())
 
         module
             .getProject()
             .getAllModule()
-            .flatMap {
+            .flatMap { subModule ->
 
-                val jarFiles = module
+                val jarFiles = subModule
                     .getDependencies()
                     .flatMap {
                         it.getDependenciesFile()
@@ -94,12 +91,12 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
                     }
 
 
-                val classFiles = module.getFileManager()
-                    .resolveFile(classCompileDirectory, module)
+                val classFiles = subModule.getFileManager()
+                    .resolveFile(classCompileDirectory, subModule)
                     .walkBottomUp()
                     .filter { it.isFile && it.name.endsWith("class") }
 
-                val subModuleProguardFiles = module
+                val subModuleProguardFiles = subModule
                     .getMainBuilderScript()
                     .get(
                         "android.buildTypes.$buildVariants.proguardFiles"
@@ -116,8 +113,8 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
                         if (file.exists()) {
                             file
                         } else {
-                            module.getFileManager()
-                                .resolveFile(it, module).apply {
+                            subModule.getFileManager()
+                                .resolveFile(it, subModule).apply {
                                     if (!isFile) {
                                         throw CompileError("Unable to indexed proguard file:$it")
                                     }
@@ -125,9 +122,9 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
                         }
                     }
 
-                val aaptOut = module
+                val aaptOut = subModule
                     .getFileManager()
-                    .resolveFile("build/generated/proguard/$buildVariants/out", module)
+                    .resolveFile("build/generated/proguard/$buildVariants/out", subModule)
 
                 if (aaptOut.isDirectory) {
                     aaptOut.walkBottomUp()
@@ -138,9 +135,10 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
                 proguardFiles.addAll(subModuleProguardFiles)
 
 
-                jarFiles + classFiles
+                jarFiles.plus(classFiles)
 
-            }.forEach {
+            }
+            .forEach {
                 getTaskInput()
                     .addInputFile(it)
             }
@@ -181,19 +179,21 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
                     .getFileManager()
                     .resolveFile(mappingOutputDirectory, module)
                     .apply {
-                        mkdirs()
+                        parentFile?.mkdirs()
+                        createNewFile()
                     }
                     .toPath()
             )
-            .addProguardConfigurationFiles(proguardFiles.map { it.toPath() })
+            .addProguardConfigurationFiles(proguardFiles
+                .map { it.toPath() })
             .addLibraryFiles(
                 File(Paths.buildPath, "jar/core-lambda-stubs.jar").toPath(),
                 File(Paths.buildPath, "jar/android.jar").toPath()
             )
-            .addProgramFiles(allInputFile.distinctBy { it.toFile().path }
+            .addProgramFiles(allInputFile
                 .map { it.toFile().toPath() })
             .setMinApiLevel(minSdk)
-            .setMode(CompilationMode.RELEASE)
+            .setMode(if (buildVariants == "debug") CompilationMode.DEBUG else CompilationMode.RELEASE)
             .setOutput(
                 outputDirectory.toPath(), OutputMode.DexIndexed
             )
@@ -201,8 +201,6 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
 
         R8.run(command)
 
-
-        Log.e("bug",proguardFiles.map { it.toPath() }.toString())
 
         proguardFiles.clear()
 
