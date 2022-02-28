@@ -58,6 +58,9 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
         buildVariants = module.getCache().getCache<BuildConfig>("${module.name}_build_config")
             .buildVariants
 
+        Log.e("bug", module
+            .getProject()
+            .getAllModule().toString())
 
         module
             .getProject()
