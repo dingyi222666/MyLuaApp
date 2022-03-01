@@ -45,8 +45,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
         setSupportActionBar(viewBinding.toolbarInclude.toolbar)
 
         supportActionBar?.apply {
@@ -59,16 +57,13 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         initViewBinding()
         initData()
 
+        PluginModule.init()
+        PluginModule.loadAllPlugin()
+
 
     }
 
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        PluginModule
-            .init()
-        PluginModule
-            .loadAllPlugin()
-    }
 
     private fun initViewBinding() {
         viewBinding.list
@@ -112,6 +107,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         }
 
     }
+
+
 
     private fun initData() {
         lifecycleScope.launch {

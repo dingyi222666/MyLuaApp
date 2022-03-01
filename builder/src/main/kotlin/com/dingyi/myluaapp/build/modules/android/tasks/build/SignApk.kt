@@ -7,17 +7,18 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.checkNotNull
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.build.modules.android.store.JKSProvider
+import com.dingyi.myluaapp.common.kts.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.conscrypt.OpenSSLProvider
 import org.luaj.vm2.LuaBoolean
 import org.luaj.vm2.LuaNil
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import java.io.File
 import java.security.KeyStore
+import java.security.Security
 import java.util.*
 
 class SignApk(private val module: Module) : DefaultTask(module) {
@@ -65,6 +66,19 @@ class SignApk(private val module: Module) : DefaultTask(module) {
                 return@forEach
             }
         }
+
+        val openSSLProvider = Security.getProviders().find { it.name == "ssl" }
+
+        if (openSSLProvider == null) {
+            Security.addProvider(OpenSSLProvider("ssl"))
+        }
+
+        val jksProvider = Security.getProviders().find { it.name == "JKSProvider" }
+
+        if (jksProvider == null) {
+            Security.addProvider(JKSProvider())
+        }
+
 
         return Task.State.DEFAULT
     }
@@ -119,8 +133,22 @@ class SignApk(private val module: Module) : DefaultTask(module) {
                 configSign = false
             } else {
 
+                val file = getFile(storeFile.tojstring()).checkNotNull()
+
                 args.add("--ks")
-                args.add(getFile(storeFile.tojstring()).checkNotNull())
+                args.add(file)
+
+               if (file.toFile().suffix == "jks") {
+                    args.add("--ks-type")
+                    args.add("jks")
+                   /*
+                    args.add("--ks-provider-name")
+                    args.add("JKSProvider")
+
+                    */
+                }
+
+
 
                 args.add("--ks-key-alias")
                 args.add(check(signerConfig["keyAlias"], "keyAlias"))

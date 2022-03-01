@@ -88,8 +88,7 @@ class WelcomeActivity : AppCompatActivity() {
                     }
 
 
-                PluginModule.init()
-                PluginModule.loadAllPlugin()
+
 
             }
 

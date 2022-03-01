@@ -80,7 +80,7 @@ dependencies {
     // 网络请求框架：https://hub.fastgit.org/liangjingkanji/Net
     implementation(BuildConfig.Libs.Network.net)
 
-
+    implementation(BuildConfig.Libs.BuildTools.conscrypt)
 
     implementation(BuildConfig.Libs.BuildTools.javapoet)
 

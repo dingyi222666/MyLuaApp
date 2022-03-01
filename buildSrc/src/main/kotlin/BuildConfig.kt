@@ -11,8 +11,8 @@ object BuildConfig {
 
         object Default {
 
-            const val targetSdk = 30
-            const val minSdk = 26
+            const val targetSdk = 26
+            const val minSdk = 30
             const val buildToolsVersion = "31.0.0"
             const val compileSdk = 31
         }
@@ -137,6 +137,7 @@ object BuildConfig {
         }
 
         object BuildTools {
+            const val conscrypt = "org.conscrypt:conscrypt-android:2.5.2"
             const val javapoet = "com.squareup:javapoet:${Versions.javapoet_version}"
 
             const val r8 =

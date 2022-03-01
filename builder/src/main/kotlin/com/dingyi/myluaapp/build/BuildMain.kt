@@ -2,11 +2,14 @@ package com.dingyi.myluaapp.build
 
 import android.app.Application
 import android.app.Service
+import com.android.apksigner.SignerParams
 import com.dingyi.myluaapp.build.builder.MainBuilder
 import com.dingyi.myluaapp.build.dependency.repository.LocalMavenRepository
 import com.dingyi.myluaapp.build.log.Logger
 import com.dingyi.myluaapp.build.service.ServiceRepository
 import com.dingyi.myluaapp.common.kts.Paths
+import org.conscrypt.OpenSSLProvider
+import java.security.Security
 import kotlin.RuntimeException
 
 class BuildMain(
@@ -21,7 +24,7 @@ class BuildMain(
 
     private val mavenRepository = LocalMavenRepository(Paths.localMavenDir, createLogger())
 
-    init {
+   init {
         repository.init()
     }
 
@@ -36,6 +39,7 @@ class BuildMain(
             nowBuilder?.stop()
             return
         }
+
 
         MainBuilder(path, createLogger(), repository, mavenRepository).apply {
             init()
