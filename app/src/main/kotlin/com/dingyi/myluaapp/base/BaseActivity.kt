@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.dingyi.myluaapp.R
-import com.dingyi.myluaapp.common.kts.getAttributeColor
-import com.dingyi.myluaapp.common.kts.getString
-import com.dingyi.myluaapp.common.kts.iconColor
-import com.dingyi.myluaapp.common.kts.showSnackBar
+import com.dingyi.myluaapp.common.ktx.getAttributeColor
+import com.dingyi.myluaapp.common.ktx.getString
+import com.dingyi.myluaapp.common.ktx.iconColor
+import com.dingyi.myluaapp.common.ktx.showSnackBar
 import com.dingyi.myluaapp.common.theme.ThemeManager
 import com.hjq.language.MultiLanguages
 

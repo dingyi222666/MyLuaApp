@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.build.modules.android.parser
 
 import android.util.Xml
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.toFile
 import org.xmlpull.v1.XmlPullParser
 import java.io.FileReader
 

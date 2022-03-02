@@ -5,7 +5,7 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 import com.dingyi.myluaapp.build.default.DefaultTask
-import com.dingyi.myluaapp.common.kts.*
+import com.dingyi.myluaapp.common.ktx.*
 import com.drake.net.Net
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers

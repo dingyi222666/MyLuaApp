@@ -2,8 +2,8 @@ package com.dingyi.myluaapp.plugin.runtime.build
 
 import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.build.BuildMain
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.plugin.api.build.BuildService
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.google.gson.Gson

@@ -5,7 +5,6 @@ import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -14,23 +13,19 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
-import com.dingyi.myluaapp.common.kts.*
+import com.dingyi.myluaapp.common.ktx.*
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
-import com.dingyi.myluaapp.core.helper.ProgressMonitor
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
-import com.dingyi.myluaapp.plugin.runtime.plugin.PluginManager
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
-import com.dingyi.myluaapp.ui.editor.action.*
 import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
 import com.dingyi.myluaapp.ui.editor.adapter.EditorPagerAdapter
 import com.dingyi.myluaapp.ui.editor.helper.ActionHelper
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
-import java.util.concurrent.atomic.AtomicBoolean
 
 class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 

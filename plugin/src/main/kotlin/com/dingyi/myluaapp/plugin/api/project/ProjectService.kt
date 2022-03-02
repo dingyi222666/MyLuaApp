@@ -1,6 +1,6 @@
 package com.dingyi.myluaapp.plugin.api.project
 
-import com.dingyi.myluaapp.common.kts.MutablePair
+import com.dingyi.myluaapp.common.ktx.MutablePair
 import java.io.File
 
 interface ProjectService {

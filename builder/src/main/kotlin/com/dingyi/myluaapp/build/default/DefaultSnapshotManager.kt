@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.build.default
 import com.dingyi.myluaapp.build.api.Cache
 import com.dingyi.myluaapp.build.api.file.SnapshotManager
 import com.dingyi.myluaapp.build.util.getSHA256
-import com.dingyi.myluaapp.common.kts.toMD5
+import com.dingyi.myluaapp.common.ktx.toMD5
 import java.io.File
 
 class DefaultSnapshotManager(

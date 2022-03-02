@@ -62,7 +62,12 @@ dependencies {
     implementation(project(":builder"))
 
 
-    implementation(BuildConfig.Libs.Views.code_editor)
+    BuildConfig.Libs.Views.sora_editor.forEach {
+        implementation(it) {
+            exclude("xml-apis", "xml-apis")
+            exclude("xerces","xercesImpl")
+        }
+    }
 
     implementation(BuildConfig.Libs.Tools.zip4j)
 

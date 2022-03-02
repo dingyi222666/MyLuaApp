@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.plugin.modules.android.project
 
-import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.dingyi.myluaapp.plugin.api.project.ProjectProvider

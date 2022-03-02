@@ -2,9 +2,9 @@ package com.dingyi.myluaapp.ui.editor
 
 import androidx.lifecycle.*
 import com.dingyi.myluaapp.R
-import com.dingyi.myluaapp.common.kts.checkNotNull
-import com.dingyi.myluaapp.common.kts.getString
-import com.dingyi.myluaapp.common.kts.showToast
+import com.dingyi.myluaapp.common.ktx.checkNotNull
+import com.dingyi.myluaapp.common.ktx.getString
+import com.dingyi.myluaapp.common.ktx.showToast
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.core.helper.ProgressMonitor
 import com.dingyi.myluaapp.plugin.api.editor.Editor

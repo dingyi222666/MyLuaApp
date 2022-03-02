@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.build.default
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
-import com.dingyi.myluaapp.common.kts.checkNotNull
+import com.dingyi.myluaapp.common.ktx.checkNotNull
 
 open class DefaultBuilder(
     private val module: Module

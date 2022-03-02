@@ -1,17 +1,13 @@
 package com.dingyi.myluaapp.build.modules.android.compiler
 
-import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.build.BuildConfig
 import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.command.CommandRunner
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.Paths
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.util.Collections.addAll
 
 class AAPT2Compiler(private val logger: ILogger) {
 

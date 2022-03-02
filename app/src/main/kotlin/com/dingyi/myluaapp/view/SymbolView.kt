@@ -4,11 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
-import androidx.preference.PreferenceDataStore
 import androidx.preference.PreferenceManager
-import androidx.viewpager2.widget.ViewPager2
-import com.dingyi.myluaapp.MainApplication
-import com.dingyi.myluaapp.common.kts.layoutInflater
+import com.dingyi.myluaapp.common.ktx.layoutInflater
 import com.dingyi.myluaapp.databinding.LayoutItemSymbolBinding
 
 /**

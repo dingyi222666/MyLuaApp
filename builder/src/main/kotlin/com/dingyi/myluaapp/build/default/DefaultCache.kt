@@ -2,9 +2,8 @@ package com.dingyi.myluaapp.build.default
 
 
 import com.dingyi.myluaapp.build.api.Cache
-import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.google.gson.Gson
-import java.io.Closeable
 import java.io.File
 
 class DefaultCache(

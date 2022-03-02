@@ -1,9 +1,9 @@
 package com.dingyi.myluaapp.core.project
 
 import androidx.annotation.Keep
-import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.toFile
-import com.dingyi.myluaapp.common.kts.toMD5
+import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.common.ktx.toFile
+import com.dingyi.myluaapp.common.ktx.toMD5
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import java.io.OutputStream

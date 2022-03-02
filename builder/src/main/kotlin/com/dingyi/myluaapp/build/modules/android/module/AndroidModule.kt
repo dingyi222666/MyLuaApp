@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.build.modules.android.module
 
-import android.util.Log
 import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.Cache
 import com.dingyi.myluaapp.build.api.builder.Builder
@@ -18,9 +17,8 @@ import com.dingyi.myluaapp.build.dependency.ProjectDependency
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.script.DefaultScript
 import com.dingyi.myluaapp.build.util.ComparableVersion
-import com.dingyi.myluaapp.common.kts.checkNotNull
-import com.dingyi.myluaapp.common.kts.println
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.checkNotNull
+import com.dingyi.myluaapp.common.ktx.toFile
 import org.luaj.vm2.LuaString
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue

@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.common.kts
+package com.dingyi.myluaapp.common.ktx
 
 import com.dingyi.myluaapp.MainApplication
 import java.io.File

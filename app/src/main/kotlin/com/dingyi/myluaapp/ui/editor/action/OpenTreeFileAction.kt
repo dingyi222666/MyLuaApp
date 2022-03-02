@@ -1,9 +1,8 @@
 package com.dingyi.myluaapp.ui.editor.action
 
-import com.dingyi.myluaapp.common.kts.endsWith
+import com.dingyi.myluaapp.common.ktx.endsWith
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
-import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import java.io.File
 

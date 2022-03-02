@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dingyi.myluaapp.base.BaseFragment
-import com.dingyi.myluaapp.common.kts.checkNotNull
-import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.ktx.checkNotNull
+import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.core.log.listener.ApkInstaller
 import com.dingyi.myluaapp.databinding.FragmentEditorBuildLogBinding

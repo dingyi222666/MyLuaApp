@@ -1,7 +1,5 @@
-package com.dingyi.myluaapp.common.kts
+package com.dingyi.myluaapp.common.ktx
 
-import org.luaj.vm2.LuaJVM
-import org.luaj.vm2.LuajVm
 import kotlin.Pair
 
 /**

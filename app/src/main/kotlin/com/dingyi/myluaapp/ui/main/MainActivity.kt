@@ -11,8 +11,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
-import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.startActivity
+import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.common.ktx.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
@@ -22,9 +22,7 @@ import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 

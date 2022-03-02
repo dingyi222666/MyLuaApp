@@ -5,11 +5,10 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.api.dependency.MavenDependency
 import com.dingyi.myluaapp.build.default.DefaultTask
-import com.dingyi.myluaapp.build.util.ComparableVersion
 import com.dingyi.myluaapp.build.util.getMD5
-import com.dingyi.myluaapp.common.kts.checkNotNull
-import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.checkNotNull
+import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.common.ktx.toFile
 import com.drake.net.Net
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers

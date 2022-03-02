@@ -1,8 +1,8 @@
 package com.dingyi.myluaapp.plugin.modules.android.project
 
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.plugin.api.project.ProjectCreatorProvider
 import com.dingyi.myluaapp.plugin.api.project.ProjectTemplate
 import com.google.gson.Gson

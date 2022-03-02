@@ -3,13 +3,8 @@ package com.dingyi.myluaapp.core.log.listener
 import android.content.Context
 import android.text.Spannable
 import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
 import android.view.View
-import androidx.core.text.clearSpans
-import com.dingyi.myluaapp.R
-import com.dingyi.myluaapp.build.api.Project
-import com.dingyi.myluaapp.common.kts.getAttributeColor
-import com.dingyi.myluaapp.common.kts.installApk
+import com.dingyi.myluaapp.common.ktx.installApk
 import com.dingyi.myluaapp.view.LogView
 
 class ApkInstaller(private val context: Context) : LogView.LogListener {

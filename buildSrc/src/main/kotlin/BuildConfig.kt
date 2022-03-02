@@ -32,7 +32,7 @@ object BuildConfig {
         const val gson_version = "2.8.8"
         const val material_version = "1.5.0"
         const val appcompat_version = "1.4.1"
-        const val code_editor_version = "0.8.4"
+        const val sora_editor_version = "0.10.2"
         const val lifecycle_version = "2.4.0"
         const val preference_ktx_version = "1.1.1"
         const val constraint_layout_version = "2.0.4"
@@ -98,7 +98,6 @@ object BuildConfig {
                 "androidx.preference:preference-ktx:${Versions.preference_ktx_version}"
             const val swiperefreshlayout =
                 "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipe_refresh_layout_version}"
-            const val viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
 
         }
 
@@ -155,10 +154,13 @@ object BuildConfig {
         }
 
         object Views {
-            const val code_editor =
-                "io.github.Rosemoe.sora-editor:editor:${Versions.code_editor_version}"
+            val sora_editor = arrayOf(
+                "io.github.Rosemoe.sora-editor:editor:${Versions.sora_editor_version}",
+                "io.github.Rosemoe.sora-editor:editor-kt:${Versions.sora_editor_version}",
+                "io.github.Rosemoe.sora-editor:language-textmate:${Versions.sora_editor_version}",
+            )
 
-           
+
         }
 
         object Network {

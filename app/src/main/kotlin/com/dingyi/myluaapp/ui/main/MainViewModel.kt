@@ -5,12 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.bean.Poetry
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.getString
-import com.dingyi.myluaapp.common.kts.getStringArray
-import com.dingyi.myluaapp.common.kts.showSnackBar
+import com.dingyi.myluaapp.common.ktx.getString
+import com.dingyi.myluaapp.common.ktx.getStringArray
+import com.dingyi.myluaapp.common.ktx.showSnackBar
 
-import com.dingyi.myluaapp.core.project.ProjectManager
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.network.Apis
 import com.dingyi.myluaapp.plugin.api.project.Project

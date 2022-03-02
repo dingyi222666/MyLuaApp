@@ -1,15 +1,12 @@
 package com.dingyi.myluaapp.build.modules.android.tasks.sync
 
-import com.android.ide.common.xml.AndroidManifestParser
-import com.android.manifmerger.ManifestSystemProperty
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.parser.AndroidManifestSimpleParser
-import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.common.ktx.toFile
 import com.google.gson.Gson
-import kotlinx.coroutines.delay
 import org.luaj.vm2.LuaValue
 import java.io.File
 

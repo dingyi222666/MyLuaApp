@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dingyi.myluaapp.R
-import com.dingyi.myluaapp.common.kts.*
+import com.dingyi.myluaapp.common.ktx.*
 import com.dingyi.myluaapp.plugin.api.project.ProjectTemplate
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import kotlinx.coroutines.Dispatchers

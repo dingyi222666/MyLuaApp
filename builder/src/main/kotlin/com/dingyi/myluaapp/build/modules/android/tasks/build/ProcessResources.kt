@@ -5,9 +5,9 @@ import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.compiler.AAPT2Compiler
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.toFile
-import com.dingyi.myluaapp.common.kts.toMD5
+import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.toFile
+import com.dingyi.myluaapp.common.ktx.toMD5
 import java.io.File
 
 class ProcessResources(private val module: Module) : DefaultTask(module) {

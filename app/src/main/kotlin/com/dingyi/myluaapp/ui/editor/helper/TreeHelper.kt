@@ -1,6 +1,6 @@
 package com.dingyi.myluaapp.ui.editor.helper
 
-import com.dingyi.myluaapp.common.kts.sortFile
+import com.dingyi.myluaapp.common.ktx.sortFile
 import com.dingyi.myluaapp.view.treeview.TreeNode
 import com.dingyi.myluaapp.view.treeview.helper.TreeHelper
 import java.io.File

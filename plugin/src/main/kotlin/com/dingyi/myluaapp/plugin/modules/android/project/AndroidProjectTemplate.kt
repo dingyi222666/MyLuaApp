@@ -1,10 +1,9 @@
 package com.dingyi.myluaapp.plugin.modules.android.project
 
-import android.util.Log
-import com.dingyi.myluaapp.common.kts.MutablePair
-import com.dingyi.myluaapp.common.kts.endsWith
-import com.dingyi.myluaapp.common.kts.replaceString
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.MutablePair
+import com.dingyi.myluaapp.common.ktx.endsWith
+import com.dingyi.myluaapp.common.ktx.replaceString
+import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.plugin.api.project.ProjectTemplate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.build.modules.public.compiler
 
 import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.logger.ILogger
-import com.dingyi.myluaapp.common.kts.Paths
+import com.dingyi.myluaapp.common.ktx.Paths
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

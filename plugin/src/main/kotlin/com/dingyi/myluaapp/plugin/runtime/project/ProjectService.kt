@@ -1,8 +1,8 @@
 package com.dingyi.myluaapp.plugin.runtime.project
 
-import com.dingyi.myluaapp.common.kts.MutablePair
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.MutablePair
+import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.project.*
 import com.dingyi.myluaapp.plugin.api.project.ProjectService

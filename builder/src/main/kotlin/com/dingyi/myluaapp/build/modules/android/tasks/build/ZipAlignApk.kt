@@ -5,7 +5,7 @@ import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.command.CommandRunner
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
-import com.dingyi.myluaapp.common.kts.Paths
+import com.dingyi.myluaapp.common.ktx.Paths
 import org.luaj.vm2.LuaBoolean
 import java.util.*
 

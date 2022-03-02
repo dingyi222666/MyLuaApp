@@ -2,11 +2,10 @@ package com.dingyi.myluaapp.common.dialog.builder
 
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import com.dingyi.myluaapp.common.dialog.BottomDialog
 import com.dingyi.myluaapp.common.dialog.DialogClickListener
 import com.dingyi.myluaapp.common.dialog.layout.BaseBottomDialogLayout
-import com.dingyi.myluaapp.common.kts.getString
+import com.dingyi.myluaapp.common.ktx.getString
 
 
 class BottomDialogBuilder(private val context: Context) {

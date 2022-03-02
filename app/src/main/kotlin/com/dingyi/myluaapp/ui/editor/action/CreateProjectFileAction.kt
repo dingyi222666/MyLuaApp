@@ -6,8 +6,8 @@ import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.dialog.builder.BottomDialogBuilder
 import com.dingyi.myluaapp.common.dialog.layout.DefaultClickListLayout
 import com.dingyi.myluaapp.common.dialog.layout.DefaultInputLayout
-import com.dingyi.myluaapp.common.kts.checkNotNull
-import com.dingyi.myluaapp.common.kts.getString
+import com.dingyi.myluaapp.common.ktx.checkNotNull
+import com.dingyi.myluaapp.common.ktx.getString
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 import com.dingyi.myluaapp.plugin.api.project.FileTemplate

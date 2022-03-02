@@ -8,15 +8,11 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ScrollView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.widget.NestedScrollView
 import com.dingyi.myluaapp.R
-import com.dingyi.myluaapp.common.helper.EventHelper
-import com.dingyi.myluaapp.common.kts.getAttributeColor
+import com.dingyi.myluaapp.common.ktx.getAttributeColor
 import java.io.File
-import java.io.ObjectInput
-import java.nio.charset.CharsetEncoder
 
 class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs) {
 

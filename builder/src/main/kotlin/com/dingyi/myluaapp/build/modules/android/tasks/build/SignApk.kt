@@ -9,7 +9,7 @@ import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 
 import com.dingyi.myluaapp.build.modules.android.storebgfder2rre.KeyStoreProvider
-import com.dingyi.myluaapp.common.kts.*
+import com.dingyi.myluaapp.common.ktx.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.conscrypt.OpenSSLProvider
@@ -18,7 +18,6 @@ import org.luaj.vm2.LuaNil
 import org.luaj.vm2.LuaTable
 import org.luaj.vm2.LuaValue
 import java.io.File
-import java.security.KeyStore
 import java.security.Security
 import java.util.*
 

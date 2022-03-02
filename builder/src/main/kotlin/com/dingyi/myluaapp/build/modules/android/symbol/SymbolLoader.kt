@@ -1,12 +1,6 @@
 package com.dingyi.myluaapp.build.modules.android.symbol
 
-import com.dingyi.myluaapp.common.kts.println
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeSpec
 import java.io.File
-import java.lang.reflect.Type
-import javax.lang.model.type.TypeMirror
 
 class SymbolLoader(
     private val loadFile: File

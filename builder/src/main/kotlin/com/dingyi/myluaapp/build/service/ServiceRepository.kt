@@ -6,8 +6,8 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.build.api.service.ServiceRepository
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.google.gson.Gson
 import dalvik.system.DexClassLoader
 import java.io.File

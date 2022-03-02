@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.build.dependency
 import com.dingyi.myluaapp.build.api.dependency.Dependency
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Project
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.toFile
 import java.io.File
 
 class ProjectDependency(

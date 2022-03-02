@@ -8,8 +8,8 @@ import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
 import com.dingyi.myluaapp.build.modules.android.parser.AndroidManifestSimpleParser
 import com.dingyi.myluaapp.build.modules.android.symbol.SymbolLoader
 import com.dingyi.myluaapp.build.modules.android.symbol.SymbolWriter
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.toMD5
+import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.toMD5
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

@@ -5,13 +5,11 @@ import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.dialog.builder.BottomDialogBuilder
 import com.dingyi.myluaapp.common.dialog.layout.DefaultMessageLayout
-import com.dingyi.myluaapp.common.kts.getString
+import com.dingyi.myluaapp.common.ktx.getString
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 import com.dingyi.myluaapp.ui.editor.MainViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 
 class DeleteProjectFileAction:Action<(() -> Unit) -> Unit> {

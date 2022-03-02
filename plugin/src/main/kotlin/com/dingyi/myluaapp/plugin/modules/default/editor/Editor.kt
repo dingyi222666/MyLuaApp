@@ -1,13 +1,10 @@
 package com.dingyi.myluaapp.plugin.modules.default.editor
 
-import android.content.Context
 import android.view.View
-import com.dingyi.myluaapp.common.kts.toFile
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import io.github.rosemoe.sora.widget.CodeEditor
 
 import com.dingyi.myluaapp.plugin.api.editor.Editor
-import com.dingyi.myluaapp.plugin.api.editor.EditorService
 
 import com.dingyi.myluaapp.plugin.api.editor.language.Language
 import com.dingyi.myluaapp.plugin.modules.default.editor.language.EmptyLanguage

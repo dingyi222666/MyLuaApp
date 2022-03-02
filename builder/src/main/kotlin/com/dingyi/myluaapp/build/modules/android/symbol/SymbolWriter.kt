@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.build.modules.android.symbol
 
-import com.dingyi.myluaapp.common.kts.println
 import java.io.File
 import java.io.OutputStreamWriter
 

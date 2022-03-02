@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
 
-import com.dingyi.myluaapp.editor.kts.dp
+import com.dingyi.myluaapp.editor.ktx.dp
 import io.github.rosemoe.sora.widget.CodeEditor
 import java.io.File
 
@@ -25,19 +25,13 @@ class CodeEditor(context: Context, attributeSet: AttributeSet?) :
         Typeface.BOLD
         typefaceText = Typeface.MONOSPACE;
         typefaceLineNumber = typefaceText
-        val newCompleteWindow = AutoCompleteWindow(this)
 
-        Class.forName("io.github.rosemoe.sora.widget.CodeEditor")
-            .getDeclaredField("mCompletionWindow")
-            .apply {
-                isAccessible = true
-            }.set(this, newCompleteWindow)//换掉显示窗口
 
-        setAutoCompletionItemAdapter(AutoCompletionItemAdapter(this))
-        setTextActionMode(TextActionMode.ACTION_MODE)
         setPinLineNumber(false)
         setInterceptParentHorizontalScrollIfNeeded(false)
-        isOverScrollEnabled = false
+
+
+
         isHardwareAcceleratedDrawAllowed = true
 
         context.externalCacheDir?.parentFile?.run {
@@ -60,8 +54,5 @@ class CodeEditor(context: Context, attributeSet: AttributeSet?) :
     }
 
 
-    // make public
-    public override fun postHideCompletionWindow() {
-        super.postHideCompletionWindow()
-    }
+
 }

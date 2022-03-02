@@ -1,10 +1,9 @@
 package com.dingyi.myluaapp.build.script
 
 import com.dingyi.myluaapp.build.api.script.Script
-import com.dingyi.myluaapp.common.kts.LuaJVM
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.toFile
-import java.io.File
+import com.dingyi.myluaapp.common.ktx.LuaJVM
+import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.toFile
 
 //The DefaultScript based lua
 class DefaultScript(private val path: String) : Script {

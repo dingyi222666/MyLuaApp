@@ -1,14 +1,11 @@
-package com.dingyi.myluaapp.common.kts
+package com.dingyi.myluaapp.common.ktx
 
 import android.animation.LayoutTransition
-import android.content.Context
-import android.content.ContextWrapper
 import android.graphics.drawable.Drawable
 import android.view.*
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.children
 import androidx.core.widget.addTextChangedListener
 import androidx.drawerlayout.widget.DrawerLayout
@@ -43,6 +40,7 @@ fun ViewGroup.addLayoutTransition() {
         enableTransitionType(LayoutTransition.DISAPPEARING)
     }
 }
+
 
 
 inline fun Int.showPopMenu(view: View, block: (PopupMenu) -> Unit) {

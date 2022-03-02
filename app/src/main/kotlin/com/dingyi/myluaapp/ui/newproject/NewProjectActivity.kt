@@ -1,7 +1,6 @@
 package com.dingyi.myluaapp.ui.newproject
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -9,8 +8,7 @@ import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
-import com.dingyi.myluaapp.common.kts.*
-import com.dingyi.myluaapp.core.project.ProjectBuilder
+import com.dingyi.myluaapp.common.ktx.*
 import com.dingyi.myluaapp.databinding.ActivityNewProjectBinding
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.google.android.material.chip.Chip

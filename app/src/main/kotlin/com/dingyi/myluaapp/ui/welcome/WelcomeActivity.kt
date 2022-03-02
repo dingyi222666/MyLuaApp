@@ -2,14 +2,12 @@ package com.dingyi.myluaapp.ui.welcome
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.build.util.getSHA256
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.startActivity
-import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
+import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.startActivity
 import com.dingyi.myluaapp.databinding.ActivityWelcomeBinding
 import com.dingyi.myluaapp.ui.main.MainActivity
 import kotlinx.coroutines.Dispatchers

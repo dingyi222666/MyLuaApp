@@ -4,16 +4,15 @@ package com.dingyi.myluaapp.build.default
 import com.dingyi.myluaapp.build.api.file.InputFile
 
 import com.dingyi.myluaapp.build.api.file.TaskInput
-import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.readFormGZIP
-import com.dingyi.myluaapp.common.kts.toFile
-import com.dingyi.myluaapp.common.kts.writeUseGZIP
+import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.common.ktx.readFormGZIP
+import com.dingyi.myluaapp.common.ktx.toFile
+import com.dingyi.myluaapp.common.ktx.writeUseGZIP
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 import java.io.File
-import java.util.zip.GZIPOutputStream
 
 class DefaultTaskInput<T : DefaultTask>(private val task: T) : TaskInput {
 

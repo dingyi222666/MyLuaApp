@@ -10,7 +10,7 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.build.script.DefaultScript
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.toFile
 import java.io.File
 
 open class DefaultModule(

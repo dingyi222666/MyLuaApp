@@ -1,6 +1,6 @@
 package com.dingyi.myluaapp.ui.editor.helper
 
-import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.action.*

@@ -1,20 +1,17 @@
 package com.dingyi.myluaapp.build.modules.android.tasks.build
 
-import android.util.Log
 import com.android.tools.r8.*
-import com.android.tools.r8.origin.Origin
 import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
-import com.dingyi.myluaapp.common.kts.Paths
-import com.dingyi.myluaapp.common.kts.endsWith
-import com.dingyi.myluaapp.common.kts.toFile
-import com.dingyi.myluaapp.common.kts.toMD5
+import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.endsWith
+import com.dingyi.myluaapp.common.ktx.toFile
+import com.dingyi.myluaapp.common.ktx.toMD5
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.luaj.vm2.Lua
 import org.luaj.vm2.LuaNumber
 import org.luaj.vm2.LuaTable
 import java.io.File

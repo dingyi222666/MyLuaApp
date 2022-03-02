@@ -1,7 +1,6 @@
 package com.dingyi.myluaapp.plugin.modules.default
 
-import android.util.Log
-import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey

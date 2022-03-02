@@ -8,7 +8,7 @@ import com.dingyi.myluaapp.build.dependency.LocalMavenDependency
 import com.dingyi.myluaapp.build.dependency.MavenPom
 import com.dingyi.myluaapp.build.parser.MavenMetaDataParser
 import com.dingyi.myluaapp.build.parser.PomParser
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.toFile
 import java.io.File
 
 class LocalMavenRepository(

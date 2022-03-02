@@ -1,10 +1,9 @@
 package com.dingyi.myluaapp.ui.editor.adapter
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.ui.editor.fragment.EditorBuildLogFragment
 import com.dingyi.myluaapp.ui.editor.fragment.EditorFileListFragment
 

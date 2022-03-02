@@ -1,8 +1,8 @@
 package com.dingyi.myluaapp.plugin.runtime.editor
 
 import android.util.Log
-import com.dingyi.myluaapp.common.kts.getJavaClass
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.editor.EditorProvider
@@ -12,7 +12,6 @@ import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.google.gson.Gson
 import java.io.File
 import java.io.FileNotFoundException
-import java.net.NetworkInterface
 
 class EditorService(private val pluginContext: PluginContext) : EditorService {
 

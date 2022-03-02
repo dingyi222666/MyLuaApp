@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.plugin.runtime.project
 
-import com.dingyi.myluaapp.common.kts.suffix
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.suffix
+import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.plugin.api.project.FileTemplate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

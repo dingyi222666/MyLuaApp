@@ -3,8 +3,8 @@ buildscript {
 
     repositories {
         maven("https://maven.aliyun.com/repository/google")
-        //google()
-        //mavenCentral()
+        google()
+        mavenCentral()
         maven("https://maven.aliyun.com/repository/public")
         maven("https://maven.aliyun.com/repository/gradle-plugin")
         maven("https://jitpack.io")
@@ -26,8 +26,8 @@ buildscript {
 allprojects {
     repositories {
         maven("https://maven.aliyun.com/repository/google")
-        //google()
-        //mavenCentral()
+        google()
+        mavenCentral()
         maven("https://maven.aliyun.com/repository/public")
         maven("https://maven.aliyun.com/repository/gradle-plugin")
         maven("https://jitpack.io")

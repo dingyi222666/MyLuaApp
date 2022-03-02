@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseFragment
-import com.dingyi.myluaapp.common.kts.getAttributeColor
-import com.dingyi.myluaapp.common.kts.getJavaClass
+import com.dingyi.myluaapp.common.ktx.getAttributeColor
+import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.databinding.FragmentEditorFileListBinding
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.adapter.EditorNodeBinder
@@ -21,7 +20,6 @@ import com.dingyi.myluaapp.view.treeview.base.BaseNodeViewFactory
 
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EditorFileListFragment : BaseFragment<FragmentEditorFileListBinding, MainViewModel>() {

@@ -87,7 +87,12 @@ dependencies {
     implementation(BuildConfig.Libs.Google.material)
     implementation(BuildConfig.Libs.Google.gson)
 
-    implementation(BuildConfig.Libs.Views.code_editor)
+    BuildConfig.Libs.Views.sora_editor.forEach {
+        implementation(it)  {
+            exclude("xml-apis","xml-apis")
+            exclude("xerces","xercesImpl")
+        }
+    }
 
     implementation(BuildConfig.Libs.Tools.channel)
     implementation(BuildConfig.Libs.Tools.brv)

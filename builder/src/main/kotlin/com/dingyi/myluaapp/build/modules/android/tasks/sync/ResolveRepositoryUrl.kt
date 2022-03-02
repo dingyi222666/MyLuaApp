@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.build.modules.android.tasks.sync
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
-import com.dingyi.myluaapp.common.kts.toFile
+import com.dingyi.myluaapp.common.ktx.toFile
 import com.google.gson.Gson
 import org.luaj.vm2.LuaTable
 import java.io.File
