@@ -1,26 +1,24 @@
 /* JKS.java -- implementation of the "JKS" key store.
-   Copyright (C) 2003  Casey Marshall <rsdio@metastatic.org>
-
-Permission to use, copy, modify, distribute, and sell this software and
-its documentation for any purpose is hereby granted without fee,
-provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in
-supporting documentation.  No representations are made about the
-suitability of this software for any purpose.  It is provided "as is"
-without express or implied warranty.
-
-This program was derived by reverse-engineering Sun's own
-implementation, using only the public API that is available in the 1.4.1
-JDK.  Hence nothing in this program is, or is derived from, anything
-copyrighted by Sun Microsystems.  While the "Binary Evaluation License
-Agreement" that the JDK is licensed under contains blanket statements
-that forbid reverse-engineering (among other things), it is my position
-that US copyright law does not and cannot forbid reverse-engineering of
-software to produce a compatible implementation.  There are, in fact,
-numerous clauses in copyright law that specifically allow
-reverse-engineering, and therefore I believe it is outside of Sun's
-power to enforce restrictions on reverse-engineering of their software,
-and it is irresponsible for them to claim they can.  */
+        Copyright (C) 2003  Casey Marshall <rsdio@metastatic.org>
+        Permission to use, copy, modify, distribute, and sell this software and
+        its documentation for any purpose is hereby granted without fee,
+        provided that the above copyright notice appear in all copies and that
+        both that copyright notice and this permission notice appear in
+        supporting documentation.  No representations are made about the
+        suitability of this software for any purpose.  It is provided "as is"
+        without express or implied warranty.
+        This program was derived by reverse-engineering Sun's own
+        implementation, using only the public API that is available in the 1.4.1
+        JDK.  Hence nothing in this program is, or is derived from, anything
+        copyrighted by Sun Microsystems.  While the "Binary Evaluation License
+        Agreement" that the JDK is licensed under contains blanket statements
+        that forbid reverse-engineering (among other things), it is my position
+        that US copyright law does not and cannot forbid reverse-engineering of
+        software to produce a compatible implementation.  There are, in fact,
+        numerous clauses in copyright law that specifically allow
+        reverse-engineering, and therefore I believe it is outside of Sun's
+        power to enforce restrictions on reverse-engineering of their software,
+        and it is irresponsible for them to claim they can.  */
 
 package com.dingyi.myluaapp.build.util;
 
@@ -141,6 +139,11 @@ import javax.crypto.spec.SecretKeySpec;
  * href="http://metastatic.org/source/JKS.java">JKS.java</a>.
  *
  * @author Casey Marshall (rsdio@metastatic.org)
+ *
+ * Changes by Ken Ellinwood:
+ * ** Fixed a NullPointerException in engineLoad(). This method must return gracefully if the keystore input stream is null.
+ * ** engineGetCertificateEntry() was updated to return the first cert in the chain for private key entries.
+ * ** Lowercase the alias names, otherwise keytool chokes on the file created by this code.
  */
 public class JKS extends KeyStoreSpi
 {
@@ -171,23 +174,23 @@ public class JKS extends KeyStoreSpi
         privateKeys = new HashMap();
         certChains = new HashMap();
         dates = new HashMap();
+
     }
 
     // Instance methods.
     // ------------------------------------------------------------------------
 
     public Key engineGetKey(String alias, char[] password)
-            throws NoSuchAlgorithmException, UnrecoverableKeyException
-    {
+            throws NoSuchAlgorithmException, UnrecoverableKeyException {
+        alias = alias.toLowerCase();
+
         if (!privateKeys.containsKey(alias))
             return null;
         byte[] key = decryptKey((byte[]) privateKeys.get(alias),
                 charsToBytes(password));
         Certificate[] chain = engineGetCertificateChain(alias);
-        if (chain.length > 0)
-        {
-            try
-            {
+        if (chain.length > 0) {
+            try {
                 // Private and public keys MUST have the same algorithm.
                 KeyFactory fact = KeyFactory.getInstance(
                         chain[0].getPublicKey().getAlgorithm());
@@ -204,16 +207,22 @@ public class JKS extends KeyStoreSpi
 
     public Certificate[] engineGetCertificateChain(String alias)
     {
+        alias = alias.toLowerCase();
         return (Certificate[]) certChains.get(alias);
     }
 
-    public Certificate engineGetCertificate(String alias)
-    {
+    public Certificate engineGetCertificate(String alias) {
+        alias = alias.toLowerCase();
+        if (engineIsKeyEntry(alias)) {
+            Certificate[] certChain = (Certificate[]) certChains.get(alias);
+            if (certChain != null && certChain.length > 0) return certChain[0];
+        }
         return (Certificate) trustedCerts.get(alias);
     }
 
     public Date engineGetCreationDate(String alias)
     {
+        alias = alias.toLowerCase();
         return (Date) dates.get(alias);
     }
 
@@ -222,6 +231,7 @@ public class JKS extends KeyStoreSpi
     public void engineSetKeyEntry(String alias, Key key, char[] passwd, Certificate[] certChain)
             throws KeyStoreException
     {
+        alias = alias.toLowerCase();
         if (trustedCerts.containsKey(alias))
             throw new KeyStoreException("\"" + alias + " is a trusted certificate entry");
         privateKeys.put(alias, encryptKey(key, charsToBytes(passwd)));
@@ -239,6 +249,7 @@ public class JKS extends KeyStoreSpi
     public void engineSetKeyEntry(String alias, byte[] encodedKey, Certificate[] certChain)
             throws KeyStoreException
     {
+        alias = alias.toLowerCase();
         if (trustedCerts.containsKey(alias))
             throw new KeyStoreException("\"" + alias + "\" is a trusted certificate entry");
         try
@@ -264,6 +275,7 @@ public class JKS extends KeyStoreSpi
     public void engineSetCertificateEntry(String alias, Certificate cert)
             throws KeyStoreException
     {
+        alias = alias.toLowerCase();
         if (privateKeys.containsKey(alias))
             throw new KeyStoreException("\"" + alias + "\" is a private key entry");
         if (cert == null)
@@ -278,6 +290,7 @@ public class JKS extends KeyStoreSpi
 
     public void engineDeleteEntry(String alias) throws KeyStoreException
     {
+        alias = alias.toLowerCase();
         aliases.remove(alias);
     }
 
@@ -288,6 +301,7 @@ public class JKS extends KeyStoreSpi
 
     public boolean engineContainsAlias(String alias)
     {
+        alias = alias.toLowerCase();
         return aliases.contains(alias);
     }
 
@@ -298,11 +312,13 @@ public class JKS extends KeyStoreSpi
 
     public boolean engineIsKeyEntry(String alias)
     {
+        alias = alias.toLowerCase();
         return privateKeys.containsKey(alias);
     }
 
     public boolean engineIsCertificateEntry(String alias)
     {
+        alias = alias.toLowerCase();
         return trustedCerts.containsKey(alias);
     }
 
@@ -359,13 +375,14 @@ public class JKS extends KeyStoreSpi
             throws IOException, NoSuchAlgorithmException, CertificateException
     {
         MessageDigest md = MessageDigest.getInstance("SHA");
-        md.update(charsToBytes(passwd));
+        if (passwd != null) md.update(charsToBytes(passwd));
         md.update("Mighty Aphrodite".getBytes("UTF-8")); // HAR HAR
         aliases.clear();
         trustedCerts.clear();
         privateKeys.clear();
         certChains.clear();
         dates.clear();
+        if (in == null) return;
         DataInputStream din = new DataInputStream(new DigestInputStream(in, md));
         if (din.readInt() != MAGIC)
             throw new IOException("not a JavaKeyStore");
@@ -405,7 +422,7 @@ public class JKS extends KeyStoreSpi
 
         byte[] hash = new byte[20];
         din.read(hash);
-        if (MessageDigest.isEqual(hash, md.digest()))
+        if (passwd != null && MessageDigest.isEqual(hash, md.digest()))
             throw new IOException("signature not verified");
     }
 

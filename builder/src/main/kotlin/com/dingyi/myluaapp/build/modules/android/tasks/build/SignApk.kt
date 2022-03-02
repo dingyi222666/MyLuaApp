@@ -7,7 +7,8 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
-import com.dingyi.myluaapp.build.modules.android.store.JKSProvider
+
+import com.dingyi.myluaapp.build.modules.android.storebgfder2rre.KeyStoreProvider
 import com.dingyi.myluaapp.common.kts.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -67,16 +68,17 @@ class SignApk(private val module: Module) : DefaultTask(module) {
             }
         }
 
-        val openSSLProvider = Security.getProviders().find { it.name == "ssl" }
+        val openSSLProvider = Security.getProvider("ssl")
 
         if (openSSLProvider == null) {
             Security.addProvider(OpenSSLProvider("ssl"))
         }
 
-        val jksProvider = Security.getProviders().find { it.name == "JKSProvider" }
+
+        val jksProvider = Security.getProvider("JKSProvider")
 
         if (jksProvider == null) {
-            Security.addProvider(JKSProvider())
+            Security.addProvider(KeyStoreProvider())
         }
 
 
@@ -84,7 +86,7 @@ class SignApk(private val module: Module) : DefaultTask(module) {
     }
 
 
-    override suspend fun run() {
+    override suspend fun run() = withContext(Dispatchers.IO) {
 
         val args = mutableListOf<String>()
 
@@ -94,6 +96,9 @@ class SignApk(private val module: Module) : DefaultTask(module) {
 
         args.add("sign")
 
+        val ksTypeMap = mapOf(
+            "jks" to "jks"
+        )
 
         var configSign = false
 
@@ -133,22 +138,30 @@ class SignApk(private val module: Module) : DefaultTask(module) {
                 configSign = false
             } else {
 
-                val file = getFile(storeFile.tojstring()).checkNotNull()
+                val file = getFile(storeFile.tojstring()).checkNotNull().toFile()
 
-                args.add("--ks")
-                args.add(file)
+                if (!file.suffix.endsWith("bks", "jks")) {
 
-               if (file.toFile().suffix == "jks") {
-                    args.add("--ks-type")
-                    args.add("jks")
-                   /*
-                    args.add("--ks-provider-name")
-                    args.add("JKSProvider")
+                    module.getLogger()
+                        .error("\n")
 
-                    */
+
+                    module
+                        .getLogger()
+                        .error("Not support this key store, only support the type of bks or jks(with rsa)")
+
+                    module.getLogger()
+                        .error("\n")
+
+                    throw CompileError("Not support this key store, only support the type of bks or jks(with rsa)")
+
                 }
 
+                args.add("--ks")
+                args.add(file.path)
 
+                args.add("--ks-type")
+                args.add(ksTypeMap.getOrDefault(file.suffix, "bks"))
 
                 args.add("--ks-key-alias")
                 args.add(check(signerConfig["keyAlias"], "keyAlias"))
@@ -181,9 +194,25 @@ class SignApk(private val module: Module) : DefaultTask(module) {
         args.add(inputPath.path)
 
 
-        withContext(Dispatchers.IO) {
+
+
+        try {
             ApkSignerTool
                 .main(args.toTypedArray())
+        } catch (it: Exception) {
+            if (it.message == "Wrong version of key store.") {
+                module
+                    .getLogger()
+                    .error("Not support this key store, only support the type of bks or jks(with rsa)")
+
+                module.getLogger()
+                    .error("\n")
+                module
+                    .getLogger()
+                    .error(it.stackTraceToString())
+
+                throw CompileError("Not support this key store, only support the type of bks or jks(with rsa)")
+            }
         }
 
 
