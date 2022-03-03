@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.editor.language.highlight
 
 import android.os.Bundle
+import androidx.annotation.UiThread
+import androidx.annotation.WorkerThread
 import io.github.rosemoe.sora.lang.analysis.AnalyzeManager
 import io.github.rosemoe.sora.lang.analysis.StyleReceiver
 import io.github.rosemoe.sora.lang.styling.MappedSpans
@@ -13,19 +15,17 @@ abstract class HighlightProvider : AnalyzeManager {
 
     private var ref: ContentReference? = null
 
-
     private var receiver: StyleReceiver? = null
 
     private var data: IncrementalEditContent? = null
 
-    private val superJob = SupervisorJob()
+    private val superJob = Job()
 
     protected val coroutineScope = CoroutineScope(Dispatchers.IO + superJob)
 
-    private val runJobList = mutableListOf<Job>()
+    protected val runJobList = mutableListOf<Job>()
 
     override fun setReceiver(receiver: StyleReceiver?) {
-
         this.receiver = receiver
     }
 
@@ -34,13 +34,6 @@ abstract class HighlightProvider : AnalyzeManager {
         return data
     }
 
-    fun postAsyncTask(block: suspend CoroutineScope.()->Unit):Job {
-        val runJob = coroutineScope.launch(start = CoroutineStart.LAZY) {
-            block()
-        }
-        runJobList.add(runJob)
-        return runJob
-    }
 
     private fun cancelAllTask() {
         superJob.cancel()
@@ -50,11 +43,13 @@ abstract class HighlightProvider : AnalyzeManager {
     private fun cancelRunTask() {
         runJobList.removeAll {
             it.cancel()
+            it.cancelChildren()
             true
         }
     }
 
-    suspend fun updateStyle(styles: Styles) = withContext(Dispatchers.Main) {
+    @UiThread
+    fun updateStyle(styles: Styles) {
         receiver?.setStyles(this@HighlightProvider, styles)
     }
 
@@ -93,12 +88,27 @@ abstract class HighlightProvider : AnalyzeManager {
 
     override fun rerun() {
         cancelRunTask()
-        runHighlighting(ref,data)
+        runHighlighting()
+    }
+
+    private fun runHighlighting() {
+        val delegate = JobDelegate()
+
+        val job = coroutineScope.launch(start = CoroutineStart.LAZY) {
+            runHighlighting(ref, data, delegate)
+        }
+
+        runJobList.add(job)
+        delegate.setJob(job)
+        job.start()
     }
 
 
-
-    abstract fun runHighlighting(ref: ContentReference?, data: IncrementalEditContent?)
+    abstract suspend fun runHighlighting(
+        ref: ContentReference?,
+        data: IncrementalEditContent?,
+        delegate: Delegate
+    )
 
     override fun destroy() {
         data = null
@@ -109,7 +119,8 @@ abstract class HighlightProvider : AnalyzeManager {
     /**
      * Default highlight method,must run in background thread
      */
-    abstract suspend fun highlighting(
+    @WorkerThread
+    abstract fun highlighting(
         text: CharSequence,
         builder: MappedSpans.Builder,
         styles: Styles,

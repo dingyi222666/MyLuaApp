@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.editor.ktx
 
 import android.content.res.Resources
 import io.github.rosemoe.sora.lang.styling.MappedSpans
+import io.github.rosemoe.sora.lang.styling.TextStyle
 import io.github.rosemoe.sora.widget.CodeEditor
 import io.github.rosemoe.sora.widget.component.EditorBuiltinComponent
 
@@ -21,5 +22,5 @@ inline fun <reified T : EditorBuiltinComponent> CodeEditor.getComponent(): T {
 }
 
 fun MappedSpans.Builder.addIfNeeded(spanLine: Int, column: Int, style: Int) {
-    addIfNeeded(spanLine, column, style.toLong())
+    addIfNeeded(spanLine, column, TextStyle.makeStyle(style))
 }

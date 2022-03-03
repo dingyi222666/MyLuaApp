@@ -44,7 +44,7 @@ object BuildConfig {
         const val swipe_refresh_layout_version = "1.2.0-alpha01"
         const val lsp4j_version = "0.12.0"
 
-        const val kotlinx_coroutines_android_version = "1.5.1"
+        const val kotlinx_coroutines_android_version = "1.6.0"
         const val core_ktx_version = "1.7.0"
         const val brv_version = "1.3.51"
         const val multi_languages_version = "6.9"

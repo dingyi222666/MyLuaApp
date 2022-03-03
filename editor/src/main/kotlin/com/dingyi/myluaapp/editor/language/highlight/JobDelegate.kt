@@ -11,6 +11,8 @@ class JobDelegate:HighlightProvider.Delegate {
     }
 
     override fun isCancelled(): Boolean {
-        return job?.isCancelled ?: false
+        val isCompleted = job?.isCompleted?.not()
+
+        return (isCompleted ?: false)
     }
 }

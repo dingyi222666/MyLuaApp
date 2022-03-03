@@ -6,22 +6,26 @@ import com.dingyi.lsp.lua.common.lexer.LuaLexer
 import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes
 import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes.*
 import com.dingyi.myluaapp.editor.ktx.addIfNeeded
+import com.dingyi.myluaapp.editor.language.highlight.IncrementalEditContent
 import com.dingyi.myluaapp.editor.language.highlight.LexerHighlightProvider
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.MappedSpans
 import io.github.rosemoe.sora.lang.styling.Styles
+import io.github.rosemoe.sora.text.ContentReference
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 
 class LuaLexerHighlightProvider : LexerHighlightProvider() {
 
-    override suspend fun highlighting(
+
+    override fun highlighting(
         text: CharSequence,
         builder: MappedSpans.Builder,
         styles: Styles,
         delegate: Delegate
-    ): Unit = withContext(Dispatchers.IO) {
+    ): Unit {
 
         kotlin.runCatching {
 
@@ -153,6 +157,7 @@ class LuaLexerHighlightProvider : LexerHighlightProvider() {
 
             it.printStackTrace()
         }
+
 
     }
 }

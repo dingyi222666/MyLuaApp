@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.plugin.runtime.editor
 
 import com.dingyi.myluaapp.editor.language.highlight.HighlightProvider
 import com.dingyi.myluaapp.editor.language.highlight.IncrementalEditContent
+import com.dingyi.myluaapp.editor.language.highlight.LexerHighlightProvider
 import com.dingyi.myluaapp.plugin.api.editor.language.Language
 import io.github.rosemoe.sora.lang.styling.MappedSpans
 import io.github.rosemoe.sora.lang.styling.Styles
@@ -16,19 +17,18 @@ class EmptyLanguage : Language() {
         return EmptyHighlightProvider()
     }
 
-    class EmptyHighlightProvider : HighlightProvider() {
-        override fun runHighlighting(ref: ContentReference?, data: IncrementalEditContent?) {
-            //
-        }
+    class EmptyHighlightProvider : LexerHighlightProvider() {
 
-        override suspend fun highlighting(
+
+        override fun highlighting(
             text: CharSequence,
             builder: MappedSpans.Builder,
             styles: Styles,
             delegate: Delegate
         ) {
-            //
+
         }
+
 
     }
 }
