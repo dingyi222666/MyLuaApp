@@ -1,9 +1,20 @@
 package com.dingyi.myluaapp.plugin.api.editor.language
 
-interface Language {
+import com.dingyi.myluaapp.editor.language.highlight.HighlightProvider
+import io.github.rosemoe.sora.lang.EmptyLanguage
 
-    fun getName():String
+import io.github.rosemoe.sora.lang.analysis.AnalyzeManager
 
-    fun getHighlightProvider(): HighlightProvider
+abstract class Language : EmptyLanguage() {
 
+    private var currentHighlightProvider: HighlightProvider? = null
+
+    abstract fun getName(): String
+
+    abstract fun getHighlightProvider(): HighlightProvider
+
+    final override fun getAnalyzeManager(): AnalyzeManager {
+        currentHighlightProvider = currentHighlightProvider ?: getHighlightProvider()
+        return currentHighlightProvider ?: getHighlightProvider()
+    }
 }

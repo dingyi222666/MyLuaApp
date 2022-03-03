@@ -6,5 +6,9 @@
   {
     "pluginPath": "null",
     "pluginMainClass": "com.dingyi.myluaapp.plugin.modules.android.MainPlugin"
+  },
+  {
+    "pluginPath": "null",
+    "pluginMainClass": "com.dingyi.myluaapp.plugin.modules.lua.MainPlugin"
   }
 ]

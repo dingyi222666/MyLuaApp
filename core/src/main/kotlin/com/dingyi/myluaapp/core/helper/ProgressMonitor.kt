@@ -26,17 +26,13 @@ class ProgressMonitor(
 
     fun postAsyncTask(block: suspend () -> Unit) {
         scope.launch {
+            isRunning = true
             count.getAndIncrement()
             changeProgressState(true)
             block.invoke()
             count.getAndDecrement()
 
-            if (!isRunning && count.get() == 0) {
-                runAfterTask()
-                isRunning = true
-            }
-
-
+            runAfterTask()
         }
     }
 
@@ -48,16 +44,30 @@ class ProgressMonitor(
     private fun runAfterTask() {
         scope.launch {
             delay(100)
-            while (count.get() > 0) {
-                delay(50)
+            var success = checkIsFinish()
+            if (!success) {
+                return@launch
             }
             for (it in afterTask) {
                 it.invoke()
                 afterTask.remove(it)
+                success = checkIsFinish()
+                if (!success) {
+                    return@launch
+                }
             }
             changeProgressState(false)
             isRunning = false
         }
+    }
+
+    private suspend fun checkIsFinish(): Boolean {
+        if (count.get() > 0) {
+            changeProgressState(true)
+            isRunning = true
+            return false
+        }
+        return true
     }
 
     fun runAfterTaskRunning(block: suspend () -> Unit) {

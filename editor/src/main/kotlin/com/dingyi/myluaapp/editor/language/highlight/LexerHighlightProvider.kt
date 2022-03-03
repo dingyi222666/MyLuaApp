@@ -1,76 +1,48 @@
 package com.dingyi.myluaapp.editor.language.highlight
 
-import android.os.Bundle
-import io.github.rosemoe.sora.lang.analysis.SimpleAnalyzeManager
 import io.github.rosemoe.sora.lang.styling.MappedSpans
 import io.github.rosemoe.sora.lang.styling.Styles
-import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.ContentReference
 
-abstract class LexerHighlightProvider : SimpleAnalyzeManager<IncrementalEditContent>() {
+abstract class LexerHighlightProvider : HighlightProvider() {
 
-    private var incrementalContent:IncrementalEditContent? = IncrementalEditContent()
+    private val textContentTmp = StringBuilder()
 
-    private lateinit var styles: Styles
-
-    final override fun analyze(
-        text: StringBuilder,
-        delegate: Delegate<IncrementalEditContent>
-    ): Styles {
+    override fun runHighlighting(ref: ContentReference?, data: IncrementalEditContent?) {
+        val delegate = JobDelegate()
 
 
-        val spanBuilder = MappedSpans.Builder()
-
-        highlight(text, spanBuilder, delegate)
-
-        delegate.setData(incrementalContent)
-
-
-        styles = Styles(spanBuilder.build())
-
-        return styles
-
-    }
-
-    override fun insert(start: CharPosition, end: CharPosition, insertedContent: CharSequence) {
-        incrementalContent?.apply {
-            actionType = IncrementalEditContent.TYPE.INSERT
-            startPosition = start
-            endPosition = end
-            actionContent = insertedContent
+        val runJob = postAsyncTask {
+            val styles = Styles()
+            val builder = MappedSpans.Builder()
+            fillContent(textContentTmp, ref)
+            highlighting(textContentTmp, builder, styles, delegate)
+            styles.spans = builder.build()
+            updateStyle(styles)
         }
-        super.insert(start, end, insertedContent)
+
+        delegate.setJob(runJob)
+
+        runJob.start()
+
     }
 
-    override fun reset(content: ContentReference, extraArguments: Bundle) {
-        super.reset(content, extraArguments)
-        incrementalContent = IncrementalEditContent()
-    }
+    private fun fillContent(textContentTmp: StringBuilder, ref: ContentReference?) {
+        ref?.let { ref ->
+           // Collect line contents
+            textContentTmp.setLength(0)
+            textContentTmp.ensureCapacity(ref.length)
 
-
-    override fun delete(start: CharPosition, end: CharPosition, deletedContent: CharSequence) {
-
-        incrementalContent?.apply {
-            actionType = IncrementalEditContent.TYPE.INSERT
-            startPosition = start
-            endPosition = end
-            actionContent = deletedContent
+            var i = 0
+            while (i < ref.lineCount) {
+                if (i != 0) {
+                    textContentTmp.append('\n')
+                }
+                ref.appendLineTo(textContentTmp, i)
+                i++
+            }
         }
-        super.delete(start, end, deletedContent)
     }
 
 
-    override fun destroy() {
-        incrementalContent = null
-        super.destroy()
-    }
-
-    /**
-     * do highlight in it
-     */
-    abstract fun highlight(
-        text: StringBuilder,
-        spans: MappedSpans.Builder,
-        delegate: Delegate<IncrementalEditContent>
-    )
 }

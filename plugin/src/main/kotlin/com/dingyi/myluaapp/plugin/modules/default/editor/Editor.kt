@@ -7,8 +7,11 @@ import io.github.rosemoe.sora.widget.CodeEditor
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 
 import com.dingyi.myluaapp.plugin.api.editor.language.Language
-import com.dingyi.myluaapp.plugin.modules.default.editor.language.EmptyLanguage
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
+import com.dingyi.myluaapp.plugin.runtime.editor.EmptyLanguage
+
+import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
+import io.github.rosemoe.sora.widget.schemes.SchemeGitHub
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -23,6 +26,7 @@ class Editor(
 ) : Editor {
 
 
+    private var currentColorScheme: EditorColorScheme = SchemeGitHub()
     private var currentLanguage: Language = EmptyLanguage()
 
     private var currentEditor = WeakReference<CodeEditor>(null)
@@ -40,6 +44,19 @@ class Editor(
     override fun getCurrentColumn(): Int {
         return currentEditor.get()?.text?.cursor?.leftColumn ?: 0
     }
+
+
+    override fun setColorScheme(scheme: EditorColorScheme) {
+        this.currentColorScheme = scheme
+        if (currentEditor.get() != null) {
+            currentEditor.get()?.colorScheme = scheme
+        }
+    }
+
+    override fun getColorScheme(): EditorColorScheme {
+        return currentColorScheme
+    }
+
 
     override fun setText(charSequence: CharSequence) {
         currentEditor.get()?.setText(charSequence)
@@ -120,6 +137,9 @@ class Editor(
 
     override fun setLanguage(language: Language) {
         currentLanguage = language
+        if (currentEditor.get() != null) {
+            currentEditor.get()?.setEditorLanguage(currentLanguage)
+        }
     }
 
     override fun getCurrentView(): View? {
@@ -152,6 +172,8 @@ class Editor(
 
     override fun binCurrentView(r: CodeEditor) {
         currentEditor = WeakReference(r)
+        r.setEditorLanguage(currentLanguage)
+        r.colorScheme = currentColorScheme
     }
 
     override suspend fun read():Unit = withContext(Dispatchers.IO) {
