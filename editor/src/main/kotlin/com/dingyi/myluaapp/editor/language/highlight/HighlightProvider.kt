@@ -10,6 +10,10 @@ import io.github.rosemoe.sora.lang.styling.Styles
 import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.ContentReference
 import kotlinx.coroutines.*
+import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 abstract class HighlightProvider : AnalyzeManager {
 
@@ -19,11 +23,10 @@ abstract class HighlightProvider : AnalyzeManager {
 
     private var data: IncrementalEditContent? = null
 
-    private val superJob = Job()
 
-    protected val coroutineScope = CoroutineScope(Dispatchers.IO + superJob)
+    protected var threadPoolExecutor:ExecutorService? = Executors.newFixedThreadPool(3)
 
-    protected val runJobList = mutableListOf<Job>()
+    protected val runTaskList = mutableListOf<Future<*>>()
 
     override fun setReceiver(receiver: StyleReceiver?) {
         this.receiver = receiver
@@ -36,14 +39,16 @@ abstract class HighlightProvider : AnalyzeManager {
 
 
     private fun cancelAllTask() {
-        superJob.cancel()
-        coroutineScope.cancel()
+        cancelRunTask()
+        threadPoolExecutor?.shutdown()
     }
 
     private fun cancelRunTask() {
-        runJobList.removeAll {
-            it.cancel()
-            it.cancelChildren()
+
+        runTaskList.removeAll {
+            if (!it.isDone) {
+                it.cancel(true)
+            }
             true
         }
     }
@@ -68,7 +73,8 @@ abstract class HighlightProvider : AnalyzeManager {
     override fun reset(content: ContentReference, extraArguments: Bundle) {
         ref = content
         data = IncrementalEditContent()
-
+        threadPoolExecutor = Executors.newFixedThreadPool(4)
+        System.gc()
         rerun()
     }
 
@@ -92,19 +98,24 @@ abstract class HighlightProvider : AnalyzeManager {
     }
 
     private fun runHighlighting() {
-        val delegate = JobDelegate()
+        val delegate = FutureDelegate()
 
-        val job = coroutineScope.launch(start = CoroutineStart.LAZY) {
+        threadPoolExecutor?.submit {
             runHighlighting(ref, data, delegate)
-        }
+        }?.let { job ->
 
-        runJobList.add(job)
-        delegate.setJob(job)
-        job.start()
+            runTaskList.add(job)
+            delegate.setFuture(job)
+            threadPoolExecutor?.execute {
+                if (!job.isDone) {
+                    job.get()
+                }
+            }
+        }
     }
 
 
-    abstract suspend fun runHighlighting(
+    abstract fun runHighlighting(
         ref: ContentReference?,
         data: IncrementalEditContent?,
         delegate: Delegate

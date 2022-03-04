@@ -100,7 +100,7 @@ class LuaLexerHighlightProvider : LexerHighlightProvider() {
                     }
                     //字符串
                     STRING, LONG_STRING -> {
-                        builder.addIfNeeded(line, column, EditorColorScheme.ATTRIBUTE_VALUE)
+                        builder.addIfNeeded(line, column, EditorColorScheme.LITERAL)
                     }
                     //注释
                     SHORT_COMMENT, BLOCK_COMMENT, DOC_COMMENT -> {

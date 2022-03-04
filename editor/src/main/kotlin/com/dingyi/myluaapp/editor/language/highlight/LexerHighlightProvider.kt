@@ -11,7 +11,7 @@ abstract class LexerHighlightProvider : HighlightProvider() {
     private val textContentTmp = StringBuilder()
 
 
-    override suspend fun runHighlighting(
+    override fun runHighlighting(
         ref: ContentReference?,
         data: IncrementalEditContent?,
         delegate: Delegate
