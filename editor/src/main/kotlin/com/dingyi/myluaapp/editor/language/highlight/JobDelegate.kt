@@ -3,16 +3,16 @@ package com.dingyi.myluaapp.editor.language.highlight
 import kotlinx.coroutines.Job
 import java.util.concurrent.Future
 
-class FutureDelegate:HighlightProvider.Delegate {
+class JobDelegate:HighlightProvider.Delegate {
 
-    private var future: Future<*>? = null
+    private var job: Job? = null
 
-    fun setFuture(job:  Future<*>) {
-        this.future = job
+    fun setFuture(job: Job) {
+        this.job = job
     }
 
     override fun isCancelled(): Boolean {
-        val isCompleted = future?.isDone
+        val isCompleted = job?.isCompleted
 
         return (isCompleted ?: false)
     }

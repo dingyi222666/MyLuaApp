@@ -27,22 +27,6 @@ abstract class LexerHighlightProvider : HighlightProvider() {
 
     }
 
-    private fun fillContent(textContentTmp: StringBuilder, ref: ContentReference?) =
-
-        ref?.let { ref ->
-            // Collect line contents
-            textContentTmp.setLength(0)
-            textContentTmp.ensureCapacity(ref.length)
-
-            var i = 0
-            while (i < ref.lineCount) {
-                if (i != 0) {
-                    textContentTmp.append('\n')
-                }
-                ref.appendLineTo(textContentTmp, i)
-                i++
-            }
-        }
 
 
 }
