@@ -2,10 +2,7 @@ package com.dingyi.myluaapp.editor.language.highlight
 
 import android.os.Bundle
 import android.util.Log
-import io.github.rosemoe.sora.lang.styling.CodeBlock
-import io.github.rosemoe.sora.lang.styling.Span
-import io.github.rosemoe.sora.lang.styling.Spans
-import io.github.rosemoe.sora.lang.styling.Styles
+import io.github.rosemoe.sora.lang.styling.*
 import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.Content
 import io.github.rosemoe.sora.text.ContentReference
@@ -21,20 +18,20 @@ import java.util.concurrent.locks.ReentrantLock
 abstract class IncrementLexerHighlightProvider : HighlightProvider() {
 
 
-    private var lexerData: LexerData<*>? = null
+    private var lexerState: LexerState<*>? = null
 
 
     private val styles = Styles()
 
     private var shadowContent: Content? = Content()
 
-    fun <T> createLexerData(): LexerData<T>? {
-        lexerData = LexerData<T>()
-        return lexerData as LexerData<T>?
+    fun <T> createLexerState(): LexerState<T>? {
+        lexerState = LexerState<T>()
+        return lexerState as LexerState<T>?
     }
 
-    fun <T> requireLexerData(): LexerData<T> {
-        return lexerData as LexerData<T>? ?: error("")
+    fun <T> requireLexerState(): LexerState<T> {
+        return lexerState as LexerState<T>? ?: error("")
     }
 
     fun requireContent(): Content {
@@ -47,11 +44,12 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
      */
     abstract fun computeBlocks(
         text: CharSequence,
-        delegate: Delegate?
+        styles: Styles,
+        delegate: Delegate
     ): List<CodeBlock?>?
 
 
-    abstract fun lexerForLine(lineString: CharSequence): List<Span>
+    abstract fun lexerForLine(line: Int, lineString: CharSequence): List<Span>
 
 
     override fun runHighlighting(
@@ -65,12 +63,11 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
 
         val spans = styles.spans ?: LockedSpans()
 
+        styles.spans = spans
 
-        val data = getData() ?: error("")
-
-        when (data.actionType) {
+        when (data?.actionType) {
             else -> {
-                doFullHighlight()
+                doFullHighlight(delegate)
             }
         }
 
@@ -79,10 +76,29 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
         updateStyle(styles)
     }
 
-    private fun doFullHighlight() {
+    final override fun highlighting(
+        text: CharSequence,
+        builder: MappedSpans.Builder,
+        styles: Styles,
+        delegate: Delegate
+    ) {
+        error("The increment highlight provider no support this method")
+    }
 
+    private fun doFullHighlight(delegate: Delegate) {
+        val modifySpan = styles.spans.modify()
+        for (line in 0 until requireContent().lineCount) {
+            if (delegate.isCancelled()) {
+                return
+            }
+            val lineText = requireContent().getLine(line)
+            val lineSpans = lexerForLine(line, lineText).toMutableList()
+            if (lineSpans.isEmpty()) {
+                lineSpans.add(Span.obtain(0,EditorColorScheme.TEXT_NORMAL.toLong()))
+            }
+            modifySpan.addLineAt(line, lineSpans)
 
-
+        }
     }
 
 
@@ -245,7 +261,7 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
         coroutine?.launch(start = CoroutineStart.LAZY, context = Dispatchers.IO) {
             Log.v("IncrementHighlightProvider", "Start ComputeBlock")
             try {
-                val codeBlock = computeBlocks(shadowContent?.toString() ?: "", delegate)
+                val codeBlock = computeBlocks(shadowContent?.toString() ?: "", styles, delegate)
                 styles.blocks = codeBlock
                 updateStyle(styles)
             } catch (e: Exception) {
@@ -290,27 +306,29 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
     }
 
 
-    override fun reset(content: ContentReference, extraArguments: Bundle) {
+    final override fun reset(content: ContentReference, extraArguments: Bundle) {
         shadowContent = content.reference.copyText(true)
+
         super.reset(content, extraArguments)
+        init()
     }
 
-    override fun destroy() {
-        lexerData?.clear()
+    final override fun destroy() {
+        lexerState?.clear()
         styles.spans = null
 
         shadowContent = null
-        lexerData = null
+        lexerState = null
         System.gc()
     }
 
     abstract fun init()
 
-    class LexerData<T> {
+    class LexerState<T> {
         private val mapData = mutableMapOf<Int, T>()
 
 
-        fun getDataForLine(line: Int): T? {
+        fun getStateForLine(line: Int): T? {
             return mapData[line]
         }
 
@@ -318,17 +336,21 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
             mapData.clear()
         }
 
-        fun removeDataForLine(line: Int): Boolean {
+        fun updateStateForLine(line: Int, data: T) {
+            mapData[line] = data
+        }
+
+        fun removeStateForLine(line: Int): Boolean {
             return mapData.remove(line) != null
         }
 
-        fun removeDataForIndices(indices: IntRange) {
+        fun removeStateForIterable(indices: IntProgression) {
             indices.forEach {
                 mapData.remove(it)
             }
         }
 
-        fun getDataForIndices(indices: IntRange): List<T> {
+        fun getStateForIterable(indices: IntProgression): List<T> {
             return mapData.filter {
                 indices.contains(it.key)
             }.map { it.value }

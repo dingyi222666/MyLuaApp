@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.plugin.modules.lua.editor
 
 import com.dingyi.myluaapp.editor.language.highlight.HighlightProvider
 import com.dingyi.myluaapp.plugin.api.editor.language.Language
+import com.dingyi.myluaapp.plugin.modules.lua.editor.highlight.LuaIncrementHighlightProvider
 import com.dingyi.myluaapp.plugin.modules.lua.editor.highlight.LuaLexerHighlightProvider
 
 class LuaLanguage: Language() {
@@ -10,6 +11,6 @@ class LuaLanguage: Language() {
     }
 
     override fun getHighlightProvider(): HighlightProvider {
-        return LuaLexerHighlightProvider()
+        return LuaIncrementHighlightProvider()
     }
 }
