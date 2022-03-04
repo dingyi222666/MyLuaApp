@@ -32,7 +32,7 @@ This project used Lua to parse the project configuration script. Based on the fl
 
 Features marked with an asterisk (*) represent feature currently development
 
-# Contribution
+## Contribution
 We welcome everyone to Contribution this project, you can create an issue or submit pull requests, we welcome contributions to anyone!
 
 ## Test Version
