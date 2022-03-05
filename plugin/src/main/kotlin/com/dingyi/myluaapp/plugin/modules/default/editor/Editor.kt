@@ -12,6 +12,7 @@ import com.dingyi.myluaapp.plugin.runtime.editor.EmptyLanguage
 
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 import io.github.rosemoe.sora.widget.schemes.SchemeGitHub
+import io.github.rosemoe.sora.widget.schemes.SchemeVS2019
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -26,7 +27,7 @@ class Editor(
 ) : Editor {
 
 
-    private var currentColorScheme: EditorColorScheme = SchemeGitHub()
+    private var currentColorScheme: EditorColorScheme = SchemeVS2019()
     private var currentLanguage: Language = EmptyLanguage()
 
     private var currentEditor = WeakReference<CodeEditor>(null)

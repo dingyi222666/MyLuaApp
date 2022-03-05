@@ -68,6 +68,7 @@ class ProjectService(
                 return project
             }
         }
+
         error("Unable to Index Project: $projectPath")
     }
 }

@@ -110,7 +110,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     private fun initData() {
         lifecycleScope.launch {
-            viewModel.refreshProjectList(viewBinding) //立即刷新一次
+            //viewModel.refreshProjectList(viewBinding) //立即刷新一次
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.refreshProjectList(viewBinding)
             }
