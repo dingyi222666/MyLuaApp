@@ -403,10 +403,38 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider() {
 
     class LuaLexerState(
         private var line: Int = 1
-    ) {
+    ) : State {
         var isLongComment = false
         var isLongString = false
         var size = 0
+
+        override fun notifyMoveLine(fromLine: Int, toLine: Int) {
+            line = toLine
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as LuaLexerState
+
+            if (line != other.line) return false
+            if (isLongComment != other.isLongComment) return false
+            if (isLongString != other.isLongString) return false
+            if (size != other.size) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = line
+            result = 31 * result + isLongComment.hashCode()
+            result = 31 * result + isLongString.hashCode()
+            result = 31 * result + size
+            return result
+        }
+
+
     }
 
 

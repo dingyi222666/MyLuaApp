@@ -32,7 +32,7 @@ object BuildConfig {
         const val gson_version = "2.8.8"
         const val material_version = "1.5.0"
         const val appcompat_version = "1.4.1"
-        const val sora_editor_version = "0.10.2"
+        const val sora_editor_version = "0.10.5"
         const val lifecycle_version = "2.4.0"
         const val preference_ktx_version = "1.1.1"
         const val constraint_layout_version = "2.0.4"

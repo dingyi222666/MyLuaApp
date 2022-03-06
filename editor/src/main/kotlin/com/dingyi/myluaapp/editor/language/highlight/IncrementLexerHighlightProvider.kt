@@ -25,12 +25,12 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
 
     private var shadowContent: Content? = Content()
 
-    fun <T> createLexerState(): LexerState<T>? {
+    fun <T : State> createLexerState(): LexerState<T>? {
         lexerState = LexerState<T>()
         return lexerState as LexerState<T>?
     }
 
-    fun <T> requireLexerState(): LexerState<T> {
+    fun <T : State> requireLexerState(): LexerState<T> {
         return lexerState as LexerState<T>? ?: error("")
     }
 
@@ -52,6 +52,12 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
     abstract fun lexerForLine(line: Int, lineString: CharSequence): List<Span>
 
 
+    private fun checkDelegate(delegate: Delegate) {
+        if (delegate.isCancelled()) {
+            error("stop highlighting")
+        }
+    }
+
     override fun runHighlighting(
         ref: ContentReference?,
         data: IncrementalEditContent?,
@@ -63,9 +69,107 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
 
         val spans = styles.spans ?: LockedSpans()
 
-        styles.spans = spans
+        checkNotNull(ref)
 
+        styles.spans = spans
         when (data?.actionType) {
+            IncrementalEditContent.TYPE.INSERT -> {
+                val modifySpan = styles.spans.modify()
+                val readerSpan = spans.read()
+                val moveLine = data.endPosition.line - data.startPosition.line
+
+                val startLine = data.startPosition.line
+
+                //移动旧的span到新的span
+                for (i in data.startPosition.line until ref.lineCount) {
+                    val oldLine = readerSpan.getSpansOnLine(i)
+                    modifySpan
+                        .setSpansOnLine(i + moveLine, oldLine)
+
+                    requireLexerState<State>()
+                        .moveState(i, i + moveLine)
+
+                    checkDelegate(delegate)
+                }
+
+                //更新插入的line
+
+                for (line in data.startPosition.line..data.endPosition.line) {
+
+                    val lineSpans =
+                        lexerForLine(line, requireContent().getLine(line)).toMutableList()
+
+                    if (lineSpans.isEmpty()) {
+                        lineSpans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong()))
+                    }
+
+                    if (line == startLine) {
+                        modifySpan
+                            .setSpansOnLine(line, lineSpans)
+                    } else {
+                        modifySpan.addLineAt(
+                            line,
+                            lineSpans
+                        )
+                    }
+
+                    checkDelegate(delegate)
+                }
+
+                //向下更新状态 直到旧的状态和新的状态相同
+                for (i in data.endPosition.line until ref.lineCount) {
+                    val oldState = requireLexerState<State>()
+                        .getStateForLine(i)
+
+                    val lineSpans = lexerForLine(i, requireContent().getLine(i)).toMutableList()
+                    if (lineSpans.isEmpty()) {
+                        lineSpans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong()))
+                    }
+
+                    val newState = requireLexerState<State>()
+                        .getStateForLine(i)
+
+                    if (oldState != newState) {
+                        modifySpan.setSpansOnLine(i, lineSpans)
+                    } else {
+                        break
+                    }
+                    checkDelegate(delegate)
+                }
+
+            }
+            IncrementalEditContent.TYPE.DELETE -> {
+
+                val modifySpan = styles.spans.modify()
+
+                //删除对应的span行
+
+
+                //重新从头开始渲染
+
+                for (i in data.startPosition.line..data.endPosition.line) {
+                    val oldState = requireLexerState<State>()
+                        .getStateForLine(i)
+
+                    val lineSpans = lexerForLine(i, requireContent().getLine(i)).toMutableList()
+                    if (lineSpans.isEmpty()) {
+                        lineSpans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong()))
+                    }
+
+                    val newState = requireLexerState<State>()
+                        .getStateForLine(i)
+
+                    if (oldState != newState) {
+                        modifySpan.setSpansOnLine(i, lineSpans)
+                    } else {
+                        break
+                    }
+                    checkDelegate(delegate)
+                }
+
+
+
+            }
             else -> {
                 doFullHighlight(delegate)
             }
@@ -272,7 +376,6 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
                 )
             } finally {
                 Log.v("IncrementHighlightProvider", "Complete ComputeBlock")
-
             }
         }?.let { job ->
             runTaskList.add(job)
@@ -288,6 +391,8 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
                     requireContent()
                         .delete(
                             incrementalEditContent.startPosition.line,
+                            incrementalEditContent.startPosition.column,
+                            incrementalEditContent.endPosition.line,
                             incrementalEditContent.endPosition.column
                         )
                 }
@@ -324,7 +429,11 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
 
     abstract fun init()
 
-    class LexerState<T> {
+    interface State {
+        fun notifyMoveLine(fromLine: Int, toLine: Int)
+    }
+
+    class LexerState<T : State> {
         private val mapData = mutableMapOf<Int, T>()
 
 
@@ -348,6 +457,12 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
             indices.forEach {
                 mapData.remove(it)
             }
+        }
+
+        fun moveState(fromLine: Int, toLine: Int) {
+            val fromState = mapData[fromLine]
+            fromState?.notifyMoveLine(fromLine, toLine)
+            mapData[toLine] = fromState as T
         }
 
         fun getStateForIterable(indices: IntProgression): List<T> {
