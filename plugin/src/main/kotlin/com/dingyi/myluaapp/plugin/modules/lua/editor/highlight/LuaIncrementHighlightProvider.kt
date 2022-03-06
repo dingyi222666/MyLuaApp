@@ -3,13 +3,14 @@ package com.dingyi.myluaapp.plugin.modules.lua.editor.highlight
 import com.dingyi.lsp.lua.common.lexer.LuaLexer
 import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes
 import com.dingyi.myluaapp.common.ktx.checkNotNull
+import com.dingyi.myluaapp.common.ktx.convertObject
 import com.dingyi.myluaapp.editor.language.highlight.IncrementLexerHighlightProvider
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.Span
 import io.github.rosemoe.sora.lang.styling.Styles
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 
-class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider() {
+class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider<LuaIncrementHighlightProvider.LuaLexerState>() {
     override fun computeBlocks(
         text: CharSequence,
         styles: Styles,
@@ -95,7 +96,10 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider() {
         }.getOrNull()
     }
 
-    override fun lexerForLine(line: Int, lineString: CharSequence): List<Span> {
+    override fun lexerForLine(
+        lineString: CharSequence,
+        tokenizeResult: LineTokenizeResult<LuaLexerState>?
+    ): LineTokenizeResult<LuaLexerState> {
 
         val lexer = LuaLexer(lineString)
 
@@ -103,11 +107,11 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider() {
 
         //generate span (for last)
 
-        val currentLexerState = requireLexerState<LuaLexerState>()
-            .getStateForLine(line) ?: LuaLexerState(line)
+        val currentLexerState = LuaLexerState()
 
-        val lastLexerState = requireLexerState<LuaLexerState>()
-            .getStateForLine(if (line - 1 < 0) 0 else line - 1)
+
+        val lastLexerState =
+            tokenizeResult?.data
 
 
         currentLexerState.apply {
@@ -129,9 +133,6 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider() {
                 else -> lastTokenTypes = token
             }
 
-
-            requireLexerState<LuaLexerState>()
-                .updateStateForLine(line, currentLexerState)
 
             token = lexer.advance()
         }
@@ -299,13 +300,12 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider() {
 
         //update lexer data
 
-
         lexerTextList.clear()
 
         lexer.yyclose()
 
 
-        return result
+        return LineTokenizeResult(currentLexerState, result)
     }
 
     //e.g: [===[ / [[ / --[===[
@@ -396,21 +396,11 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider() {
     }
 
 
-    override fun init() {
-        createLexerState<LuaLexerState>()
-    }
-
-
     class LuaLexerState(
-        private var line: Int = 1
-    ) : State {
+    ) {
         var isLongComment = false
         var isLongString = false
         var size = 0
-
-        override fun notifyMoveLine(fromLine: Int, toLine: Int) {
-            line = toLine
-        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -418,7 +408,6 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider() {
 
             other as LuaLexerState
 
-            if (line != other.line) return false
             if (isLongComment != other.isLongComment) return false
             if (isLongString != other.isLongString) return false
             if (size != other.size) return false
@@ -427,7 +416,7 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider() {
         }
 
         override fun hashCode(): Int {
-            var result = line
+            var result = 0
             result = 31 * result + isLongComment.hashCode()
             result = 31 * result + isLongString.hashCode()
             result = 31 * result + size

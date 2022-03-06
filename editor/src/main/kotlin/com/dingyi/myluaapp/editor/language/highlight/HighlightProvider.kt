@@ -24,7 +24,7 @@ abstract class HighlightProvider : AnalyzeManager {
 
     private var receiver: StyleReceiver? = null
 
-    private var data: IncrementalEditContent? = null
+    private var data: IncrementalEditContent? = IncrementalEditContent()
 
 
     private var handler: Handler? = Handler(Looper.getMainLooper())
@@ -93,8 +93,13 @@ abstract class HighlightProvider : AnalyzeManager {
     }
 
 
-    fun runOnUiThread(runnable: Runnable) {
+    protected fun runOnUiThread(runnable: Runnable) {
         handler?.post(runnable)
+    }
+
+
+    protected fun requireData():IncrementalEditContent {
+        return checkNotNull(data)
     }
 
     override fun delete(start: CharPosition, end: CharPosition, deletedContent: CharSequence) {
@@ -119,7 +124,7 @@ abstract class HighlightProvider : AnalyzeManager {
         val delegate = JobDelegate()
 
         coroutine?.launch(start = CoroutineStart.LAZY, context = Dispatchers.IO) {
-            Log.v("HighlightProvider", "Start Highlight")
+            Log.v("HighlightProvider", "Start Highlight in thread:${Thread.currentThread().name}")
             try {
                 runHighlighting(ref, data, delegate)
             } catch (e: Exception) {

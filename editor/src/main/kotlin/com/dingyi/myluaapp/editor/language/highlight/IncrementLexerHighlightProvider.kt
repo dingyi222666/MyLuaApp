@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.editor.language.highlight
 
 import android.os.Bundle
 import android.util.Log
+import android.util.SparseArray
 import io.github.rosemoe.sora.lang.styling.*
 import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.Content
@@ -15,26 +16,17 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 
-abstract class IncrementLexerHighlightProvider : HighlightProvider() {
+abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
 
-    private var lexerState: LexerState<*>? = null
-
+    private val lineStates = SparseArray<LineTokenizeResult<T>>(128)
 
     private val styles = Styles()
 
     private var shadowContent: Content? = Content()
 
-    fun <T : State> createLexerState(): LexerState<T>? {
-        lexerState = LexerState<T>()
-        return lexerState as LexerState<T>?
-    }
 
-    fun <T : State> requireLexerState(): LexerState<T> {
-        return lexerState as LexerState<T>? ?: error("")
-    }
-
-    fun requireContent(): Content {
+    private fun requireContent(): Content {
         return shadowContent ?: error("")
     }
 
@@ -49,7 +41,10 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
     ): List<CodeBlock?>?
 
 
-    abstract fun lexerForLine(line: Int, lineString: CharSequence): List<Span>
+    abstract fun lexerForLine(
+        lineString: CharSequence,
+        result: LineTokenizeResult<T>?
+    ): LineTokenizeResult<T>
 
 
     private fun checkDelegate(delegate: Delegate) {
@@ -64,7 +59,7 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
         delegate: Delegate
     ) {
 
-        processContent()
+
         runComputeBlock()
 
         val spans = styles.spans ?: LockedSpans()
@@ -72,113 +67,23 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
         checkNotNull(ref)
 
         styles.spans = spans
-        when (data?.actionType) {
-            IncrementalEditContent.TYPE.INSERT -> {
-                val modifySpan = styles.spans.modify()
-                val readerSpan = spans.read()
-                val moveLine = data.endPosition.line - data.startPosition.line
-
-                val startLine = data.startPosition.line
-
-                //移动旧的span到新的span
-                for (i in data.startPosition.line until ref.lineCount) {
-                    val oldLine = readerSpan.getSpansOnLine(i)
-                    modifySpan
-                        .setSpansOnLine(i + moveLine, oldLine)
-
-                    requireLexerState<State>()
-                        .moveState(i, i + moveLine)
-
-                    checkDelegate(delegate)
-                }
-
-                //更新插入的line
-
-                for (line in data.startPosition.line..data.endPosition.line) {
-
-                    val lineSpans =
-                        lexerForLine(line, requireContent().getLine(line)).toMutableList()
-
-                    if (lineSpans.isEmpty()) {
-                        lineSpans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong()))
-                    }
-
-                    if (line == startLine) {
-                        modifySpan
-                            .setSpansOnLine(line, lineSpans)
-                    } else {
-                        modifySpan.addLineAt(
-                            line,
-                            lineSpans
-                        )
-                    }
-
-                    checkDelegate(delegate)
-                }
-
-                //向下更新状态 直到旧的状态和新的状态相同
-                for (i in data.endPosition.line until ref.lineCount) {
-                    val oldState = requireLexerState<State>()
-                        .getStateForLine(i)
-
-                    val lineSpans = lexerForLine(i, requireContent().getLine(i)).toMutableList()
-                    if (lineSpans.isEmpty()) {
-                        lineSpans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong()))
-                    }
-
-                    val newState = requireLexerState<State>()
-                        .getStateForLine(i)
-
-                    if (oldState != newState) {
-                        modifySpan.setSpansOnLine(i, lineSpans)
-                    } else {
-                        break
-                    }
-                    checkDelegate(delegate)
-                }
-
-            }
+        when (requireData().actionType) {
             IncrementalEditContent.TYPE.DELETE -> {
 
-                val modifySpan = styles.spans.modify()
-
-                //删除对应的span行
-
-
-                //重新从头开始渲染
-
-                for (i in data.startPosition.line..data.endPosition.line) {
-                    val oldState = requireLexerState<State>()
-                        .getStateForLine(i)
-
-                    val lineSpans = lexerForLine(i, requireContent().getLine(i)).toMutableList()
-                    if (lineSpans.isEmpty()) {
-                        lineSpans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong()))
-                    }
-
-                    val newState = requireLexerState<State>()
-                        .getStateForLine(i)
-
-                    if (oldState != newState) {
-                        modifySpan.setSpansOnLine(i, lineSpans)
-                    } else {
-                        break
-                    }
-                    checkDelegate(delegate)
-                }
-
-
+            }
+            IncrementalEditContent.TYPE.INSERT -> {
 
             }
-            else -> {
+            IncrementalEditContent.TYPE.EMPTY -> {
                 doFullHighlight(delegate)
             }
         }
 
         styles.spans = spans
-
+        processContent()
         updateStyle(styles)
     }
+
 
     final override fun highlighting(
         text: CharSequence,
@@ -192,16 +97,18 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
     private fun doFullHighlight(delegate: Delegate) {
         val modifySpan = styles.spans.modify()
         for (line in 0 until requireContent().lineCount) {
-            if (delegate.isCancelled()) {
-                return
-            }
+            checkDelegate(delegate)
             val lineText = requireContent().getLine(line)
-            val lineSpans = lexerForLine(line, lineText).toMutableList()
+            val lastState = lineStates.get(line - 1)
+            val lineState = lexerForLine(lineText, lastState)
+            val lineSpans = lineState.spans?.toMutableList() ?: mutableListOf()
             if (lineSpans.isEmpty()) {
-                lineSpans.add(Span.obtain(0,EditorColorScheme.TEXT_NORMAL.toLong()))
+                lineSpans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong()))
             }
             modifySpan.addLineAt(line, lineSpans)
-
+            //recycler span
+            lineState.spans = null
+            lineStates.put(line, lineState)
         }
     }
 
@@ -412,64 +319,47 @@ abstract class IncrementLexerHighlightProvider : HighlightProvider() {
 
 
     final override fun reset(content: ContentReference, extraArguments: Bundle) {
-        shadowContent = content.reference.copyText(true)
+        shadowContent = content.reference.copyText(false)
+        shadowContent?.apply {
+            isUndoEnabled = false
+        }
 
         super.reset(content, extraArguments)
-        init()
+
     }
 
     final override fun destroy() {
-        lexerState?.clear()
+
         styles.spans = null
 
         shadowContent = null
-        lexerState = null
+
+        lineStates.clear()
+
         System.gc()
     }
 
-    abstract fun init()
 
-    interface State {
-        fun notifyMoveLine(fromLine: Int, toLine: Int)
-    }
+    class LineTokenizeResult<T>(
+        var data: T,
+        var spans: List<Span>?
+    ) {
 
-    class LexerState<T : State> {
-        private val mapData = mutableMapOf<Int, T>()
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
 
+            other as LineTokenizeResult<*>
 
-        fun getStateForLine(line: Int): T? {
-            return mapData[line]
+            if (data != other.data) return false
+
+            return true
         }
 
-        fun clear() {
-            mapData.clear()
-        }
-
-        fun updateStateForLine(line: Int, data: T) {
-            mapData[line] = data
-        }
-
-        fun removeStateForLine(line: Int): Boolean {
-            return mapData.remove(line) != null
-        }
-
-        fun removeStateForIterable(indices: IntProgression) {
-            indices.forEach {
-                mapData.remove(it)
-            }
-        }
-
-        fun moveState(fromLine: Int, toLine: Int) {
-            val fromState = mapData[fromLine]
-            fromState?.notifyMoveLine(fromLine, toLine)
-            mapData[toLine] = fromState as T
-        }
-
-        fun getStateForIterable(indices: IntProgression): List<T> {
-            return mapData.filter {
-                indices.contains(it.key)
-            }.map { it.value }
+        override fun hashCode(): Int {
+            return data?.hashCode() ?: 0
         }
     }
+
 
 }
