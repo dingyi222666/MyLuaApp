@@ -151,6 +151,7 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider<LuaIncreme
             // ]] match index 2
             if ((currentLexerState.isLongComment || currentLexerState.isLongString)
                 && token == LuaTokenTypes.RBRACK && lexer.yycolumn() + 1 >= currentLexerState.size
+                && lexer.yycolumn() - currentLexerState.size >= 1
             ) {
 
 

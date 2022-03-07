@@ -2,7 +2,6 @@ package com.dingyi.myluaapp.editor.language.highlight
 
 import android.os.Bundle
 import android.util.Log
-import android.util.SparseArray
 import io.github.rosemoe.sora.lang.styling.*
 import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.Content
@@ -108,8 +107,7 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
                     .setSpansOnLine(line, tokenizeResult.clearSpans())
 
                 lineStates
-                    .value
-                    .set(line, tokenizeResult)
+                    .value[line] = tokenizeResult
             } else {
                 modifySpan
                     .addLineAt(line, tokenizeResult.clearSpans())
@@ -146,11 +144,8 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
                 modifySpan
                     .setSpansOnLine(line, tokenizeResult.clearSpans())
 
-                if (lineStates.value.size <= line) {
-                    lineStates.value.add(line, tokenizeResult)
-                } else {
-                    lineStates.value.set(line, tokenizeResult)
-                }
+                lineStates.value[line] = tokenizeResult
+
 
             }
 
@@ -160,7 +155,7 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
     }
 
-    private fun doDeleteHighlight(delegate: HighlightProvider.Delegate) {
+    private fun doDeleteHighlight(delegate: Delegate) {
 
 
         val data = requireData()
@@ -170,24 +165,22 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
         val modifySpan = styles.spans.modify()
 
         //delete span and state
-        var line = startLine +1
-        while (line<endLine) {
+        var line = startLine + 1
+
+        while (line <= endLine) {
 
             if (startLine == endLine) {
                 break
             }
 
             modifySpan
-                .deleteLineAt(startLine)
+                .deleteLineAt(startLine + 1)
 
-            lineStates.value.removeAt(startLine)
+            lineStates.value.removeAt(startLine + 1)
 
             checkDelegate(delegate)
             line ++
         }
-
-
-        lineStates.value.removeAt(startLine)
 
 
         //update span
@@ -421,7 +414,7 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
             }
         }?.let { job ->
             runTaskList.add(job)
-            delegate.setFuture(job)
+            delegate.setJob(job)
             job.start()
         }
     }

@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.plugin.modules.default.editor
 
 import android.view.View
+import android.view.ViewGroup
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import io.github.rosemoe.sora.widget.CodeEditor
 
@@ -9,10 +10,8 @@ import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.editor.language.Language
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
 import com.dingyi.myluaapp.plugin.runtime.editor.EmptyLanguage
+import io.github.rosemoe.sora.widget.schemes.*
 
-import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
-import io.github.rosemoe.sora.widget.schemes.SchemeGitHub
-import io.github.rosemoe.sora.widget.schemes.SchemeVS2019
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -27,7 +26,7 @@ class Editor(
 ) : Editor {
 
 
-    private var currentColorScheme: EditorColorScheme = SchemeVS2019()
+        private var currentColorScheme: EditorColorScheme = SchemeEclipse()
     private var currentLanguage: Language = EmptyLanguage()
 
     private var currentEditor = WeakReference<CodeEditor>(null)
@@ -148,11 +147,15 @@ class Editor(
     }
 
     override fun undo() {
-        currentEditor.get()?.undo()
+        if (currentEditor.get()?.canUndo() == true) {
+            currentEditor.get()?.undo()
+        }
     }
 
     override fun redo() {
-        currentEditor.get()?.redo()
+        if (currentEditor.get()?.canRedo() == true) {
+            currentEditor.get()?.redo()
+        }
     }
 
     override fun save() {
@@ -160,6 +163,7 @@ class Editor(
         if (currentEditor.get() == null) {
             return
         }
+
 
         if (!path.isFile) {
             pluginContext.getEditorService().closeEditor(this)

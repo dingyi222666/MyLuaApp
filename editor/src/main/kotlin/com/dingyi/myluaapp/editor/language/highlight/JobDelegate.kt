@@ -7,7 +7,7 @@ class JobDelegate:HighlightProvider.Delegate {
 
     private var job: Job? = null
 
-    fun setFuture(job: Job) {
+    fun setJob(job: Job) {
         this.job = job
     }
 

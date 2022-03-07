@@ -15,8 +15,6 @@ import io.github.rosemoe.sora.text.ContentReference
 import kotlinx.coroutines.*
 import java.lang.Exception
 import java.lang.Runnable
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
 
 abstract class HighlightProvider : AnalyzeManager {
 
@@ -136,7 +134,7 @@ abstract class HighlightProvider : AnalyzeManager {
         }?.let { job ->
 
             runTaskList.add(job)
-            delegate.setFuture(job)
+            delegate.setJob(job)
             job.start()
         }
 
