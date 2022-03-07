@@ -13,7 +13,6 @@ abstract class LexerHighlightProvider : HighlightProvider() {
 
     override fun runHighlighting(
         ref: ContentReference?,
-        data: IncrementalEditContent?,
         delegate: Delegate
     ) {
 

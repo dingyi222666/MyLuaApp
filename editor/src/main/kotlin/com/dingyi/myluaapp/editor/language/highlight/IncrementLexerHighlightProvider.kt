@@ -10,8 +10,10 @@ import io.github.rosemoe.sora.text.ContentReference
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.util.*
+
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
@@ -19,8 +21,8 @@ import java.util.concurrent.locks.ReentrantLock
 abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
 
-    private val lineStates = SparseArray<LineTokenizeResult<T>>(128)
-
+    @OptIn(InternalCoroutinesApi::class)
+    private val lineStates = lazy { synchronized(this) { mutableListOf<LineTokenizeResult<T>>() } }
     private val styles = Styles()
 
     private var shadowContent: Content? = Content()
@@ -41,9 +43,10 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
     ): List<CodeBlock?>?
 
 
-    abstract fun lexerForLine(
+    abstract fun tokenizeLine(
         lineString: CharSequence,
-        result: LineTokenizeResult<T>?
+        line: Int,
+        tokenizeResult: LineTokenizeResult<T>?
     ): LineTokenizeResult<T>
 
 
@@ -55,24 +58,21 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
     override fun runHighlighting(
         ref: ContentReference?,
-        data: IncrementalEditContent?,
         delegate: Delegate
     ) {
 
 
         runComputeBlock()
-
+        processContent()
         val spans = styles.spans ?: LockedSpans()
-
-        checkNotNull(ref)
 
         styles.spans = spans
         when (requireData().actionType) {
-            IncrementalEditContent.TYPE.DELETE -> {
-
-            }
             IncrementalEditContent.TYPE.INSERT -> {
-
+                doInsertHighlight(delegate)
+            }
+            IncrementalEditContent.TYPE.DELETE -> {
+                doDeleteHighlight(delegate)
             }
             IncrementalEditContent.TYPE.EMPTY -> {
                 doFullHighlight(delegate)
@@ -80,8 +80,147 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
         }
 
         styles.spans = spans
-        processContent()
+
         updateStyle(styles)
+    }
+
+    private fun doInsertHighlight(delegate: Delegate) {
+
+        val data = requireData()
+        val startLine = data.startPosition.line
+        val endLine = data.endPosition.line
+
+        val modifySpan = styles.spans.modify()
+
+        //insert and update state
+        for (line in startLine..endLine) {
+            //last state
+            val lastState = lineStates
+                .value
+                .getOrNull(line - 1)
+
+            //result
+            val tokenizeResult = tokenizeLine(requireContent().getLine(line),line, lastState)
+
+            //if line == startLine,the line is contains
+            if (line == startLine) {
+                modifySpan
+                    .setSpansOnLine(line, tokenizeResult.clearSpans())
+
+                lineStates
+                    .value
+                    .set(line, tokenizeResult)
+            } else {
+                modifySpan
+                    .addLineAt(line, tokenizeResult.clearSpans())
+
+                lineStates
+                    .value
+                    .add(line, tokenizeResult)
+            }
+
+
+            checkDelegate(delegate)
+        }
+
+        //update for all
+
+        for (line in endLine + 1 until requireContent().lineCount) {
+            val lastState = lineStates
+                .value
+                .getOrNull(line - 1)
+
+            val oldState = lineStates
+                .value
+                .getOrNull(line)
+
+            val tokenizeResult = tokenizeLine(
+                requireContent()
+                    .getLine(line),line, lastState
+            )
+
+            if (oldState == tokenizeResult) {
+                break
+            } else {
+
+                modifySpan
+                    .setSpansOnLine(line, tokenizeResult.clearSpans())
+
+                if (lineStates.value.size <= line) {
+                    lineStates.value.add(line, tokenizeResult)
+                } else {
+                    lineStates.value.set(line, tokenizeResult)
+                }
+
+            }
+
+
+            checkDelegate(delegate)
+        }
+
+    }
+
+    private fun doDeleteHighlight(delegate: HighlightProvider.Delegate) {
+
+
+        val data = requireData()
+        val startLine = data.startPosition.line
+        val endLine = data.endPosition.line
+
+        val modifySpan = styles.spans.modify()
+
+        //delete span and state
+        var line = startLine +1
+        while (line<endLine) {
+
+            if (startLine == endLine) {
+                break
+            }
+
+            modifySpan
+                .deleteLineAt(startLine)
+
+            lineStates.value.removeAt(startLine)
+
+            checkDelegate(delegate)
+            line ++
+        }
+
+
+        lineStates.value.removeAt(startLine)
+
+
+        //update span
+
+
+        for (line in startLine until requireContent().lineCount) {
+            val lastState = lineStates
+                .value
+                .getOrNull(line - 1)
+
+            val oldState = lineStates
+                .value
+                .get(line)
+
+            val tokenizeResult = tokenizeLine(
+                requireContent()
+                    .getLine(line),line, lastState
+            )
+
+            if (oldState == tokenizeResult) {
+                break
+            } else {
+
+                modifySpan
+                    .setSpansOnLine(line, tokenizeResult.clearSpans())
+
+                lineStates.value.set(line, tokenizeResult)
+
+            }
+
+            checkDelegate(delegate)
+        }
+
     }
 
 
@@ -99,16 +238,10 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
         for (line in 0 until requireContent().lineCount) {
             checkDelegate(delegate)
             val lineText = requireContent().getLine(line)
-            val lastState = lineStates.get(line - 1)
-            val lineState = lexerForLine(lineText, lastState)
-            val lineSpans = lineState.spans?.toMutableList() ?: mutableListOf()
-            if (lineSpans.isEmpty()) {
-                lineSpans.add(Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong()))
-            }
-            modifySpan.addLineAt(line, lineSpans)
-            //recycler span
-            lineState.spans = null
-            lineStates.put(line, lineState)
+            val lastState = lineStates.value.getOrNull(line - 1)
+            val lineState = tokenizeLine(lineText,line, lastState)
+            modifySpan.addLineAt(line, lineState.clearSpans())
+            lineStates.value.add(line, lineState)
         }
     }
 
@@ -238,7 +371,9 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
             override fun addLineAt(line: Int, spans: List<Span>) {
                 lock.lock()
                 try {
+
                     lines.add(line, Line(spans))
+
                 } finally {
                     lock.unlock()
                 }
@@ -334,7 +469,7 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
         shadowContent = null
 
-        lineStates.clear()
+        lineStates.value.clear()
 
         System.gc()
     }
@@ -344,6 +479,23 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
         var data: T,
         var spans: List<Span>?
     ) {
+
+
+        fun clearSpans(): List<Span> {
+            var result = spans ?: listOf(
+                Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong())
+            )
+
+            if (result.isEmpty()) {
+                result = listOf(
+                    Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong())
+                )
+            }
+
+            this.spans = null
+
+            return result
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true

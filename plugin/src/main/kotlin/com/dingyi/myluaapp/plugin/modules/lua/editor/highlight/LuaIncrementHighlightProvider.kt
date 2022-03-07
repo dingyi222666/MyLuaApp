@@ -3,7 +3,6 @@ package com.dingyi.myluaapp.plugin.modules.lua.editor.highlight
 import com.dingyi.lsp.lua.common.lexer.LuaLexer
 import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes
 import com.dingyi.myluaapp.common.ktx.checkNotNull
-import com.dingyi.myluaapp.common.ktx.convertObject
 import com.dingyi.myluaapp.editor.language.highlight.IncrementLexerHighlightProvider
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.Span
@@ -11,6 +10,7 @@ import io.github.rosemoe.sora.lang.styling.Styles
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 
 class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider<LuaIncrementHighlightProvider.LuaLexerState>() {
+
     override fun computeBlocks(
         text: CharSequence,
         styles: Styles,
@@ -96,8 +96,9 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider<LuaIncreme
         }.getOrNull()
     }
 
-    override fun lexerForLine(
+    override fun tokenizeLine(
         lineString: CharSequence,
+        line: Int,
         tokenizeResult: LineTokenizeResult<LuaLexerState>?
     ): LineTokenizeResult<LuaLexerState> {
 
@@ -107,7 +108,9 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider<LuaIncreme
 
         //generate span (for last)
 
-        val currentLexerState = LuaLexerState()
+        val currentLexerState = LuaLexerState(
+            contentHashCode = lineString.toString().hashCode(),
+        line = line)
 
 
         val lastLexerState =
@@ -147,7 +150,7 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider<LuaIncreme
             // ]==] match index 3
             // ]] match index 2
             if ((currentLexerState.isLongComment || currentLexerState.isLongString)
-                && token == LuaTokenTypes.RBRACK && lexer.yycolumn() >= currentLexerState.size
+                && token == LuaTokenTypes.RBRACK && lexer.yycolumn() + 1 >= currentLexerState.size
             ) {
 
 
@@ -397,17 +400,20 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider<LuaIncreme
 
 
     class LuaLexerState(
+        val contentHashCode: Int = 0,
+        val line: Int,
     ) {
         var isLongComment = false
         var isLongString = false
         var size = 0
-
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
 
             other as LuaLexerState
 
+            if (contentHashCode != other.contentHashCode) return false
+            if (line != other.line) return false
             if (isLongComment != other.isLongComment) return false
             if (isLongString != other.isLongString) return false
             if (size != other.size) return false
@@ -416,7 +422,8 @@ class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider<LuaIncreme
         }
 
         override fun hashCode(): Int {
-            var result = 0
+            var result = contentHashCode
+            result = 31 * result + line
             result = 31 * result + isLongComment.hashCode()
             result = 31 * result + isLongString.hashCode()
             result = 31 * result + size

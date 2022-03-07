@@ -126,7 +126,7 @@ abstract class HighlightProvider : AnalyzeManager {
         coroutine?.launch(start = CoroutineStart.LAZY, context = Dispatchers.IO) {
             Log.v("HighlightProvider", "Start Highlight in thread:${Thread.currentThread().name}")
             try {
-                runHighlighting(ref, data, delegate)
+                runHighlighting(ref, delegate)
             } catch (e: Exception) {
                 Log.e("HighlightProvider", "Unexpected exception is thrown in the thread.", e)
             } finally {
@@ -163,7 +163,6 @@ abstract class HighlightProvider : AnalyzeManager {
 
     abstract fun runHighlighting(
         ref: ContentReference?,
-        data: IncrementalEditContent?,
         delegate: Delegate
     )
 
