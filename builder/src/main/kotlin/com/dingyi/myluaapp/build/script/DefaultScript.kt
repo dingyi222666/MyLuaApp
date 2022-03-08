@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.build.script
 
+import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.common.ktx.LuaJVM
 import com.dingyi.myluaapp.common.ktx.Paths
@@ -38,8 +39,11 @@ class DefaultScript(private val path: String) : Script {
     override fun run() {
         if (!runStatus) {
             runStatus = true
-
-            luaJVM.runFunc("runScript", path)
+            kotlin.runCatching {
+                luaJVM.runFunc("runScript", path)
+            }.onFailure {
+                throw CompileError("run script:$path error with:${it.stackTraceToString()}")
+            }
         }
     }
 

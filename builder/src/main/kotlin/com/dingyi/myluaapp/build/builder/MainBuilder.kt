@@ -58,7 +58,17 @@ class MainBuilder(
             project?.getCache()?.putCache("build_mode", commands[1])
         }
 
-        project?.init()
+
+        kotlin.runCatching {
+
+            project?.init()
+        }.onFailure {
+            logger.info("\n")
+
+            logger.error(it.stackTraceToString())
+            stop()
+            return
+        }
 
         logger.info("\n")
 

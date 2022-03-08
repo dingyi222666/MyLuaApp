@@ -7,7 +7,7 @@ import io.github.rosemoe.sora.widget.CodeEditor
 
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 
-import com.dingyi.myluaapp.plugin.api.editor.language.Language
+import com.dingyi.myluaapp.editor.language.highlight.language.Language
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
 import com.dingyi.myluaapp.plugin.runtime.editor.EmptyLanguage
 import io.github.rosemoe.sora.widget.schemes.*

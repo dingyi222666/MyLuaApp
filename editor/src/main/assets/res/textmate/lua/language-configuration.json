@@ -70,6 +70,8 @@
       "'"
     ]
   ],
+  "foldingStartMarker": "\\b(function|local\\s+function|then|do|repeat)\\b|{|{[ \t]*$|\\[\\[",
+  "foldingStopMarker": "\\bend\\b|}|^\\s*}|\\]\\]",
   "indentationRules": {
     "increaseIndentPattern": "^((?!(\\-\\-)).)*((\\b(else|function|then|do|repeat)\\b((?!\\b(end|until)\\b).)*)|(\\{\\s*))$",
     "decreaseIndentPattern": "^\\s*((\\b(elseif|else|end|until)\\b)|(\\})|(\\)))"

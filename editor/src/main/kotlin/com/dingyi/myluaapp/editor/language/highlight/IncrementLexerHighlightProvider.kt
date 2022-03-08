@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.editor.language.highlight
 import android.os.Bundle
 import android.util.Log
 import io.github.rosemoe.sora.lang.styling.*
+import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
 import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.Content
 import io.github.rosemoe.sora.text.ContentReference
@@ -65,6 +66,7 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
         runComputeBlock()
         processContent()
+
         val spans = styles.spans ?: LockedSpans()
 
         styles.spans = spans

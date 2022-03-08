@@ -1,7 +1,0 @@
-[
-  {
-    "name": "Lua",
-    "foldingStartMarker": "\\b(function|local\\s+function|then|do|repeat)\\b|{|{[ \t]*$|\\[\\[",
-    "foldingStopMarker": "\\bend\\b|}|^\\s*}|\\]\\]"
-  }
-]
