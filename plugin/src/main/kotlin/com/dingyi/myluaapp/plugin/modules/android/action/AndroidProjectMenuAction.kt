@@ -26,7 +26,6 @@ class AndroidProjectMenuAction : Action<Unit> {
                     argument.getPluginContext()
                         .getBuildService()
                         .build(project, "sync")
-
                     true
                 }
 
@@ -38,13 +37,21 @@ class AndroidProjectMenuAction : Action<Unit> {
                             .getBuildService()
                             .build(project, "build debug")
 
-
                         true
                     }
 
                     menu("构建release包")
 
                 }
+                menu("清除缓存").click {
+                    callBuildListener(argument.getPluginContext())
+                    argument.getPluginContext()
+                        .getBuildService()
+                        .build(project, "clean")
+
+                    true
+                }
+
             }
 
         }

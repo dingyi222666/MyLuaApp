@@ -129,10 +129,8 @@ abstract class HighlightProvider : AnalyzeManager {
                 Log.e("HighlightProvider", "Unexpected exception is thrown in the thread.", e)
             } finally {
                 Log.v("HighlightProvider", "Complete Highlight")
-
             }
         }?.let { job ->
-
             runTaskList.add(job)
             delegate.setJob(job)
             job.start()

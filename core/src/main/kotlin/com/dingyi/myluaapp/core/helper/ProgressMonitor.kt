@@ -31,7 +31,7 @@ class ProgressMonitor(
             changeProgressState(true)
             block.invoke()
             count.getAndDecrement()
-
+            delay(100)
             runAfterTask()
         }
     }

@@ -9,6 +9,7 @@ import com.dingyi.myluaapp.build.modules.android.parser.AndroidManifestSimplePar
 import com.dingyi.myluaapp.build.modules.android.symbol.SymbolLoader
 import com.dingyi.myluaapp.build.modules.android.symbol.SymbolWriter
 import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.common.ktx.toMD5
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -113,10 +114,14 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
 
         val rFile = File(file.toFile().parentFile, "R.txt")
 
-        val symbolLoader =
+        val symbolLoader = kotlin.runCatching {
             SymbolLoader.load(
                 rFile
             )
+        }.onFailure {
+            rFile.delete()
+            throw it
+        }.getOrNull().checkNotNull()
 
         val outputDirectory = applicationModule
             .getFileManager()
@@ -132,7 +137,6 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
             .parse(
                 File(file.toFile().parentFile, "AndroidManifest.xml").path
             )
-
 
         SymbolWriter(
             manifestInfo.packageId ?: ""
@@ -152,14 +156,19 @@ class GenerateRFile(private val applicationModule: Module) : DefaultTask(applica
 
     private suspend fun generateModuleRFile(file: InputFile, module: Module) =
         withContext(Dispatchers.IO) {
-            val symbolLoader =
-                SymbolLoader.load(
-                    module.getFileManager()
-                        .resolveFile(
-                            "build/intermediates/compile_local_symbol_list/${buildVariants}/R.txt",
-                            module
-                        )
+            val rFile = module.getFileManager()
+                .resolveFile(
+                    "build/intermediates/compile_local_symbol_list/${buildVariants}/R.txt",
+                    module
                 )
+            val symbolLoader = kotlin.runCatching {
+                SymbolLoader.load(
+                    rFile
+                )
+            }.onFailure {
+                rFile.delete()
+                throw it
+            }.getOrNull().checkNotNull()
 
             symbolLoader.merge(
                 applicationModule.getFileManager().resolveFile(

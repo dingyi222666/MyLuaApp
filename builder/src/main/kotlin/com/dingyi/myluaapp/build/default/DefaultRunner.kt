@@ -39,7 +39,7 @@ class DefaultRunner(
 
 
         coroutineScope.launch(coroutineScope.coroutineContext) {
-
+            delay(100)
             project.getLogger().info("run tasks [:$type] in project:${project.getPath()}")
 
             project.getLogger().info("\n")

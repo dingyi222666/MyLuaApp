@@ -4,6 +4,7 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class CleanTask(applyModule: Module) : DefaultTask(applyModule) {
 
@@ -28,5 +29,16 @@ class CleanTask(applyModule: Module) : DefaultTask(applyModule) {
             .getFileManager()
             .resolveFile("build", applyModule)
             .deleteRecursively()
+
+        if (applyModule == applyModule.getProject()
+                .getMainModule()
+        ) {
+            applyModule
+                .getProject()
+                .run {
+                    File(this.getPath(), "build")
+                }
+                .deleteRecursively()
+        }
     }
 }

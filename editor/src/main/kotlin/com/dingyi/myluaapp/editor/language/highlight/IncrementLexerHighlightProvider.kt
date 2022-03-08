@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.Collections.synchronizedList
 
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.Lock
@@ -20,8 +21,7 @@ import java.util.concurrent.locks.ReentrantLock
 abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
 
-    @OptIn(InternalCoroutinesApi::class)
-    private val lineStates = lazy { synchronized(this) { mutableListOf<LineTokenizeResult<T>>() } }
+    private val lineStates = synchronizedList(mutableListOf<LineTokenizeResult<T>>())
     private val styles = Styles()
 
     private var shadowContent: Content? = Content()
@@ -30,6 +30,8 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
     private fun requireContent(): Content {
         return shadowContent ?: error("")
     }
+
+
 
     /**
      * Compute code blocks
@@ -83,6 +85,7 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
         updateStyle(styles)
     }
 
+
     private fun doInsertHighlight(delegate: Delegate) {
 
         val data = requireData()
@@ -93,29 +96,30 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
         //insert and update state
         for (line in startLine..endLine) {
-            //last state
-            val lastState = lineStates
-                .value
-                .getOrNull(line - 1)
 
-            //result
-            val tokenizeResult = tokenizeLine(requireContent().getLine(line),line, lastState)
+                //last state
+                val lastState = lineStates
 
-            //if line == startLine,the line is contains
-            if (line == startLine) {
-                modifySpan
-                    .setSpansOnLine(line, tokenizeResult.clearSpans())
+                    .getOrNull(line - 1)
 
-                lineStates
-                    .value[line] = tokenizeResult
-            } else {
-                modifySpan
-                    .addLineAt(line, tokenizeResult.clearSpans())
+                //result
+                val tokenizeResult = tokenizeLine(requireContent().getLine(line), line, lastState)
 
-                lineStates
-                    .value
-                    .add(line, tokenizeResult)
-            }
+                //if line == startLine,the line is contains
+                if (line == startLine) {
+
+                    modifySpan
+                        .setSpansOnLine(line, tokenizeResult.clearSpans())
+
+                    lineStates[line] = tokenizeResult
+
+                } else {
+                    modifySpan
+                        .addLineAt(line, tokenizeResult.clearSpans())
+
+                    lineStates
+                        .add(line, tokenizeResult)
+                }
 
 
             checkDelegate(delegate)
@@ -124,30 +128,30 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
         //update for all
 
         for (line in endLine + 1 until requireContent().lineCount) {
-            val lastState = lineStates
-                .value
-                .getOrNull(line - 1)
 
-            val oldState = lineStates
-                .value
-                .getOrNull(line)
+                val lastState = lineStates
+                    .getOrNull(line - 1)
 
-            val tokenizeResult = tokenizeLine(
-                requireContent()
-                    .getLine(line),line, lastState
-            )
+                val oldState = lineStates
+                    .getOrNull(line)
 
-            if (oldState == tokenizeResult) {
-                break
-            } else {
+                val tokenizeResult = tokenizeLine(
+                    requireContent()
+                        .getLine(line), line, lastState
+                )
 
-                modifySpan
-                    .setSpansOnLine(line, tokenizeResult.clearSpans())
+                if (oldState == tokenizeResult) {
+                    break
+                } else {
 
-                lineStates.value[line] = tokenizeResult
+                    modifySpan
+                        .setSpansOnLine(line, tokenizeResult.clearSpans())
+
+                    lineStates[line] = tokenizeResult
 
 
-            }
+                }
+
 
 
             checkDelegate(delegate)
@@ -176,7 +180,7 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
             modifySpan
                 .deleteLineAt(startLine + 1)
 
-            lineStates.value.removeAt(startLine + 1)
+            lineStates.removeAt(startLine + 1)
 
             checkDelegate(delegate)
             line ++
@@ -188,11 +192,9 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
         for (line in startLine until requireContent().lineCount) {
             val lastState = lineStates
-                .value
                 .getOrNull(line - 1)
 
             val oldState = lineStates
-                .value
                 .get(line)
 
             val tokenizeResult = tokenizeLine(
@@ -207,7 +209,7 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
                 modifySpan
                     .setSpansOnLine(line, tokenizeResult.clearSpans())
 
-                lineStates.value.set(line, tokenizeResult)
+                lineStates.set(line, tokenizeResult)
 
             }
 
@@ -231,10 +233,10 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
         for (line in 0 until requireContent().lineCount) {
             checkDelegate(delegate)
             val lineText = requireContent().getLine(line)
-            val lastState = lineStates.value.getOrNull(line - 1)
-            val lineState = tokenizeLine(lineText,line, lastState)
+            val lastState = lineStates.getOrNull(line - 1)
+            val lineState = tokenizeLine(lineText, line, lastState)
             modifySpan.addLineAt(line, lineState.clearSpans())
-            lineStates.value.add(line, lineState)
+            lineStates.add(line, lineState)
         }
     }
 
@@ -462,7 +464,7 @@ abstract class IncrementLexerHighlightProvider<T> : HighlightProvider() {
 
         shadowContent = null
 
-        lineStates.value.clear()
+        lineStates.clear()
 
         System.gc()
     }
