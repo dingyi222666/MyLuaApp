@@ -3,13 +3,13 @@ package com.dingyi.myluaapp.plugin.modules.lua.editor.highlight
 import com.dingyi.lsp.lua.common.lexer.LuaLexer
 import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes
 import com.dingyi.myluaapp.common.ktx.checkNotNull
-import com.dingyi.myluaapp.editor.language.highlight.IncrementLexerHighlightProvider
+import com.dingyi.myluaapp.editor.highlight.IncrementStateHighlightProvider
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.Span
 import io.github.rosemoe.sora.lang.styling.Styles
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 
-class LuaIncrementHighlightProvider : IncrementLexerHighlightProvider<LuaIncrementHighlightProvider.LuaLexerState>() {
+class LuaIncrementHighlightProvider : IncrementStateHighlightProvider<LuaIncrementHighlightProvider.LuaLexerState>() {
 
     override fun computeBlocks(
         text: CharSequence,

@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.editor.language.highlight
+package com.dingyi.myluaapp.editor.highlight
 
 import android.os.Bundle
 import android.os.Handler
@@ -96,7 +96,7 @@ abstract class HighlightProvider : AnalyzeManager {
     }
 
 
-    protected fun requireData():IncrementalEditContent {
+    protected fun requireData(): IncrementalEditContent {
         return checkNotNull(data)
     }
 
@@ -118,7 +118,7 @@ abstract class HighlightProvider : AnalyzeManager {
         runHighlighting()
     }
 
-    private fun runHighlighting() {
+    fun runHighlighting() {
         val delegate = JobDelegate()
 
         coroutine?.launch(start = CoroutineStart.LAZY, context = Dispatchers.IO) {

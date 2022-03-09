@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.editor.language.highlight
+package com.dingyi.myluaapp.editor.highlight
 
 import io.github.rosemoe.sora.lang.styling.MappedSpans
 import io.github.rosemoe.sora.lang.styling.Span

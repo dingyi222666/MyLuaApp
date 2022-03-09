@@ -1,9 +1,9 @@
-package com.dingyi.myluaapp.editor.language.highlight
+package com.dingyi.myluaapp.editor.highlight
 
 import kotlinx.coroutines.Job
 import java.util.concurrent.Future
 
-class JobDelegate:HighlightProvider.Delegate {
+class JobDelegate: HighlightProvider.Delegate {
 
     private var job: Job? = null
 

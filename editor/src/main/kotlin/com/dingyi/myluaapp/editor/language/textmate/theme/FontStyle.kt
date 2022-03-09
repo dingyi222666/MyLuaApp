@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.editor.language.highlight.textmate.theme
+package com.dingyi.myluaapp.editor.language.textmate.theme
 
 
 /**

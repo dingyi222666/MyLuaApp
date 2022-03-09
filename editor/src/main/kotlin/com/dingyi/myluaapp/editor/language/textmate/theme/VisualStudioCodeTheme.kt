@@ -1,9 +1,9 @@
-package com.dingyi.myluaapp.editor.language.highlight.textmate.theme
+package com.dingyi.myluaapp.editor.language.textmate.theme
 
 import android.graphics.Color
 import android.util.ArrayMap
 import android.util.SparseIntArray
-import com.dingyi.myluaapp.editor.language.highlight.textmate.theme.ThemeRepository.fontStyleMap
+import com.dingyi.myluaapp.editor.language.textmate.theme.ThemeRepository.fontStyleMap
 import io.github.rosemoe.sora.textmate.core.internal.grammar.StackElementMetadata
 
 import io.github.rosemoe.sora.textmate.core.internal.theme.reader.ThemeReader
@@ -25,33 +25,20 @@ class VisualStudioCodeTheme(
             )
         }
 
-    private val scopesThemeMap = ArrayMap<Int, FontStyle>(100)
-
-    private val colorCacheMap = ArrayMap<String, Int>()
-
-
-    private val colorCacheList = SparseIntArray()
 
     private val visualStudioCodeTheme = Theme.createFromRawTheme(visualStudioCodeRawTheme)
 
     //load all theme
     override fun init() {
 
-        visualStudioCodeRawTheme.editorSettings.forEach { editorColor ->
-            val color = Color.parseColor(editorColor.value.run {
-                if (this.length < 9) {
-                    "#" + ((this.length - 1..7).joinToString(
-                        separator = ""
-                    ) { "F" }) + this.substring(1)
-                } else this
-            })
-            colorCacheMap[editorColor.key] = colorCacheList.size()
-            colorCacheList.append(colorCacheList.size(), color)
-        }
     }
 
-    override fun getColor(index: Int): Int {
-        return colorCacheList[index]
+    override fun getColor(index: Int): Int? {
+        return visualStudioCodeTheme
+            .getColor(index)
+            ?.let { color ->
+                Color.parseColor(color)
+            }
     }
 
     override fun getName(): String {
@@ -59,9 +46,8 @@ class VisualStudioCodeTheme(
     }
 
 
-
     override fun match(scope: Int): FontStyle? {
-        return scopesThemeMap[scope] ?: matchFontStyle(scope)
+        return matchFontStyle(scope)
     }
 
     private fun matchFontStyle(scope: Int): FontStyle? {
@@ -77,30 +63,19 @@ class VisualStudioCodeTheme(
     }
 
 
-    override fun parseColor(colorText: String): Int {
-
-
-        return if (colorCacheMap.containsKey(colorText)) {
-            colorCacheMap.getValue(colorText)
-        } else {
-            val color = Color.parseColor(colorText)
-            val index = colorCacheList.size()
-            colorCacheMap[colorText] = index
-            colorCacheList.put(index, color)
-            index
-        }.run {
-            this + 0xff
-        }
-    }
-
     override fun matchSettings(settings: String): Int? {
-        return colorCacheMap[settings]?.run {
-            colorCacheList[this]
-        }
+        return visualStudioCodeRawTheme
+            .editorSettings
+            .get(settings)
+            .let { color -> Color.parseColor(color) }
     }
 
-    override fun getThemeRaw():io.github.rosemoe.sora.textmate.core.internal.theme.ThemeRaw {
+    override fun getThemeRaw(): io.github.rosemoe.sora.textmate.core.internal.theme.ThemeRaw {
         return visualStudioCodeRawTheme
+    }
+
+    override fun getDefaultColor(): Int? {
+        return matchSettings("editor.foreground")?.plus(0xff)
     }
 
     override fun equals(other: Any?): Boolean {

@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.plugin.api.editor
 
 import android.view.View
-import com.dingyi.myluaapp.editor.language.highlight.language.Language
+import com.dingyi.myluaapp.editor.language.Language
 import io.github.rosemoe.sora.widget.CodeEditor
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme

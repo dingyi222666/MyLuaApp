@@ -6,8 +6,8 @@ import com.dingyi.lsp.lua.common.lexer.LuaLexer
 import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes
 import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes.*
 import com.dingyi.myluaapp.editor.ktx.addIfNeeded
-import com.dingyi.myluaapp.editor.language.highlight.IncrementalEditContent
-import com.dingyi.myluaapp.editor.language.highlight.LexerHighlightProvider
+import com.dingyi.myluaapp.editor.highlight.IncrementalEditContent
+import com.dingyi.myluaapp.editor.highlight.LexerHighlightProvider
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.MappedSpans
 import io.github.rosemoe.sora.lang.styling.Styles

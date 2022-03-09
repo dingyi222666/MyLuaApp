@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.editor.language.highlight.textmate.theme
+package com.dingyi.myluaapp.editor.language.textmate.theme
 
 import io.github.rosemoe.sora.textmate.core.internal.theme.ThemeRaw
 
@@ -19,14 +19,16 @@ interface ITheme {
     /**
      * return color index
      */
-    fun parseColor(colorText: String): Int
+
     fun init() //
 
     /**
      * get color by index
      */
-    fun getColor(index: Int): Int
-    fun matchSettings(settings: String): Int?
+    fun getColor(index: Int): Int?
+
     fun getThemeRaw(): ThemeRaw
+    fun matchSettings(s: String): Int?
+    fun getDefaultColor():Int?
 
 }
