@@ -7,6 +7,7 @@ import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.Span
 import io.github.rosemoe.sora.lang.styling.Styles
 import io.github.rosemoe.sora.lang.styling.TextStyle
+import io.github.rosemoe.sora.langs.textmate.analyzer.TextMateAnalyzer
 import io.github.rosemoe.sora.textmate.core.grammar.ITokenizeLineResult2
 import io.github.rosemoe.sora.textmate.core.grammar.StackElement
 import io.github.rosemoe.sora.textmate.core.internal.grammar.StackElementMetadata
@@ -51,6 +52,7 @@ class TextMateHighlightProvider(
         line: Int,
         tokenizeResult: LineTokenizeResult<TextMateState>?
     ): LineTokenizeResult<TextMateState> {
+
         val lineText: String = lineString.toString()
         val tokens = mutableListOf<Span>()
         val lineTokens: ITokenizeLineResult2 =

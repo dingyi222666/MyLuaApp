@@ -1,20 +1,13 @@
 package com.dingyi.myluaapp.editor.highlight
 
 import android.os.Bundle
-import android.util.Log
+import io.github.rosemoe.sora.lang.analysis.AsyncIncrementalAnalyzeManager
+import io.github.rosemoe.sora.lang.analysis.IncrementalAnalyzeManager
 import io.github.rosemoe.sora.lang.styling.*
-import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.ContentReference
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 import java.util.Collections.synchronizedList
-
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
 
 /**
  * Increment highlight provider for state,use state for increment
@@ -58,133 +51,97 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
     }
 
 
+    private fun doDeleteHighlight(delegate: Delegate) {
+
+        val data = requireData()
+        val startLine = data.startPosition.line
+        val endLine = data.endPosition.line
+
+
+        if (endLine >= startLine + 1) {
+            lineStates.subList(startLine + 1, endLine + 1).clear()
+        }
+
+        val mdf = styles.spans.modify()
+
+        var line = startLine + 1
+        while (line <= endLine) {
+            mdf.deleteLineAt(startLine + 1)
+            ++line
+        }
+
+
+        var res = lineStates
+            .getOrNull(startLine - 1)
+        line = startLine
+        while (line < requireContent().lineCount) {
+            res = tokenizeLine(
+                requireContent()
+                    .getLine(line), line, res
+            )
+            mdf.setSpansOnLine(
+                line,
+                res.clearSpans()
+            )
+            if (lineStates.set(line, res) == res) {
+                break
+            }
+            ++line
+            checkDelegate(delegate)
+        }
+
+
+    }
+
     private fun doInsertHighlight(delegate: Delegate) {
 
         val data = requireData()
         val startLine = data.startPosition.line
         val endLine = data.endPosition.line
+        var line = startLine
+        val spans = styles.spans.modify()
 
-        val modifySpan = styles.spans.modify()
-
-        //insert and update state
-        for (line in startLine..endLine) {
-
-                //last state
-                val lastState = lineStates
-
-                    .getOrNull(line - 1)
-
-                //result
-                val tokenizeResult = tokenizeLine(requireContent().getLine(line), line, lastState)
-
-                //if line == startLine,the line is contains
-                if (line == startLine) {
-
-                    modifySpan
-                        .setSpansOnLine(line, tokenizeResult.clearSpans())
-
-                    lineStates[line] = tokenizeResult
-
-                } else {
-                    modifySpan
-                        .addLineAt(line, tokenizeResult.clearSpans())
-
-                    lineStates
-                        .add(line, tokenizeResult)
-                }
-
-
-            checkDelegate(delegate)
-        }
-
-        //update for all
-
-        for (line in endLine + 1 until requireContent().lineCount) {
-
-                val lastState = lineStates
-                    .getOrNull(line - 1)
-
-                val oldState = lineStates
-                    .getOrNull(line)
-
-                val tokenizeResult = tokenizeLine(
-                    requireContent()
-                        .getLine(line), line, lastState
-                )
-
-                if (oldState == tokenizeResult) {
-                    break
-                } else {
-
-                    modifySpan
-                        .setSpansOnLine(line, tokenizeResult.clearSpans())
-
-                    lineStates[line] = tokenizeResult
-
-
-                }
-
-
-
-            checkDelegate(delegate)
-        }
-
-    }
-
-    private fun doDeleteHighlight(delegate: Delegate) {
-
-
-        val data = requireData()
-        val startLine = data.startPosition.line
-        val endLine = data.endPosition.line
-
-        val modifySpan = styles.spans.modify()
-
-        //delete span and state
-        var line = startLine + 1
+        var res = lineStates
+            .getOrNull(startLine - 1)
 
         while (line <= endLine) {
-
-            if (startLine == endLine) {
-                break
+            res = tokenizeLine(
+                requireContent()
+                    .getLine(line), line, res
+            )
+            if (line == startLine) {
+                spans.setSpansOnLine(
+                    line,
+                    res.clearSpans()
+                )
+                lineStates[line] = res
+            } else {
+                spans.addLineAt(
+                    line,
+                    res.clearSpans()
+                )
+                lineStates.add(line, res)
             }
 
-            modifySpan
-                .deleteLineAt(startLine + 1)
-
-            lineStates.removeAt(startLine + 1)
-
+            ++line
             checkDelegate(delegate)
-            line ++
         }
 
 
-        //update span
-
-
-        for (line in startLine until requireContent().lineCount) {
-            val lastState = lineStates
-                .getOrNull(line - 1)
-
-            val oldState = lineStates
-                .get(line)
-
-            val tokenizeResult = tokenizeLine(
+        while (line < requireContent().lineCount) {
+            res = tokenizeLine(
                 requireContent()
-                    .getLine(line),line, lastState
+                    .getLine(line), line, res
             )
-
-            if (oldState == tokenizeResult) {
+            if (res == lineStates[line]) {
                 break
-            } else {
-
-                modifySpan
-                    .setSpansOnLine(line, tokenizeResult.clearSpans())
-
-                lineStates.set(line, tokenizeResult)
-
             }
-
+            spans.setSpansOnLine(
+                line,
+                res.clearSpans()
+            )
+            lineStates[line] = res
+            ++line
             checkDelegate(delegate)
         }
 
