@@ -7,8 +7,7 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
-
-import com.dingyi.myluaapp.build.modules.android.storebgfder2rre.KeyStoreProvider
+import com.dingyi.myluaapp.build.modules.android.store.KeyStoreProvider
 import com.dingyi.myluaapp.common.ktx.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
