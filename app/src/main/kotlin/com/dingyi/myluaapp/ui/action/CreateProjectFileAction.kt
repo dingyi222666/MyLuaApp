@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.ui.editor.action
+package com.dingyi.myluaapp.ui.action
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope

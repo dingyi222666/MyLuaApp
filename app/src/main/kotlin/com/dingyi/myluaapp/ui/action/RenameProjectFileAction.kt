@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.ui.editor.action
+package com.dingyi.myluaapp.ui.action
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +14,7 @@ import com.dingyi.myluaapp.ui.editor.MainViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 
-class CreateProjectDirectoryAction : Action<(() -> Unit) -> Unit> {
+class RenameProjectFileAction : Action<(() -> Unit) -> Unit> {
 
     override fun callAction(argument: ActionArgument): (() -> Unit) -> Unit {
         var block: (() -> Unit)? = null
@@ -30,18 +30,19 @@ class CreateProjectDirectoryAction : Action<(() -> Unit) -> Unit> {
         activity?.let {
             BottomDialogBuilder.with(it)
                 .setDialogLayout(DefaultInputLayout)
-                .setTitle(R.string.editor_dialog_create_directory_title)
+                .setTitle(R.string.editor_dialog_rename_title)
+                .setDefaultText(file.name.toString())
                 .setPositiveButton(android.R.string.ok.getString()) { helper, inputText ->
                     val (_, inputName) = inputText.checkNotNull()
                     if (inputName.toString().isEmpty()) {
                         //拦截不关闭dialog
                         return@setPositiveButton helper.interceptClose(false)
                     } else {
-
-                        val targetPath = "${file.path}/$inputName".toFile()
+                        val parentPath = file.parentFile?.path ?: file
+                        val targetPath = "$parentPath/$inputName".toFile()
                         helper.interceptClose(false)
                         activity.lifecycleScope.launch {
-                            viewModel?.createDirectory(targetPath)
+                            viewModel?.renameFile(file, targetPath)
                             block?.invoke()
                             helper.interceptClose(true)
                             helper.dismiss()
@@ -59,7 +60,7 @@ class CreateProjectDirectoryAction : Action<(() -> Unit) -> Unit> {
 
 
     override val name: String
-        get() = "CreateProjectFileAction"
+        get() = "RenameProjectFileAction"
     override val id: String
-        get() = "com.dingyi.myluapp.plugin.default.action8"
+        get() = "com.dingyi.myluapp.plugin.default.action7"
 }

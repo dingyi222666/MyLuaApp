@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.ui.editor.action
+package com.dingyi.myluaapp.ui.action
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -20,11 +20,18 @@ class DeleteProjectFileAction:Action<(() -> Unit) -> Unit> {
             block = target
         }
 
+
+
         val file = argument.getArgument<File>(0)
 
         val activity = argument.getArgument<AppCompatActivity>(1)
 
         val viewModel = argument.getArgument<MainViewModel>(2)
+
+        if (file == viewModel?.project?.value?.path) {
+            return result
+        }
+
         activity?.let {
 
             BottomDialogBuilder.with(activity)

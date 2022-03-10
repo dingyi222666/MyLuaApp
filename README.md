@@ -16,19 +16,19 @@ If you've never used Lua before, that's fine. You can still use Java to develop 
 This project used Lua to parse the project configuration script. Based on the flexibility of lua, it may even be possible to dynamically add packaging tasks to the build system in the future.
 
 ## Features
- - [x] JavaC supports (ecj)
- - [x] AAPT2 supports
- - [x] D8 and R8 supports
- - [x] Maven Dependency resolution supports
- - [x] File Tree List  
- - [ ] *Multi-module supports
- - [ ] TextMate supports (tm4e)
- - [ ] *Plugin Module
- - [ ] *Build Module
- - [ ] Auto completion supports for Lua
- - [ ] Auto completion supports for Java
- - [ ] Auto completion supports for Xml
- - [ ] *Project template
+- [x] JavaC supports (ecj)
+- [x] AAPT2 supports
+- [x] D8 and R8 supports
+- [x] Maven Dependency resolution supports
+- [x] File Tree List
+- [ ] Multi-module supports*
+- [ ] TextMate supports (tm4e)*
+- [ ] Project template*
+- [ ] Plugin Module*
+- [ ] Build Module*
+- [ ] Auto completion supports for Lua
+- [ ] Auto completion supports for Java
+- [ ] Auto completion supports for Xml
 
 Features marked with an asterisk (*) represent feature currently development
 

@@ -42,12 +42,13 @@ class AndroidProjectTemplate(
 
         //projectPath.mkdirs()
         zipFile.fileHeaders
+            .filterNot { it.isDirectory }
             .forEach {
 
                 var filePath = it.fileName
 
                 if (filePath.indexOf(regexAppName) != -1 || filePath.indexOf(regexAppPackageName) != -1) {
-                    replaceString(filePath, pair).apply {
+                    replaceString(filePath, pair,true).apply {
 
                         zipFile.extractFile(it, projectPath.path, this)
                         filePath = projectPath.path + "/" + this

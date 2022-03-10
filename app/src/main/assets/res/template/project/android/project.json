@@ -2,14 +2,27 @@
   "templates": [
     {
       "name": {
-        "default": "Lua Java 空模板",
-        "english": "Lua And Java Empty Project"
+        "default": "Lua Android 空模板",
+        "english": "Lua Android Empty Project"
       },
-      "path": "zip/empty_lua_java_project.zip",
+      "path": "zip/empty_lua_android_project.zip",
       "replaces": [
         "xml",
         "lua",
         "json"
+      ]
+    },
+    {
+      "name": {
+        "default": "Android 空模板",
+        "english": "Android Empty Project"
+      },
+      "path": "zip/empty_android_project.zip",
+      "replaces": [
+        "xml",
+        "lua",
+        "json",
+        "java"
       ]
     }
   ]

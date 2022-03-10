@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.ui.editor.helper
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
-import com.dingyi.myluaapp.ui.editor.action.*
+import com.dingyi.myluaapp.ui.action.*
 import com.dingyi.myluaapp.ui.editor.activity.EditorActivity
 
 object ActionHelper {

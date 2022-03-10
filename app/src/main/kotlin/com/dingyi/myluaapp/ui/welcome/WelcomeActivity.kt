@@ -1,9 +1,12 @@
 package com.dingyi.myluaapp.ui.welcome
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.build.util.getSHA256
 import com.dingyi.myluaapp.common.ktx.Paths
@@ -24,6 +27,8 @@ class WelcomeActivity : AppCompatActivity() {
         ActivityWelcomeBinding.inflate(layoutInflater)
     }
 
+    private val listenerLiveData = MutableLiveData(false)
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +46,8 @@ class WelcomeActivity : AppCompatActivity() {
                 // Hide the nav bar and status bar
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
+
+
 
         setContentView(viewBinding.root)
 
@@ -86,8 +93,6 @@ class WelcomeActivity : AppCompatActivity() {
                     }
 
 
-
-
             }
 
 
@@ -95,13 +100,39 @@ class WelcomeActivity : AppCompatActivity() {
             viewBinding.title.text = "MyLuaApp by dingyi"
 
 
+            withContext(Dispatchers.Main) {
+                listenerLiveData.value = true
+            }
+
             startActivity<MainActivity>()
 
             finish()
 
         }
 
+        extendDisplayTime()
 
+    }
+
+    //延长启动画面显示时间
+    private fun extendDisplayTime() {
+
+        // Set up an OnPreDrawListener to the root view.
+        val content = findViewById<View>(android.R.id.content);
+        content.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (listenerLiveData.value == true) {
+                        content.viewTreeObserver.removeOnPreDrawListener(this)
+                    }
+                    listenerLiveData.value ?: false
+                } else {
+                    content.viewTreeObserver.removeOnPreDrawListener(this)
+                    true
+                }
+            }
+
+        })
     }
 
 }

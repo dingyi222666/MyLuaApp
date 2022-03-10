@@ -157,7 +157,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun updateNode(treeNode: TreeNode) {
-        viewModelScope.launch {
+        progressMonitor.postAsyncTask {
 
             val newTreeNode = withContext(Dispatchers.IO) {
                 if (treeNode.parent.isRoot) {
@@ -167,9 +167,9 @@ class MainViewModel : ViewModel() {
                 }
             }.checkNotNull()
 
-            refreshEditor()
-
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Main) {
+                refreshEditor()
+           
                 if (treeNode == rootNode.value) {
                     rootNode.value = newTreeNode
                 } else {

@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.ui.editor.action
+package com.dingyi.myluaapp.ui.action
 
 import com.dingyi.myluaapp.common.ktx.endsWith
 import com.dingyi.myluaapp.plugin.api.Action
