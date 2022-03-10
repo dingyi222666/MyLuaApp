@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.build.modules.android.storebgfder2rre
+package com.dingyi.myluaapp.build.modules.android.store
 
 import com.dingyi.myluaapp.build.util.JKS
 import com.dingyi.myluaapp.common.ktx.getJavaClass
@@ -9,7 +9,7 @@ class KeyStoreProvider() :
 
     init {
         put("KeyStore.jks", getJavaClass<JKS>().name)
-        //init service、
+        //init service
 
         services
     }
