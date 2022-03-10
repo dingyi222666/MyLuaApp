@@ -11,7 +11,7 @@ object BuildConfig {
 
         object Default {
 
-            const val targetSdk = 30
+            const val targetSdk = 31
             const val minSdk = 26
             const val buildToolsVersion = "31.0.0"
             const val compileSdk = 31
@@ -137,11 +137,7 @@ object BuildConfig {
 
         object BuildTools {
             const val conscrypt = "org.conscrypt:conscrypt-android:2.5.2"
-            val spongycastle = arrayOf(
-                "com.madgag.spongycastle:core:1.58.0.0",
-                "com.madgag.spongycastle:prov:1.58.0.0",
 
-            )
             const val javapoet = "com.squareup:javapoet:${Versions.javapoet_version}"
 
             const val r8 =
