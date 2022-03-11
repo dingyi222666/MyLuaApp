@@ -48,10 +48,9 @@ class PluginManager(private val context: PluginContext) {
 
                 if (plugin is Plugin) {
                     allPluginPath[plugin.pluginId] = pluginPath.toString()
-
                     allPlugin.add(plugin to "")
                 } else {
-                    error("Load PluginClass $pluginClass fail.The Class isn't extends Plugin")
+                    error("Unable to load plugin class $pluginClass.The parent class of the current object is not  Plugin")
                 }
 
             }
@@ -66,6 +65,7 @@ class PluginManager(private val context: PluginContext) {
                 if (path.isEmpty()) {
                     loadPlugin[plugin] = WrapperBasePluginContext(context,plugin)
                 }
+                plugin.onStart(loadPlugin.getValue(plugin))
             }
 
     }
@@ -76,6 +76,7 @@ class PluginManager(private val context: PluginContext) {
             .forEach { (plugin,path) ->
                 if (path.isEmpty()) {
                     loadPlugin[plugin] = WrapperBasePluginContext(context,plugin)
+                    plugin.onStart(loadPlugin.getValue(plugin))
                 }
             }
     }
