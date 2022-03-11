@@ -19,8 +19,6 @@ class ApkInstaller(private val context: Context) : LogView.LogListener {
             .filterNotNull()
             .forEach {
 
-                println(it.value)
-
                 log.text.setSpan(
                     object : ClickableSpan() {
                         override fun onClick(widget: View) {
@@ -32,8 +30,6 @@ class ApkInstaller(private val context: Context) : LogView.LogListener {
                     it.range.last + 1,
                     Spannable.SPAN_INCLUSIVE_INCLUSIVE
                 )
-
-
             }
 
         return log

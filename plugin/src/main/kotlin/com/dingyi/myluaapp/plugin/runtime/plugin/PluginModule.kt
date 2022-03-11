@@ -7,6 +7,7 @@ import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.build.BuildMain
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.PluginModule
+import com.dingyi.myluaapp.plugin.api.Properties
 import com.dingyi.myluaapp.plugin.api.build.BuildService
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorService
 
@@ -88,7 +89,7 @@ object PluginModule: PluginModule {
     }
 
 
-    override fun getProperties() {
+    override fun getProperties():Properties {
         TODO("Not yet implemented")
     }
 

@@ -39,6 +39,16 @@ abstract class DefaultProject(
 
     }
 
+    override fun backup(exportPath: File) {
+        TODO("Not yet implemented")
+    }
+
+
+    override fun walkProjectFile(): FileTreeWalk {
+        TODO("Not yet implemented")
+    }
+
+
     override suspend fun renameFile(file: File, targetFile: File): Unit =
         withContext(Dispatchers.IO) {
 

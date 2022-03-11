@@ -57,6 +57,8 @@ dependencies {
     implementation(BuildConfig.Libs.Default.glide)
     annotationProcessor(BuildConfig.Libs.Default.glide_compiler)
     implementation(BuildConfig.Libs.Google.gson)
+    implementation(BuildConfig.Libs.Tools.mmkv)
+
 
 
 }

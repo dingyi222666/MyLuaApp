@@ -1,18 +1,16 @@
 package com.dingyi.myluaapp.build.default
 
 import android.util.Log
-import android.util.TimeUtils
 import com.dingyi.myluaapp.build.api.Project
-import com.dingyi.myluaapp.build.api.runner.Runner
+import com.dingyi.myluaapp.build.api.scheduler.Scheduler
 import com.dingyi.myluaapp.build.api.Task
 import kotlinx.coroutines.*
-import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 
-class DefaultRunner(
+class DefaultScheduler(
     private val project: Project
-) : Runner {
+) : Scheduler {
 
     override fun run(type: String): Job {
 

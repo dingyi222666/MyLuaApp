@@ -41,6 +41,7 @@ class MainViewModel : ViewModel() {
         lifecycleOwner.scopeNetLife {
             runCatching {
                 Get<Poetry>(Apis.poetryApi).await()
+
             }.getOrNull()?.content ?: R.array.main_poetry_array.getStringArray().run {
                 get(IntRange(0, lastIndex).random())
             }.let {

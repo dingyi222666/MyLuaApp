@@ -6,6 +6,7 @@ import android.content.Context
 
 import kotlin.properties.Delegates
 import com.hjq.language.MultiLanguages
+import com.tencent.mmkv.MMKV
 
 
 /**
@@ -27,6 +28,7 @@ class MainApplication : Application() {
 
         CrashHandler.init(this)
 
+        MMKV.initialize(this)
     }
 
     override fun attachBaseContext(base: Context) {

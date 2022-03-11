@@ -24,14 +24,6 @@ class AndroidProject(
         )
     }
 
-    override fun backup(exportPath: File) {
-        TODO("Not yet implemented")
-    }
-
-
-    override fun walkProjectFile(): FileTreeWalk {
-        TODO("Not yet implemented")
-    }
 
     override fun runProject() {
         pluginContext

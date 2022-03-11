@@ -72,7 +72,7 @@ object Paths {
     val projectDir = "$mainDir/project"
     val fontsDir = "$mainDir/fonts"
     val pluginDir = "$assetsDir/plugin"
-
+    val dexLoaderDir = "$cacheDir/dexLoader"
     val resDir = "$assetsDir/res"
     val buildPath = "$resDir/build"
     val tempateDir = "$resDir/template"

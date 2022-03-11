@@ -9,7 +9,7 @@ import com.dingyi.myluaapp.build.api.file.FileManager
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Project
-import com.dingyi.myluaapp.build.api.runner.Runner
+import com.dingyi.myluaapp.build.api.scheduler.Scheduler
 import com.dingyi.myluaapp.build.api.script.Script
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.api.dependency.Dependency
@@ -49,7 +49,7 @@ open class DefaultProject(
         "$path/build/cache"
     )
 
-    private val defaultRunner = DefaultRunner(this)
+    private val defaultRunner = DefaultScheduler(this)
 
     private var mainModule: Module = DefaultModule(this, "")
 
@@ -77,7 +77,7 @@ open class DefaultProject(
         return defaultFileManager
     }
 
-    override fun getRunner(): Runner {
+    override fun getRunner(): Scheduler {
         return defaultRunner
     }
 

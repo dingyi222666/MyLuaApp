@@ -25,18 +25,13 @@ inline val Context.versionCode: Int
 
 
 inline fun <reified T> Activity.startActivity(block: Intent.() -> Unit = {}) {
-    startActivity(Intent(this, T::class.java).apply(block))
+    startActivity(Intent(this, getJavaClass<T>()).apply(block))
 }
 
 inline fun Activity.startActivity(targetClass: Class<*>, block: Intent.() -> Unit = {}) {
     startActivity(Intent(this, targetClass).apply(block))
 }
 
-fun AppCompatActivity.openDocument(fileType: String, callback: (Uri) -> Unit) {
-    registerForActivityResult(ActivityResultContracts.OpenDocument()) {
-        callback(it)
-    }.launch(arrayOf(fileType))
-}
 
 fun restartApp() {
     exitProcess(0)

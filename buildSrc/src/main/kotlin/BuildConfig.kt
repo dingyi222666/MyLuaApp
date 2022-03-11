@@ -32,7 +32,7 @@ object BuildConfig {
         const val gson_version = "2.8.8"
         const val material_version = "1.5.0"
         const val appcompat_version = "1.4.1"
-        const val sora_editor_version = "0.10.5"
+        const val sora_editor_version = "0.10.7"
         const val lifecycle_version = "2.4.0"
         const val preference_ktx_version = "1.1.1"
         const val constraint_layout_version = "2.0.4"
@@ -57,6 +57,7 @@ object BuildConfig {
 
         const val r8_version = "3.0.73"
 
+        const val mmkv_version = "1.2.12"
 
         const val android_build_tool_version = "7.1.1"
 
@@ -132,6 +133,7 @@ object BuildConfig {
 
             const val zip4j = "net.lingala.zip4j:zip4j:${Versions.zip4j_version}"
 
+            const val mmkv = "com.tencent:mmkv:${Versions.mmkv_version}"
 
         }
 

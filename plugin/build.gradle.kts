@@ -72,6 +72,8 @@ dependencies {
         }
     }
 
+    implementation(BuildConfig.Libs.Tools.mmkv)
+
     implementation(BuildConfig.Libs.Tools.zip4j)
 
     implementation(BuildConfig.Libs.Google.gson)
