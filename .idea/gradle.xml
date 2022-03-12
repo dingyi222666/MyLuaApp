@@ -15,7 +15,6 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/builder" />
-            <option value="$PROJECT_DIR$/builder-plugin-api" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/editor" />
