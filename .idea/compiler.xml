@@ -6,6 +6,7 @@
       <module name="MyLuaApp.androlua" target="11" />
       <module name="MyLuaApp.app" target="11" />
       <module name="MyLuaApp.builder" target="11" />
+      <module name="MyLuaApp.builder-plugin-api" target="11" />
       <module name="MyLuaApp.common" target="11" />
       <module name="MyLuaApp.core" target="11" />
       <module name="MyLuaApp.editor" target="11" />
