@@ -34,6 +34,8 @@ object TreeHelper {
         addChildNode(node, node.level + 1)
 
 
+
+
         TreeHelper.getAllNodes(node)
             .filter { allExpandPath.contains(it.value as File) }
             .forEach {
@@ -57,6 +59,7 @@ object TreeHelper {
 
          main.isLeaf = true
 
+
          main.children.forEach {
              val file = it.value as File
 
@@ -64,7 +67,6 @@ object TreeHelper {
                  it.isLeaf = true
                  addChildNode(it, it.level + 1)
              }
-
          }
      }
 }

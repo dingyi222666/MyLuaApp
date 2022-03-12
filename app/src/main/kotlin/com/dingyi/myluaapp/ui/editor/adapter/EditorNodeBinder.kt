@@ -63,6 +63,8 @@ class EditorNodeBinder(
                         .addArgument(treeNode.value as File)
                         .addArgument(viewModel), DefaultActionKey.CLICK_TREE_VIEW_FILE
                 )
+
+
         } else {
             binding
                 .arrow
@@ -70,6 +72,9 @@ class EditorNodeBinder(
                 .rotation(if (expand) 90f else 0f)
                 .setDuration(120)
                 .start()
+
+
+
         }
 
     }

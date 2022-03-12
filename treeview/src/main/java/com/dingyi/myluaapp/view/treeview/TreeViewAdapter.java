@@ -186,8 +186,21 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    private void forEachNode(TreeNode treeNode) {
+        treeNode.setExpanded(true);
+        treeNode.getChildren().forEach(child -> {
+            if (child.hasChild() && child.getChildren().size() == 1) {
+                forEachNode(child);
+            }
+        });
+    }
+
     private void onNodeToggled(TreeNode treeNode) {
         treeNode.setExpanded(!treeNode.isExpanded());
+
+        if (treeNode.isExpanded() && treeNode.hasChild() && treeNode.getChildren().size() == 1) {
+            forEachNode(treeNode);
+        }
 
         if (treeNode.isExpanded()) {
             expandNode(treeNode);
