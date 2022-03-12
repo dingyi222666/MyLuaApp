@@ -7,11 +7,11 @@ import com.dingyi.myluaapp.build.api.builder.MainBuilder
 
 interface HookService : Service {
 
-    fun onCreateModule(module: Module)
+    fun onCreateModule(module: Module):Module
 
-    fun onCreateProject(project: Project)
+    fun onCreateProject(project: Project):Project
 
-    fun onCreateBuilder(builder: MainBuilder)
+    fun onCreateBuilder(builder: Builder):Builder
 
     override fun onCreateBuilder(path: String, module: Module): Builder? {
         return null

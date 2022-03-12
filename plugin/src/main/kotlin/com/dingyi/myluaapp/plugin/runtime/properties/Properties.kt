@@ -9,11 +9,11 @@ class Properties(
     private val mmkv = MMKV.mmkvWithID(pluginId)
 
     override fun putString(key: String, value: String) {
-       mmkv.putString(key, value)
+        mmkv.putString(key, value)
 
     }
 
-    override fun getString(key: String, value: String):String? {
-       return mmkv.getString(key,value)
+    override fun getString(key: String): String? {
+        return mmkv.getString(key, "")
     }
 }

@@ -4,11 +4,14 @@ import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.common.ktx.convertObject
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.common.ktx.toFile
+import com.dingyi.myluaapp.common.loader.ApkClassLoader
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.runtime.plugin.dynamic.WrapperBasePluginContext
 import com.google.gson.Gson
 import dalvik.system.DexClassLoader
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.lingala.zip4j.ZipFile
 import java.io.File
 
@@ -19,7 +22,6 @@ class PluginManager(private val context: PluginContext) {
 
     private val loadPlugin = mutableMapOf<Plugin,PluginContext>()
 
-    private val allPluginPath = mutableMapOf<String, String>()
 
     fun getAllPlugin() = allPlugin.map { it.first }
 
@@ -35,24 +37,26 @@ class PluginManager(private val context: PluginContext) {
 
         configList.forEach {
             val pluginClass = it["pluginMainClass"]
-            val pluginPath = it["pluginPath"]
+            val pluginId = it["pluginId"]
 
             if (pluginClass == null) {
                 error("Missing plugin class")
             }
 
 
-            if (pluginPath == "null") {
-                val plugin = Class.forName(pluginClass).newInstance()
+            val plugin = if (pluginId == "system") {
+                Class.forName(pluginClass).newInstance()
+            } else {
+                val pluginPath = File(Paths.pluginDir, pluginId)
+                val classLoader =
+                    ApkClassLoader(File(pluginPath, "plugin.apk"), File(pluginPath, "lib"))
+                classLoader.loadClass(pluginClass).newInstance()
+            }
 
-
-                if (plugin is Plugin) {
-                    allPluginPath[plugin.pluginId] = pluginPath.toString()
-                    allPlugin.add(plugin to "")
-                } else {
-                    error("Unable to load plugin class $pluginClass.The parent class of the current object is not  Plugin")
-                }
-
+            if (plugin is Plugin) {
+                allPlugin.add(plugin to "")
+            } else {
+                error("Unable to load plugin $pluginId.The parent class of the current class is not Plugin")
             }
         }
 
@@ -75,21 +79,18 @@ class PluginManager(private val context: PluginContext) {
             .mapNotNull { (preLoadPlugin,path) -> if (loadPlugin.keys.find { it.pluginId == preLoadPlugin.pluginId } == null) preLoadPlugin to path else null }
             .forEach { (plugin,path) ->
                 if (path.isEmpty()) {
-                    loadPlugin[plugin] = WrapperBasePluginContext(context,plugin)
+                    loadPlugin[plugin] = WrapperBasePluginContext(context, plugin)
                     plugin.onStart(loadPlugin.getValue(plugin))
                 }
             }
     }
 
-    fun uninstallPlugin(pluginId: String) {
+    suspend fun uninstallPlugin(pluginId: String) = withContext(Dispatchers.IO) {
 
     }
 
-    private fun getPluginId(pluginPath: String) {
 
-    }
-
-    fun installPlugin(pluginPath: String) {
+    suspend fun installPlugin(pluginPath: String) = withContext(Dispatchers.IO) {
         val file = pluginPath.toFile()
         if (file.isFile.not()) {
             error("Unable to install plugin:${pluginPath}")
@@ -118,16 +119,34 @@ class PluginManager(private val context: PluginContext) {
         val targetPluginId = pluginClassInstance
             .pluginId
 
+
+        zipFile.extractAll(Paths.pluginDir + "/" + targetPluginId)
+
+        file.copyTo(File(Paths.pluginDir + "/" + targetPluginId + "/plugin.apk"))
+
         zipFile.close()
+
+        val pluginConfigPath = File(Paths.pluginDir, "plugin.json")
+
+        val pluginConfigList = Gson()
+            .fromJson(
+                pluginConfigPath.readText(),
+                getJavaClass<List<Map<String, String>>>()
+            ).toMutableList()
+
+        pluginConfigList.removeIf { it["pluginId"] == configList["pluginId"] }
+
+        pluginConfigList.add(configList)
+
+        pluginConfigPath.writeText(Gson().toJson(pluginConfigList))
     }
 
     fun stop() {
-        loadPlugin.forEach { (plugin,context) ->
-            allPluginPath.remove(plugin.pluginId)
+        loadPlugin.forEach { (plugin, context) ->
             allPlugin.removeIf { it.first == plugin }
             plugin.onStop(context)
-            loadPlugin.remove(plugin)
         }
+        loadPlugin.clear()
     }
 
     fun getPluginPath(plugin: Plugin): Any {

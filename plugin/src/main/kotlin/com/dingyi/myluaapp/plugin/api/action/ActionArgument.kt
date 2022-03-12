@@ -8,6 +8,9 @@ interface ActionArgument {
 
     fun clear()
 
+    /**
+     * get plugin context of base
+     */
     fun getPluginContext(): PluginContext
     fun <T> getArgument(i: Int): T?
 }

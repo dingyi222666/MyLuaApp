@@ -16,6 +16,7 @@ import com.dingyi.myluaapp.plugin.runtime.action.ActionService
 
 
 import com.dingyi.myluaapp.plugin.runtime.project.ProjectService
+import kotlinx.coroutines.CoroutineScope
 
 object PluginModule: PluginModule {
 
@@ -44,11 +45,11 @@ object PluginModule: PluginModule {
         pluginManager?.loadAllPlugin()
     }
 
-    override fun installPlugin(pluginPath: String) {
+    override suspend fun installPlugin(pluginPath: String) {
         pluginManager?.installPlugin(pluginPath)
     }
 
-    override fun uninstallPlugin(pluginId: String) {
+    override suspend fun uninstallPlugin(pluginId: String) {
         pluginManager?.uninstallPlugin(pluginId)
     }
 

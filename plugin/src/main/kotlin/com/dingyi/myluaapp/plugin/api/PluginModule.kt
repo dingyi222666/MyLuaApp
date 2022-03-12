@@ -13,9 +13,9 @@ interface PluginModule: PluginContext {
 
     fun loadAllPlugin()
 
-    fun installPlugin(pluginPath:String)
+    suspend fun installPlugin(pluginPath:String)
 
-    fun uninstallPlugin(pluginId: String)
+    suspend fun uninstallPlugin(pluginId: String)
 
     fun getAllPlugin():List<Plugin>
 

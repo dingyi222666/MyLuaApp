@@ -57,6 +57,9 @@ dependencies {
 
     implementation(project(":common"))
 
+    implementation(project(":luaj"))
+
+
     implementation(project(":editor"))
 
     implementation(project(":builder"))

@@ -25,6 +25,9 @@ interface PluginContext {
     fun getProperties(): Properties
 
 
+    /**
+     * Return the base context based on the plugin, the context can only be used to get assets and resource resources, not to used create view
+     */
     fun getAndroidContext():Context
 
 }

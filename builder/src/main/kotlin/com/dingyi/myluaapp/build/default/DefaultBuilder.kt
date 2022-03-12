@@ -19,7 +19,7 @@ open class DefaultBuilder(
     override fun dependsOn(task: Task, dependsTask: Task) {
         arrayOf(buildTasks, cleanTasks, syncTasks).forEach {
             if (it.contains(dependsTask)) {
-                it.add((it.indexOf(dependsTask)).coerceAtLeast(0), task)
+                it.add((it.indexOf(dependsTask) + 1).coerceAtLeast(0), task)
             }
         }
     }

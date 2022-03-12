@@ -88,15 +88,12 @@ class BuildMain(
     fun close() {
         nowBuilder?.stop()
 
-        repository.shutdown()
         logger?.close()
         logger = null
     }
 
-    fun refreshService() {
-        repository.refresh()
-    }
 
+    fun getServiceRepository() = repository
 
 }
 
