@@ -20,7 +20,7 @@ interface PluginContext {
 
     fun getBuildService(): BuildService<*>
 
-    fun getAssetManager(plugin: Plugin):AssetManager
+    fun getAssetManager(plugin: Plugin): AssetManager
 
     fun getProperties(): Properties
 
@@ -28,6 +28,9 @@ interface PluginContext {
     /**
      * Return the base context based on the plugin, the context can only be used to get assets and resource resources, not to used create view
      */
-    fun getAndroidContext():Context
+    fun getAndroidContext(): Context
+
+    val apiVersion: Int
+        get() = 1
 
 }

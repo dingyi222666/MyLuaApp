@@ -29,7 +29,7 @@ class PluginAndroidContext(
 ):Context() {
 
 
-    private lateinit var defaultAssetManager: AssetManager
+    private var defaultAssetManager: AssetManager
     private lateinit var defaultResources: Resources
 
     init {
@@ -39,7 +39,7 @@ class PluginAndroidContext(
                 isAccessible = true
             }
             .newInstance()
-            .convertObject<AssetManager>()
+            .convertObject()
 
         getJavaClass<AssetManager>()
             .getDeclaredMethod("addAssetsPath", getJavaClass<String>())
