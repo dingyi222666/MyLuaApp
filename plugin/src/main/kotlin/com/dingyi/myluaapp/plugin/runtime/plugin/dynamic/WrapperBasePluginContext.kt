@@ -15,4 +15,6 @@ open class WrapperBasePluginContext(
     override fun getProperties(): com.dingyi.myluaapp.plugin.api.Properties {
         return properties
     }
+
+
 }

@@ -150,7 +150,7 @@ class PluginAndroidContext(
     }
 
     override fun getExternalFilesDir(type: String?): File? {
-        error("This method is not supported")
+       return kotlin.runCatching {  File(pluginPath.parent,type) }.getOrNull()
     }
 
     override fun getExternalFilesDirs(type: String?): Array<File> {
