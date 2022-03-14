@@ -56,7 +56,8 @@ dependencies {
     implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 
     implementation(project(":common"))
-    implementation(project(":luaj"))
+
+    implementation(project(":ide-api"))
 
 
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)

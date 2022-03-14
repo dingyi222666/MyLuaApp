@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.res.AssetManager
 
 import com.dingyi.myluaapp.MainApplication
-import com.dingyi.myluaapp.build.BuildMain
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.PluginModule
 import com.dingyi.myluaapp.plugin.api.Properties
-import com.dingyi.myluaapp.plugin.api.build.BuildService
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorService
 
 
@@ -16,7 +14,6 @@ import com.dingyi.myluaapp.plugin.runtime.action.ActionService
 
 
 import com.dingyi.myluaapp.plugin.runtime.project.ProjectService
-import kotlinx.coroutines.CoroutineScope
 
 object PluginModule: PluginModule {
 
@@ -96,6 +93,6 @@ object PluginModule: PluginModule {
 
 
     override fun getAndroidContext(): Context {
-        return MainApplication.instance
+        return com.dingyi.myluaapp.MainApplication.instance
     }
 }

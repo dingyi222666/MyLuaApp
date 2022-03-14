@@ -33,8 +33,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
-    implementation(project(":luaj"))
+
+    implementation(BuildConfig.Libs.Tools.multi_languages)
+    implementation(BuildConfig.Libs.Tools.mmkv)
     implementation(BuildConfig.Libs.Google.gson)
     implementation(BuildConfig.Libs.AndroidX.appcompat)
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)

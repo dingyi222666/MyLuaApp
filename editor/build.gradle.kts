@@ -46,6 +46,8 @@ dependencies {
     implementation(BuildConfig.Libs.AndroidX.appcompat)
     implementation(BuildConfig.Libs.AndroidX.lifecycle_runtime)
     implementation(BuildConfig.Libs.Google.gson)
+    implementation(project(":ide-api"))
+
     BuildConfig.Libs.Views.sora_editor.forEach {
         implementation(it) {
             exclude("xml-apis","xml-apis")

@@ -57,8 +57,7 @@ dependencies {
 
     implementation(project(":common"))
 
-    implementation(project(":luaj"))
-
+    implementation(project(":core"))
 
     implementation(project(":editor"))
 
@@ -74,6 +73,8 @@ dependencies {
             exclude("xerces","xercesImpl")
         }
     }
+
+    implementation(project(":ide-api"))
 
     implementation(BuildConfig.Libs.Tools.mmkv)
 

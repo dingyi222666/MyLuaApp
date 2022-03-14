@@ -18,8 +18,8 @@
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/editor" />
+            <option value="$PROJECT_DIR$/ide-api" />
             <option value="$PROJECT_DIR$/lua-lsp-server" />
-            <option value="$PROJECT_DIR$/luaj" />
             <option value="$PROJECT_DIR$/plugin" />
             <option value="$PROJECT_DIR$/treeview" />
           </set>

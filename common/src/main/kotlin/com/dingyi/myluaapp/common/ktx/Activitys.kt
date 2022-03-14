@@ -4,9 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.dingyi.myluaapp.MainApplication
 import java.io.File
@@ -42,11 +39,11 @@ fun Context.getStringArray(resId: Int): Array<String> {
 }
 
 fun Int.getString(): String {
-    return MainApplication.instance.getString(this)
+    return com.dingyi.myluaapp.MainApplication.instance.getString(this)
 }
 
 fun Int.getStringArray(): Array<String> {
-    return MainApplication.instance.getStringArray(this)
+    return com.dingyi.myluaapp.MainApplication.instance.getStringArray(this)
 }
 
 fun Context.getAttributeColor(resId: Int): Int {

@@ -101,7 +101,7 @@ fun TextView.setTextIfDifferent(data: String) {
 }
 
 fun String.showToast() =
-    Toast.makeText(MainApplication.instance, this, Toast.LENGTH_SHORT).show()
+    Toast.makeText(com.dingyi.myluaapp.MainApplication.instance, this, Toast.LENGTH_SHORT).show()
 
 fun String.showSnackBar(view: View) =
     Snackbar.make(view, this, Snackbar.LENGTH_LONG)
@@ -111,4 +111,4 @@ fun String.showSnackBar(view: View) =
 
 
 inline val Int.dp: Int
-    get() = (MainApplication.instance.resources.displayMetrics.density * this + 0.5f).toInt()
+    get() = (com.dingyi.myluaapp.MainApplication.instance.resources.displayMetrics.density * this + 0.5f).toInt()

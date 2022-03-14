@@ -11,11 +11,8 @@ android {
         minSdk = BuildConfig.Config.Default.minSdk
         targetSdk = BuildConfig.Config.Default.targetSdk
 
-        consumerProguardFiles("consumer-rules.pro")
-    }
 
-    buildFeatures {
-        viewBinding = true
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -37,26 +34,18 @@ android {
 }
 
 dependencies {
+    api(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 
-    api(fileTree("dir" to "libs", "include" to "*.jar"))
-
-    implementation(BuildConfig.Libs.AndroidX.appcompat)
-    implementation(BuildConfig.Libs.AndroidX.core_kotlinx)
     implementation(BuildConfig.Libs.Google.material)
-    implementation(project(":core"))
 
-    // OkHttp 框架：https://github.com/square/okhttp
-    // noinspection GradleDependency
-    implementation(BuildConfig.Libs.Network.okhttp3)
-    // 网络请求框架：https://github.com/getActivity/EasyHttp
-    implementation(BuildConfig.Libs.Network.net)
-    implementation(BuildConfig.Libs.Default.kotlin_stdlib) //kt
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
-    //glide
-    implementation(BuildConfig.Libs.Default.glide)
-    annotationProcessor(BuildConfig.Libs.Default.glide_compiler)
-    implementation(BuildConfig.Libs.Google.gson)
-
-
-
+    implementation(project(":common"))
+    implementation(BuildConfig.Libs.AndroidX.appcompat)
+    implementation(BuildConfig.Libs.Tools.mmkv)
+    BuildConfig.Libs.Views.sora_editor.forEach {
+        implementation(it) {
+            exclude("xml-apis", "xml-apis")
+            exclude("xerces", "xercesImpl")
+        }
+    }
 }

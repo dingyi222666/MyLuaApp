@@ -21,11 +21,11 @@ This project used Lua to parse the project configuration script. Based on the fl
 - [x] D8 and R8 supports
 - [x] Maven Dependency resolution supports
 - [x] File Tree List
-- [ ] Multi-module supports*
-- [ ] TextMate supports (tm4e)*
-- [ ] Project template*
-- [ ] Plugin Module*
-- [ ] Build Module*
+- [ ] Multi-module supports(*)
+- [ ] TextMate supports (tm4e)(*)
+- [ ] Project template(*)
+- [ ] Plugin Module(*)
+- [ ] Build Module(*)
 - [ ] Auto completion supports for Lua
 - [ ] Auto completion supports for Java
 - [ ] Auto completion supports for Xml

@@ -60,8 +60,7 @@ android {
 
 dependencies {
     implementation(project(":editor")) // editor
-
-    implementation(project(":luaj"))
+    implementation(project(":ide-api"))
     implementation(project(":common"))
     implementation(project(":core"))
     implementation(project(":plugin"))

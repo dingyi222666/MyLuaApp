@@ -2,7 +2,6 @@ package com.dingyi.myluaapp
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.pm.PackageInfo
 import android.os.Build
 import android.os.Build.VERSION
 import android.os.Environment
