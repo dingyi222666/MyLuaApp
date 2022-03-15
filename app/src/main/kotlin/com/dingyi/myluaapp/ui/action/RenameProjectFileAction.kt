@@ -28,6 +28,11 @@ class RenameProjectFileAction : Action<(() -> Unit) -> Unit> {
 
         val viewModel = argument.getArgument<MainViewModel>(2)
         activity?.let {
+
+            if (it.isFinishing) {
+                return@let
+            }
+
             BottomDialogBuilder.with(it)
                 .setDialogLayout(DefaultInputLayout)
                 .setTitle(R.string.editor_dialog_rename_title)

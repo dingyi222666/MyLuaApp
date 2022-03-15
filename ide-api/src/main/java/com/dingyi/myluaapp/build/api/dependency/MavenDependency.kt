@@ -4,6 +4,9 @@ import java.io.File
 
 interface MavenDependency : Dependency {
 
+    /**
+     * Dependency group Id
+     */
     val groupId: String
 
     val artifactId: String

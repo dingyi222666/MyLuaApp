@@ -162,7 +162,13 @@ class PluginManager(private val context: PluginContext) {
 
         pluginConfigPath.writeText(Gson().toJson(pluginConfigList))
 
-        plugin.onInstall(context)
+        plugin.onInstall(
+            WrapperPluginContext(
+                pluginContext = context,
+                plugin = plugin,
+                pluginAndroidContext = MainApplication.instance
+            )
+            )
     }
 
     fun stop() {

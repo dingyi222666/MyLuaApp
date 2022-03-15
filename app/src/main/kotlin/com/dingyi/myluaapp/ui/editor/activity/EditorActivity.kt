@@ -76,7 +76,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         viewModel.logBroadcastReceiver.value = LogBroadcastReceiver(lifecycle, this)
 
 
-        initAction()
+        ActionHelper
+            .initEditorActivity(this)
+
 
         initView()
 
@@ -121,10 +123,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
     }
 
-    private fun initAction() {
-        ActionHelper
-            .initEditorActivity(this)
-    }
+
 
     private fun updateTab(tab: TabLayout.Tab, index: Int, choose: Boolean = false) {
         val currentEditor = viewModel.allEditor.value?.getOrNull(index)
@@ -391,6 +390,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         super.onPause()
 
         if (this.isCreated) {
+
+
             viewModel.progressMonitor.runAfterTaskRunning {
                 PluginModule
                     .getEditorService()
@@ -403,6 +404,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         super.onResume()
 
         if (this.isCreated) {
+
             viewModel.progressMonitor.runAfterTaskRunning(this::initViewAfterSync)
         }
 

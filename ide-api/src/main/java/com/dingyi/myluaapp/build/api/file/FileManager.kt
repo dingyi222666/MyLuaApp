@@ -8,6 +8,9 @@ interface FileManager : SnapshotManager {
 
     fun getSnapshotManager(): SnapshotManager
 
+    /**
+     * Get a file for module
+     */
     fun resolveFile(name: String, module: Module): File
 
     fun forEachDirectory(directory: File): List<File>
