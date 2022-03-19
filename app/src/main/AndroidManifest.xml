@@ -30,9 +30,38 @@
 
                 <action android:name="android.intent.action.ACTION_VIEW" />
                 <action android:name="android.intent.action.MAIN" />
+
             </intent-filter>
         </activity>
 
+
+        <activity android:name=".ui.import.ImportActivity"
+            android:theme="@style/TransparentTheme"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:mimeType="*/*" />
+                <data android:host="*" />
+                <data android:pathPattern=".*.mpk" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="content" />
+                <data android:host="*" />
+                <data android:pathPattern=".*.mpk" />
+            </intent-filter>
+
+        </activity>
 
         <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.newproject.NewProjectActivity" />

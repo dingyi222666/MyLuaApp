@@ -24,4 +24,5 @@
     <color name="theme_default_log_debug_color">#54CEE3</color>
     <color name="theme_blue_colorPrimary">#1E88E5</color>
     <color name="theme_white_rippleColor">#3fffffff</color>
+    <color name="transparent">#00000000</color>
 </resources>

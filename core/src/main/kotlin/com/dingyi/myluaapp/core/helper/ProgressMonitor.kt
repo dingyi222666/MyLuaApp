@@ -12,6 +12,7 @@ class ProgressMonitor(
     private var progressRunningState = MutableLiveData(true)
 
     private val count = AtomicInteger(0)
+
     private suspend fun changeProgressState(boolean: Boolean) = withContext(Dispatchers.Main) {
         progressRunningState.value = boolean
     }
