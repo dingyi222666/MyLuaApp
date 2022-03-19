@@ -19,6 +19,14 @@
     <string name="new_project_app_package_error_empty">PackageName cannot be empty</string>
     <string name="new_project_base_other_title">Other Configure</string>
     <string name="new_project_use_androidx">Use AndroidX</string>
+    <string name="import_dialog_plugin">Import</string>
+    <string name="import_plugin_title">Import Plugin:&#160;</string>
+    <string name="import_plugin_name">Plugin Name</string>
+    <string name="import_plugin_id">Plugin Id</string>
+    <string name="import_plugin_version">Plugin Version</string>
+    <string name="import_plugin_author">Plugin Author</string>
+    <string name="import_plugin_class_name">Plugin Main Class</string>
+    <string name="import_plugin_description">Plugin Description</string>
     <string name="new_project_app_package_text">com.MyLuaApp.application</string>
     <string name="permission_request_sdcard">MyLuaApp needs storage permissions for opening and editing projects</string>
     <string name="permission_request_sdcard_denied">Storage permissions are required permissions, otherwise they will be unavailable</string>

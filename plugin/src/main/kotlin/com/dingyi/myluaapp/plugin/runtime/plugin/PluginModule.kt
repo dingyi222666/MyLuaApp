@@ -42,8 +42,8 @@ object PluginModule: PluginModule {
         pluginManager?.loadAllPlugin()
     }
 
-    override suspend fun installPlugin(pluginPath: String) {
-        pluginManager?.installPlugin(pluginPath)
+    override suspend fun installPlugin(pluginPath: String):Int {
+        return pluginManager?.installPlugin(pluginPath) ?: -1
     }
 
     override suspend fun uninstallPlugin(pluginId: String) {
@@ -93,6 +93,9 @@ object PluginModule: PluginModule {
 
 
     override fun getAndroidContext(): Context {
-        return com.dingyi.myluaapp.MainApplication.instance
+        return MainApplication.instance
     }
+
+    override val apiVersion: Int
+        get() = 1
 }

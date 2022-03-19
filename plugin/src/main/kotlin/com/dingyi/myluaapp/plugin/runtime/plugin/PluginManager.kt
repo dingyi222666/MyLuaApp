@@ -103,7 +103,8 @@ class PluginManager(private val context: PluginContext) {
     }
 
 
-    suspend fun installPlugin(pluginPath: String) = withContext(Dispatchers.IO) {
+    suspend fun installPlugin(pluginPath: String):Int = withContext(Dispatchers.IO) {
+        var result = 0
         val file = pluginPath.toFile()
         if (file.isFile.not()) {
             error("Unable to install plugin:${pluginPath}")
@@ -148,6 +149,10 @@ class PluginManager(private val context: PluginContext) {
             error("Unable to install plugin $pluginId.The manifest plugin id not equals plugin main class plugin id")
         }
 
+        if (plugin.targetApiVersion < context.apiVersion) {
+            result = 1
+        }
+
         val pluginConfigPath = File(Paths.pluginDir, "plugin.json")
 
         val pluginConfigList = Gson()
@@ -169,6 +174,8 @@ class PluginManager(private val context: PluginContext) {
                 pluginAndroidContext = MainApplication.instance
             )
             )
+
+        result
     }
 
     fun stop() {
