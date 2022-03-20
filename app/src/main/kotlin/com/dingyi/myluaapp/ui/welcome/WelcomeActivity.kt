@@ -13,6 +13,7 @@ import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.common.ktx.startActivity
 import com.dingyi.myluaapp.databinding.ActivityWelcomeBinding
 import com.dingyi.myluaapp.ui.main.MainActivity
+import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -50,6 +51,8 @@ class WelcomeActivity : AppCompatActivity() {
 
 
         setContentView(viewBinding.root)
+
+
 
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
@@ -95,12 +98,18 @@ class WelcomeActivity : AppCompatActivity() {
 
                 val pluginFile = File(Paths.assetsDir, "plugin")
 
+                val targetPath = File(Paths.pluginDir)
 
-                pluginFile.copyRecursively(File(Paths.pluginDir),overwrite = true)
+                if (!targetPath.exists()) {
 
-                pluginFile.deleteRecursively()
+                    pluginFile.copyRecursively(File(Paths.pluginDir), overwrite = true)
+                    pluginFile.deleteRecursively()
+
+                }
 
             }
+
+
 
 
 

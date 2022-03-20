@@ -148,8 +148,9 @@ class ImportActivity : AppCompatActivity() {
     }
 
     private fun showImportSuccessToast() {
-
-
+        Toast
+            .makeText(this, R.string.import_success_toast, Toast.LENGTH_LONG)
+            .show()
         finish()
     }
 }

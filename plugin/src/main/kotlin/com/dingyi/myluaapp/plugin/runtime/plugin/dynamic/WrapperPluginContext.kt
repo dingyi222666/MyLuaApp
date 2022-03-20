@@ -18,7 +18,7 @@ class WrapperPluginContext(
     }
 
     private val wrapperPluginContext = PluginAndroidContext(
-        pluginPath = (Paths.pluginDir + '/' + plugin.pluginId + "plugin.apk") .toFile(),
+        pluginPath = (Paths.pluginDir + '/' + plugin.pluginId + "/plugin.apk") .toFile(),
         wrapperContext = pluginAndroidContext
     )
 
