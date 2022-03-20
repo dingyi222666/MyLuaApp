@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.plugin.runtime.plugin.dynamic
 
+import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -23,6 +24,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
 
+@SuppressLint("DiscouragedPrivateApi")
 class PluginAndroidContext(
     private val pluginPath: File,
     private val wrapperContext: Context
@@ -42,15 +44,19 @@ class PluginAndroidContext(
             .convertObject()
 
         getJavaClass<AssetManager>()
-            .getDeclaredMethod("addAssetsPath", getJavaClass<String>())
+            .getDeclaredMethod("addAssetPath", getJavaClass<String>())
             .apply {
                 isAccessible = true
             }
             .invoke(defaultAssetManager, pluginPath.path)
 
 
-        defaultResources = Resources(defaultAssetManager,
-        wrapperContext.resources.displayMetrics,wrapperContext.resources.configuration)
+        val superRes = wrapperContext.resources
+
+        defaultResources =
+            Resources(defaultAssetManager, superRes.displayMetrics, superRes.configuration)
+        val mTheme = defaultResources.newTheme()
+        mTheme.setTo(wrapperContext.theme)
 
 
     }

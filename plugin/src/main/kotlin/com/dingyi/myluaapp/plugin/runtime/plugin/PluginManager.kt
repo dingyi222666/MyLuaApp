@@ -49,12 +49,23 @@ class PluginManager(private val context: PluginContext) {
             } else {
                 val pluginPath = File(Paths.pluginDir, pluginId)
                 val classLoader =
-                    ApkClassLoader(File(pluginPath, "plugin.apk"), File(pluginPath, "lib"))
+                    ApkClassLoader(
+                        File(pluginPath, "plugin.apk"), File(pluginPath, "lib"), MainApplication
+                            .instance.classLoader
+                    )
                 classLoader.loadClass(pluginClass).newInstance()
             }
 
             if (plugin is Plugin) {
-                allPlugin.add(plugin to "")
+                allPlugin.add(
+                    Pair(
+                        plugin,
+                        if (pluginId == "system") "" else File(
+                            Paths.pluginDir,
+                            pluginId + "/plugin.apk"
+                        ).absolutePath
+                    )
+                )
             } else {
                 error("Unable to load plugin $pluginId.The parent class of the current class is not Plugin")
             }
@@ -126,16 +137,23 @@ class PluginManager(private val context: PluginContext) {
         //先运行一次
 
 
-        zipFile.extractAll(Paths.pluginDir + "/" + pluginId)
+        zipFile.extractFile("plugin.json", Paths.pluginDir + "/" + pluginId)
 
-        file.copyTo(File(Paths.pluginDir + "/" + pluginId + "/plugin.apk"))
+        runCatching {
+            zipFile.extractFile("lib", Paths.pluginDir + "/" + pluginId)
+        }
+
+        file.copyTo(File(Paths.pluginDir + "/" + pluginId + "/plugin.apk"), overwrite = true)
 
         zipFile.close()
 
 
         val pluginDir = File(Paths.pluginDir, pluginId)
         val classLoader =
-            ApkClassLoader(File(pluginDir, "plugin.apk"), File(pluginDir, "lib"))
+            ApkClassLoader(
+                File(pluginDir, "plugin.apk"), File(pluginDir, "lib"), MainApplication
+                    .instance.classLoader
+            )
         val plugin = classLoader.loadClass(pluginClass).newInstance()
 
 
@@ -167,13 +185,16 @@ class PluginManager(private val context: PluginContext) {
 
         pluginConfigPath.writeText(Gson().toJson(pluginConfigList))
 
-        plugin.onInstall(
-            WrapperPluginContext(
-                pluginContext = context,
-                plugin = plugin,
-                pluginAndroidContext = MainApplication.instance
+        withContext(Dispatchers.Main) {
+
+            plugin.onInstall(
+                WrapperPluginContext(
+                    pluginContext = context,
+                    plugin = plugin,
+                    pluginAndroidContext = MainApplication.instance
+                )
             )
-            )
+        }
 
         result
     }

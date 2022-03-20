@@ -93,6 +93,13 @@ class WelcomeActivity : AppCompatActivity() {
                     }
 
 
+                val pluginFile = File(Paths.assetsDir, "plugin")
+
+
+                pluginFile.copyRecursively(File(Paths.pluginDir),overwrite = true)
+
+                pluginFile.deleteRecursively()
+
             }
 
 

@@ -1,20 +1,37 @@
 package com.dingyi.myluaapp.core.helper
 
+import com.dingyi.myluaapp.MainApplication
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import com.google.gson.reflect.TypeToken
 import net.lingala.zip4j.ZipFile
-import net.lingala.zip4j.io.inputstream.ZipInputStream
+
 import net.lingala.zip4j.model.FileHeader
 import net.lingala.zip4j.model.LocalFileHeader
+import java.io.File
 import java.io.InputStream
 import java.lang.StringBuilder
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 
 
 object ImportHelper {
 
 
-    fun importPlugin(importStream: InputStream) {
+    fun importPlugin(importStream: InputStream,block:(File) -> Unit) {
+        val tmpPluginPath =
+            File(MainApplication.instance.getExternalFilesDir("")?.parentFile,"cache/import.mpk")
+
+
+        tmpPluginPath.parentFile?.mkdirs()
+        tmpPluginPath.createNewFile()
+        importStream.use { input ->
+            tmpPluginPath.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        block(tmpPluginPath)
 
     }
 
@@ -28,10 +45,14 @@ object ImportHelper {
         val inputStream = ZipInputStream(importStream)
 
 
-        var next: LocalFileHeader? = inputStream.getNextEntry(null, false)
+        var next:ZipEntry? = inputStream.nextEntry
 
-        while (next?.fileName != "plugin.json" || next == null) {
-            next = inputStream.getNextEntry(null, false)
+        while ( next == null || next.name != "plugin.json" ) {
+            next = inputStream.nextEntry
+        }
+
+        if (next == null) {
+            error("no found")
         }
 
         val json = inputStream

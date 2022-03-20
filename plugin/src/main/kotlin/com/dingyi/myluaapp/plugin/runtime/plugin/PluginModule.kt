@@ -14,6 +14,7 @@ import com.dingyi.myluaapp.plugin.runtime.action.ActionService
 
 
 import com.dingyi.myluaapp.plugin.runtime.project.ProjectService
+import com.dingyi.myluaapp.plugin.runtime.ui.UiService
 
 object PluginModule: PluginModule {
 
@@ -25,6 +26,8 @@ object PluginModule: PluginModule {
     private val defaultActionService = ActionService(this)
 
     private val defaultEditorService = EditorService(this)
+
+    private val defaultUiService = UiService(this)
 
     private val defaultBuildService =
         com.dingyi.myluaapp.plugin.runtime.build.BuildService()
@@ -58,6 +61,10 @@ object PluginModule: PluginModule {
         defaultBuildService.stop()
         pluginManager?.stop()
         pluginManager = null
+    }
+
+    override fun getUiService():UiService {
+        return defaultUiService
     }
 
     override fun getProjectService(): ProjectService {

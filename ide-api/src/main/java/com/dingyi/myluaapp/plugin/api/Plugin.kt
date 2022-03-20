@@ -27,15 +27,18 @@ interface Plugin {
     fun onStop(context: PluginContext)
 
 
-    val pluginId:String
+    val pluginId: String
 
-    val pluginName:String
+    val pluginName: String
 
-    val pluginVersion:String
+    val pluginVersion: String
 
-    val pluginAuthor:String
+    val pluginAuthor: String
 
-    val pluginDescription:String
+    val pluginDescription: String
+
+    val pluginVersionCode: Int
+        get() = 1
 
     val targetApiVersion: Int
         get() = 1

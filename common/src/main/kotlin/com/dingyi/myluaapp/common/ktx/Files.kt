@@ -62,16 +62,16 @@ fun Array<File>.sortFile(): List<File> {
 }
 
 object Paths {
-    val mainDir = com.dingyi.myluaapp.MainApplication.instance.getExternalFilesDir("")?.absolutePath
+    val mainDir = MainApplication.instance.getExternalFilesDir("")?.absolutePath
     val cacheDir = "${mainDir?.toFile()?.parentFile?.path}/cache"
     val builderDir = "$cacheDir/builder"
-    val nativeLibraryDir = com.dingyi.myluaapp.MainApplication.instance.applicationInfo.nativeLibraryDir
-    val assetsDir = com.dingyi.myluaapp.MainApplication.instance.filesDir.absolutePath
+    val nativeLibraryDir = MainApplication.instance.applicationInfo.nativeLibraryDir
+    val assetsDir = MainApplication.instance.filesDir.absolutePath
     val localMavenDir = "$builderDir/maven"
     val extractAarDir = "$builderDir/extract-aar"
     val projectDir = "$mainDir/project"
     val fontsDir = "$mainDir/fonts"
-    val pluginDir = "$assetsDir/plugin"
+    val pluginDir = "$mainDir/plugin"
     val dexLoaderDir = "$cacheDir/dexLoader"
     val resDir = "$assetsDir/res"
     val buildPath = "$resDir/build"

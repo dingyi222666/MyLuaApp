@@ -25,6 +25,8 @@
     <string name="import_plugin_name">插件名称</string>
     <string name="import_plugin_id">插件id</string>
     <string name="import_plugin_version">插件版本号</string>
+    <string name="import_plugin_version_code">插件版本号代码</string>
+    <string name="import_success_toast">导入成功</string>
     <string name="import_plugin_author">插件作者</string>
     <string name="import_plugin_description">插件描述</string>
     <string name="import_plugin_class_name">插件运行主类</string>

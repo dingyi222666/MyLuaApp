@@ -8,6 +8,7 @@ import com.dingyi.myluaapp.plugin.api.action.ActionService
 import com.dingyi.myluaapp.plugin.api.build.BuildService
 import com.dingyi.myluaapp.plugin.api.editor.EditorService
 import com.dingyi.myluaapp.plugin.api.project.ProjectService
+import com.dingyi.myluaapp.plugin.api.ui.UiService
 
 interface PluginContext {
 
@@ -24,6 +25,7 @@ interface PluginContext {
 
     fun getProperties(): Properties
 
+    fun getUiService():UiService
 
     /**
      * Return the base context based on the plugin, the context can only be used to get assets and resource resources, not to used create view
