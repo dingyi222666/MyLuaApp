@@ -1,10 +1,12 @@
 rootProject.name = "MyLuaApp"
-include(":app")
-include(":editor")
-include(":lua-lsp-server")
-include(":builder")
-include(":core")
-include(":common")
-include(":plugin")
-include(":treeview")
-include(":ide-api")
+include(
+    ":app",
+    ":editor",
+    ":lua-lsp-server",
+    ":builder",
+    ":core",
+    ":common",
+    ":plugin",
+    ":treeview",
+    ":ide-api"
+)

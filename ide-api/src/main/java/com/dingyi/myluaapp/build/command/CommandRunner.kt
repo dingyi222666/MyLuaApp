@@ -31,8 +31,6 @@ class CommandRunner {
 
         val status = runCatching {
 
-
-
             process.waitFor()
 
             val status = process.exitValue()

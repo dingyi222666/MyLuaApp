@@ -31,6 +31,9 @@ interface Module : ModuleScript {
 
     fun getFileManager(): FileManager
 
+    /**
+     * Get super project of module
+     */
     fun getProject(): Project
 
     fun getCache(): Cache
@@ -41,4 +44,8 @@ interface Module : ModuleScript {
 
 
     fun close()
+    /**
+     * If is main module,return true
+     */
+    fun isMainModule(): Boolean = false
 }

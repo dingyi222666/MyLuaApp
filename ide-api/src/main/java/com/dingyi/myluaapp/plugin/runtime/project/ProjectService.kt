@@ -69,6 +69,6 @@ class ProjectService(
             }
         }
 
-        error("Unable to Index Project: $projectPath")
+        error("$allProjectProvider Unable to Index Project: $projectPath")
     }
 }

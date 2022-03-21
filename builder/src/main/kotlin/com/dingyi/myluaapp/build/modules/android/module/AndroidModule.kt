@@ -56,6 +56,10 @@ class AndroidModule(
         return defaultBuilder.checkNotNull()
     }
 
+    override fun isMainModule(): Boolean {
+        return type == "AndroidApplication"
+    }
+
     override fun init() {
         defaultMainBuilderScript.run()
 

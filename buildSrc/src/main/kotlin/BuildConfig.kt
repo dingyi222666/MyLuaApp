@@ -61,6 +61,8 @@ object BuildConfig {
 
         const val android_build_tool_version = "7.1.1"
 
+        const val preferences_dsl_version = "2.2.0"
+
     }
 
     object Libs {
@@ -157,6 +159,8 @@ object BuildConfig {
                 "io.github.Rosemoe.sora-editor:editor-kt:${Versions.sora_editor_version}",
                 "io.github.Rosemoe.sora-editor:language-textmate:${Versions.sora_editor_version}",
             )
+
+            val preference_dsl = "de.maxr1998:modernandroidpreferences:${Versions.preferences_dsl_version}"
 
 
         }

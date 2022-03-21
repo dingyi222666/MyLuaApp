@@ -49,7 +49,7 @@ android {
         }
     }
     packagingOptions {
-        resources.excludes.addAll(listOf("META-INF/*","xsd/catalog.xml","license/*"))
+        resources.excludes.addAll(listOf("META-INF/*","xsd/*","license/*"))
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -59,15 +59,14 @@ android {
 
 
 dependencies {
+
     implementation(project(":editor")) // editor
-    implementation(project(":ide-api"))
     implementation(project(":common"))
     implementation(project(":core"))
     implementation(project(":plugin"))
     implementation(project(":treeview"))
-
-
     implementation(project(":builder"))
+    implementation(project(":ide-api"))
 
     implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 
@@ -81,6 +80,7 @@ dependencies {
     implementation(BuildConfig.Libs.AndroidX.constraint_layout)
     implementation(BuildConfig.Libs.AndroidX.preference_ktx)
 
+    implementation(BuildConfig.Libs.Views.preference_dsl)
 
     //google
     implementation(BuildConfig.Libs.Google.material)
@@ -104,7 +104,7 @@ dependencies {
 
     //glide
     implementation(BuildConfig.Libs.Default.glide)
-    annotationProcessor(BuildConfig.Libs.Default.glide_compiler)
+    kapt(BuildConfig.Libs.Default.glide_compiler)
 
 
     // OkHttp 框架：https://github.com/square/okhttp

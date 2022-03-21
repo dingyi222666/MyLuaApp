@@ -65,6 +65,7 @@
         <activity android:name=".ui.newproject.NewProjectActivity" />
         <activity android:name=".ui.editor.activity.EditorActivity" />
 
+        <activity android:name=".ui.GeneralActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.dingyi.MyLuaApp"

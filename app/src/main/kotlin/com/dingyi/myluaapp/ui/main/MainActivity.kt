@@ -16,9 +16,11 @@ import com.dingyi.myluaapp.common.ktx.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
+import com.dingyi.myluaapp.ui.GeneralActivity
 import com.dingyi.myluaapp.ui.editor.activity.EditorActivity
 import com.dingyi.myluaapp.ui.main.model.ProjectUiModel
 import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
+import com.dingyi.myluaapp.ui.settings.SettingsFragment
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
@@ -121,10 +123,21 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         when (item.itemId) {
             R.id.main_action_menu_new_project -> {
                 startActivity<NewProjectActivity>()
-                return true
             }
+            R.id.main_action_menu_settings -> {
+                startActivity<GeneralActivity> {
+                    putExtra("type", getJavaClass<SettingsFragment>().name)
+                    putExtra("arg",
+                        Bundle().apply {
+                            putString("method", "main")
+                        }
+                    )
+                }
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
+        return true
+
     }
 
     override fun onDestroy() {

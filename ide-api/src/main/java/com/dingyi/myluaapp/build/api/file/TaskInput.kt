@@ -22,10 +22,15 @@ interface TaskInput {
     fun bindOutputFiles(inputFile: InputFile,outputFile: List<File>)
 
 
+    /**
+     * Check the task input isIncremental
+     */
     suspend fun isIncremental():Boolean
 
+    /**
+     * Return incremental input file
+     */
     fun getIncrementalInputFile():List<InputFile>
-
 
 
     fun addOutputDirectory(file: File)
@@ -33,6 +38,9 @@ interface TaskInput {
 
     fun getOutputDirectory():List<File>
 
+    /**
+     * Snapshot input and output file
+     */
     fun snapshot()
 
     fun transformDirectoryToFile()

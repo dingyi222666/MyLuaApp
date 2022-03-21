@@ -101,9 +101,11 @@ open class DefaultProject(
             if (childDir.isDirectory) {
                 childDir.listFiles()?.forEach {
                     if (it.isFile && it.name.contains(".gradle.lua")) {
-                        allScript.add(DefaultScript(it.path).apply {
-                            run()
-                        })
+                        allScript.add(
+                            DefaultScript(it.path).apply {
+                                run()
+                            }
+                        )
                     }
                 }
             }
@@ -197,6 +199,8 @@ open class DefaultProject(
             it.init()
         }
 
+
+
     }
 
     open fun indexModule(value: String) {
@@ -206,7 +210,7 @@ open class DefaultProject(
 
             val module = getMainBuilder().getServiceRepository().onCreateModule(dir.path, this)
             if (module != null) {
-                if (module.name == "src" || module.name == "app") {
+                if (module.isMainModule()) {
                     mainModule = module
                 }
                 allModules.add(module)
