@@ -34,9 +34,9 @@ MyLuaApp 是一款轻量，快速的安卓软件， 使用**Lua和Java** 来混�
 标注为带*号的功能代表着目前正在开发的功能
 
 ## 构建本项目
-1.克隆本仓库到本地
-2.使用Android Studio打开它
-3.使用Gradle去构建
+1. 克隆本仓库到本地
+2. 使用Android Studio打开它
+3. 使用Gradle去构建
 
 ## 提交贡献
 我们欢迎所有人为本项目添砖加瓦，你可以提出issues或者提交一个pull requests，我们欢迎任何人的贡献
