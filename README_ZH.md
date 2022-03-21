@@ -7,7 +7,7 @@
 
 目前该项目仍在***开发中***. 项目还处在**alpha** 阶段，大部分功能都**没有实现**(比如构建模块)。目前本软件还不能完全运行。
 
-MyLuaApp 是一款轻量，快速的编程软件， 使用**Lua和Java混合** 来开发安卓软件。
+MyLuaApp 是一款轻量，快速的安卓软件， 使用**Lua和Java** 来混合开发安卓软件。
 
 是的，你可以使用Lua来开发安卓软件!本项目使用了
 [AndroLua_pro](https://github.com/nirenr/AndroLua_pro)作为软件的lua运行时环境，它比原版[AndroLua](https://github.com/mkottman/AndroLua)的运行速度要快不少。
@@ -32,6 +32,11 @@ MyLuaApp 是一款轻量，快速的编程软件， 使用**Lua和Java混合** �
 - [ ] Xml的自动补全支持
 
 标注为带*号的功能代表着目前正在开发的功能
+
+## 构建本项目
+1.克隆本仓库到本地
+2.使用Android Studio打开它
+3.使用Gradle去构建
 
 ## 提交贡献
 我们欢迎所有人为本项目添砖加瓦，你可以提出issues或者提交一个pull requests，我们欢迎任何人的贡献

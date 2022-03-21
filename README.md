@@ -7,9 +7,9 @@ English | [中文](https://github.com/dingyi222666/MyLuaApp/tree/master/README_Z
 
 It's ***Work In Progress***.The project is still in the **alpha** stage, and most of the Features are **not implemented** (such as build module). At present, this project can not be fully run.
 
-MyLuaApp is a light and faster software run in **Android Arm Devices** to develop Android software that combines **Lua and Java**.
+MyLuaApp is a light and faster software run in **Android Arm Devices** to develop Android software with **Lua or Java**.
 
-You can use lua to develop Android software!The project use [AndroLua_pro](https://github.com/nirenr/AndroLua_pro) runtime environment of the software, run much faster than the original [AndroLua](https://github.com/mkottman/AndroLua)
+You can use lua to develop Android software! The project use [AndroLua_pro](https://github.com/nirenr/AndroLua_pro) runtime environment of the software, run much faster than the original [AndroLua](https://github.com/mkottman/AndroLua)
 
 If you've never used Lua before, that's fine. You can still use Java to develop software, which support java or mixed of Lua and Java to develop, but there is no support plan for ndk for the time being.
 
@@ -31,6 +31,11 @@ This project used Lua to parse the project configuration script. Based on the fl
 - [ ] Auto completion supports for Xml
 
 Features marked with an asterisk (*) represent feature currently development
+
+## Build
+1.Clone this repository to local.
+2.Open it on Android Studio.
+3.Use gradle to build it.
 
 ## Contribution
 We welcome everyone to Contribution this project, you can create an issue or submit pull requests, we welcome contributions to anyone!

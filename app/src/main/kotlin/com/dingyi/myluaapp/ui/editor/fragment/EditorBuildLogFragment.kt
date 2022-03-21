@@ -59,6 +59,7 @@ class EditorBuildLogFragment : BaseFragment<FragmentEditorBuildLogBinding, MainV
     override fun onDestroyView() {
         super.onDestroyView()
         logReceiver.removeCallback(callback)
+
     }
 
 

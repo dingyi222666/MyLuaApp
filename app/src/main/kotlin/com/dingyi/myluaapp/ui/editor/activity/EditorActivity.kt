@@ -390,8 +390,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         super.onPause()
 
         if (this.isCreated) {
-
-
+            
             viewModel.progressMonitor.runAfterTaskRunning {
                 PluginModule
                     .getEditorService()

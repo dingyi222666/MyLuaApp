@@ -77,8 +77,17 @@ class MainBuilder(
 
         logger.info("\n")
 
-        runJob = project?.getRunner()?.run(commands[0])
 
+
+        kotlin.runCatching {
+            runJob = project?.getRunner()?.run(commands[0])
+        }.onFailure {
+            logger.info("\n")
+
+            logger.error(it.stackTraceToString())
+            stop()
+            return
+        }
 
 
     }

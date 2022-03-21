@@ -177,6 +177,7 @@ class Editor(
 
     override fun binCurrentView(r: CodeEditor) {
         currentEditor = WeakReference(r)
+
         r.setEditorLanguage(currentLanguage)
         r.colorScheme = currentColorScheme
     }

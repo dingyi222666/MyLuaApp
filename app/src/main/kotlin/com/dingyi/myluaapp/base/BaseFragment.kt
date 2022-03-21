@@ -30,8 +30,6 @@ abstract class BaseFragment<V : ViewBinding, T : ViewModel> : Fragment() {
         viewModel = ViewModelProvider(requireActivity(),ViewModelProvider.NewInstanceFactory.instance)[getViewModelClass()]
 
 
-
-
     }
 
 
