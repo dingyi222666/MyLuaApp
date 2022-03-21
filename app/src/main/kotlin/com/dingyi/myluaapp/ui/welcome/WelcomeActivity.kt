@@ -101,15 +101,10 @@ class WelcomeActivity : AppCompatActivity() {
                 val targetPath = File(Paths.pluginDir)
 
                 if (!targetPath.exists()) {
-
                     pluginFile.copyRecursively(File(Paths.pluginDir), overwrite = true)
                     pluginFile.deleteRecursively()
-
                 }
-
             }
-
-
 
 
 

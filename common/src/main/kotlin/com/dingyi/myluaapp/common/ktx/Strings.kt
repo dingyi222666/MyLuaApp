@@ -33,7 +33,7 @@ fun String.toMD5() = kotlin.runCatching {
         val i = b.toInt() and 0xff//获取低八位有效值
         var hexString = Integer.toHexString(i)//将整数转化为16进制
         if (hexString.length < 2) {
-            hexString = "0" + hexString//如果是一位的话，补0
+            hexString = "0$hexString"//如果是一位的话，补0
         }
         sb.append(hexString)
     }

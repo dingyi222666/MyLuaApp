@@ -187,6 +187,7 @@ class DexBuilderByR8(private val module: Module) : DefaultTask(module) {
                 File(Paths.buildPath, "jar/core-lambda-stubs.jar").toPath(),
                 File(Paths.buildPath, "jar/android.jar").toPath()
             )
+
             .addProgramFiles(allInputFile
                 .map { it.toFile().toPath() })
             .setMinApiLevel(minSdk)

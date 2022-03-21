@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.plugin.runtime.plugin
 
 import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.common.loader.ApkClassLoader
@@ -18,12 +19,12 @@ import java.io.File
 class PluginManager(private val context: PluginContext) {
 
 
-    private val allPlugin = mutableListOf<Pair<Plugin,String>>()
+    private val allPlugin = mutableListOf<PluginContainer>()
 
-    private val loadPlugin = mutableMapOf<Plugin,PluginContext>()
+    private val loadedPlugin = mutableListOf<PluginContainer>()
 
 
-    fun getAllPlugin() = allPlugin.map { it.first }
+    fun getAllPlugin() = allPlugin.map { it.getPlugin() }
 
     fun init() {
 
@@ -35,78 +36,45 @@ class PluginManager(private val context: PluginContext) {
                 getJavaClass<List<Map<String, String>>>()
             )
 
-        configList.forEach {
-            val pluginClass = it["pluginMainClass"]
-            val pluginId = it["pluginId"]
-
-            if (pluginClass == null) {
-                error("Missing plugin class")
-            }
-
-
-            val plugin = if (pluginId == "system") {
-                Class.forName(pluginClass).newInstance()
-            } else {
-                val pluginPath = File(Paths.pluginDir, pluginId)
-                val classLoader =
-                    ApkClassLoader(
-                        File(pluginPath, "plugin.apk"), File(pluginPath, "lib"), MainApplication
-                            .instance.classLoader
-                    )
-                classLoader.loadClass(pluginClass).newInstance()
-            }
-
-            if (plugin is Plugin) {
-                allPlugin.add(
-                    Pair(
-                        plugin,
-                        if (pluginId == "system") "" else File(
-                            Paths.pluginDir,
-                            pluginId + "/plugin.apk"
-                        ).absolutePath
-                    )
-                )
-            } else {
-                error("Unable to load plugin $pluginId.The parent class of the current class is not Plugin")
-            }
+        configList.map {
+            val pluginId = it.getValue("pluginId")
+            PluginContainer(
+                pluginId = pluginId,
+                pluginMainClass = it.getValue("pluginMainClass"),
+                pluginConfig = it.toMutableMap(),
+                superPluginContext = context
+            )
+        }.forEach {
+            allPlugin.add(it)
         }
 
     }
 
     fun loadPlugin(pluginId: String) {
-        allPlugin.find { it.first.pluginId == pluginId }
-            ?.let { (preLoadPlugin,path) -> if (loadPlugin.keys.find { it.pluginId == preLoadPlugin.pluginId } == null) preLoadPlugin to path else null }
-            ?.let { (plugin,path) ->
-                if (path.isEmpty()) {
-                    loadPlugin[plugin] = WrapperBasePluginContext(context, plugin)
-                } else {
-                    loadPlugin[plugin] = WrapperPluginContext(
-                        pluginContext = context,
-                        plugin = plugin,
-                        pluginAndroidContext = MainApplication.instance
-                    )
-                }
-                plugin.onStart(loadPlugin.getValue(plugin))
-            }
 
+        val loadPlugin = allPlugin.find { it.getPluginId() == pluginId }
+            .checkNotNull()
+
+        if (!loadedPlugin.contains(loadPlugin) || loadPlugin
+                .isEnabled
+        ) {
+            loadPlugin.init()
+            loadPlugin.start()
+        }
+
+        loadedPlugin.add(loadPlugin)
     }
 
     fun loadAllPlugin() {
-        allPlugin
-            .mapNotNull { (preLoadPlugin,path) -> if (loadPlugin.keys.find { it.pluginId == preLoadPlugin.pluginId } == null) preLoadPlugin to path else null }
-            .forEach { (plugin,path) ->
-                if (path.isEmpty()) {
-                    loadPlugin[plugin] = WrapperBasePluginContext(context, plugin)
-                } else {
-                    loadPlugin[plugin] = WrapperPluginContext(
-                        pluginContext = context,
-                        plugin = plugin,
-                        pluginAndroidContext = MainApplication.instance
-                    )
-                }
-
-                plugin.onStart(loadPlugin.getValue(plugin))
+        val notLoaderPluginList = allPlugin - loadedPlugin
+        for (it in notLoaderPluginList) {
+            if (!it.isEnabled) {
+                continue
             }
+            it.init()
+            it.start()
+            loadedPlugin.add(it)
+        }
     }
 
     suspend fun uninstallPlugin(pluginId: String) = withContext(Dispatchers.IO) {
@@ -131,9 +99,9 @@ class PluginManager(private val context: PluginContext) {
                 getJavaClass<Map<String, String>>()
             )
 
-        val pluginClass = configList["pluginMainClass"]
+        val pluginClass = configList.getValue("pluginMainClass")
 
-        val pluginId = configList["pluginId"]
+        val pluginId = configList.getValue("pluginId")
         //先运行一次
 
 
@@ -147,20 +115,18 @@ class PluginManager(private val context: PluginContext) {
 
         zipFile.close()
 
+        val container = PluginContainer(
+            pluginId = pluginId,
+            pluginMainClass = pluginClass,
+            pluginConfig = configList.toMutableMap(),
+            superPluginContext = context
+        )
+
+        container.init()
+
+        val plugin = container.getPlugin()
 
         val pluginDir = File(Paths.pluginDir, pluginId)
-        val classLoader =
-            ApkClassLoader(
-                File(pluginDir, "plugin.apk"), File(pluginDir, "lib"), MainApplication
-                    .instance.classLoader
-            )
-        val plugin = classLoader.loadClass(pluginClass).newInstance()
-
-
-        if (plugin !is Plugin) {
-            pluginDir.deleteRecursively()
-            error("Unable to install plugin $pluginId.The parent class of the current class is not Plugin")
-        }
 
         if (plugin.pluginId != pluginId) {
             pluginDir.deleteRecursively()
@@ -171,40 +137,21 @@ class PluginManager(private val context: PluginContext) {
             result = 1
         }
 
-        val pluginConfigPath = File(Paths.pluginDir, "plugin.json")
-
-        val pluginConfigList = Gson()
-            .fromJson(
-                pluginConfigPath.readText(),
-                getJavaClass<List<Map<String, String>>>()
-            ).toMutableList()
-
-        pluginConfigList.removeIf { it["pluginId"] == configList["pluginId"] }
-
-        pluginConfigList.add(configList)
-
-        pluginConfigPath.writeText(Gson().toJson(pluginConfigList))
-
+        container.insertPluginToList()
         withContext(Dispatchers.Main) {
-
-            plugin.onInstall(
-                WrapperPluginContext(
-                    pluginContext = context,
-                    plugin = plugin,
-                    pluginAndroidContext = MainApplication.instance
-                )
-            )
+            container.install()
         }
 
         result
     }
 
     fun stop() {
-        loadPlugin.forEach { (plugin, context) ->
-            allPlugin.removeIf { it.first == plugin }
-            plugin.onStop(context)
+        loadedPlugin.forEach { container ->
+            allPlugin.remove(container)
+            container.stop()
         }
-        loadPlugin.clear()
+        loadedPlugin.clear()
+        allPlugin.clear()
     }
 
     fun getPluginPath(plugin: Plugin): String {
