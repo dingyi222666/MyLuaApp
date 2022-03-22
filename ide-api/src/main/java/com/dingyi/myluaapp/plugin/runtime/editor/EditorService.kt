@@ -193,6 +193,9 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
     }
 
     override fun clearAllEditor() {
+        for (editor in allEditor) {
+            editor.clear()
+        }
         allEditor.clear()
     }
 

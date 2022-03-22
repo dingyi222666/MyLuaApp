@@ -158,6 +158,10 @@ class Editor(
         }
     }
 
+    override fun clear() {
+        currentEditor.clear()
+    }
+
     override fun save() {
 
         if (currentEditor.get() == null) {

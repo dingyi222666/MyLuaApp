@@ -392,9 +392,11 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
         if (this.isCreated) {
             
             viewModel.progressMonitor.runAfterTaskRunning {
-                PluginModule
-                    .getEditorService()
-                    .saveEditorServiceState()
+                withContext(Dispatchers.IO) {
+                    PluginModule
+                        .getEditorService()
+                        .saveEditorServiceState()
+                }
             }
         }
     }
@@ -412,14 +414,23 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
     override fun onDestroy() {
         super.onDestroy()
 
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                PluginModule
+                    .getEditorService()
+                    .apply {
+                        //saveEditorServiceState()
+                        clearAllEditor()
+                    }
 
-        PluginModule
-            .getEditorService()
-            .clearAllEditor()
+            }
 
-        tabLayoutMediator.detach()
 
-        viewModel.progressMonitor.close()
+
+            tabLayoutMediator.detach()
+
+            viewModel.progressMonitor.close()
+        }
 
     }
 

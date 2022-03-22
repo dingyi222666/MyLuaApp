@@ -68,13 +68,19 @@ class ProgressMonitor(
             isRunning = true
             return false
         }
+        isRunning = false
         return true
     }
 
     fun runAfterTaskRunning(block: suspend () -> Unit) {
         afterTask.add(block)
-        if (count.get() == 0 && !isRunning) {
-            runAfterTask()
+        scope.launch {
+            while (!checkIsFinish()) {
+                count.get()
+            }
+            if (count.get() == 0 && !isRunning) {
+                runAfterTask()
+            }
         }
     }
 

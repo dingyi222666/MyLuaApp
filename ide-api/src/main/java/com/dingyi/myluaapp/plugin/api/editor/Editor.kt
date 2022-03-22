@@ -48,5 +48,6 @@ interface Editor {
     fun undo()
 
     fun redo()
+    fun clear()
 
 }
