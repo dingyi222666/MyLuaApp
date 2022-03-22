@@ -2,7 +2,6 @@ package com.dingyi.myluaapp.ui.settings
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +52,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
                 val activity = requireActivity()
                 if (activity is AppCompatActivity) {
                     activity.supportActionBar?.apply {
-                        title = screen.title
+                        title = screen.titleRes.getString()
                         setDisplayHomeAsUpEnabled(true)
                     }
                 }
@@ -123,7 +122,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
     }
 
     fun application() = screen(requireActivity()) {
-        title = R.string.settings_application_category.getString()
+        titleRes = R.string.settings_application_category
 
 
         singleChoice(
@@ -143,11 +142,43 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
     }
 
 
+    fun editor() = screen(requireActivity()) {
+        titleRes = R.string.settings_editor_category
+
+        categoryHeader("settings_editor_function_category") {
+            titleRes = R.string.settings_editor_function_category
+        }
+
+        editText("symbol") {
+            titleRes = R.string.settings_editor_symbol_bar_category
+        }
+
+        categoryHeader("settings_editor_appearance_category") {
+            titleRes = R.string.settings_editor_appearance_category
+        }
+
+        pref("font_set") {
+            titleRes = R.string.settings_editor_font_category
+            summaryRes = R.string.settings_editor_font_summary
+            icon = iconRes(R.drawable.ic_twotone_translate_24)
+        }
+
+        switch("magnifier_set") {
+            titleRes = R.string.settings_editor_magnifier_category
+            summaryRes = R.string.settings_editor_magnifier_summary
+            icon = iconRes(R.drawable.ic_twotone_search_24)
+
+        }
+
+
+    }
+
+
     /**
      * The main function will return preferences dsl of the settings fragment
      */
     fun main() = screen(requireActivity()) {
-        title = R.string.settings_main_title.getString()
+        titleRes = R.string.settings_main_title
 
         //application
         pref("application") {
@@ -165,6 +196,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
             titleRes = R.string.settings_editor_category
             summaryRes = R.string.settings_editor_summary
             icon = iconRes(R.drawable.ic_twotone_keyboard_24)
+            onClick {
+                startSettings("editor")
+                true
+            }
         }
 
         //build
@@ -215,4 +250,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
         }
         return drawable
     }
+
+
 }
