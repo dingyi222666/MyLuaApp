@@ -31,7 +31,7 @@ class AndroidModule(
     override val type: String
         get() = _type
 
-    private var _type = "AndroidApplication"
+    private var _type = "AndroidLibrary"
 
     private val staticName = path.toFile().name
 
@@ -57,10 +57,11 @@ class AndroidModule(
     }
 
     override fun isMainModule(): Boolean {
+        initType()
         return type == "AndroidApplication"
     }
 
-    override fun init() {
+    private fun initType() {
         defaultMainBuilderScript.run()
 
 
@@ -81,6 +82,10 @@ class AndroidModule(
 
             }
         }
+    }
+
+    override fun init() {
+
 
         val applicationId = if (_type == "AndroidApplication") {
             (defaultMainBuilderScript.get("android.defaultConfig.applicationId") as LuaValue?)?.tojstring()

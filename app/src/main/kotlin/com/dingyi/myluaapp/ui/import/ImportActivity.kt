@@ -54,7 +54,6 @@ class ImportActivity : AppCompatActivity() {
 
                 "mpk" -> {
                     showPluginInfoDialog(
-
                         uri
                     )
                 }
