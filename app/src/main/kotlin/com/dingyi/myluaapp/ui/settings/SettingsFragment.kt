@@ -1,5 +1,7 @@
 package com.dingyi.myluaapp.ui.settings
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -161,6 +163,15 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
             titleRes = R.string.settings_editor_font_category
             summaryRes = R.string.settings_editor_font_summary
             icon = iconRes(R.drawable.ic_twotone_translate_24)
+            onClick {
+                startActivityForResult(
+                    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        type = "font/ttf"
+                    },
+                    REQUEST_FONT_SET_CODE
+                )
+                true
+            }
         }
 
         switch("magnifier_set") {
@@ -251,5 +262,36 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
         return drawable
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_FONT_SET_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    data?.data?.let {
+                        requireContext().contentResolver.openInputStream(it)?.use { input ->
+                            runCatching {
+                                (Paths.fontsDir + "/default.ttf").toFile().run {
+                                    if (!exists()) {
+                                        createNewFile()
+                                    }
+                                    outputStream()
+                                }.use { output ->
+                                    input.copyTo(output)
+                                }
+                            }.isSuccess
+                        }
+                    }?.let {
+                        if (it) R.string.settings_editor_font_toast_successful
+                        else R.string.settings_editor_font_toast_fail
+                    }?.getString()?.showToast()
+                }
+            }
+        }
 
+
+    }
+
+    companion object {
+        const val REQUEST_FONT_SET_CODE = 1
+    }
 }
