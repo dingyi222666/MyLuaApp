@@ -2,23 +2,25 @@ package com.dingyi.myluaapp.ui.settings
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseFragment
-import com.dingyi.myluaapp.common.ktx.getAttributeColor
-import com.dingyi.myluaapp.common.ktx.getJavaClass
-import com.dingyi.myluaapp.common.ktx.getString
+import com.dingyi.myluaapp.common.ktx.*
 import com.dingyi.myluaapp.databinding.FragmentSettingsBinding
+import com.dingyi.myluaapp.ui.GeneralActivity
+import com.hjq.language.MultiLanguages
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.PreferencesAdapter
-import de.Maxr1998.modernpreferences.helpers.pref
-import de.Maxr1998.modernpreferences.helpers.screen
+import de.Maxr1998.modernpreferences.helpers.*
+import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
+import java.util.*
+import kotlin.concurrent.thread
 
 class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() {
 
@@ -58,21 +60,86 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
 
                 val preferencesAdapter = PreferencesAdapter(screen)
                 viewBinding.list.apply {
+
                     layoutManager =
                         LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                     adapter = preferencesAdapter
                 }
 
+                preferencesAdapter.setRootScreen(screen)
             }
         }
 
     }
+
 
     override fun getViewBindingInstance(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentSettingsBinding {
         return FragmentSettingsBinding.inflate(inflater, container, false)
+    }
+
+
+    private fun getLanguageSelectionItem(): List<SelectionItem> {
+        val settingsApplicationLanguageEntry = requireContext()
+            .getStringArray(R.array.settings_application_language_entry)
+
+        val settingsApplicationLanguageValue = requireContext()
+            .getStringArray(R.array.settings_application_language_entry_value)
+
+        return settingsApplicationLanguageEntry.mapIndexed { index, s ->
+            SelectionItem(
+                key = settingsApplicationLanguageValue[index],
+                title = s,
+                summary = null
+            )
+        }
+
+    }
+
+    private fun checkLanguage(language: String) {
+        val restart =
+            when (language) {
+                "default" -> MultiLanguages.setSystemLanguage(requireContext())
+                "chinese" -> MultiLanguages.setAppLanguage(requireContext(), Locale.CHINESE)
+                "english" -> MultiLanguages.setAppLanguage(requireContext(), Locale.ENGLISH)
+                else -> false
+            }
+
+
+
+        if (restart) {
+            thread {
+                requireActivity().runOnUiThread {
+                    R.string.settings_editor_language_restart_toast
+                        .getString()
+                        .showToast()
+                }
+                Thread.sleep(500)
+                android.os.Process.killProcess(android.os.Process.myPid())    //获取PID
+            }
+        }
+    }
+
+    fun application() = screen(requireActivity()) {
+        title = R.string.settings_application_category.getString()
+
+
+        singleChoice(
+            key = "language",
+            items = getLanguageSelectionItem()
+        ) {
+            titleRes = R.string.settings_application_language_title
+            summaryRes = R.string.settings_application_language_summary
+            icon = iconRes(R.drawable.ic_twotone_translate_24)
+
+            onSelectionChange {
+                checkLanguage(it)
+                true
+            }
+
+        }
     }
 
 
@@ -87,6 +154,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
             titleRes = R.string.settings_application_category
             summaryRes = R.string.settings_application_summary
             icon = iconRes(R.drawable.ic_twotone_palette_24)
+            onClick {
+                startSettings("application")
+                true
+            }
         }
 
         //editor
@@ -117,7 +188,21 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
     }
 
 
-    private fun PreferenceScreen.Builder.iconRes(
+    private fun startSettings(method: String, arg: String? = null) {
+        requireActivity().startActivity<GeneralActivity> {
+            putExtra("type", getJavaClass<SettingsFragment>().name)
+            putExtra("arg",
+                Bundle().apply {
+                    putString("method", method)
+                    putString("arg", arg)
+                }
+            )
+        }
+
+    }
+
+
+    private fun iconRes(
         iconRes: Int,
         tintRes: Int = R.attr.theme_hintTextColor
     ): Drawable? {

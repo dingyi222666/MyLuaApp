@@ -78,6 +78,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                         LayoutItemMainProjectBinding.bind(itemView).appName,
                         "project_name_transition"
                     ).toBundle()
+
                     this@MainActivity.startActivity(
                         Intent(this@MainActivity, getJavaClass<EditorActivity>()).apply {
                             putExtra(
@@ -105,6 +106,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         viewModel.poetry.observe(this) {
             supportActionBar?.subtitle = it
         }
+
 
     }
 
