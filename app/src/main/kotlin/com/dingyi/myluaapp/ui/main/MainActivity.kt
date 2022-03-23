@@ -129,10 +129,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
             R.id.main_action_menu_settings -> {
                 startActivity<GeneralActivity> {
                     putExtra("type", getJavaClass<SettingsFragment>().name)
-                    putExtra("arg",
-                        Bundle().apply {
-                            putString("method", "main")
-                        }
+                    putExtra(
+                        "arg", Bundle()
                     )
                 }
             }

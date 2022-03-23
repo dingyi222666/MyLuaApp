@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseFragment
@@ -25,6 +26,7 @@ import kotlin.concurrent.thread
 
 class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() {
 
+
     override fun getViewModelClass(): Class<MainViewModel> {
         return getJavaClass()
     }
@@ -34,9 +36,9 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
 
         arguments?.let {
 
-            val targetMethod = it.getString("method") ?: "main"
+            val targetMethod = it.getString("method") ?: "callScreen"
 
-            val methodStringArg = it.getString("arg") ?: ""
+            val methodStringArg = it.getString("arg") ?: getJavaClass<MainScreen>().name
 
 
             val methodInstance = if (methodStringArg.isEmpty()) {
@@ -82,185 +84,21 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
     }
 
 
-    private fun getLanguageSelectionItem(): List<SelectionItem> {
-        val settingsApplicationLanguageEntry = requireContext()
-            .getStringArray(R.array.settings_application_language_entry)
-
-        val settingsApplicationLanguageValue = requireContext()
-            .getStringArray(R.array.settings_application_language_entry_value)
-
-        return settingsApplicationLanguageEntry.mapIndexed { index, s ->
-            SelectionItem(
-                key = settingsApplicationLanguageValue[index],
-                title = s,
-                summary = null
-            )
-        }
-
-    }
-
-    private fun checkLanguage(language: String) {
-        val restart =
-            when (language) {
-                "default" -> MultiLanguages.setSystemLanguage(requireContext())
-                "chinese" -> MultiLanguages.setAppLanguage(requireContext(), Locale.CHINESE)
-                "english" -> MultiLanguages.setAppLanguage(requireContext(), Locale.ENGLISH)
-                else -> false
-            }
-
-
-
-        if (restart) {
-            thread {
-                requireActivity().runOnUiThread {
-                    R.string.settings_editor_language_restart_toast
-                        .getString()
-                        .showToast()
-                }
-                Thread.sleep(500)
-                android.os.Process.killProcess(android.os.Process.myPid())    //获取PID
-            }
-        }
-    }
-
-    fun application() = screen(requireActivity()) {
-        titleRes = R.string.settings_application_category
-
-
-        singleChoice(
-            key = "language",
-            items = getLanguageSelectionItem()
-        ) {
-            titleRes = R.string.settings_application_language_title
-            summaryRes = R.string.settings_application_language_summary
-            icon = iconRes(R.drawable.ic_twotone_translate_24)
-
-            onSelectionChange {
-                checkLanguage(it)
-                true
-            }
-
-        }
-    }
-
-
-    fun editor() = screen(requireActivity()) {
-        titleRes = R.string.settings_editor_category
-
-        categoryHeader("settings_editor_function_category") {
-            titleRes = R.string.settings_editor_function_category
-        }
-
-        editText("symbol") {
-            titleRes = R.string.settings_editor_symbol_bar_category
-        }
-
-        categoryHeader("settings_editor_appearance_category") {
-            titleRes = R.string.settings_editor_appearance_category
-        }
-
-        pref("font_set") {
-            titleRes = R.string.settings_editor_font_category
-            summaryRes = R.string.settings_editor_font_summary
-            icon = iconRes(R.drawable.ic_twotone_translate_24)
-            onClick {
-                startActivityForResult(
-                    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                        type = "font/ttf"
-                    },
-                    REQUEST_FONT_SET_CODE
-                )
-                true
-            }
-        }
-
-        switch("magnifier_set") {
-            titleRes = R.string.settings_editor_magnifier_category
-            summaryRes = R.string.settings_editor_magnifier_summary
-            icon = iconRes(R.drawable.ic_twotone_search_24)
-
-        }
-
-
-    }
 
 
     /**
      * The main function will return preferences dsl of the settings fragment
      */
-    fun main() = screen(requireActivity()) {
-        titleRes = R.string.settings_main_title
-
-        //application
-        pref("application") {
-            titleRes = R.string.settings_application_category
-            summaryRes = R.string.settings_application_summary
-            icon = iconRes(R.drawable.ic_twotone_palette_24)
-            onClick {
-                startSettings("application")
-                true
-            }
-        }
-
-        //editor
-        pref("editor") {
-            titleRes = R.string.settings_editor_category
-            summaryRes = R.string.settings_editor_summary
-            icon = iconRes(R.drawable.ic_twotone_keyboard_24)
-            onClick {
-                startSettings("editor")
-                true
-            }
-        }
-
-        //build
-        pref("build") {
-            icon = iconRes(R.drawable.ic_twotone_build_24)
-            summaryRes = R.string.settings_build_summary
-            titleRes =R.string.settings_build_category
-        }
-
-        //plugin
-        pref("plugin") {
-            icon = iconRes(R.drawable.ic_twotone_memory_24)
-            summaryRes = R.string.settings_plugin_summary
-            titleRes = R.string.settings_plugin_category
-        }
-
-        //about
-        pref("about") {
-            titleRes = R.string.settings_about_category
-        }
-    }
+    fun callScreen(
+        clazz: String
+    ): PreferenceScreen = requireActivity().classLoader.loadClass(clazz)
+        .getConstructor(getJavaClass<com.dingyi.myluaapp.ui.settings.SettingScreen>())
+        .newInstance(defaultScreen)
+        .convertObject<com.dingyi.myluaapp.ui.settings.SettingScreen>()
+        .create(PreferenceScreen.Builder(requireContext()))
+        .build()
 
 
-    private fun startSettings(method: String, arg: String? = null) {
-        requireActivity().startActivity<GeneralActivity> {
-            putExtra("type", getJavaClass<SettingsFragment>().name)
-            putExtra("arg",
-                Bundle().apply {
-                    putString("method", method)
-                    putString("arg", arg)
-                }
-            )
-        }
-
-    }
-
-
-    private fun iconRes(
-        iconRes: Int,
-        tintRes: Int = R.attr.theme_hintTextColor
-    ): Drawable? {
-        val drawable = AppCompatResources
-            .getDrawable(requireContext(), iconRes)
-
-        if (tintRes != 0) {
-            val color = requireContext().getAttributeColor(tintRes)
-            drawable?.setTint(color)
-        }
-        return drawable
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -272,6 +110,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
                             runCatching {
                                 (Paths.fontsDir + "/default.ttf").toFile().run {
                                     if (!exists()) {
+                                        parentFile?.mkdirs()
                                         createNewFile()
                                     }
                                     outputStream()
@@ -290,6 +129,21 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() 
 
 
     }
+
+    open inner class SettingScreen : com.dingyi.myluaapp.ui.settings.SettingScreen {
+        override fun create(screen: PreferenceScreen.Builder): PreferenceScreen.Builder {
+            return screen
+        }
+
+        override fun getBindFragment(): Fragment {
+            return this@SettingsFragment
+        }
+
+    }
+
+
+
+    private val defaultScreen = SettingScreen()
 
     companion object {
         const val REQUEST_FONT_SET_CODE = 1

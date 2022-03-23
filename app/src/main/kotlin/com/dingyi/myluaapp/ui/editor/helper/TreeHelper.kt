@@ -2,8 +2,8 @@ package com.dingyi.myluaapp.ui.editor.helper
 
 import com.dingyi.myluaapp.common.ktx.sortFile
 import com.dingyi.myluaapp.view.treeview.TreeNode
-import com.dingyi.myluaapp.view.treeview.helper.TreeHelper
 import java.io.File
+import com.dingyi.myluaapp.view.treeview.helper.TreeHelper
 
 object TreeHelper {
      fun getAllNode(path: File?): TreeNode {
@@ -32,7 +32,6 @@ object TreeHelper {
         TreeHelper.deleteAllChild(node)
 
         addChildNode(node, node.level + 1)
-
 
 
 
