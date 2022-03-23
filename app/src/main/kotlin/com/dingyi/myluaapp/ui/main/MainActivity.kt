@@ -17,6 +17,7 @@ import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.GeneralActivity
+import com.dingyi.myluaapp.ui.about.AboutFragment
 import com.dingyi.myluaapp.ui.editor.activity.EditorActivity
 import com.dingyi.myluaapp.ui.main.model.ProjectUiModel
 import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
@@ -132,6 +133,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                     putExtra(
                         "arg", Bundle()
                     )
+                }
+            }
+            R.id.main_action_menu_about -> {
+                startActivity<GeneralActivity> {
+                    putExtra("type", getJavaClass<AboutFragment>().name)
                 }
             }
             else -> return super.onOptionsItemSelected(item)

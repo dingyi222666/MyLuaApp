@@ -82,6 +82,7 @@
     <string name="editor_menu_file_list_toolbar_new_file">Create File</string>
     <string name="editor_dialog_choose_file_template_title">Create File</string>
     <string name="editor_menu_file_list_toolbar_new_directory">Create Directory</string>
+    <string name="about_description">A light and faster software run in Android Arm Devices to develop Android software with Lua or Java.</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>

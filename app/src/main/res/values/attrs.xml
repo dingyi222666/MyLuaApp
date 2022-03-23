@@ -11,6 +11,6 @@
     <attr name="theme_log_warn_color" format="color|reference" />
     <attr name="theme_log_error_color" format="color|reference" />
     <attr name="theme_log_click_color" format="color|reference" />
-
+    <attr name="theme_stroke_color" format="color|reference" />
 
 </resources>

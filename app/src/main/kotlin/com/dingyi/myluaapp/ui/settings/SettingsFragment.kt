@@ -2,32 +2,25 @@ package com.dingyi.myluaapp.ui.settings
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.ktx.*
 import com.dingyi.myluaapp.databinding.FragmentSettingsBinding
-import com.dingyi.myluaapp.ui.GeneralActivity
-import com.hjq.language.MultiLanguages
+import com.dingyi.myluaapp.ui.GeneralActivityViewModel
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.PreferencesAdapter
-import de.Maxr1998.modernpreferences.helpers.*
-import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
-import java.util.*
-import kotlin.concurrent.thread
 
-class SettingsFragment : BaseFragment<FragmentSettingsBinding, MainViewModel>() {
+class SettingsFragment : BaseFragment<FragmentSettingsBinding, GeneralActivityViewModel>() {
 
 
-    override fun getViewModelClass(): Class<MainViewModel> {
+    override fun getViewModelClass(): Class<GeneralActivityViewModel> {
         return getJavaClass()
     }
 

@@ -7,6 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="theme_default_stroke_color">#E0E0E0</color>
     <color name="theme_default_backgroundColor">#FFFFFFFF</color>
     <color name="theme_default_colorPrimary">#FF009688</color>
     <color name="theme_default_textColor">#FF000000</color>

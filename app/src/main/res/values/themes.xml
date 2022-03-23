@@ -18,6 +18,7 @@
         <item name="theme_rippleColor">@color/theme_default_rippleColor</item>
         <item name="theme_cardBackgroundColor">@color/theme_default_cardBackgroundColor</item>
         <item name="theme_textColor">@color/theme_default_textColor</item>
+        <item name="theme_stroke_color">@color/theme_default_stroke_color</item>
         <item name="theme_hintTextColor">@color/theme_default_hintTextColor</item>
         <item name="theme_rippleColorOnBackground">@color/theme_white_rippleColor</item>
         <item name="theme_log_debug_color">@color/theme_default_log_debug_color</item>
@@ -28,6 +29,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="circleImageShapeAppearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 
     <style name="ThemeOverlay.Corner.BottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/Widget.Corner.Round.BottomSheet</item>

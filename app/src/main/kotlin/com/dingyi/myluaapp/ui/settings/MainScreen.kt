@@ -2,6 +2,10 @@ package com.dingyi.myluaapp.ui.settings
 
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.common.ktx.startActivity
+import com.dingyi.myluaapp.ui.GeneralActivity
+import com.dingyi.myluaapp.ui.about.AboutFragment
+import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
@@ -52,7 +56,11 @@ class MainScreen(settingsScreen: SettingScreen) : SettingScreen by settingsScree
         pref("about") {
             titleRes = R.string.settings_about_category
             onClick {
-                startSettings<AboutScreen>()
+                getBindFragment()
+                    .requireActivity()
+                    .startActivity<GeneralActivity> {
+                        putExtra("type", getJavaClass<AboutFragment>().name)
+                    }
                 true
             }
         }
