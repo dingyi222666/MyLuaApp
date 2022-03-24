@@ -78,7 +78,7 @@
                         android:paddingTop="8dp"
                         android:paddingEnd="?android:listPreferredItemPaddingEnd"
                         android:paddingBottom="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/contact"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/about_description">
@@ -103,7 +103,7 @@
                                 android:layout_marginStart="24dp"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:text="版本号"
+                                android:text="@string/about_version"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                             <TextView
@@ -111,6 +111,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="24dp"
                                 android:ellipsize="end"
+                                android:id="@+id/version_code"
                                 android:maxLines="1"
                                 android:text="0.1"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
@@ -118,8 +119,130 @@
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
 
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/contact"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="?selectableItemBackground"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        android:paddingStart="?android:listPreferredItemPaddingStart"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="?android:listPreferredItemPaddingEnd"
+                        android:paddingBottom="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/version">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_twotone_email_24"
+                            app:tint="?theme_hintTextColor" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="24dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/about_contact_me"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                        </LinearLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?theme_stroke_color"
+                app:strokeWidth="1dp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="?android:listPreferredItemPaddingStart"
+                        android:paddingTop="6dp"
+                        android:paddingEnd="?android:listPreferredItemPaddingEnd"
+                        android:paddingBottom="6dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/about_development_title"
+                            android:textColor="?theme_textColor" />
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="?android:listPreferredItemPaddingStart"
+                        android:paddingTop="8dp"
+                        android:paddingEnd="?android:listPreferredItemPaddingEnd"
+                        android:paddingBottom="8dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_github"
+                            app:tint="?theme_hintTextColor" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="24dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/about_open_source"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                        </LinearLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </com.google.android.material.card.MaterialCardView>
+
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.core.widget.NestedScrollView>

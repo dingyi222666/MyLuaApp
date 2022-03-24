@@ -53,6 +53,7 @@
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/default_tab_indicator.xml" value="0.16944444444444445" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.16944444444444445" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/ic_baseline_format_list_numbered_24.xml" value="0.12129629629629629" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/ic_github.xml" value="0.1575" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.20555555555555555" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/ic_twotone_build_24.xml" value="0.24166666666666667" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/drawable/ic_twotone_chevron_right_24.xml" value="0.11018518518518519" />
@@ -79,7 +80,7 @@
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/activity_new_project.xml" value="0.23383084577114427" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/activity_welcome.xml" value="0.2" />
-        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/fragment_about.xml" value="0.4" />
+        <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/fragment_about.xml" value="0.264" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/fragment_editor_build_log.xml" value="0.1" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/fragment_editor_code_navigation.xml" value="0.12864583333333332" />
         <entry key="..\:/android studio project/MyLuaApp2/app/src/main/res/layout/fragment_editor_edit_pager.xml" value="0.15081521739130435" />

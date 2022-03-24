@@ -95,6 +95,8 @@
     <string name="main_dialog_delete_project_message">是否确认删除当前项目？删除后不可恢复！</string>
     <string name="editor_build_log_title">打包日志</string>
     <string name="about_description">小而轻快,用Lua或者Java混合开发android软件</string>
+    <string name="about_version">版本号</string>
+    <string name="about_contact_me">联系我们</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>
         <item>夜雨潇潇至，天寒拥敝裘。</item>
@@ -136,4 +138,6 @@
         <item>落尽梨花春又了。满地残阳，翠色和烟老。</item>
         <item>飞絮飞花何处是，层冰积雪摧残，疏疏一树五更寒。</item>
     </string-array>
+    <string name="about_development_title">开发相关</string>
+    <string name="about_open_source">开源地址</string>
 </resources>

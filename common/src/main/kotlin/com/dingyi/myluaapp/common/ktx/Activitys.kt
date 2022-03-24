@@ -20,6 +20,8 @@ import kotlin.system.exitProcess
 inline val Context.versionCode: Int
     get() = packageManager.getPackageInfo(packageName, 0).versionCode
 
+inline val Context.versionName: String
+    get() = packageManager.getPackageInfo(packageName, 0).versionName
 
 inline fun <reified T> Activity.startActivity(block: Intent.() -> Unit = {}) {
     startActivity(Intent(this, getJavaClass<T>()).apply(block))
