@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.AssetManager
 
 import com.dingyi.myluaapp.MainApplication
+import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.PluginModule
 import com.dingyi.myluaapp.plugin.api.Properties
@@ -15,6 +16,7 @@ import com.dingyi.myluaapp.plugin.runtime.action.ActionService
 
 import com.dingyi.myluaapp.plugin.runtime.project.ProjectService
 import com.dingyi.myluaapp.plugin.runtime.ui.UiService
+import java.io.File
 
 object PluginModule: PluginModule {
 
@@ -103,6 +105,10 @@ object PluginModule: PluginModule {
         return MainApplication.instance
     }
 
+    override fun getPluginDir(): File {
+        return File(Paths.pluginDir)
+    }
+
     override val apiVersion: Int
-        get() = 1
+        get() = 2
 }

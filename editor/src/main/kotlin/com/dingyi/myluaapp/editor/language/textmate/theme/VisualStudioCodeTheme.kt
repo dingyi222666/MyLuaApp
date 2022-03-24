@@ -67,7 +67,7 @@ class VisualStudioCodeTheme(
         return visualStudioCodeRawTheme
             .editorSettings
             .get(settings)
-            .let { color -> Color.parseColor(color) }
+            ?.let { color -> Color.parseColor(color) }
     }
 
     override fun getThemeRaw(): io.github.rosemoe.sora.textmate.core.internal.theme.ThemeRaw {

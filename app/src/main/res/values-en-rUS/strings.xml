@@ -85,6 +85,7 @@
     <string name="about_version">Version Name</string>
     <string name="about_contact_me">Contact me</string>
     <string name="about_development_title">Development</string>
+    <string name="about_open_source_license">Open Source License</string>
     <string name="about_description">A light and faster software run in Android Arm Devices to develop Android software with Lua or Java.</string>
     <string-array name="main_poetry_array">
         <item>夜雨清无寐，秋虫响易哀。</item>

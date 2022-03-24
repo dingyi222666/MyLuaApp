@@ -18,7 +18,7 @@ class CreateEditorAction : Action<Unit> {
                 val textMateLanguage = TextMateLanguage
                     .createLanguage(
                         File(Paths.assetsDir,"res/textmate/lua/lua.tmLanguage.json"),
-                        File(Paths.assetsDir,"res/textmate/theme/light_vs.json"),
+                        File(Paths.assetsDir,"res/textmate/theme/default_theme.json"),
                         File(Paths.assetsDir,"res/textmate/lua/language-configuration.json"),
                         "lua"
                     )

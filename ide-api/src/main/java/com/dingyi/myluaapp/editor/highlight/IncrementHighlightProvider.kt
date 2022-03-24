@@ -52,10 +52,10 @@ abstract class IncrementHighlightProvider : HighlightProvider() {
      * @param text The text. can be safely accessed.
      */
     abstract fun computeBlocks(
-        text: CharSequence,
+        text: Content,
         styles: Styles,
         delegate: Delegate
-    ): List<CodeBlock?>?
+    ): List<CodeBlock>?
 
 
     private fun runComputeBlock() {
@@ -64,7 +64,7 @@ abstract class IncrementHighlightProvider : HighlightProvider() {
         coroutine?.launch(start = CoroutineStart.LAZY, context = Dispatchers.IO) {
             Log.v("IncrementHighlightProvider", "Start ComputeBlock")
             try {
-                val codeBlock = computeBlocks(shadowContent?.toString() ?: "", styles, delegate)
+                val codeBlock = computeBlocks(requireContent(), styles, delegate)
                 styles.blocks = codeBlock
                 updateStyle(styles)
             } catch (e: Exception) {

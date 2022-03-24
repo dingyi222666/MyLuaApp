@@ -1,19 +1,23 @@
 package com.dingyi.myluaapp.editor.language.textmate.highlight
 
-import android.graphics.Color
 import com.dingyi.myluaapp.editor.highlight.IncrementStateHighlightProvider
 import com.dingyi.myluaapp.editor.language.textmate.TextMateLanguage
+import com.dingyi.myluaapp.editor.language.textmate.fold.IndentRange
+import io.github.rosemoe.sora.lang.analysis.AsyncIncrementalAnalyzeManager
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.Span
 import io.github.rosemoe.sora.lang.styling.Styles
 import io.github.rosemoe.sora.lang.styling.TextStyle
 import io.github.rosemoe.sora.langs.textmate.analyzer.TextMateAnalyzer
+
+import io.github.rosemoe.sora.text.Content
 import io.github.rosemoe.sora.textmate.core.grammar.ITokenizeLineResult2
 import io.github.rosemoe.sora.textmate.core.grammar.StackElement
 import io.github.rosemoe.sora.textmate.core.internal.grammar.StackElementMetadata
 import io.github.rosemoe.sora.textmate.core.theme.FontStyle
-import io.github.rosemoe.sora.util.ArrayList
+import io.github.rosemoe.sora.textmate.languageconfiguration.internal.supports.Folding
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
+import java.util.*
 
 class TextMateHighlightProvider(
     private val language: TextMateLanguage
@@ -40,12 +44,53 @@ class TextMateHighlightProvider(
     }
 
     override fun computeBlocks(
-        text: CharSequence,
+        text: Content,
         styles: Styles,
         delegate: Delegate
-    ): List<CodeBlock?>? {
-        return mutableListOf()
+    ): List<CodeBlock> {
+
+        val blocks = mutableListOf<CodeBlock>()
+
+        if (language.getLanguageConfiguration() == null) {
+            return blocks
+        }
+
+        val folding = language.getLanguageConfiguration()?.folding ?: return blocks
+        kotlin.runCatching {
+            val foldingRegions = IndentRange.computeRanges(
+                text,
+                language.tabSize,
+                folding.offSide,
+                folding,
+                TextMateAnalyzer.MAX_FOLDING_REGIONS_FOR_INDENT_LIMIT,
+                delegate
+            )
+
+            var i = 0
+            while (i < foldingRegions.length() && !delegate.isCancelled()) {
+                val startLine = foldingRegions.getStartLineNumber(i)
+                val endLine = foldingRegions.getEndLineNumber(i)
+                if (startLine != endLine) {
+                    val codeBlock = CodeBlock()
+                    codeBlock.toBottomOfEndLine = true
+                    codeBlock.startLine = startLine
+                    codeBlock.endLine = endLine
+
+                    // It's safe here to use raw data because the Content is only held by this thread
+                    val length = text.getColumnCount(startLine)
+                    val chars = text.getLine(startLine).rawData
+                    codeBlock.startColumn =
+                        IndentRange.computeStartColumn(chars, length, language.tabSize)
+                    codeBlock.endColumn = codeBlock.startColumn
+                    blocks.add(codeBlock)
+                }
+                i++
+            }
+            Collections.sort(blocks, CodeBlock.COMPARATOR_END)
+        }
+        return blocks
     }
+
 
     override fun tokenizeLine(
         lineString: CharSequence,

@@ -1,9 +1,9 @@
 {
   "comments": {
-    "lineComment": "--",
+    "lineComment": "//",
     "blockComment": [
-      "--[[",
-      "]]"
+      "/*",
+      "*/"
     ]
   },
   "brackets": [
@@ -46,6 +46,13 @@
       "notIn": [
         "string"
       ]
+    },
+    {
+      "open": "/**",
+      "close": " */",
+      "notIn": [
+        "string"
+      ]
     }
   ],
   "surroundingPairs": [
@@ -68,16 +75,16 @@
     [
       "'",
       "'"
+    ],
+    [
+      "<",
+      ">"
     ]
   ],
   "folding": {
     "markers": {
-      "start": "^\\s*\\b(function|local\\s+function|if|for)\\b|{[ \\t]*$|\\[\\[",
-      "end": "\\bend\\b|^\\s*}|\\]\\]"
+      "start": "^\\s*//\\s*(?:(?:#?region\\b)|(?:<editor-fold\\b))",
+      "end": "^\\s*//\\s*(?:(?:#?endregion\\b)|(?:</editor-fold>))"
     }
-  },
-  "indentationRules": {
-    "increaseIndentPattern": "^((?!(\\-\\-)).)*((\\b(else|function|then|do|repeat)\\b((?!\\b(end|until)\\b).)*)|(\\{\\s*))$",
-    "decreaseIndentPattern": "^\\s*((\\b(elseif|else|end|until)\\b)|(\\})|(\\)))"
   }
 }

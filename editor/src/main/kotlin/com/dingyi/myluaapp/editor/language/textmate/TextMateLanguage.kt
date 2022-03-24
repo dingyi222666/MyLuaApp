@@ -1,19 +1,12 @@
 package com.dingyi.myluaapp.editor.language.textmate
 
-import android.os.Bundle
-import com.dingyi.myluaapp.editor.language.Language
 import com.dingyi.myluaapp.editor.highlight.HighlightProvider
+import com.dingyi.myluaapp.editor.language.Language
 import com.dingyi.myluaapp.editor.language.textmate.grammar.GrammarRepository
-
 import com.dingyi.myluaapp.editor.language.textmate.highlight.TextMateHighlightProvider
 import com.dingyi.myluaapp.editor.language.textmate.theme.ITheme
 import com.dingyi.myluaapp.editor.language.textmate.theme.TextMateColorScheme
 import com.dingyi.myluaapp.editor.language.textmate.theme.ThemeRepository
-
-import io.github.rosemoe.sora.lang.completion.CompletionPublisher
-import io.github.rosemoe.sora.langs.textmate.analyzer.TextMateAnalyzer
-import io.github.rosemoe.sora.text.CharPosition
-import io.github.rosemoe.sora.text.ContentReference
 import io.github.rosemoe.sora.textmate.core.grammar.IGrammar
 import io.github.rosemoe.sora.textmate.languageconfiguration.ILanguageConfiguration
 import io.github.rosemoe.sora.textmate.languageconfiguration.internal.LanguageConfiguration
@@ -47,6 +40,9 @@ class TextMateLanguage(
             defaultColorScheme = this
         }
     }
+
+
+    var tabSize = 4;
 
 
     override fun destroy() {

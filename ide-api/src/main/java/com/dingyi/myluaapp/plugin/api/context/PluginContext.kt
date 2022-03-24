@@ -9,6 +9,7 @@ import com.dingyi.myluaapp.plugin.api.build.BuildService
 import com.dingyi.myluaapp.plugin.api.editor.EditorService
 import com.dingyi.myluaapp.plugin.api.project.ProjectService
 import com.dingyi.myluaapp.plugin.api.ui.UiService
+import java.io.File
 
 interface PluginContext {
 
@@ -31,6 +32,8 @@ interface PluginContext {
      * Return the base context based on the plugin, the context can only be used to get assets and resource resources, not to used create view
      */
     fun getAndroidContext(): Context
+
+    fun getPluginDir(): File
 
     val apiVersion: Int
         get() = 1

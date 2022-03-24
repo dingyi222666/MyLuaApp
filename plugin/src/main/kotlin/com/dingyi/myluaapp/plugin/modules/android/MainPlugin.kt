@@ -23,7 +23,7 @@ class MainPlugin: Plugin {
 
         context
             .getProjectService().apply {
-                addProjectCreatorProvider(AndroidProjectCreatorProvider())
+                addProjectCreatorProvider(AndroidProjectCreatorProvider(context))
                 addProjectProvider(AndroidProjectProvider(context))
             }
 

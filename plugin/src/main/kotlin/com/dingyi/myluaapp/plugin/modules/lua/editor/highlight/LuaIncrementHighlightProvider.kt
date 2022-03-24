@@ -7,18 +7,19 @@ import com.dingyi.myluaapp.editor.highlight.IncrementStateHighlightProvider
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.Span
 import io.github.rosemoe.sora.lang.styling.Styles
+import io.github.rosemoe.sora.text.Content
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 
 class LuaIncrementHighlightProvider : IncrementStateHighlightProvider<LuaIncrementHighlightProvider.LuaLexerState>() {
 
     override fun computeBlocks(
-        text: CharSequence,
+        text: Content,
         styles: Styles,
         delegate: Delegate
-    ): List<CodeBlock?>? {
+    ): List<CodeBlock>? {
         return kotlin.runCatching {
 
-            val lexer = LuaLexer(text)
+            val lexer = LuaLexer(text.copyText())
             val blockStack = ArrayDeque<CodeBlock>()
             val resultBlock = mutableListOf<CodeBlock>()
             var token: LuaTokenTypes? = lexer.advance()
