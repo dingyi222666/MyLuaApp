@@ -40,6 +40,7 @@ dependencies {
 
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
     implementation(project(":common"))
+
     implementation(BuildConfig.Libs.AndroidX.appcompat)
     implementation(BuildConfig.Libs.Tools.mmkv)
     BuildConfig.Libs.Views.sora_editor.forEach {

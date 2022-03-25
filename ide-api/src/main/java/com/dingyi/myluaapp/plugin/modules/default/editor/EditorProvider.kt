@@ -1,11 +1,10 @@
 package com.dingyi.myluaapp.plugin.modules.default.editor
 
-import android.content.Context
+import com.dingyi.myluaapp.editor.language.textmate.TextMateLanguage
+import com.dingyi.myluaapp.editor.language.textmate.TextMateLanguageProvider
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 
 import com.dingyi.myluaapp.plugin.api.editor.EditorProvider
-import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
-import io.github.rosemoe.sora.widget.CodeEditor
 import java.io.File
 
 class EditorProvider(
@@ -18,6 +17,17 @@ class EditorProvider(
 
         id++
 
-        return Editor(editorPath, id,pluginContext)
+        val editor =
+            Editor(editorPath, id, pluginContext)
+
+        val language = TextMateLanguageProvider.getTextMateLanguage(editorPath)
+
+        if (language is TextMateLanguage) {
+            editor.setColorScheme(language.getColorScheme())
+            editor.setLanguage(language)
+        }
+
+
+        return editor
     }
 }

@@ -20,13 +20,7 @@ fun String.toFile() = File(this)
 fun String.toZipFile() = ZipFile(this)
 
 inline val File.suffix: String
-    get() = if (name.lastIndexOf(".") == -1) "" else name.substring(
-        name.lastIndex.coerceAtMost(
-            name.lastIndexOf(
-                "."
-            ) + 1
-        )
-    )
+    get() = this.extension
 
 fun OutputStream.writeUseGZIP(text: String) {
     this.use { output ->

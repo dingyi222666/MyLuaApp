@@ -5,7 +5,6 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 
 import com.dingyi.myluaapp.editor.ktx.dp
-import io.github.rosemoe.sora.lang.Language
 import io.github.rosemoe.sora.widget.CodeEditor
 import java.io.File
 

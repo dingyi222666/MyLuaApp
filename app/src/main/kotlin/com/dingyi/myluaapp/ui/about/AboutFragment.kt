@@ -1,5 +1,7 @@
 package com.dingyi.myluaapp.ui.about
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +45,28 @@ class AboutFragment : BaseFragment<FragmentAboutBinding, GeneralActivityViewMode
 
         viewBinding.apply {
             versionCode.text = requireActivity.versionName
+            contact.setOnClickListener {
+                //发送邮件到dingyi222666@foxmail.com
+                Intent(Intent.ACTION_SENDTO)
+                    .apply {
+                        data = Uri.parse("mailto:dingyi222666@foxmail.com")
+                        putExtra(Intent.EXTRA_SUBJECT, "")
+                        putExtra(Intent.EXTRA_TEXT, "")
+                    }.also {
+                        startActivity(it)
+                    }
+
+            }
+
+            openSource.setOnClickListener {
+                //打开浏览器，网址为github.com/dingyi222666/MyLuaApp
+                Intent(Intent.ACTION_VIEW)
+                    .apply {
+                        data = Uri.parse("https://github.com/dingyi222666/MyLuaApp")
+                    }.also { startActivity(it) }
+
+            }
+
         }
 
     }

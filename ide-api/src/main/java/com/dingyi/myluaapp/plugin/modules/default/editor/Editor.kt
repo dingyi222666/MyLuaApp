@@ -26,7 +26,7 @@ class Editor(
 ) : Editor {
 
 
-        private var currentColorScheme: EditorColorScheme = SchemeEclipse()
+    private var currentColorScheme: EditorColorScheme = SchemeEclipse()
     private var currentLanguage: Language = EmptyLanguage()
 
     private var currentEditor = WeakReference<CodeEditor>(null)
