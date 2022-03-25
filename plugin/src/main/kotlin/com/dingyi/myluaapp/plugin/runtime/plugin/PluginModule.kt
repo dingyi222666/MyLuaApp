@@ -8,6 +8,7 @@ import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.PluginModule
 import com.dingyi.myluaapp.plugin.api.Properties
+import com.dingyi.myluaapp.plugin.api.build.BuildService
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorService
 
 
@@ -81,9 +82,8 @@ object PluginModule: PluginModule {
         return defaultActionService
     }
 
-    override fun getBuildService(): com.dingyi.myluaapp.plugin.runtime.build.BuildService {
-        return defaultBuildService
-    }
+    override fun <T> getBuildService() = defaultBuildService as BuildService<T>
+
 
     override fun getAssetManager(plugin: Plugin): AssetManager {
         val path = pluginManager?.getPluginPath(plugin)

@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.editor.highlight
 import android.os.Bundle
 import android.util.Log
 import com.dingyi.myluaapp.editor.highlight.HighlightProvider
+import io.github.rosemoe.sora.lang.analysis.IncrementalAnalyzeManager
 import io.github.rosemoe.sora.lang.styling.*
 import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.Content
@@ -11,6 +12,8 @@ import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.Lock
@@ -38,12 +41,14 @@ abstract class IncrementHighlightProvider : HighlightProvider() {
     }
 
 
-    override fun runHighlighting(ref: ContentReference?, delegate: Delegate) {
-
-        processContent()
-
+    override suspend fun runHighlighting(
+        ref: ContentReference?,
+        data: IncrementalEditContent,
+        delegate: Delegate
+    ) = withContext(Dispatchers.IO) {
+        processContent(data)
+        checkDelegate(delegate)
         styles.spans = styles.spans ?: LockedSpans()
-
         runComputeBlock()
     }
 
@@ -84,35 +89,37 @@ abstract class IncrementHighlightProvider : HighlightProvider() {
     }
 
 
-    private fun processContent() {
-        getData()?.let { incrementalEditContent ->
-            when (incrementalEditContent.actionType) {
-                IncrementalEditContent.TYPE.DELETE -> {
-                    requireContent()
-                        .delete(
-                            incrementalEditContent.startPosition.line,
-                            incrementalEditContent.startPosition.column,
-                            incrementalEditContent.endPosition.line,
-                            incrementalEditContent.endPosition.column
-                        )
-                }
-                IncrementalEditContent.TYPE.INSERT -> {
-                    requireContent()
-                        .insert(
-                            incrementalEditContent.startPosition.line, incrementalEditContent
-                                .startPosition.column, incrementalEditContent.actionContent
-                        )
-                }
-                else -> {
+    private fun processContent(incrementalEditContent: IncrementalEditContent) {
+
+        when (incrementalEditContent.actionType) {
+            IncrementalEditContent.TYPE.DELETE -> {
+                requireContent()
+                    .delete(
+                        incrementalEditContent.startPosition.line,
+                        incrementalEditContent.startPosition.column,
+                        incrementalEditContent.endPosition.line,
+                        incrementalEditContent.endPosition.column
+                    )
+            }
+            IncrementalEditContent.TYPE.INSERT -> {
+                Log.e("IncrementHighlightProvider", incrementalEditContent.toString())
+                requireContent()
+                    .insert(
+                        incrementalEditContent.startPosition.line, incrementalEditContent
+                            .startPosition.column, incrementalEditContent.actionContent
+                    )
+            }
+            else -> {
 
                 }
             }
-        }
+
     }
 
 
     override fun reset(content: ContentReference, extraArguments: Bundle) {
-        shadowContent = content.reference.copyText(false)
+        shadowContent = content.reference.copyText(true)
+
         shadowContent?.apply {
             isUndoEnabled = false
         }

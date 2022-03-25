@@ -1,7 +1,6 @@
 package com.dingyi.myluaapp.editor.highlight
 
 import kotlinx.coroutines.Job
-import java.util.concurrent.Future
 
 class JobDelegate: HighlightProvider.Delegate {
 
@@ -12,8 +11,6 @@ class JobDelegate: HighlightProvider.Delegate {
     }
 
     override fun isCancelled(): Boolean {
-        val isCompleted = job?.isCompleted
-
-        return (isCompleted ?: false)
+        return job?.isCompleted ?: false
     }
 }

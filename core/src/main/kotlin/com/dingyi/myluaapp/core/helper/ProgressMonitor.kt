@@ -51,12 +51,12 @@ class ProgressMonitor(
             }
             for (it in afterTask) {
                 it.invoke()
-                afterTask.remove(it)
                 success = checkIsFinish()
                 if (!success) {
                     return@launch
                 }
             }
+            afterTask.clear()
             changeProgressState(false)
             isRunning = false
         }

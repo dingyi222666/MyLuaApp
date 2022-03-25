@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.editor.highlight
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Base64DataException
 import android.util.Log
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
@@ -12,7 +13,9 @@ import io.github.rosemoe.sora.lang.styling.MappedSpans
 import io.github.rosemoe.sora.lang.styling.Styles
 import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.ContentReference
+import io.github.rosemoe.sora.util.IntPair
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
 import java.lang.Exception
 import java.lang.Runnable
 
@@ -30,6 +33,7 @@ abstract class HighlightProvider : AnalyzeManager {
     private var superJob: Job? = Job()
 
     protected var coroutine: CoroutineScope? = CoroutineScope(Dispatchers.IO + (superJob ?: Job()))
+
 
     protected val runTaskList = mutableListOf<Job>()
 
@@ -53,13 +57,10 @@ abstract class HighlightProvider : AnalyzeManager {
     }
 
     private fun cancelRunTask() {
-
-        runTaskList.removeAll {
-            if (!it.isCompleted) {
-                it.cancel("cancel")
-            }
-            true
+        runTaskList.forEach {
+            it.cancel()
         }
+        runTaskList.clear()
     }
 
     @UiThread
@@ -71,6 +72,10 @@ abstract class HighlightProvider : AnalyzeManager {
 
 
     override fun insert(start: CharPosition, end: CharPosition, insertedContent: CharSequence) {
+        if (start.toIntPair() == end.toIntPair()) {
+            return
+        }
+
         data?.apply {
             actionType = IncrementalEditContent.TYPE.INSERT
             startPosition = start
@@ -96,11 +101,15 @@ abstract class HighlightProvider : AnalyzeManager {
     }
 
 
-    protected fun requireData(): IncrementalEditContent {
+    private fun requireData(): IncrementalEditContent {
         return checkNotNull(data)
     }
 
     override fun delete(start: CharPosition, end: CharPosition, deletedContent: CharSequence) {
+
+        if (start.toIntPair() == end.toIntPair()) {
+            return
+        }
 
         data?.apply {
             actionType = IncrementalEditContent.TYPE.DELETE
@@ -118,15 +127,16 @@ abstract class HighlightProvider : AnalyzeManager {
         runHighlighting()
     }
 
-    fun runHighlighting() {
+     private fun runHighlighting() {
         val delegate = JobDelegate()
 
-        coroutine?.launch(start = CoroutineStart.LAZY, context = Dispatchers.IO) {
+        coroutine?.launch(context = Dispatchers.IO) {
             Log.v("HighlightProvider", "Start Highlight in thread:${Thread.currentThread().name}")
             try {
-                runHighlighting(ref, delegate)
+                runHighlighting(ref,requireData().copy(),delegate)
             } catch (e: Exception) {
-                Log.e("HighlightProvider", "Unexpected exception is thrown in the thread.", e)
+                e.printStackTrace(System.err)
+                Log.e("HighlightProvider", "Unexpected exception is thrown in the thread.",e.fillInStackTrace())
             } finally {
                 Log.v("HighlightProvider", "Complete Highlight")
             }
@@ -157,8 +167,9 @@ abstract class HighlightProvider : AnalyzeManager {
     }
 
 
-    abstract fun runHighlighting(
+    abstract suspend fun runHighlighting(
         ref: ContentReference?,
+        data:IncrementalEditContent,
         delegate: Delegate
     )
 

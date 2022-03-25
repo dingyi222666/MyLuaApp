@@ -78,6 +78,13 @@ class PluginManager(private val context: PluginContext) {
     }
 
     suspend fun uninstallPlugin(pluginId: String) = withContext(Dispatchers.IO) {
+        val plugin = allPlugin.find { it.getPluginId() == pluginId } ?: return@withContext
+
+        plugin.uninstall()
+        loadedPlugin.remove(plugin)
+        allPlugin.remove(plugin)
+
+        File(Paths.pluginDir, pluginId).deleteRecursively()
 
     }
 

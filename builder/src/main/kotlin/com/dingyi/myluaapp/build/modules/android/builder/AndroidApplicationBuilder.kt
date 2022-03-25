@@ -17,6 +17,7 @@ class AndroidApplicationBuilder(
     override fun init() {
         addBuildTasks()
         addSyncTasks()
+        super.init()
     }
 
     private fun addSyncTasks() {

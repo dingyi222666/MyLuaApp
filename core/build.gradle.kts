@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    implementation(BuildConfig.Libs.Tools.androlua_standalone)
 
     implementation(BuildConfig.Libs.Tools.multi_languages)
     implementation(BuildConfig.Libs.Tools.mmkv)

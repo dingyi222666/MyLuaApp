@@ -40,6 +40,7 @@ class AndroidModule(
 
     private var defaultBuilder: Builder? = null
 
+    private val eventMap = mutableMapOf<String,MutableList<Runnable>>()
 
     private val defaultMainBuilderScript = DefaultScript(
         File(path, "build.gradle.lua").path
@@ -59,6 +60,12 @@ class AndroidModule(
     override fun isMainModule(): Boolean {
         initType()
         return type == "AndroidApplication"
+    }
+
+    override fun afterInit(runnable: Runnable) {
+        eventMap.getOrPut("afterInit") {
+            mutableListOf()
+        }.add(runnable)
     }
 
     private fun initType() {
@@ -105,6 +112,9 @@ class AndroidModule(
 
 
         initDependencies()
+
+        eventMap.remove("afterInit")?.forEach { it.run() }
+
 
     }
 

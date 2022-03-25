@@ -48,4 +48,9 @@ interface Module : ModuleScript {
      * If is main module,return true
      */
     fun isMainModule(): Boolean = false
+
+    /**
+     * Run tasks in module after init
+     */
+    fun afterInit(runnable: Runnable)
 }

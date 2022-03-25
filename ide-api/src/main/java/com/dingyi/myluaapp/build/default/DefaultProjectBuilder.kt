@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.build.default
 
+import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.builder.Builder
 import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.api.Task
@@ -74,5 +75,9 @@ class DefaultProjectBuilder(
             it.getBuilder().clear()
         }
         System.gc()
+    }
+
+    override fun onInit(function: Runnable) {
+        throw CompileError("not support onInit")
     }
 }

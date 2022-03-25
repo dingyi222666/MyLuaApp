@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
+import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.common.ktx.*
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
@@ -115,7 +116,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
             viewModel.project.value?.let {
                 PluginModule
-                    .getBuildService()
+                    .getBuildService<Service>()
                     .build(it, "sync")
             }
         }

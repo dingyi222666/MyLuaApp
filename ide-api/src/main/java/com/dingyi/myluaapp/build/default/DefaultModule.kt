@@ -32,6 +32,8 @@ open class DefaultModule(
         File(path, "build.gradle.lua").path
     )
 
+    private val eventMap = mutableMapOf<String, MutableList<Runnable>>()
+
     private val allScript = mutableListOf(defaultMainBuilderScript)
 
 
@@ -43,7 +45,7 @@ open class DefaultModule(
 
     override fun init() {
         defaultMainBuilderScript.run()
-
+        eventMap.remove("afterInit")?.forEach { it.run() }
 
     }
 
@@ -77,6 +79,13 @@ open class DefaultModule(
             it.close()
         }
     }
+
+    override fun afterInit(runnable: Runnable) {
+        eventMap.getOrPut("afterInit") {
+            mutableListOf()
+        }.add(runnable)
+    }
+
 
     override fun getMainBuilderScript(): Script {
         return defaultMainBuilderScript

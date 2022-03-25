@@ -5,6 +5,7 @@ import com.dingyi.myluaapp.plugin.api.project.Project
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.zip.ZipFile
 
 abstract class DefaultProject(
     private val pluginContext: PluginContext
@@ -40,12 +41,12 @@ abstract class DefaultProject(
     }
 
     override fun backup(exportPath: File) {
-        TODO("Not yet implemented")
+        TODO("not implemented")
     }
 
 
     override fun walkProjectFile(): FileTreeWalk {
-        TODO("Not yet implemented")
+        return path.walk()
     }
 
 

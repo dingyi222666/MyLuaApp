@@ -37,7 +37,8 @@ class ServiceRepository : ServiceRepository {
 
 
     override fun addService(service: Service) {
-        services.add(service)
+        if (service is HookService) hookServices.add(service) else services.add(service)
+
     }
 
     override fun init() {

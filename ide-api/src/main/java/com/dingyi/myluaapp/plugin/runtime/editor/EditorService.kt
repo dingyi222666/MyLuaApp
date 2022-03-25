@@ -379,7 +379,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
     }
 
     override fun addSupportLanguages(vararg language: String) {
-        supportLanguages.addAll(language)
+        supportLanguages.addAll(language.toList() - supportLanguages)
     }
 
     override fun setCurrentEditor(file: File) {

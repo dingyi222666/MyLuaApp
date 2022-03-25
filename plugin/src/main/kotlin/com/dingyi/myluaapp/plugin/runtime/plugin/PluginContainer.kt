@@ -151,8 +151,14 @@ class PluginContainer(
 
         initContext()
 
+        if (isLoader) {
+            stop()
+        }
+
         pluginInstance
             .onUninstall(pluginContext)
+
+        removePluginToList()
     }
 
     override fun equals(other: Any?): Boolean {

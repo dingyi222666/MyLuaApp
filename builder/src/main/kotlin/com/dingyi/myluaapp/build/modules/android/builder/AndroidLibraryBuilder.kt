@@ -16,6 +16,7 @@ class AndroidLibraryBuilder(
 
     override fun init() {
         addBuildTasks()
+        super.init()
     }
 
     private fun addBuildTasks() {

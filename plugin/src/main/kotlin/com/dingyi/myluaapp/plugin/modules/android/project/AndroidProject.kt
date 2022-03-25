@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.plugin.modules.android.project
 
+import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
@@ -27,7 +28,7 @@ class AndroidProject(
 
     override fun runProject() {
         pluginContext
-            .getBuildService()
+                .getBuildService<Service>()
             .build(this, "build debug")
 
         pluginContext

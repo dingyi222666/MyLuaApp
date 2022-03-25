@@ -6,6 +6,18 @@ import io.github.rosemoe.sora.text.CharPosition
  * The edit content of this edit event
  */
 class IncrementalEditContent {
+    fun copy(): IncrementalEditContent {
+        val new = IncrementalEditContent()
+        new.actionContent = actionContent
+        new.actionType = actionType
+        new.endPosition = endPosition
+        new.startPosition = startPosition
+        return new
+    }
+
+    override fun toString(): String {
+        return "IncrementalEditContent(actionType=$actionType, startPosition=$startPosition, endPosition=$endPosition, actionContent=$actionContent)"
+    }
 
     /**
      * Edit action
@@ -43,6 +55,8 @@ class IncrementalEditContent {
          */
         EMPTY
     }
+
+
 
 
 }

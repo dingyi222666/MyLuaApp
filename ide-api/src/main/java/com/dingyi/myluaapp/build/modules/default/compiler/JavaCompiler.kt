@@ -14,6 +14,7 @@ import java.io.PrintWriter
 import java.nio.charset.Charset
 import java.util.*
 import javax.tools.*
+import javax.tools.JavaCompiler
 
 class JavaCompiler(
     val logger: ILogger
@@ -103,6 +104,8 @@ class JavaCompiler(
 
 
         val result = task.call()
+
+
 
         if (!result) {
             logger.error("e: ${errorStream.toByteArray().decodeToString()}")

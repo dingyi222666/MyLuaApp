@@ -20,7 +20,7 @@ interface PluginContext {
 
     fun getActionService(): ActionService
 
-    fun getBuildService(): BuildService<*>
+    fun <T> getBuildService(): BuildService<T>
 
     fun getAssetManager(plugin: Plugin): AssetManager
 

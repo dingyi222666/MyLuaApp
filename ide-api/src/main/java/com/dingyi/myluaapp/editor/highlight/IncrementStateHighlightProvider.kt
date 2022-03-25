@@ -1,12 +1,11 @@
 package com.dingyi.myluaapp.editor.highlight
 
 import android.os.Bundle
-import io.github.rosemoe.sora.lang.analysis.AsyncIncrementalAnalyzeManager
-import io.github.rosemoe.sora.lang.analysis.IncrementalAnalyzeManager
 import io.github.rosemoe.sora.lang.styling.*
 import io.github.rosemoe.sora.text.ContentReference
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.Collections.synchronizedList
 
 /**
@@ -32,33 +31,33 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
 
 
 
-    override fun runHighlighting(
+    override suspend fun runHighlighting(
         ref: ContentReference?,
+        data:IncrementalEditContent,
         delegate: Delegate
-    ) {
+    ) = withContext(Dispatchers.IO) {
 
+        super.runHighlighting(ref,data,delegate)
 
-        super.runHighlighting(ref,delegate)
-
-        when (requireData().actionType) {
+        when (data.actionType) {
             IncrementalEditContent.TYPE.INSERT -> {
-                doInsertHighlight(delegate)
+                doInsertHighlight(data)
             }
             IncrementalEditContent.TYPE.DELETE -> {
-                doDeleteHighlight(delegate)
+                doDeleteHighlight(data)
             }
             IncrementalEditContent.TYPE.EMPTY -> {
-                doFullHighlight(delegate)
+                doFullHighlight()
             }
         }
-
+        checkDelegate(delegate)
         updateStyle(styles)
     }
 
 
-    private fun doDeleteHighlight(delegate: Delegate) {
+    private fun doDeleteHighlight(data: IncrementalEditContent) {
 
-        val data = requireData()
+
         val startLine = data.startPosition.line
         val endLine = data.endPosition.line
 
@@ -91,15 +90,15 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
                 break
             }
             ++line
-            checkDelegate(delegate)
+
         }
 
 
     }
 
-    private fun doInsertHighlight(delegate: Delegate) {
+    private fun doInsertHighlight(data: IncrementalEditContent) {
 
-        val data = requireData()
+
         val startLine = data.startPosition.line
         val endLine = data.endPosition.line
         var line = startLine
@@ -128,7 +127,6 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
             }
 
             ++line
-            checkDelegate(delegate)
         }
 
 
@@ -146,17 +144,16 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
             )
             lineStates[line] = res
             ++line
-            checkDelegate(delegate)
         }
+
 
     }
 
 
 
-    private fun doFullHighlight(delegate: Delegate) {
+    private fun doFullHighlight() {
         val modifySpan = styles.spans.modify()
         for (line in 0 until requireContent().lineCount) {
-            checkDelegate(delegate)
             val lineText = requireContent().getLine(line)
             val lastState = lineStates.getOrNull(line - 1)
             val lineState = tokenizeLine(lineText, line, lastState)
@@ -170,12 +167,9 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
 
 
     final override fun reset(content: ContentReference, extraArguments: Bundle) {
-        shadowContent = content.reference.copyText(false)
-        shadowContent?.apply {
-            isUndoEnabled = false
-        }
-
         super.reset(content, extraArguments)
+
+
 
     }
 

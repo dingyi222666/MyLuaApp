@@ -63,6 +63,8 @@ object BuildConfig {
 
         const val preferences_dsl_version = "2.2.0"
 
+        const val androlua_standalone_version = "1.0.2"
+
     }
 
     object Libs {
@@ -136,6 +138,8 @@ object BuildConfig {
             const val zip4j = "net.lingala.zip4j:zip4j:${Versions.zip4j_version}"
 
             const val mmkv = "com.tencent:mmkv:${Versions.mmkv_version}"
+
+            const val androlua_standalone = "io.github.dingyi222666:androlua-standlone:${Versions.androlua_standalone_version}"
 
         }
 

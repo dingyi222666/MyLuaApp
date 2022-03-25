@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.plugin.modules.lua
 
+import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
@@ -8,6 +9,7 @@ import com.dingyi.myluaapp.plugin.modules.default.action.FileTagMenuAction
 import com.dingyi.myluaapp.plugin.modules.default.action.SymbolClickAction
 import com.dingyi.myluaapp.plugin.modules.default.editor.EditorProvider
 import com.dingyi.myluaapp.plugin.modules.lua.action.CreateEditorAction
+import com.dingyi.myluaapp.plugin.modules.lua.build.LuaBuildService
 
 class MainPlugin: Plugin {
 
@@ -22,21 +24,23 @@ class MainPlugin: Plugin {
     override fun onStart(context: PluginContext) {
 
 
-        context
-            .getEditorService()
-            .apply {
-                addSupportLanguages("lua")
-            }
+        context.apply {
+            getEditorService()
+                .apply {
+                    addSupportLanguages("lua", "aly")
+                }
 
-        context
-            .getActionService()
-            .apply {
-                registerAction(
-                    getJavaClass<CreateEditorAction>(),
-                    DefaultActionKey.CREATE_EDITOR_ACTION
-                )
+            getActionService()
+                .apply {
+                    registerAction(
+                        getJavaClass<CreateEditorAction>(),
+                        DefaultActionKey.CREATE_EDITOR_ACTION
+                    )
+                }
 
-            }
+            getBuildService<Service>()
+                .addBuildService(LuaBuildService())
+        }
     }
 
     override fun onStop(context: PluginContext) {

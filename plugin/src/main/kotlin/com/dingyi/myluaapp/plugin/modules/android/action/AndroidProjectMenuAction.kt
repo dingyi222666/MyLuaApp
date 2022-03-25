@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.plugin.modules.android.action
 
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
+import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
@@ -24,7 +25,7 @@ class AndroidProjectMenuAction : Action<Unit> {
                     callBuildListener(argument.getPluginContext())
 
                     argument.getPluginContext()
-                        .getBuildService()
+                        .getBuildService<Service>()
                         .build(project, "sync")
                     true
                 }
@@ -34,7 +35,7 @@ class AndroidProjectMenuAction : Action<Unit> {
                     menu("构建debug包").click {
                         callBuildListener(argument.getPluginContext())
                         argument.getPluginContext()
-                            .getBuildService()
+                            .getBuildService<Service>()
                             .build(project, "build debug")
 
                         true
@@ -46,7 +47,7 @@ class AndroidProjectMenuAction : Action<Unit> {
                 menu("清除缓存").click {
                     callBuildListener(argument.getPluginContext())
                     argument.getPluginContext()
-                        .getBuildService()
+                        .getBuildService<Service>()
                         .build(project, "clean")
 
                     true

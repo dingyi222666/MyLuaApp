@@ -12,6 +12,8 @@ import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 
 class LuaIncrementHighlightProvider : IncrementStateHighlightProvider<LuaIncrementHighlightProvider.LuaLexerState>() {
 
+
+
     override fun computeBlocks(
         text: Content,
         styles: Styles,
@@ -313,6 +315,10 @@ class LuaIncrementHighlightProvider : IncrementStateHighlightProvider<LuaIncreme
         return LineTokenizeResult(currentLexerState, result)
     }
 
+
+
+
+
     //e.g: [===[ / [[ / --[===[
     private fun matchCommentStart(string: CharSequence): CharSequence {
         // first char,must be '-' or '['
@@ -375,7 +381,7 @@ class LuaIncrementHighlightProvider : IncrementStateHighlightProvider<LuaIncreme
         val size = string.length
 
         //If last index char not equals ']',will return empty string
-        if (string.last() != ']' || string.isEmpty()) {
+         if (string.last() != ']' || string.isEmpty()) {
             return ""
         }
 

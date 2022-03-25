@@ -15,7 +15,7 @@ open class DefaultBuilder(
 
     protected val buildTasks = mutableListOf<Task>()
 
-
+    private val onInitList = mutableListOf<Runnable>()
 
     override fun dependsOn(task: Task, dependsTask: Task) {
         arrayOf(buildTasks, cleanTasks, syncTasks).forEach {
@@ -27,6 +27,7 @@ open class DefaultBuilder(
 
     //Only call in sub class
     protected fun addTask(task: Task, mutableList: MutableList<Task>) {
+
         mutableList.add(task)
     }
 
@@ -44,7 +45,10 @@ open class DefaultBuilder(
 
 
     override fun init() {
-
+        onInitList.removeAll {
+            it.run()
+            true
+        }
     }
 
     override fun getTaskByName(name: String): Task {
@@ -59,5 +63,9 @@ open class DefaultBuilder(
             it.clear()
         }
         System.gc()
+    }
+
+    override fun onInit(function: Runnable) {
+        onInitList.add(function)
     }
 }

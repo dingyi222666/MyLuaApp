@@ -36,15 +36,20 @@ android {
 dependencies {
     api(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 
-    implementation(BuildConfig.Libs.Google.material)
+
+    compileOnly("org.eclipse.jdt:ecj:3.26.0")
+    compileOnly(files("../builder/libs/javax-tools.jar"))
+
+    compileOnly(BuildConfig.Libs.Google.material)
+    compileOnly(BuildConfig.Libs.Tools.androlua_standalone)
 
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
-    implementation(project(":common"))
+    compileOnly(project(":common"))
 
-    implementation(BuildConfig.Libs.AndroidX.appcompat)
-    implementation(BuildConfig.Libs.Tools.mmkv)
+    compileOnly(BuildConfig.Libs.AndroidX.appcompat)
+    compileOnly(BuildConfig.Libs.Tools.mmkv)
     BuildConfig.Libs.Views.sora_editor.forEach {
-        implementation(it) {
+        compileOnly(it) {
             exclude("xml-apis", "xml-apis")
             exclude("xerces", "xercesImpl")
         }

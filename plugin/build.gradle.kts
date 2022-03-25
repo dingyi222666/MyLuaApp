@@ -82,6 +82,8 @@ dependencies {
 
     implementation(BuildConfig.Libs.Google.gson)
 
+    implementation(BuildConfig.Libs.Tools.androlua_standalone)
+
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
 
     implementation(BuildConfig.Libs.AndroidX.appcompat)
