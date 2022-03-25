@@ -43,8 +43,8 @@ class AndroidProject(
 
     override fun getFileTemplates(): List<FileTemplate> {
         return readDefaultFileTemplates(
-            File(Paths.assetsDir, "plugin/default_template.json"),
-            File(Paths.assetsDir, "plugin/lua_project_template.json")
+            File(pluginContext.getPluginDir(), "default_template.json"),
+            File(pluginContext.getPluginDir(), "lua_project_template.json")
         )
     }
 

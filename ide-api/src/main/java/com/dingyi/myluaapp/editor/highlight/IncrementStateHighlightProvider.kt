@@ -17,8 +17,13 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
 
     private val lineStates = synchronizedList(mutableListOf<LineTokenizeResult<T>>())
 
-
-
+    /**
+     * tokenize line and return tokenize result
+     * @param lineString line string
+     * @param line line number
+     * @param tokenizeResult last line tokenize result
+     * @return tokenize result
+     */
     abstract fun tokenizeLine(
         lineString: CharSequence,
         line: Int,
@@ -69,7 +74,6 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
             mdf.deleteLineAt(startLine + 1)
             ++line
         }
-
 
         var res = lineStates
             .getOrNull(startLine - 1)
@@ -183,12 +187,19 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
     }
 
 
+    /**
+     * A LineState and spans data class for a line.
+     */
     class LineTokenizeResult<T>(
         var data: T,
         var spans: List<Span>?
     ) {
 
 
+        /**
+         * Clear and return the spans.
+         * @return The spans.
+         */
         fun clearSpans(): List<Span> {
             var result = spans ?: listOf(
                 Span.obtain(0, EditorColorScheme.TEXT_NORMAL.toLong())

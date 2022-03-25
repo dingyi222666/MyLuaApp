@@ -20,6 +20,7 @@ class ServiceRepository : ServiceRepository {
 
     private val hookServices = mutableListOf<HookService>()
 
+
     override fun loadService(className: String): Service {
         return runCatching {
             val targetClass = Class.forName(className)

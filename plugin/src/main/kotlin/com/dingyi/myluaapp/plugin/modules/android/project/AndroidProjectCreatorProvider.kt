@@ -13,7 +13,7 @@ class AndroidProjectCreatorProvider(
     private val pluginContext: PluginContext
 ) : ProjectCreatorProvider {
 
-    private val jsonPath = File(pluginContext.getPluginDir(),"project/android/project.json")
+    private val jsonPath = File(Paths.tempateDir,"project/android/project.json")
 
     override fun getTemplates(): List<ProjectTemplate> {
 
@@ -24,7 +24,7 @@ class AndroidProjectCreatorProvider(
             ).templates
 
         allTemplate.forEach { templateData ->
-            templateData.path = pluginContext.getPluginDir().path + "/project/android/" + templateData.path
+            templateData.path = Paths.tempateDir + "/project/android/" + templateData.path
         }
 
         return allTemplate.map {

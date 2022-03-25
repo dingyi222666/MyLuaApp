@@ -20,6 +20,13 @@ class JavaCompiler(
 ) {
 
 
+    /**
+     * Compile java source code to class file
+     * @param inputFiles java source code file
+     * @param classPaths java class path
+     * @param option java compiler option
+     * @param outputDir output class file dir
+     */
     suspend fun compile(
         inputFiles: List<File>,
         classPaths: List<File>,
@@ -62,6 +69,7 @@ class JavaCompiler(
         standardJavaFileManager.setLocation(
             StandardLocation.SOURCE_PATH, classPaths
         )
+
 
 
         standardJavaFileManager.setLocation(
@@ -114,17 +122,29 @@ class JavaCompiler(
         }"
     }
 
+    /**
+     * Java compiler option
+     */
     class Option {
         private val map = mutableMapOf<String, String>()
 
+        /**
+         * Add Compiler Option
+         */
         fun addOption(key: String, value: String = "") {
             map[key] = value
         }
 
+        /**
+         * Find Compiler Option
+         */
         fun findOption(key: String): String? {
             return map[key]
         }
 
+        /**
+         * Convert Compiler Option to List
+         */
         fun toList(): List<String> {
             val list = mutableListOf<String>()
 
