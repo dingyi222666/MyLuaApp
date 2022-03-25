@@ -16,6 +16,7 @@ open class DefaultBuilder(
     protected val buildTasks = mutableListOf<Task>()
 
 
+
     override fun dependsOn(task: Task, dependsTask: Task) {
         arrayOf(buildTasks, cleanTasks, syncTasks).forEach {
             if (it.contains(dependsTask)) {

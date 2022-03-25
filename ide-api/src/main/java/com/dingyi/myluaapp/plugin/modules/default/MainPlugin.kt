@@ -25,7 +25,7 @@ class MainPlugin: Plugin {
             .getEditorService()
             .apply {
                 addEditorProvider(EditorProvider(context))
-                addSupportLanguages("lua", "java", "aly", "xml")
+                addSupportLanguages("json", "lua", "java", "aly", "xml")
             }
 
         context

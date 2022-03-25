@@ -100,9 +100,8 @@ class TextMateHighlightProvider(
         val data = tokenizeResult?.data?.ruleStack ?: StackElement.NULL
         val lineText: String = lineString.toString()
         val tokens = mutableListOf<Span>()
-        val lineTokens: ITokenizeLineResult2 =
-            language.getGrammar()
-                .tokenizeLine2(lineText, data)
+        val lineTokens = language.getGrammar()
+            .tokenizeLine2(lineText, data)
         val tokensLength = lineTokens.tokens.size / 2
         for (i in 0 until tokensLength) {
             val startIndex = lineTokens.tokens[2 * i]

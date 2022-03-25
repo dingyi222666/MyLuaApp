@@ -13,7 +13,7 @@ class CreateEditorAction : Action<Unit> {
     override fun callAction(argument: ActionArgument): Unit? {
         argument.getArgument<Editor>(0)?.let { editor ->
 
-            if (editor.getFile().name.endsWith("lua","aly")) {
+            if (editor.getFile().name.endsWith("aly")) {
                 //editor.setLanguage(LuaLanguage())
                 val textMateLanguage = TextMateLanguage
                     .createLanguage(

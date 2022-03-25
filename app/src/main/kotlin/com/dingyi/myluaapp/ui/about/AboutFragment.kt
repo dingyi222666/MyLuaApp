@@ -39,7 +39,6 @@ class AboutFragment : BaseFragment<FragmentAboutBinding, GeneralActivityViewMode
                     title = R.string.about_slogan_title.getString()
 
                     setDisplayHomeAsUpEnabled(true)
-
                 }
         }
 
