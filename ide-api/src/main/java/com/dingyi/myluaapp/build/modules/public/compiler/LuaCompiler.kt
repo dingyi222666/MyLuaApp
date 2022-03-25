@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.build.modules.default.compiler
+package com.dingyi.myluaapp.build.modules.public.compiler
 
 import io.github.dingyi.androlua.vm.SingleLuaVM
 import java.io.File

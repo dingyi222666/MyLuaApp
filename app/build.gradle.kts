@@ -49,7 +49,8 @@ android {
         }
     }
     packagingOptions {
-        resources.excludes.addAll(listOf("META-INF/*","xsd/*","license/*"))
+        resources.excludes.addAll(listOf("META-INF/**","xsd/*","license/*"))
+        resources.pickFirsts.add("kotlin/**")
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

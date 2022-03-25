@@ -46,6 +46,8 @@ android {
 
 
 
+
+
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
@@ -75,6 +77,10 @@ dependencies {
     implementation(BuildConfig.Libs.BuildTools.r8)
     implementation(BuildConfig.Libs.Annotation.build_tools_annotation)
 
+    implementation(BuildConfig.Libs.BuildTools.kotlin_compiler) {
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlinx-coroutines-core-jvm")
+    }
 
     // OkHttp 框架：https://github.com/square/okhttp
     // noinspection GradleDependency

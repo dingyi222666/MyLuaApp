@@ -141,6 +141,7 @@ object BuildConfig {
 
             const val androlua_standalone = "io.github.dingyi222666:androlua-standlone:${Versions.androlua_standalone_version}"
 
+
         }
 
         object BuildTools {
@@ -154,6 +155,8 @@ object BuildConfig {
 
             const val zip_flinger = "com.android:zipflinger:${Versions.android_build_tool_version}"
 
+            const val kotlin_compiler =
+                "org.jetbrains.kotlin:kotlin-compiler-embeddable:${Versions.kotlin_version}"
 
         }
 

@@ -4,8 +4,7 @@ import com.dingyi.myluaapp.build.api.Module
 import com.dingyi.myluaapp.build.api.Task
 import com.dingyi.myluaapp.build.default.DefaultTask
 import com.dingyi.myluaapp.build.modules.android.config.BuildConfig
-import com.dingyi.myluaapp.build.modules.default.compiler.LuaCompiler
-import java.util.*
+import com.dingyi.myluaapp.build.modules.public.compiler.LuaCompiler
 
 class CompileLua(
     private val module: Module

@@ -38,6 +38,8 @@ dependencies {
 
 
     compileOnly("org.eclipse.jdt:ecj:3.26.0")
+    compileOnly(BuildConfig.Libs.BuildTools.kotlin_compiler)
+
     compileOnly(files("../builder/libs/javax-tools.jar"))
 
     compileOnly(BuildConfig.Libs.Google.material)
