@@ -47,12 +47,15 @@ interface Editor {
 
     fun setLanguage(language: Language)
 
+    fun addEditorListener(listener: EditorListener)
+
+    fun removeEditorListener(listener: EditorListener)
 
     fun getCurrentView(): View?
     fun undo()
 
     fun redo()
-    fun clear()
+    fun close()
 
     /**
      * Format the current code

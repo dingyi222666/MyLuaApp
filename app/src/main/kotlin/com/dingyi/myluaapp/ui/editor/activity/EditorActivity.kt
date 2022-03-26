@@ -18,7 +18,7 @@ import com.dingyi.myluaapp.common.ktx.*
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
 import com.dingyi.myluaapp.plugin.api.editor.Editor
-import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.ui.editor.adapter.EditorDrawerPagerAdapter
@@ -109,7 +109,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                 .callAction<Unit>(
                     PluginModule
                         .getActionService()
-                        .createActionArgument(), DefaultActionKey.BUILD_STARTED_KEY
+                        .createActionArgument(), CommonActionKey.BUILD_STARTED_KEY
                 )
 
             delay(20)
@@ -203,7 +203,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                                 .addArgument(getCurrentEditor(tab))
                                 .addArgument({
                                     viewModel.refreshEditor()
-                                }), DefaultActionKey.SHOW_FILE_TAG_MENU
+                                }), CommonActionKey.SHOW_FILE_TAG_MENU
                         )
 
                 }
@@ -225,7 +225,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             PluginModule.getActionService()
                 .callAction<Unit>(
                     PluginModule.getActionService().createActionArgument()
-                        .addArgument(it), DefaultActionKey.CLICK_SYMBOL_VIEW
+                        .addArgument(it), CommonActionKey.CLICK_SYMBOL_VIEW
                 )
         }
 
@@ -277,7 +277,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                         .createActionArgument()
                         .addArgument(viewModel.project.value)
                         .addArgument(projectMenu),
-                    DefaultActionKey
+                    CommonActionKey
                         .ADD_PROJECT_MENU
                 )
 

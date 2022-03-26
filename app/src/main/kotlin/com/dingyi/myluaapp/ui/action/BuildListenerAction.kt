@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.ui.action
 import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
-import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import kotlinx.coroutines.delay
 
@@ -25,7 +25,7 @@ class BuildListenerAction : Action<Unit> {
                 argument
                     .getPluginContext()
                     .getActionService()
-                    .createActionArgument(), DefaultActionKey.OPEN_LOG_FRAGMENT
+                    .createActionArgument(), CommonActionKey.OPEN_LOG_FRAGMENT
             )
 
         return null

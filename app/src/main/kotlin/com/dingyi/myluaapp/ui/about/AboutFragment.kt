@@ -15,6 +15,8 @@ import com.dingyi.myluaapp.common.ktx.versionCode
 import com.dingyi.myluaapp.common.ktx.versionName
 import com.dingyi.myluaapp.databinding.FragmentAboutBinding
 import com.dingyi.myluaapp.ui.GeneralActivityViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AboutFragment : BaseFragment<FragmentAboutBinding, GeneralActivityViewModel>() {
     override fun getViewModelClass(): Class<GeneralActivityViewModel> {
@@ -32,7 +34,9 @@ class AboutFragment : BaseFragment<FragmentAboutBinding, GeneralActivityViewMode
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val requireActivity = requireActivity()
+        GlobalScope.launch {
 
+        }
         if (requireActivity is AppCompatActivity) {
             requireActivity
                 .supportActionBar?.apply {

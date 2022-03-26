@@ -1,11 +1,10 @@
 package com.dingyi.myluaapp.plugin.modules.android.project
 
 import com.dingyi.myluaapp.build.api.service.Service
-import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.project.FileTemplate
-import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 import com.dingyi.myluaapp.plugin.runtime.project.DefaultFileTemplate
 import com.dingyi.myluaapp.plugin.runtime.project.DefaultProject
 import com.google.gson.Gson
@@ -41,7 +40,7 @@ class AndroidProject(
             .callAction<Unit>(
                 pluginContext
                     .getActionService()
-                    .createActionArgument(), DefaultActionKey.BUILD_STARTED_KEY
+                    .createActionArgument(), CommonActionKey.BUILD_STARTED_KEY
             )
 
     }

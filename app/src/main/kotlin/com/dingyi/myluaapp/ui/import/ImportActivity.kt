@@ -37,7 +37,6 @@ class ImportActivity : AppCompatActivity() {
             return
         }
 
-
         contentResolver
             .openInputStream(uri)
             .apply {

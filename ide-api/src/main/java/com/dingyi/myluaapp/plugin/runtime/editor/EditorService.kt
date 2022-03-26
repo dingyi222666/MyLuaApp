@@ -8,7 +8,7 @@ import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.editor.EditorProvider
 import com.dingyi.myluaapp.plugin.api.editor.EditorService
 import com.dingyi.myluaapp.plugin.api.project.Project
-import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 import com.google.gson.Gson
 import java.io.File
 import java.io.FileNotFoundException
@@ -85,7 +85,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
                         pluginContext
                             .getActionService()
                             .createActionArgument()
-                            .addArgument(editor), DefaultActionKey.CREATE_EDITOR_ACTION
+                            .addArgument(editor), CommonActionKey.CREATE_EDITOR_ACTION
                     )
                 return editor
             }
@@ -195,7 +195,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
     override fun clearAllEditor() {
         for (editor in allEditor) {
-            editor.clear()
+            editor.close()
         }
         allEditor.clear()
     }
@@ -244,7 +244,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
                         pluginContext
                             .getActionService()
                             .createActionArgument()
-                            .addArgument(file), DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST
+                            .addArgument(file), CommonActionKey.OPEN_EDITOR_FILE_DELETE_TOAST
                     )
                 closeEditor(file)
                 continue
@@ -323,7 +323,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
                         pluginContext
                             .getActionService()
                             .createActionArgument()
-                            .addArgument(file), DefaultActionKey.OPEN_EDITOR_FILE_DELETE_TOAST
+                            .addArgument(file), CommonActionKey.OPEN_EDITOR_FILE_DELETE_TOAST
                     )
                 closeEditor(file)
                 continue

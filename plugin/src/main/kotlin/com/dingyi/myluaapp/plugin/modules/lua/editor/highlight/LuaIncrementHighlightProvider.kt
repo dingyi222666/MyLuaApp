@@ -2,7 +2,6 @@ package com.dingyi.myluaapp.plugin.modules.lua.editor.highlight
 
 import com.dingyi.myluaapp.editor.lsp.service.lua.common.lexer.lexer.LuaLexer
 import com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.lexer.LuaTokenTypes
-import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.editor.highlight.IncrementStateHighlightProvider
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.Span

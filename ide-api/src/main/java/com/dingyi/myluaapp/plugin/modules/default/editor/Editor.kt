@@ -7,11 +7,16 @@ import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import io.github.rosemoe.sora.widget.CodeEditor
 
 import com.dingyi.myluaapp.plugin.api.editor.Editor
+import com.dingyi.myluaapp.plugin.api.editor.EditorListener
 
 
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
 import com.dingyi.myluaapp.plugin.runtime.editor.EmptyLanguage
+import io.github.rosemoe.sora.event.ContentChangeEvent
+import io.github.rosemoe.sora.event.EventReceiver
+import io.github.rosemoe.sora.event.Unsubscribe
 import io.github.rosemoe.sora.widget.schemes.*
+import io.github.rosemoe.sorakt.subscribeEvent
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,9 +28,9 @@ class Editor(
     private val path: File,
     private val id: Int,
     private val pluginContext: PluginContext
-) : Editor {
+) : Editor, EventReceiver<ContentChangeEvent> {
 
-
+    private val allEditorListener = mutableListOf<EditorListener>()
     private var currentColorScheme: EditorColorScheme = SchemeEclipse()
     private var currentLanguage: Language = EmptyLanguage()
 
@@ -142,6 +147,14 @@ class Editor(
         }
     }
 
+    override fun addEditorListener(listener: EditorListener) {
+        allEditorListener.add(listener)
+    }
+
+    override fun removeEditorListener(listener: EditorListener) {
+        allEditorListener.remove(listener)
+    }
+
     override fun getCurrentView(): View? {
         return currentEditor.get()
     }
@@ -158,8 +171,10 @@ class Editor(
         }
     }
 
-    override fun clear() {
+    override fun close() {
         currentEditor.clear()
+        allEditorListener.forEach { it.onEditorClose() }
+        allEditorListener.clear()
     }
 
     override fun format() {
@@ -174,7 +189,6 @@ class Editor(
             return
         }
 
-
         if (!path.isFile) {
             pluginContext.getEditorService().closeEditor(this)
             throw FileNotFoundException("The File was deleted.")
@@ -183,11 +197,17 @@ class Editor(
         currentEditor.get()?.let {
             path.writeText(it.text.toString())
         }
+
+        allEditorListener.forEach { it.onEditorSave() }
     }
 
     override fun binCurrentView(r: CodeEditor) {
+        if (currentEditor.get() != null) {
+            save()
+            //TODO unsubscribe event
+        }
         currentEditor = WeakReference(r)
-
+        r.subscribeEvent(this)
         r.setEditorLanguage(currentLanguage)
         r.colorScheme = currentColorScheme
     }
@@ -220,6 +240,12 @@ class Editor(
 
     override fun hashCode(): Int {
         return path.absolutePath.hashCode()
+    }
+
+    override fun onReceive(event: ContentChangeEvent, unsubscribe: Unsubscribe) {
+        allEditorListener.forEach {
+            it.onEditorChange(this, event)
+        }
     }
 
 

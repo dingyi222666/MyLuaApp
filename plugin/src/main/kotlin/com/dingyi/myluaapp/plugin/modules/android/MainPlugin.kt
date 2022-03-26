@@ -7,7 +7,7 @@ import com.dingyi.myluaapp.plugin.modules.android.action.AndroidProjectMenuActio
 
 import com.dingyi.myluaapp.plugin.modules.android.project.AndroidProjectCreatorProvider
 import com.dingyi.myluaapp.plugin.modules.android.project.AndroidProjectProvider
-import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 
 class MainPlugin: Plugin {
 
@@ -32,7 +32,7 @@ class MainPlugin: Plugin {
             .apply {
                 registerAction(
                     getJavaClass<AndroidProjectMenuAction>(),
-                    DefaultActionKey.ADD_PROJECT_MENU
+                    CommonActionKey.ADD_PROJECT_MENU
                 )
             }
 

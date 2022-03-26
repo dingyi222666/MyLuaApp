@@ -10,7 +10,7 @@ import com.dingyi.myluaapp.common.ktx.dp
 import com.dingyi.myluaapp.common.ktx.suffix
 import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.databinding.LayoutItemEditorFileListBinding
-import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.editor.MainViewModel
 import com.dingyi.myluaapp.view.treeview.TreeNode
@@ -61,7 +61,7 @@ class EditorNodeBinder(
                 .callAction<Unit>(
                     PluginModule.getActionService().createActionArgument()
                         .addArgument(treeNode.value as File)
-                        .addArgument(viewModel), DefaultActionKey.CLICK_TREE_VIEW_FILE
+                        .addArgument(viewModel), CommonActionKey.CLICK_TREE_VIEW_FILE
                 )
 
 
@@ -89,7 +89,7 @@ class EditorNodeBinder(
                     .getActionService()
                     .createActionArgument()
                     .addArgument(treeNode)
-                    .addArgument(itemView), DefaultActionKey.TREE_LIST_ON_LONG_CLICK
+                    .addArgument(itemView), CommonActionKey.TREE_LIST_ON_LONG_CLICK
             )?.invoke {
                viewModel.updateNode(treeNode)
             }

@@ -6,7 +6,7 @@ import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 import com.dingyi.myluaapp.plugin.api.action.ActionKey
-import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 import com.dingyi.myluaapp.view.treeview.TreeNode
 
 class TreeListOnLongClickAction : Action<(() -> Unit) -> Unit> {
@@ -38,13 +38,13 @@ class TreeListOnLongClickAction : Action<(() -> Unit) -> Unit> {
             menu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.editor_file_list_toolbar_action_new_file ->
-                        callAction(argument, DefaultActionKey.CREATE_PROJECT_FILE, treeNode, block)
+                        callAction(argument, CommonActionKey.CREATE_PROJECT_FILE, treeNode, block)
                     R.id.editor_file_list_long_click_action_rename ->
-                        callAction(argument, DefaultActionKey.RENAME_PROJECT_FILE, treeNode, block)
+                        callAction(argument, CommonActionKey.RENAME_PROJECT_FILE, treeNode, block)
                     R.id.editor_file_list_long_click_action_delete ->
-                        callAction(argument, DefaultActionKey.DELETE_PROJECT_FILE, treeNode, block)
+                        callAction(argument, CommonActionKey.DELETE_PROJECT_FILE, treeNode, block)
                     R.id.editor_file_list_toolbar_action_new_directory ->
-                        callAction(argument,DefaultActionKey.CREATE_PROJECT_DIRECTORY,treeNode,block)
+                        callAction(argument,CommonActionKey.CREATE_PROJECT_DIRECTORY,treeNode,block)
                     else -> false
                 }
                 true

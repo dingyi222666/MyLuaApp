@@ -1,7 +1,6 @@
 package com.dingyi.myluaapp.plugin.modules.android.action
 
 import android.view.MenuItem
-import androidx.core.view.GravityCompat
 import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
@@ -9,7 +8,7 @@ import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.project.Project
 import com.dingyi.myluaapp.plugin.dsl.menu.click
 import com.dingyi.myluaapp.plugin.dsl.menu.dsl
-import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
+import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 
 class AndroidProjectMenuAction : Action<Unit> {
 
@@ -66,7 +65,7 @@ class AndroidProjectMenuAction : Action<Unit> {
             .callAction<Unit>(
                 pluginContext
                     .getActionService()
-                    .createActionArgument(), DefaultActionKey.BUILD_STARTED_KEY
+                    .createActionArgument(), CommonActionKey.BUILD_STARTED_KEY
             )
     }
 
