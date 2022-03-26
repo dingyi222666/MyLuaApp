@@ -2,15 +2,16 @@ package com.dingyi.myluaapp.plugin.modules.lua.editor.highlight
 
 
 import android.util.Log
-import com.dingyi.myluaapp.editor.lsp.service.lua.common.lexer.lexer.LuaLexer
-import com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.lexer.LuaTokenTypes
-import com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.lexer.LuaTokenTypes.*
 import com.dingyi.myluaapp.editor.ktx.addIfNeeded
 import com.dingyi.myluaapp.editor.highlight.LexerHighlightProvider
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.lexer.LuaLexer
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.lexer.LuaTokenTypes
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.lexer.LuaTokenTypes.*
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.MappedSpans
 import io.github.rosemoe.sora.lang.styling.Styles
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
+
 
 class LuaLexerHighlightProvider : LexerHighlightProvider() {
 

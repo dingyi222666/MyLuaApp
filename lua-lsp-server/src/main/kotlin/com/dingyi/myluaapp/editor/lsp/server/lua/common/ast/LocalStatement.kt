@@ -1,4 +1,8 @@
-package com.dingyi.myluaapp.editor.lsp.service.lua.common.ast
+package com.dingyi.myluaapp.editor.lsp.server.lua.common.ast
+
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.ast.ASTNode
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.ast.ExpressionNode
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.ast.StatementNode
 
 /**
  * @author: dingyi

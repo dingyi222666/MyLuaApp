@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.plugin.modules.lua.editor.format
 
-import com.dingyi.myluaapp.editor.lsp.service.lua.common.lexer.LuaLexer
-import com.dingyi.myluaapp.editor.lsp.service.lua.common.lexer.LuaTokenTypes
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.lexer.LuaLexer
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.lexer.LuaTokenTypes
 import java.io.IOException
 import java.lang.StringBuilder
 

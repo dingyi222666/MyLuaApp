@@ -1,5 +1,5 @@
 // Generated from java-escape by ANTLR 4.7.1
-package com.dingyi.myluaapp.editor.lsp.service.lua.common.parser
+package com.dingyi.myluaapp.editor.lsp.server.lua.common.parser
 
 import org.antlr.v4.kotlinruntime.tree.ParseTreeVisitor
 

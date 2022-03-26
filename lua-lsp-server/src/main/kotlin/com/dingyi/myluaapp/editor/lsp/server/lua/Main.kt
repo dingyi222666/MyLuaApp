@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.editor.lsp.service.lua
+package com.dingyi.myluaapp.editor.lsp.server.lua
 
 class Main {
 

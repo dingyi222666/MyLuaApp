@@ -1,9 +1,10 @@
-package com.dingyi.myluaapp.editor.lsp.service.lua.common.ast
+package com.dingyi.myluaapp.editor.lsp.server.lua.common.ast
 
 
-import com.dingyi.myluaapp.editor.lsp.service.lua.common.parser.LuaBaseVisitor
-import com.dingyi.myluaapp.editor.lsp.service.lua.common.parser.LuaLexer
-import com.dingyi.myluaapp.editor.lsp.service.lua.common.parser.LuaParser
+
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.parser.LuaBaseVisitor
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.parser.LuaLexer
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.parser.LuaParser
 import org.antlr.v4.kotlinruntime.CharStreams
 import org.antlr.v4.kotlinruntime.CommonTokenStream
 import org.antlr.v4.kotlinruntime.ParserRuleContext
