@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":ide-api"))
     implementation(project(":common"))
 
+    implementation(BuildConfig.Libs.Tools.lsp4j)
     BuildConfig.Libs.Views.sora_editor.forEach {
         implementation(it) {
             exclude("xml-apis","xml-apis")

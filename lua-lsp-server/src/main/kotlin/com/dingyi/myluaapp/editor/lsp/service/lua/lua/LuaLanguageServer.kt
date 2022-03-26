@@ -1,4 +1,4 @@
-package com.dingyi.lsp.lua.server
+package com.dingyi.myluaapp.editor.lsp.service.lua.lua
 
 import org.eclipse.lsp4j.InitializeParams
 import org.eclipse.lsp4j.InitializeResult

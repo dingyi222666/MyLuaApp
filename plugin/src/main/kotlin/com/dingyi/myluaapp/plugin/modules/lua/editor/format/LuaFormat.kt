@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.plugin.modules.lua.editor.format
 
-import com.dingyi.lsp.lua.common.lexer.LuaLexer
-import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes
+import com.dingyi.myluaapp.editor.lsp.service.lua.common.lexer.lexer.LuaLexer
+import com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.lexer.LuaTokenTypes
 import java.io.IOException
 import java.lang.StringBuilder
 
@@ -15,7 +15,10 @@ object LuaFormat {
 
 
     fun createAutoIndent(text: CharSequence?): Int {
-        val lexer = LuaLexer(text)
+        val lexer =
+            LuaLexer(
+                text
+            )
         var idt = 0
         try {
             while (true) {
@@ -40,7 +43,10 @@ object LuaFormat {
     fun format(text: CharSequence?, width: Int): CharSequence {
         val builder = StringBuilder()
         var isNewLine = true
-        val lexer = LuaLexer(text)
+        val lexer =
+            LuaLexer(
+                text
+            )
         try {
             var idt = 0
             while (true) {

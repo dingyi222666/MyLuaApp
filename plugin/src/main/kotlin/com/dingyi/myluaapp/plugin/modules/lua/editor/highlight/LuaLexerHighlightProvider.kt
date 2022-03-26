@@ -2,20 +2,15 @@ package com.dingyi.myluaapp.plugin.modules.lua.editor.highlight
 
 
 import android.util.Log
-import com.dingyi.lsp.lua.common.lexer.LuaLexer
-import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes
-import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes.*
+import com.dingyi.myluaapp.editor.lsp.service.lua.common.lexer.lexer.LuaLexer
+import com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.lexer.LuaTokenTypes
+import com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.lexer.LuaTokenTypes.*
 import com.dingyi.myluaapp.editor.ktx.addIfNeeded
-import com.dingyi.myluaapp.editor.highlight.IncrementalEditContent
 import com.dingyi.myluaapp.editor.highlight.LexerHighlightProvider
 import io.github.rosemoe.sora.lang.styling.CodeBlock
 import io.github.rosemoe.sora.lang.styling.MappedSpans
 import io.github.rosemoe.sora.lang.styling.Styles
-import io.github.rosemoe.sora.text.ContentReference
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 
 class LuaLexerHighlightProvider : LexerHighlightProvider() {
 
@@ -30,7 +25,10 @@ class LuaLexerHighlightProvider : LexerHighlightProvider() {
         kotlin.runCatching {
 
 
-            val lexer = LuaLexer(text)
+            val lexer =
+                LuaLexer(
+                    text
+                )
             val blockStack = ArrayDeque<CodeBlock>()
             var token: LuaTokenTypes? = lexer.advance()
             var maxSwitch = 1

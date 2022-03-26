@@ -1,4 +1,4 @@
-package com.dingyi.lsp.lua.common.ast
+package com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.ast
 
 /**
  * @author: dingyi

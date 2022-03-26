@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.plugin.modules.lua.editor.highlight
 
-import com.dingyi.lsp.lua.common.lexer.LuaLexer
-import com.dingyi.lsp.lua.common.lexer.LuaTokenTypes
+import com.dingyi.myluaapp.editor.lsp.service.lua.common.lexer.lexer.LuaLexer
+import com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.lexer.LuaTokenTypes
 import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.editor.highlight.IncrementStateHighlightProvider
 import io.github.rosemoe.sora.lang.styling.CodeBlock
@@ -21,7 +21,10 @@ class LuaIncrementHighlightProvider : IncrementStateHighlightProvider<LuaIncreme
     ): List<CodeBlock>? {
         return kotlin.runCatching {
 
-            val lexer = LuaLexer(text.copyText())
+            val lexer =
+                LuaLexer(
+                    text.copyText()
+                )
             val blockStack = ArrayDeque<CodeBlock>()
             val resultBlock = mutableListOf<CodeBlock>()
             var token: LuaTokenTypes? = lexer.advance()
@@ -105,7 +108,10 @@ class LuaIncrementHighlightProvider : IncrementStateHighlightProvider<LuaIncreme
         tokenizeResult: LineTokenizeResult<LuaLexerState>?
     ): LineTokenizeResult<LuaLexerState> {
 
-        val lexer = LuaLexer(lineString)
+        val lexer =
+            LuaLexer(
+                lineString
+            )
 
         val result = mutableListOf<Span>()
 

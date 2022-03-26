@@ -27,8 +27,8 @@ tasks.register<com.strumenta.antlrkotlin.gradleplugin.AntlrKotlinTask>("generate
         project.dependencies.create(BuildConfig.Libs.Tools.antlr_kotlin_target)
     )
     maxHeapSize = "64m"
-    packageName = "com.strumenta.antlrkotlin.examples"
-    arguments = listOf("-visitor", "-package", "com.dingyi.lsp.lua.common.parser")
+    packageName = "com.dingyi.myluaapp.editor.lsp.service.lua.antlrkotlin.generated"
+    arguments = listOf("-visitor", "-package", "com.dingyi.myluaapp.editor.lsp.service.lua.common.parser")
     source = project.objects
         .sourceDirectorySet("antlr", "antlr")
         .srcDir("src/main/antlr").apply {

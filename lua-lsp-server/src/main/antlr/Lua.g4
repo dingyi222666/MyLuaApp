@@ -74,7 +74,6 @@ attrib
 
 retstat
     : 'return' explist? ';'? (comment*)?
-
     ;
 
 label

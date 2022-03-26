@@ -28,7 +28,7 @@ object BuildConfig {
     object Versions {
         const val kotlin_version = "1.6.10"
         const val android_gradle_plugin_version = "7.0.3"
-        const val antlr_kotlin_version = "6304d5c1c4"
+        const val antlr_kotlin_version = "6cf22fb195"
         const val gson_version = "2.8.8"
         const val material_version = "1.5.0"
         const val appcompat_version = "1.4.1"
@@ -64,6 +64,9 @@ object BuildConfig {
         const val preferences_dsl_version = "2.2.0"
 
         const val androlua_standalone_version = "1.0.2"
+
+
+        const val jdt_version = "3.29.0"
 
     }
 
@@ -142,9 +145,11 @@ object BuildConfig {
             const val androlua_standalone = "io.github.dingyi222666:androlua-standlone:${Versions.androlua_standalone_version}"
 
 
+
         }
 
         object BuildTools {
+            const val ecj_compiler = "org.eclipse.jdt:ecj:${Versions.jdt_version}"
             const val conscrypt = "org.conscrypt:conscrypt-android:2.5.2"
 
             const val javapoet = "com.squareup:javapoet:${Versions.javapoet_version}"

@@ -1,4 +1,4 @@
-package com.dingyi.lsp.lua.common.ast
+package com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.ast
 
 import com.dingyi.lsp.lua.common.parser.LuaBaseVisitor
 import com.dingyi.lsp.lua.common.parser.LuaLexer

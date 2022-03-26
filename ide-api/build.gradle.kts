@@ -37,15 +37,13 @@ dependencies {
     api(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 
 
-    compileOnly("org.eclipse.jdt:ecj:3.26.0")
+
+    compileOnly(BuildConfig.Libs.BuildTools.ecj_compiler)
     compileOnly(BuildConfig.Libs.BuildTools.kotlin_compiler)
-
     compileOnly(files("../builder/libs/javax-tools.jar"))
-
     compileOnly(BuildConfig.Libs.Google.material)
     compileOnly(BuildConfig.Libs.Tools.androlua_standalone)
-
-    implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
+    compileOnly(BuildConfig.Libs.Tools.lsp4j)
     compileOnly(project(":common"))
 
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
@@ -56,4 +54,5 @@ dependencies {
             exclude("xerces", "xercesImpl")
         }
     }
+    implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
 }

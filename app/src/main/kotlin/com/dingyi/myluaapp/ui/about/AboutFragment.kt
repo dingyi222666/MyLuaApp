@@ -51,10 +51,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding, GeneralActivityViewMode
                         data = Uri.parse("mailto:dingyi222666@foxmail.com")
                         putExtra(Intent.EXTRA_SUBJECT, "")
                         putExtra(Intent.EXTRA_TEXT, "")
-                    }.also {
-                        startActivity(it)
-                    }
-
+                    }.also { startActivity(it) }
             }
 
             openSource.setOnClickListener {
