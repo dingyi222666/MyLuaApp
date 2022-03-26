@@ -162,6 +162,12 @@ class Editor(
         currentEditor.clear()
     }
 
+    override fun format() {
+        currentEditor.get()
+            ?.formatCodeAsync()
+
+    }
+
     override fun save() {
 
         if (currentEditor.get() == null) {

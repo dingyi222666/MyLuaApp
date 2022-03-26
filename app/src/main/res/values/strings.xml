@@ -141,4 +141,5 @@
     </string-array>
     <string name="about_development_title">开发相关</string>
     <string name="about_open_source">开源地址</string>
+    <string name="editor_menu_tab_close_all">关闭所有</string>
 </resources>

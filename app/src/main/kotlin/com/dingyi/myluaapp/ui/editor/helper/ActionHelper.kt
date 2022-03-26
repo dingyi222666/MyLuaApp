@@ -50,7 +50,11 @@ object ActionHelper {
                     activity.lifecycle,
                     DefaultActionKey.BUILD_STARTED_KEY
                 )
-
+                registerAction(
+                    getJavaClass<FileTagMenuAction>(),
+                    activity.lifecycle,
+                    DefaultActionKey.SHOW_FILE_TAG_MENU
+                )
                 registerForwardArgument(
                     DefaultActionKey.DELETE_PROJECT_FILE,
                     DefaultActionKey.CREATE_PROJECT_FILE,

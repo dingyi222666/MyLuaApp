@@ -79,7 +79,6 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             val editor = i.createEditor(editorPath)
             if (editor != null) {
 
-
                 pluginContext
                     .getActionService()
                     .callAction<Unit>(

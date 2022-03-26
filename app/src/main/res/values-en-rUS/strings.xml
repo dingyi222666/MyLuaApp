@@ -142,5 +142,6 @@
     <string name="main_dialog_delete_project_message">Are you sure want to delete it? Unrecoverable it after deletion.</string>
     <string name="editor_build_log_title">Build Log</string>
     <string name="about_open_source">Open Source</string>
+    <string name="editor_menu_tab_close_all">Close All</string>
 
 </resources>

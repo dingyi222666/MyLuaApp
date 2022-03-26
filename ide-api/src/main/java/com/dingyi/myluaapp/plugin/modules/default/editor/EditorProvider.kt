@@ -27,7 +27,6 @@ class EditorProvider(
             editor.setLanguage(language)
         }
 
-
         return editor
     }
 }

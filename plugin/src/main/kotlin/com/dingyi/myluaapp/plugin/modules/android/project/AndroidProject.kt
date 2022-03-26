@@ -27,6 +27,11 @@ class AndroidProject(
 
 
     override fun runProject() {
+
+        pluginContext
+            .getEditorService()
+            .saveEditorServiceState()
+
         pluginContext
                 .getBuildService<Service>()
             .build(this, "build debug")

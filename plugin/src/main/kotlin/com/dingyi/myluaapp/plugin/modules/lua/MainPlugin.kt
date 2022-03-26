@@ -5,7 +5,6 @@ import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.modules.default.action.DefaultActionKey
-import com.dingyi.myluaapp.plugin.modules.default.action.FileTagMenuAction
 import com.dingyi.myluaapp.plugin.modules.default.action.SymbolClickAction
 import com.dingyi.myluaapp.plugin.modules.default.editor.EditorProvider
 import com.dingyi.myluaapp.plugin.modules.lua.action.CreateEditorAction

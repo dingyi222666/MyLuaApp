@@ -35,7 +35,11 @@
         app:showAsAction="withText|ifRoom"
 
         android:title="@string/editor_menu_code">
-
+        <menu>
+            <item
+                android:id="@+id/editor_action_code_format"
+                android:title="@string/editor_menu_format" />
+        </menu>
     </item>
     <item
         android:id="@+id/editor_action_plugin"

@@ -212,7 +212,6 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
 
 
-
         listOf(
             viewBinding.appbarLayout,
             viewBinding.container,
@@ -299,6 +298,7 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                         openDrawer(GravityCompat.START)
                 }
             }
+            R.id.editor_action_code_format -> viewModel.currentEditor.value?.format()
             R.id.editor_action_save -> viewModel.saveEditor()
             R.id.editor_action_undo -> viewModel.currentEditor.value?.undo()
             R.id.editor_action_redo -> viewModel.currentEditor.value?.redo()

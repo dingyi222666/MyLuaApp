@@ -42,7 +42,6 @@ class TextMateLanguage(
     }
 
 
-    var tabSize = 4;
 
 
     override fun destroy() {

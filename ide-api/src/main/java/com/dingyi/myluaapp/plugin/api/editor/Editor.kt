@@ -9,7 +9,11 @@ import java.io.File
 
 interface Editor {
 
+    /**
+     * Get current editor document.
+     */
     fun getText(): CharSequence?
+
 
     fun getCurrentLine():Int
 
@@ -49,5 +53,10 @@ interface Editor {
 
     fun redo()
     fun clear()
+
+    /**
+     * Format the current code
+     */
+    fun format()
 
 }

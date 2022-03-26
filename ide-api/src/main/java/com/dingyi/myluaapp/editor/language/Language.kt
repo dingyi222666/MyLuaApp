@@ -21,4 +21,7 @@ abstract class Language : EmptyLanguage() {
         return currentHighlightProvider ?: getHighlightProvider()
     }
 
+    var tabSize = 4;
+
+
 }

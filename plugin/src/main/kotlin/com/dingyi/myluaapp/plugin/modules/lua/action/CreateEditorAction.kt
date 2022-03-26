@@ -17,14 +17,18 @@ class CreateEditorAction : Action<Unit> {
                 //editor.setLanguage(LuaLanguage())
                 val textMateLanguage = TextMateLanguage
                     .createLanguage(
-                        File(Paths.assetsDir,"res/textmate/lua/lua.tmLanguage.json"),
-                        File(Paths.assetsDir,"res/textmate/theme/default_theme.json"),
-                        File(Paths.assetsDir,"res/textmate/lua/language-configuration.json"),
+                        File(Paths.assetsDir, "res/textmate/lua/lua.tmLanguage.json"),
+                        File(Paths.assetsDir, "res/textmate/theme/default_theme.json"),
+                        File(Paths.assetsDir, "res/textmate/lua/language-configuration.json"),
                         "lua"
                     )
 
                 editor.setColorScheme(textMateLanguage.getColorScheme())
                 editor.setLanguage(textMateLanguage)
+            }
+
+            if (editor.getFile().extension.contains("lua") or editor.getFile().extension.contains("aly")) {
+                editor.setLanguage(LuaLanguage(editor.getLanguage()))
             }
         }
 
