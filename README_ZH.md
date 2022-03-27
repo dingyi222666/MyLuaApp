@@ -1,9 +1,9 @@
 # MyLuaApp
-![[GitHub license](https://img.shields.io/github/license/dingyi222666/MyLuaApp)](https://github.com/dingyi222666/MyLuaApp/blob/main/LICENSE)
-![[Telegram](https://img.shields.io/badge/Join-Telegram-blue)](https://t.me/MyLuaApp)
-![[QQ](https://img.shields.io/badge/Join-QQ_Group-ff69b4)](https://jq.qq.com/?_wv=1027&k=XnJ4FMvS)  
+[![GitHub license](https://img.shields.io/github/license/dingyi222666/MyLuaApp)](https://github.com/dingyi222666/MyLuaApp/blob/master/LICENSE)
+[![Telegram](https://img.shields.io/badge/Join-Telegram-blue)](https://t.me/MyLuaApp)
+[![QQ](https://img.shields.io/badge/Join-QQ_Group-ff69b4)](https://jq.qq.com/?_wv=1027&k=XnJ4FMvS)   
 ![Minimum SDK](https://img.shields.io/badge/Minimum%20SDK-26-%23ff5252)
-![CI Build Stauts](https://github.com/dingyi222666/MyLuaApp/actions/workflows/android_workflow.yml/badge.svg)
+[![CI Build Stauts](https://github.com/dingyi222666/MyLuaApp/actions/workflows/android-debug-build.yml/badge.svg)](https://github.com/dingyi222666/MyLuaApp/tree/master/.github/workflows/android-debug-build.yml)
 
 [English](https://github.com/dingyi222666/MyLuaApp/tree/master/README.md) | 中文
 
