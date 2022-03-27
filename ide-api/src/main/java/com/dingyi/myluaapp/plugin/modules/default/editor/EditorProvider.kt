@@ -5,6 +5,7 @@ import com.dingyi.myluaapp.editor.language.textmate.TextMateLanguageProvider
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 
 import com.dingyi.myluaapp.plugin.api.editor.EditorProvider
+import com.dingyi.myluaapp.plugin.api.project.Project
 import java.io.File
 
 class EditorProvider(
@@ -13,12 +14,12 @@ class EditorProvider(
 
     private var id = 0
 
-    override fun createEditor(editorPath: File): Editor {
+    override fun createEditor(project: Project,editorPath: File): Editor {
 
         id++
 
         val editor =
-            Editor(editorPath, id, pluginContext)
+            Editor(editorPath, id,project, pluginContext)
 
         val language = TextMateLanguageProvider.getTextMateLanguage(editorPath)
 

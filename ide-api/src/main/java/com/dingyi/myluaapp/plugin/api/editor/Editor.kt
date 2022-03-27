@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.plugin.api.editor
 
 import android.view.View
 import com.dingyi.myluaapp.editor.language.Language
+import com.dingyi.myluaapp.plugin.api.project.Project
 import io.github.rosemoe.sora.widget.CodeEditor
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
@@ -52,8 +53,10 @@ interface Editor {
     fun removeEditorListener(listener: EditorListener)
 
     fun getCurrentView(): View?
-    fun undo()
 
+    fun getProject():Project
+
+    fun undo()
     fun redo()
     fun close()
 

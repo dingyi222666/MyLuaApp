@@ -3,12 +3,11 @@ package com.dingyi.myluaapp.editor.lsp.server
 import android.os.Process
 import android.util.Log
 import com.dingyi.myluaapp.common.ktx.checkNotNull
-import com.dingyi.myluaapp.common.ktx.getJavaClass
-import com.dingyi.myluaapp.editor.lsp.editor.Document
-import com.dingyi.myluaapp.editor.lsp.ktx.toURI
+import com.dingyi.myluaapp.editor.lsp.document.Document
 import com.dingyi.myluaapp.editor.lsp.server.connect.StreamConnectionProvider
 import com.dingyi.myluaapp.editor.lsp.server.definition.LanguageServerDefinition
 import com.dingyi.myluaapp.plugin.api.editor.Editor
+import com.dingyi.myluaapp.plugin.api.project.Project
 import org.eclipse.lsp4j.*
 import org.eclipse.lsp4j.jsonrpc.Launcher
 import org.eclipse.lsp4j.jsonrpc.MessageConsumer
@@ -16,22 +15,21 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either
 import org.eclipse.lsp4j.services.LanguageServer
 import java.io.IOException
 import java.net.URI
-import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
+import java.util.concurrent.TimeUnit
 
 
 class LanguageServerWrapper(
-    private val projectPath: String,
-    private val definition: LanguageServerDefinition,
-
+    private val project: Project,
+    val serverDefinition: LanguageServerDefinition,
 ) {
 
 
     protected var connectedDocuments: MutableMap<URI, Document>? = null
 
-    private val serverMessageHandler = definition.getServerMessageHandler()
+    private val serverMessageHandler = serverDefinition.getServerMessageHandler()
     protected val initParams = InitializeParams()
 
     protected var lspStreamProvider: StreamConnectionProvider? = null
@@ -79,7 +77,7 @@ class LanguageServerWrapper(
 
         initializeFuture = initializeFuture ?: CompletableFuture.supplyAsync {
             kotlin.runCatching {
-                lspStreamProvider = definition.createConnectionProvider()
+                lspStreamProvider = serverDefinition.createConnectionProvider()
                 lspStreamProvider?.start()
                 return@supplyAsync null
             }.onFailure {
@@ -89,22 +87,22 @@ class LanguageServerWrapper(
             }
         }.thenApply {
             kotlin.runCatching {
-                val client = definition.createLanguageClient()
+                val client = serverDefinition.createLanguageClient()
                 val executorService = Executors.newCachedThreadPool()
 
                 initParams.processId = Process.myPid()
 
 
-                val rootURI = projectPath.toURI()
+                val rootURI = project.path.toURI()
 
                 initParams.setRootUri(rootURI.toString())
                 initParams.setRootPath(rootURI.path)
                 initParams.setWorkspaceFolders(listOf(WorkspaceFolder(rootURI.toString())))
                 val provider = lspStreamProvider.checkNotNull()
                 val launcher: Launcher<LanguageServer> =
-                    definition.createLauncherBuilder<LanguageServer>()
+                    serverDefinition.createLauncherBuilder<LanguageServer>()
                         .setLocalService(client) //
-                        .setRemoteInterface(definition.getServerInterface()) //
+                        .setRemoteInterface(serverDefinition.getServerInterface()) //
                         .setInput(provider.getInputStream()) //
                         .setOutput(provider.getOutputStream()) //
                         .setExecutorService(executorService) //
@@ -256,11 +254,57 @@ class LanguageServerWrapper(
      * @return null if not connection has happened, a future tracking the connection state otherwise
      * @throws IOException
      */
-
     fun connect(editor: Editor): CompletableFuture<LanguageServer?>? {
         return connect(editor.getFile().toURI(), editor)
     }
 
+    /**
+     * Warning: this is a long running operation
+     *
+     * @return the server capabilities, or null if initialization job didn't
+     * complete
+     */
+
+    fun getServerCapabilities(): ServerCapabilities? {
+        try {
+            getInitializedServer()[10, TimeUnit.SECONDS]
+        } catch (e: java.lang.Exception) {
+            Log.e("LanguageServerWrapper", "Fail to get server ", e)
+        }
+        return serverCapabilities
+    }
+
+    /**
+     * Check whether this LS is suitable for provided project. Starts the LS if not
+     * already started.
+     *
+     * @return whether this language server can operate on the given project
+     * @since 0.5
+     */
+    fun canOperate(project: Project): Boolean {
+        return project == this.project
+    }
+
+    fun canOperate(editor: Editor): Boolean {
+        val documentUri = editor.getFile().toURI()
+        if (isConnectedTo(documentUri)) {
+            return true
+        }
+        if (connectedDocuments?.isEmpty() == true) {
+            return true
+        }
+        val file = editor.getFile()
+        return (file.exists() && canOperate(editor.getProject()))
+    }
+
+    /**
+     * checks if the wrapper is already connected to the document at the given uri
+     *
+     * @noreference test only
+     */
+    fun isConnectedTo(uri: URI): Boolean {
+        return connectedDocuments?.containsKey(uri) ?: false
+    }
 
     /**
      * To make public when we support non IFiles
@@ -324,6 +368,7 @@ class LanguageServerWrapper(
         }
     }
 
+
     /**
      * Stops a language server. If language server is stopped, does nothing.
      */
@@ -374,6 +419,9 @@ class LanguageServerWrapper(
 
     }
 
-    var status: ServerStatus = ServerStatus.STOPPED
-        private set
+    fun getVersion(fileUri: URI): Int {
+        return connectedDocuments?.get(fileUri)?.version ?: 0
+    }
+
+
 }

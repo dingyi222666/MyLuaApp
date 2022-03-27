@@ -76,7 +76,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
     private fun createEditor(editorPath: File): Editor? {
         for (i in allEditorProvider) {
-            val editor = i.createEditor(editorPath)
+            val editor = i.createEditor(currentProject, editorPath)
             if (editor != null) {
 
                 pluginContext
@@ -95,8 +95,6 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
     override fun closeEditor(editor: Editor) {
         val indexOfEditor = allEditor.indexOf(editor)
-
-
 
 
 
@@ -260,7 +258,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             }
 
             for (it in allEditorProvider) {
-                val editor = it.createEditor(file)
+                val editor = it.createEditor(currentProject,file)
                 if (editor != null) {
                     editor.restoreState(editorState)
 
@@ -339,7 +337,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             }
 
             for (it in allEditorProvider) {
-                val editor = it.createEditor(file)
+                val editor = it.createEditor(currentProject,file)
                 if (editor != null) {
                     editor.restoreState(editorState)
 

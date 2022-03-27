@@ -8,6 +8,7 @@ import io.github.rosemoe.sora.widget.CodeEditor
 
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.editor.EditorListener
+import com.dingyi.myluaapp.plugin.api.project.Project
 
 
 import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
@@ -28,6 +29,7 @@ import java.lang.ref.WeakReference
 class Editor(
     private val path: File,
     private val id: Int,
+    private val project: Project,
     private val pluginContext: PluginContext
 ) : Editor, EventReceiver<ContentChangeEvent> {
 
@@ -158,6 +160,10 @@ class Editor(
 
     override fun getCurrentView(): View? {
         return currentEditor.get()
+    }
+
+    override fun getProject(): Project {
+        return project
     }
 
     override fun undo() {

@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.editor.lsp.editor
+package com.dingyi.myluaapp.editor.lsp.document
 
 import com.dingyi.myluaapp.editor.lsp.ktx.didClose
 import com.dingyi.myluaapp.editor.lsp.ktx.didOpen
@@ -7,12 +7,9 @@ import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.editor.EditorListener
 import io.github.rosemoe.sora.event.ContentChangeEvent
 import org.eclipse.lsp4j.DidChangeTextDocumentParams
-import org.eclipse.lsp4j.DidOpenTextDocumentParams
-import org.eclipse.lsp4j.TextDocumentItem
 import org.eclipse.lsp4j.TextDocumentSyncKind
 import java.net.URI
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.CompletionStage
 
 
 class Document(
@@ -22,7 +19,7 @@ class Document(
     syncKind: TextDocumentSyncKind? = TextDocumentSyncKind.Full
 ) : EditorListener {
 
-    private var version = 0
+    var version = 0
     private val changeParams: DidChangeTextDocumentParams? = null
     private val modificationStamp: Long = 0
 
