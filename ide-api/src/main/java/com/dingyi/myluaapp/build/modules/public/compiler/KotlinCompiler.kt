@@ -4,6 +4,7 @@ import com.dingyi.myluaapp.build.CompileError
 import com.dingyi.myluaapp.build.api.logger.ILogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jetbrains.kotlin.cli.js.K2JSCompiler
 import java.io.File
 import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler
 import java.io.ByteArrayOutputStream
@@ -22,6 +23,7 @@ class KotlinCompiler(
     ) = withContext(Dispatchers.IO) {
 
         val errorStream = ByteArrayOutputStream()
+
 
         val compiler = K2JVMCompiler()
 

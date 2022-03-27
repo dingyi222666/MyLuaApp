@@ -14,6 +14,7 @@ import com.dingyi.myluaapp.plugin.runtime.editor.EditorState
 import com.dingyi.myluaapp.plugin.runtime.editor.EmptyLanguage
 import io.github.rosemoe.sora.event.ContentChangeEvent
 import io.github.rosemoe.sora.event.EventReceiver
+import io.github.rosemoe.sora.event.SubscriptionReceipt
 import io.github.rosemoe.sora.event.Unsubscribe
 import io.github.rosemoe.sora.widget.schemes.*
 import io.github.rosemoe.sorakt.subscribeEvent
@@ -33,7 +34,7 @@ class Editor(
     private val allEditorListener = mutableListOf<EditorListener>()
     private var currentColorScheme: EditorColorScheme = SchemeEclipse()
     private var currentLanguage: Language = EmptyLanguage()
-
+    private var currentUnsubscribe: SubscriptionReceipt<*>? = null
     private var currentEditor = WeakReference<CodeEditor>(null)
 
     private var currentEditorState = EditorState(path.path, 0, 0, 0, 0, 0f)
@@ -204,10 +205,10 @@ class Editor(
     override fun binCurrentView(r: CodeEditor) {
         if (currentEditor.get() != null) {
             save()
-            //TODO unsubscribe event
+            currentUnsubscribe?.unsubscribe()
         }
         currentEditor = WeakReference(r)
-        r.subscribeEvent(this)
+        currentUnsubscribe = r.subscribeEvent(this)
         r.setEditorLanguage(currentLanguage)
         r.colorScheme = currentColorScheme
     }
