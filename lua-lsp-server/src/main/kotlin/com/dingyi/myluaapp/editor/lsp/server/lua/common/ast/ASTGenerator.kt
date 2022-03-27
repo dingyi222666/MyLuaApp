@@ -46,18 +46,20 @@ class ASTGenerator() {
             }
         }
 
-        private fun getStringContent(string: LuaParser.StringContext): String {
-            return when {
-                string.CHARSTRING() != null -> {
-                    string.CHARSTRING()?.text?.let { getStringContent(it) }
+        private fun getStringContent(string: LuaParser.StringContext?): String {
+            return string?.let { string ->
+                return when {
+                    string.CHARSTRING() != null -> ({
+                        string.CHARSTRING()?.text?.let { getStringContent(it) }
+                    }).toString()
+                    string.LONGSTRING() != null -> ({
+                        string.LONGSTRING()?.text?.let { getStringContent(it) }
+                    }).toString()
+                    string.NORMALSTRING() != null -> ({
+                        string.NORMALSTRING()?.text?.let { getStringContent(it) }
+                    }).toString()
+                    else -> ""
                 }
-                string.LONGSTRING() != null -> {
-                    string.LONGSTRING()?.text?.let { getStringContent(it) }
-                }
-                string.NORMALSTRING() != null -> {
-                    string.NORMALSTRING()?.text?.let { getStringContent(it) }
-                }
-                else -> ""
             } ?: ""
         }
 
@@ -114,6 +116,13 @@ class ASTGenerator() {
                         value = ctx.findNumber()?.text ?: "0"
                     )
                 }
+                ctx.findString() != null -> {
+                    ConstantsNode(
+                        type = ConstantsNode.TYPE.STRING,
+                        value = getStringContent(ctx.findString())
+                    )
+                }
+
                 else -> ConstantsNode(
                     type = ConstantsNode.TYPE.UNKNOWN,
                     value = ""
