@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.editor.lsp.server.connect
+package com.dingyi.myluaapp.editor.lsp.connect
 
 import org.eclipse.lsp4j.jsonrpc.messages.Message
 import org.eclipse.lsp4j.services.LanguageServer
@@ -18,4 +18,6 @@ interface StreamConnectionProvider {
     fun handleMessage(it: Message, languageServer: LanguageServer?, root: String?) {
 
     }
+
+    fun isStop (): Boolean
 }

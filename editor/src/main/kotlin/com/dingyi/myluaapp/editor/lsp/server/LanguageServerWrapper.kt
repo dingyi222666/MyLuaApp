@@ -3,8 +3,8 @@ package com.dingyi.myluaapp.editor.lsp.server
 import android.os.Process
 import android.util.Log
 import com.dingyi.myluaapp.common.ktx.checkNotNull
+import com.dingyi.myluaapp.editor.lsp.connect.StreamConnectionProvider
 import com.dingyi.myluaapp.editor.lsp.document.Document
-import com.dingyi.myluaapp.editor.lsp.server.connect.StreamConnectionProvider
 import com.dingyi.myluaapp.editor.lsp.server.definition.LanguageServerDefinition
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.project.Project
@@ -73,8 +73,7 @@ class LanguageServerWrapper(
                 stop()
             }
         }
-
-
+        connectedDocuments = mutableMapOf()
         initializeFuture = initializeFuture ?: CompletableFuture.supplyAsync {
             kotlin.runCatching {
                 lspStreamProvider = serverDefinition.createConnectionProvider()
@@ -242,8 +241,7 @@ class LanguageServerWrapper(
         }.thenRun {
             requireLanguageServer().initialized(InitializedParams())
         }.thenRun {
-
-
+            Log.d("LanguageServer", "Initialized")
         }
     }
 
@@ -361,11 +359,15 @@ class LanguageServerWrapper(
     }
 
     fun disconnect(uri: URI?) {
-        val document = connectedDocuments?.remove(uri)
-        document?.onEditorClose()
+        val document = connectedDocuments?.remove(uri) ?: return
+        document.onEditorClose()
         if (connectedDocuments?.isEmpty() == true) {
             stop()
         }
+    }
+
+    fun disconnect(editor: Editor) {
+        disconnect(editor.getFile().toURI())
     }
 
 
@@ -381,6 +383,37 @@ class LanguageServerWrapper(
         }
 
         serverCapabilities = null;
+
+
+        val serverFuture = launcherFuture
+        val provider = lspStreamProvider
+        val languageServerInstance = languageServer
+
+        val shutdownKillAndStopFutureAndProvider = Runnable {
+            if (languageServerInstance != null) {
+                val shutdown =
+                    languageServerInstance.shutdown()
+                try {
+                    shutdown[5, TimeUnit.SECONDS]
+                }  catch (ex: Exception) {
+                    Log.e("LanguageServerWrapper", "shutdown failed", ex)
+                }
+            }
+            serverFuture?.cancel(true)
+            languageServerInstance?.exit()
+            provider?.stop()
+        }
+
+        CompletableFuture.runAsync(shutdownKillAndStopFutureAndProvider)
+
+        launcherFuture = null
+        lspStreamProvider = null
+
+        while (connectedDocuments?.isEmpty() == false) {
+            disconnect(connectedDocuments?.keys?.iterator()?.next())
+        }
+        languageServer = null
+
     }
 
 

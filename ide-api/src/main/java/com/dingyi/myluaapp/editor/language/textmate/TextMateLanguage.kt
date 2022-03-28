@@ -2,11 +2,13 @@ package com.dingyi.myluaapp.editor.language.textmate
 
 import com.dingyi.myluaapp.editor.highlight.HighlightProvider
 import com.dingyi.myluaapp.editor.language.Language
+import com.dingyi.myluaapp.editor.complete.AutoCompleteProvider
 import com.dingyi.myluaapp.editor.language.textmate.grammar.GrammarRepository
 import com.dingyi.myluaapp.editor.language.textmate.highlight.TextMateHighlightProvider
 import com.dingyi.myluaapp.editor.language.textmate.theme.ITheme
 import com.dingyi.myluaapp.editor.language.textmate.theme.TextMateColorScheme
 import com.dingyi.myluaapp.editor.language.textmate.theme.ThemeRepository
+import com.dingyi.myluaapp.plugin.runtime.editor.EmptyLanguage
 import io.github.rosemoe.sora.textmate.core.grammar.IGrammar
 import io.github.rosemoe.sora.textmate.languageconfiguration.ILanguageConfiguration
 import io.github.rosemoe.sora.textmate.languageconfiguration.internal.LanguageConfiguration
@@ -20,11 +22,15 @@ class TextMateLanguage(
 ) : Language() {
 
     override fun getName(): String {
-        return "TextMate"
+        return languageName
     }
 
     override fun getHighlightProvider(): HighlightProvider {
         return TextMateHighlightProvider(this)
+    }
+
+    override fun getAutoCompleteProvider(): AutoCompleteProvider {
+        return EmptyLanguage.EmptyAutoCompleteProvider()
     }
 
     private var defaultColorScheme: TextMateColorScheme? = null
@@ -36,11 +42,10 @@ class TextMateLanguage(
     fun getLanguageConfiguration(): ILanguageConfiguration? = languageConfiguration
 
     fun getColorScheme(): TextMateColorScheme {
-        return (defaultColorScheme ?: TextMateColorScheme(theme))?.apply {
+        return (defaultColorScheme ?: TextMateColorScheme(theme)).apply {
             defaultColorScheme = this
         }
     }
-
 
 
 

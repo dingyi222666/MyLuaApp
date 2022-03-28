@@ -79,7 +79,7 @@ dependencies {
     implementation(BuildConfig.Libs.Tools.mmkv)
 
     implementation(BuildConfig.Libs.Tools.zip4j)
-
+    compileOnly(BuildConfig.Libs.Tools.lsp4j)
     implementation(BuildConfig.Libs.Google.gson)
 
     implementation(BuildConfig.Libs.Tools.androlua_standalone)

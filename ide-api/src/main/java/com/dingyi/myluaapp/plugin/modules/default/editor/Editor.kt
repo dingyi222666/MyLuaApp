@@ -210,7 +210,6 @@ class Editor(
 
     override fun binCurrentView(r: CodeEditor) {
         if (currentEditor.get() != null) {
-            save()
             currentUnsubscribe?.unsubscribe()
         }
         currentEditor = WeakReference(r)

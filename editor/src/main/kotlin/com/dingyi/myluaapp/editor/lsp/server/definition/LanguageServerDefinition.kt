@@ -4,7 +4,7 @@ import android.util.Log
 import com.dingyi.myluaapp.editor.lsp.client.DefaultLanguageClient
 import com.dingyi.myluaapp.editor.lsp.client.ServerMessageHandler
 import com.dingyi.myluaapp.editor.lsp.ktx.DiagnosticHandler
-import com.dingyi.myluaapp.editor.lsp.server.connect.StreamConnectionProvider
+import com.dingyi.myluaapp.editor.lsp.connect.StreamConnectionProvider
 import org.eclipse.lsp4j.MessageParams
 import org.eclipse.lsp4j.MessageType
 import org.eclipse.lsp4j.jsonrpc.Launcher
@@ -16,7 +16,15 @@ interface LanguageServerDefinition {
 
     val id: String
 
+    /**
+     * Create a connection provider
+     */
     fun createConnectionProvider(): StreamConnectionProvider
+
+    /**
+     * Get connection provider when is created
+     */
+    fun getConnectionProvider(): StreamConnectionProvider?
 
     fun createLanguageClient(): DefaultLanguageClient {
         return DefaultLanguageClient(this)
@@ -74,4 +82,5 @@ interface LanguageServerDefinition {
         return Launcher.Builder()
     }
 
+    fun getLanguageClient(): DefaultLanguageClient?
 }

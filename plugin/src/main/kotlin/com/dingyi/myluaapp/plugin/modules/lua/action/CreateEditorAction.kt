@@ -1,8 +1,17 @@
 package com.dingyi.myluaapp.plugin.modules.lua.action
 
+import android.util.Log
+import com.androlua.LuaServer
+import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.common.ktx.Paths
+import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.common.ktx.endsWith
 import com.dingyi.myluaapp.editor.language.textmate.TextMateLanguage
+import com.dingyi.myluaapp.editor.lsp.client.language.LSPLanguage
+import com.dingyi.myluaapp.editor.lsp.connect.InternalConnectionProvider
+import com.dingyi.myluaapp.editor.lsp.server.definition.InternalLanguageServerDefinition
+import com.dingyi.myluaapp.editor.lsp.server.lua.LuaLanguageServer
+import com.dingyi.myluaapp.editor.lsp.service.LanguageServiceAccessor
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 import com.dingyi.myluaapp.plugin.api.editor.Editor
@@ -28,13 +37,43 @@ class CreateEditorAction : Action<Unit> {
             }
 
             if (editor.getFile().extension.contains("lua") or editor.getFile().extension.contains("aly")) {
-                editor.setLanguage(LuaLanguage(editor.getLanguage()))
+                val luaLanguage = LuaLanguage(editor)
+                editor.setLanguage(luaLanguage)
+
+                val definition = InternalLanguageServerDefinition("lua", LuaLanguageServer())
+
+
+                LanguageServiceAccessor.getInitializedLanguageServer(
+                    editor,
+                    definition,
+                    null
+                ).thenAccept {
+                    Log.e("CreateEditorAction", "create lua language server success")
+                    editor.setLanguage(
+                        LSPLanguage(
+                            wrapper = LanguageServiceAccessor.getLSWrapper(
+                                editor.getProject(),
+                                definition,
+                            ),
+                            server = it,
+                            client = definition.getLanguageClient().checkNotNull(),
+                            editor = editor,
+                            wrapperLanguage = luaLanguage
+                        )
+                    )
+
+                }.exceptionally {
+                    Log.e("CreateEditorAction", "create lua language server failed")
+                    null
+                }
+
             }
         }
 
         return null
 
     }
+
 
     override val name: String
         get() = "CreateEditorAction"

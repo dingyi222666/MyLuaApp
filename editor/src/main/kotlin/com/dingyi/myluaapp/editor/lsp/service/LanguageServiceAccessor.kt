@@ -2,7 +2,7 @@ package com.dingyi.myluaapp.editor.lsp.service
 
 import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.editor.lsp.server.LanguageServerWrapper
-import com.dingyi.myluaapp.editor.lsp.server.connect.StreamConnectionProvider
+import com.dingyi.myluaapp.editor.lsp.connect.StreamConnectionProvider
 import com.dingyi.myluaapp.editor.lsp.server.definition.LanguageServerDefinition
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.project.Project
@@ -54,7 +54,7 @@ object LanguageServiceAccessor {
     }
 
 
-    private fun getLSWrapper(
+    fun getLSWrapper(
         project: Project,
         serverDefinition: LanguageServerDefinition
     ): LanguageServerWrapper {
