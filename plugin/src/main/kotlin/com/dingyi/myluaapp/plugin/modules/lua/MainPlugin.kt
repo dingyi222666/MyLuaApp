@@ -2,7 +2,10 @@ package com.dingyi.myluaapp.plugin.modules.lua
 
 import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.editor.lsp.server.definition.InternalLanguageServerDefinition
 import com.dingyi.myluaapp.editor.lsp.server.definition.SocketLanguageServerDefinition
+import com.dingyi.myluaapp.editor.lsp.server.lua.LuaLanguageServer
+import com.dingyi.myluaapp.editor.lsp.server.lua.Main
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
@@ -21,9 +24,10 @@ class MainPlugin: Plugin {
 
     override fun onStart(context: PluginContext) {
 
-        val languageServerDefinition =  SocketLanguageServerDefinition("lua", 5024)
+        val port = getRandomPort()
+        Main.startWithSocket(arrayOf(port.toString()))
 
-
+        val languageServerDefinition = SocketLanguageServerDefinition("lua",port)
         context.apply {
             getEditorService()
                 .apply {
@@ -35,6 +39,7 @@ class MainPlugin: Plugin {
 
                     registerForwardArgument(
                         CommonActionKey.CREATE_EDITOR_ACTION,
+                        getJavaClass<CreateEditorAction>()
                     ) {
                         it.addArgument(languageServerDefinition)
                     }
@@ -50,8 +55,18 @@ class MainPlugin: Plugin {
         }
     }
 
-    override fun onStop(context: PluginContext) {
+    /**
+     * Get a random socket port and close it
+     */
+    private fun getRandomPort(): Int {
+        val serverSocket = java.net.ServerSocket(0)
+        val port = serverSocket.localPort
+        serverSocket.close()
+        return port
+    }
 
+    override fun onStop(context: PluginContext) {
+        Main.close()
     }
 
     override val pluginId: String

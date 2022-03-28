@@ -17,6 +17,8 @@ class LuaLanguageServer(
 
 ) : LanguageServer,LanguageClientAware, TextDocumentService,WorkspaceService {
 
+    private var isClose = false
+
     private lateinit var rootPath: File
 
     override fun initialize(params: InitializeParams): CompletableFuture<InitializeResult> {
@@ -25,11 +27,14 @@ class LuaLanguageServer(
     }
 
     override fun shutdown(): CompletableFuture<Any> {
+
         return CompletableFuture.completedFuture(Any())
     }
 
-    override fun exit() {
+    fun isClose() = isClose
 
+    override fun exit() {
+        isClose = true
     }
 
     override fun getTextDocumentService(): TextDocumentService {

@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.plugin.api.action
 import androidx.lifecycle.Lifecycle
 import com.dingyi.myluaapp.plugin.api.Action
 
+
 interface ActionService {
 
 
@@ -29,7 +30,7 @@ interface ActionService {
     /**
      * Unregister one or more forwarding event
      */
-    fun unregisterForwardArgument(vararg key: ActionKey, block: (ActionArgument) -> ActionArgument)
+    fun unregisterForwardArgument(vararg key: ActionKey, block: ForwardArgument)
 
     /**
      *  Register forward argument event,when lifecycle destroy,will automatic unregister the forward argument
@@ -37,18 +38,18 @@ interface ActionService {
     fun registerForwardArgument(
         vararg key: ActionKey,
         lifecycle: Lifecycle,
-        block: (ActionArgument) -> ActionArgument
+        block: ForwardArgument
     )
 
 
-    fun registerForwardArgument(key: ActionKey, block: (ActionArgument) -> ActionArgument)
+    fun registerForwardArgument(key: ActionKey, block: ForwardArgument)
 
-    fun registerForwardArgument(vararg key: ActionKey, block: (ActionArgument) -> ActionArgument)
+    fun registerForwardArgument(vararg key: ActionKey, block: ForwardArgument)
 
     /**
      * Unregister a forwarding event
      */
-    fun unregisterForwardArgument(key: ActionKey, block: (ActionArgument) -> ActionArgument)
+    fun unregisterForwardArgument(key: ActionKey, block: ForwardArgument)
 
     /**
      *  Register forward argument event,when lifecycle destroy,will automatic unregister the forward argument
@@ -56,6 +57,10 @@ interface ActionService {
     fun registerForwardArgument(
         key: ActionKey,
         lifecycle: Lifecycle,
-        block: (ActionArgument) -> ActionArgument
+        block: ForwardArgument
     )
+
+    fun registerForwardArgument(key: ActionKey, targetActionClass: Class<*>, block: ForwardArgument)
 }
+
+typealias ForwardArgument = (ActionArgument) -> ActionArgument

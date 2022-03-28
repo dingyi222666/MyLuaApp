@@ -4,28 +4,20 @@ import android.util.Log
 import org.eclipse.lsp4j.launch.LSPLauncher
 import org.eclipse.lsp4j.services.LanguageServer
 import java.io.*
+import java.util.concurrent.CompletableFuture
 
 class InternalConnectionProvider(
-    private val server: LanguageServer
+    private val block: () -> Pair<InputStream, OutputStream>
 ) : StreamConnectionProvider {
 
-    private lateinit var inputStream: PipedInputStream
-    private lateinit var outputStream: PipedOutputStream
+    private lateinit var inputStream: InputStream
+    private lateinit var outputStream: OutputStream
 
 
     override fun start() {
-        inputStream = PipedInputStream()
-        outputStream = PipedOutputStream()
-        inputStream.connect(outputStream)
-
-
-        kotlin.runCatching {
-            LSPLauncher
-                .createServerLauncher(server, inputStream, outputStream)
-                .startListening()
-        }.onFailure {
-            Log.e("InternalConnectionProvider","start language server failed", it)
-        }
+        val (inputStream, outputStream) = block()
+        this.inputStream = inputStream
+        this.outputStream = outputStream
 
     }
 

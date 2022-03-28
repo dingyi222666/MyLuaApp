@@ -97,7 +97,7 @@ class LanguageServerWrapper(
 
                 initParams.setRootUri(rootURI.toString())
                 initParams.setRootPath(rootURI.path)
-                initParams.setWorkspaceFolders(listOf(WorkspaceFolder(rootURI.toString())))
+                initParams.workspaceFolders = listOf(WorkspaceFolder(rootURI.toString()))
                 val provider = lspStreamProvider.checkNotNull()
                 val launcher: Launcher<LanguageServer> =
                     serverDefinition.createLauncherBuilder<LanguageServer>()
@@ -451,7 +451,7 @@ class LanguageServerWrapper(
     }
 
     fun crashed(e: Exception) {
-
+        Log.e("LanguageServerWrapper", "Language server crashed", e)
     }
 
     fun getVersion(fileUri: URI): Int {

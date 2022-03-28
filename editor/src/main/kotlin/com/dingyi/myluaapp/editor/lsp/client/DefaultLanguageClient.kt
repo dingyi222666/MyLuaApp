@@ -3,10 +3,7 @@ package com.dingyi.myluaapp.editor.lsp.client
 import com.dingyi.myluaapp.editor.lsp.ktx.DiagnosticHandler
 import com.dingyi.myluaapp.editor.lsp.server.LanguageServerWrapper
 import com.dingyi.myluaapp.editor.lsp.server.definition.LanguageServerDefinition
-import org.eclipse.lsp4j.MessageActionItem
-import org.eclipse.lsp4j.MessageParams
-import org.eclipse.lsp4j.PublishDiagnosticsParams
-import org.eclipse.lsp4j.ShowMessageRequestParams
+import org.eclipse.lsp4j.*
 import org.eclipse.lsp4j.services.LanguageClient
 import org.eclipse.lsp4j.services.LanguageServer
 import java.lang.UnsupportedOperationException
@@ -41,6 +38,7 @@ open class DefaultLanguageClient(
     override fun logMessage(message: MessageParams) {
         handler.logMessage(message)
     }
+
 
     fun connect(languageServer: LanguageServer, languageServerWrapper: LanguageServerWrapper) {
         this.server = languageServer

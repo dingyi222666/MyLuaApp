@@ -41,10 +41,11 @@ class CreateEditorAction : Action<Unit> {
             }
 
             if (editor.getFile().extension.contains("lua") or editor.getFile().extension.contains("aly")) {
+
                 val luaLanguage = LuaLanguage(editor)
+
                 editor.setLanguage(luaLanguage)
 
-                Main.startWithSocket(arrayOf("5024"))
 
                 val definition = argument.getArgument<LanguageServerDefinition>(1).checkNotNull()
                 LanguageServiceAccessor.getInitializedLanguageServer(

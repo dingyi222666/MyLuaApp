@@ -9,6 +9,7 @@ import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 import com.dingyi.myluaapp.plugin.api.action.ActionKey
 import com.dingyi.myluaapp.plugin.api.action.ActionService
+import com.dingyi.myluaapp.plugin.api.action.ForwardArgument
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 
 class ActionService(private val pluginContext: PluginContext) : ActionService {
@@ -16,7 +17,10 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
     private val allAction = mutableMapOf<ActionKey, MutableList<Class<*>>>()
 
     private val allForwardAction =
-        mutableMapOf<ActionKey, MutableList<(ActionArgument) -> ActionArgument>>()
+        mutableMapOf<ActionKey, MutableList<ForwardArgument>>()
+
+    private val filterForwardAction =
+        mutableMapOf<Pair<ActionKey, Class<*>>, MutableList<ForwardArgument>>()
 
     override fun createActionArgument(): ActionArgument {
         return DefaultActionArgument()
@@ -65,22 +69,47 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
 
     override fun <T> callAction(actionArgument: ActionArgument, key: ActionKey): T? {
         val list = allAction[key]
-        val targetActionArgument = forwardActionArgument(actionArgument, key)
+        var firstResult: T? = null
+
         if (list != null) {
             for (action in list) {
+
+                var targetActionArgument =
+                    forwardActionArgument(
+                        forwardActionArgument(actionArgument, key, action), key
+                    )
+
                 val result = (action.newInstance() as Action<*>).callAction(targetActionArgument)
                 if (result != null) {
-                    return result as T
+                    if (firstResult == null) {
+                        firstResult = result as T?
+                    }
                 }
             }
         }
-        return null
+        return firstResult
 
+    }
+
+    private fun forwardActionArgument(
+        actionArgument: ActionArgument,
+        key: ActionKey,
+        action: Class<*>
+    ): ActionArgument {
+        val mapKey = key to action
+        val keyAction = filterForwardAction.getOrDefault(mapKey, mutableListOf())
+
+        filterForwardAction[mapKey] = keyAction
+
+        return keyAction
+            .fold(actionArgument) { acc: ActionArgument, function: ForwardArgument ->
+                function.invoke(acc)
+            }
     }
 
     override fun registerForwardArgument(
         key: ActionKey,
-        block: (ActionArgument) -> ActionArgument
+        block: ForwardArgument
     ) {
         val keyAction = allForwardAction.getOrDefault(key, mutableListOf())
         keyAction.add(block)
@@ -88,8 +117,22 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
     }
 
     override fun registerForwardArgument(
+        key: ActionKey,
+        targetActionClass: Class<*>,
+        block: ForwardArgument
+    ) {
+        val mapKey = key to targetActionClass
+        val keyAction = filterForwardAction.getOrElse(mapKey) {
+            mutableListOf()
+        }
+        keyAction.add(block)
+        allForwardAction[key] = keyAction
+    }
+
+
+    override fun registerForwardArgument(
         vararg key: ActionKey,
-        block: (ActionArgument) -> ActionArgument
+        block: ForwardArgument
     ) {
         key.forEach {
             registerForwardArgument(it, block)
@@ -105,14 +148,14 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
         allForwardAction[key] = keyAction
 
         return keyAction
-            .fold(actionArgument) { acc: ActionArgument, function: (ActionArgument) -> ActionArgument ->
+            .fold(actionArgument) { acc: ActionArgument, function: ForwardArgument ->
                 function.invoke(acc)
             }
     }
 
     override fun unregisterForwardArgument(
         vararg key: ActionKey,
-        block: (ActionArgument) -> ActionArgument
+        block: ForwardArgument
     ) {
         key.forEach {
             unregisterForwardArgument(it, block)
@@ -121,7 +164,7 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
 
     override fun unregisterForwardArgument(
         key: ActionKey,
-        block: (ActionArgument) -> ActionArgument
+        block: ForwardArgument
     ) {
         val keyAction = allForwardAction.getOrDefault(key, mutableListOf())
         keyAction.remove(block)
@@ -131,7 +174,7 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
     override fun registerForwardArgument(
         vararg key: ActionKey,
         lifecycle: Lifecycle,
-        block: (ActionArgument) -> ActionArgument
+        block: ForwardArgument
     ) {
         key.forEach {
             registerForwardArgument(it, lifecycle, block)
@@ -141,7 +184,7 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
     override fun registerForwardArgument(
         key: ActionKey,
         lifecycle: Lifecycle,
-        block: (ActionArgument) -> ActionArgument
+        block: ForwardArgument
     ) {
         registerForwardArgument(key, block)
         lifecycle.addObserver(object : LifecycleEventObserver {
@@ -178,3 +221,4 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
     }
 
 }
+
