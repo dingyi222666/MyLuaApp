@@ -26,18 +26,12 @@ open class LSPLanguage(
     }
 
     override fun getAutoCompleteProvider(): AutoCompleteProvider {
-        return LSPAutoCompleteProvider(server.checkNotNull(), editor.checkNotNull())
+        print("LSPLanguage getAutoCompleteProvider")
+        return LSPAutoCompleteProvider(checkNotNull(server), checkNotNull(editor))
     }
 
     override fun destroy() {
-
-        server?.shutdown()?.complete {
-            server?.exit()
-            wrapper.disconnect(editor.checkNotNull())
-            server = null
-        }
-
-        editor = null
+        wrapper.disconnect(editor.checkNotNull())
 
     }
 }

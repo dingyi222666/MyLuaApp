@@ -38,4 +38,5 @@ interface EditorService {
     fun setCurrentEditor(file: File)
 
     fun closeEditor(editor: File)
+
 }

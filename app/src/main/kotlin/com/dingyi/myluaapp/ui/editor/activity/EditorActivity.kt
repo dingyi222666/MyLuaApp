@@ -17,6 +17,7 @@ import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.common.ktx.*
 import com.dingyi.myluaapp.core.broadcast.LogBroadcastReceiver
 import com.dingyi.myluaapp.databinding.ActivityEditorBinding
+import com.dingyi.myluaapp.editor.lsp.service.LanguageServiceAccessor
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
@@ -352,7 +353,6 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
 
         }
 
-
         viewModel.subTitle.observe(this) { title ->
             if (title.isEmpty()) {
                 supportActionBar?.subtitle = null
@@ -397,6 +397,8 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
                     PluginModule
                         .getEditorService()
                         .saveEditorServiceState()
+
+
                 }
             }
         }
@@ -431,6 +433,9 @@ class EditorActivity : BaseActivity<ActivityEditorBinding, MainViewModel>() {
             tabLayoutMediator.detach()
 
             viewModel.progressMonitor.close()
+
+            LanguageServiceAccessor
+                .clearStartedServers()
         }
 
     }

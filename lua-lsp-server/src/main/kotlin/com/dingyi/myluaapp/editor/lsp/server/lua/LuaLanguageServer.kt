@@ -2,9 +2,7 @@ package com.dingyi.myluaapp.editor.lsp.server.lua
 
 import org.eclipse.lsp4j.*
 import org.eclipse.lsp4j.jsonrpc.messages.Either
-import org.eclipse.lsp4j.services.LanguageServer
-import org.eclipse.lsp4j.services.TextDocumentService
-import org.eclipse.lsp4j.services.WorkspaceService
+import org.eclipse.lsp4j.services.*
 import java.io.File
 import java.net.URI
 import java.util.concurrent.CompletableFuture
@@ -15,7 +13,9 @@ import kotlin.io.path.toPath
  * @date: 2021/10/5 22:46
  * @description:
  **/
-class LuaLanguageServer : LanguageServer, TextDocumentService,WorkspaceService {
+class LuaLanguageServer(
+
+) : LanguageServer,LanguageClientAware, TextDocumentService,WorkspaceService {
 
     private lateinit var rootPath: File
 
@@ -51,7 +51,6 @@ class LuaLanguageServer : LanguageServer, TextDocumentService,WorkspaceService {
                insertTextMode = InsertTextMode.AsIs
                insertTextFormat = InsertTextFormat.PlainText
            })
-
            Either.forLeft(list)
        }
     }
@@ -78,5 +77,9 @@ class LuaLanguageServer : LanguageServer, TextDocumentService,WorkspaceService {
 
     override fun didChangeWatchedFiles(params: DidChangeWatchedFilesParams?) {
         TODO("Not yet implemented")
+    }
+
+    override fun connect(client: LanguageClient?) {
+
     }
 }

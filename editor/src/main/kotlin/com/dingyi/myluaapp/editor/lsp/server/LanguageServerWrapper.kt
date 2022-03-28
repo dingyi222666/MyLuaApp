@@ -80,6 +80,7 @@ class LanguageServerWrapper(
                 lspStreamProvider?.start()
                 return@supplyAsync null
             }.onFailure {
+                Log.e("LanguageServerWrapper", "Failed to start language server", it)
                 stop();
                 initializeFuture?.completeExceptionally(it);
                 return@supplyAsync null
@@ -125,6 +126,7 @@ class LanguageServerWrapper(
                 client.connect(requireLanguageServer(), this);
                 launcherFuture = launcher.startListening();
             }.onFailure {
+                Log.e("LanguageServerWrapper", "Failed to start language server", it)
                 stop();
                 initializeFuture?.completeExceptionally(it);
 
@@ -422,7 +424,7 @@ class LanguageServerWrapper(
      */
     fun isActive(): Boolean {
         return launcherFuture?.let {
-            it.isDone && it.isCancelled
+            it.isDone.not() and it.isCancelled.not()
         } ?: false
     }
 

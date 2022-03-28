@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.plugin.runtime.editor
 
 import android.util.Log
+import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
@@ -196,6 +197,11 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             editor.close()
         }
         allEditor.clear()
+
+        currentEditorServiceState.editors.clear()
+        currentEditor = null
+        currentEditorServiceState.lastOpenPath = null
+
     }
 
     override fun saveEditorServiceState() {
@@ -210,7 +216,8 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
         Log.e("all", currentEditorServiceState.toString())
 
 
-        val projectEditorStateFile = File(currentProject.path, ".MyLuaApp/editor_config.bin")
+        val projectEditorStateFile =
+            File(currentProject.path, ".MyLuaApp/editor_config.bin")
 
         val text = Gson()
             .toJson(currentEditorServiceState)
@@ -225,7 +232,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
         projectEditorStateFile.writeText(text)
 
-
+        
     }
 
     override fun refreshEditorServiceState() {
@@ -258,7 +265,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             }
 
             for (it in allEditorProvider) {
-                val editor = it.createEditor(currentProject,file)
+                val editor = it.createEditor(currentProject, file)
                 if (editor != null) {
                     editor.restoreState(editorState)
 
@@ -310,6 +317,8 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
     private fun indexAllEditor() {
 
+
+
         for (editorState in currentEditorServiceState.editors) {
 
             val file = editorState.path.toFile()
@@ -337,7 +346,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             }
 
             for (it in allEditorProvider) {
-                val editor = it.createEditor(currentProject,file)
+                val editor = it.createEditor(currentProject, file)
                 if (editor != null) {
                     editor.restoreState(editorState)
 
@@ -383,11 +392,18 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
         currentEditor = openEditor(file)
     }
 
+
+
     override fun closeAllEditor() {
+
+
+        saveEditorServiceState()
         currentEditorServiceState.editors.clear()
-        allEditor.clear()
         currentEditor = null
         currentEditorServiceState.lastOpenPath = null
-        saveEditorServiceState()
+        allEditor.clear()
+
+
+
     }
 }

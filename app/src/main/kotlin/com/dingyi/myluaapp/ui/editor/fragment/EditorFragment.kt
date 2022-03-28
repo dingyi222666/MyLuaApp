@@ -5,6 +5,7 @@ import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -90,6 +91,7 @@ class EditorFragment : BaseFragment<FragmentEditorEditPagerBinding, MainViewMode
             runCatching {
                 editor.read()
             }.onFailure {
+                Log.e("EditorFragment", "Unable to read file:${it.message}",it)
                 System.err.println(it)
                 closeAndRefreshEditor(editor)
             }

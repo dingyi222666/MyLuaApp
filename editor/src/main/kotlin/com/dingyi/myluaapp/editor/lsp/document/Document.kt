@@ -41,7 +41,7 @@ class Document(
     }
 
     override fun onEditorChange(currentEditor: Editor, event: ContentChangeEvent) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onEditorClose() {
@@ -56,7 +56,7 @@ class Document(
     }
 
     override fun onEditorSave() {
-        TODO("Not yet implemented")
+
     }
 
 }

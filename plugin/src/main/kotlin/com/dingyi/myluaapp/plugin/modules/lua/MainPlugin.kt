@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.plugin.modules.lua
 
 import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.editor.lsp.server.definition.SocketLanguageServerDefinition
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
@@ -20,6 +21,8 @@ class MainPlugin: Plugin {
 
     override fun onStart(context: PluginContext) {
 
+        val languageServerDefinition =  SocketLanguageServerDefinition("lua", 5024)
+
 
         context.apply {
             getEditorService()
@@ -33,7 +36,13 @@ class MainPlugin: Plugin {
                         getJavaClass<CreateEditorAction>(),
                         CommonActionKey.CREATE_EDITOR_ACTION
                     )
+                    registerForwardArgument(
+                        CommonActionKey.CREATE_EDITOR_ACTION,
+                    ) {
+                        it.addArgument(languageServerDefinition)
+                    }
                 }
+
 
             getBuildService<Service>()
                 .addBuildService(LuaBuildService())

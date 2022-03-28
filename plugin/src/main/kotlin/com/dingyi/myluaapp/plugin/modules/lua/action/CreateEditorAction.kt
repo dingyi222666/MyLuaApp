@@ -9,8 +9,12 @@ import com.dingyi.myluaapp.common.ktx.endsWith
 import com.dingyi.myluaapp.editor.language.textmate.TextMateLanguage
 import com.dingyi.myluaapp.editor.lsp.client.language.LSPLanguage
 import com.dingyi.myluaapp.editor.lsp.connect.InternalConnectionProvider
+import com.dingyi.myluaapp.editor.lsp.connect.SocketStreamConnectionProvider
 import com.dingyi.myluaapp.editor.lsp.server.definition.InternalLanguageServerDefinition
+import com.dingyi.myluaapp.editor.lsp.server.definition.LanguageServerDefinition
+import com.dingyi.myluaapp.editor.lsp.server.definition.SocketLanguageServerDefinition
 import com.dingyi.myluaapp.editor.lsp.server.lua.LuaLanguageServer
+import com.dingyi.myluaapp.editor.lsp.server.lua.Main
 import com.dingyi.myluaapp.editor.lsp.service.LanguageServiceAccessor
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
@@ -40,14 +44,19 @@ class CreateEditorAction : Action<Unit> {
                 val luaLanguage = LuaLanguage(editor)
                 editor.setLanguage(luaLanguage)
 
-                val definition = InternalLanguageServerDefinition("lua", LuaLanguageServer())
+                Main.startWithSocket(arrayOf("5024"))
 
-
+                val definition = argument.getArgument<LanguageServerDefinition>(1).checkNotNull()
                 LanguageServiceAccessor.getInitializedLanguageServer(
                     editor,
                     definition,
                     null
                 ).thenAccept {
+
+                    if (it == null) {
+                        throw RuntimeException("language server is null")
+                    }
+
                     Log.e("CreateEditorAction", "create lua language server success")
                     editor.setLanguage(
                         LSPLanguage(
@@ -63,7 +72,7 @@ class CreateEditorAction : Action<Unit> {
                     )
 
                 }.exceptionally {
-                    Log.e("CreateEditorAction", "create lua language server failed")
+                    Log.e("CreateEditorAction", "create lua language server failed",it)
                     null
                 }
 

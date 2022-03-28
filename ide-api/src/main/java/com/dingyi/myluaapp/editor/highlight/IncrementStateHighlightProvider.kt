@@ -153,12 +153,13 @@ abstract class IncrementStateHighlightProvider<T> : IncrementHighlightProvider()
 
     private fun doFullHighlight() {
         val modifySpan = styles.spans.modify()
+        var currentState:LineTokenizeResult<T>? = null
         for (line in 0 until requireContent().lineCount) {
             val lineText = requireContent().getLine(line)
-            val lastState = lineStates.getOrNull(line - 1)
-            val lineState = tokenizeLine(lineText, line, lastState)
+            val lineState = tokenizeLine(lineText, line, currentState)
             modifySpan.addLineAt(line, lineState.clearSpans())
             lineStates.add(line, lineState)
+            currentState = lineState
         }
     }
 
