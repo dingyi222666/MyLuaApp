@@ -51,7 +51,7 @@ class CreateEditorAction : Action<Unit> {
                     editor,
                     definition,
                     null
-                ).thenAccept {
+                ).handle { it, u ->
 
                     if (it == null) {
                         throw RuntimeException("language server is null")

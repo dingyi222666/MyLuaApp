@@ -32,15 +32,16 @@ class MainPlugin: Plugin {
 
             getActionService()
                 .apply {
-                    registerAction(
-                        getJavaClass<CreateEditorAction>(),
-                        CommonActionKey.CREATE_EDITOR_ACTION
-                    )
+
                     registerForwardArgument(
                         CommonActionKey.CREATE_EDITOR_ACTION,
                     ) {
                         it.addArgument(languageServerDefinition)
                     }
+                    registerAction(
+                        getJavaClass<CreateEditorAction>(),
+                        CommonActionKey.CREATE_EDITOR_ACTION
+                    )
                 }
 
 

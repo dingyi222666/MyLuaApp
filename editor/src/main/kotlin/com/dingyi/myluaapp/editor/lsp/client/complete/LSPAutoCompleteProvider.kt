@@ -24,18 +24,18 @@ class LSPAutoCompleteProvider(
         position: CharPosition,
         publisher: CompletionPublisher
     ): Unit = withContext(Dispatchers.IO) {
-        suspendCoroutine<Unit> { continuation ->
+        suspendCoroutine<Unit> {
             server.textDocumentService
                 .completion(editor.getFile().toURI(), position)
-                ?.thenApply { result ->
+                ?.handle { result, exp ->
                     (result.left ?: result.right?.items)?.forEach {
                         publisher.addItem(SimpleCompletionItem(it.label, 0, it.insertText))
                     }
+                    it.resume(Unit)
+                    publisher.updateList()
                 }
-            continuation.resume(Unit)
-            publisher.updateList()
+
+
         }
-
     }
-
 }

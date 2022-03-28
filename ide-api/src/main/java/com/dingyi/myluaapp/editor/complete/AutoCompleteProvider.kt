@@ -9,7 +9,11 @@ import org.checkerframework.checker.guieffect.qual.UI
 interface AutoCompleteProvider {
 
     @WorkerThread
-    suspend fun requireAutoComplete(content:ContentReference,position: CharPosition,publisher:CompletionPublisher)
+    suspend fun requireAutoComplete(
+        content: ContentReference,
+        position: CharPosition,
+        publisher: CompletionPublisher
+    )
 
 
 }

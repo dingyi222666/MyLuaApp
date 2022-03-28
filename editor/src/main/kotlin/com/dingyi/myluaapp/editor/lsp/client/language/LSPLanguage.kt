@@ -30,6 +30,7 @@ open class LSPLanguage(
         return LSPAutoCompleteProvider(checkNotNull(server), checkNotNull(editor))
     }
 
+
     override fun destroy() {
         wrapper.disconnect(editor.checkNotNull())
 
