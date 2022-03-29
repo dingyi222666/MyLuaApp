@@ -32,10 +32,10 @@ object BuildConfig {
         const val gson_version = "2.8.8"
         const val material_version = "1.5.0"
         const val appcompat_version = "1.4.1"
-        const val sora_editor_version = "0.10.9"
+        const val sora_editor_version = "0.10.10"
         const val lifecycle_version = "2.4.0"
         const val preference_ktx_version = "1.1.1"
-        const val constraint_layout_version = "2.0.4"
+        const val constraint_layout_version = "2.1.3"
 
         const val glide_version = "4.11.0"
         const val net_version = "3.1.2"
@@ -65,6 +65,7 @@ object BuildConfig {
 
         const val androlua_standalone_version = "1.0.2"
 
+        const val java_parser_version = "3.24.2"
 
         const val jdt_version = "3.29.0"
 
@@ -144,7 +145,7 @@ object BuildConfig {
 
             const val androlua_standalone = "io.github.dingyi222666:androlua-standlone:${Versions.androlua_standalone_version}"
 
-
+            const val java_parser = "com.github.javaparser:javaparser-symbol-solver-core:${Versions.java_parser_version}"
 
         }
 
