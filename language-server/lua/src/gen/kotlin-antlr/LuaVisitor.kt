@@ -214,6 +214,12 @@ interface LuaVisitor<T> : ParseTreeVisitor<T> {
 	 */
 	fun visitCasebody(ctx : LuaParser.CasebodyContext) : T
 	/**
+	 * Visit a parse tree produced by {@link LuaParser#caseexp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	fun visitCaseexp(ctx : LuaParser.CaseexpContext) : T
+	/**
 	 * Visit a parse tree produced by {@link LuaParser#lambdabody}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -376,6 +376,18 @@ open class LuaBaseListener : LuaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	override fun enterCaseexp(ctx: LuaParser.CaseexpContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	override fun exitCaseexp(ctx: LuaParser.CaseexpContext) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	override fun enterLambdabody(ctx: LuaParser.LambdabodyContext) { }
 	/**
 	 * {@inheritDoc}

@@ -228,6 +228,13 @@ open class LuaBaseVisitor<T> : AbstractParseTreeVisitor<T>(), LuaVisitor<T> {
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	override fun visitCaseexp(ctx : LuaParser.CaseexpContext ) : T { return this!!.visitChildren(ctx)!! }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	override fun visitLambdabody(ctx : LuaParser.LambdabodyContext ) : T { return this!!.visitChildren(ctx)!! }
 	/**
 	 * {@inheritDoc}

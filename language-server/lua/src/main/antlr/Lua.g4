@@ -26,7 +26,7 @@ stat
     | 'function' funcname funcbody  #functionDefStat
     | 'local' 'function' NAME funcbody  #localFunctionDefStat
     | 'local' attnamelist ('=' explist)?  #localVarListStat
-    | 'switch' exp ('do')? casebody* defaultbody? 'end' #switchStat
+    | 'switch' exp ('do')?  casebody* defaultbody 'end' #switchStat
     | 'when' exp prefixexp ('else'? prefixexp)? #whenStat
     | 'lambda' lambdabody #lambdaStat
     | 'defer' functioncall #deferStat
@@ -53,11 +53,15 @@ elsebody
 
 
 defaultbody
-    : 'default' block
+    : 'default' ('then'|':')? block
     ;
 
 casebody
-    : 'case' (parlist) ('then'|':')? block
+    : 'case' caseexp  block
+    ;
+
+caseexp
+    : explist ('then'|':')?
     ;
 
 lambdabody

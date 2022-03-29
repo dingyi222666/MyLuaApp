@@ -25,6 +25,8 @@ class JavaLanguageServer : LanguageServer, LanguageClientAware, TextDocumentServ
 
     private val parserHelper = ParserHelper()
 
+
+
     override fun initialize(params: InitializeParams): CompletableFuture<InitializeResult> {
         return CompletableFuture.supplyAsync {
 

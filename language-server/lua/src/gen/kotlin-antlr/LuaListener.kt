@@ -353,6 +353,16 @@ interface LuaListener : ParseTreeListener {
 	 */
 	fun exitCasebody(ctx: LuaParser.CasebodyContext)
 	/**
+	 * Enter a parse tree produced by {@link LuaParser#caseexp}.
+	 * @param ctx the parse tree
+	 */
+	fun enterCaseexp(ctx: LuaParser.CaseexpContext)
+	/**
+	 * Exit a parse tree produced by {@link LuaParser#caseexp}.
+	 * @param ctx the parse tree
+	 */
+	fun exitCaseexp(ctx: LuaParser.CaseexpContext)
+	/**
 	 * Enter a parse tree produced by {@link LuaParser#lambdabody}.
 	 * @param ctx the parse tree
 	 */
