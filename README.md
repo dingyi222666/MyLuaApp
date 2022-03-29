@@ -6,7 +6,7 @@
 [![CI Build Stauts](https://github.com/dingyi222666/MyLuaApp/actions/workflows/android-debug-build.yml/badge.svg)](https://github.com/dingyi222666/MyLuaApp/tree/master/.github/workflows/android-debug-build.yml)
 
 
-nglish | [中文](https://github.com/dingyi222666/MyLuaApp/tree/master/README_ZH.md)
+English | [中文](https://github.com/dingyi222666/MyLuaApp/tree/master/README_ZH.md)
 
 It's ***Work In Progress***.The project is still in the **alpha** stage, and most of the Features are **not implemented** (such as build module). At present, this project can not be fully run.
 
