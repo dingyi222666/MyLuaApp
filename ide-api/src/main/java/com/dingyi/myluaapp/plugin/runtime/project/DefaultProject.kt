@@ -1,5 +1,7 @@
 package com.dingyi.myluaapp.plugin.runtime.project
 
+import com.dingyi.myluaapp.build.api.service.Service
+import com.dingyi.myluaapp.editor.lsp.LSPProject
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.project.Project
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +51,15 @@ abstract class DefaultProject(
         return path.walk()
     }
 
+    private var currentProject: com.dingyi.myluaapp.build.api.Project? = null
+
+    override fun getBuildProject(): com.dingyi.myluaapp.build.api.Project {
+        return currentProject ?: pluginContext.getBuildService<Service>()
+            .getMainBuilder(this)
+            .getProject().apply {
+                currentProject = this
+            }
+    }
 
     override suspend fun renameFile(file: File, targetFile: File): Unit =
         withContext(Dispatchers.IO) {

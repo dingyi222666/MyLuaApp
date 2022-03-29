@@ -10,4 +10,5 @@ interface EditorListener {
 
     fun onEditorSave()
 
+    fun onEditorOpen()
 }

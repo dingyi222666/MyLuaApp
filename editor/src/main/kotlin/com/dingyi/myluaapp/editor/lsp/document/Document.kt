@@ -7,8 +7,7 @@ import com.dingyi.myluaapp.editor.lsp.server.LanguageServerWrapper
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.editor.EditorListener
 import io.github.rosemoe.sora.event.ContentChangeEvent
-import org.eclipse.lsp4j.DidChangeTextDocumentParams
-import org.eclipse.lsp4j.TextDocumentSyncKind
+import org.eclipse.lsp4j.*
 import java.net.URI
 import java.util.concurrent.CompletableFuture
 
@@ -17,7 +16,7 @@ class Document(
     private val wrapper: LanguageServerWrapper,
     val uri: URI,
     private var editor: Editor?,
-    syncKind: TextDocumentSyncKind? = TextDocumentSyncKind.Full
+    private val syncKind: TextDocumentSyncKind? = TextDocumentSyncKind.Full
 ) : EditorListener {
 
     var version = 0
@@ -25,24 +24,89 @@ class Document(
     private val modificationStamp: Long = 0
 
 
-    var didOpenFuture: CompletableFuture<Void>? = null
-
     init {
         editor?.addEditorListener(this)
 
-        didOpenFuture = wrapper.getInitializedServer()
+
+    }
+
+
+    private fun makeFullDidChangeParams(
+        currentEditor: Editor,
+        event: ContentChangeEvent
+    ): DidChangeTextDocumentParams {
+        return DidChangeTextDocumentParams(
+            VersionedTextDocumentIdentifier(
+                uri.toString(),
+                ++version
+            ),
+            mutableListOf(
+                TextDocumentContentChangeEvent(
+                    currentEditor.getText().toString()
+                )
+            )
+        )
+    }
+
+    override fun onEditorChange(currentEditor: Editor, event: ContentChangeEvent) {
+        wrapper.getInitializedServer()
+            .thenAcceptAsync { ls ->
+                when (syncKind) {
+                    TextDocumentSyncKind.Full, TextDocumentSyncKind.None -> {
+                        ls.textDocumentService.didChange(
+                            makeFullDidChangeParams(currentEditor, event)
+                        )
+                    }
+                    TextDocumentSyncKind.Incremental -> {
+
+                        val params = when (event.action) {
+                            ContentChangeEvent.ACTION_SET_NEW_TEXT -> makeFullDidChangeParams(
+                                currentEditor,
+                                event
+                            )
+                            else -> makeIncrementDidChangeParams(event)
+                        }
+
+                        ls.textDocumentService.didChange(
+                            params
+                        )
+                    }
+                }
+            }
+    }
+
+    private fun makeIncrementDidChangeParams(
+        event: ContentChangeEvent
+    ): DidChangeTextDocumentParams {
+        val text = event.changedText.toString()
+        return DidChangeTextDocumentParams(
+            VersionedTextDocumentIdentifier(
+                uri.toString(),
+                ++version
+            ),
+            mutableListOf(
+                TextDocumentContentChangeEvent(
+                    Range(
+                        Position(event.changeStart.line, event.changeStart.column),
+                        Position(event.changeEnd.line, event.changeEnd.column)
+                    ),
+                    if (event.action == ContentChangeEvent.ACTION_INSERT) text.length else -text.length,
+                    event.changedText.toString()
+                )
+            )
+        )
+    }
+
+    override fun onEditorOpen() {
+        wrapper.getInitializedServer()
             .thenAcceptAsync { ls ->
                 ls.textDocumentService.didOpen(
                     uri = uri,
                     text = editor?.getText().toString(),
                     version = version,
-                    languageId  = editor?. let { it.getLanguage().getName() } ?: ""
+                    languageId = editor?.let { it.getLanguage().getName() } ?: ""
                 )
             }
-    }
-
-    override fun onEditorChange(currentEditor: Editor, event: ContentChangeEvent) {
-
     }
 
     override fun onEditorClose() {

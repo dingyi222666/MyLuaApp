@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.plugin.runtime.build
 
 import com.dingyi.myluaapp.MainApplication
 import com.dingyi.myluaapp.build.BuildMain
+import com.dingyi.myluaapp.build.api.builder.MainBuilder
 import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.plugin.api.build.BuildService
 import com.dingyi.myluaapp.plugin.api.project.Project
@@ -37,5 +38,9 @@ class BuildService() : BuildService<Service> {
 
     override fun stop() {
         buildMain.close()
+    }
+
+    override fun getMainBuilder(project: Project): MainBuilder {
+        return buildMain.getBuilder(project.path.path)
     }
 }

@@ -48,10 +48,7 @@ object LanguageServiceAccessor {
             getLSWrapper(editor.getProject(), lsDefinition)
         if (capabilitiesComply(wrapper, capabilitiesPredicate)) {
 
-            return wrapper.getInitializedServer().thenApply {
-                wrapper.connect(editor)
-                it
-            }
+            return wrapper.getInitializedServer()
         }
         return CompletableFuture.completedFuture(null)
     }

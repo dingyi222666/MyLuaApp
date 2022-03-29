@@ -27,7 +27,6 @@ open class LSPLanguage(
 
     init {
         serverCapabilities = wrapper.getServerCapabilities()
-        editor?.let { wrapper.connect(it) }
     }
 
     override fun getName() = "LSPLanguage"

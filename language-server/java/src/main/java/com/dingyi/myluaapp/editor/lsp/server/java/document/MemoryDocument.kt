@@ -22,9 +22,9 @@ open class MemoryDocument(override val uri: String) : Document {
 
         return subList.mapIndexed { index, documentLine ->
             if (index == 0) {
-                documentLine.text.substring(range.start.character, documentLine.text.length)
+                documentLine.getRange(range.start.character .. documentLine.text.length)
             } else if (index == subList.size - 1) {
-                documentLine.text.substring(0, range.end.character)
+                documentLine.getRange(0 .. range.end.character)
             } else {
                 documentLine.text
             }
@@ -32,15 +32,18 @@ open class MemoryDocument(override val uri: String) : Document {
     }
 
     override fun setText(text: String) {
-        var workLine = 0
+        lines.clear()
+
         val buffer = StringBuilder()
-        var currLine: DocumentLine = lines[workLine]
+        var currLine = lines.getOrNull(0) ?: DocumentLine("",0)
         for (element in text) {
             if (element == '\n') {
                 val newLine = DocumentLine(buffer.toString(), currLine.lineNumber)
-                lines.add(workLine + 1, newLine)
+                newLine.text = buffer.toString()
+                buffer.clear()
+                lines.add( newLine)
                 currLine = newLine
-                workLine++
+
             } else {
                 buffer.append(element)
             }

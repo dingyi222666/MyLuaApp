@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.build
 
 import android.app.Application
+import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.builder.MainBuilder
 import com.dingyi.myluaapp.build.dependency.repository.LocalMavenRepository
 import com.dingyi.myluaapp.build.log.Logger
@@ -28,6 +29,8 @@ class BuildMain(
         logger = logger ?: Logger(application)
         return logger ?: error("")
     }
+
+    fun getBuilder(path: String) = MainBuilder(path,createLogger(),repository, mavenRepository)
 
     fun build(path: String, command: String) {
 
@@ -82,7 +85,16 @@ class BuildMain(
             }
         }.build("sync")
 
+    }
 
+    fun syncAndReturnProject(path: String):Project {
+        return MainBuilder(path, createLogger(), repository, mavenRepository).apply {
+            init()
+            nowBuilder = this
+            setBuildCompleteListener {
+                nowBuilder = null
+            }
+        }.sync()
     }
 
     fun close() {

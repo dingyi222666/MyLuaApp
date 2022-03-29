@@ -98,7 +98,7 @@ class TextMateHighlightProvider(
         tokenizeResult: LineTokenizeResult<TextMateState>?
     ): LineTokenizeResult<TextMateState> {
         val data = tokenizeResult?.data?.ruleStack ?: StackElement.NULL
-        val lineText: String = lineString.toString()
+        val lineText = lineString.toString()
         val tokens = mutableListOf<Span>()
         val lineTokens = language.getGrammar()
             .tokenizeLine2(lineText, data)

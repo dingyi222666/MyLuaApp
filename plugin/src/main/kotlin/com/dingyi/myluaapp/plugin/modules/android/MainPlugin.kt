@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.plugin.modules.android
 
+import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.editor.lsp.server.definition.SocketLanguageServerDefinition
 import com.dingyi.myluaapp.editor.lsp.server.java.Main
@@ -33,9 +34,12 @@ class MainPlugin: Plugin {
 
 
         val port = getRandomPort()
-        Main.startWithSocket(arrayOf(port.toString()))
 
-        val javaLanguageServerDefinition = SocketLanguageServerDefinition("java", port)
+
+
+        val javaLanguageServerDefinition = SocketLanguageServerDefinition("java", port) {
+            Main.startWithSocket(arrayOf(port.toString()))
+        }
 
 
         context.getActionService()
@@ -68,8 +72,7 @@ class MainPlugin: Plugin {
     }
 
     override fun onStop(context: PluginContext) {
-        Main
-            .close()
+        Main.close()
     }
 
     override val pluginId: String

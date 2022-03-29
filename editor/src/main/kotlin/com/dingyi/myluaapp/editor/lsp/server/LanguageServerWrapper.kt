@@ -356,7 +356,7 @@ class LanguageServerWrapper(
                 )
 
                 connectedDocuments[uri] = document
-                return@thenComposeAsync document.didOpenFuture?.thenApply {}
+                return@thenComposeAsync  CompletableFuture.completedFuture<Any>(null)
             }
             CompletableFuture.completedFuture<Any>(null)
         }.thenApply { languageServer }

@@ -20,6 +20,7 @@ import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.modules.lua.editor.LuaLanguage
+import org.eclipse.lsp4j.InitializedParams
 import java.io.File
 
 class CreateJavaEditorAction : Action<Unit> {
@@ -39,6 +40,8 @@ class CreateJavaEditorAction : Action<Unit> {
                     if (it == null) {
                         throw RuntimeException("language server is null")
                     }
+
+
 
 
                     editor.setLanguage(

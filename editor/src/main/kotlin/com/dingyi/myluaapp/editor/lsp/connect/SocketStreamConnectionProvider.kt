@@ -4,7 +4,8 @@ import java.io.*
 import java.net.Socket
 
 class SocketStreamConnectionProvider(
-    private val port:Int
+    private val port: Int,
+    private val block: () -> Unit
 ): StreamConnectionProvider {
 
 
@@ -14,6 +15,7 @@ class SocketStreamConnectionProvider(
 
 
     override fun start() {
+        block()
         socket = Socket("localhost", port)
         inputStream = BufferedInputStream(socket.getInputStream())
         outputStream = BufferedOutputStream(socket.getOutputStream())

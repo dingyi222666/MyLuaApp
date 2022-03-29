@@ -227,10 +227,15 @@ class Editor(
             throw FileNotFoundException("The File was deleted.")
         }
         val text = path.readText()
+
+
         withContext(Dispatchers.Main) {
             setText(text)
             doRestoreState(currentEditorState)
         }
+
+        allEditorListener.forEach { it.onEditorOpen() }
+
     }
 
     override fun equals(other: Any?): Boolean {

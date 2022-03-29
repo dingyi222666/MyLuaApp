@@ -1,19 +1,18 @@
 package com.dingyi.myluaapp.editor.lsp.server.definition
 
-import com.dingyi.myluaapp.editor.lsp.connect.InternalConnectionProvider
 import com.dingyi.myluaapp.editor.lsp.connect.SocketStreamConnectionProvider
 import com.dingyi.myluaapp.editor.lsp.connect.StreamConnectionProvider
-import org.eclipse.lsp4j.services.LanguageServer
 
 open class SocketLanguageServerDefinition(
     override val id: String,
     private val port: Int,
+    private val block: () -> Unit
 ) : EmptyLanguageServerDefinition() {
 
     private var connectionProvider: StreamConnectionProvider? = null
 
     override fun createConnectionProvider(): StreamConnectionProvider {
-        return SocketStreamConnectionProvider(port).apply {
+        return SocketStreamConnectionProvider(port,block).apply {
             connectionProvider = this
         }
     }

@@ -2,7 +2,9 @@ package com.dingyi.myluaapp.editor.lsp.server.java.document
 
 import java.io.File
 
+
 class FileDocument(private val file: File) : MemoryDocument(file.toURI().toString()) {
+
 
     override fun getText(): String {
         if (lines.isEmpty()) {

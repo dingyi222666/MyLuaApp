@@ -18,6 +18,7 @@ import com.dingyi.myluaapp.build.dependency.ProjectDependency
 import com.dingyi.myluaapp.build.script.DefaultScript
 import com.dingyi.myluaapp.build.util.ComparableVersion
 import com.dingyi.myluaapp.common.ktx.toFile
+import org.jetbrains.kotlin.asJava.fastCheckIsNullabilityApplied
 import org.luaj.vm2.LuaTable
 import java.io.File
 

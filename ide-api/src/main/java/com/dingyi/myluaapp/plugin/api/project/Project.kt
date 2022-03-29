@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.plugin.api.project
 
+import com.dingyi.myluaapp.editor.lsp.LSPProject
 import java.io.File
 
 interface Project {
@@ -19,6 +20,9 @@ interface Project {
     suspend fun renameFile(file: File, targetFile: File)
 
     suspend fun createDirectory(targetPath: File)
+
+
+    fun getBuildProject():com.dingyi.myluaapp.build.api.Project
 
     val name: String
 

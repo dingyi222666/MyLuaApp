@@ -26,9 +26,11 @@ class MainPlugin: Plugin {
     override fun onStart(context: PluginContext) {
 
         val port = getRandomPort()
-        Main.startWithSocket(arrayOf(port.toString()))
 
-        val languageServerDefinition = SocketLanguageServerDefinition("lua",port)
+        val languageServerDefinition = SocketLanguageServerDefinition("lua",port) {
+            Main.startWithSocket(arrayOf(port.toString()))
+
+        }
         context.apply {
             getEditorService()
                 .apply {

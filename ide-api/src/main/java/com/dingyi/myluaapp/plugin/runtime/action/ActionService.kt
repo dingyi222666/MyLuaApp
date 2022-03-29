@@ -131,7 +131,7 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
             mutableListOf()
         }
         keyAction.add(block)
-        allForwardAction[key] = keyAction
+        filterForwardAction[mapKey] = keyAction
     }
 
 
