@@ -63,7 +63,7 @@ dependencies {
 
     implementation(project(":builder"))
 
-    implementation(project(":lua-lsp-server"))
+    implementation(project(":language-server:lua"))
 
 
     BuildConfig.Libs.Views.sora_editor.forEach {
