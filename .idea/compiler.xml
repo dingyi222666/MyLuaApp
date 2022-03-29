@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.7">
+    <bytecodeTargetLevel target="1.8">
       <module name="MyLuaApp.AndroLua" target="11" />
       <module name="MyLuaApp.androlua" target="11" />
       <module name="MyLuaApp.app" target="11" />
@@ -11,7 +11,7 @@
       <module name="MyLuaApp.core" target="11" />
       <module name="MyLuaApp.editor" target="11" />
       <module name="MyLuaApp.ide-api" target="11" />
-      <module name="MyLuaApp.language-server.lua" target="1.8" />
+      <module name="MyLuaApp.language-server.java" target="11" />
       <module name="MyLuaApp.LuaLibrary" target="11" />
       <module name="MyLuaApp.plugin" target="11" />
       <module name="MyLuaApp.tm4e" target="11" />

@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.editor.lsp.client.complete
 
 import com.dingyi.myluaapp.editor.complete.AutoCompleteProvider
+import com.dingyi.myluaapp.editor.lsp.client.language.LSPLanguage
 import com.dingyi.myluaapp.editor.lsp.ktx.completion
 import com.dingyi.myluaapp.editor.lsp.server.LanguageServerWrapper
 import com.dingyi.myluaapp.plugin.api.editor.Editor
@@ -17,13 +18,18 @@ import kotlin.coroutines.suspendCoroutine
 
 class LSPAutoCompleteProvider(
     private val server: LanguageServer,
-    private val editor: Editor
+    private val editor: Editor,
+    private val language:LSPLanguage
 ) : AutoCompleteProvider {
+
+
     override suspend fun requireAutoComplete(
         content: ContentReference,
         position: CharPosition,
         publisher: CompletionPublisher
     ): Unit = withContext(Dispatchers.IO) {
+
+
         suspendCoroutine<Unit> {
             server.textDocumentService
                 .completion(editor.getFile().toURI(), position)

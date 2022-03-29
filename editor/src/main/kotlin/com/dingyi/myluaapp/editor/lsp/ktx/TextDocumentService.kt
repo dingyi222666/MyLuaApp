@@ -24,3 +24,7 @@ fun TextDocumentService.completion(uri: URI, position: CharPosition): Completabl
         )
     )
 }
+
+fun TextDocumentService.didSave(uri: URI,text: String) {
+    didSave(DidSaveTextDocumentParams(TextDocumentIdentifier(uri.toString()),text))
+}

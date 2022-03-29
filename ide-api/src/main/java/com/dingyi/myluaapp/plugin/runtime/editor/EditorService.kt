@@ -100,6 +100,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
 
         if (indexOfEditor != -1) {
+            editor.close()
             allEditor.removeAt(indexOfEditor)
         }
 
@@ -161,6 +162,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
 
         for (i in allEditor) {
             if (i.getFile().path == editor.path) {
+                i.close()
                 allEditor.remove(i)
                 return
             }
@@ -372,6 +374,7 @@ class EditorService(private val pluginContext: PluginContext) : EditorService {
             .add(editor.saveState())
 
         currentEditorServiceState.lastOpenPath = editor.getFile().path
+        allEditor.forEach { if (it !=editor) it.close() }
         allEditor.clear()
         allEditor.add(editor)
     }

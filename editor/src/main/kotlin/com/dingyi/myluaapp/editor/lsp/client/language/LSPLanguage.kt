@@ -9,6 +9,8 @@ import com.dingyi.myluaapp.editor.lsp.server.LanguageServerWrapper
 import com.dingyi.myluaapp.editor.lsp.service.LanguageServiceAccessor
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.runtime.editor.EmptyLanguage
+import io.github.rosemoe.sora.text.Content
+import org.eclipse.lsp4j.ServerCapabilities
 import org.eclipse.lsp4j.services.LanguageClient
 import org.eclipse.lsp4j.services.LanguageServer
 
@@ -19,6 +21,15 @@ open class LSPLanguage(
     private val wrapperLanguage: Language,
     private var editor: Editor?
 ) : Language() {
+
+     var serverCapabilities: ServerCapabilities? = null
+        private set
+
+    init {
+        serverCapabilities = wrapper.getServerCapabilities()
+        editor?.let { wrapper.connect(it) }
+    }
+
     override fun getName() = "LSPLanguage"
 
     override fun getHighlightProvider(): HighlightProvider {
@@ -27,8 +38,10 @@ open class LSPLanguage(
 
     override fun getAutoCompleteProvider(): AutoCompleteProvider {
         print("LSPLanguage getAutoCompleteProvider")
-        return LSPAutoCompleteProvider(checkNotNull(server), checkNotNull(editor))
+        return LSPAutoCompleteProvider(checkNotNull(server), checkNotNull(editor), this)
     }
+
+
 
 
     override fun destroy() {

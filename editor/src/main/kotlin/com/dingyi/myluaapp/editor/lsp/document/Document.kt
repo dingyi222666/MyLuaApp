@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.editor.lsp.document
 
 import com.dingyi.myluaapp.editor.lsp.ktx.didClose
 import com.dingyi.myluaapp.editor.lsp.ktx.didOpen
+import com.dingyi.myluaapp.editor.lsp.ktx.didSave
 import com.dingyi.myluaapp.editor.lsp.server.LanguageServerWrapper
 import com.dingyi.myluaapp.plugin.api.editor.Editor
 import com.dingyi.myluaapp.plugin.api.editor.EditorListener
@@ -56,7 +57,14 @@ class Document(
     }
 
     override fun onEditorSave() {
-
+        if (!wrapper.isActive()) {
+            return
+        }
+        wrapper.getInitializedServer().thenAccept {
+            editor?.getText()?.let { string ->
+                it.textDocumentService.didSave(uri, string.toString())
+            }
+        }
     }
 
 }

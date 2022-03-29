@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.plugin.modules.android
 
 import com.dingyi.myluaapp.common.ktx.getJavaClass
+import com.dingyi.myluaapp.editor.lsp.server.definition.SocketLanguageServerDefinition
+import com.dingyi.myluaapp.editor.lsp.server.java.Main
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.modules.android.action.AndroidProjectMenuAction
@@ -8,6 +10,8 @@ import com.dingyi.myluaapp.plugin.modules.android.action.AndroidProjectMenuActio
 import com.dingyi.myluaapp.plugin.modules.android.project.AndroidProjectCreatorProvider
 import com.dingyi.myluaapp.plugin.modules.android.project.AndroidProjectProvider
 import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
+import com.dingyi.myluaapp.plugin.modules.android.action.CreateJavaEditorAction
+import com.dingyi.myluaapp.plugin.runtime.ktx.getRandomPort
 
 class MainPlugin: Plugin {
 
@@ -28,19 +32,44 @@ class MainPlugin: Plugin {
             }
 
 
+        val port = getRandomPort()
+        Main.startWithSocket(arrayOf(port.toString()))
+
+        val javaLanguageServerDefinition = SocketLanguageServerDefinition("java", port)
+
+
         context.getActionService()
             .apply {
                 registerAction(
                     getJavaClass<AndroidProjectMenuAction>(),
                     CommonActionKey.ADD_PROJECT_MENU
                 )
+                context.apply {
+
+
+
+                    getActionService()
+                        .apply {
+
+                            registerForwardArgument(
+                                CommonActionKey.CREATE_EDITOR_ACTION,
+                                getJavaClass<CreateJavaEditorAction>()
+                            ) {
+                                it.addArgument(javaLanguageServerDefinition)
+                            }
+                            registerAction(
+                                getJavaClass<CreateJavaEditorAction>(),
+                                CommonActionKey.CREATE_EDITOR_ACTION
+                            )
+                        }
+                }
+
             }
-
-
     }
 
     override fun onStop(context: PluginContext) {
-
+        Main
+            .close()
     }
 
     override val pluginId: String

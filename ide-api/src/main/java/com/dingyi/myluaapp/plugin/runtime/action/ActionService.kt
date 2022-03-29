@@ -74,10 +74,15 @@ class ActionService(private val pluginContext: PluginContext) : ActionService {
         if (list != null) {
             for (action in list) {
 
-                var targetActionArgument =
-                    forwardActionArgument(
-                        forwardActionArgument(actionArgument, key, action), key
-                    )
+                val mapKey = key to action
+                val keyAction = filterForwardAction.get(mapKey)
+
+
+                val targetActionArgument = if (keyAction != null) {
+                    forwardActionArgument(actionArgument, key, action)
+                } else {
+                    forwardActionArgument(actionArgument, key)
+                }
 
                 val result = (action.newInstance() as Action<*>).callAction(targetActionArgument)
                 if (result != null) {

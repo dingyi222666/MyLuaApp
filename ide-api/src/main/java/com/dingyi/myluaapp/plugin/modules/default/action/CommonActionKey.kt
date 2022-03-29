@@ -12,7 +12,7 @@ object CommonActionKey {
     val CREATE_PROJECT_FILE = ActionKey(0x11, false)
     val DELETE_PROJECT_FILE = ActionKey(0x10, false)
 
-    val CREATE_EDITOR_ACTION = ActionKey(0x2,false)
+    val CREATE_EDITOR_ACTION = ActionKey(0x2,true)
 
     val CLICK_TREE_VIEW_FILE = ActionKey(0x3,true)
 

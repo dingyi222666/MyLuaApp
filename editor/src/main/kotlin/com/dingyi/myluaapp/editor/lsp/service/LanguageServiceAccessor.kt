@@ -47,8 +47,11 @@ object LanguageServiceAccessor {
         val wrapper =
             getLSWrapper(editor.getProject(), lsDefinition)
         if (capabilitiesComply(wrapper, capabilitiesPredicate)) {
-            wrapper.connect(editor)
-            return wrapper.getInitializedServer()
+
+            return wrapper.getInitializedServer().thenApply {
+                wrapper.connect(editor)
+                it
+            }
         }
         return CompletableFuture.completedFuture(null)
     }

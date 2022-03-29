@@ -11,6 +11,7 @@ import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.modules.default.action.CommonActionKey
 import com.dingyi.myluaapp.plugin.modules.lua.action.CreateEditorAction
 import com.dingyi.myluaapp.plugin.modules.lua.build.LuaBuildService
+import com.dingyi.myluaapp.plugin.runtime.ktx.getRandomPort
 
 class MainPlugin: Plugin {
 
@@ -55,15 +56,7 @@ class MainPlugin: Plugin {
         }
     }
 
-    /**
-     * Get a random socket port and close it
-     */
-    private fun getRandomPort(): Int {
-        val serverSocket = java.net.ServerSocket(0)
-        val port = serverSocket.localPort
-        serverSocket.close()
-        return port
-    }
+
 
     override fun onStop(context: PluginContext) {
         Main.close()

@@ -19,6 +19,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 
 
 class LanguageServerWrapper(
@@ -108,14 +109,16 @@ class LanguageServerWrapper(
                         .setExecutorService(executorService) //
                         .wrapMessages { consumer ->
                             MessageConsumer {
-                                consumer.consume(it)
-                                val currentConnectionProvider = lspStreamProvider
-                                if (currentConnectionProvider != null && isActive()) {
-                                    currentConnectionProvider.handleMessage(
-                                        it,
-                                        languageServer,
-                                        initParams.rootUri
-                                    )
+                                thread {
+                                    consumer.consume(it)
+                                    val currentConnectionProvider = lspStreamProvider
+                                    if (currentConnectionProvider != null && isActive()) {
+                                        currentConnectionProvider.handleMessage(
+                                            it,
+                                            languageServer,
+                                            initParams.rootUri
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -217,8 +220,7 @@ class LanguageServerWrapper(
             hoverCapabilities.contentFormat =
                 listOf(MarkupKind.MARKDOWN, MarkupKind.PLAINTEXT)
             textDocumentClientCapabilities.hover = hoverCapabilities
-            textDocumentClientCapabilities.onTypeFormatting = null // TODO
-
+            textDocumentClientCapabilities.onTypeFormatting = null
             textDocumentClientCapabilities.rangeFormatting = RangeFormattingCapabilities()
             textDocumentClientCapabilities.references = ReferencesCapabilities()
             textDocumentClientCapabilities.rename = RenameCapabilities()
@@ -240,9 +242,9 @@ class LanguageServerWrapper(
             return@thenCompose requireLanguageServer().initialize(initParams)
         }.thenAccept { res ->
             serverCapabilities = res.capabilities
-        }.thenRun {
+        }.thenAccept {
             requireLanguageServer().initialized(InitializedParams())
-        }.thenRun {
+        }.thenAccept {
             Log.d("LanguageServer", "Initialized")
         }
     }
@@ -336,7 +338,7 @@ class LanguageServerWrapper(
                     )
                 }
                 val syncOptions: Either<TextDocumentSyncKind, TextDocumentSyncOptions>? =
-                    if (initializeFuture == null) null else serverCapabilities!!.textDocumentSync
+                    if (initializeFuture == null) null else serverCapabilities?.textDocumentSync
                 var syncKind: TextDocumentSyncKind? = null
                 if (syncOptions != null) {
                     if (syncOptions.isRight) {

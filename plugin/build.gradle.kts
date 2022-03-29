@@ -65,6 +65,9 @@ dependencies {
 
     implementation(project(":language-server:lua"))
 
+    implementation(project(":language-server:java"))
+
+
 
     BuildConfig.Libs.Views.sora_editor.forEach {
         implementation(it) {
