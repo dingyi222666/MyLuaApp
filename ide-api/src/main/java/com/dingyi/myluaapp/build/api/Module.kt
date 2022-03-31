@@ -26,7 +26,6 @@ interface Module : ModuleScript {
 
     fun getDependencies(): List<Dependency>
 
-
     fun getPath(): String
 
     fun getFileManager(): FileManager
@@ -44,8 +43,9 @@ interface Module : ModuleScript {
 
 
     fun close()
+
     /**
-     * If is main module,return true
+     * Return the module is a main module
      */
     fun isMainModule(): Boolean = false
 

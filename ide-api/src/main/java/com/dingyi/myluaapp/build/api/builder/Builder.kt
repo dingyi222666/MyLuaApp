@@ -15,5 +15,5 @@ interface Builder {
     fun init()
 
     fun clear()
-     fun onInit(function: Runnable)
+    fun onInit(function: Runnable)
 }

@@ -35,4 +35,7 @@ include(
     ":language-server:lua",
     ":language-server:java")
 
+include(":build-tools:build-api")
+
 rootProject.name = "MyLuaApp"
+

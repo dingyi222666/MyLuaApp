@@ -87,15 +87,7 @@ class BuildMain(
 
     }
 
-    fun syncAndReturnProject(path: String):Project {
-        return MainBuilder(path, createLogger(), repository, mavenRepository).apply {
-            init()
-            nowBuilder = this
-            setBuildCompleteListener {
-                nowBuilder = null
-            }
-        }.sync()
-    }
+
 
     fun close() {
         nowBuilder?.stop()

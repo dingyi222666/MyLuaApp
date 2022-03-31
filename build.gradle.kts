@@ -12,6 +12,7 @@ plugins {
     id("com.android.library") version (BuildConfig.Versions.android_gradle_plugin_version) apply (false)
     id("org.jetbrains.kotlin.android") version (BuildConfig.Versions.kotlin_version) apply (false)
     id("org.jetbrains.kotlin.kapt") version (BuildConfig.Versions.kotlin_version) apply (false)
+    id("org.jetbrains.kotlin.jvm") version (BuildConfig.Versions.kotlin_version) apply false
 }
 
 tasks {
@@ -19,4 +20,6 @@ tasks {
         delete(rootProject.buildDir)
     }
 }
+
+
 
