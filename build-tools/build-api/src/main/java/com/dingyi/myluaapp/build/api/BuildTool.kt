@@ -1,17 +1,10 @@
 package com.dingyi.myluaapp.build.api
 
-import com.dingyi.myluaapp.build.api.file.SnapshotManager
-import java.io.File
+import com.dingyi.myluaapp.build.api.properties.Properties
 
-interface BuildTool {
+interface BuildTool:Properties {
 
+    fun getVersion(): String
 
-    fun getLocalMavenDirectory(): File
-
-    fun getCacheDirectory(): File
-
-    fun getCurrentVersion():String
-
-    fun getSnapshotManager(): SnapshotManager
 
 }
