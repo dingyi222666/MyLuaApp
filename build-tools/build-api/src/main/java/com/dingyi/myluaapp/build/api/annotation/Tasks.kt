@@ -16,3 +16,12 @@ annotation class TaskInput
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class TaskOutput
+
+
+/**
+ * A task main action annotation.
+ * If marked on a method, will execute the method as the task main action.
+ */
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class TaskAction

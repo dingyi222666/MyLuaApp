@@ -14,4 +14,5 @@ interface PluginContainer {
 
     fun setPlugin(id:String,plugin:Plugin<*>)
 
+    fun clearPlugin()
 }
