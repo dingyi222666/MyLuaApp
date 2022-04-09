@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.build.api.tests
 
+import com.dingyi.myluaapp.build.api.plugins.ExtensionAware
 import org.junit.Test
 
 
@@ -29,4 +30,25 @@ fun main() {
     val test = Test1()
 
 
+}
+
+class Test2 {
+    @Test
+    fun test() {
+        val container: ExtensionAware? = null
+        container?.let {
+            it.getExtensions()
+                .add(
+                    "android",
+                    "com.android.tools.build.gradle.internal.plugins.AndroidExtension"
+                )
+
+
+            it.getExtensions()
+                .getByName("android").apply {
+
+                }
+        }
+
+    }
 }
