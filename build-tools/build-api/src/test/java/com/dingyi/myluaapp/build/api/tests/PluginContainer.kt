@@ -1,7 +1,10 @@
 package com.dingyi.myluaapp.build.api.tests
 
+import com.dingyi.myluaapp.build.api.internal.plugins.DefaultExtensionContainer
 import com.dingyi.myluaapp.build.api.plugins.ExtensionAware
+import com.dingyi.myluaapp.build.api.plugins.ExtensionContainer
 import org.junit.Test
+import org.junit.Assert.*
 
 
 @Target(AnnotationTarget.FIELD)
@@ -32,23 +35,29 @@ fun main() {
 
 }
 
+class TestBean {
+    var test = ""
+    var age = 12
+    override fun toString(): String {
+        return "TestBean(test='$test', age=$age)"
+    }
+
+}
+
 class Test2 {
     @Test
     fun test() {
-        val container: ExtensionAware? = null
-        container?.let {
-            it.getExtensions()
-                .add(
-                    "android",
-                    "com.android.tools.build.gradle.internal.plugins.AndroidExtension"
-                )
-
-
-            it.getExtensions()
-                .getByName("android").apply {
-
-                }
+        val container = DefaultExtensionContainer()
+        val testBean = TestBean()
+        container.add("test", testBean)
+        assertEquals(testBean, container.getByName("test"))
+        println(container.getByName("test"))
+        container.configure(TestBean::class.java) {
+            it.test = "configure"
+            it.age = 120
         }
+        println(container.getByName("test"))
+        assertEquals(testBean, container.getByName("test"))
 
     }
 }

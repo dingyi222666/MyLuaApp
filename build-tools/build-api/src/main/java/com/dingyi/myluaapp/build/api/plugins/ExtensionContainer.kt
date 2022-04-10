@@ -85,7 +85,7 @@ interface ExtensionContainer {
          * @throws IllegalArgumentException When an extension with the given name already exists.
          * @see .add
          */
-        fun <T> create(name: String?, type: Class<T>?, vararg constructionArguments: Any?): T
+        fun <T> create(name: String, type: Class<T>, vararg constructionArguments: Any?): T
 
 
         /**
@@ -105,7 +105,7 @@ interface ExtensionContainer {
          * @param type extension type
          * @return extension or null
          */
-        fun <T> findByType(type: Class<T>): T
+        fun <T> findByType(type: Class<T>): T?
 
 
         /**
@@ -124,7 +124,7 @@ interface ExtensionContainer {
          * @param name extension name
          * @return extension or null
          */
-        fun findByName(name: String?): Any?
+        fun findByName(name: String): Any?
 
         /**
          * Looks for the extension of the specified type and configures it with the supplied action.
@@ -155,4 +155,5 @@ interface ExtensionContainer {
          * @return The extra properties extension in this extension container.
          */
         fun getExtraProperties(): ExtraPropertiesExtension
+
 }
