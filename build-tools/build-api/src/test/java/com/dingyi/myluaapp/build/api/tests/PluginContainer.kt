@@ -52,9 +52,11 @@ class Test2 {
         container.add("test", testBean)
         assertEquals(testBean, container.getByName("test"))
         println(container.getByName("test"))
-        container.configure(TestBean::class.java) {
-            it.test = "configure"
-            it.age = 120
+        container.configure("test") { it: TestBean ->
+            it.apply {
+                test = "configure"
+                age = 120
+            }
         }
         println(container.getByName("test"))
         assertEquals(testBean, container.getByName("test"))
