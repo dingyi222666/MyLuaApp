@@ -26,6 +26,22 @@ interface DomainObjectCollection<T> : MutableCollection<T> {
 
 
     /**
+     * Adds an object to the collection, if there is no existing object in the collection with the same name.
+     *
+     * @param e the item to add to the collection
+     * @return `true` if the item was added, or `` false if an item with the same name already exists.
+     */
+    override fun add(e: T): Boolean
+
+    /**
+     * Adds any of the given objects to the collection that do not have the same name as any existing element.
+     *
+     * @param c the items to add to the collection
+     * @return `true` if any item was added, or `` false if all items have non unique names within this collection.
+     */
+    override fun addAll(c: Collection<T>): Boolean
+
+    /**
      * Returns a collection containing the objects in this collection of the given type.  The returned collection is
      * live, so that when matching objects are later added to this collection, they are also visible in the filtered
      * collection.

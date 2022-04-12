@@ -7,6 +7,37 @@ import java.io.File
 
 interface Project:Properties {
 
+    /**
+     * The default project build file name.
+     */
+    val DEFAULT_BUILD_FILE: String
+        get() = "build.gradle"
+
+
+    /**
+     * The hierarchy separator for project and task path names.
+     */
+    val PATH_SEPARATOR: String
+        get() = ":"
+
+    /**
+     * The default build directory name.
+     */
+    val DEFAULT_BUILD_DIR_NAME: String
+        get() = "build"
+
+    val GRADLE_PROPERTIES: String
+        get() = "gradle.properties"
+
+    val SYSTEM_PROP_PREFIX: String
+        get() = "systemProp"
+
+    val DEFAULT_VERSION: String
+        get() = "unspecified"
+
+    val DEFAULT_STATUS: String
+        get() = "release"
+
     fun getAllProject():Set<Project>
 
     fun getPath():String

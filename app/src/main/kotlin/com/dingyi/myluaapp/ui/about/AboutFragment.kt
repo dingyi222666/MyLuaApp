@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.ktx.getJavaClass
@@ -34,9 +35,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding, GeneralActivityViewMode
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val requireActivity = requireActivity()
-        GlobalScope.launch {
 
-        }
         if (requireActivity is AppCompatActivity) {
             requireActivity
                 .supportActionBar?.apply {
@@ -60,11 +59,12 @@ class AboutFragment : BaseFragment<FragmentAboutBinding, GeneralActivityViewMode
 
             openSource.setOnClickListener {
                 //打开浏览器，网址为github.com/dingyi222666/MyLuaApp
+
                 Intent(Intent.ACTION_VIEW)
                     .apply {
                         data = Uri.parse("https://github.com/dingyi222666/MyLuaApp")
                     }.also { startActivity(it) }
-
+                RecyclerView
             }
 
         }
