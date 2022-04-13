@@ -64,7 +64,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding, GeneralActivityViewMode
                     .apply {
                         data = Uri.parse("https://github.com/dingyi222666/MyLuaApp")
                     }.also { startActivity(it) }
-                RecyclerView
+
             }
 
         }
