@@ -86,7 +86,7 @@ interface PluginManager {
      * @since 2.3
      */
     fun withPlugin(
-        id: String?,
+        id: String,
         action: Action<in AppliedPlugin>
     )
 }

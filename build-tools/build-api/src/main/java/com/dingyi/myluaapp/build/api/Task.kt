@@ -111,4 +111,6 @@ interface Task {
      */
     fun getDidWork(): Boolean
 
+    fun getProject():Project
+
 }

@@ -18,7 +18,6 @@ class ApkInstaller(private val context: Context) : LogView.LogListener {
             .flatMap { it.groups }
             .filterNotNull()
             .forEach {
-
                 log.text.setSpan(
                     object : ClickableSpan() {
                         override fun onClick(widget: View) {

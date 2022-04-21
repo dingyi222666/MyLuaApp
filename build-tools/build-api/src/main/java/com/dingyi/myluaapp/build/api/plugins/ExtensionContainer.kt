@@ -6,9 +6,6 @@ import com.dingyi.myluaapp.build.api.Action
  */
 
 interface ExtensionContainer {
-
-
-
         /**
          * Adds a new extension to this container.
          *

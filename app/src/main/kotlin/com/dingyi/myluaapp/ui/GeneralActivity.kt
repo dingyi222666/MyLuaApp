@@ -1,6 +1,9 @@
 package com.dingyi.myluaapp.ui
 
+import android.annotation.SuppressLint
+import android.app.StatusBarManager
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -22,6 +25,7 @@ class GeneralActivity : AppCompatActivity() {
         ActivityGeneralBinding.inflate(layoutInflater)
     }
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         delegate.localNightMode= AppCompatDelegate.MODE_NIGHT_YES
         super.onCreate(savedInstanceState)

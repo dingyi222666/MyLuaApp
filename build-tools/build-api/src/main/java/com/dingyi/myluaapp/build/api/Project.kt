@@ -2,10 +2,14 @@ package com.dingyi.myluaapp.build.api
 
 import com.dingyi.myluaapp.build.api.file.collection.FileCollection
 import com.dingyi.myluaapp.build.api.file.collection.FileTree
+import com.dingyi.myluaapp.build.api.internal.BuildToolInternal
+import com.dingyi.myluaapp.build.api.plugins.ExtensionAware
+import com.dingyi.myluaapp.build.api.plugins.PluginAware
+import com.dingyi.myluaapp.build.api.plugins.PluginContainer
 import com.dingyi.myluaapp.build.api.properties.Properties
 import java.io.File
 
-interface Project:Properties {
+interface Project:Properties,PluginAware,ExtensionAware {
 
     /**
      * The default project build file name.
@@ -50,5 +54,9 @@ interface Project:Properties {
     fun fileTree(arg:Map<String,String>): FileTree
 
     fun files(vararg path: Any):FileCollection
+
+    fun getBuildTool(): BuildTool
+
+
 
 }

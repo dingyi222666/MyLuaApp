@@ -49,7 +49,7 @@ interface DomainObjectCollection<T> : MutableCollection<T> {
      * @param type The type of objects to find.
      * @return The matching objects. Returns an empty collection if there are no such objects in this collection.
      */
-    fun <S : T?> withType(type: Class<S>): DomainObjectCollection<S>
+    fun <S : T> withType(type: Class<S>): DomainObjectCollection<S>
 
     /**
      * Returns a collection containing the objects in this collection of the given type. Equivalent to calling
@@ -59,7 +59,7 @@ interface DomainObjectCollection<T> : MutableCollection<T> {
      * @param configureAction The action to execute for each object in the resulting collection.
      * @return The matching objects. Returns an empty collection if there are no such objects in this collection.
      */
-    fun <S : T?> withType(
+    fun <S : T> withType(
         type: Class<S>,
         configureAction: Action<in S>
     ): DomainObjectCollection<S>

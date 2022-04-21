@@ -26,7 +26,6 @@ class DefaultExtensionContainer : ExtensionContainer {
 
 
 
-
     override fun add(name: String, extension: Any) {
         extensions[name] = ExtensionHolder(
             name,
