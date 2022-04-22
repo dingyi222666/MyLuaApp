@@ -15,8 +15,8 @@
  */
 package com.dingyi.myluaapp.build.api.sepcs
 
-
 import com.google.common.collect.ObjectArrays
+
 
 /**
  * A [CompositeSpec] which requires all its specs to be true in order to evaluate to true.

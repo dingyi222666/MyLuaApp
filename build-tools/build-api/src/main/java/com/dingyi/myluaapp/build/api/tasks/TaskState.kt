@@ -21,7 +21,7 @@ interface TaskState {
      *
      * @return The exception, or null if the task did not fail.
      */
-    fun getFailure(): Throwable
+    fun getFailure(): Throwable?
 
     /**
      * Throws the task failure, if any. Does nothing if the task did not fail.

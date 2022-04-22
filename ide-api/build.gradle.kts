@@ -45,7 +45,7 @@ dependencies {
     compileOnly(BuildConfig.Libs.Tools.androlua_standalone)
     compileOnly(BuildConfig.Libs.Tools.lsp4j)
     compileOnly(project(":common"))
-
+    implementation(BuildConfig.Libs.Google.guava)
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(BuildConfig.Libs.Tools.mmkv)
     BuildConfig.Libs.Views.sora_editor.forEach {

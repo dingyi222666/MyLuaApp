@@ -53,7 +53,7 @@ object BuildConfig {
         const val javapoet_version = "1.13.0"
 
 
-        const val guava_version = "24.0-android"
+        const val guava_version = "30.1.1-jre"
 
         const val r8_version = "3.0.73"
 
@@ -69,6 +69,7 @@ object BuildConfig {
 
         const val jdt_version = "3.29.0"
 
+        const val jgrapht_version = "1.3.1"
     }
 
     object Libs {
@@ -147,6 +148,7 @@ object BuildConfig {
 
             const val java_parser = "com.github.javaparser:javaparser-symbol-solver-core:${Versions.java_parser_version}"
 
+            const val jgrapht = "org.jgrapht:jgrapht-core:${Versions.jgrapht_version}"
         }
 
         object BuildTools {
