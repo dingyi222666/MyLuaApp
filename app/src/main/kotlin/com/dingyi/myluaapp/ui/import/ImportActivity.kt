@@ -3,8 +3,6 @@ package com.dingyi.myluaapp.ui.import
 import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -13,10 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.common.ktx.getString
-import com.dingyi.myluaapp.common.theme.ThemeManager
 import com.dingyi.myluaapp.core.helper.ImportHelper
 import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

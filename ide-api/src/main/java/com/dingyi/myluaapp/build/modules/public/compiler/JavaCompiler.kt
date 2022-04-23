@@ -14,7 +14,6 @@ import java.io.PrintWriter
 import java.nio.charset.Charset
 import java.util.*
 import javax.tools.*
-import javax.tools.JavaCompiler
 
 class JavaCompiler(
     val logger: ILogger

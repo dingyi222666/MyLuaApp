@@ -28,15 +28,24 @@ include(
     ":editor",
     ":builder",
     ":core",
-    ":common",
     ":plugin",
     ":treeview",
     ":ide-api",
     ":language-server:lua",
-    ":language-server:java")
+    ":language-server:java"
+)
 
 include(":build-tools:build-api")
 
+//foreach platform
+file("platform").listFiles()
+    ?.forEach {
+        val name = it.name
+        include(":$name")
+
+        project(":$name").projectDir = it
+
+    }
 
 rootProject.name = "MyLuaApp"
 

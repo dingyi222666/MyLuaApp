@@ -7,17 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseFragment
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.common.ktx.getString
-import com.dingyi.myluaapp.common.ktx.versionCode
 import com.dingyi.myluaapp.common.ktx.versionName
 import com.dingyi.myluaapp.databinding.FragmentAboutBinding
 import com.dingyi.myluaapp.ui.GeneralActivityViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class AboutFragment : BaseFragment<FragmentAboutBinding, GeneralActivityViewModel>() {
     override fun getViewModelClass(): Class<GeneralActivityViewModel> {

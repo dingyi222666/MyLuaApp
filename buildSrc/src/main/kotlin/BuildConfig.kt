@@ -175,7 +175,7 @@ object BuildConfig {
                 "io.github.Rosemoe.sora-editor:language-textmate:${Versions.sora_editor_version}",
             )
 
-            val preference_dsl = "de.maxr1998:modernandroidpreferences:${Versions.preferences_dsl_version}"
+            const val preference_dsl = "de.maxr1998:modernandroidpreferences:${Versions.preferences_dsl_version}"
 
 
         }

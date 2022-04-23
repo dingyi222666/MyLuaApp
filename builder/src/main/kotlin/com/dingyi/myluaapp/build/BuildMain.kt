@@ -1,13 +1,11 @@
 package com.dingyi.myluaapp.build
 
 import android.app.Application
-import com.dingyi.myluaapp.build.api.Project
 import com.dingyi.myluaapp.build.builder.MainBuilder
 import com.dingyi.myluaapp.build.dependency.repository.LocalMavenRepository
 import com.dingyi.myluaapp.build.log.Logger
 import com.dingyi.myluaapp.build.service.ServiceRepository
 import com.dingyi.myluaapp.common.ktx.Paths
-import kotlin.RuntimeException
 
 class BuildMain(
     private val application: Application

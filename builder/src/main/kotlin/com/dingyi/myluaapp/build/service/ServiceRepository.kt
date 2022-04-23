@@ -11,7 +11,6 @@ import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.common.ktx.convertObject
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.google.gson.Gson
-import dalvik.system.DexClassLoader
 import java.io.File
 
 class ServiceRepository : ServiceRepository {

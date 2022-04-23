@@ -5,12 +5,15 @@ enum class TaskExecutionOutcome(
     val isUpToDate: Boolean,
     val message: String?
 ) {
-    FROM_CACHE(true, true, "FROM-CACHE"), UP_TO_DATE(true, true, "UP-TO-DATE"), SKIPPED(
+    FROM_CACHE(true, true, "FROM-CACHE"),
+    UP_TO_DATE(true, true, "UP-TO-DATE"),
+    SKIPPED(
         true,
         false,
         "SKIPPED"
     ),
-    NO_SOURCE(true, false, "NO-SOURCE"), EXECUTED(false, false, null);
+    NO_SOURCE(true, false, "NO-SOURCE"),
+    EXECUTED(false, false, null);
 
     companion object {
         fun valueOf(outcome: ExecutionOutcome): TaskExecutionOutcome {

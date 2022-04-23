@@ -18,7 +18,6 @@ package com.dingyi.myluaapp.build.api.internal.project;
 
 import com.dingyi.myluaapp.build.api.sepcs.Spec
 import java.io.File;
-import java.util.Set;
 
 interface ProjectRegistry<T : ProjectIdentifier> {
     fun addProject(project: T);
@@ -37,5 +36,5 @@ interface ProjectRegistry<T : ProjectIdentifier> {
 
     fun getSubProjects(path: String): Set<T>
 
-    fun findAll(constraint: Spec<in T>):Set<T>
+    fun findAll(constraint: Spec<in T>): Set<T>
 }

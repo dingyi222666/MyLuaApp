@@ -6,8 +6,6 @@ import com.dingyi.myluaapp.common.ktx.getString
 import com.dingyi.myluaapp.common.ktx.showToast
 import com.dingyi.myluaapp.plugin.api.Action
 import com.dingyi.myluaapp.plugin.api.action.ActionArgument
-import com.dingyi.myluaapp.plugin.dsl.menu.click
-import com.dingyi.myluaapp.plugin.dsl.menu.dsl
 import com.dingyi.myluaapp.plugin.modules.default.editor.Editor
 import com.google.android.material.tabs.TabLayout
 

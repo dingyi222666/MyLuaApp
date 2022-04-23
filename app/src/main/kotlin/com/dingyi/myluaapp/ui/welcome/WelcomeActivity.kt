@@ -13,7 +13,6 @@ import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.common.ktx.startActivity
 import com.dingyi.myluaapp.databinding.ActivityWelcomeBinding
 import com.dingyi.myluaapp.ui.main.MainActivity
-import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

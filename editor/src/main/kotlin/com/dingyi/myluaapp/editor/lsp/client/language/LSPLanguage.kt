@@ -6,10 +6,7 @@ import com.dingyi.myluaapp.editor.highlight.HighlightProvider
 import com.dingyi.myluaapp.editor.language.Language
 import com.dingyi.myluaapp.editor.lsp.client.complete.LSPAutoCompleteProvider
 import com.dingyi.myluaapp.editor.lsp.server.LanguageServerWrapper
-import com.dingyi.myluaapp.editor.lsp.service.LanguageServiceAccessor
 import com.dingyi.myluaapp.plugin.api.editor.Editor
-import com.dingyi.myluaapp.plugin.runtime.editor.EmptyLanguage
-import io.github.rosemoe.sora.text.Content
 import org.eclipse.lsp4j.ServerCapabilities
 import org.eclipse.lsp4j.services.LanguageClient
 import org.eclipse.lsp4j.services.LanguageServer

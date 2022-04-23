@@ -2,9 +2,7 @@ package com.dingyi.myluaapp.plugin.modules.lua
 
 import com.dingyi.myluaapp.build.api.service.Service
 import com.dingyi.myluaapp.common.ktx.getJavaClass
-import com.dingyi.myluaapp.editor.lsp.server.definition.InternalLanguageServerDefinition
 import com.dingyi.myluaapp.editor.lsp.server.definition.SocketLanguageServerDefinition
-import com.dingyi.myluaapp.editor.lsp.server.lua.LuaLanguageServer
 import com.dingyi.myluaapp.editor.lsp.server.lua.Main
 import com.dingyi.myluaapp.plugin.api.Plugin
 import com.dingyi.myluaapp.plugin.api.context.PluginContext

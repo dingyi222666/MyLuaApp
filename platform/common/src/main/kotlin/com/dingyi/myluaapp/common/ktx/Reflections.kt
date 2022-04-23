@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.common.ktx
 
+import org.luaj.vm2.LuaJVM
 import kotlin.Pair
 
 /**
@@ -68,14 +69,18 @@ data class MutablePair<A, B>(
     var second: B
 ) : java.io.Serializable {
 
+    constructor(pair: Pair<A, B>) : this(pair.first, pair.second)
+
+
     /**
      * Returns string representation of the [Pair] including its [first] and [second] values.
      */
     override fun toString(): String = "($first, $second)"
 
-
 }
 
-typealias LuaJVM = org.luaj.vm2.LuaJVM
+fun <A, B> Pair<A, B>.toMutablePair(): MutablePair<A, B> = MutablePair(this)
+
+typealias LuaJVM = LuaJVM
 
 

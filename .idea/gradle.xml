@@ -16,13 +16,14 @@
             <option value="$PROJECT_DIR$/build-tools/build-api" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/builder" />
-            <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/editor" />
             <option value="$PROJECT_DIR$/ide-api" />
             <option value="$PROJECT_DIR$/language-server" />
             <option value="$PROJECT_DIR$/language-server/java" />
             <option value="$PROJECT_DIR$/language-server/lua" />
+            <option value="$PROJECT_DIR$/platform/common" />
+            <option value="$PROJECT_DIR$/platform/core-api" />
             <option value="$PROJECT_DIR$/plugin" />
             <option value="$PROJECT_DIR$/treeview" />
           </set>

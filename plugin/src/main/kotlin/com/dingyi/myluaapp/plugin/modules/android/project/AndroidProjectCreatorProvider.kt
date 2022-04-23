@@ -2,7 +2,6 @@ package com.dingyi.myluaapp.plugin.modules.android.project
 
 import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.common.ktx.getJavaClass
-import com.dingyi.myluaapp.common.ktx.toFile
 import com.dingyi.myluaapp.plugin.api.context.PluginContext
 import com.dingyi.myluaapp.plugin.api.project.ProjectCreatorProvider
 import com.dingyi.myluaapp.plugin.api.project.ProjectTemplate
