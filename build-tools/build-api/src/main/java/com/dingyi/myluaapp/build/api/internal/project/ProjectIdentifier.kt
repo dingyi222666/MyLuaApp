@@ -25,7 +25,7 @@ interface ProjectIdentifier {
 
     fun getPath():String
 
-    fun getParentIdentifier():ProjectIdentifier
+    fun getParentIdentifier():ProjectIdentifier?
 
     fun getProjectDir():File
 

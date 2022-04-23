@@ -219,4 +219,52 @@ interface Project:Properties,PluginAware,ExtensionAware {
      * @param action the action to execute.
      */
     fun afterEvaluate(action: Action<in Project>)
+
+
+    /**
+     *
+     * Returns the nesting level of a project in a multi-project hierarchy. For single project builds this is always
+     * 0. In a multi-project hierarchy 0 is returned for the root project.
+     */
+    fun getDepth(): Int
+
+
+    /**
+     *
+     * Converts a name to an absolute project path, resolving names relative to this project.
+     *
+     * @param path The path to convert.
+     * @return The absolute path.
+     */
+    fun absoluteProjectPath(path: String): String
+
+    /**
+     *
+     * Converts a name to a project path relative to this project.
+     *
+     * @param path The path to convert.
+     * @return The relative path.
+     */
+    fun relativeProjectPath(path: String): String
+
+    /**
+     *
+     * Returns the root project for the hierarchy that this project belongs to.  In the case of a single-project
+     * build, this method returns this project.
+     *
+     * @return The root project. Never returns null.
+     */
+    fun getRootProject(): Project
+
+    /**
+     *
+     * Returns the root directory of this project. The root directory is the project directory of the root
+     * project.
+     *
+     * @return The root directory. Never returns null.
+     */
+    fun getRootDir(): File
+
+
+
 }

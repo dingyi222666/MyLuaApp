@@ -29,7 +29,7 @@ class AnActionEvent(
     }
 
 
-    fun <T> getData(key: DataKey<T>): T? {
+    fun <T> getData(key: Key<T>): T? {
         return mDataContext.getData(key)
     }
 
@@ -52,8 +52,7 @@ class AnActionEvent(
      * // if we're here then EDITOR != null
      * Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
      * }
-     * }
-    </pre> *
+     * }</pre> *
      */
     fun <T> getRequiredData(key: DataKey<T>): T? {
         return getData(key)

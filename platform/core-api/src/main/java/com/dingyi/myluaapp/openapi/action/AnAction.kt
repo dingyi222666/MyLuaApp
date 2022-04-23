@@ -28,7 +28,7 @@ import java.util.function.Supplier
  * // do something when this action is pressed
  * }
  * }
-</pre> *
+ * </pre>
  *
  * This implementation is partially adopted from IntelliJ's Actions API.
  *
@@ -101,7 +101,7 @@ abstract class AnAction() {
      * no work should be done at this phase. For example checking values such as editor
      * selection is fine but working with the file system such as reading/writing to a file is not.
      * If the action state cannot be determined, do the checks in
-     * [.actionPerformed] and inform the user if the action cannot
+     * [actionPerformed] and inform the user if the action cannot
      * be performed by possibly showing a dialog.
      *
      * @param event Carries information on the invocation place and data available

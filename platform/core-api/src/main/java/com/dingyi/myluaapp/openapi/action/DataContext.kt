@@ -35,7 +35,7 @@ interface DataContext {
      */
 
     fun <T> getData(key: DataKey<T>): T? {
-        return getData(key) as T?
+        return getData(key.name) as T?
     }
 
     companion object {

@@ -2,8 +2,9 @@ package com.dingyi.myluaapp.build.api.internal
 
 import com.dingyi.myluaapp.build.api.Action
 import com.dingyi.myluaapp.build.api.Project
+import com.dingyi.myluaapp.build.api.internal.project.ProjectIdentifier
 
-interface ProjectInternal: Project {
+interface ProjectInternal: Project,ProjectIdentifier {
 
     val HELP_TASK: String
         get() = "help"
