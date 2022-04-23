@@ -339,7 +339,9 @@ class LanguageServerWrapper(
                 }
                 val syncOptions: Either<TextDocumentSyncKind, TextDocumentSyncOptions>? =
                     if (initializeFuture == null) null else serverCapabilities?.textDocumentSync
-                var syncKind: TextDocumentSyncKind? = null
+
+                //default is full
+                var syncKind = TextDocumentSyncKind.Full
                 if (syncOptions != null) {
                     if (syncOptions.isRight) {
                         syncKind = syncOptions.right.change

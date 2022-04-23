@@ -266,5 +266,23 @@ interface Project:Properties,PluginAware,ExtensionAware {
     fun getRootDir(): File
 
 
+    /**
+     *
+     * Returns the direct children of this project.
+     *
+     * @return A map from child project name to child project. Returns an empty map if this project does not have
+     * any children.
+     */
+    fun getChildProjects(): Map<String, Project>
+
+
+    /**
+     *
+     * Returns the parent project of this project, if any.
+     *
+     * @return The parent project, or null if this is the root project.
+     */
+    fun getParent(): Project?
+
 
 }

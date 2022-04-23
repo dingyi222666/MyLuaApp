@@ -56,5 +56,8 @@ interface ProjectInternal: Project,ProjectIdentifier {
         configureAction: Action<in Project>
     )
 
+    override fun getSubprojects(): Set<ProjectInternal>
+
+    override fun getParent(): ProjectInternal?
   
 }

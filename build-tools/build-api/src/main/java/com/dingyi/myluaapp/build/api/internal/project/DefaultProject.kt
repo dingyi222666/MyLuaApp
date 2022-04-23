@@ -10,28 +10,39 @@ import com.dingyi.myluaapp.build.api.plugins.ExtensionContainer
 import com.dingyi.myluaapp.build.api.plugins.ObjectConfigurationAction
 import com.dingyi.myluaapp.build.api.plugins.PluginContainer
 import com.dingyi.myluaapp.build.api.plugins.PluginManager
-import com.dingyi.myluaapp.build.api.services.ServiceRegistry
+import com.dingyi.myluaapp.build.api.services.get
 import com.dingyi.myluaapp.build.api.tasks.TaskContainer
+import com.dingyi.myluaapp.build.internal.services.ServiceRegistryFactory
+import com.google.common.collect.Maps
 import java.io.File
 
 class DefaultProject(
-    val projectName:String,
-    val parent: ProjectInternal?,
-    val currentProjectDir:File,
-    val currentBuildFile: File,
-    val buildToolInternal:BuildToolInternal,
-    val services: ServiceRegistry,
+    private val projectName: String,
+    private val parentProject: ProjectInternal?,
+    private val currentProjectDir: File,
+    private val currentBuildFile: File,
+    private val buildToolInternal: BuildToolInternal,
+    private val servicesFactory: ServiceRegistryFactory,
 ):ProjectInternal {
 
+    private var group: Any? = null
+    private val childProjects = Maps.newTreeMap<String, ProjectInternal>()
 
-    private val rootProject = parent?.getRootProject() ?: this;
+
+    private val services = servicesFactory.createFor(this)
+
+    private val taskContainer = services.get<TaskContainer>()
+
+    private val projectRegistry = services.get<ProjectRegistry<ProjectInternal>>()
+
+    private val rootProject = parentProject?.getRootProject() ?: this;
 
     override fun getBuildTool(): BuildToolInternal {
         return buildToolInternal
     }
 
     override fun addChildProject(childProject: ProjectInternal) {
-        TODO("Not yet implemented")
+        childProjects[childProject.getName()] = childProject
     }
 
     override fun project(path: String): ProjectInternal {
@@ -63,11 +74,11 @@ class DefaultProject(
     }
 
     override fun getSubprojects(referrer: ProjectInternal): Set<ProjectInternal> {
-        TODO("Not yet implemented")
+        return projectRegistry.getSubProjects(getPath())
     }
 
-    override fun getSubprojects(): Set<Project> {
-        TODO("Not yet implemented")
+    override fun getSubprojects(): Set<ProjectInternal> {
+       return getSubprojects(this)
     }
 
     override fun subprojects(referrer: ProjectInternal, configureAction: Action<in Project>) {
@@ -94,6 +105,10 @@ class DefaultProject(
         TODO("Not yet implemented")
     }
 
+    override fun getParent(): ProjectInternal? {
+        return parentProject
+    }
+
     override fun getAllProject(): Set<Project> {
         TODO("Not yet implemented")
     }
@@ -105,6 +120,11 @@ class DefaultProject(
     override fun getName(): String {
         TODO("Not yet implemented")
     }
+
+    override fun getChildProjects(): Map<String, Project> {
+        return childProjects
+    }
+
 
     override fun file(path: Any): File {
         TODO("Not yet implemented")
@@ -127,11 +147,16 @@ class DefaultProject(
     }
 
     override fun getGroup(): Any {
-        TODO("Not yet implemented")
+        group = group ?: if (this === rootProject) {
+            ""
+        } else rootProject.getName() + if (getParent() === rootProject) "" else "." + getParent()?.getPath()
+                ?.substring(1)?.replace(':', '.')
+
+        return checkNotNull(group)
     }
 
     override fun setGroup(group: Any) {
-        TODO("Not yet implemented")
+        this.group = group
     }
 
     override fun getStatus(): Any {
@@ -143,7 +168,7 @@ class DefaultProject(
     }
 
     override fun getProject(): Project {
-        TODO("Not yet implemented")
+        return this
     }
 
     override fun getTasks(): TaskContainer {

@@ -14,6 +14,8 @@ interface ServiceRegistry {
     </T> */
     operator fun <T> get(serviceType: Class<T>): T
 
+
+
     /**
      * Locates all services of the given type.
      *
@@ -32,4 +34,7 @@ interface ServiceRegistry {
      * @throws ServiceLookupException On failure to lookup the specified service.
      */
     operator fun get(serviceType: Type): Any
+
 }
+
+inline fun <reified T> ServiceRegistry.get(): T = get<T>(T::class.java)

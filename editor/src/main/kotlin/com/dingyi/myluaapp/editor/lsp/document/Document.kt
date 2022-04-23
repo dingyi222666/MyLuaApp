@@ -16,7 +16,7 @@ class Document(
     private val wrapper: LanguageServerWrapper,
     val uri: URI,
     private var editor: Editor?,
-    private val syncKind: TextDocumentSyncKind? = TextDocumentSyncKind.Full
+    private val syncKind: TextDocumentSyncKind = TextDocumentSyncKind.Full
 ) : EditorListener {
 
     var version = 0
