@@ -29,7 +29,7 @@ class AnActionEvent(
     }
 
 
-    fun <T> getData(key: Key<T>): T? {
+    fun <T> getData(key: DataKey<T>): T? {
         return mDataContext.getData(key)
     }
 

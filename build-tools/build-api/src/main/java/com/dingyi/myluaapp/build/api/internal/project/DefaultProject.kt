@@ -13,6 +13,7 @@ import com.dingyi.myluaapp.build.api.plugins.PluginManager
 import com.dingyi.myluaapp.build.api.services.get
 import com.dingyi.myluaapp.build.api.tasks.TaskContainer
 import com.dingyi.myluaapp.build.internal.services.ServiceRegistryFactory
+import com.dingyi.myluaapp.build.util.Path
 import com.google.common.collect.Maps
 import java.io.File
 
@@ -36,6 +37,11 @@ class DefaultProject(
     private val projectRegistry = services.get<ProjectRegistry<ProjectInternal>>()
 
     private val rootProject = parentProject?.getRootProject() ?: this;
+
+    private val identifierPath =
+        if (rootProject == this) Path.ROOT else (
+                Path.path(parentProject?.getPath().toString()).append(Path.path(projectName)))
+
 
     override fun getBuildTool(): BuildToolInternal {
         return buildToolInternal
@@ -114,11 +120,11 @@ class DefaultProject(
     }
 
     override fun getPath(): String {
-        TODO("Not yet implemented")
+        return identifierPath.toString()
     }
 
     override fun getName(): String {
-        TODO("Not yet implemented")
+        return projectName
     }
 
     override fun getChildProjects(): Map<String, Project> {
@@ -172,7 +178,7 @@ class DefaultProject(
     }
 
     override fun getTasks(): TaskContainer {
-        TODO("Not yet implemented")
+        return taskContainer
     }
 
     override fun beforeEvaluate(action: Action<in Project>) {
@@ -236,7 +242,7 @@ class DefaultProject(
     }
 
     override fun getParentIdentifier(): ProjectIdentifier? {
-        TODO("Not yet implemented")
+        return parentProject
     }
 
     override fun getProjectDir(): File {
