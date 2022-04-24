@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.build.api.internal.project
 
 import com.dingyi.myluaapp.build.api.Action
 import com.dingyi.myluaapp.build.api.Project
+import com.dingyi.myluaapp.build.api.ProjectEvaluationListener
 import com.dingyi.myluaapp.build.api.file.collection.FileCollection
 import com.dingyi.myluaapp.build.api.file.collection.FileTree
 import com.dingyi.myluaapp.build.api.internal.BuildToolInternal
@@ -12,6 +13,7 @@ import com.dingyi.myluaapp.build.api.plugins.PluginContainer
 import com.dingyi.myluaapp.build.api.plugins.PluginManager
 import com.dingyi.myluaapp.build.api.services.get
 import com.dingyi.myluaapp.build.api.tasks.TaskContainer
+import com.dingyi.myluaapp.build.internal.event.ListenerBroadcast
 import com.dingyi.myluaapp.build.internal.services.ServiceRegistryFactory
 import com.dingyi.myluaapp.build.util.Path
 import com.google.common.collect.Maps
@@ -29,6 +31,7 @@ class DefaultProject(
     private var group: Any? = null
     private val childProjects = Maps.newTreeMap<String, ProjectInternal>()
 
+    private val evaluationListener = newProjectEvaluationListenerBroadcast()
 
     private val services = servicesFactory.createFor(this)
 
@@ -42,6 +45,18 @@ class DefaultProject(
         if (rootProject == this) Path.ROOT else (
                 Path.path(parentProject?.getPath().toString()).append(Path.path(projectName)))
 
+    private val depth: Int
+
+    init {
+        if (parentProject == null) {
+            depth = 0;
+        } else {
+            depth = parentProject.getDepth() + 1;
+        }
+
+        evaluationListener.add(buildToolInternal.getProjectEvaluationBroadcaster());
+
+    }
 
     override fun getBuildTool(): BuildToolInternal {
         return buildToolInternal
@@ -182,16 +197,14 @@ class DefaultProject(
     }
 
     override fun beforeEvaluate(action: Action<in Project>) {
-        TODO("Not yet implemented")
+        evaluationListener.add("beforeEvaluate",  action);
     }
 
     override fun afterEvaluate(action: Action<in Project>) {
-        TODO("Not yet implemented")
+        evaluationListener.add("afterEvaluate",  action);
     }
 
-    override fun getDepth(): Int {
-        TODO("Not yet implemented")
-    }
+    override fun getDepth(): Int  = depth
 
     override fun absoluteProjectPath(path: String): String {
         TODO("Not yet implemented")
@@ -246,12 +259,19 @@ class DefaultProject(
     }
 
     override fun getProjectDir(): File {
-        TODO("Not yet implemented")
+        return currentProjectDir
     }
 
     override fun getBuildFile(): File {
-        TODO("Not yet implemented")
+        return currentBuildFile
     }
 
+    override fun getProjectEvaluationBroadcaster(): ProjectEvaluationListener {
+        return evaluationListener.getSource()
+    }
+
+    private fun newProjectEvaluationListenerBroadcast(): ListenerBroadcast<ProjectEvaluationListener> {
+        return ListenerBroadcast(ProjectEvaluationListener::class.java)
+    }
 
 }

@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.build.api.`object`
 
 import com.dingyi.myluaapp.build.api.Action
+import com.dingyi.myluaapp.build.api.provider.Provider
+import com.dingyi.myluaapp.build.api.sepcs.Spec
 
 
 /**
@@ -24,6 +26,22 @@ import com.dingyi.myluaapp.build.api.Action
 </T> */
 interface DomainObjectCollection<T> : MutableCollection<T> {
 
+
+    /**
+     * Adds an element to this collection, given a [Provider] that will provide the element when required.
+     *
+     * @param provider A [Provider] that can provide the element when required.
+     * @since 4.8
+     */
+    fun addLater(provider: Provider<out T>)
+
+    /**
+     * Adds elements to this collection, given a [Provider] of [Iterable] that will provide the elements when required.
+     *
+     * @param provider A [Provider] of [Iterable] that can provide the elements when required.
+     * @since 5.0
+     */
+    fun addAllLater(provider: Provider<out Iterable<T>>)
 
     /**
      * Adds an object to the collection, if there is no existing object in the collection with the same name.
@@ -65,6 +83,16 @@ interface DomainObjectCollection<T> : MutableCollection<T> {
     ): DomainObjectCollection<S>
 
 
+    /**
+     * Returns a collection which contains the objects in this collection which meet the given specification. The
+     * returned collection is live, so that when matching objects are added to this collection, they are also visible in
+     * the filtered collection.
+     *
+     * @param spec The specification to use.
+     * @return The collection of matching objects. Returns an empty collection if there are no such objects in this
+     * collection.
+     */
+    fun matching(spec: Spec<in T>): DomainObjectCollection<T>
 
     /**
      * Adds an `Action` to be executed when an object is added to this collection.
@@ -85,6 +113,35 @@ interface DomainObjectCollection<T> : MutableCollection<T> {
      * @return the supplied action
      */
     fun whenObjectRemoved(action: Action<in T>): Action<in T>
+
+
+    /**
+     * Executes the given action against all objects in this collection, and any objects subsequently added to this
+     * collection.
+     *
+     * @param action The action to be executed
+     */
+    fun all(action: Action<in T>)
+
+
+
+    /**
+     * Configures each element in this collection using the given action, as each element is required. Actions are run in the order added.
+     *
+     * @param action A [Action] that can configure the element when required.
+     * @since 4.9
+     */
+    fun configureEach(action: Action<in T>)
+
+    // note: this is here to override the default Groovy Collection.findAll { } method.
+    /**
+     * Returns a collection which contains the objects in this collection which meet the given closure specification.
+     *
+     * @param spec The specification to use. The closure gets a collection element as an argument.
+     * @return The collection of matching objects. Returns an empty collection if there are no such objects in this
+     * collection.
+     */
+    fun findAll(spec: Spec<in T>): Collection<T>
 
 
 }

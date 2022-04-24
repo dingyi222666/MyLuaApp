@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.build.api.internal
 
 import com.dingyi.myluaapp.build.api.Action
 import com.dingyi.myluaapp.build.api.Project
+import com.dingyi.myluaapp.build.api.ProjectEvaluationListener
 import com.dingyi.myluaapp.build.api.internal.project.ProjectIdentifier
 
 interface ProjectInternal: Project,ProjectIdentifier {
@@ -23,6 +24,7 @@ interface ProjectInternal: Project,ProjectIdentifier {
 
     override fun project(path: String):ProjectInternal
 
+    fun getProjectEvaluationBroadcaster(): ProjectEvaluationListener
 
     fun project(
         referrer:ProjectInternal,

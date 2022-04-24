@@ -29,6 +29,10 @@ class AnActionEvent(
     }
 
 
+    /**
+     * Allows an action to retrieve information about the context in which it was invoked.
+     * @see DataContext#getData(Key)
+     */
     fun <T> getData(key: DataKey<T>): T? {
         return mDataContext.getData(key)
     }

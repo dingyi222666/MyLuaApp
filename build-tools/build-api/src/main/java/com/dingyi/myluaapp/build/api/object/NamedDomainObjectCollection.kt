@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.build.api.`object`
 
 import com.dingyi.myluaapp.build.api.Action
 import com.dingyi.myluaapp.build.api.Namer
+import com.dingyi.myluaapp.build.api.sepcs.Spec
 import java.util.*
 
 
@@ -145,6 +146,17 @@ interface NamedDomainObjectCollection<T> : DomainObjectCollection<T> {
      * @throws UnknownDomainObjectException when there is no such object in this collection.
      */
 
-    fun getAt(name: String?): T
+    fun getAt(name: String): T
+
+
+    /**
+     * {@inheritDoc}
+     */
+    fun <S : T?> withType(type: Class<S>): NamedDomainObjectCollection<S>
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun matching(spec: Spec<in T>): NamedDomainObjectCollection<T>
 
 }

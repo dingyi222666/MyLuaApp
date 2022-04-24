@@ -140,7 +140,7 @@ interface ExtraPropertiesExtension {
      *
      * @return All of the registered properties and their current values as a map.
      */
-    val properties: Map<String?, Any?>?
+    val properties: Map<String, Any?>?
 
     /**
      * The exception that will be thrown when an attempt is made to read a property that is not set.
