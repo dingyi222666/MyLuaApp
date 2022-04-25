@@ -62,7 +62,7 @@ android {
 dependencies {
 
     implementation(project(":editor")) // editor
-    implementation(project(":common"))
+    implementation(project(":platform-common"))
     implementation(project(":core"))
     implementation(project(":plugin"))
     implementation(project(":treeview"))

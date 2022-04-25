@@ -6,6 +6,5 @@ interface ServiceManager {
 
     fun <T> getService(serviceClass: Class<T>, name: String): T
 
-    fun createNewServiceManager(): ServiceManager
 
 }

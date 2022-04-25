@@ -47,7 +47,7 @@ dependencies {
     implementation(BuildConfig.Libs.AndroidX.lifecycle_runtime)
     implementation(BuildConfig.Libs.Google.gson)
     implementation(project(":ide-api"))
-    implementation(project(":common"))
+    implementation(project(":platform-common"))
 
     implementation(BuildConfig.Libs.Tools.lsp4j)
     BuildConfig.Libs.Views.sora_editor.forEach {

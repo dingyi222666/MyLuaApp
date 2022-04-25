@@ -44,7 +44,7 @@ dependencies {
     compileOnly(BuildConfig.Libs.Google.material)
     compileOnly(BuildConfig.Libs.Tools.androlua_standalone)
     compileOnly(BuildConfig.Libs.Tools.lsp4j)
-    compileOnly(project(":common"))
+    compileOnly(project(":platform-common"))
     implementation(BuildConfig.Libs.Google.guava)
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(BuildConfig.Libs.Tools.mmkv)

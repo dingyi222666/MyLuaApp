@@ -9,7 +9,6 @@ object ApplicationManager {
     }
 
     fun getAndroidApplication(): Application {
-
         return checkNotNull(ApplicationManager.outAndroidApplication) { "The android application is not init" }
     }
 

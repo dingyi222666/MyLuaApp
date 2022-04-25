@@ -56,8 +56,7 @@ android {
 dependencies {
 
     implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
-
-    implementation(project(":common"))
+    implementation(project(":platform-common"))
 
     implementation(project(":ide-api"))
 

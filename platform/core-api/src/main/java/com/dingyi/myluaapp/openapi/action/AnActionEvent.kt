@@ -6,8 +6,8 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 /**
  * Container for information necessary to execute or update an {@link AnAction}
  *
- * @see AnAction#update(AnActionEvent)
- * @see AnAction#actionPerformed(AnActionEvent)
+ * @see AnAction.update(AnActionEvent)
+ * @see AnAction.actionPerformed(AnActionEvent)
  */
 
 class AnActionEvent(

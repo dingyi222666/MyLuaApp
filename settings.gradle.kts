@@ -41,9 +41,9 @@ include(":build-tools:build-api")
 file("platform").listFiles()
     ?.forEach {
         val name = it.name
-        include(":$name")
+        include(":platform-$name")
 
-        project(":$name").projectDir = it
+        project(":platform-$name").projectDir = it
 
     }
 
