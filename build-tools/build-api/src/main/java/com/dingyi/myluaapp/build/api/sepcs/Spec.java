@@ -31,6 +31,8 @@ package com.dingyi.myluaapp.build.api.sepcs;
  * limitations under the License.
  */
 
+import kotlin.jvm.functions.Function1;
+
 /**
  * Represents some predicate against objects of type T.
  *
@@ -38,4 +40,9 @@ package com.dingyi.myluaapp.build.api.sepcs;
  */
 public interface Spec<T> {
     boolean isSatisfiedBy(T element);
+
+    default Function1<T, Boolean> toKotlinLambda() {
+        return this::isSatisfiedBy;
+    }
+
 }

@@ -28,7 +28,7 @@ object CrashHandler
     private var mContext = WeakReference<Context>(null)
 
     //用来存储设备信息和异常信息
-    private val infos: MutableMap<String, String> = LinkedHashMap()
+    private val infos = mutableMapOf<String, String>()
 
     //用于格式化日期,作为日志文件名的一部分
     private val formatter: DateFormat = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")

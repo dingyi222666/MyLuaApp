@@ -2,7 +2,7 @@ package com.dingyi.myluaapp.build.api.plugins
 
 import com.dingyi.myluaapp.build.api.Action
 import com.dingyi.myluaapp.build.api.Plugin
-import com.dingyi.myluaapp.build.api.`object`.DomainObjectSet
+import com.dingyi.myluaapp.build.api.objects.DomainObjectSet
 import com.dingyi.myluaapp.build.api.sepcs.Spec
 
 

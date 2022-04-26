@@ -1,4 +1,4 @@
-package com.dingyi.myluaapp.build.api.`object`
+package com.dingyi.myluaapp.build.api.objects
 
 import com.dingyi.myluaapp.build.api.Action
 import com.dingyi.myluaapp.build.api.Namer

@@ -107,12 +107,6 @@ interface Provider<T> {
      */
     fun <S> flatMap(transformer: Transformer<out Provider<out S>, in T>): Provider<S>
 
-    /**
-     * Returns `true` if there is a value present, otherwise `false`.
-     *
-     * @return `true` if there is a value present, otherwise `false`
-     */
-    val isPresent: Boolean
 
     /**
      * Returns a [Provider] whose value is the value of this provider, if present, otherwise the given default value.
@@ -129,28 +123,6 @@ interface Provider<T> {
      * @since 5.6
      */
     fun orElse(provider: Provider<out T>): Provider<T>
-
-    /**
-     * Returns a view of this [Provider] which can be safely read at configuration time.
-     *
-     * @since 6.5
-     */
-    fun forUseAtConfigurationTime(): Provider<T>
-
-    /**
-     * Returns a provider which value will be computed by combining this provider value with another
-     * provider value using the supplied combiner function.
-     *
-     * If the supplied providers represents a task or the output of a task, the resulting provider
-     * will carry the dependency information.
-     *
-     * @param right the second provider to combine with
-     * @param combiner the combiner of values
-     * @param <B> the type of the second provider
-     * @param <R> the type of the result of the combiner
-     * @return a combined provider
-     *
-     * @since 6.6
-    </R></B> */
-    fun <B, R> zip(right: Provider<B>, combiner: BiFunction<T, B, R>): Provider<R>
 }
+
+
