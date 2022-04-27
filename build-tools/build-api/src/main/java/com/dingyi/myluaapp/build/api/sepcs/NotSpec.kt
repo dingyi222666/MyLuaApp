@@ -22,7 +22,7 @@ package com.dingyi.myluaapp.build.api.sepcs
  *
  * @param <T> The target type for this Spec
 </T> */
-class NotSpec<T>(val sourceSpec: Spec<in T>) : Spec<T> {
+class NotSpec<T>(private val sourceSpec: Spec<in T>) : Spec<T> {
     override fun isSatisfiedBy(element: T): Boolean {
         return !sourceSpec.isSatisfiedBy(element)
     }

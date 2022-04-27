@@ -58,7 +58,7 @@ abstract class ActionGroup: AnAction {
 
     private val PROP_POPUP = "popup"
 
-    private var myDumbAware: Boolean? = null
+
 
 
     /**
