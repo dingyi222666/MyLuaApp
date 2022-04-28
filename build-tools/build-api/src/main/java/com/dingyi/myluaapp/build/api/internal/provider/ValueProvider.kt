@@ -14,4 +14,8 @@ class ValueProvider<T>(
 
         return true
     }
+
+    companion object {
+        fun <T> of(value: T?): ValueProvider<T> = ValueProvider(value)
+    }
 }

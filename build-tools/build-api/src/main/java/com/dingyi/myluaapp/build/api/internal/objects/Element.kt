@@ -14,6 +14,10 @@ interface Element<T> {
 
     fun remove(element: T): Boolean
 
+    fun removeAll(elements: Collection<T>): Boolean
+
+    fun contains(element: T): Boolean
+
 }
 
 class SingleElement<T>(
@@ -53,12 +57,20 @@ class SingleElement<T>(
         return true
     }
 
+    override fun contains(element: T): Boolean {
+        return list.contains(element)
+    }
+
+    override fun removeAll(elements: Collection<T>): Boolean {
+        return list.removeAll(elements)
+    }
+
 }
 
 
-class IteratorProvider<T>(
-    private val provider: Provider<Iterator<T>>
-):Element<T> {
+class IterableProvider<T>(
+    private val provider: Provider<out Iterable<T>>
+) : Element<T> {
 
     private val list = mutableListOf<T>()
 
@@ -79,7 +91,18 @@ class IteratorProvider<T>(
     }
 
     override fun getValues(): List<T> {
-       return list
+        realize()
+        return list
+    }
+
+    override fun contains(element: T): Boolean {
+        realize()
+        return list.contains(element)
+    }
+
+    override fun removeAll(elements: Collection<T>): Boolean {
+        realize()
+        return list.removeAll(elements)
     }
 
     override fun clear() {
@@ -87,18 +110,31 @@ class IteratorProvider<T>(
     }
 
     override fun remove(index: Int): T {
+        realize()
         return list.removeAt(index)
     }
 
     override fun remove(element: T): Boolean {
+        realize()
         return list.remove(element)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as IterableProvider<*>
+
+        if (this.provider != other.provider) return false
+
+        return true
     }
 
 
 }
 
 class SingleProviderElement<T>(
-    private val provider: Provider<T>
+    private val provider: Provider<out T>
 ):  Element<T> {
 
     private val list = mutableListOf<T>()
@@ -113,7 +149,12 @@ class SingleProviderElement<T>(
         }
     }
 
-    override fun size() :Int {
+    override fun contains(element: T): Boolean {
+        realize()
+        return list.contains(element)
+    }
+
+    override fun size(): Int {
         realize()
         return list.size
     }
@@ -123,17 +164,31 @@ class SingleProviderElement<T>(
         return list
     }
 
+    override fun removeAll(elements: Collection<T>): Boolean {
+        realize()
+        return list.removeAll(elements)
+    }
+
     override fun clear() = list.clear()
 
-    override fun remove(index: Int):T  {
+    override fun remove(index: Int): T {
         realize()
         return list.removeAt(index)
     }
 
-    override fun remove(element: T):Boolean {
+    override fun remove(element: T): Boolean {
         realize()
         return list.remove(element)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
+        other as SingleProviderElement<*>
+
+        if (this.provider != other.provider) return false
+
+        return true
+    }
 }
