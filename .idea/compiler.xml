@@ -20,6 +20,8 @@
       <module name="MyLuaApp.tm4e" target="11" />
       <module name="MyLuaApp.treeview" target="11" />
       <module name="MyLuaApp2.buildSrc" target="11" />
+      <module name="MyLuaApp2.buildSrc.main" target="11" />
+      <module name="MyLuaApp2.buildSrc.test" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
