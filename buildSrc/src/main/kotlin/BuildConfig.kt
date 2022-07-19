@@ -26,19 +26,19 @@ object BuildConfig {
     }
 
     object Versions {
-        const val kotlin_version = "1.6.20"
+        const val kotlin_version = "1.6.21"
         const val android_gradle_plugin_version = "7.1.3"
         const val antlr_kotlin_version = "6cf22fb195"
         const val gson_version = "2.8.8"
         const val material_version = "1.5.0"
         const val appcompat_version = "1.4.1"
-        const val sora_editor_version = "0.10.10"
+        const val sora_editor_version = "0.11.0"
         const val lifecycle_version = "2.4.0"
         const val preference_ktx_version = "1.1.1"
         const val constraint_layout_version = "2.1.3"
 
         const val glide_version = "4.11.0"
-        const val net_version = "3.1.2"
+        const val net_version = "3.4.12"
         const val okhttp3_version = "4.9.1"
         const val channel_version = "1.1.4"
         const val swipe_refresh_layout_version = "1.2.0-alpha01"
@@ -46,7 +46,7 @@ object BuildConfig {
 
         const val kotlinx_coroutines_android_version = "1.6.0"
         const val core_ktx_version = "1.7.0"
-        const val brv_version = "1.3.51"
+        const val brv_version = "1.3.79"
         const val multi_languages_version = "6.9"
 
         const val zip4j_version = "2.9.1"
@@ -63,13 +63,12 @@ object BuildConfig {
 
         const val preferences_dsl_version = "2.2.0"
 
-        const val androlua_standalone_version = "1.0.2"
+        const val androlua_standalone_version = "1.0.4"
 
         const val java_parser_version = "3.24.2"
 
         const val jdt_version = "3.29.0"
 
-        const val jgrapht_version = "1.3.1"
     }
 
     object Libs {
@@ -79,10 +78,6 @@ object BuildConfig {
         }
 
         object Plugin {
-            const val kotlin_gradle_plugin =
-                "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin_version}"
-            const val android_gradle_plugin =
-                "com.android.tools.build:gradle:${Versions.android_gradle_plugin_version}"
             const val antlr_kotlin_gradle_plugin =
                 "com.strumenta.antlr-kotlin:antlr-kotlin-gradle-plugin:${Versions.antlr_kotlin_version}"
         }
@@ -148,7 +143,7 @@ object BuildConfig {
 
             const val java_parser = "com.github.javaparser:javaparser-symbol-solver-core:${Versions.java_parser_version}"
 
-            const val jgrapht = "org.jgrapht:jgrapht-core:${Versions.jgrapht_version}"
+
         }
 
         object BuildTools {
