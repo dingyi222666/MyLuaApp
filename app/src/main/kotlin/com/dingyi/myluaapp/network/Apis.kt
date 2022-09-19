@@ -7,6 +7,5 @@ package com.dingyi.myluaapp.network
  **/
 object Apis {
 
-
     const val poetryApi = "https://v1.jinrishici.com/all.json"
 }

@@ -7,6 +7,9 @@
       <module name="MyLuaApp.app" target="11" />
       <module name="MyLuaApp.builder" target="11" />
       <module name="MyLuaApp.builder-plugin-api" target="11" />
+      <module name="MyLuaApp.buildSrc" target="11" />
+      <module name="MyLuaApp.buildSrc.main" target="11" />
+      <module name="MyLuaApp.buildSrc.test" target="11" />
       <module name="MyLuaApp.common" target="11" />
       <module name="MyLuaApp.core" target="11" />
       <module name="MyLuaApp.core-api" target="11" />

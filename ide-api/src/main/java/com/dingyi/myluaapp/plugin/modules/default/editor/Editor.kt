@@ -18,6 +18,7 @@ import io.github.rosemoe.sora.event.EventReceiver
 import io.github.rosemoe.sora.event.SubscriptionReceipt
 import io.github.rosemoe.sora.event.Unsubscribe
 import io.github.rosemoe.sora.widget.schemes.*
+import io.github.rosemoe.sorakt.batchEdit
 import io.github.rosemoe.sorakt.subscribeEvent
 
 import kotlinx.coroutines.Dispatchers
@@ -71,10 +72,10 @@ class Editor(
     }
 
     override fun appendText(charSequence: CharSequence) {
-        currentEditor.get()?.let {
-            it.text?.beginBatchEdit()
-            it.text.insert(getCurrentLine(), getCurrentColumn(), charSequence)
-            it.text.endBatchEdit()
+        currentEditor.get()?.let { editor ->
+            editor.text.batchEdit {
+                it.insert(getCurrentLine(), getCurrentColumn(), charSequence)
+            }
         }
     }
 
@@ -82,7 +83,6 @@ class Editor(
     override fun getId(): Int {
         return id
     }
-
 
 
     override fun saveState(): EditorState {
