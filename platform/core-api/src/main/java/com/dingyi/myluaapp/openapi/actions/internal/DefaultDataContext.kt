@@ -13,6 +13,10 @@ class DefaultDataContext:DataContext {
         return userDataHolder.getUserData(Key.create(dataId))
     }
 
+    override fun <T> getData(key: DataKey<T>): T? {
+        return userDataHolder.getUserData(key)
+    }
+
     override fun <T> putData(key: DataKey<T>, t: T?) {
         userDataHolder.putUserData(key, t)
     }

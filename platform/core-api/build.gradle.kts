@@ -41,4 +41,5 @@ dependencies {
     compileOnly(BuildConfig.Libs.BuildTools.kotlin_compiler)
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(project(":platform-common"))
+    testImplementation(BuildConfig.Libs.Default.junit)
 }

@@ -31,7 +31,7 @@ object BuildConfig {
         const val antlr_kotlin_version = "6cf22fb195"
         const val gson_version = "2.8.8"
         const val material_version = "1.6.1"
-        const val appcompat_version = "1.6.0"
+        const val appcompat_version = "1.5.1"
         const val sora_editor_version = "0.11.0"
         const val lifecycle_version = "2.4.0"
         const val preference_ktx_version = "1.1.1"
@@ -69,6 +69,8 @@ object BuildConfig {
 
         const val jdt_version = "3.29.0"
 
+
+        const val junit_version = "4.13.2"
     }
 
     object Libs {
@@ -115,6 +117,8 @@ object BuildConfig {
             const val glide = "com.github.bumptech.glide:glide:${Versions.glide_version}"
             const val kotlinx_coroutines_android =
                 "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.kotlinx_coroutines_android_version}"
+
+            const val junit = "junit:junit:${Versions.junit_version}"
         }
 
         object Tools {
@@ -139,9 +143,11 @@ object BuildConfig {
 
             const val mmkv = "com.tencent:mmkv:${Versions.mmkv_version}"
 
-            const val androlua_standalone = "io.github.dingyi222666:androlua-standlone:${Versions.androlua_standalone_version}"
+            const val androlua_standalone =
+                "io.github.dingyi222666:androlua-standlone:${Versions.androlua_standalone_version}"
 
-            const val java_parser = "com.github.javaparser:javaparser-symbol-solver-core:${Versions.java_parser_version}"
+            const val java_parser =
+                "com.github.javaparser:javaparser-symbol-solver-core:${Versions.java_parser_version}"
 
 
         }
@@ -170,7 +176,8 @@ object BuildConfig {
                 "io.github.Rosemoe.sora-editor:language-textmate:${Versions.sora_editor_version}",
             )
 
-            const val preference_dsl = "de.maxr1998:modernandroidpreferences:${Versions.preferences_dsl_version}"
+            const val preference_dsl =
+                "de.maxr1998:modernandroidpreferences:${Versions.preferences_dsl_version}"
 
 
         }
