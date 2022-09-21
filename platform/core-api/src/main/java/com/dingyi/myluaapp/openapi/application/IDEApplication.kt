@@ -6,4 +6,5 @@ import com.dingyi.myluaapp.openapi.service.ServiceProvider
 interface IDEApplication : ServiceProvider {
 
 
+
 }

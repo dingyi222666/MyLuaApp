@@ -14,7 +14,7 @@ class DefaultActionManager : ActionManager {
     private val myLock = Any()
     private val idToAction: MutableMap<String, AnAction> = LinkedHashMap()
 
-    private val idToIndex = ArrayMap<String, Int>()
+    private val idToIndex = HashMap<String, Int>()
     private val actionToId = HashMap<Any, String>()
     private val idToGroupId = HashMap<String, String>()
 
@@ -28,13 +28,14 @@ class DefaultActionManager : ActionManager {
 
     override fun getId(action: AnAction): String? {
         synchronized(myLock) {
-            return actionToId.get(action)
+            return actionToId[action]
         }
     }
 
     override fun registerAction(actionId: String, action: AnAction) {
-        idToIndex.put(actionId, myRegisteredActionsCount++);
-        actionToId.put(action, actionId);
+        idToIndex[actionId] = myRegisteredActionsCount++;
+        actionToId[action] = actionId;
+        idToAction[actionId] = action
     }
 
     /* override fun registerAction(actionId: String, action: AnAction, pluginId: Any) {
@@ -59,7 +60,7 @@ class DefaultActionManager : ActionManager {
         }
         registerAction(actionId, newAction)
         if (oldIndex >= 0) {
-            idToIndex.put(actionId, oldIndex)
+            idToIndex[actionId] = oldIndex
         }
         //return oldAction
     }

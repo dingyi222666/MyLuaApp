@@ -5,23 +5,23 @@ import android.app.Application
 object ApplicationManager {
 
     fun setAndroidApplication(androidApplication: Application) {
-        ApplicationManager.outAndroidApplication = androidApplication
+        ApplicationManager.ourAndroidApplication = androidApplication
     }
 
     fun getAndroidApplication(): Application {
-        return checkNotNull(ApplicationManager.outAndroidApplication) { "The android application is not init" }
+        return checkNotNull(ApplicationManager.ourAndroidApplication) { "The android application is not init" }
     }
 
     fun setIDEApplication(ideApplication: IDEApplication) {
-        ApplicationManager.outIDEApplication = ideApplication
+        ApplicationManager.ourIDEApplication = ideApplication
     }
 
     fun getIDEApplication(): IDEApplication {
-        return checkNotNull(ApplicationManager.outIDEApplication) { "The ide application is not init" }
+        return checkNotNull(ApplicationManager.ourIDEApplication) { "The ide application is not init" }
     }
 
 
-    private var outAndroidApplication: Application? = null
-    private var outIDEApplication: IDEApplication? = null
+    private var ourAndroidApplication: Application? = null
+    private var ourIDEApplication: IDEApplication? = null
 
 }

@@ -14,8 +14,8 @@ import java.util.concurrent.ConcurrentMap
 
 </T> */
 class DataKey<T> private constructor(
-   val name: String
-): Key<T>(name) {
+    val name: String
+) : Key<T>(name) {
 
     /**
      * For short notation, use `MY_KEY.is(dataId)` instead of `MY_KEY.getName().equals(dataId)`.
@@ -36,7 +36,7 @@ class DataKey<T> private constructor(
     companion object {
         private val ourDataKeyIndex: ConcurrentMap<String, DataKey<*>> = ConcurrentHashMap()
 
-        fun <T> create( name: String): DataKey<T> {
+        fun <T> create(name: String): DataKey<T> {
             return ourDataKeyIndex.computeIfAbsent(name) { DataKey<T>(name) } as DataKey<T>
         }
 
