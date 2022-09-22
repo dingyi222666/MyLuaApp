@@ -70,6 +70,8 @@ object BuildConfig {
         const val jdt_version = "3.29.0"
 
 
+        const val commons_vfs_version = "2.9.0"
+
         const val junit_version = "4.13.2"
     }
 
@@ -148,6 +150,10 @@ object BuildConfig {
 
             const val java_parser =
                 "com.github.javaparser:javaparser-symbol-solver-core:${Versions.java_parser_version}"
+
+
+            const val commons_vfs =
+                "org.apache.commons:commons-vfs2${Versions.commons_vfs_version}"
 
 
         }

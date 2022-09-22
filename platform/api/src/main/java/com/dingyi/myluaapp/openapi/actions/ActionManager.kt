@@ -18,7 +18,7 @@ interface ActionManager {
          * Fetches the instance of ActionManager implementation.
          */
         fun getInstance(): ActionManager {
-            return ApplicationManager.getIDEApplication().getService(getJavaClass())
+            return ApplicationManager.getIDEApplication()[getJavaClass()]
         }
     }
 

@@ -1,9 +1,10 @@
 package com.dingyi.myluaapp.openapi.application
 
 import com.dingyi.myluaapp.openapi.service.ServiceProvider
+import com.dingyi.myluaapp.openapi.service.ServiceRegistry
 
 
-interface IDEApplication : ServiceProvider {
+interface IDEApplication : ServiceRegistry {
 
 
 

@@ -17,6 +17,7 @@
       <module name="MyLuaApp.ide-api" target="11" />
       <module name="MyLuaApp.language-server.java" target="11" />
       <module name="MyLuaApp.LuaLibrary" target="11" />
+      <module name="MyLuaApp.platform-api" target="11" />
       <module name="MyLuaApp.platform-common" target="11" />
       <module name="MyLuaApp.platform-core-api" target="11" />
       <module name="MyLuaApp.plugin" target="11" />

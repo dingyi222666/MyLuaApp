@@ -11,14 +11,6 @@ interface ServiceRegistry {
     </T> */
     operator fun <T> get(serviceType: Class<T>): T
 
-    /**
-     * Locates all services of the given type.
-     *
-     * @param serviceType The service type.
-     * @param <T>         The service type.
-    </T> */
-
-    fun <T> getAll(serviceType: Class<T>): List<T>
 
 
     /**
