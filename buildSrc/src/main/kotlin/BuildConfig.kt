@@ -73,6 +73,9 @@ object BuildConfig {
         const val commons_vfs_version = "2.9.0"
 
         const val junit_version = "4.13.2"
+
+
+        const val intellij_util_version = "222.4167.33"
     }
 
     object Libs {
@@ -154,6 +157,10 @@ object BuildConfig {
 
             const val commons_vfs =
                 "org.apache.commons:commons-vfs2${Versions.commons_vfs_version}"
+
+
+            const val intellij_platform_util = "com.jetbrains.intellij.platform:util:${Versions.intellij_util_version}"
+
 
 
         }

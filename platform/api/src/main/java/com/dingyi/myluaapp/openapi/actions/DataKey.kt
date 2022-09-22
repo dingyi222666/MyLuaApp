@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.openapi.actions
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+
+import com.intellij.openapi.util.Key
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 

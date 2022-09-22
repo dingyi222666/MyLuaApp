@@ -34,8 +34,9 @@ class TextRange private constructor(
         }
     }
 
-    val length: Int
-        get() = endOffset - startOffset
+    fun getLength() = endOffset - startOffset
+
+
 
     override fun equals(obj: Any?): Boolean {
         if (obj !is TextRange) return false
@@ -78,8 +79,8 @@ class TextRange private constructor(
     }
 
     fun cutOut(subRange: TextRange): TextRange {
-        require(subRange.startOffset <= length) { "SubRange: $subRange; this=$this" }
-        require(subRange.endOffset <= length) { "SubRange: $subRange; this=$this" }
+        require(subRange.startOffset <= getLength()) { "SubRange: $subRange; this=$this" }
+        require(subRange.endOffset <= getLength()) { "SubRange: $subRange; this=$this" }
         assertProperRange(subRange)
         return TextRange(
             startOffset + subRange.startOffset,
@@ -101,7 +102,7 @@ class TextRange private constructor(
     fun grown(lengthDelta: Int): TextRange {
         return if (lengthDelta == 0) {
             this
-        } else from(startOffset, length + lengthDelta)
+        } else from(startOffset, getLength() + lengthDelta)
     }
 
 
@@ -137,9 +138,8 @@ class TextRange private constructor(
         return if (isProperRange(newStart, newEnd)) TextRange(newStart, newEnd) else null
     }
 
-    val isEmpty: Boolean
-        get() = startOffset >= endOffset
 
+    fun isEmpty() = startOffset >= endOffset
 
     fun union(textRange: TextRange): TextRange {
         return if (equals(textRange)) {

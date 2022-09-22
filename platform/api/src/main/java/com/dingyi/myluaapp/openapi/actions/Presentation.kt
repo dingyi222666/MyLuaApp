@@ -2,7 +2,7 @@ package com.dingyi.myluaapp.openapi.actions
 
 import android.graphics.drawable.Drawable
 import org.jetbrains.annotations.NonNls
-import org.jetbrains.kotlin.com.intellij.util.BitUtil
+import com.intellij.util.BitUtil
 import java.beans.PropertyChangeListener
 import java.beans.PropertyChangeSupport
 import java.util.*

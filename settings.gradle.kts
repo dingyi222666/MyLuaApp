@@ -1,4 +1,5 @@
 @file:Suppress("UnstableApiUsage")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -8,6 +9,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.aliyun.com/repository/gradle-plugin")
+        maven("https://www.jetbrains.com/intellij-repository/releases")
         maven("https://jitpack.io")
     }
 }
@@ -21,6 +23,7 @@ dependencyResolutionManagement {
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.aliyun.com/repository/gradle-plugin")
+        maven("https://www.jetbrains.com/intellij-repository/releases")
         maven("https://jitpack.io")
 
     }

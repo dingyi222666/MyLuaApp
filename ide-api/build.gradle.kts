@@ -39,7 +39,6 @@ dependencies {
 
 
     compileOnly(BuildConfig.Libs.BuildTools.ecj_compiler)
-    compileOnly(BuildConfig.Libs.BuildTools.kotlin_compiler)
     compileOnly(files("../builder/libs/javax-tools.jar"))
     compileOnly(BuildConfig.Libs.Google.material)
     compileOnly(BuildConfig.Libs.Tools.androlua_standalone)
