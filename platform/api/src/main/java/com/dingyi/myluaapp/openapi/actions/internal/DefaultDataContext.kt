@@ -2,8 +2,8 @@ package com.dingyi.myluaapp.openapi.actions.internal
 
 import com.dingyi.myluaapp.openapi.actions.DataContext
 import com.dingyi.myluaapp.openapi.actions.DataKey
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
+import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.UserDataHolderBase
 
 class DefaultDataContext:DataContext {
 

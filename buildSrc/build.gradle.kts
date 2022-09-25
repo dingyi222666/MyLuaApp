@@ -1,4 +1,3 @@
-// 导入 Kotlin 插件
 import org.gradle.kotlin.dsl.`kotlin-dsl`
 
 plugins {

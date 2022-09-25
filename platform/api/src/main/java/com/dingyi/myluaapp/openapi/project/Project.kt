@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 
 
-interface Project {
+interface Project :ServiceRegistry{
     companion object {
 
 

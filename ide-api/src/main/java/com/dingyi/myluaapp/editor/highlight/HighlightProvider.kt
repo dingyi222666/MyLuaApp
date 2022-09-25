@@ -3,7 +3,6 @@ package com.dingyi.myluaapp.editor.highlight
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Base64DataException
 import android.util.Log
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
@@ -13,11 +12,11 @@ import io.github.rosemoe.sora.lang.styling.MappedSpans
 import io.github.rosemoe.sora.lang.styling.Styles
 import io.github.rosemoe.sora.text.CharPosition
 import io.github.rosemoe.sora.text.ContentReference
-import io.github.rosemoe.sora.util.IntPair
-import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Mutex
-import java.lang.Exception
-import java.lang.Runnable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 abstract class HighlightProvider : AnalyzeManager {
 

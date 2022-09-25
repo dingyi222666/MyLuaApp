@@ -11,10 +11,10 @@ object BuildConfig {
 
         object Default {
 
-            const val targetSdk = 31
+            const val targetSdk = 33
             const val minSdk = 26
-            const val buildToolsVersion = "31.0.0"
-            const val compileSdk = 31
+            const val buildToolsVersion = "33.0.0"
+            const val compileSdk = 33
         }
 
         object App {
@@ -26,8 +26,8 @@ object BuildConfig {
     }
 
     object Versions {
-        const val kotlin_version = "1.6.21"
-        const val android_gradle_plugin_version = "7.1.3"
+        const val kotlin_version = "1.7.0"
+        const val android_gradle_plugin_version = "7.2.2"
         const val antlr_kotlin_version = "6cf22fb195"
         const val gson_version = "2.8.8"
         const val material_version = "1.6.1"
@@ -156,7 +156,7 @@ object BuildConfig {
 
 
             const val commons_vfs =
-                "org.apache.commons:commons-vfs2${Versions.commons_vfs_version}"
+                "org.apache.commons:commons-vfs2:${Versions.commons_vfs_version}"
 
 
             const val intellij_platform_util = "com.jetbrains.intellij.platform:util:${Versions.intellij_util_version}"

@@ -18,9 +18,7 @@ abstract class DocumentEvent(
         return getOffset();
     }
 
-
     abstract fun getOldFragment(): CharSequence
-
 
     abstract fun getNewFragment(): CharSequence
 

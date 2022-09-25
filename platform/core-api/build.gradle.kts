@@ -41,6 +41,6 @@ dependencies {
     compileOnly(BuildConfig.Libs.Tools.intellij_platform_util)
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(project(":platform-common"))
-    implementation(BuildConfig.Libs.Tools.commons_vfs)
+    compileOnly(BuildConfig.Libs.Tools.commons_vfs)
     testImplementation(BuildConfig.Libs.Default.junit)
 }

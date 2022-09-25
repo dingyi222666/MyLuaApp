@@ -22,22 +22,24 @@ interface Module : ServiceRegistry, Disposable {
      *
      * @return the project instance.
      */
-    val project: Project
+    fun getProject(): Project
 
     /**
      * Returns the name of this module.
      *
      * @return the module name.
      */
-    val name: String
+    fun getName(): String
 
     /**
      * Checks if the module instance has been disposed and unloaded.
      *
      * @return true if the module has been disposed, false otherwise
      */
-    val isDisposed: Boolean
-    val isLoaded: Boolean
+    fun isDisposed(): Boolean
+
+
+    fun isLoaded(): Boolean
 
 
     companion object {
