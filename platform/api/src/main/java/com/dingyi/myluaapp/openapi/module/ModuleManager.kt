@@ -2,7 +2,6 @@ package com.dingyi.myluaapp.openapi.module
 
 import com.dingyi.myluaapp.openapi.project.Project
 import com.dingyi.myluaapp.openapi.service.get
-import com.intellij.util.graph.Graph
 import java.io.File
 import java.io.IOException
 import java.nio.file.Path
@@ -91,6 +90,20 @@ abstract class ModuleManager {
      * @return the sorted array of modules.
      */
     abstract fun getSortedModules(): Array<Module>
+
+
+
+    abstract fun getModuleGrouper( model:ModifiableModuleModel):ModuleGrouper
+
+    /**
+     * Returns the model for the list of modules in the project, which can be used to add,
+     * remove or modify modules.
+     *
+     * @return the modifiable model instance.
+     */
+    abstract fun getModifiableModel(): ModifiableModuleModel
+
+
     /*
 
         */

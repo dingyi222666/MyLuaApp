@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.openapi.editor
 
 
 import com.dingyi.myluaapp.openapi.Disposable
+import com.dingyi.myluaapp.openapi.editor.event.DocumentListener
 import org.jetbrains.annotations.Contract
 import org.jetbrains.annotations.NotNull
 
@@ -180,7 +181,7 @@ interface Document {
     fun addDocumentListener(listener: DocumentListener) {}
 
     fun addDocumentListener(
-         listener: DocumentListener,
+        listener: DocumentListener,
         parentDisposable: Disposable
     ) {
     }

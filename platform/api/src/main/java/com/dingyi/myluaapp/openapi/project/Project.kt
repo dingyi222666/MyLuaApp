@@ -1,8 +1,6 @@
 package com.dingyi.myluaapp.openapi.project
 
-import com.dingyi.myluaapp.openapi.editor.DocumentEvent
 import com.dingyi.myluaapp.openapi.service.ServiceRegistry
-import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable

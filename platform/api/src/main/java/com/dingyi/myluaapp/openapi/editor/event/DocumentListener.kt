@@ -1,6 +1,7 @@
-package com.dingyi.myluaapp.openapi.editor
+package com.dingyi.myluaapp.openapi.editor.event
 
 
+import com.dingyi.myluaapp.openapi.editor.event.DocumentEvent
 import java.util.*
 
 interface DocumentListener : EventListener {
