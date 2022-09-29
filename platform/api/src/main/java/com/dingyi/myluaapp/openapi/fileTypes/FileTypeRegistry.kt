@@ -113,7 +113,7 @@ abstract class FileTypeRegistry {
                 val instanceGetter: Supplier<out FileTypeRegistry> = instanceGetter
                     ?: // in tests FileTypeManager service maybe not preloaded, so, ourInstanceGetter is not set
                     return ApplicationManager.getIDEApplication()
-                        .get("com.intellij.openapi.fileTypes.FileTypeManager")
+                        .get("com.dingyi.myluaapp.openapi.fileTypes.FileTypeManager")
                 return instanceGetter.get()
             }
     }

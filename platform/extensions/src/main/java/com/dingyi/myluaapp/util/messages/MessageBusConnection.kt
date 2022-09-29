@@ -23,7 +23,7 @@ interface MessageBusConnection : SimpleMessageBusConnection, Disposable {
   /**
    * Allows specifying default handler to use during [anonymous subscriptions][.subscribe].
    */
-  fun setDefaultHandler(handler: MessageHandler?)
+  fun setDefaultHandler(handler: MessageHandler)
 
   fun setDefaultHandler(runnable: Runnable) {
     setDefaultHandler { _, _ -> runnable.run() }

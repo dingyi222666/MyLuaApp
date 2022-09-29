@@ -14,25 +14,6 @@ import java.io.IOException
 abstract class ProjectManager {
 
     /**
-     * Returns the list of currently opened projects.
-     * [Project.isDisposed] must be checked for each project before use (if the whole operation is not under read action).
-     */
-    abstract fun getOpenProjects():Array<Project>
-
-    /**
-     * Returns the project which is used as a template for new projects. The template project
-     * is always available, even when no other project is open. This [Project] instance is not
-     * supposed to be used for anything except template settings storage.
-     *
-     *
-     *
-     * NB: default project can be lazy loaded
-     *
-     * @return the template project instance.
-     */
-    abstract fun getDefaultProject():Project
-
-    /**
      * Loads and opens a project with the specified path. If the project file is from an older IDEA
      * version, prompts the user to convert it to the latest version. If the project file is from a
      * newer version, shows a message box telling the user that the load failed.
@@ -53,21 +34,15 @@ abstract class ProjectManager {
      */
     abstract fun closeAndDispose(project: Project): Boolean
 
-
-    /**
+/*    *//**
      * Asynchronously reloads the specified project.
      *
      * @param project the project to reload.
-     */
-    abstract fun reloadProject(project: Project)
+     *//*
+    abstract fun reloadProject(project: Project)*/
 
-
-    fun findOpenProjectByHash(locationHash: String): Project? {
-        return null
-    }
 
     companion object {
-
 
         /**
          * @return `ProjectManager` instance

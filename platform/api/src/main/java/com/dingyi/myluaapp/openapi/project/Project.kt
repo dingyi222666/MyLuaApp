@@ -8,9 +8,6 @@ import org.jetbrains.annotations.Nullable
 
 interface Project :ServiceRegistry{
     companion object {
-
-
-
         const val DIRECTORY_STORE_FOLDER = ".MyLuaApp"
     }
 
@@ -22,8 +19,7 @@ interface Project :ServiceRegistry{
      * @return project name
      */
     @NotNull
-    fun getName(): String?
-
+    fun getName(): String
 
 
     /**
@@ -33,34 +29,12 @@ interface Project :ServiceRegistry{
 
     @NonNls
     fun getProjectFilePath(): String?
-
-    /**
-     * Returns presentable project path:
-     * [.getProjectFilePath] for file-based projects, [.getBasePath] for directory-based ones.<br></br>
-     * Returns `null` for default project.
-     * **Note:** the word "presentable" here implies file system presentation, not a UI one.
-     */
-    @Nullable
-
-    @NonNls
-    fun getPresentableUrl(): String? {
-        return null
-    }
-
-
-    @NotNull
-    @NonNls
-    fun getLocationHash(): String?
-
     fun save()
 
     fun isOpen(): Boolean
 
     fun isInitialized(): Boolean
 
-    fun isDefault(): Boolean {
-        return false
-    }
 
     fun getServiceRegistry(): ServiceRegistry
 

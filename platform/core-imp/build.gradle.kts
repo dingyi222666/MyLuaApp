@@ -3,7 +3,6 @@ plugins {
     id("com.android.library")
 }
 
-
 android {
     compileSdk = BuildConfig.Config.Default.compileSdk
     buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
@@ -16,7 +15,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
+        viewBinding = false
     }
 
     buildTypes {
@@ -41,6 +40,8 @@ dependencies {
     compileOnly(BuildConfig.Libs.Tools.intellij_platform_util)
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(project(":platform-common"))
+    compileOnly(project(":platform-extensions"))
+    compileOnly(project(":platform-api"))
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
     testImplementation(BuildConfig.Libs.Default.junit)
 }
