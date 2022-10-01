@@ -34,6 +34,6 @@ class MessageListenerList<T : Any>(messageBus: MessageBus, topic: Topic<T>) {
     }
 
     fun remove(@NotNull listener: T) {
-        myListenerToConnectionMap.remove(listener)?.disconnect()
+         myListenerToConnectionMap.remove(listener)?.disconnect()
     }
 }

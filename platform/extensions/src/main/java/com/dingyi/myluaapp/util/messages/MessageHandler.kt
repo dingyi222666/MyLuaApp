@@ -14,5 +14,5 @@ fun interface MessageHandler {
      * @param event   information about target method called by the publisher
      * @param params  called method arguments
      */
-    fun handle(event: Method, vararg params: Any?)
+    fun handle(event: MethodHandle, vararg params: Any?)
 }

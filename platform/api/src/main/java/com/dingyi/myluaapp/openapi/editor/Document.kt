@@ -1,8 +1,9 @@
 package com.dingyi.myluaapp.openapi.editor
 
 
-import com.dingyi.myluaapp.openapi.Disposable
+
 import com.dingyi.myluaapp.openapi.editor.event.DocumentListener
+import com.intellij.openapi.Disposable
 import org.jetbrains.annotations.Contract
 import org.jetbrains.annotations.NotNull
 

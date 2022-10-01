@@ -10,7 +10,9 @@ pluginManagement {
         gradlePluginPortal()
         maven("https://maven.aliyun.com/repository/gradle-plugin")
         maven("https://www.jetbrains.com/intellij-repository/releases")
+
         maven("https://jitpack.io")
+        maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies")
     }
 }
 
@@ -25,6 +27,7 @@ dependencyResolutionManagement {
         maven("https://maven.aliyun.com/repository/gradle-plugin")
         maven("https://www.jetbrains.com/intellij-repository/releases")
         maven("https://jitpack.io")
+        maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies")
 
     }
 }

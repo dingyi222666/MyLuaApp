@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.util.messages
 
-import com.dingyi.myluaapp.openapi.Disposable
+
+import com.intellij.openapi.Disposable
 
 
 /**

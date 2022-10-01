@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.util.messages
 
-import com.dingyi.myluaapp.openapi.Disposable
+
+import com.intellij.openapi.Disposable
 
 /**
  * Core of IntelliJ Platform messaging infrastructure. Basic functions:
@@ -27,7 +28,7 @@ interface MessageBus : Disposable {
      *
      * @return parent bus (if defined)
      */
-    fun getParent(): MessageBus
+    fun getParent(): MessageBus?
 
     /**
      * Create a new [Disposable] connection that is disconnected on message bus dispose, or on explicit dispose.
@@ -107,7 +108,7 @@ interface MessageBus : Disposable {
      * @param <L>   [business interface][Topic.getListenerClass] of the target topic
      * @return publisher for target topic
     </L> */
-    fun <L> syncPublisher(topic: Topic<L>): L
+    fun <L:Any> syncPublisher(topic: Topic<L>): L
 
     /**
      * Disposes current bus, i.e. drops all queued but not delivered messages (if any) and disallows further
@@ -118,7 +119,7 @@ interface MessageBus : Disposable {
     /**
      * Returns true if this bus is disposed.
      */
-    fun isDisposed(): Boolean
+    val isDisposed: Boolean
 
     /**
      * @return true when events in the given topic are being dispatched in the current thread,

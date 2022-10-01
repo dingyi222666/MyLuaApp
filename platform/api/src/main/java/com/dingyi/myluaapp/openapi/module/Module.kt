@@ -1,9 +1,9 @@
 package com.dingyi.myluaapp.openapi.module
 
 
-import com.dingyi.myluaapp.openapi.Disposable
 import com.dingyi.myluaapp.openapi.project.Project
 import com.dingyi.myluaapp.openapi.service.ServiceRegistry
+import com.intellij.openapi.Disposable
 import org.jetbrains.annotations.NonNls
 import java.io.File
 import java.nio.file.Path
