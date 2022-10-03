@@ -1,4 +1,5 @@
-import com.dingyi.myluaapp.editor.lsp.service.lua.lua.common.ast.ASTGenerator
+import com.dingyi.myluaapp.editor.lsp.server.lua.common.ast.ASTGenerator
+
 
 /**
  * @author: dingyi

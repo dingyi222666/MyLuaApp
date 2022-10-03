@@ -39,27 +39,9 @@ interface ModifiableModuleModel {
         )
     }
 
-    /**
-     * Creates a non-persistent module of the specified type and adds it to the project
-     * to which the module manager is related. [.commit] must be called to
-     * bring the changes in effect.
-     *
-     * In contrast with modules created by [.newModule],
-     * non-persistent modules aren't stored on a filesystem and aren't being written
-     * in a project XML file. When IDE closes, all non-persistent modules vanishes out.
-     */
-
-    fun newNonPersistentModule(
-        moduleName: String?, moduleTypeId: String?
-    ): Module {
-        throw UnsupportedOperationException()
-    }
 
 
-    @Deprecated("use {@link #newModule(String, String)} instead")
-    fun newModule(
-        filePath: String, moduleTypeId: String, options: Map<String, String>?
-    ): Module
+
 
     /**
      * Loads a module from an .iml file with the specified path and adds it to the project.
@@ -143,7 +125,7 @@ interface ModifiableModuleModel {
      */
 
     fun getActualName(module: Module?): String?
-    fun getModuleGroupPath(module: Module): Array<String>?
+    fun getModuleGroupPath(module: Module): Array<String>
     fun hasModuleGroups(): Boolean
     fun setModuleGroupPath(
         module: Module, groupPath: Array<String>

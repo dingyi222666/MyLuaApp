@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.openapi.module
 
 import com.dingyi.myluaapp.openapi.project.Project
 import com.dingyi.myluaapp.openapi.service.get
+import com.intellij.util.graph.Graph
 import java.io.File
 import java.io.IOException
 import java.nio.file.Path
@@ -30,19 +31,7 @@ abstract class ModuleManager {
         return newModule(file.toString().replace(File.separatorChar, '/'), moduleTypeId)
     }
 
-    /**
-     * Creates a non-persistent module of the specified type and adds it to the project
-     * to which the module manager is related. [.commit] must be called to
-     * bring the changes in effect.
-     *
-     * In contrast with modules created by [.newModule],
-     * non-persistent modules aren't stored on a filesystem and aren't being written
-     * in a project XML file. When IDE closes, all non-persistent modules vanishes out.
-     */
 
-    fun newNonPersistentModule(moduleName: String, id: String): Module {
-        throw UnsupportedOperationException()
-    }
 
 
     abstract fun loadModule(filePath: String): Module
@@ -82,65 +71,42 @@ abstract class ModuleManager {
 
     abstract fun findModuleByName(name: String): Module
 
-    /**
-     * Returns the list of modules sorted by dependency (the modules which do not depend
-     * on anything are in the beginning of the list, a module which depends on another module
-     * follows it in the list).
-     *
-     * @return the sorted array of modules.
-     */
-    abstract fun getSortedModules(): Array<Module>
 
 
 
-    abstract fun getModuleGrouper( model:ModifiableModuleModel):ModuleGrouper
 
-    /**
-     * Returns the model for the list of modules in the project, which can be used to add,
-     * remove or modify modules.
-     *
-     * @return the modifiable model instance.
-     */
-    abstract fun getModifiableModel(): ModifiableModuleModel
-
-
-    /*
-
-        */
     /**
      * Returns the module comparator which can be used for sorting modules by dependency
      * (the modules which do not depend on anything are in the beginning of the list,
      * a module which depends on another module follows it in the list).
      *
      * @return the module comparator instance.
-     *//*
+     */
 
 
     abstract fun moduleDependencyComparator(): Comparator<Module?>?
 
-    */
+
     /**
      * Returns the list of modules which directly depend on the specified module.
      *
      * @param module the module for which the list of dependent modules is requested.
      * @return list of *modules that depend on* given module.
      * @see ModuleUtilCore.getAllDependentModules
-     *//*
+     */
 
     abstract fun getModuleDependentModules(module: Module): List<Module>
 
-    */
     /**
      * Checks if one of the specified modules directly depends on the other module.
      *
      * @param module   the module to check the dependency for.
      * @param onModule the module on which `module` may depend.
      * @return true if `module` directly depends on `onModule`, false otherwise.
-     *//*
+     */
 
     abstract fun isModuleDependent(module: Module, onModule: Module): Boolean
 
-    */
     /**
      * Returns the graph of dependencies between modules in the project.
      *
@@ -153,12 +119,10 @@ abstract class ModuleManager {
     /**
      * Returns the graph of dependencies between modules in the project.
      *
-     * @param includeTests whether test-only dependencies should be included
      * @return the module dependency graph.
-     *//*
+     */
 
-    abstract fun moduleGraph(includeTests: Boolean): Graph<Module>
-*/
+    abstract fun moduleGraph(): Graph<Module>
 
 
     /**
@@ -183,7 +147,7 @@ abstract class ModuleManager {
          * @return the module manager instance.
          */
         fun getInstance(project: Project): ModuleManager {
-            return project.get()//ModuleManager::class.java)
+            return project.getServiceRegistry()[ModuleManager::class.java]
         }
     }
 }

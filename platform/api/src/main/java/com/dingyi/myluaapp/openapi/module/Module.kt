@@ -14,7 +14,7 @@ import java.nio.file.Path
  *
  * @see ModuleManager.getModules
  */
-interface Module : ServiceRegistry, Disposable {
+interface Module : Disposable {
 
 
     /**
@@ -41,6 +41,7 @@ interface Module : ServiceRegistry, Disposable {
 
     fun isLoaded(): Boolean
 
+    fun getServiceRegistry(): ServiceRegistry
 
     companion object {
         /**

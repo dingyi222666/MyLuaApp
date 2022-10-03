@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 
 
-interface Project :ServiceRegistry{
+interface Project {
     companion object {
         const val DIRECTORY_STORE_FOLDER = ".MyLuaApp"
     }
@@ -25,7 +25,7 @@ interface Project :ServiceRegistry{
     /**
      * @return a path to project file (see [.getProjectFile]) or `null` for default project.
      */
-    @Nullable
+
 
     @NonNls
     fun getProjectFilePath(): String?
@@ -34,7 +34,6 @@ interface Project :ServiceRegistry{
     fun isOpen(): Boolean
 
     fun isInitialized(): Boolean
-
 
     fun getServiceRegistry(): ServiceRegistry
 

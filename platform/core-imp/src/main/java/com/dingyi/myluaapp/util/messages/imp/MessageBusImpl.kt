@@ -722,7 +722,6 @@ private fun invokeListener(
 
 private fun invokeMethod(handler: Any, args: Array<Any?>?, methodHandle: MethodHandle) {
     if (args == null) {
-        println(methodHandle)
         methodHandle.invokeWithArguments(handler)
     } else {
         methodHandle.bindTo(handler).invokeWithArguments(args)
