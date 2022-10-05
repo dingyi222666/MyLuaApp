@@ -23,6 +23,7 @@
       <module name="MyLuaApp.platform-core-imp" target="11" />
       <module name="MyLuaApp.platform-extensions" target="11" />
       <module name="MyLuaApp.platform-imp" target="11" />
+      <module name="MyLuaApp.platform-util" target="11" />
       <module name="MyLuaApp.plugin" target="11" />
       <module name="MyLuaApp.tm4e" target="11" />
       <module name="MyLuaApp.treeview" target="11" />

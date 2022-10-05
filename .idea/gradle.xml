@@ -27,6 +27,7 @@
             <option value="$PROJECT_DIR$/platform/core-imp" />
             <option value="$PROJECT_DIR$/platform/extensions" />
             <option value="$PROJECT_DIR$/platform/imp" />
+            <option value="$PROJECT_DIR$/platform/util" />
             <option value="$PROJECT_DIR$/plugin" />
             <option value="$PROJECT_DIR$/treeview" />
           </set>

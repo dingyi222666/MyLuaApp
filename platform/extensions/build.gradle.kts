@@ -42,7 +42,7 @@ android {
 
 dependencies {
     compileOnly(BuildConfig.Libs.Tools.intellij_platform_util)
-    compileOnly(BuildConfig.Libs.AndroidX.appcompat)
+    //compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
     compileOnly(project(":platform-common"))
     compileOnly(project(":platform-api"))

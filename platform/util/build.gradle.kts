@@ -40,6 +40,10 @@ android {
 dependencies {
     compileOnly(BuildConfig.Libs.Tools.intellij_platform_util)
     //compileOnly(BuildConfig.Libs.AndroidX.appcompat)
+
+    implementation("org.slf4j:slf4j-api:2.0.3")
+
+
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
     compileOnly(project(":platform-common"))
     testImplementation(BuildConfig.Libs.Default.junit)
