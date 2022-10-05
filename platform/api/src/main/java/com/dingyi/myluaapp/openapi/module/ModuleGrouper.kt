@@ -48,7 +48,7 @@ abstract class ModuleGrouper {
     /**
      * If [module] itself can be considered as a group, returns its groups. Otherwise returns null.
      */
-    abstract fun getModuleAsGroupPath(module: Module): List<String>?
+    abstract fun getModuleAsGroupPath(module: Module): List<String>
 
   /**
      * If [description] itself can be considered as a group, returns its groups. Otherwise returns null.

@@ -12,16 +12,16 @@ object ApplicationManager {
         return checkNotNull(ourAndroidApplication) { "The android application is not init" }
     }
 
-    fun setIDEApplication(ideApplication: IDEApplication) {
-        ourIDEApplication = ideApplication
+    fun setApplication(ideApplication: IDEApplication) {
+        ourApplication = ideApplication
     }
 
-    fun getIDEApplication(): IDEApplication {
-        return checkNotNull(ourIDEApplication) { "The ide application is not init" }
+    fun getApplication(): IDEApplication {
+        return checkNotNull(ourApplication) { "The ide application is not init" }
     }
 
 
     private var ourAndroidApplication: Application? = null
-    private var ourIDEApplication: IDEApplication? = null
+    private var ourApplication: IDEApplication? = null
 
 }

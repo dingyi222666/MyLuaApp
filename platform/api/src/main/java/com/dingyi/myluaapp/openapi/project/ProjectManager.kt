@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.openapi.project
 
-import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
 import com.dingyi.myluaapp.openapi.service.find
 
@@ -48,7 +47,7 @@ abstract class ProjectManager {
          * @return `ProjectManager` instance
          */
         val instance: ProjectManager
-            get() = ApplicationManager.getIDEApplication().find<ProjectManager>()
+            get() = ApplicationManager.getApplication().find<ProjectManager>()
 
 
     }

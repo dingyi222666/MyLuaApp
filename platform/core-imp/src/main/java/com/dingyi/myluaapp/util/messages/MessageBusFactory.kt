@@ -11,7 +11,7 @@ abstract class MessageBusFactory {
 
     companion object {
         val instance: MessageBusFactory
-            get() = ApplicationManager.getIDEApplication()[MessageBusFactory::class.java]
+            get() = ApplicationManager.getApplication()[MessageBusFactory::class.java]
 
         fun newMessageBus(owner: MessageBusOwner): MessageBus {
             return instance.createMessageBus(owner, null)
