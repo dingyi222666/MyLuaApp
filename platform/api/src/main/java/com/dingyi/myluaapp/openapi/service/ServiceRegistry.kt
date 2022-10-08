@@ -40,5 +40,8 @@ interface ServiceRegistry {
      */
     fun find(serviceType: String): Any?
 
+    fun asRegistration(): ServiceRegistration
+
+    fun asReadOnlyComponentManager():ComponentManager
 
 }

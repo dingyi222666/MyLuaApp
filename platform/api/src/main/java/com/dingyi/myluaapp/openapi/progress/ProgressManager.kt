@@ -119,7 +119,7 @@ abstract class ProgressManager : ProgressIndicatorProvider() {
      */
 
     abstract fun executeProcessUnderProgress(
-        process: Runnable, progress: ProgressIndicator?
+        process: Runnable, progress: ProgressIndicator
     )
 
     /**
@@ -157,7 +157,6 @@ abstract class ProgressManager : ProgressIndicatorProvider() {
          */
 
         var instanceOrNull: ProgressManager? = null
-
 
         val instance: ProgressManager
             get() {

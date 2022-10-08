@@ -23,7 +23,7 @@ open class DefaultLogger(category: String) : Logger() {
         var t = t
         t = ensureNotControlFlow(t)
         System.err.println("WARN: $message")
-        t?.printStackTrace(System.err)
+        t.printStackTrace(System.err)
     }
 
     override fun error(message: String, t: Throwable?, vararg details: String) {

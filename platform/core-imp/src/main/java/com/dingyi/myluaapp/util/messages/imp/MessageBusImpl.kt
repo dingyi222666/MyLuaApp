@@ -565,7 +565,7 @@ internal class ToParentMessagePublisher<L>(topic: Topic<L>, bus: MessageBusImpl)
 
 /**
  * For TO_DIRECT_CHILDREN broadcast direction we don't need special clean logic because cache is computed per bus, exactly as for
- * NONE broadcast direction. And on publish, direct children of bus are queried to get message handlers.
+ * NONE broadcast direction. And on publish, direct children of bus are queried to getServiceRegistry message handlers.
  */
 private fun clearSubscriberCacheOnConnectionTerminated(
     topicAndHandlerPairs: Array<Any>,
