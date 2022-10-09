@@ -6,7 +6,6 @@ import com.intellij.util.graph.CachingSemiGraph;
 import com.intellij.util.graph.DFSTBuilder;
 import com.intellij.util.graph.GraphGenerator;
 import com.intellij.util.graph.InboundSemiGraph;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +25,6 @@ import java.util.*;
  *
  * @author Alexander Kireyev
  */
-@ApiStatus.Internal
 public final class LoadingOrder {
   @NonNls public static final String FIRST_STR = "first";
   @NonNls public static final String LAST_STR = "last";

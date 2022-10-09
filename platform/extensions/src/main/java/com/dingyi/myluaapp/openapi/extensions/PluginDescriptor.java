@@ -2,7 +2,6 @@
 package com.dingyi.myluaapp.openapi.extensions;
 
 import com.intellij.openapi.util.NlsSafe;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +15,7 @@ public interface PluginDescriptor {
 
   @Nullable ClassLoader getPluginClassLoader();
 
-  @ApiStatus.Experimental
+
   default @NotNull ClassLoader getClassLoader() {
     ClassLoader classLoader = getPluginClassLoader();
     return classLoader == null ? getClass().getClassLoader() : classLoader;

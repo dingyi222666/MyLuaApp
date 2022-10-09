@@ -28,7 +28,16 @@ dependencyResolutionManagement {
         maven("https://www.jetbrains.com/intellij-repository/releases")
         maven("https://jitpack.io")
         maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies")
+    }
 
+    versionCatalogs {
+        create("libs") {
+            library(
+                "annotation.androidBuildTools",
+                "com.android.tools",
+                "annotations"
+            ).version("26.0.0")
+        }
     }
 }
 
@@ -52,7 +61,6 @@ file("platform").listFiles()
     ?.forEach {
         val name = it.name
         include(":platform-$name")
-
         project(":platform-$name").projectDir = it
 
     }

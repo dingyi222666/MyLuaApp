@@ -3,33 +3,35 @@
 
 package com.dingyi.myluaapp.openapi.extensions.impl
 
+import com.dingyi.myluaapp.diagnostic.Logger
+import com.dingyi.myluaapp.openapi.components.ComponentManager
 import com.dingyi.myluaapp.openapi.extensions.BaseExtensionPointName
+import com.dingyi.myluaapp.openapi.extensions.DefaultPluginDescriptor
+import com.dingyi.myluaapp.openapi.extensions.ExtensionPoint
 import com.dingyi.myluaapp.openapi.extensions.ExtensionPointDescriptor
+import com.dingyi.myluaapp.openapi.extensions.ExtensionPointName
+import com.dingyi.myluaapp.openapi.extensions.ExtensionsArea
+import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
+import com.dingyi.myluaapp.openapi.extensions.PluginId
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.components.ComponentManager
-import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.extensions.*
 import com.intellij.openapi.util.Disposer
 import com.intellij.util.ThreeState
-import org.jdom.Element
-import org.jetbrains.annotations.ApiStatus.Internal
 import org.jetbrains.annotations.TestOnly
 import java.lang.reflect.Modifier
 import java.util.*
 import java.util.function.Consumer
 
-@Internal
 class ExtensionsAreaImpl(private val componentManager: ComponentManager) : ExtensionsArea {
   companion object {
     private val LOG = Logger.getInstance(ExtensionsAreaImpl::class.java)
 
     private const val DEBUG_REGISTRATION = false
 
-    @Internal
     fun createExtensionPoints(points: List<ExtensionPointDescriptor>,
                               componentManager: ComponentManager,
                               result: MutableMap<String, ExtensionPointImpl<*>>,
-                              pluginDescriptor: PluginDescriptor) {
+                              pluginDescriptor: PluginDescriptor
+    ) {
       for (descriptor in points) {
         val name = descriptor.getQualifiedName(pluginDescriptor)
         val point: ExtensionPointImpl<Any> = if (descriptor.isBean) {
@@ -58,7 +60,7 @@ class ExtensionsAreaImpl(private val componentManager: ComponentManager) : Exten
   }
 
   @Volatile
-  @Internal
+  //@Internal
   @JvmField
   var extensionPoints = emptyMap<String, ExtensionPointImpl<*>>()
 
@@ -278,7 +280,6 @@ class ExtensionsAreaImpl(private val componentManager: ComponentManager) : Exten
     extensionPoints.values.forEach(consumer)
   }
 
-  @Internal
   fun <T : Any> findExtensionByClass(aClass: Class<T>): T? {
     // TeamCity plugin wants DefaultDebugExecutor in constructor
     if (aClass.name == "com.intellij.execution.executors.DefaultDebugExecutor") {

@@ -2,10 +2,16 @@
 package com.dingyi.myluaapp.openapi.extensions.impl;
 
 import com.dingyi.myluaapp.diagnostic.Logger;
+import com.dingyi.myluaapp.ide.plugins.cl.PluginAwareClassLoader;
 import com.dingyi.myluaapp.openapi.components.ComponentManager;
 import com.dingyi.myluaapp.openapi.extensions.ExtensionDescriptor;
 import com.dingyi.myluaapp.openapi.extensions.ExtensionPoint;
+import com.dingyi.myluaapp.openapi.extensions.ExtensionPointAdapter;
+import com.dingyi.myluaapp.openapi.extensions.ExtensionPointAndAreaListener;
+import com.dingyi.myluaapp.openapi.extensions.ExtensionPointChangeListener;
 import com.dingyi.myluaapp.openapi.extensions.ExtensionPointListener;
+import com.dingyi.myluaapp.openapi.extensions.ExtensionPointPriorityListener;
+import com.dingyi.myluaapp.openapi.extensions.ExtensionsArea;
 import com.dingyi.myluaapp.openapi.extensions.LoadingOrder;
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor;
 import com.intellij.diagnostic.ActivityCategory;
@@ -50,7 +56,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 
-public abstract class ExtensionPointImpl<T extends Object> implements ExtensionPoint<T>, Iterable<@Nullable T> {
+public abstract class ExtensionPointImpl<T extends Object> implements ExtensionPoint<T>, Iterable<T> {
     static final Logger LOG = Logger.Companion.getInstance(ExtensionPointImpl.class);
 
     // test-only
@@ -100,7 +106,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
         isDynamic = dynamic;
     }
 
-    final <CACHE_KEY extends @NotNull Object, V extends @NotNull Object> @NotNull ConcurrentMap<CACHE_KEY, V> getCacheMap() {
+    final <CACHE_KEY extends Object, V extends Object> @NotNull ConcurrentMap<CACHE_KEY, V> getCacheMap() {
         ConcurrentMap<?, ?> keyMapperToCache = keyMapperToCacheRef.get();
         if (keyMapperToCache == null) {
             keyMapperToCache = keyMapperToCacheRef.updateAndGet(prev -> prev == null ? new ConcurrentHashMap<>() : prev);
@@ -297,8 +303,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
      * so, `next` may return `null` (in this case stop iteration).
      */
     @Override
-    @ApiStatus.Experimental
-    public final @NotNull Iterator<@Nullable T> iterator() {
+    public final @NotNull Iterator<T> iterator() {
         List<T> result = cachedExtensions;
         return result == null ? createIterator() : result.iterator();
     }
@@ -329,7 +334,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
 
         // do not use getThreadSafeAdapterList - no need to check that no listeners, because processImplementations is not a generic-purpose method
         for (ExtensionComponentAdapter adapter : shouldBeSorted ? getSortedAdapters() : adapters) {
-            consumer.accept((Supplier<@Nullable T>) () -> adapter.createInstance(componentManager), adapter.pluginDescriptor);
+            consumer.accept((Supplier<T>) () -> adapter.createInstance(componentManager), adapter.pluginDescriptor);
         }
     }
 
@@ -344,12 +349,12 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
     public final void processIdentifiableImplementations(@NotNull BiConsumer<? super @NotNull Supplier<? extends @Nullable T>, ? super @Nullable String> consumer) {
         // do not use getThreadSafeAdapterList - no need to check that no listeners, because processImplementations is not a generic-purpose method
         for (ExtensionComponentAdapter adapter : getSortedAdapters()) {
-            Supplier<@Nullable T> supplier = () -> adapter.createInstance(componentManager);
+            Supplier<T> supplier = () -> adapter.createInstance(componentManager);
             consumer.accept(supplier, adapter.getOrderId());
         }
     }
 
-    private @NotNull Iterator<@Nullable T> createIterator() {
+    private @NotNull Iterator<T> createIterator() {
         int size;
         List<ExtensionComponentAdapter> adapters = getSortedAdapters();
         size = adapters.size();
@@ -1065,8 +1070,9 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
             componentInstance = extension;
         }
 
+
         @Override
-        public boolean isInstanceCreated$intellij_platform_extensions() {
+        public boolean isInstanceCreated$platform_extensions_debug() {
             return true;
         }
 

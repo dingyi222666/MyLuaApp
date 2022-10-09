@@ -1,11 +1,12 @@
 // Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.dingyi.myluaapp.openapi.extensions.impl
 
+import com.dingyi.myluaapp.openapi.components.ComponentManager
 import com.dingyi.myluaapp.openapi.extensions.ExtensionDescriptor
-import com.dingyi.myluaapp.openapi.extensions.impl.ExtensionComponentAdapter
-import com.dingyi.myluaapp.openapi.extensions.impl.ImplementationClassResolver
-import com.intellij.openapi.components.ComponentManager
-import com.intellij.openapi.extensions.*
+import com.dingyi.myluaapp.openapi.extensions.ExtensionNotApplicableException
+import com.dingyi.myluaapp.openapi.extensions.LoadingOrder
+import com.dingyi.myluaapp.openapi.extensions.PluginAware
+import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.util.xml.dom.XmlElement
 import com.intellij.util.xmlb.XmlSerializer
