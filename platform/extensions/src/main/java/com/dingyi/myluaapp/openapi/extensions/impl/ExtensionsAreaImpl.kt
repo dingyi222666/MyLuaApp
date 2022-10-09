@@ -261,17 +261,17 @@ class ExtensionsAreaImpl(private val componentManager: ComponentManager) : Exten
     extensionPoints = Collections.unmodifiableMap(map)
   }
 
-  override fun <T : Any> getExtensionPoint(extensionPointName: String): ExtensionPointImpl<T> {
+  override fun <T:Any> getExtensionPoint(extensionPointName: String): ExtensionPointImpl<T> {
     return getExtensionPointIfRegistered(extensionPointName)
            ?: throw IllegalArgumentException("Missing extension point: $extensionPointName in container $componentManager")
   }
 
-  override fun <T : Any> getExtensionPointIfRegistered(extensionPointName: String): ExtensionPointImpl<T>? {
+  override fun <T:Any> getExtensionPointIfRegistered(extensionPointName: String): ExtensionPointImpl<T>? {
     @Suppress("UNCHECKED_CAST")
     return extensionPoints.get(extensionPointName) as ExtensionPointImpl<T>?
   }
 
-  override fun <T : Any> getExtensionPoint(extensionPointName: ExtensionPointName<T>): ExtensionPoint<T> {
+  override fun <T : Any> getExtensionPoint(extensionPointName: ExtensionPointName<T>): ExtensionPointImpl<T> {
     return getExtensionPoint(extensionPointName.name)
   }
 

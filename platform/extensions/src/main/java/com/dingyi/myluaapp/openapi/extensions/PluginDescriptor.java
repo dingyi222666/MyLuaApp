@@ -75,15 +75,6 @@ public interface PluginDescriptor {
 
   @Nullable String getUrl();
 
-  /**
-   * @deprecated doesn't make sense for installed plugins; use PluginNode#getDownloads
-   */
-  @Deprecated
-  @ApiStatus.ScheduledForRemoval
-  default @Nullable String getDownloads() {
-    return null;
-  }
-
   @Nullable @NlsSafe String getSinceBuild();
 
   @Nullable @NlsSafe String getUntilBuild();
@@ -95,12 +86,11 @@ public interface PluginDescriptor {
   /**
    * If true, this plugin is hidden from the list of installed plugins in Settings | Plugins.
    */
-  @ApiStatus.Internal
+
   default boolean isImplementationDetail() {
     return false;
   }
 
-  @ApiStatus.Experimental
   default boolean isOnDemand() {
     return false;
   }

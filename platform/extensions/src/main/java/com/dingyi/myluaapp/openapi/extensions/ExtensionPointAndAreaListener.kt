@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /*
  * @author max
  */
-package com.dingyi.myluaapp.openapi.extensions;
+package com.dingyi.myluaapp.openapi.extensions
 
-import org.jetbrains.annotations.NotNull;
-
-public interface ExtensionPointAndAreaListener<T> extends ExtensionPointListener<T> {
-  default void areaReplaced(@NotNull ExtensionsArea oldArea) {
-  }
+interface ExtensionPointAndAreaListener<T> : ExtensionPointListener<T> {
+    fun areaReplaced(oldArea: ExtensionsArea) {}
 }

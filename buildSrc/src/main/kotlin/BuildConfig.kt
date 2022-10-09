@@ -164,6 +164,8 @@ object BuildConfig {
 
             const val intellij_platform_xml_util = "com.jetbrains.intellij.platform:util-xml-dom:${Versions.intellij_util_version}"
 
+            const val intellij_util_jdom = "com.jetbrains.intellij.platform:util-jdom:222.4167.29${Versions.intellij_util_version}"
+
 
         }
 

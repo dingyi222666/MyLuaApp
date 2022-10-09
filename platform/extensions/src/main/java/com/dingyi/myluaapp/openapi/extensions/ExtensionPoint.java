@@ -72,7 +72,11 @@ public interface ExtensionPoint<T extends Object> {
   void addExtensionPointListener(@NotNull ExtensionPointListener<T> listener, boolean invokeForLoadedExtensions, @Nullable Disposable parentDisposable);
 
 
-  /**
+    void addExtensionPointListener(@NotNull ExtensionPointChangeListener listener,
+                                   boolean invokeForLoadedExtensions,
+                                   @Nullable Disposable parentDisposable);
+
+    /**
    * Consider using {@link ExtensionPointName#addChangeListener}
    */
   void addChangeListener(@NotNull Runnable listener, @Nullable Disposable parentDisposable);

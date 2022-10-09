@@ -9,7 +9,7 @@ abstract class BaseExtensionPointName<T : Any>(val name: String) {
   override fun toString(): String = name
 
   protected fun getPointImpl(areaInstance: AreaInstance?): ExtensionPointImpl<T> {
-    val area = (areaInstance?.extensionArea ?: Extensions.getRootArea()) as ExtensionsAreaImpl
+    val area = (areaInstance?.extensionArea ?: Extensions.rootArea) as ExtensionsAreaImpl
     return area.getExtensionPoint(name)
   }
 }

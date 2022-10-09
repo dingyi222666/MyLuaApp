@@ -489,7 +489,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
                 return null;
             }
 
-            boolean isNotifyThatAdded = listeners != null && listeners.length != 0 && !adapter.isInstanceCreated$intellij_platform_extensions() && !isDynamic;
+            boolean isNotifyThatAdded = listeners != null && listeners.length != 0 && !adapter.isInstanceCreated$platform_extensions_debug() && !isDynamic;
             // do not call CHECK_CANCELED here in loop because it is called by createInstance()
             @Nullable T extension = adapter.createInstance(componentManager);
             if (extension == null) {
@@ -545,7 +545,6 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
      * instead of direct usage.
      */
     @TestOnly
-    @ApiStatus.Internal
     public final synchronized void maskAll(@NotNull List<? extends T> newList, @NotNull Disposable parentDisposable, boolean fireEvents) {
         if (POINTS_IN_READONLY_MODE == null) {
             //noinspection AssignmentToStaticFieldFromInstanceMethod
@@ -634,7 +633,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
     @Override
     public final synchronized void unregisterExtension(@NotNull T extension) {
         if (!unregisterExtensions((__, adapter) ->
-                !adapter.isInstanceCreated$intellij_platform_extensions() ||
+                !adapter.isInstanceCreated$platform_extensions_debug() ||
                         adapter.createInstance(componentManager) != extension, true)) {
             // there is a possible case that particular extension was replaced in particular environment, e.g., Upsource
             // replaces some IntelliJ extensions (important for CoreApplicationEnvironment), so, just log as error instead of throw error
@@ -747,7 +746,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
                 }
             } else {
                 for (ExtensionComponentAdapter adapter : adapters) {
-                    if (isRemoved && !adapter.isInstanceCreated$intellij_platform_extensions()) {
+                    if (isRemoved && !adapter.isInstanceCreated$platform_extensions_debug()) {
                         continue;
                     }
 
