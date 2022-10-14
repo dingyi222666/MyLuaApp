@@ -5,9 +5,6 @@ plugins {
 
 
 android {
-
-
-
     compileSdk = BuildConfig.Config.Default.compileSdk
     buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
 
@@ -19,7 +16,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding = false
+        viewBinding = true
     }
 
     buildTypes {
@@ -38,16 +35,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
 }
 
 dependencies {
-    implementation(BuildConfig.Libs.Tools.intellij_platform_xml_util)
     compileOnly(BuildConfig.Libs.Tools.intellij_platform_util)
-    implementation(BuildConfig.Libs.Tools.intellij_util_jdom)
-    //compileOnly(BuildConfig.Libs.AndroidX.appcompat)
+    compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
     compileOnly(project(":platform-common"))
-    compileOnly(project(":platform-util"))
+    implementation(project(":platform-api"))
+    implementation(project(":platform-util"))
+    implementation(project(":extensions"))
+
     testImplementation(BuildConfig.Libs.Default.junit)
 }

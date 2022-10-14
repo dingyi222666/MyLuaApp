@@ -13,7 +13,9 @@
       <module name="MyLuaApp.common" target="11" />
       <module name="MyLuaApp.core" target="11" />
       <module name="MyLuaApp.core-api" target="11" />
+      <module name="MyLuaApp.core-imp" target="11" />
       <module name="MyLuaApp.editor" target="11" />
+      <module name="MyLuaApp.extensions" target="11" />
       <module name="MyLuaApp.ide-api" target="11" />
       <module name="MyLuaApp.language-server.java" target="11" />
       <module name="MyLuaApp.LuaLibrary" target="11" />
@@ -25,11 +27,16 @@
       <module name="MyLuaApp.platform-imp" target="11" />
       <module name="MyLuaApp.platform-util" target="11" />
       <module name="MyLuaApp.plugin" target="11" />
+      <module name="MyLuaApp.service-container" target="11" />
       <module name="MyLuaApp.tm4e" target="11" />
       <module name="MyLuaApp.treeview" target="11" />
       <module name="MyLuaApp2.buildSrc" target="11" />
       <module name="MyLuaApp2.buildSrc.main" target="11" />
       <module name="MyLuaApp2.buildSrc.test" target="11" />
+      <module name="platform.MyLuaApp.platform-api" target="11" />
+      <module name="platform.MyLuaApp.platform-common" target="11" />
+      <module name="platform.MyLuaApp.platform-imp" target="11" />
+      <module name="platform.MyLuaApp.platform-util" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

@@ -48,8 +48,6 @@ public interface ComponentManager extends UserDataHolder, Disposable, AreaInstan
   boolean hasComponent(@NotNull Class<?> interfaceClass);
 
 
-
-
   boolean isInjectionForExtensionSupported();
 
   /**

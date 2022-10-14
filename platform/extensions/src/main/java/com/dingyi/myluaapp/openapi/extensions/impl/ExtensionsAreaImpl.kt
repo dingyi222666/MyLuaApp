@@ -16,6 +16,7 @@ import com.dingyi.myluaapp.openapi.extensions.PluginId
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
 import com.intellij.util.ThreeState
+import org.jdom.Element
 import org.jetbrains.annotations.TestOnly
 import java.lang.reflect.Modifier
 import java.util.*
@@ -220,7 +221,7 @@ class ExtensionsAreaImpl(private val componentManager: ComponentManager) : Exten
     newMap.put(name, point)
     extensionPoints = Collections.unmodifiableMap(newMap)
     if (DEBUG_REGISTRATION) {
-      epTraces!!.put(name, Throwable("Original registration for $name"))
+      epTraces?.put(name, Throwable("Original registration for $name"))
     }
     return point
   }
@@ -249,7 +250,7 @@ class ExtensionsAreaImpl(private val componentManager: ComponentManager) : Exten
     val id2 = pluginDescriptor.pluginId
     val message = "Duplicate registration for EP '$pointName': first in $id1, second in $id2"
     if (DEBUG_REGISTRATION) {
-      LOG.error(message, epTraces!!.get(pointName))
+      LOG.error(message, epTraces?.get(pointName))
     }
     throw componentManager.createError(message, pluginDescriptor.pluginId)
   }

@@ -46,7 +46,7 @@ class ExtensionPointName<T : Any>(@NonNls name: String) : BaseExtensionPointName
         get() = getExtensionsIfPointIsRegistered(null)
 
     fun getExtensionsIfPointIsRegistered(areaInstance: AreaInstance?): List<T> {
-        val area = areaInstance?.extensionArea ?: Extensions.rootArea
+        val area = areaInstance?.extensionArea ?: Extensions.getRootArea()
         val point = area?.getExtensionPointIfRegistered<T>(name)
         return point?.extensionList ?: emptyList()
     }
@@ -212,7 +212,7 @@ class ExtensionPointName<T : Any>(@NonNls name: String) : BaseExtensionPointName
     fun <K : Any, V : Any> computeIfAbsent(
         key: K,
         cacheId: Class<*>,
-        valueMapper: Function<in K?, out V?>
+        valueMapper: Function<in K, out V>
     ): V {
         return ExtensionProcessingHelper.computeIfAbsent(
             getPointImpl(null),

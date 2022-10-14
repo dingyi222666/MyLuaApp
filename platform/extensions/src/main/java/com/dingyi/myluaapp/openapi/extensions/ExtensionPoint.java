@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  */
 public interface ExtensionPoint<T extends Object> {
   /**
-   * @deprecated Use {@link com.intellij.testFramework.PlatformTestUtil#maskExtensions} or {@link #registerExtension(Object, Disposable)}.
+   * @deprecated Use  or {@link #registerExtension(Object, Disposable)}.
    */
   @Deprecated
   void registerExtension(T extension);
@@ -28,7 +28,7 @@ public interface ExtensionPoint<T extends Object> {
   void registerExtension(T extension, @NotNull PluginDescriptor pluginDescriptor, @NotNull Disposable parentDisposable);
 
   /**
-   * Use {@link com.intellij.testFramework.PlatformTestUtil#maskExtensions}
+   * Use
    * to register extension as first or to completely replace existing extensions in tests.
    */
   @TestOnly

@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
@@ -60,8 +60,8 @@ include(":build-tools:build-api")
 file("platform").listFiles()
     ?.forEach {
         val name = it.name
-        include(":platform-$name")
-        project(":platform-$name").projectDir = it
+        include(name)
+        project(":$name").projectDir = it
 
     }
 

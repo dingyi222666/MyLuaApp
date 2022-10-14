@@ -75,7 +75,7 @@ object BuildConfig {
         const val junit_version = "4.13.2"
 
 
-        const val intellij_util_version = "222.4167.33"
+        const val intellij_util_version = "222.4345.14"
     }
 
     object Libs {
@@ -164,7 +164,7 @@ object BuildConfig {
 
             const val intellij_platform_xml_util = "com.jetbrains.intellij.platform:util-xml-dom:${Versions.intellij_util_version}"
 
-            const val intellij_util_jdom = "com.jetbrains.intellij.platform:util-jdom:222.4167.29${Versions.intellij_util_version}"
+            const val intellij_util_jdom = "com.jetbrains.intellij.platform:util-jdom:${Versions.intellij_util_version}"
 
 
         }

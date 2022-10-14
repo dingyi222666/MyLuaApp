@@ -97,10 +97,10 @@ object ExtensionProcessingHelper {
      * See [com.intellij.openapi.extensions.ExtensionPointName.getByKey].
      */
     fun <K : Any, T : Any> getByKey(
-        point: ExtensionPointImpl<T?>,
+        point: ExtensionPointImpl<T>,
         key: K,
         cacheId: Class<*>,
-        keyMapper: Function<in T?, out K?>
+        keyMapper: Function<in T, out K>
     ): T? {
         return doGetByKey(point, cacheId, key, keyMapper, Function.identity(), point.getCacheMap())
     }
