@@ -141,10 +141,8 @@ public interface ComponentManager extends UserDataHolder, Disposable, AreaInstan
 
   @NotNull <T> T instantiateClass(@NotNull String className, @NotNull PluginDescriptor pluginDescriptor);
 
-  @NotNull ActivityCategory getActivityCategory(boolean isExtension);
 
-
-  default boolean isSuitableForOs(@NotNull ExtensionDescriptor.Os os) {
+    default boolean isSuitableForOs(@NotNull ExtensionDescriptor.Os os) {
     return true;
   }
 }

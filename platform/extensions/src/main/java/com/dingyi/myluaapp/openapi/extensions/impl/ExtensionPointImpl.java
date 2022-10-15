@@ -451,9 +451,6 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
             result = Arrays.copyOf(result, extensionIndex);
         }
 
-        // don't count ProcessCanceledException as valid action to measure (later special category can be introduced if needed)
-        ActivityCategory category = componentManager.getActivityCategory(true);
-        StartUpMeasurer.addCompletedActivity(startTime, extensionClass, category, /* pluginId = */ null, StartUpMeasurer.MEASURE_THRESHOLD);
         return result;
     }
 
@@ -489,7 +486,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
                 return null;
             }
 
-            boolean isNotifyThatAdded = listeners != null && listeners.length != 0 && !adapter.isInstanceCreated$platform_extensions_debug() && !isDynamic;
+            boolean isNotifyThatAdded = listeners != null && listeners.length != 0 && !adapter.isInstanceCreated$extensions_debug() && !isDynamic;
             // do not call CHECK_CANCELED here in loop because it is called by createInstance()
             @Nullable T extension = adapter.createInstance(componentManager);
             if (extension == null) {
@@ -633,7 +630,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
     @Override
     public final synchronized void unregisterExtension(@NotNull T extension) {
         if (!unregisterExtensions((__, adapter) ->
-                !adapter.isInstanceCreated$platform_extensions_debug() ||
+                !adapter.isInstanceCreated$extensions_debug() ||
                         adapter.createInstance(componentManager) != extension, true)) {
             // there is a possible case that particular extension was replaced in particular environment, e.g., Upsource
             // replaces some IntelliJ extensions (important for CoreApplicationEnvironment), so, just log as error instead of throw error
@@ -746,7 +743,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
                 }
             } else {
                 for (ExtensionComponentAdapter adapter : adapters) {
-                    if (isRemoved && !adapter.isInstanceCreated$platform_extensions_debug()) {
+                    if (isRemoved && !adapter.isInstanceCreated$extensions_debug()) {
                         continue;
                     }
 
@@ -1071,7 +1068,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
 
 
         @Override
-        public boolean isInstanceCreated$platform_extensions_debug() {
+        public boolean isInstanceCreated$extensions_debug() {
             return true;
         }
 

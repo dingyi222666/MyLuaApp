@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.openapi.progress
 
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
-import com.dingyi.myluaapp.openapi.components.getService
+import com.dingyi.myluaapp.openapi.components.service
 import com.dingyi.myluaapp.openapi.project.Project
 import com.intellij.openapi.util.Computable
 import com.intellij.openapi.util.Ref
@@ -163,7 +163,7 @@ abstract class ProgressManager : ProgressIndicatorProvider() {
             get() {
                 var result = instanceOrNull
                 if (result == null) {
-                    result = ApplicationManager.getApplication().getService<ProgressManager>()
+                    result = ApplicationManager.getApplication().service()
                     instanceOrNull = result
                 }
                 return result

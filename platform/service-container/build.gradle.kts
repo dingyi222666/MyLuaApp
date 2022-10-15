@@ -42,7 +42,8 @@ dependencies {
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
     compileOnly(project(":platform-common"))
-    implementation(project(":platform-api"))
+    compileOnly(project(":core-imp"))
+    compileOnly(project(":platform-api"))
     implementation(project(":platform-util"))
     implementation(project(":extensions"))
 

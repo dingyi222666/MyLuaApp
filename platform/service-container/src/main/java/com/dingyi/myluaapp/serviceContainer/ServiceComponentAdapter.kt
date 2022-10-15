@@ -1,10 +1,9 @@
 // Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.dingyi.myluaapp.serviceContainer
 
+import com.dingyi.myluaapp.openapi.components.ServiceDescriptor
+import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.ServiceDescriptor
-import com.intellij.openapi.extensions.PluginDescriptor
 import com.intellij.openapi.util.Disposer
 import kotlinx.coroutines.CompletableDeferred
 
@@ -26,15 +25,14 @@ internal class ServiceComponentAdapter(
 
   override fun getComponentKey(): String = descriptor.getInterface()
 
-  override fun getActivityCategory(componentManager: ComponentManagerImpl) = componentManager.getActivityCategory(isExtension = false)
 
   override fun <T : Any> doCreateInstance(componentManager: ComponentManagerImpl, implementationClass: Class<T>): T {
     if (isDebugEnabled) {
       val app = componentManager.getApplication()
-      if (app != null && app.isWriteAccessAllowed && !app.isUnitTestMode &&
+      /*if (app != null && app.isWriteAccessAllowed && !app.isUnitTestMode &&
           PersistentStateComponent::class.java.isAssignableFrom(implementationClass)) {
         LOG.warn(Throwable("Getting service from write-action leads to possible deadlock. Service implementation $implementationClassName"))
-      }
+      }*/
     }
     return createAndInitialize(componentManager, implementationClass)
   }

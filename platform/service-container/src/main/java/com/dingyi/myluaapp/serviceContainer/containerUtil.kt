@@ -23,18 +23,18 @@ internal fun checkCanceledIfNotInClassInit() {
 }
 
 internal fun isGettingServiceAllowedDuringPluginUnloading(descriptor: PluginDescriptor): Boolean {
-  return descriptor.isRequireRestart ||
-        /* descriptor.pluginId == PluginManagerCore.CORE_ID || descriptor.pluginId == PluginManagerCore.JAVA_PLUGIN_ID*/
+  return descriptor.isRequireRestart /*||
+         descriptor.pluginId == PluginManagerCore.CORE_ID || descriptor.pluginId == PluginManagerCore.JAVA_PLUGIN_ID*/
 }
 
 @ApiStatus.Internal
 fun isUnderIndicatorOrJob(): Boolean {
-  return ProgressIndicatorProvider.getGlobalProgressIndicator() != null || Cancellation.currentJob() != null
+  return ProgressIndicatorProvider.globalProgressIndicator != null || Cancellation.currentJob() != null
 }
 
 @ApiStatus.Internal
 fun throwAlreadyDisposedError(serviceDescription: String, componentManager: ComponentManagerImpl) {
-  val error = AlreadyDisposedException("Cannot create $serviceDescription because container is already disposed (container=${componentManager})")
+  val error = RuntimeException("Cannot create $serviceDescription because container is already disposed (container=${componentManager})")
   if (!isUnderIndicatorOrJob()) {
     throw error
   }

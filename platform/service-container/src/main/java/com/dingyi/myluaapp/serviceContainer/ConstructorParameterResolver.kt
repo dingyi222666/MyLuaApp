@@ -59,12 +59,12 @@ internal class ConstructorParameterResolver {
     val message = "Do not use constructor injection to get extension instance (requestorClass=${requestorClass.name}, extensionClass=${expectedType.name})"
     val app = componentManager.getApplication()
     @Suppress("SpellCheckingInspection")
-    if (app != null && app.isUnitTestMode && pluginId.idString != "org.jetbrains.kotlin" && pluginId.idString != "Lombook Plugin") {
+   /* if (app != null && app.isUnitTestMode && pluginId.idString != "org.jetbrains.kotlin" && pluginId.idString != "Lombook Plugin") {
       throw PluginException(message, pluginId)
     }
-    else {
+    else {*/
       LOG.warn(message)
-    }
+    //}
     return extension
   }
 }

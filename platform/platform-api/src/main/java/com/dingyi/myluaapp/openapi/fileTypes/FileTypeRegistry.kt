@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.openapi.fileTypes
 
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
-import com.dingyi.myluaapp.openapi.components.getService
+import com.dingyi.myluaapp.openapi.components.service
 import org.apache.commons.vfs2.FileObject
 import java.util.function.Supplier
 
@@ -114,7 +114,7 @@ abstract class FileTypeRegistry {
                 val instanceGetter: Supplier<out FileTypeRegistry> = instanceGetter
                     ?: // in tests FileTypeManager service maybe not preloaded, so, ourInstanceGetter is not set
                     return ApplicationManager.getApplication()
-                        .getService()
+                        .service()
                 return instanceGetter.get()
             }
     }

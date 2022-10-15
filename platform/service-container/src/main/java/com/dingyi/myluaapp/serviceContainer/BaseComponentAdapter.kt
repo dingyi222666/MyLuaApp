@@ -11,10 +11,8 @@ import com.dingyi.myluaapp.openapi.progress.Cancellation
 import com.intellij.diagnostic.LoadingState
 import com.intellij.openapi.progress.ProcessCanceledException
 import kotlinx.coroutines.*
-import kotlinx.coroutines.future.asCompletableFuture
+import com.dingyi.myluaapp.common.ktx.asCompletableFuture
 import org.picocontainer.ComponentAdapter
-import java.lang.invoke.MethodHandles
-import java.lang.invoke.VarHandle
 import java.lang.reflect.Field
 
 @OptIn(ExperimentalCoroutinesApi::class)
