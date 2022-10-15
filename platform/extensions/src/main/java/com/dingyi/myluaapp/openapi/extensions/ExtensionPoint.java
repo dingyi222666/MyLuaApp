@@ -2,12 +2,7 @@
 package com.dingyi.myluaapp.openapi.extensions;
 
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.extensions.ExtensionNotApplicableException;
-import com.intellij.openapi.extensions.ExtensionPointChangeListener;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.PluginDescriptor;
 import com.dingyi.myluaapp.openapi.extensions.impl.ExtensionComponentAdapter;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
@@ -17,11 +12,11 @@ import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
 /**
- * @see com.intellij.testFramework.PlatformTestUtil#maskExtensions
+ *
  */
-public interface ExtensionPoint<T extends @NotNull Object> {
+public interface ExtensionPoint<T extends Object> {
   /**
-   * @deprecated Use {@link com.intellij.testFramework.PlatformTestUtil#maskExtensions} or {@link #registerExtension(Object, Disposable)}.
+   * @deprecated Use  or {@link #registerExtension(Object, Disposable)}.
    */
   @Deprecated
   void registerExtension(T extension);
@@ -33,7 +28,7 @@ public interface ExtensionPoint<T extends @NotNull Object> {
   void registerExtension(T extension, @NotNull PluginDescriptor pluginDescriptor, @NotNull Disposable parentDisposable);
 
   /**
-   * Use {@link com.intellij.testFramework.PlatformTestUtil#maskExtensions}
+   * Use
    * to register extension as first or to completely replace existing extensions in tests.
    */
   @TestOnly
@@ -76,19 +71,16 @@ public interface ExtensionPoint<T extends @NotNull Object> {
 
   void addExtensionPointListener(@NotNull ExtensionPointListener<T> listener, boolean invokeForLoadedExtensions, @Nullable Disposable parentDisposable);
 
-  /**
-   * @deprecated Use {@link ExtensionPointName#addChangeListener(Runnable, Disposable)}
-   */
-  @Deprecated
-  @ApiStatus.ScheduledForRemoval
-  void addExtensionPointListener(@NotNull ExtensionPointChangeListener listener, boolean invokeForLoadedExtensions, @Nullable Disposable parentDisposable);
 
-  /**
+    void addExtensionPointListener(@NotNull ExtensionPointChangeListener listener,
+                                   boolean invokeForLoadedExtensions,
+                                   @Nullable Disposable parentDisposable);
+
+    /**
    * Consider using {@link ExtensionPointName#addChangeListener}
    */
   void addChangeListener(@NotNull Runnable listener, @Nullable Disposable parentDisposable);
 
-  @ApiStatus.Internal
   void removeExtensionPointListener(@NotNull ExtensionPointListener<T> extensionPointListener);
 
   /**

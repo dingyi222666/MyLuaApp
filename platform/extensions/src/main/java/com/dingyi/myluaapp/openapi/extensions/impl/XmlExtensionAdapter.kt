@@ -1,18 +1,20 @@
 // Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.dingyi.myluaapp.openapi.extensions.impl
 
-import com.intellij.openapi.components.ComponentManager
-import com.intellij.openapi.extensions.*
+import com.dingyi.myluaapp.openapi.extensions.ExtensionDescriptor
+import com.dingyi.myluaapp.openapi.extensions.ExtensionNotApplicableException
+import com.dingyi.myluaapp.openapi.extensions.LoadingOrder
+import com.dingyi.myluaapp.openapi.extensions.PluginAware
+import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
+import com.dingyi.myluaapp.openapi.service.ServiceRegistry
 import com.intellij.openapi.progress.ProcessCanceledException
-import com.intellij.util.xml.dom.XmlElement
-import com.intellij.util.xmlb.XmlSerializer
-import java.util.*
+import java.util.Arrays
 
 internal open class XmlExtensionAdapter(implementationClassName: String,
                                         pluginDescriptor: PluginDescriptor,
                                         orderId: String?,
                                         order: LoadingOrder,
-                                        private var extensionElement: XmlElement?,
+                                       /* private var extensionElement: XmlElement?,*/
                                         implementationClassResolver: ImplementationClassResolver
 ) : ExtensionComponentAdapter(
   implementationClassName, pluginDescriptor, orderId, order, implementationClassResolver) {
@@ -27,13 +29,13 @@ internal open class XmlExtensionAdapter(implementationClassName: String,
   override val isInstanceCreated: Boolean
     get() = extensionInstance != null
 
-  override fun <T : Any> createInstance(componentManager: ComponentManager): T? {
+  override fun <T : Any> createInstance(componentManager: ServiceRegistry): T? {
     @Suppress("UNCHECKED_CAST")
     return (extensionInstance as T?)?.takeIf { it !== NOT_APPLICABLE } ?: doCreateInstance(componentManager)
   }
 
   @Synchronized
-  private fun <T : Any> doCreateInstance(componentManager: ComponentManager): T? {
+  private fun <T : Any> doCreateInstance(componentManager: ServiceRegistry): T? {
     @Suppress("UNCHECKED_CAST")
     var instance = extensionInstance as T?
     if (instance != null) {
@@ -41,7 +43,7 @@ internal open class XmlExtensionAdapter(implementationClassName: String,
     }
 
     if (initializing) {
-      throw componentManager.createError("Cyclic extension initialization: $this", pluginDescriptor.pluginId)
+      /*throw componentManager.createError*/ error("Cyclic extension initialization: $this"/*, pluginDescriptor.pluginId*/)
     }
 
     try {
@@ -52,23 +54,23 @@ internal open class XmlExtensionAdapter(implementationClassName: String,
       if (instance is PluginAware) {
         instance.setPluginDescriptor(pluginDescriptor)
       }
-      val element = extensionElement
+    /*  val element = extensionElement
       if (element != null) {
         XmlSerializer.getBeanBinding(instance::class.java).deserializeInto(instance, element)
         extensionElement = null
-      }
+      }*/
       extensionInstance = instance
     }
     catch (e: ExtensionNotApplicableException) {
       extensionInstance = NOT_APPLICABLE
-      extensionElement = null
+     /* extensionElement = null*/
       return null
     }
     catch (e: ProcessCanceledException) {
       throw e
     }
     catch (e: Throwable) {
-      throw componentManager.createError("Cannot create extension (class=$assignableToClassName)", e, pluginDescriptor.pluginId, null)
+      /*throw componentManager.createError*/ throw RuntimeException("Cannot create extension (class=$assignableToClassName)", e/*, pluginDescriptor.pluginId, null*/)
     }
     finally {
       initializing = false
@@ -76,8 +78,8 @@ internal open class XmlExtensionAdapter(implementationClassName: String,
     return instance
   }
 
-  protected open fun <T> instantiateClass(aClass: Class<T>, componentManager: ComponentManager): T {
-    return componentManager.instantiateClass(aClass, pluginDescriptor.pluginId)
+  protected open fun <T> instantiateClass(aClass: Class<T>, componentManager: ServiceRegistry): T {
+    return aClass.newInstance() /*componentManager.instantiateClass(aClass, pluginDescriptor.pluginId)*/
   }
 
   internal class SimpleConstructorInjectionAdapter(implementationClassName: String,
@@ -85,8 +87,8 @@ internal open class XmlExtensionAdapter(implementationClassName: String,
                                                    descriptor: ExtensionDescriptor,
                                                    implementationClassResolver: ImplementationClassResolver
   ) : XmlExtensionAdapter(
-    implementationClassName, pluginDescriptor, descriptor.orderId, descriptor.order, descriptor.element, implementationClassResolver) {
-    override fun <T> instantiateClass(aClass: Class<T>, componentManager: ComponentManager): T {
+    implementationClassName, pluginDescriptor, descriptor.orderId, descriptor.order,/* descriptor.element,*/ implementationClassResolver) {
+    override fun <T> instantiateClass(aClass: Class<T>, componentManager: ServiceRegistry): T {
       if (aClass.name != "org.jetbrains.kotlin.asJava.finder.JavaElementFinder") {
         try {
           return super.instantiateClass(aClass, componentManager)
@@ -108,7 +110,13 @@ internal open class XmlExtensionAdapter(implementationClassName: String,
             " please remove extra constructor parameters", e)
         }
       }
-      return componentManager.instantiateClassWithConstructorInjection(aClass, aClass, pluginDescriptor.pluginId)
+      return componentManager.apply {
+          asRegistration().add(aClass)
+      }.get(aClass).apply {
+          /*componentManager.asRegistration()
+              .remove(aClass)*/
+      }
+    /* componentManager.instantiateClassWithConstructorInjection(aClass, aClass, pluginDescriptor.pluginId)*/
     }
   }
 }

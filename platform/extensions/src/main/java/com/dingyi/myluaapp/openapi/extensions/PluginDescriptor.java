@@ -2,7 +2,6 @@
 package com.dingyi.myluaapp.openapi.extensions;
 
 import com.intellij.openapi.util.NlsSafe;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,13 +15,17 @@ public interface PluginDescriptor {
 
   @Nullable ClassLoader getPluginClassLoader();
 
-  @ApiStatus.Experimental
+
   default @NotNull ClassLoader getClassLoader() {
     ClassLoader classLoader = getPluginClassLoader();
     return classLoader == null ? getClass().getClassLoader() : classLoader;
   }
 
-    /**
+  default boolean isBundled() {
+    return false;
+  }
+
+  /**
    * @deprecated Use {@link #getPluginPath()}
    */
   @Deprecated
@@ -41,9 +44,7 @@ public interface PluginDescriptor {
 
   @Nullable String getProductCode();
 
-  @Nullable Date getReleaseDate();
-
-  int getReleaseVersion();
+    int getReleaseVersion();
 
   boolean isLicenseOptional();
 
@@ -55,25 +56,17 @@ public interface PluginDescriptor {
 
   @Nullable @NlsSafe String getVendor();
 
-  @NlsSafe String getVersion();
+    @NlsSafe String getVersion();
 
-  @Nullable String getResourceBundleBaseName();
-
-  @Nullable @NlsSafe String getCategory();
-
-  @Nullable String getVendorEmail();
+    @Nullable String getVendorEmail();
 
   @Nullable String getVendorUrl();
 
   @Nullable String getUrl();
 
-
   @Nullable @NlsSafe String getSinceBuild();
 
-  @Nullable @NlsSafe String getUntilBuild();
-
-
-  /**
+    /**
    * If true, this plugin requires restart even if it otherwise fulfills the requirements of dynamic plugins.
    */
   default boolean isRequireRestart() { return false; }

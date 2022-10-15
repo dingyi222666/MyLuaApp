@@ -1,12 +1,12 @@
 // Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.dingyi.myluaapp.openapi.extensions.impl
 
-import com.intellij.openapi.components.ComponentManager
-import com.intellij.openapi.extensions.LoadingOrder
-import com.intellij.openapi.extensions.PluginDescriptor
-import org.jetbrains.annotations.ApiStatus.Internal
+import com.dingyi.myluaapp.openapi.components.ComponentManager
+import com.dingyi.myluaapp.openapi.extensions.LoadingOrder
+import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
+import com.dingyi.myluaapp.openapi.service.ServiceRegistry
 
-@Internal
+
 abstract class ExtensionComponentAdapter internal constructor(implementationClassName: String,
                                                               @JvmField val pluginDescriptor: PluginDescriptor,
                                                               private val orderId: String?,
@@ -22,16 +22,17 @@ abstract class ExtensionComponentAdapter internal constructor(implementationClas
   @JvmField
   internal var implementationClassOrName: Any = implementationClassName
 
+
   internal abstract val isInstanceCreated: Boolean
 
-  abstract fun <T : Any> createInstance(componentManager: ComponentManager): T?
+  abstract fun <T : Any> createInstance(componentManager: ServiceRegistry): T?
 
   override fun getOrder() = order
 
   override fun getOrderId() = orderId
 
   @Throws(ClassNotFoundException::class)
-  fun <T> getImplementationClass(componentManager: ComponentManager): Class<T> {
+  fun <T> getImplementationClass(componentManager: ServiceRegistry): Class<T> {
     @Suppress("UNCHECKED_CAST")
     return implementationClassResolver.resolveImplementationClass(componentManager, this) as Class<T>
   }
