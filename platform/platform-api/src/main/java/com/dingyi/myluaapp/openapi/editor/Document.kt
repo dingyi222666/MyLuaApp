@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull
 
 
 interface Document {
+
     companion object {
 
         var EMPTY_ARRAY = arrayOfNulls<Document>(0)

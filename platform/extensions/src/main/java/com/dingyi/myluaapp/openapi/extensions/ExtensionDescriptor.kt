@@ -1,5 +1,5 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
-package com.dingyi.myluaapp.openapi.extensions
+package com.intellij.openapi.extensions
 
 import com.intellij.util.xml.dom.XmlElement
 import org.jetbrains.annotations.ApiStatus

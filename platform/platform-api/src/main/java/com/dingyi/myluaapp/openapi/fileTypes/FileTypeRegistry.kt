@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.openapi.fileTypes
 
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
-import com.dingyi.myluaapp.openapi.components.service
+import com.dingyi.myluaapp.openapi.service.get
 import org.apache.commons.vfs2.FileObject
 import java.util.function.Supplier
 
@@ -25,8 +25,8 @@ import java.util.function.Supplier
  * [com.intellij.openapi.application.ReadAction.nonBlocking].
  */
 abstract class FileTypeRegistry {
-    abstract fun isFileIgnored(file: FileObject): Boolean
-
+   /* abstract fun isFileIgnored(file: FileObject): Boolean
+*/
     /**
      * Checks if the given file has the given file type.
      */
@@ -114,7 +114,7 @@ abstract class FileTypeRegistry {
                 val instanceGetter: Supplier<out FileTypeRegistry> = instanceGetter
                     ?: // in tests FileTypeManager service maybe not preloaded, so, ourInstanceGetter is not set
                     return ApplicationManager.getApplication()
-                        .service()
+                        .get()
                 return instanceGetter.get()
             }
     }

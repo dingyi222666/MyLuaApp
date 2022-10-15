@@ -1,13 +1,12 @@
 package com.dingyi.myluaapp.openapi.project
 
-
-import com.dingyi.myluaapp.openapi.components.ComponentManager
+import com.dingyi.myluaapp.openapi.service.ServiceRegistry
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 
 
-interface Project: ComponentManager {
+interface Project : ServiceRegistry {
     companion object {
         const val DIRECTORY_STORE_FOLDER = ".MyLuaApp"
     }
@@ -26,11 +25,10 @@ interface Project: ComponentManager {
     /**
      * @return a path to project file (see [.getProjectFile]) or `null` for default project.
      */
-
+    @Nullable
 
     @NonNls
     fun getProjectFilePath(): String?
-
 
     fun save()
 
@@ -38,6 +36,8 @@ interface Project: ComponentManager {
 
     fun isInitialized(): Boolean
 
+
+    fun getServiceRegistry(): ServiceRegistry
 
 
 }

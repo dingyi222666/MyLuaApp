@@ -1,9 +1,9 @@
 package com.dingyi.myluaapp.openapi.application
 
-import com.dingyi.myluaapp.openapi.components.ComponentManager
+import com.dingyi.myluaapp.openapi.service.ServiceRegistry
 
 
-interface IDEApplication : ComponentManager {
+interface IDEApplication : ServiceRegistry {
 
 
 

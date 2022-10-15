@@ -14,9 +14,9 @@ interface ExtensionPointListener<T> {
     }
   }
 
-
+  //@JvmDefault
   fun extensionAdded(extension: T, pluginDescriptor: PluginDescriptor) {}
 
-
+  //@JvmDefault
   fun extensionRemoved(extension: T, pluginDescriptor: PluginDescriptor) {}
 }

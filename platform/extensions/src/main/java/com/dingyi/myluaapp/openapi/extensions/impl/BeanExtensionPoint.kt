@@ -1,18 +1,18 @@
 // Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.dingyi.myluaapp.openapi.extensions.impl
 
-import com.dingyi.myluaapp.openapi.components.ComponentManager
-import com.dingyi.myluaapp.openapi.extensions.ExtensionDescriptor
-import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
-import com.dingyi.myluaapp.openapi.extensions.impl.XmlExtensionAdapter
+import com.dingyi.myluaapp.openapi.service.ServiceRegistry
+import com.intellij.openapi.components.ComponentManager
+import com.intellij.openapi.extensions.ExtensionDescriptor
+import com.intellij.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.extensions.impl.XmlExtensionAdapter.SimpleConstructorInjectionAdapter
 
 internal class BeanExtensionPoint<T : Any>(
-    name: String,
-    className: String,
-    pluginDescriptor: PluginDescriptor,
-    componentManager: ComponentManager,
-    dynamic: Boolean,
+  name: String,
+  className: String,
+  pluginDescriptor: PluginDescriptor,
+  componentManager: ServiceRegistry,
+  dynamic: Boolean,
 ) : ExtensionPointImpl<T>(name, className, pluginDescriptor, componentManager, null, dynamic),
     ImplementationClassResolver {
 

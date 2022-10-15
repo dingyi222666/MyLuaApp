@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.openapi.module
 
 
 import com.dingyi.myluaapp.openapi.project.Project
+import com.dingyi.myluaapp.openapi.service.ServiceRegistry
 import com.intellij.openapi.Disposable
 import org.jetbrains.annotations.NonNls
 
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NonNls
  *
  * @see ModuleManager.getModules
  */
-interface Module : Disposable {
+interface Module : ServiceRegistry, Disposable {
 
 
     /**
@@ -37,6 +38,7 @@ interface Module : Disposable {
 
 
     fun isLoaded(): Boolean
+
 
 
     companion object {

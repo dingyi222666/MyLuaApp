@@ -17,4 +17,4 @@ abstract class ExtensionPointAdapter<T> : ExtensionPointListener<T> {
      * Fired when extensions are added or removed in the EP.
      */
     abstract fun extensionListChanged()
-}
+}+

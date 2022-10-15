@@ -1,9 +1,8 @@
 // Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.dingyi.myluaapp.openapi.extensions.impl
 
-import com.dingyi.myluaapp.openapi.components.ComponentManager
-import com.dingyi.myluaapp.openapi.extensions.InternalIgnoreDependencyViolation
-
+import com.intellij.openapi.components.ComponentManager
+import com.intellij.openapi.extensions.InternalIgnoreDependencyViolation
 
 internal fun interface ImplementationClassResolver {
   fun resolveImplementationClass(componentManager: ComponentManager, adapter: ExtensionComponentAdapter): Class<*>
