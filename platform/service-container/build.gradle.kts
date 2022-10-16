@@ -42,10 +42,14 @@ dependencies {
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
     compileOnly(project(":platform-common"))
-    compileOnly(project(":core-imp"))
     compileOnly(project(":platform-api"))
     implementation(project(":platform-util"))
     implementation(project(":extensions"))
 
+    testImplementation(BuildConfig.Libs.Tools.intellij_platform_util)
+    testImplementation(project(":platform-common"))
+    testImplementation(project(":platform-api"))
+    testImplementation(project(":platform-util"))
+    testImplementation(project(":extensions"))
     testImplementation(BuildConfig.Libs.Default.junit)
 }

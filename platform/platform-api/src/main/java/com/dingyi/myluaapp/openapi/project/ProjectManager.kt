@@ -2,7 +2,7 @@ package com.dingyi.myluaapp.openapi.project
 
 
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
-import com.dingyi.myluaapp.openapi.components.service
+import com.dingyi.myluaapp.openapi.service.get
 import java.io.IOException
 
 
@@ -46,7 +46,7 @@ abstract class ProjectManager {
          * @return `ProjectManager` instance
          */
         val instance: ProjectManager
-            get() = ApplicationManager.getApplication().service()
+            get() = ApplicationManager.getApplication().get()
 
 
     }

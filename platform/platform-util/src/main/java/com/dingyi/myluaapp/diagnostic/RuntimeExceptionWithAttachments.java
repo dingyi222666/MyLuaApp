@@ -46,7 +46,7 @@ public class RuntimeExceptionWithAttachments extends RuntimeException implements
   }
 
   @Override
-  public Attachment @NotNull [] getAttachments() {
+  public Attachment [] getAttachments() {
     return myAttachments;
   }
 }

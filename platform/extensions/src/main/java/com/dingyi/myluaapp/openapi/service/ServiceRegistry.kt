@@ -5,7 +5,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.UserDataHolder
 
 
-interface ServiceRegistry: UserDataHolder, Disposable, AreaInstance {
+interface ServiceRegistry: UserDataHolder, Disposable, AreaInstance{
     /**
      * Locates the service of the given type.
      *
@@ -43,6 +43,16 @@ interface ServiceRegistry: UserDataHolder, Disposable, AreaInstance {
 
      */
     fun find(serviceType: String): Any?
+
+    /**
+     * Locates all services of the given type.
+     *
+     * @param serviceType The service type.
+     * @param <T>         The service type.
+    </T> */
+
+    fun <T> getAll(serviceType: Class<T>): List<T>
+
 
     fun asRegistration(): ServiceRegistration
 
