@@ -17,7 +17,8 @@ class ExtensionTest1 {
     fun test1() {
 
 
-        rootService.extensionArea.registerExtensionPoint(
+        rootService.extensionArea
+            .registerExtensionPoint(
             myExtensionName.name, MyExtension::class.java.name, ExtensionPoint.Kind.INTERFACE, true
         )
 

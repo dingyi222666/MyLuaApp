@@ -123,7 +123,7 @@ interface Document {
      * @throws ReadOnlyModificationException         if the document is read-only.
      * @throws ReadOnlyFragmentModificationException if the fragment to be modified is covered by a guarded block.
      */
-    fun insertString(offset: Int, @NotNull s: CharSequence)
+    fun insertString(offset: Int, s: CharSequence)
 
     /**
      * Deletes the specified range of text from the document.
