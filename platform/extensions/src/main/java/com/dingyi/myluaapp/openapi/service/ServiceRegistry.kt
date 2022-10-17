@@ -1,11 +1,12 @@
 package com.dingyi.myluaapp.openapi.service
 
 import com.dingyi.myluaapp.openapi.extensions.AreaInstance
+import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.UserDataHolder
 
 
-interface ServiceRegistry: UserDataHolder, Disposable, AreaInstance{
+interface ServiceRegistry : UserDataHolder, Disposable, AreaInstance {
     /**
      * Locates the service of the given type.
      *
@@ -54,8 +55,14 @@ interface ServiceRegistry: UserDataHolder, Disposable, AreaInstance{
     fun <T> getAll(serviceType: Class<T>): List<T>
 
 
-    fun asRegistration(): ServiceRegistration
+    /**
+     * try Load class
+     */
+    fun <T> instantiateClass(serviceType: Class<T>, pluginDescriptor: PluginDescriptor): T
 
+    fun instantiateClass(serviceType: String, pluginDescriptor: PluginDescriptor): Any
+
+    fun asRegistration(): ServiceRegistration
 
 
 }

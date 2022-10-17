@@ -35,7 +35,7 @@ inline fun <reified T> Any?.setPrivateField(name: String, obj: Any?) {
  *
  */
 inline fun <T> T?.checkNotNull(): T {
-    return checkNotNull(this)
+    return this!!
 }
 
 inline fun <T> T?.ifNull(block: () -> Unit) {

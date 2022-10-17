@@ -24,8 +24,8 @@ object Extensions {
         }
     }
 
-    @Deprecated("Use {@link ComponentManager#getExtensionArea()}")
-    fun getRootArea(): ExtensionsArea? {
-        return ourRootArea
+    //@Deprecated("Use {@link ComponentManager#getExtensionArea()}")
+    fun getRootArea(): ExtensionsArea {
+        return ourRootArea.checkNotNull()
     }
 }

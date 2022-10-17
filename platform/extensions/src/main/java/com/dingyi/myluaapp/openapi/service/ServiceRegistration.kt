@@ -23,4 +23,6 @@ interface ServiceRegistration {
      * Adds a service provider bean to this registry. This provider may define factory and decorator methods. See [DefaultServiceRegistry] for details.
      */
     fun addProvider(provider: Any)
+
+
 }

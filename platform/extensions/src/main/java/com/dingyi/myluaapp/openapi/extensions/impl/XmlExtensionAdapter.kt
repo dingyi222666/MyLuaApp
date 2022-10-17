@@ -110,12 +110,7 @@ internal open class XmlExtensionAdapter(implementationClassName: String,
             " please remove extra constructor parameters", e)
         }
       }
-      return componentManager.apply {
-          asRegistration().add(aClass)
-      }.get(aClass).apply {
-          /*componentManager.asRegistration()
-              .remove(aClass)*/
-      }
+      return componentManager.instantiateClass(aClass,pluginDescriptor)
     /* componentManager.instantiateClassWithConstructorInjection(aClass, aClass, pluginDescriptor.pluginId)*/
     }
   }

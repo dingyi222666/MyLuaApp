@@ -117,5 +117,7 @@ abstract class FileTypeRegistry {
                         .get()
                 return instanceGetter.get()
             }
+
+        const val extensionName = "com.intellij.fileType"
     }
 }

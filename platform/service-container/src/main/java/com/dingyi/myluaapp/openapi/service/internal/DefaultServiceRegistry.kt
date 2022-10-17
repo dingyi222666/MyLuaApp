@@ -4,6 +4,7 @@ package com.dingyi.myluaapp.openapi.service.internal
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.openapi.extensions.Extensions
 import com.dingyi.myluaapp.openapi.extensions.ExtensionsArea
+import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.extensions.impl.ExtensionsAreaImpl
 import com.dingyi.myluaapp.openapi.service.*
 import com.dingyi.myluaapp.openapi.service.internal.TypeStringFormatter.format
@@ -531,6 +532,38 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
     }
 
 
+    override fun instantiateClass(serviceType: String, pluginDescriptor: PluginDescriptor): Any {
+        return instantiateClass(pluginDescriptor.classLoader.loadClass(serviceType),pluginDescriptor)
+    }
+
+    override fun <T> instantiateClass(
+        serviceType: Class<T>,
+        pluginDescriptor: PluginDescriptor
+    ): T {
+
+        if (serviceType.isInterface) {
+            error("Cannot register an interface for construction.")
+        }
+        val match: Constructor<T> = InjectUtil.selectConstructor(serviceType) as Constructor<T>
+        if (InjectUtil.isPackagePrivate(match.modifiers) || Modifier.isPrivate(match.modifiers)) {
+            match.isAccessible = true
+        }
+
+        val params = match.parameterTypes
+
+        val invokeArray = arrayOfNulls<Any>(params.size)
+        params.forEachIndexed { index, any ->
+            val availableService = Optional.ofNullable(get(unwrap(any)))
+            if (!availableService.isPresent) {
+                error("Can't create services")
+            }
+            invokeArray[index] = availableService.get()
+        }
+
+        return match.newInstance(invokeArray)
+
+    }
+
     override fun <T : Any?> getUserData(key: Key<T>): T? {
         return targetUserDataHolder.getUserData(key)
     }
@@ -566,6 +599,8 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
     override fun toString(): String {
         return getDisplayName()
     }
+
+
 }
 
 
