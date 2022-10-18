@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.openapi.fileTypes
 
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
+import com.dingyi.myluaapp.openapi.language.Language
+import com.dingyi.myluaapp.openapi.language.LanguageFileType
 import com.dingyi.myluaapp.openapi.service.get
 import org.apache.commons.vfs2.FileObject
 import java.util.function.Supplier
@@ -91,9 +93,12 @@ abstract class FileTypeRegistry {
      */
     abstract fun findFileTypeByName(fileTypeName: String): FileType?
 
-    /**
-     * Pluggable file type detector by content
-     */
+
+
+    open fun findFileTypeByLanguage(language: Language): LanguageFileType? {
+        return language.findMyFileType(registeredFileTypes())
+    }
+
 
     companion object {
         private var instanceGetter: Supplier<out FileTypeRegistry>? = null
