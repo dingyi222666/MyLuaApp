@@ -43,6 +43,7 @@ interface Editor : UserDataHolder {
 
     fun getCaretModel(): CaretModel
 
+
     /**
      * Checks if this editor instance has been disposed.
      *
@@ -72,5 +73,14 @@ interface Editor : UserDataHolder {
      * @return `true` if the editor is one-line, `false` otherwise.
      */
     fun isOneLineMode(): Boolean
+
+
+    /**
+     * Returns the scrolling model for the document, which can be used to scroll the document
+     * and retrieve information about the current position of the scrollbars.
+     *
+     * @return the scrolling model instance.
+     */
+    fun getScrollingModel(): ScrollingModel
 
 }

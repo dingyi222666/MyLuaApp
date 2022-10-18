@@ -22,7 +22,7 @@ interface Caret : UserDataHolderEx, Disposable {
      * Returns an instance of CaretModel, current caret is associated with.
      */
 
-    fun getCaretModel():CaretModel
+    fun getCaretModel(): CaretModel
 
 
     /**
@@ -87,13 +87,22 @@ interface Caret : UserDataHolderEx, Disposable {
      */
     fun offset(): Int
 
+    /**
+     * Disable cursor smoothing animation
+     */
+    fun disableAnimation()
+
+    /**
+     * Enable cursor smoothing animation
+     */
+    fun enableAnimation()
 
     /**
      * Returns the start offset in the document of the selected text range, or the caret
      * position if there is currently no selection.
      * Must be called from inside read action (see [Application.runReadAction])
      *
-     * @see .getSelectionRange
+     * @see selectionRange
      */
     fun selectionStart(): Int
 
@@ -109,7 +118,7 @@ interface Caret : UserDataHolderEx, Disposable {
      * position if there is currently no selection.
      * Must be called from inside read action (see [Application.runReadAction])
      *
-     * @see .getSelectionRange
+     * @see selectionRange
      */
     fun selectionEnd(): Int
 
