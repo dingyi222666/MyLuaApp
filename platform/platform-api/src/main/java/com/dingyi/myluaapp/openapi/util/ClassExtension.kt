@@ -6,7 +6,7 @@ import com.intellij.util.containers.ContainerUtil
 import java.util.function.Predicate
 
 
-class ClassExtension<T>(epName: String) :
+class ClassExtension<T : Any>(epName: String) :
     KeyedExtensionCollector<T, Class<*>>(epName) {
 
 

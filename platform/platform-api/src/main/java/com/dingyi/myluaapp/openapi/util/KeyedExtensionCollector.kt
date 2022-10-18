@@ -28,7 +28,7 @@ import java.util.function.Predicate
 open class KeyedExtensionCollector<T : Any, KeyT>(val name: String) : ModificationTracker {
 
 
-    private val myLock: String = "lock for KeyedExtensionCollector $name"
+    protected val myLock: String = "lock for KeyedExtensionCollector $name"
 
     /** Guarded by [.myLock]  */
     private var myExplicitExtensions = mutableMapOf<String, MutableList<T>>()
@@ -49,7 +49,7 @@ open class KeyedExtensionCollector<T : Any, KeyT>(val name: String) : Modificati
         }
     }
 
-    protected fun invalidateCacheForExtension(key: String?) {
+    protected open fun invalidateCacheForExtension(key: String?) {
         if (key != null) {
             myCache.remove(key)
         }
@@ -121,7 +121,7 @@ open class KeyedExtensionCollector<T : Any, KeyT>(val name: String) : Modificati
         return if (list.isEmpty()) null else list[0]
     }
 
-    protected fun buildExtensions(stringKey: String, key: KeyT): List<T> {
+    protected open fun buildExtensions(stringKey: String, key: KeyT): List<T> {
         // compute out of our lock (https://youtrack.jetbrains.com/issue/IDEA-208060)
         val extensions: List<KeyedLazyInstance<T>> = extensions as List<KeyedLazyInstance<T>>
         synchronized(myLock) {
