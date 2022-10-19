@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.openapi.util
 import java.util.concurrent.atomic.AtomicLongFieldUpdater
 
 
-class SimpleModificationTracker : ModificationTracker {
+open class SimpleModificationTracker : ModificationTracker {
 
     @Volatile
     private var myCounter: Long = 0
