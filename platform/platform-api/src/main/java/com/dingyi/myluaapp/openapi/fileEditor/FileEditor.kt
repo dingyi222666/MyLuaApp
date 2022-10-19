@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.openapi.fileEditor
 
 import android.view.View
 import com.dingyi.myluaapp.openapi.actions.ActionGroup
+import com.dingyi.myluaapp.openapi.vfs.VirtualFile
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.UserDataHolder
@@ -27,14 +28,14 @@ interface FileEditor : UserDataHolder, Disposable {
 
     companion object {
 
-        val FILE_KEY: Key<FileObject> = Key.create("FILE_KEY")
+        val FILE_KEY: Key<VirtualFile> = Key.create("FILE_KEY")
     }
 
     /**
      * Returns the file for which [FileEditorProvider.createEditor] was called.
      * The default implementation is temporary, and shall be dropped in the future.
      */
-    fun getFile(): FileObject? {
+    fun getFile(): VirtualFile? {
         /*PluginException.reportDeprecatedDefault(
             javaClass,
             "getFile",
@@ -46,7 +47,7 @@ interface FileEditor : UserDataHolder, Disposable {
     /**
      * Returns the files for which [com.intellij.ide.SaveAndSyncHandler] should be called on frame activation.
      */
-    fun getFilesToRefresh(): List<FileObject> {
+    fun getFilesToRefresh(): List<VirtualFile> {
         val file = getFile()
         return if (file == null) Collections.emptyList() else Collections.singletonList(file)
     }

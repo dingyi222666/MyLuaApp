@@ -3,7 +3,6 @@ package com.dingyi.myluaapp.openapi.language
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.fileTypes.FileType
 import com.dingyi.myluaapp.openapi.fileTypes.FileTypeRegistry
-import com.intellij.openapi.util.NlsSafe
 import com.intellij.openapi.util.UserDataHolderBase
 import com.intellij.util.ArrayUtilRt
 import com.intellij.util.ConcurrencyUtil
@@ -223,9 +222,6 @@ abstract class Language : UserDataHolderBase {
     }
 
 
-    open fun findLanguageByID(id: String?): Language? {
-        return if (id == null) null else ourRegisteredIDs[id]
-    }
 
     companion object {
 
@@ -242,6 +238,22 @@ abstract class Language : UserDataHolderBase {
             val languages = ourRegisteredLanguages.values
             return Collections.unmodifiableCollection(languages.toList())
         }
+
+         fun findLanguageByID(id: String?): Language? {
+            return if (id == null) null else ourRegisteredIDs[id]
+        }
+
+        val ANY: Language = object : Language("") {
+            override fun toString(): String {
+                return "Language: ANY"
+            }
+
+
+            override fun getAssociatedFileType(): LanguageFileType? {
+                return null
+            }
+        }
+
 
     }
 }

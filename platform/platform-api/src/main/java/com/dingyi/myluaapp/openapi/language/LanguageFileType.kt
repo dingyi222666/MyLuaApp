@@ -45,8 +45,6 @@ abstract class LanguageFileType protected constructor(
     }
 
 
-
-
     open fun getDisplayName(): String {
         return language.getDisplayName()
     }

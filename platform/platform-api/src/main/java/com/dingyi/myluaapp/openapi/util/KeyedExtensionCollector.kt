@@ -56,7 +56,7 @@ open class KeyedExtensionCollector<T : Any, KeyT>(val name: String) : Modificati
         myTracker.incModificationCount()
     }
 
-    fun addExplicitExtension(key: KeyT, t: T) {
+    open fun addExplicitExtension(key: KeyT, t: T) {
         synchronized(myLock) {
             val stringKey = keyToString(key)
             if (myExplicitExtensions === emptyMap<String, List<T>>()) {
@@ -76,7 +76,7 @@ open class KeyedExtensionCollector<T : Any, KeyT>(val name: String) : Modificati
         Disposer.register(parentDisposable) { removeExplicitExtension(key, t) }
     }
 
-    fun removeExplicitExtension(key: KeyT, t: T) {
+    open fun removeExplicitExtension(key: KeyT, t: T) {
         synchronized(myLock) {
             val stringKey = keyToString(key)
             val list = myExplicitExtensions[stringKey]
@@ -95,7 +95,7 @@ open class KeyedExtensionCollector<T : Any, KeyT>(val name: String) : Modificati
     }
 
     /**
-     * @see .findSingle
+     * @see findSingle
      */
     fun forKey(key: KeyT): List<T> {
         val stringKey = keyToString(key)
@@ -223,7 +223,7 @@ open class KeyedExtensionCollector<T : Any, KeyT>(val name: String) : Modificati
         return myTracker.getModificationCount()
     }
 
-    protected fun ensureValuesLoaded() {
+    protected open fun ensureValuesLoaded() {
         val point: ExtensionPoint<KeyedLazyInstance<T>>? = point
         if (point != null) {
             for (bean in point.extensionList) {

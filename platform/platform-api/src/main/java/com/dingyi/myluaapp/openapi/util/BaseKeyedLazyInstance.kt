@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.openapi.util
 
+import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
 import com.dingyi.myluaapp.openapi.extensions.PluginAware
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
@@ -15,8 +16,8 @@ abstract class BaseKeyedLazyInstance<T> :
     }
 
 
-    fun getPluginDescriptor(): PluginDescriptor? {
-        return pluginDescriptor
+    fun getPluginDescriptor(): PluginDescriptor {
+        return checkNotNull(pluginDescriptor)
     }
 
     override fun setPluginDescriptor(value: PluginDescriptor) {

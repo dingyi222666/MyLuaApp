@@ -4,7 +4,7 @@ import com.dingyi.myluaapp.openapi.application.ApplicationManager
 import com.dingyi.myluaapp.openapi.language.Language
 import com.dingyi.myluaapp.openapi.language.LanguageFileType
 import com.dingyi.myluaapp.openapi.service.get
-import org.apache.commons.vfs2.FileObject
+import com.dingyi.myluaapp.openapi.vfs.VirtualFile
 import java.util.function.Supplier
 
 /**
@@ -32,7 +32,7 @@ abstract class FileTypeRegistry {
     /**
      * Checks if the given file has the given file type.
      */
-    fun isFileOfType(file: FileObject, type: FileType): Boolean {
+    fun isFileOfType(file: VirtualFile, type: FileType): Boolean {
         return file.type.getName() == type.getDefaultExtension()
     }
 
@@ -50,7 +50,7 @@ abstract class FileTypeRegistry {
      * Returns the file type for the specified file.
      */
 
-    abstract fun getFileTypeByFile(file: FileObject): FileType
+    abstract fun getFileTypeByFile(file: VirtualFile): FileType
 
     /**
      * Returns the file type for the specified file.
@@ -58,8 +58,8 @@ abstract class FileTypeRegistry {
      * @param content a content of the file (if already available, to avoid reading from disk again)
      */
 
-    @Deprecated("Use #getFileTypeByFile(FileObject)", ReplaceWith("getFileTypeByFile(file)"))
-    fun getFileTypeByFile(file: FileObject, content: ByteArray?): FileType {
+    @Deprecated("Use #getFileTypeByFile(VirtualFile)", ReplaceWith("getFileTypeByFile(file)"))
+    fun getFileTypeByFile(file: VirtualFile, content: ByteArray?): FileType {
         return getFileTypeByFile(file)
     }
 
