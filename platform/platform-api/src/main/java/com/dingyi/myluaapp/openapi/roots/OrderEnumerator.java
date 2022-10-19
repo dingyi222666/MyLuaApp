@@ -15,21 +15,15 @@
  */
 package com.dingyi.myluaapp.openapi.roots;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleOrderEntry;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.OrderEnumerationHandler;
-import com.intellij.openapi.roots.OrderRootsEnumerator;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.roots.RootModelProvider;
-import com.intellij.openapi.roots.libraries.Library;
+import com.dingyi.myluaapp.openapi.module.Module;
+import com.dingyi.myluaapp.openapi.project.Project;
+import com.dingyi.myluaapp.openapi.roots.libraries.Library;
+import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
 import com.intellij.util.Processor;
-import org.jetbrains.annotations.ApiStatus;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -43,7 +37,7 @@ import java.util.List;
  *
  * <p>Note that all configuration methods modify {@link OrderEnumerator} instance instead of creating a new one.</p>
  */
-@ApiStatus.NonExtendable
+
 public abstract class OrderEnumerator {
   /**
    * Skip test dependencies
@@ -225,15 +219,7 @@ public abstract class OrderEnumerator {
    */
   public abstract void forEachModule(@NotNull Processor<? super Module> processor);
 
-  /**
-   * Passes order entries to the specified visitor.
-   *
-   * @param policy       the visitor to accept.
-   * @param initialValue the default value to be returned by the visit process.
-   * @return the value returned by the visitor.
-   * @see OrderEntry#accept(RootPolicy, Object)
-   */
-  public abstract <R> R process(@NotNull RootPolicy<R> policy, R initialValue);
+
 
   /**
    * Creates new enumerator instance to process dependencies of {@code module}

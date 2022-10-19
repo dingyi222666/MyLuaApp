@@ -15,16 +15,10 @@
  */
 package com.dingyi.myluaapp.openapi.roots;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.LibraryOrSdkOrderEntry;
-import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.RootPolicy;
-import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nls;
+import com.dingyi.myluaapp.openapi.module.Module;
+import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
+
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an entry in the classpath of a module (as shown in the "Order/Export" page
@@ -32,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author dsl
  */
-@ApiStatus.NonExtendable
+
 public interface OrderEntry extends Synthetic, Comparable<OrderEntry> {
   /**
    * The empty array of order entries which can be reused to avoid unnecessary allocations.
@@ -64,7 +58,7 @@ public interface OrderEntry extends Synthetic, Comparable<OrderEntry> {
    * @return name of this OrderEntry to be shown to user.
    */
   @NotNull
-  @Nls(capitalization = Nls.Capitalization.Title) String getPresentableName();
+   String getPresentableName();
 
   /**
    * Checks whether this order entry is invalid for some reason. Note that entry being valid
@@ -82,12 +76,4 @@ public interface OrderEntry extends Synthetic, Comparable<OrderEntry> {
   @NotNull
   Module getOwnerModule();
 
-  /**
-   * Accepts the specified order entries visitor.
-   *
-   * @param policy       the visitor to accept.
-   * @param initialValue the default value to be returned by the visit process.
-   * @return the value returned by the visitor.
-   */
-  <R> R accept(@NotNull RootPolicy<R> policy, @Nullable R initialValue);
 }

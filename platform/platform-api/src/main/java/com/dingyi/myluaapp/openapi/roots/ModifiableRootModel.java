@@ -18,17 +18,11 @@ package com.dingyi.myluaapp.openapi.roots;
 import com.dingyi.myluaapp.openapi.module.Module;
 import com.dingyi.myluaapp.openapi.project.Project;
 import com.dingyi.myluaapp.openapi.roots.libraries.Library;
+import com.dingyi.myluaapp.openapi.roots.libraries.LibraryTable;
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.roots.ProjectModelExternalSource;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.libraries.LibraryTable;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Consumer;
-import org.jetbrains.annotations.ApiStatus;
+
+
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +38,7 @@ import java.util.List;
  * @see ModuleRootManager#getModifiableModel()
  * @see ModuleRootModificationUtil
  */
-@ApiStatus.NonExtendable
+
 public interface ModifiableRootModel extends ModuleRootModel {
   @NotNull
   Project getProject();

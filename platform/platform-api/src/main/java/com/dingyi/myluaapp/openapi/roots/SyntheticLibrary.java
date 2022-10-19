@@ -2,11 +2,7 @@
 package com.dingyi.myluaapp.openapi.roots;
 
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.impl.libraries.LibraryEx;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.util.containers.ContainerUtil;
 
 import org.jetbrains.annotations.NonNls;

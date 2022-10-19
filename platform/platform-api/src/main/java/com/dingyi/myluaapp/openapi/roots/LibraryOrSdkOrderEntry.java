@@ -16,8 +16,7 @@
 package com.dingyi.myluaapp.openapi.roots;
 
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.ApiStatus;
+
 import org.jetbrains.annotations.NotNull;
 
 

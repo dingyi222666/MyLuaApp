@@ -2,9 +2,7 @@
 
 package com.dingyi.myluaapp.openapi.roots;
 
-import com.intellij.openapi.util.NlsContexts;
 
-import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Element;
@@ -44,7 +42,7 @@ public enum DependencyScope {
 
   public static final @NonNls String SCOPE_ATTR = "scope";
 
-  DependencyScope(@NotNull Supplier<@NlsContexts.ListItem String> displayName,
+  DependencyScope(@NotNull Supplier<String> displayName,
                   boolean forProductionCompile,
                   boolean forProductionRuntime,
                   boolean forTestCompile,

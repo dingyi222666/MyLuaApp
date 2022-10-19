@@ -15,11 +15,9 @@
  */
 package com.dingyi.myluaapp.openapi.roots;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.OrderEnumeratorSettings;
+import com.dingyi.myluaapp.openapi.extensions.ExtensionPointName;
+import com.dingyi.myluaapp.openapi.module.Module;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,10 +28,10 @@ import java.util.Collection;
  * {@link org.jetbrains.jps.model.java.impl.JpsJavaDependenciesEnumerationHandler} extension to ensure that the same logic applies inside
  * JPS build process.
  */
-@ApiStatus.OverrideOnly
+
 public abstract class OrderEnumerationHandler {
   public static final ExtensionPointName<Factory> EP_NAME =
-    ExtensionPointName.create("com.intellij.orderEnumerationHandlerFactory");
+    ExtensionPointName.Companion.create("com.intellij.orderEnumerationHandlerFactory");
 
   public abstract static class Factory {
     @Contract(pure = true)

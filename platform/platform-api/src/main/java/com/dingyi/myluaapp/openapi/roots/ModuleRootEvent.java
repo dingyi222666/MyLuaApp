@@ -2,9 +2,7 @@
 package com.dingyi.myluaapp.openapi.roots;
 
 import com.dingyi.myluaapp.openapi.project.Project;
-import com.intellij.openapi.project.RootsChangeRescanningInfo;
-import com.intellij.openapi.roots.AdditionalLibraryRootsProvider;
-import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
+
 
 import org.jetbrains.annotations.NotNull;
 

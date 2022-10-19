@@ -4,13 +4,6 @@ package com.dingyi.myluaapp.openapi.roots;
 import com.dingyi.myluaapp.openapi.module.Module;
 import com.dingyi.myluaapp.openapi.roots.libraries.Library;
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.projectRoots.ProjectJdkTable;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.impl.libraries.LibraryEx;
-import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.util.Consumer;
 import com.intellij.util.EmptyConsumer;
 

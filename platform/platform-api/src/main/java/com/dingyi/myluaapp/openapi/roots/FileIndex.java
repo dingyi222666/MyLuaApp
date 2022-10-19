@@ -16,18 +16,11 @@
 package com.dingyi.myluaapp.openapi.roots;
 
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.roots.TestSourcesFilter;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileFilter;
-import org.jetbrains.annotations.ApiStatus;
+import com.dingyi.myluaapp.openapi.vfs.VirtualFileFilter;
+
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jps.model.module.JpsModuleSourceRootType;
-
-import java.util.Set;
 
 /**
  * Provides information about files contained in a project or module.
@@ -89,15 +82,5 @@ public interface FileIndex {
    */
   boolean isInSourceContent(@NotNull VirtualFile fileOrDir);
 
-  /**
-   * Returns {@code true} if {@code fileOrDir} is a file or directory located under a test sources or resources root and not excluded or ignored.
-   * <p>
-   * Use this method when you really need to check whether the file is under test roots according to project configuration.
-   * <p>
-   * If you want to determine whether file should be considered as test (e.g. for implementing SearchScope)
-   * you'd better use {@link TestSourcesFilter#isTestSources(VirtualFile, Project)} instead
-   * which calls this method for you.
-   * @see TestSourcesFilter#isTestSources(VirtualFile, Project)
-   */
-  boolean isInTestSourceContent(@NotNull VirtualFile fileOrDir);
+
 }

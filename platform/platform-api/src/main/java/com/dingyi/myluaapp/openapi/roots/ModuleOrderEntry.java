@@ -18,7 +18,7 @@ package com.dingyi.myluaapp.openapi.roots;
 import com.dingyi.myluaapp.openapi.module.Module;
 import com.intellij.openapi.util.NlsSafe;
 
-import org.jetbrains.annotations.ApiStatus;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

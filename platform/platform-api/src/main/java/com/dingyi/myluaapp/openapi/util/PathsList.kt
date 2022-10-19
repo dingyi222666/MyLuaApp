@@ -1,6 +1,12 @@
 package com.dingyi.myluaapp.openapi.util
 
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile
+import com.intellij.openapi.util.io.FileUtil
+import com.intellij.openapi.util.text.StringUtil
+import com.intellij.util.containers.JBIterable
+import java.io.File
+import java.util.Arrays
+import java.util.Collections
 
 
 class PathsList {
@@ -10,7 +16,7 @@ class PathsList {
     val isEmpty: Boolean
         get() = myPathSet.isEmpty()
 
-    fun add(path: String?) {
+    fun add(path: String) {
         addAllLast(chooseFirstTimeItems(path), myPath)
     }
 
@@ -26,10 +32,10 @@ class PathsList {
         myPathSet.clear()
     }
 
-    fun add(file: VirtualFile?) {
-        val path: String = LOCAL_PATH.`fun`(file)
-        val trimmed = path?.trim { it <= ' ' } ?: ""
-        if (!trimmed.isEmpty() && myPathSet.add(trimmed)) {
+    fun add(file: VirtualFile) {
+        val path: String = LOCAL_PATH(file)
+        val trimmed = path.trim { it <= ' ' } ?: ""
+        if (trimmed.isNotEmpty() && myPathSet.add(trimmed)) {
             myPath.add(trimmed)
         }
     }
@@ -43,17 +49,17 @@ class PathsList {
         }
     }
 
-    fun addTail(path: String?) {
+    fun addTail(path: String) {
         addAllLast(chooseFirstTimeItems(path), myPathTail)
     }
 
-    @NotNull
-    private fun chooseFirstTimeItems(@Nullable path: String?): Iterable<String> {
+
+    private fun chooseFirstTimeItems(path: String?): Iterable<String> {
         return if (path == null) {
             Collections.emptyList()
         } else {
             JBIterable.from(StringUtil.tokenize(path, File.pathSeparator)).filter { element ->
-                element = element.trim()
+                val element = element.trim()
                 !element.isEmpty() && !myPathSet.contains(element)
             }
         }
@@ -66,14 +72,14 @@ class PathsList {
         }
     }
 
-    @get:NotNull
+
     val pathsString: String
         get() = StringUtil.join(pathList, File.pathSeparator)
 
-    @get:NotNull
+
     val pathList: List<String>
         get() {
-            val result: MutableList<String> = ArrayList()
+            val result = ArrayList<String>()
             result.addAll(myPath)
             result.addAll(myPathTail)
             return result
@@ -91,13 +97,13 @@ class PathsList {
     val rootDirs: List<Any>
         get() = JBIterable.from(pathList).filterMap(PATH_TO_DIR).toList()
 
-    fun addAll(allClasspath: List<String?>) {
+    fun addAll(allClasspath: List<String>) {
         for (path in allClasspath) {
             add(path)
         }
     }
 
-    fun addAllFiles(files: Array<File?>?) {
+    fun addAllFiles(files: Array<File>) {
         addAllFiles(Arrays.asList(files))
     }
 
@@ -121,26 +127,26 @@ class PathsList {
         }
     }
 
-    fun addVirtualFiles(files: Array<VirtualFile?>?) {
+    fun addVirtualFiles(files: Array<VirtualFile>) {
         addVirtualFiles(Arrays.asList(files))
     }
 
     companion object {
-        private val PATH_TO_LOCAL_VFILE: Function<String, VirtualFile> =
-            Function<String, VirtualFile> { path ->
+        private val PATH_TO_LOCAL_VFILE: (String) -> VirtualFile =
+             { path ->
                 StandardFileSystems.local().findFileByPath(path.replace(File.separatorChar, '/'))
             }
         private val LOCAL_PATH: (VirtualFile) -> String = { file -> PathUtil.getLocalPath(file) }
-        private val PATH_TO_DIR: Function<String, VirtualFile> =
-            Function<String, VirtualFile> { s ->
-                val file: VirtualFile = PATH_TO_LOCAL_VFILE.`fun`(s) ?: return@Function null
-                if (!file.isDirectory() && FileTypeRegistry.getInstance()
-                        .getFileTypeByFileName(file.getNameSequence()) === ArchiveFileType.INSTANCE
-                ) {
-                    return@Function StandardFileSystems.jar()
-                        .findFileByPath(file.getPath() + URLUtil.JAR_SEPARATOR)
-                }
-                file
-            }
+        private val PATH_TO_DIR: (String) -> VirtualFile? = { s ->
+            /* val file: VirtualFile = PATH_TO_LOCAL_VFILE.`fun`(s) ?: return@Function null
+             if (!file.isDirectory() && FileTypeRegistry.getInstance()
+                     .getFileTypeByFileName(file.getNameSequence()) === ArchiveFileType.INSTANCE
+             ) {
+                 return@Function StandardFileSystems.jar()
+                     .findFileByPath(file.getPath() + URLUtil.JAR_SEPARATOR)
+             }
+             file*/
+            null
+        }
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.dingyi.myluaapp.openapi.roots;
 
+import com.dingyi.myluaapp.openapi.util.PathsList;
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.NotNullFunction;
@@ -79,12 +80,4 @@ public interface OrderRootsEnumerator {
   @NotNull
   OrderRootsEnumerator usingCustomRootProvider(@NotNull NotNullFunction<? super OrderEntry, VirtualFile[]> provider);
 
-  /**
-   * Instructs the enumerator to use {@code provider} to obtain roots of an SDK order entry instead of taking them from SDK configuration. 
-   * Note that this option won't affect the result of {@link #getUrls()} method
-   * 
-   * @return this instance
-   */
-  @NotNull
-  OrderRootsEnumerator usingCustomSdkRootProvider(@NotNull NotNullFunction<? super JdkOrderEntry, VirtualFile[]> provider);
 }

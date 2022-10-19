@@ -17,16 +17,9 @@ package com.dingyi.myluaapp.openapi.roots;
 
 import com.dingyi.myluaapp.openapi.module.Module;
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.vfs.VirtualFile;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jps.model.module.JpsModuleSourceRootType;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Interface providing root information model for a given module.
@@ -62,14 +55,6 @@ public interface ModuleRootModel {
 
 
 
-  /**
-   * Returns {@code true} if SDK for this module is inherited from a project.
-   *
-   * @return true if the SDK is inherited, false otherwise
-   * @see ProjectRootManager#getProjectSdk()
-   * @see ProjectRootManager#setProjectSdk(Sdk)
-   */
-  boolean isSdkInherited();
 
   /**
    * Returns an array of content roots from all content entries.
