@@ -13,17 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dingyi.myluaapp.openapi.roots;
-
-
-import org.jetbrains.annotations.NotNull;
+package com.dingyi.myluaapp.openapi.roots
 
 /**
  * Order entry for content source folders
- *  @author dsl
+ * @author dsl
  */
-
-public interface ModuleSourceOrderEntry extends OrderEntry {
-  @NotNull
-  ModuleRootModel getRootModel();
+interface ModuleSourceOrderEntry : OrderEntry {
+    val rootModel: ModuleRootModel
 }

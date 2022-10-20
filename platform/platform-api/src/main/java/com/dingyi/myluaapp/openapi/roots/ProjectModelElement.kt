@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dingyi.myluaapp.openapi.roots;
-
-import org.jetbrains.annotations.Nullable;
+package com.dingyi.myluaapp.openapi.roots
 
 /**
  * Base interface for elements of the project model (modules, libraries, artifacts, etc).
  */
-
-public interface ProjectModelElement {
-  /**
-   * Return non-null value if this element was automatically created by the IDE during importing from some external project system rather
-   * than created by user manually via UI. Configuration files corresponding to such elements will be stored separately so they won't
-   * pollute project directories. Also IDEs will show a warning if user tries to modify settings of such element because these changes may
-   * be lost after reimporting from the external model.
-   */
-
-  @Nullable
-  ProjectModelExternalSource getExternalSource();
+interface ProjectModelElement {
+    /**
+     * Return non-null value if this element was automatically created by the IDE during importing from some external project system rather
+     * than created by user manually via UI. Configuration files corresponding to such elements will be stored separately so they won't
+     * pollute project directories. Also IDEs will show a warning if user tries to modify settings of such element because these changes may
+     * be lost after reimporting from the external model.
+     */
+    val externalSource: ProjectModelExternalSource?
 }

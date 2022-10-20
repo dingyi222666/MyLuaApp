@@ -17,9 +17,7 @@ package com.dingyi.myluaapp.openapi.roots;
 
 import com.dingyi.myluaapp.openapi.util.PathsList;
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.NotNullFunction;
-import com.intellij.util.PathsList;
 
 import org.jetbrains.annotations.NotNull;
 

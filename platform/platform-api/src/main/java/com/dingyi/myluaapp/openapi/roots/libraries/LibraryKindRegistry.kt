@@ -10,5 +10,5 @@ open class LibraryKindRegistry {
         LibraryKindRegistry::class.java)
   }
 
-  fun findKindById(id: String?): LibraryKind? = LibraryKind.findByIdInternal(id)
+  fun findKindById(id: String): LibraryKind? = LibraryKind.findByIdInternal(id)
 }

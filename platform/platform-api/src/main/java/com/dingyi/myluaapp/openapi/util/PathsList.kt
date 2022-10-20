@@ -104,10 +104,10 @@ class PathsList {
     }
 
     fun addAllFiles(files: Array<File>) {
-        addAllFiles(Arrays.asList(files))
+        addAllFiles(files.toList())
     }
 
-    fun addAllFiles(files: List<File?>) {
+    fun addAllFiles(files: List<File>) {
         for (file in files) {
             add(file)
         }
@@ -121,22 +121,25 @@ class PathsList {
         addFirst(FileUtil.toCanonicalPath(file.getAbsolutePath()).replace('/', File.separatorChar))
     }
 
-    fun addVirtualFiles(files: Collection<VirtualFile?>) {
+    fun addVirtualFiles(files: Collection<VirtualFile>) {
         for (file in files) {
             add(file)
         }
     }
 
     fun addVirtualFiles(files: Array<VirtualFile>) {
-        addVirtualFiles(Arrays.asList(files))
+        addVirtualFiles(files.toList())
     }
+
+
 
     companion object {
         private val PATH_TO_LOCAL_VFILE: (String) -> VirtualFile =
              { path ->
-                StandardFileSystems.local().findFileByPath(path.replace(File.separatorChar, '/'))
+                 TODO("")
+                //StandardFileSystems.local().findFileByPath(path.replace(File.separatorChar, '/'))
             }
-        private val LOCAL_PATH: (VirtualFile) -> String = { file -> PathUtil.getLocalPath(file) }
+        private val LOCAL_PATH: (VirtualFile) -> String = { file -> TODO("") }
         private val PATH_TO_DIR: (String) -> VirtualFile? = { s ->
             /* val file: VirtualFile = PATH_TO_LOCAL_VFILE.`fun`(s) ?: return@Function null
              if (!file.isDirectory() && FileTypeRegistry.getInstance()

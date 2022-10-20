@@ -28,82 +28,89 @@ import org.jetbrains.annotations.Nullable;
 
 
 public interface Library extends Disposable, ProjectModelElement {
-  Library[] EMPTY_ARRAY = new Library[0];
+    Library[] EMPTY_ARRAY = new Library[0];
 
-  /**
-   * Returns name for the library or {@code null} if the library doesn't have a name (it's possible to create a module level library without
-   * specifying a name for it).
-   */
-  @Nullable
-  String getName();
-
-  /**
-   * Returns name of the library to show in UI. If the library has a {@link #getName() name} specified by user it is returned; for unnamed
-   * module-level library name of its first file is returned.
-   */
-  @NotNull @Nls String getPresentableName();
-
-  String @NotNull [] getUrls(@NotNull OrderRootType rootType);
-
-  VirtualFile @NotNull [] getFiles(@NotNull OrderRootType rootType);
-
-  /**
-   * As soon as you obtaining modifiable model you will have to commit it or call Disposer.dispose(model)!
-   */
-  @NotNull
-  ModifiableModel getModifiableModel();
-
-  LibraryTable getTable();
-
-
-  boolean isJarDirectory(@NotNull String url);
-
-  boolean isJarDirectory(@NotNull String url, @NotNull OrderRootType rootType);
-
-  boolean isValid(@NotNull String url, @NotNull OrderRootType rootType);
-
-  /**
-   * Compares the content of the current instance of the library with the given one.
-   * @param library to compare with
-   * @return true if the content is same
-   */
-  boolean hasSameContent(@NotNull Library library);
-
-  interface ModifiableModel extends Disposable {
-    String @NotNull [] getUrls(@NotNull OrderRootType rootType);
-
-    void setName(String name);
-
+    /**
+     * Returns name for the library or {@code null} if the library doesn't have a name (it's possible to create a module level library without
+     * specifying a name for it).
+     */
+    @Nullable
     String getName();
 
-    void addRoot(@NonNls @NotNull String url, @NotNull OrderRootType rootType);
+    /**
+     * Returns name of the library to show in UI. If the library has a {@link #getName() name} specified by user it is returned; for unnamed
+     * module-level library name of its first file is returned.
+     */
+    @NotNull
+    @Nls
+    String getPresentableName();
 
-    void addJarDirectory(@NotNull String url, boolean recursive);
-
-    void addJarDirectory(@NotNull String url, boolean recursive, @NotNull OrderRootType rootType);
-
-    void addRoot(@NotNull VirtualFile file, @NotNull OrderRootType rootType);
-
-    void addJarDirectory(@NotNull VirtualFile file, boolean recursive);
-
-    void addJarDirectory(@NotNull VirtualFile file, boolean recursive, @NotNull OrderRootType rootType);
-
-    void moveRootUp(@NotNull String url, @NotNull OrderRootType rootType);
-
-    void moveRootDown(@NotNull String url, @NotNull OrderRootType rootType);
-
-    boolean removeRoot(@NotNull String url, @NotNull OrderRootType rootType);
-
-    void commit();
+    String @NotNull [] getUrls(@NotNull OrderRootType rootType);
 
     VirtualFile @NotNull [] getFiles(@NotNull OrderRootType rootType);
 
-    boolean isChanged();
+    /**
+     * As soon as you obtaining modifiable model you will have to commit it or call Disposer.dispose(model)!
+     */
+    @NotNull
+    ModifiableModel getModifiableModel();
+
+    LibraryTable getTable();
+
 
     boolean isJarDirectory(@NotNull String url);
 
     boolean isJarDirectory(@NotNull String url, @NotNull OrderRootType rootType);
 
     boolean isValid(@NotNull String url, @NotNull OrderRootType rootType);
-  }
+
+    /**
+     * Compares the content of the current instance of the library with the given one.
+     *
+     * @param library to compare with
+     * @return true if the content is same
+     */
+    boolean hasSameContent(@NotNull Library library);
+
+    interface ModifiableModel extends Disposable {
+        String @NotNull [] getUrls(@NotNull OrderRootType rootType);
+
+        void setName(String name);
+
+        String getName();
+
+        void addRoot(@NonNls @NotNull String url, @NotNull OrderRootType rootType);
+
+        void addJarDirectory(@NotNull String url, boolean recursive);
+
+        void addJarDirectory(@NotNull String url, boolean recursive, @NotNull OrderRootType rootType);
+
+        void addRoot(@NotNull VirtualFile file, @NotNull OrderRootType rootType);
+
+        void addJarDirectory(@NotNull VirtualFile file, boolean recursive);
+
+        void addJarDirectory(@NotNull VirtualFile file, boolean recursive, @NotNull OrderRootType rootType);
+
+        void moveRootUp(@NotNull String url, @NotNull OrderRootType rootType);
+
+        void moveRootDown(@NotNull String url, @NotNull OrderRootType rootType);
+
+        boolean removeRoot(@NotNull String url, @NotNull OrderRootType rootType);
+
+        void commit();
+
+        VirtualFile @NotNull [] getFiles(@NotNull OrderRootType rootType);
+
+        boolean isChanged();
+
+        boolean isJarDirectory(@NotNull String url);
+
+        boolean isJarDirectory(@NotNull String url, @NotNull OrderRootType rootType);
+
+        boolean isValid(@NotNull String url, @NotNull OrderRootType rootType);
+
+        void addExcludedRoot(@NotNull String excludedUrl, @NotNull OrderRootType rootType);
+
+        void addExcludedRoot(@NotNull String excludedUrl);
+    }
 }

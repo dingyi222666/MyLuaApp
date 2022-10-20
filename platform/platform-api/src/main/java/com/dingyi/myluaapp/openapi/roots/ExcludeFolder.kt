@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2017 JetBrains s.r.o.
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dingyi.myluaapp.openapi.roots;
-
-import org.jetbrains.annotations.NotNull;
+package com.dingyi.myluaapp.openapi.roots
 
 /**
- * Describes an external project system (e.g. Maven, Gradle, sbt) from which a project model element can be imported.
+ * Represents an exclude root under the content root of a module.
  *
- * @see ProjectModelElement#getExternalSource()
+ * @see ContentEntry.getExcludeFolders
+ * @author dsl
  */
-
-public interface ProjectModelExternalSource {
-  @NotNull
-  String getDisplayName();
-
-  @NotNull
-  String getId();
-}
+interface ExcludeFolder : ContentFolder

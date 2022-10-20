@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dingyi.myluaapp.openapi.roots;
+package com.dingyi.myluaapp.openapi.roots
 
 /**
- *  todo: document
- *  @author dsl
+ * Describes an external project system (e.g. Maven, Gradle, sbt) from which a project model element can be imported.
+ *
+ * @see ProjectModelElement.getExternalSource
  */
-public interface Synthetic {
-  boolean isSynthetic();
+interface ProjectModelExternalSource {
+    val displayName: String
+    val id: String
 }

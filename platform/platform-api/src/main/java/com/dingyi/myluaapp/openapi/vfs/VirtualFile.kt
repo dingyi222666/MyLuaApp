@@ -6,7 +6,7 @@ import org.apache.commons.vfs2.FileObject
 interface VirtualFile : FileObject {
 
     fun getFileType(): FileType
-    fun findChild(name: String): VirtualFile
+    fun findChild(name: String): VirtualFile?
 
     fun isDirectory() = isFolder
 

@@ -65,10 +65,10 @@ public final class ModuleRootModificationUtil {
                                       @NotNull List<String> excludedRootUrls,
                                       @NotNull DependencyScope scope,
                                       boolean exported,
-                                      Consumer<? super LibraryEx.ModifiableModelEx> postProcessor) {
+                                      Consumer<? super Library.ModifiableModel> postProcessor) {
     updateModel(module, model -> {
-      LibraryEx library = (LibraryEx)model.getModuleLibraryTable().createLibrary(libName);
-      LibraryEx.ModifiableModelEx libraryModel = library.getModifiableModel();
+      Library library = model.getModuleLibraryTable().createLibrary(libName);
+      Library.ModifiableModel libraryModel = library.getModifiableModel();
 
       for (String rootUrl : classesRootUrls) {
         libraryModel.addRoot(rootUrl, OrderRootType.CLASSES);
@@ -87,14 +87,13 @@ public final class ModuleRootModificationUtil {
 
       postProcessor.consume(libraryModel);
 
-      ApplicationManager.getApplication().invokeAndWait(() -> WriteAction.run(libraryModel::commit));
+      libraryModel.commit();
+
+      //ApplicationManager.getApplication().invokeAndWait(() -> WriteAction.run(libraryModel::commit));
     });
   }
 
   public static void addModuleLibrary(@NotNull Module module, @NotNull String classesRootUrl) {
-    if (ApplicationManager.getApplication().isUnitTestMode() && classesRootUrl.endsWith(".jar")) {
-      assert false : "jar file is expected, local file is used";
-    }
     addModuleLibrary(module, null, Collections.singletonList(classesRootUrl), Collections.emptyList());
   }
 
@@ -141,14 +140,15 @@ public final class ModuleRootModificationUtil {
   }
 
   public static void modifyModel(@NotNull Module module, @NotNull Function<? super ModifiableRootModel, Boolean> modifier) {
-    ModifiableRootModel model = ReadAction.compute(() -> ModuleRootManager.getInstance(module).getModifiableModel());
+    ModifiableRootModel model =/* ReadAction.compute(() ->*/ ModuleRootManager.getInstance(module).getModifiableModel();/*);*/
     try {
       if (modifier.apply(model)) {
-        ApplicationManager.getApplication().invokeAndWait(() -> {
+      /*  ApplicationManager.getApplication().invokeAndWait(() -> {*/
           if (!module.isDisposed()) {
-            WriteAction.run(model::commit);
+              model.commit();
+            //WriteAction.run(model::commit);
           }
-        });
+       /* });*/
       }
     }
     finally {

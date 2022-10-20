@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dingyi.myluaapp.openapi.roots;
+package com.dingyi.myluaapp.openapi.roots
 
 /**
- * Represents an exclude root under the content root of a module.
- *
- * @see ContentEntry#getExcludeFolders()  
+ * todo: document
  * @author dsl
  */
-
-public interface ExcludeFolder extends ContentFolder {
+interface Synthetic {
+    fun isSynthetic(): Boolean
 }
