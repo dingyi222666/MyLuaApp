@@ -59,21 +59,6 @@ interface Editor : UserDataHolder {
 
     fun getProject(): Project
 
-    /**
-     * Returns the insert/overwrite mode for the editor.
-     *
-     * @return `true` if the editor is in insert mode, `false` otherwise.
-     */
-    fun isReadMode(): Boolean
-
-
-    /**
-     * Checks if the current editor instance is a one-line editor (used in a dialog control, for example).
-     *
-     * @return `true` if the editor is one-line, `false` otherwise.
-     */
-    fun isOneLineMode(): Boolean
-
 
     /**
      * Returns the scrolling model for the document, which can be used to scroll the document
