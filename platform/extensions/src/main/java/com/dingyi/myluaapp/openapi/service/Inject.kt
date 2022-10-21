@@ -178,6 +178,6 @@ package com.dingyi.myluaapp.openapi.service
     AnnotationTarget.CONSTRUCTOR,
     AnnotationTarget.FIELD
 )
-@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+@Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 annotation class Inject

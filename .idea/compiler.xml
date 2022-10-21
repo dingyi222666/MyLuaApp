@@ -4,6 +4,7 @@
     <bytecodeTargetLevel target="1.8">
       <module name="MyLuaApp.AndroLua" target="11" />
       <module name="MyLuaApp.androlua" target="11" />
+      <module name="MyLuaApp.anyalysis" target="11" />
       <module name="MyLuaApp.app" target="11" />
       <module name="MyLuaApp.builder" target="11" />
       <module name="MyLuaApp.builder-plugin-api" target="11" />

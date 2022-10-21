@@ -22,6 +22,7 @@
             <option value="$PROJECT_DIR$/language-server" />
             <option value="$PROJECT_DIR$/language-server/java" />
             <option value="$PROJECT_DIR$/language-server/lua" />
+            <option value="$PROJECT_DIR$/platform/anyalysis" />
             <option value="$PROJECT_DIR$/platform/core-imp" />
             <option value="$PROJECT_DIR$/platform/extensions" />
             <option value="$PROJECT_DIR$/platform/platform-api" />

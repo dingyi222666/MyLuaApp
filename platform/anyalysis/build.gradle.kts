@@ -5,9 +5,6 @@ plugins {
 
 
 android {
-
-
-
     compileSdk = BuildConfig.Config.Default.compileSdk
     buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
 
@@ -38,16 +35,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
 }
 
 dependencies {
-    //implementation(BuildConfig.Libs.Tools.intellij_platform_xml_util)
     compileOnly(BuildConfig.Libs.Tools.intellij_platform_util)
-    //implementation(BuildConfig.Libs.Tools.intellij_util_jdom)
     //compileOnly(BuildConfig.Libs.AndroidX.appcompat)
-    compileOnly(BuildConfig.Libs.Tools.commons_vfs)
+    implementation("org.slf4j:slf4j-api:2.0.3")
     compileOnly(project(":platform-common"))
-    compileOnly(project(":platform-util"))
+    implementation(project(":platform-api"))
+    implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
+    compileOnly(BuildConfig.Libs.Tools.commons_vfs)
+
     testImplementation(BuildConfig.Libs.Default.junit)
 }

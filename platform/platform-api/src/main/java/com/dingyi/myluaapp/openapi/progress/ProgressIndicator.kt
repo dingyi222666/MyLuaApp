@@ -130,6 +130,10 @@ interface ProgressIndicator {
      * @throws ProcessCanceledException if this progress has been canceled, i.e. [.isCanceled] returns true.
      */
     fun checkCanceled()
+
+
+    fun getProgressIndicator(): ProgressIndicator
+
     val isPopupWasShown: Boolean
     val isShowing: Boolean
 }

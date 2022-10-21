@@ -151,6 +151,8 @@ abstract class ProgressManager : ProgressIndicatorProvider() {
     abstract fun <X> silenceGlobalIndicator(computable: Supplier<out X>?): X
 
 
+    //abstract fun getProgressIndicator(): ProgressIndicator
+
     companion object {
         /**
          * @return ProgressManager or null if not yet initialized

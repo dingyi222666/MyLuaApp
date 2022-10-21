@@ -15,4 +15,5 @@ enum class DefaultTokenType(tokenName: String) {
     OPERATOR("OPERATOR"), IDENTIFIER_VAR("IDENTIFIER_VAR");
 
     val tokenType = TokenType(tokenName)
+
 }

@@ -49,6 +49,7 @@ public class TreeView implements SelectableTreeAction {
         this.root = root;
         this.context = context;
         this.baseNodeViewFactory = baseNodeViewFactory;
+
         if (baseNodeViewFactory == null) {
             throw new IllegalArgumentException("You must assign a BaseNodeViewFactory!");
         }
@@ -58,6 +59,7 @@ public class TreeView implements SelectableTreeAction {
         if (rootView == null) {
             this.rootView = buildRootView();
         }
+        
 
         return rootView;
     }
