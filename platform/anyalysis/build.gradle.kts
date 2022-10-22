@@ -42,7 +42,8 @@ dependencies {
     //compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     implementation("org.slf4j:slf4j-api:2.0.3")
     compileOnly(project(":platform-common"))
-    implementation(project(":platform-api"))
+    compileOnly(project(":platform-api"))
+    compileOnly(project(":extensions"))
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
 

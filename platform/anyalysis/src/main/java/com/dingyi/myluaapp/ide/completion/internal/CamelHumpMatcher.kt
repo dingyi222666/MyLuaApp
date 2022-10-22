@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.ide.completion.internal
 
 
+import com.dingyi.myluaapp.ide.completion.CompletionElement
 import com.dingyi.myluaapp.ide.completion.PrefixMatcher
 import com.dingyi.myluaapp.openapi.editor.TextRange
 import com.intellij.openapi.util.text.StringUtil
@@ -35,7 +36,7 @@ class CamelHumpMatcher constructor(
     }
 
 
-    override fun prefixMatches(name: List<String>): Boolean {
+    override fun prefixMatches(name: CompletionElement): Boolean {
         return prefixMatchersInternal(name, true)
     }
 
@@ -56,15 +57,18 @@ class CamelHumpMatcher constructor(
     }
 
 
+    private val nullOfArrays = arrayOfNulls<CompletionElement>(1)
+
     private fun prefixMatchersInternal(
-        element: List<String>,
+        element: CompletionElement,
         itemCaseInsensitive: Boolean
     ): Boolean {
-        for (name in element) {
+        nullOfArrays[0] = element
+        for (name in nullOfArrays) {
             if (itemCaseInsensitive && StringUtil.startsWithIgnoreCase(
-                    name,
+                    name?.getString().toString(),
                     prefix
-                ) || prefixMatches(name)
+                ) || prefixMatches(name?.getString().toString())
             ) {
                 return true
             }
@@ -76,6 +80,7 @@ class CamelHumpMatcher constructor(
                  }
              }*/
         }
+
         return false
     }
 

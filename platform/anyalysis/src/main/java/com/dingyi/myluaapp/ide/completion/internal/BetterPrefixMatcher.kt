@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.ide.completion.internal
 
 
+import com.dingyi.myluaapp.ide.completion.CompletionElement
 import com.dingyi.myluaapp.ide.completion.CompletionResultSet
 import com.dingyi.myluaapp.ide.completion.PrefixMatcher
 import com.dingyi.myluaapp.openapi.editor.TextRange
@@ -11,7 +12,7 @@ import com.intellij.util.containers.FList
 /**
  * @author peter
  */
-class BetterPrefixMatcher(private val myOriginal: PrefixMatcher, minMatchingDegree: Int) :
+open class BetterPrefixMatcher(private val myOriginal: PrefixMatcher, minMatchingDegree: Int) :
     PrefixMatcher(myOriginal.prefix) {
     private val myHumpMatcher: CamelHumpMatcher? =
         if (myOriginal is CamelHumpMatcher) myOriginal else null
@@ -22,11 +23,11 @@ class BetterPrefixMatcher(private val myOriginal: PrefixMatcher, minMatchingDegr
     }
 
 
-    protected fun createCopy(original: PrefixMatcher, degree: Int): BetterPrefixMatcher {
+    protected open fun createCopy(original: PrefixMatcher, degree: Int): BetterPrefixMatcher {
         return BetterPrefixMatcher(original, degree)
     }
 
-    override fun prefixMatches(name: List<String>): Boolean {
+    override fun prefixMatches(name: CompletionElement): Boolean {
         return myOriginal.prefixMatches(name)
     }
 
@@ -34,7 +35,7 @@ class BetterPrefixMatcher(private val myOriginal: PrefixMatcher, minMatchingDegr
         return prefixMatchesEx(name) == MatchingOutcome.BETTER_MATCH
     }
 
-    protected fun prefixMatchesEx(name: String): MatchingOutcome {
+    protected open fun prefixMatchesEx(name: String): MatchingOutcome {
         return myHumpMatcher?.let { matchOptimized(name, it) } ?: matchGeneric(name)
     }
 
@@ -87,7 +88,7 @@ class BetterPrefixMatcher(private val myOriginal: PrefixMatcher, minMatchingDegr
     ) : BetterPrefixMatcher(original, minMatchingDegree) {
         constructor(result: CompletionResultSet) : this(
             result,
-            result.getPrefixMatcher(),
+            result.prefixMatcher,
             Int.MIN_VALUE
         ) {
         }
@@ -99,7 +100,7 @@ class BetterPrefixMatcher(private val myOriginal: PrefixMatcher, minMatchingDegr
         override fun prefixMatchesEx(name: String): MatchingOutcome {
             val outcome = super.prefixMatchesEx(name)
             if (outcome == MatchingOutcome.WORSE_MATCH) {
-                myResult.restartCompletionOnAnyPrefixChange()
+                //myResult.restartCompletionOnAnyPrefixChange()
             }
             return outcome
         }

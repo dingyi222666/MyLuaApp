@@ -6,20 +6,17 @@ import com.dingyi.myluaapp.openapi.progress.ProgressManager
 abstract class PrefixMatcher protected constructor( val prefix: String) {
 
 
-    fun isStartMatch(element: List<String>): Boolean {
-        for (s in element) {
-            if (isStartMatch(s)) {
-                return true
-            }
-        }
-        return false
+    fun isStartMatch(element: CompletionElement): Boolean {
+
+        return isStartMatch(element.getString())
+
     }
 
     open fun isStartMatch(name: String): Boolean {
         return prefixMatches(name)
     }
 
-    abstract fun prefixMatches(name:  List<String>): Boolean
+    abstract fun prefixMatches(name:  CompletionElement): Boolean
 
 
     abstract fun prefixMatches(name:  String): Boolean

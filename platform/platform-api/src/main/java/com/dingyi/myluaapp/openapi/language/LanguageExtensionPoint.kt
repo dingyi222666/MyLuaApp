@@ -8,7 +8,7 @@ import com.dingyi.myluaapp.util.KeyedLazyInstance
 /**
  * Base class for [Language]-bound extension points.
  */
-class LanguageExtensionPoint<T:Any> : CustomLoadingExtensionPointBean<T>, KeyedLazyInstance<T> {
+open class LanguageExtensionPoint<T:Any> : CustomLoadingExtensionPointBean<T>, KeyedLazyInstance<T> {
     // these must be public for scrambling compatibility
     /**
      * Language ID.
