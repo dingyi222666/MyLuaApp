@@ -68,4 +68,17 @@ interface Editor : UserDataHolder {
      */
     fun getScrollingModel(): ScrollingModel
 
+    /**
+     * Returns the selection model for the editor, which can be used to select ranges of text in
+     * the document and retrieve information about the selection.
+     *
+     *
+     * To query or change selections for specific carets, [CaretModel] interface should be used.
+     *
+     * @return the selection model instance.
+     * @see .getCaretModel
+     */
+
+    fun getSelectionModel(): SelectionModel
+
 }

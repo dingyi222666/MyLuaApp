@@ -1,7 +1,4 @@
-package com.dingyi.myluaapp.ide.completion.internal
-
-import com.dingyi.myluaapp.ide.completion.CompletionElement
-import com.dingyi.myluaapp.ide.completion.PrefixMatcher
+package com.dingyi.myluaapp.ide.completion
 
 
 /**

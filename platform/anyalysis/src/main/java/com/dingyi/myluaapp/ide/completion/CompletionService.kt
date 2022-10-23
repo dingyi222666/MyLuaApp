@@ -1,7 +1,6 @@
 package com.dingyi.myluaapp.ide.completion
 
 import CompletionProcess
-import com.dingyi.myluaapp.ide.completion.internal.CompletionResult
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
 import com.dingyi.myluaapp.openapi.progress.ProgressManager
 import com.intellij.util.Consumer

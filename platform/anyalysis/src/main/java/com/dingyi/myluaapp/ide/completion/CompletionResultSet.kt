@@ -2,7 +2,6 @@ package com.dingyi.myluaapp.ide.completion
 
 
 
-import com.dingyi.myluaapp.ide.completion.internal.CompletionResult
 import com.dingyi.myluaapp.openapi.progress.ProgressManager
 import com.intellij.util.Consumer
 import org.jetbrains.annotations.Contract

@@ -6,7 +6,6 @@ import com.dingyi.myluaapp.openapi.vfs.VirtualFile
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.UserDataHolder
-import org.apache.commons.vfs2.FileObject
 import java.util.Collections
 
 
@@ -25,6 +24,42 @@ interface FileEditor : UserDataHolder, Disposable {
      */
     fun isModified(): Boolean
 
+
+    /**
+     * Returns editor's name - a string that identifies the editor among others
+     * (e.g.: "GUI Designer" for graphical editing and "Text" for textual representation of a GUI form editor).
+     */
+    fun getName(): String
+
+    /**
+     * Returns editor's internal state.
+     */
+
+    fun getState(): FileEditorState {
+        return FileEditorState.INSTANCE
+    }
+
+    /**
+     * Applies a given state to the editor.
+     */
+    fun setState(state: FileEditorState)
+
+    /**
+     * In some cases, it's desirable to set state exactly as requested (e.g. on tab splitting), while in other cases different behaviour is
+     * preferred, e.g. bringing caret into view on text editor opening.
+     * This method passes an additional flag to [FileEditor] to indicate the desired way to set state.
+     */
+    fun setState(state: FileEditorState, exactState: Boolean) {
+        setState(state)
+    }
+
+
+    /**
+     * An editor is valid if its contents still exist.
+     * For example, an editor displaying the contents of some file stops being valid if the file is deleted.
+     * An editor can also become invalid after being disposed of.
+     */
+    fun isValid(): Boolean
 
     companion object {
 

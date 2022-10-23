@@ -48,6 +48,7 @@ class CompletionContributor {
             ProgressManager.checkCanceled()
             if (filter.test(parameters.file)) {
                 for (provider in providers) {
+                    ProgressManager.checkCanceled()
                     provider.addCompletionVariants(parameters, result)
                     if (result.isStopped) {
                         return;
