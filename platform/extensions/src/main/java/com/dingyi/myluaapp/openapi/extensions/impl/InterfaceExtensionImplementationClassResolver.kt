@@ -30,13 +30,13 @@ internal class InterfaceExtensionImplementationClassResolver private constructor
         val result =
             pluginDescriptor.classLoader.loadClass(className) //componentManager.loadClass<Any>(className, pluginDescriptor)
         @Suppress("SpellCheckingInspection") if (result.classLoader !== pluginDescriptor.pluginClassLoader && pluginDescriptor.pluginClassLoader != null && !className.startsWith(
-                "com.intellij.webcore.resourceRoots."
-            ) && !className.startsWith("com.intellij.tasks.impl.") && !result.isAnnotationPresent(
+                "com.dingyi.myluaapp.webcore.resourceRoots."
+            ) && !className.startsWith("com.dingyi.myluaapp.tasks.impl.") && !result.isAnnotationPresent(
                 InternalIgnoreDependencyViolation::class.java
             )
         ) {
             val idString = pluginDescriptor.pluginId.idString
-            if (idString != "com.intellij.java" && idString != "com.intellij.java.ide" && idString != "org.jetbrains.android" && idString != "com.intellij.kotlinNative.platformDeps" && idString != "com.jetbrains.rider.android") {
+            if (idString != "com.dingyi.myluaapp.java" && idString != "com.dingyi.myluaapp.java.ide" && idString != "org.jetbrains.android" && idString != "com.dingyi.myluaapp.kotlinNative.platformDeps" && idString != "com.jetbrains.rider.android") {
                 ExtensionPointImpl.LOG.error(
                     """Created extension classloader is not equal to plugin's one.
 See https://youtrack.jetbrains.com/articles/IDEA-A-65/Plugin-Model#internalignoredependencyviolation

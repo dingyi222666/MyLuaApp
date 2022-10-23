@@ -29,7 +29,7 @@ abstract class CompletionResultSet protected constructor(
 ) :
     Consumer<CompletionElement> {
     private val myConsumer: Consumer<in CompletionResult>
-    protected val myCompletionService: CompletionService = CompletionService.getCompletionService()
+    protected val myCompletionService: CompletionService = CompletionService.completionService
     protected val myContributor: CompletionContributor
     var isStopped = false
         private set
@@ -109,13 +109,13 @@ abstract class CompletionResultSet protected constructor(
     ): LinkedHashSet<CompletionResult> {
         val elements: LinkedHashSet<CompletionResult> = LinkedHashSet<CompletionResult>()
         runRemainingContributors(
-            parameters,
-            Consumer<CompletionResult> { result: CompletionResult ->
-                if (passResult) {
-                    passResult(result)
-                }
-                elements.add(result)
-            })
+           parameters= parameters,
+            { result: CompletionResult ->
+                 if (passResult) {
+                     passResult(result)
+                 }
+                 elements.add(result)
+             })
         return elements
     }
 
@@ -128,7 +128,7 @@ abstract class CompletionResultSet protected constructor(
         if (stop) {
             stopHere()
         }
-        myCompletionService.getVariantsFromContributors(parameters, myContributor,)
+        myCompletionService.getVariantsFromContributors(parameters, myContributor,consumer)
     }
 
     /**

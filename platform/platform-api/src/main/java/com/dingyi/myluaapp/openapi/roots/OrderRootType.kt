@@ -49,7 +49,7 @@ open class OrderRootType protected constructor(private val myName: String) {
 
     companion object {
         private var ourExtensionsLoaded = false
-        val EP_NAME = create<OrderRootType>("com.intellij.orderRootType")
+        val EP_NAME = create<OrderRootType>("com.dingyi.myluaapp.orderRootType")
 
         @JvmField
         var ourPersistentOrderRootTypes = arrayOf<PersistentOrderRootType>()

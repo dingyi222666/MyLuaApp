@@ -16,7 +16,6 @@ import com.dingyi.myluaapp.openapi.service.ServiceRegistry
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
 import com.intellij.util.ThreeState
-import org.jdom.Element
 import org.jetbrains.annotations.TestOnly
 import java.lang.reflect.Modifier
 import java.util.*
@@ -85,26 +84,26 @@ class ExtensionsAreaImpl(private val componentManager: ServiceRegistry) : Extens
       }
     }
   }
-
+/*
   @TestOnly
   fun registerExtensionPoints(pluginDescriptor: PluginDescriptor, extensionPointElements: List<Element>) {
     for (element in extensionPointElements) {
       var pointName = element.getAttributeValue("qualifiedName")
       if (pointName == null) {
         val name = element.getAttributeValue("name")
-                   ?: /*throw componentManager.createError*/ error("'name' attribute not specified for extension point in '$pluginDescriptor' plugin ${pluginDescriptor.pluginId}")
+                   ?: *//*throw componentManager.createError*//* error("'name' attribute not specified for extension point in '$pluginDescriptor' plugin ${pluginDescriptor.pluginId}")
         pointName = pluginDescriptor.pluginId.idString + '.' + name
       }
 
       val beanClassName = element.getAttributeValue("beanClass")
       val interfaceClassName = element.getAttributeValue("interface")
       if (beanClassName == null && interfaceClassName == null) {
-        /*throw componentManager.createError*/ error(
+        *//*throw componentManager.createError*//* error(
           "Neither 'beanClass' nor 'interface' attribute is specified for extension point '$pointName' in '${pluginDescriptor}' plugin ${pluginDescriptor.pluginId}"
         )
       }
       if (beanClassName != null && interfaceClassName != null) {
-       /* throw componentManager.createError*/ error(
+       *//* throw componentManager.createError*//* error(
           "Both 'beanClass' and 'interface' attributes are specified for extension point '$pointName' in '$pluginDescriptor' plugin ${pluginDescriptor.pluginId}"
         )
       }
@@ -116,7 +115,7 @@ class ExtensionsAreaImpl(private val componentManager: ServiceRegistry) : Extens
                                     isInterface = interfaceClassName != null,
                                     dynamic = dynamic)
     }
-  }
+  }*/
 
   fun unregisterExtensions(extensionPointName: String,
                            pluginDescriptor: PluginDescriptor,
@@ -280,8 +279,8 @@ class ExtensionsAreaImpl(private val componentManager: ServiceRegistry) : Extens
 
   fun <T : Any> findExtensionByClass(aClass: Class<T>): T? {
     // TeamCity plugin wants DefaultDebugExecutor in constructor
-    if (aClass.name == "com.intellij.execution.executors.DefaultDebugExecutor") {
-      return getExtensionPointIfRegistered<Any>("com.intellij.executor")?.findExtension(aClass, false, ThreeState.YES)
+    if (aClass.name == "com.dingyi.myluaapp.execution.executors.DefaultDebugExecutor") {
+      return getExtensionPointIfRegistered<Any>("com.dingyi.myluaapp.executor")?.findExtension(aClass, false, ThreeState.YES)
     }
 
     for (point in extensionPoints.values) {

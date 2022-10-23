@@ -20,7 +20,7 @@ object LanguageUtil {
     fun getFileLanguage(file: VirtualFile?): Language? {
         if (file == null) return null
 
-        return  getFileTypeLanguage(file.getFileType())
+        return getFileTypeLanguage(file.getFileType())
     }
 
 

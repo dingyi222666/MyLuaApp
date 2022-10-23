@@ -10,11 +10,11 @@ import com.dingyi.myluaapp.openapi.vfs.VirtualFile
  * Contains useful information about the current completion request
  */
 class CompletionParameters private constructor(
-    project: Project,
-    editor: Editor,
-    file: VirtualFile,
-    prefix: String?,
-    caret: Caret
+    val project: Project,
+    val editor: Editor,
+    val file: VirtualFile,
+    val prefix: String?,
+    val caret: Caret
 ) {
 
 }

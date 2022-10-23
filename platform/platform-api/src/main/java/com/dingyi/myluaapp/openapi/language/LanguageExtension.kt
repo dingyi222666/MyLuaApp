@@ -7,9 +7,9 @@ import com.dingyi.myluaapp.util.KeyedLazyInstance
 import com.intellij.openapi.util.Key
 import com.intellij.util.containers.ContainerUtil
 
-class LanguageExtension<T : Any> @JvmOverloads constructor(
+open class LanguageExtension<T : Any> constructor(
     epName: String,
-    val defaultImplementation: T? = null
+    val defaultImplementation: T?
 ) : KeyedExtensionCollector<T, Language>(epName) {
     private  /* non static!!! */ val myCacheKey: Key<T>
     private  /* non static!!! */ val myAllCacheKey: Key<List<T>>
@@ -20,11 +20,15 @@ class LanguageExtension<T : Any> @JvmOverloads constructor(
     ) {
     }
 
+
     constructor(
         epName: ExtensionPointName<out KeyedLazyInstance<T>>,
         defaultImplementation: T?
     ) : this(epName.name, defaultImplementation) {
     }
+
+    constructor(epName: String) : this(epName,null)
+
 
     init {
         myCacheKey = Key.create("EXTENSIONS_IN_LANGUAGE_$epName")

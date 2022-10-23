@@ -44,6 +44,7 @@ dependencies {
     compileOnly(project(":platform-common"))
     compileOnly(project(":platform-api"))
     compileOnly(project(":extensions"))
+    compileOnly(project(":platform-util"))
     implementation(BuildConfig.Libs.Default.kotlinx_coroutines_android)
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
 

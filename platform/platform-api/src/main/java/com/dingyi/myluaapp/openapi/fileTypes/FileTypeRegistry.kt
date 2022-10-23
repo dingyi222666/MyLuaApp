@@ -123,6 +123,6 @@ abstract class FileTypeRegistry {
                 return instanceGetter.get()
             }
 
-        const val extensionName = "com.intellij.fileType"
+        const val extensionName = "com.dingyi.myluaapp.fileType"
     }
 }

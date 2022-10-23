@@ -97,6 +97,6 @@ abstract class OrderEnumerationHandler {
     }
 
     companion object {
-        val EP_NAME = create<Factory>("com.intellij.orderEnumerationHandlerFactory")
+        val EP_NAME = create<Factory>("com.dingyi.myluaapp.orderEnumerationHandlerFactory")
     }
 }

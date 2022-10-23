@@ -25,7 +25,7 @@ import java.util.function.Function
 import java.util.function.Predicate
 
 
-open class KeyedExtensionCollector<T : Any, KeyT>(val name: String) : ModificationTracker {
+open class KeyedExtensionCollector<T : Any, KeyT:Any>(val name: String) : ModificationTracker {
 
 
     protected val myLock: String = "lock for KeyedExtensionCollector $name"

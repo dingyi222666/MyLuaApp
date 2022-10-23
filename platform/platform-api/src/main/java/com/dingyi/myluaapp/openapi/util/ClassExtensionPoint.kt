@@ -6,7 +6,7 @@ import com.dingyi.myluaapp.util.KeyedLazyInstance
 
 
 class ClassExtensionPoint<T> :
-    KeyedLazyInstance<T>,BaseKeyedLazyInstance<T>() {
+    KeyedLazyInstance<T>, BaseKeyedLazyInstance<T>() {
     // these must be public for scrambling compatibility
 
     lateinit var forClass: String

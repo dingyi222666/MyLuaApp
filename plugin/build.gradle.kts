@@ -71,9 +71,8 @@ dependencies {
 
     BuildConfig.Libs.Views.sora_editor.forEach {
         implementation(it) {
-
-            exclude("xml-apis", "xml-apis")
             exclude("xerces","xercesImpl")
+            exclude("xml-apis", "xml-apis")
         }
     }
 
