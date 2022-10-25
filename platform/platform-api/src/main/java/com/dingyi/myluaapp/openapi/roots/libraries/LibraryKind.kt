@@ -53,7 +53,7 @@ class LibraryKind(@param:NonNls val kindId: String) {
                 "com.dingyi.myluaapp.openapi.roots.libraries.LibraryKindRegistry.Companion.getInstance"
             )
         )
-        fun findById(kindId: String?): LibraryKind? {
+        fun findById(kindId: String): LibraryKind? {
             return getInstance().findKindById(kindId)
         }
 

@@ -1,5 +1,7 @@
 package com.dingyi.myluaapp.ide.navigatable
 
+import kotlin.jvm.internal.Reflection
+
 
 /**
  * Represents an instance which can be shown in the IDE (e.g. a file, a specific location inside a file, etc).
