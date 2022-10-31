@@ -13,5 +13,5 @@ interface EditorColorsScheme {
 
     fun getName(name:String)
 
-    fun getFont():Typeface
+    fun getFont():Typeface?
 }

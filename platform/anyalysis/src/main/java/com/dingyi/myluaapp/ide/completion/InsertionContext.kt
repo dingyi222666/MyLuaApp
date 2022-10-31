@@ -19,10 +19,8 @@ class InsertionContext(
     var tailOffset: Int
         private set
 
-
     init {
         tailOffset = editor.getCaretModel().offset
-
     }
 
 
@@ -34,7 +32,4 @@ class InsertionContext(
         get() = editor.getProject()
 
 
-    companion object {
-
-    }
 }

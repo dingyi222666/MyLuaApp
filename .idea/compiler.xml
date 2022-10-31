@@ -2,36 +2,36 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
-      <module name="buildSrc.MyLuaApp.buildSrc.test" target="11" />
+      <module name="buildSrc.MyLuaApp.buildSrc.test" target="17" />
       <module name="MyLuaApp.AndroLua" target="11" />
       <module name="MyLuaApp.androlua" target="11" />
-      <module name="MyLuaApp.anyalysis" target="11" />
-      <module name="MyLuaApp.app" target="11" />
-      <module name="MyLuaApp.builder" target="11" />
+      <module name="MyLuaApp.anyalysis" target="17" />
+      <module name="MyLuaApp.app" target="17" />
+      <module name="MyLuaApp.builder" target="17" />
       <module name="MyLuaApp.builder-plugin-api" target="11" />
-      <module name="MyLuaApp.buildSrc" target="11" />
-      <module name="MyLuaApp.buildSrc.main" target="11" />
+      <module name="MyLuaApp.buildSrc" target="17" />
+      <module name="MyLuaApp.buildSrc.main" target="17" />
       <module name="MyLuaApp.buildSrc.test" target="11" />
       <module name="MyLuaApp.common" target="11" />
-      <module name="MyLuaApp.core" target="11" />
+      <module name="MyLuaApp.core" target="17" />
       <module name="MyLuaApp.core-api" target="11" />
-      <module name="MyLuaApp.core-imp" target="11" />
-      <module name="MyLuaApp.editor" target="11" />
-      <module name="MyLuaApp.extensions" target="11" />
-      <module name="MyLuaApp.ide-api" target="11" />
-      <module name="MyLuaApp.language-server.java" target="11" />
+      <module name="MyLuaApp.core-imp" target="17" />
+      <module name="MyLuaApp.editor" target="17" />
+      <module name="MyLuaApp.extensions" target="17" />
+      <module name="MyLuaApp.ide-api" target="17" />
+      <module name="MyLuaApp.language-server.java" target="17" />
       <module name="MyLuaApp.LuaLibrary" target="11" />
-      <module name="MyLuaApp.platform-api" target="11" />
-      <module name="MyLuaApp.platform-common" target="11" />
+      <module name="MyLuaApp.platform-api" target="17" />
+      <module name="MyLuaApp.platform-common" target="17" />
       <module name="MyLuaApp.platform-core-api" target="11" />
       <module name="MyLuaApp.platform-core-imp" target="11" />
       <module name="MyLuaApp.platform-extensions" target="11" />
-      <module name="MyLuaApp.platform-imp" target="11" />
-      <module name="MyLuaApp.platform-util" target="11" />
-      <module name="MyLuaApp.plugin" target="11" />
-      <module name="MyLuaApp.service-container" target="11" />
+      <module name="MyLuaApp.platform-imp" target="17" />
+      <module name="MyLuaApp.platform-util" target="17" />
+      <module name="MyLuaApp.plugin" target="17" />
+      <module name="MyLuaApp.service-container" target="17" />
       <module name="MyLuaApp.tm4e" target="11" />
-      <module name="MyLuaApp.treeview" target="11" />
+      <module name="MyLuaApp.treeview" target="17" />
       <module name="MyLuaApp2.buildSrc" target="11" />
       <module name="MyLuaApp2.buildSrc.main" target="11" />
       <module name="MyLuaApp2.buildSrc.test" target="11" />

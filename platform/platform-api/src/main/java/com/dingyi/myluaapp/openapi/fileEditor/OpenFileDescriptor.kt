@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.openapi.fileEditor
 
+import android.view.View
 import com.dingyi.myluaapp.openapi.actions.DataKey
 import com.dingyi.myluaapp.openapi.editor.CaretModel
 import com.dingyi.myluaapp.openapi.editor.Editor
@@ -23,22 +24,18 @@ class OpenFileDescriptor private constructor(
     val column: Int
 
 
-
-
-    constructor( project: Project,  file: VirtualFile) : this(
+    constructor(project: Project, file: VirtualFile) : this(
         project,
         file,
         -1,
         -1,
-    ) {
-    }
+    )
 
     init {
         myProject = project
         myFile = file
         line = logicalLine
         column = logicalColumn
-
     }
 
 
@@ -48,11 +45,11 @@ class OpenFileDescriptor private constructor(
 
 
     override fun navigate(requestFocus: Boolean) {
-        //FileNavigator.getInstance().navigate(this, requestFocus)
+        FileNavigator.instance.navigate(this, requestFocus)
     }
 
     fun navigateInEditor(project: Project, requestFocus: Boolean): Boolean {
-       // return FileNavigator.getInstance().navigateInEditor(this, requestFocus)
+        return FileNavigator.instance.navigateInEditor(this, requestFocus)
     }
 
     fun navigateIn(e: Editor) {
@@ -64,7 +61,7 @@ class OpenFileDescriptor private constructor(
     }
 
     override fun canNavigate(): Boolean {
-        //return FileNavigator.getInstance().canNavigate(myFile)
+        return FileNavigator.instance.canNavigate(this)
     }
 
     override fun canNavigateToSource(): Boolean {
@@ -80,7 +77,7 @@ class OpenFileDescriptor private constructor(
 
     }
 
-    override operator fun compareTo( o: OpenFileDescriptor): Int {
+    override operator fun compareTo(o: OpenFileDescriptor): Int {
         var i: Int = myProject.getName().compareTo(o.myProject.getName())
         if (i != 0) return i
         i = myFile.name.compareTo(o.myFile.getName())
@@ -96,7 +93,7 @@ class OpenFileDescriptor private constructor(
          */
         val NAVIGATE_IN_EDITOR: DataKey<Editor> = DataKey.create("NAVIGATE_IN_EDITOR")
         protected fun navigateInEditor(
-           descriptor: OpenFileDescriptor,
+            descriptor: OpenFileDescriptor,
             e: Editor
         ) {
             val caretModel: CaretModel = e.getCaretModel()
@@ -106,18 +103,16 @@ class OpenFileDescriptor private constructor(
                     descriptor.line, Math.max(
                         descriptor.column, 0
                     )
+                )
 
-
-
-                    caretModel.moveToLogicalPosition(pos)
-                    caretMoved = true
+                caretModel.moveToLogicalPosition(pos)
+                caretMoved = true
 
             }
             if (caretMoved) {
                 e.getSelectionModel().removeSelection()
                 FileEditorManager.getInstance(descriptor.project).runWhenLoaded(e) {
                     descriptor.scrollToCaret(e)
-                    unfoldCurrentLine(e)
                 }
             }
         }

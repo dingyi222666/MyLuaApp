@@ -14,4 +14,5 @@ interface VirtualFile : FileObject {
 
 
     override fun getParent():VirtualFile
+    abstract fun isValid(): Boolean
 }

@@ -1,6 +1,5 @@
 package com.dingyi.myluaapp.ide.completion
 
-import CompletionProcess
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
 import com.dingyi.myluaapp.openapi.progress.ProgressManager
 import com.intellij.util.Consumer
@@ -14,7 +13,7 @@ abstract class CompletionService {
      */
     fun getVariantsFromContributors(
         parameters: CompletionParameters,
-       from: CompletionContributor?,
+        from: CompletionContributor?,
         consumer: Consumer<in CompletionResult>
     ) {
         getVariantsFromContributors(

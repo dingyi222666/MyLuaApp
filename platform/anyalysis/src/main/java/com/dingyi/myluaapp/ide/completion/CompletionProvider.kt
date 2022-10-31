@@ -9,8 +9,6 @@ package com.dingyi.myluaapp.ide.completion
  * @author peter
  */
 abstract class CompletionProvider<V : CompletionParameters> {
-     protected constructor() {}
-
 
 
     protected abstract fun addCompletions(
