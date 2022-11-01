@@ -10,12 +10,10 @@ android {
     buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
 
     defaultConfig {
-        applicationId = "com.dingyi.myluaapp.ide.ui.android"
+
         minSdk = BuildConfig.Config.Default.minSdk
         targetSdk = BuildConfig.Config.Default.targetSdk
 
-        versionCode = BuildConfig.Config.App.versionCode
-        versionName = BuildConfig.Config.App.versionName
         multiDexEnabled = true
     }
 
@@ -29,11 +27,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 

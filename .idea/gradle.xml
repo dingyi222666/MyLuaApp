@@ -28,6 +28,7 @@
             <option value="$PROJECT_DIR$/platform/extensions" />
             <option value="$PROJECT_DIR$/platform/platform-api" />
             <option value="$PROJECT_DIR$/platform/platform-common" />
+            <option value="$PROJECT_DIR$/platform/platform-dsl" />
             <option value="$PROJECT_DIR$/platform/platform-imp" />
             <option value="$PROJECT_DIR$/platform/platform-util" />
             <option value="$PROJECT_DIR$/platform/service-container" />
