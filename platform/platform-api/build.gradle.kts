@@ -39,11 +39,12 @@ android {
 
 dependencies {
     compileOnly(BuildConfig.Libs.Tools.intellij_platform_util)
-    //compileOnly(BuildConfig.Libs.AndroidX.appcompat)
+    compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
     compileOnly(BuildConfig.Libs.Google.gson)
     compileOnly(project(":extensions"))
     compileOnly(project(":platform-common"))
     compileOnly(project(":platform-util"))
+    implementation(project(":android-support"))
     testImplementation(BuildConfig.Libs.Default.junit)
 }

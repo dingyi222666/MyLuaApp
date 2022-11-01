@@ -1,5 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+include(":android-support")
+
+
 //enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

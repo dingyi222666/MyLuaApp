@@ -15,7 +15,9 @@ import org.antlr.v4.kotlinruntime.ParserRuleContext
  * @date: 2021/10/7 10:50
  * @description: convert cst to ast
  **/
-class ASTGenerator() {
+class
+
+ASTGenerator() {
 
 
     fun generate(inputCode: String): ChunkNode {
