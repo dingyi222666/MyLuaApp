@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
 }
 
+
 android {
     compileSdk = BuildConfig.Config.Default.compileSdk
     buildToolsVersion = BuildConfig.Config.Default.buildToolsVersion
