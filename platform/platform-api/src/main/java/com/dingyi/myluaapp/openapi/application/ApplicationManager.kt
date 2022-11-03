@@ -1,9 +1,13 @@
 package com.dingyi.myluaapp.openapi.application
 
 import android.app.Application
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.util.Disposer
+
 
 object ApplicationManager {
 
+    @JvmStatic
     fun setAndroidApplication(androidApplication: Application) {
         ourAndroidApplication = androidApplication
     }
@@ -14,6 +18,16 @@ object ApplicationManager {
 
     fun setApplication(ideApplication: IDEApplication) {
         ourApplication = ideApplication
+    }
+
+    fun setApplication(ideApplication: IDEApplication, parent: Disposable) {
+        val old = ourApplication
+        Disposer.register(parent) {
+            if (old != null) { // to prevent NPEs in threads still running
+                setApplication(old)
+            }
+        }
+        setApplication(ideApplication)
     }
 
     fun getApplication(): IDEApplication {

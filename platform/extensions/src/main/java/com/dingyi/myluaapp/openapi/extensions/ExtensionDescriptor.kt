@@ -1,9 +1,9 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.dingyi.myluaapp.openapi.extensions
 
-import org.jetbrains.annotations.ApiStatus
 
-@ApiStatus.Internal
+
+
 class ExtensionDescriptor(
     @JvmField val implementation: String?,
     @JvmField val orderId: String?,
@@ -12,7 +12,7 @@ class ExtensionDescriptor(
 
 }
 
-@ApiStatus.Internal
+
 class ExtensionPointDescriptor(@JvmField val name: String,
                                @JvmField val isNameQualified: Boolean,
                                @JvmField val className: String,

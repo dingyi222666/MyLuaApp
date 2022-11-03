@@ -24,6 +24,7 @@ class MainApplication : Application() {
 
         instance = this
 
+
         // 初始化语种切换框架
         MultiLanguages.init(this);
 
@@ -32,6 +33,17 @@ class MainApplication : Application() {
         MMKV.initialize(this)
 
         LuaGlobal.init(this)
+
+
+        //set android application
+
+        val ideApplicationManager = classLoader
+            .loadClass("com.dingyi.myluaapp.openapi.application.ApplicationManager")
+
+        val setAndroidApplicationMethod = ideApplicationManager
+            .getMethod("setAndroidApplication", Application::class.java)
+
+        setAndroidApplicationMethod.invoke(null, this)
     }
 
     override fun attachBaseContext(base: Context) {

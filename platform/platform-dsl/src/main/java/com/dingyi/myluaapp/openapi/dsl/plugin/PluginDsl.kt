@@ -60,7 +60,6 @@ fun plugin(name: String, block: PluginDslBuilder.() -> Unit): PluginDslBuilder {
         }
         .also(block)
 }
-
 fun test() {
     plugin("JavaPlugin") {
         version = "114514"

@@ -42,6 +42,8 @@ dependencies {
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
     compileOnly(project(":platform-common"))
-    implementation(project(":platform-api"))
+    compileOnly(project(":platform-api"))
+    compileOnly(project(":service-container"))
+    compileOnly(project(":extensions"))
     testImplementation(BuildConfig.Libs.Default.junit)
 }

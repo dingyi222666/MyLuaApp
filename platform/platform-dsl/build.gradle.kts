@@ -37,6 +37,5 @@ android {
 }
 
 dependencies {
-
     implementation(project(":platform-api"))
 }
