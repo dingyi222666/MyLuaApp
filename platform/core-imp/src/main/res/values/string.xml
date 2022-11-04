@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="plugin.loading.error.long.incompatible">=Plugin \'%1$s\' (version \'%2$s\') is not compatible with the current version of the IDE, because it requires build %3$s or newer but the current build is %4$s</string>
+</resources>

@@ -14,7 +14,6 @@ import com.dingyi.myluaapp.openapi.extensions.LoadingOrder;
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor;
 import com.dingyi.myluaapp.openapi.service.ServiceRegistry;
 import com.intellij.diagnostic.StartUpMeasurer;
-import com.intellij.diagnostic.ThreadDumper;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.util.Disposer;
@@ -344,7 +343,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
     }
 
     // null id means that instance was created and extension element cleared
-    public final void processIdentifiableImplementations(@NotNull BiConsumer<? super @NotNull Supplier<? extends @Nullable T>, ? super @Nullable String> consumer) {
+    public final void processIdentifiableImplementations(@NotNull BiConsumer<? super Supplier<? extends @Nullable T>, ? super @Nullable String> consumer) {
         // do not use getThreadSafeAdapterList - no need to check that no listeners, because processImplementations is not a generic-purpose method
         for (ExtensionComponentAdapter adapter : getSortedAdapters()) {
             Supplier<T> supplier = () -> adapter.createInstance(componentManager);
@@ -1012,7 +1011,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
         return null;
     }
 
-    public final <V> @NotNull List<@NotNull T> findExtensions(@NotNull Class<V> aClass) {
+    public final <V> @NotNull List<T> findExtensions(@NotNull Class<V> aClass) {
         List<T> extensionsCache = cachedExtensions;
         if (extensionsCache == null) {
             List<T> suitableInstances = new ArrayList<>();

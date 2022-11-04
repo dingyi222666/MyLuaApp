@@ -24,8 +24,6 @@ class PluginDslBuilder internal constructor() {
     var description: String = ""
 
 
-    var descriptionWithMarkdown: String? = null
-
 
     lateinit var id: String
 

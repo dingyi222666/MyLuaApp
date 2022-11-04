@@ -2,76 +2,55 @@
 package com.dingyi.myluaapp.openapi.extensions;
 
 import com.intellij.openapi.util.NlsSafe;
+
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Date;
 
 public interface PluginDescriptor {
-  @NotNull PluginId getPluginId();
+    @NotNull
+    PluginId getPluginId();
 
-  @Nullable ClassLoader getPluginClassLoader();
+    @Nullable
+    ClassLoader getPluginClassLoader();
 
 
-  default @NotNull ClassLoader getClassLoader() {
-    ClassLoader classLoader = getPluginClassLoader();
-    return classLoader == null ? getClass().getClassLoader() : classLoader;
-  }
+    default @NotNull ClassLoader getClassLoader() {
+        ClassLoader classLoader = getPluginClassLoader();
+        return classLoader == null ? getClass().getClassLoader() : classLoader;
+    }
 
-  default boolean isBundled() {
-    return false;
-  }
+    @NotNull
+    String getAuthor();
 
-  /**
-   * @deprecated Use {@link #getPluginPath()}
-   */
-  @Deprecated
-  default File getPath() {
-    Path path = getPluginPath();
-    return path == null ? null : path.toFile();
-  }
-
-  Path getPluginPath();
-
-  @Nullable @Nls String getDescription();
-
-  @Nullable String getChangeNotes();
-
-  @NlsSafe String getName();
-
-  @Nullable String getProductCode();
-
-    int getReleaseVersion();
-
-  boolean isLicenseOptional();
-
-  /**
-   * @deprecated Do not use.
-   */
-  @Deprecated
-  PluginId @NotNull [] getOptionalDependentPluginIds();
-
-  @Nullable @NlsSafe String getVendor();
-
-    @NlsSafe String getVersion();
-
-    @Nullable String getVendorEmail();
-
-  @Nullable String getVendorUrl();
-
-  @Nullable String getUrl();
-
-  @Nullable @NlsSafe String getSinceBuild();
+    int getMinSdkVersion();
 
     /**
-   * If true, this plugin requires restart even if it otherwise fulfills the requirements of dynamic plugins.
-   */
-  default boolean isRequireRestart() { return false; }
+     * @deprecated Use {@link #getPluginPath()}
+     */
+    @Deprecated
+    default File getPath() {
+        Path path = getPluginPath();
+        return path == null ? null : path.toFile();
+    }
 
-  boolean isEnabled();
+    Path getPluginPath();
 
-  void setEnabled(boolean enabled);
+    @Nullable
+    @Nls
+    String getDescription();
+
+
+    @NotNull
+    String getVersion();
+
+    @NlsSafe String getName();
+
+
+    boolean isEnabled();
+
+    void setEnabled(boolean enabled);
 }

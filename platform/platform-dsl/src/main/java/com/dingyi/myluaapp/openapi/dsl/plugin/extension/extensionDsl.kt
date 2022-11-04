@@ -1,8 +1,6 @@
 package com.dingyi.myluaapp.openapi.dsl.plugin.extension
 
 import com.dingyi.myluaapp.openapi.dsl.plugin.PluginDslBuilder
-import com.dingyi.myluaapp.openapi.dsl.plugin.actions.ActionDslBuilder
-import com.dingyi.myluaapp.openapi.dsl.plugin.actions.ActionGroupDslBuilder
 
 class ExtensionPointsDslBuilder internal constructor() {
 

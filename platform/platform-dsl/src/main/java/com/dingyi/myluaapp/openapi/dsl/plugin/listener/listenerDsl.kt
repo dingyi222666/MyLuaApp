@@ -1,8 +1,6 @@
 package com.dingyi.myluaapp.openapi.dsl.plugin.listener
 
 import com.dingyi.myluaapp.openapi.dsl.plugin.PluginDslBuilder
-import com.dingyi.myluaapp.openapi.dsl.plugin.extension.extensions
-import com.dingyi.myluaapp.openapi.dsl.plugin.extension.func2
 
 class ListenerDslBuilder internal constructor(level: Level) {
 
