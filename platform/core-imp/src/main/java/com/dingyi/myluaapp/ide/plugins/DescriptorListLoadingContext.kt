@@ -18,10 +18,22 @@ private val LOG: Logger
 @ApiStatus.Internal
 class DescriptorListLoadingContext constructor(
     @JvmField val disabledPlugins: Set<PluginId>,
-    @JvmField val result: PluginLoadingResult = createPluginLoadingResult(),
+    @JvmField val result: PluginLoadingResult = createPluginLoadingResult(null),
     checkOptionalConfigFileUniqueness: Boolean = false,
     @JvmField val transient: Boolean = false
 )  {
+
+
+    @Volatile var defaultVersion: Int? = null
+        get() {
+            var result = field
+            if (result == null) {
+                result = this.result.productBuildNumber.get()
+                field = result
+            }
+            return result
+        }
+        private set
 
 
     private val optionalConfigNames: MutableMap<String, PluginId>? = if (checkOptionalConfigFileUniqueness) ConcurrentHashMap() else null

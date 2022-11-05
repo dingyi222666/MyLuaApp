@@ -28,8 +28,9 @@ import java.util.zip.ZipFile
 private val LOG: Logger
     get() = PluginManagerCore.logger
 
-internal fun createPluginLoadingResult(): PluginLoadingResult {
-    return PluginLoadingResult(brokenPluginVersions = PluginManagerCore.getBrokenPluginVersions())
+internal fun createPluginLoadingResult(buildNumber: Int?): PluginLoadingResult {
+    return PluginLoadingResult(brokenPluginVersions = PluginManagerCore.getBrokenPluginVersions(), productBuildNumber =
+    { buildNumber ?: PluginManagerCore.buildNumber })
 }
 
 fun loadDescriptor(file: Path,

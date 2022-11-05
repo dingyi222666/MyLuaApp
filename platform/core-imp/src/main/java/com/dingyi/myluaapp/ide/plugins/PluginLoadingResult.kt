@@ -1,5 +1,8 @@
 package com.dingyi.myluaapp.ide.plugins
 
+
+
+import com.dingyi.myluaapp.ide.ui.android.bundle.AndroidBundle
 import com.dingyi.myluaapp.openapi.extensions.PluginId
 import com.intellij.util.text.VersionComparatorUtil
 import org.jetbrains.annotations.ApiStatus
@@ -15,7 +18,9 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Supplier
 
 @ApiStatus.Internal
-class PluginLoadingResult(private val brokenPluginVersions: Map<PluginId, Set<String?>>) {
+class PluginLoadingResult(
+    private val brokenPluginVersions: Map<PluginId, Set<String?>>,
+    @JvmField val productBuildNumber: Supplier<Int>) {
     @JvmField
     val incompletePlugins = ConcurrentHashMap<PluginId, PluginDescriptorImpl>()
     private val plugins = HashMap<PluginId, PluginDescriptorImpl>()
@@ -85,8 +90,8 @@ class PluginLoadingResult(private val brokenPluginVersions: Map<PluginId, Set<St
     fun reportCannotLoad(file: Path, e: Throwable?) {
         PluginManagerCore.logger.warn("Cannot load $file", e)
         globalErrors.add(Supplier {
-            CoreBundle.message(
-                "plugin.loading.error.text.file.contains.invalid.plugin.descriptor",
+            AndroidBundle.coreBundle.message(
+                com.dingyi.myluaapp.ide.core.R.string.plugin_loading_error_text_file_contains_invalid_plugin_descriptor,
                 pluginPathToUserString(file)
             )
         })

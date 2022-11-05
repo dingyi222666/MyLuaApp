@@ -1,37 +1,24 @@
 package com.dingyi.myluaapp.ide.plugins
 
 
+import com.dingyi.myluaapp.diagnostic.Logger
 import com.dingyi.myluaapp.ide.ui.android.bundle.AndroidBundle
+import com.dingyi.myluaapp.openapi.application.PathManager
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.extensions.PluginId
-import com.intellij.core.CoreBundle
-import com.intellij.diagnostic.Activity
-import com.intellij.diagnostic.ActivityCategory
-import com.intellij.diagnostic.LoadingState
-import com.intellij.diagnostic.StartUpMeasurer
-import com.intellij.ide.plugins.cl.PluginAwareClassLoader
-import com.intellij.openapi.application.PathManager
-import com.intellij.openapi.application.impl.ApplicationInfoImpl
-import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.extensions.PluginDescriptor
-import com.intellij.openapi.extensions.PluginId
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.BuildNumber
-import com.intellij.openapi.util.NlsContexts
+import com.dingyi.myluaapp.openapi.project.Project
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.openapi.util.Pair
 import com.intellij.openapi.util.io.FileUtilRt
 import com.intellij.openapi.util.text.HtmlChunk
 import com.intellij.util.ArrayUtil
 import com.intellij.util.ArrayUtilRt
-import com.intellij.util.PlatformUtils
 import com.intellij.util.ReflectionUtil
 import com.intellij.util.containers.ContainerUtil
 import com.intellij.util.execution.ParametersListUtil
 import com.intellij.util.graph.DFSTBuilder
 import com.intellij.util.graph.GraphGenerator
 import com.intellij.util.graph.InboundSemiGraph
-import com.intellij.util.lang.UrlClassLoader
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
@@ -68,18 +55,15 @@ import java.util.stream.Stream
 object PluginManagerCore {
     @NonNls
     val META_INF: String = "META-INF/"
-    val CORE_ID = PluginId.getId("com.myluaapp")
-    val CORE_PLUGIN_ID: String = "com.myluaapp"
-    val JAVA_PLUGIN_ID = PluginId.getId("com.myluaapp.java")
-    val JAVA_MODULE_ID: PluginId = PluginId.getId("com.myluapp.modules.java")
+    val CORE_ID = PluginId.getId("com.dingyi.myluaapp")
+    val CORE_PLUGIN_ID: String = "com.dingyi.myluaapp"
+    val JAVA_PLUGIN_ID = PluginId.getId("com.dingyi.myluaapp.java")
+    val JAVA_MODULE_ID: PluginId = PluginId.getId("com.dingyi.myluapp.modules.java")
     val PLUGIN_XML: String = "plugin.xml"
     val PLUGIN_XML_PATH: String = META_INF + PLUGIN_XML
-    val ALL_MODULES_MARKER: PluginId = PluginId.getId(
-        com.myluapp.modules.all")
-
-                private
-                val MODULE_DEPENDENCY_PREFIX: String = "com.myluapp.module"
-        val SPECIAL_IDEA_PLUGIN_ID : PluginId = PluginId . getId ("MyLuaApp CORE")
+    val ALL_MODULES_MARKER: PluginId = PluginId.getId("com.dingyi.myluapp.modules.all")
+    val MODULE_DEPENDENCY_PREFIX: String = "com.dingyi.myluapp.module"
+    val SPECIAL_IDEA_PLUGIN_ID: PluginId = PluginId.getId("MyLuaApp CORE")
     val PROPERTY_PLUGIN_PATH: String = "plugin.path"
 
     @NonNls
@@ -103,7 +87,7 @@ object PluginManagerCore {
 
     @Volatile
     private var ourLoadedPlugins: List<PluginDescriptorImpl?>? = null
-    private var ourPluginLoadingErrors: Map<PluginId, PluginLoadingError>? = null
+    private var ourPluginLoadingErrors: Map<PluginId, Exception>? = null
     private var ourAdditionalLayoutMap: Map<String, Array<String>> = emptyMap()
 
     @Volatile
@@ -132,7 +116,7 @@ object PluginManagerCore {
             if (result == null) {
                 result = Files.isDirectory(
                     Paths.get(
-                        PathManager.getHomePath(),
+                        PathManager.homePath.toString(),
                         Project.DIRECTORY_STORE_FOLDER
                     )
                 )
@@ -144,7 +128,7 @@ object PluginManagerCore {
 
     @Volatile
     private var descriptorListFuture: CompletableFuture<DescriptorListLoadingContext?>? = null
-    private var ourBuildNumber: BuildNumber? = null
+    private var ourBuildNumber: Int? = 114514
 
     /**
      * Returns list of all available plugin descriptors (bundled and custom, include disabled ones). Use [.getLoadedPlugins]
@@ -190,7 +174,7 @@ object PluginManagerCore {
                 val errors: List<HtmlChunk> =
                     ContainerUtil.map(
                         ourPluginErrors,
-                        com.intellij.util.Function { obj: Supplier<out HtmlChunk> -> obj.get() })
+                        { obj: Supplier<out HtmlChunk> -> obj.get() })
                 ourPluginErrors.clear()
                 return errors
             }
@@ -231,7 +215,7 @@ object PluginManagerCore {
     }
 
     fun updateBrokenPlugins(brokenPlugins: Map<PluginId, Set<String?>>) {
-        brokenPluginVersions = SoftReference<Map<PluginId, Set<String?>>>(brokenPlugins)
+        brokenPluginVersions = SoftReference(brokenPlugins)
         val updatedBrokenPluginFile: Path = updatedBrokenPluginFile
         try {
             DataOutputStream(
@@ -1548,7 +1532,7 @@ object PluginManagerCore {
     val logger: Logger
         get() {
             // do not use class reference here
-            return Logger.getInstance("#com.intellij.ide.plugins.PluginManager")
+            return Logger.getInstance("#com.dingyi.myluaapp.ide.plugins.PluginManager")
         }
 
     fun getPlugin(id: PluginId?): PluginDescriptor? {

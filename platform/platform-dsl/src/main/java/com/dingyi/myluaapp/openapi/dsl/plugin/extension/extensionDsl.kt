@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.openapi.dsl.plugin.extension
 
 import com.dingyi.myluaapp.openapi.dsl.plugin.PluginDslBuilder
+import com.dingyi.myluaapp.openapi.extensions.ExtensionDescriptor
+import com.dingyi.myluaapp.openapi.extensions.LoadingOrder
 
 class ExtensionPointsDslBuilder internal constructor() {
 
@@ -37,16 +39,21 @@ class ExtensionPointBuilder internal constructor(var name: String) {
     infix fun String.withImplements(implement: String) {
         withAttributes[this] = implement
     }
+
+
 }
 
 
 class ExtensionsDslBuilder internal constructor(var pluginId: String = "com.myluaapp") {
 
 
-    val allImplementation = mutableListOf<ExtensionPointBuilder>()
+    val allImplementation = mutableMapOf<String, MutableList<ExtensionsImplementationBuilder>>()
 
     infix fun String.implementation(block: ExtensionsImplementationBuilder.() -> Unit): ExtensionsImplementationBuilder {
         val builder = ExtensionsImplementationBuilder().also(block)
+        val old = allImplementation[this] ?: mutableListOf()
+        old.add(builder)
+        allImplementation[this] = old
         return builder
     }
 
@@ -61,6 +68,15 @@ class ExtensionsImplementationBuilder internal constructor() {
     infix fun String.withKeyImplementation(implementationClass: Any) {
         beanImplementKeys[this] = implementationClass
     }
+
+    fun toExtensionDescriptor(): ExtensionDescriptor {
+        return ExtensionDescriptor(
+            implementation = implementation,
+            orderId = null,
+            order = LoadingOrder.FIRST
+        )
+    }
+
 }
 
 

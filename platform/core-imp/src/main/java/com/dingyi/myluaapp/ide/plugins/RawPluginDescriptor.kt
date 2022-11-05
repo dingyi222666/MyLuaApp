@@ -14,11 +14,15 @@ import java.time.LocalDate
 
 @ApiStatus.Internal
 class RawPluginDescriptor {
+
     @JvmField
     var id: String? = null
 
     @JvmField
     internal var name: String? = null
+
+    @JvmField
+    internal val author: String? = null
 
 
     @JvmField
@@ -42,10 +46,10 @@ class RawPluginDescriptor {
 
 
     @JvmField
-    var epNameToExtensionPoints: MutableMap<String, ExtensionsDslBuilder>? = null
+    var epNameToExtensions: ExtensionsDslBuilder? = null
 
 
     @JvmField
-    var epNameToExtensions: MutableMap<String, ExtensionPointsDslBuilder>? = null
+    var epNameToExtensionPoints: List<ExtensionPointsDslBuilder>? = null
 
 }
