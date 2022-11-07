@@ -37,6 +37,4 @@ android {
 }
 
 dependencies {
-    compileOnly(project(":platform-api"))
-    compileOnly(project(":extensions"))
 }

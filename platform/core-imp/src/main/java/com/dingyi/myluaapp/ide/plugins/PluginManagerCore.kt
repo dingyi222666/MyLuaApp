@@ -22,7 +22,6 @@ import com.intellij.util.graph.InboundSemiGraph
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
-import org.jetbrains.annotations.PropertyKey
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.DataInputStream
@@ -54,17 +53,18 @@ import java.util.stream.Stream
 // Prefer to use only JDK classes. Any post start-up functionality should be placed in PluginManager class.
 object PluginManagerCore {
     @NonNls
-    val META_INF: String = "META-INF/"
-    val CORE_ID = PluginId.getId("com.dingyi.myluaapp")
-    val CORE_PLUGIN_ID: String = "com.dingyi.myluaapp"
-    val JAVA_PLUGIN_ID = PluginId.getId("com.dingyi.myluaapp.java")
-    val JAVA_MODULE_ID: PluginId = PluginId.getId("com.dingyi.myluapp.modules.java")
-    val PLUGIN_XML: String = "plugin.xml"
-    val PLUGIN_XML_PATH: String = META_INF + PLUGIN_XML
-    val ALL_MODULES_MARKER: PluginId = PluginId.getId("com.dingyi.myluapp.modules.all")
-    val MODULE_DEPENDENCY_PREFIX: String = "com.dingyi.myluapp.module"
-    val SPECIAL_IDEA_PLUGIN_ID: PluginId = PluginId.getId("MyLuaApp CORE")
-    val PROPERTY_PLUGIN_PATH: String = "plugin.path"
+    val ASSETS: String = "META-INF/"
+
+    const val CORE_PLUGIN_ID: String = "com.dingyi.myluaapp"
+    const val CORE_ID = PluginId.getId(CORE_PLUGIN_ID)
+    const val JAVA_PLUGIN_ID = PluginId.getId("com.dingyi.myluaapp.java")
+    const val JAVA_MODULE_ID: PluginId = PluginId.getId("com.dingyi.myluapp.modules.java")
+    const val PLUGIN_DSL: String = "plugin.init"
+    const val PLUGIN_DSL_PATH: String = ASSETS + PLUGIN_DSL
+    const val ALL_MODULES_MARKER: PluginId = PluginId.getId("com.dingyi.myluapp.modules.all")
+    const val MODULE_DEPENDENCY_PREFIX: String = "com.dingyi.myluapp.module"
+    const val SPECIAL_IDEA_PLUGIN_ID: PluginId = PluginId.getId("MyLuaApp CORE")
+    const val PROPERTY_PLUGIN_PATH: String = "plugin.path"
 
     @NonNls
     val DISABLE: String = "disable"
@@ -116,7 +116,7 @@ object PluginManagerCore {
             if (result == null) {
                 result = Files.isDirectory(
                     Paths.get(
-                        PathManager.homePath.toString(),
+                        PathManager.homePath,
                         Project.DIRECTORY_STORE_FOLDER
                     )
                 )
@@ -201,7 +201,7 @@ object PluginManagerCore {
         )
     }
 
-    fun isDisabled(pluginId: PluginId): Boolean {
+    fun isDisabled(pluginId8: PluginId): Boolean {
         return DisabledPluginsState.isDisabled(pluginId)
     }
 

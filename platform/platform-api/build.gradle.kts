@@ -45,6 +45,6 @@ dependencies {
     compileOnly(project(":extensions"))
     compileOnly(project(":platform-common"))
     compileOnly(project(":platform-util"))
-    implementation(project(":android-support"))
+    compileOnly(project(":android-support"))
     testImplementation(BuildConfig.Libs.Default.junit)
 }

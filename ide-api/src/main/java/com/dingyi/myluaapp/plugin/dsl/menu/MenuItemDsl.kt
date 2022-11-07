@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.plugin.dsl.menu
 
 import android.view.MenuItem
+import com.dingyi.myluaapp.common.ktx.checkNotNull
 
 fun MenuItem.dsl(dsl: MenuItemConfig.() -> Unit) {
     val config = MenuItemConfig()
@@ -22,16 +23,15 @@ class MenuItemConfig {
     fun apply(menuItem: MenuItem, it: Triple<String, String, MenuItemConfig.() -> Unit>): MenuItem {
 
         val item = if (it.second == "submenu") {
-            menuItem.subMenu.addSubMenu(it.first).item
+            menuItem.subMenu?.addSubMenu(it.first)?.item
         } else {
-            menuItem.subMenu.add(it.first)
-
+            menuItem.subMenu?.add(it.first)
         }
 
 
-        item.dsl(it.third)
+        item?.dsl(it.third)
 
-        return item
+        return item.checkNotNull()
 
     }
 

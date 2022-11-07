@@ -1,8 +1,6 @@
 package com.dingyi.myluaapp.openapi.dsl.plugin.extension
 
 import com.dingyi.myluaapp.openapi.dsl.plugin.PluginDslBuilder
-import com.dingyi.myluaapp.openapi.extensions.ExtensionDescriptor
-import com.dingyi.myluaapp.openapi.extensions.LoadingOrder
 
 class ExtensionPointsDslBuilder internal constructor() {
 
@@ -69,13 +67,6 @@ class ExtensionsImplementationBuilder internal constructor() {
         beanImplementKeys[this] = implementationClass
     }
 
-    fun toExtensionDescriptor(): ExtensionDescriptor {
-        return ExtensionDescriptor(
-            implementation = implementation,
-            orderId = null,
-            order = LoadingOrder.FIRST
-        )
-    }
 
 }
 

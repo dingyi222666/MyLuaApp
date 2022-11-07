@@ -1,16 +1,14 @@
 package com.dingyi.myluaapp.ide.plugins
 
+import com.dingyi.myluaapp.diagnostic.Logger
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.extensions.PluginId
-import com.intellij.openapi.diagnostic.Logger
 import org.jetbrains.annotations.ApiStatus
 import java.util.ArrayList
 import java.util.Arrays
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 
-
-private val unitTestWithBundledPlugins = java.lang.Boolean.getBoolean("idea.run.tests.with.bundled.plugins")
 
 private val LOG: Logger
     get() = PluginManagerCore.logger
@@ -21,7 +19,7 @@ class DescriptorListLoadingContext constructor(
     @JvmField val result: PluginLoadingResult = createPluginLoadingResult(null),
     checkOptionalConfigFileUniqueness: Boolean = false,
     @JvmField val transient: Boolean = false
-)  {
+):AutoCloseable  {
 
 
     @Volatile var defaultVersion: Int? = null
@@ -59,6 +57,10 @@ class DescriptorListLoadingContext constructor(
                 "Please rename to ensure that lookup in the classloader by short name returns correct optional config. " +
                 "Current plugin: $descriptor.")
         return true
+    }
+
+    override fun close() {
+
     }
 }
 

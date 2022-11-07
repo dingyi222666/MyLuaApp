@@ -1,7 +1,7 @@
 package com.dingyi.myluaapp.ide.ui.android.bundle
 
+import android.app.Application
 import android.content.Context
-import com.dingyi.myluaapp.openapi.application.ApplicationManager
 
 
 class AndroidBundle(
@@ -25,7 +25,14 @@ class AndroidBundle(
             @Synchronized
             get() {
                 if (!this::CORE_BUNDER.isInitialized) {
-                    CORE_BUNDER = AndroidBundle(ApplicationManager.getAndroidApplication())
+                    val applicationManagerClass =
+                        javaClass.classLoader.loadClass("com.dingyi.myluapp.openapi.application.ApplicationManager")
+                    CORE_BUNDER = AndroidBundle(
+                        applicationManagerClass.getMethod(
+                            "getAndroidApplication",
+                            null
+                        ).invoke(null) as Application
+                    )
                 }
                 return CORE_BUNDER
             }

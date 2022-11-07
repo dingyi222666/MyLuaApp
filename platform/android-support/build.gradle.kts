@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
 }
 
@@ -44,5 +44,4 @@ dependencies {
     implementation(BuildConfig.Libs.AndroidX.constraint_layout)
     implementation(BuildConfig.Libs.AndroidX.preference_ktx)
     implementation(BuildConfig.Libs.Google.material)
-    implementation(project(":platform-api"))
 }

@@ -48,6 +48,12 @@ android {
             }
         }
     }
+
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
     packagingOptions {
         resources.excludes.addAll(listOf("META-INF/**","xsd/*","license/*"))
         resources.pickFirsts.add("kotlin/**")

@@ -9,6 +9,7 @@ import com.dingyi.myluaapp.openapi.extensions.ExtensionDescriptor
 import com.dingyi.myluaapp.openapi.extensions.ExtensionsArea
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.extensions.PluginId
+import com.dingyi.myluaapp.openapi.extensions.dsl.toExtensionDescriptor
 import com.dingyi.myluaapp.openapi.extensions.impl.ExtensionPointImpl
 import com.dingyi.myluaapp.plaform.util.plugins.DataLoader
 import org.jetbrains.annotations.ApiStatus
@@ -58,7 +59,7 @@ class PluginDescriptorImpl(
     // extension point name -> list of extension descriptors
     val epNameToExtensions: Map<String, List<ExtensionDescriptor>>? =
         raw.epNameToExtensions?.allImplementation
-            ?.mapValues { it.value.map { it.toExtensionDescriptor() } }
+            ?.mapValues { values -> values.value.map { it.toExtensionDescriptor() } }
 
 
     @JvmField
