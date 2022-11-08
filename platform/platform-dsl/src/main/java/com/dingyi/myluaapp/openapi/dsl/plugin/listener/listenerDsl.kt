@@ -2,7 +2,7 @@ package com.dingyi.myluaapp.openapi.dsl.plugin.listener
 
 import com.dingyi.myluaapp.openapi.dsl.plugin.PluginDslBuilder
 
-class ListenerDslBuilder internal constructor(level: Level) {
+class ListenerDslBuilder internal constructor( val level: Level) {
 
     val allListener = mutableListOf<ListenerImplementationBuilder>()
 

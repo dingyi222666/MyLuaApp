@@ -1,7 +1,6 @@
 package com.dingyi.myluaapp.ide.plugins
 
 
-
 import com.dingyi.myluaapp.diagnostic.Logger
 import com.dingyi.myluaapp.plaform.util.plugins.DataLoader
 import java.io.IOException
@@ -13,37 +12,43 @@ import java.util.zip.ZipFile
 class PluginPathResolver(private val pluginJarFiles: List<Path>) : PathResolver {
     companion object {
         // don't use Kotlin emptyList here
-        @JvmField val DEFAULT_PATH_RESOLVER: PathResolver = PluginPathResolver(Collections.emptyList())
+        @JvmField
+        val DEFAULT_PATH_RESOLVER: PathResolver = PluginPathResolver(Collections.emptyList())
 
-        private fun loadUsingZipFile(readInto: RawPluginDescriptor,
-                                     readContext: DescriptorListLoadingContext,
-                                     pathResolver: PathResolver,
-                                     dataLoader: DataLoader,
-                                     jarFile: Path,
-                                     relativePath: String,
-                                    /* includeBase: String?*/): Boolean {
+        private fun loadUsingZipFile(
+            readInto: RawPluginDescriptor?,
+            readContext: DescriptorListLoadingContext,
+            pathResolver: PathResolver,
+            dataLoader: DataLoader,
+            jarFile: Path,
+            relativePath: String,
+            /* includeBase: String?*/
+        ): Boolean {
             val zipFile = ZipFile(jarFile.toFile())
             try {
                 // do not use kotlin stdlib here
-                val entry = zipFile.getEntry(if (relativePath.startsWith("/")) relativePath.substring(1) else relativePath) ?: return false
-                readModuleDescriptor(inputStream = zipFile.getInputStream(entry),
+                val entry =
+                    zipFile.getEntry(if (relativePath.startsWith("/")) relativePath.substring(1) else relativePath)
+                        ?: return false
+                val stream = zipFile.getInputStream(entry) ?: return false
+                readModuleDescriptor(
+                    input = stream,
                     readContext = readContext,
                     pathResolver = pathResolver,
                     dataLoader = dataLoader,
-                 /*   includeBase = includeBase,*/
+                    /*   includeBase = includeBase,*/
                     readInto = readInto,
-                    locationSource = jarFile.toString())
+                    locationSource = jarFile.toString()
+                )
                 return true
-            }
-            catch (e: IOException) {
-                Logger.getInstance(PluginPathResolver::class.java).error("Corrupted jar file: $jarFile", e)
+            } catch (e: IOException) {
+                Logger.getInstance(PluginPathResolver::class.java)
+                    .error("Corrupted jar file: $jarFile", e)
                 return false
-            }
-            finally {
+            } finally {
                 zipFile.close()
             }
         }
-
 
 
         internal fun getParentPath(path: String): String {
@@ -72,23 +77,33 @@ class PluginPathResolver(private val pluginJarFiles: List<Path>) : PathResolver 
     }
 
 
-    override fun resolvePath(readContext: DescriptorListLoadingContext,
-                             dataLoader: DataLoader,
-                             relativePath: String,
-                             readInto: RawPluginDescriptor?): RawPluginDescriptor? {
+    override fun resolvePath(
+        readContext: DescriptorListLoadingContext,
+        dataLoader: DataLoader,
+        relativePath: String,
+        readInto: RawPluginDescriptor?
+    ): RawPluginDescriptor? {
         val path = toLoadPath(relativePath, null)
         dataLoader.load(path)?.let {
-            return readModuleDescriptor(input = it,
+            return readModuleDescriptor(
+                input = it.inputStream(),
                 readContext = readContext,
                 pathResolver = this,
                 dataLoader = dataLoader,
-               /* includeBase = null,*/
+                /* includeBase = null,*/
                 readInto = readInto,
-                locationSource = null)
+                locationSource = null
+            )
         }
 
         val result = readInto ?: RawPluginDescriptor()
-        if (findInJarFiles(readInto = result, dataLoader = dataLoader,/* readContext = readContext, */relativePath = path, includeBase = null)) {
+        if (findInJarFiles(
+                readInto = result,
+                readContext = readContext,
+                dataLoader = dataLoader,/* readContext = readContext, */
+                relativePath = path/*, includeBase = null*/
+            )
+        ) {
             return result
         }
 
@@ -99,48 +114,53 @@ class PluginPathResolver(private val pluginJarFiles: List<Path>) : PathResolver 
         return null
     }
 
-    private fun findInJarFiles(readInto: RawPluginDescriptor,
-                                  readContext: DescriptorListLoadingContext,
-                               dataLoader: DataLoader,
-                               relativePath: String,
-                             /*  includeBase: String?*/): Boolean {
+    private fun findInJarFiles(
+        readInto: RawPluginDescriptor,
+        readContext: DescriptorListLoadingContext,
+        dataLoader: DataLoader,
+        relativePath: String,
+        /*  includeBase: String?*/
+    ): Boolean {
         /*val pool = dataLoader.pool*/
         for (jarFile in pluginJarFiles) {
             if (dataLoader.isExcludedFromSubSearch(jarFile)) {
                 continue
             }
 
-          /*  if (pool == null) {*/
-                if (loadUsingZipFile(readInto = readInto,
-                       readContext = readContext,
-                        pathResolver = this,
-                        dataLoader = dataLoader,
-                        jarFile = jarFile,
-                        relativePath = relativePath,
-                      /*  includeBase = includeBase*/)) {
-                    return true
-                }
-           /* }*/
-           /* else {
-                val resolver = try {
-                    pool.load(jarFile)
-                }
-                catch (e: IOException) {
-                    Logger.getInstance(PluginPathResolver::class.java).error("Corrupted jar file: $jarFile", e)
-                    continue
-                }
+            /*  if (pool == null) {*/
+            if (loadUsingZipFile(
+                    readInto = readInto,
+                    readContext = readContext,
+                    pathResolver = this,
+                    dataLoader = dataLoader,
+                    jarFile = jarFile,
+                    relativePath = relativePath,
+                    /*  includeBase = includeBase*/
+                )
+            ) {
+                return true
+            }
+            /* }*/
+            /* else {
+                 val resolver = try {
+                     pool.load(jarFile)
+                 }
+                 catch (e: IOException) {
+                     Logger.getInstance(PluginPathResolver::class.java).error("Corrupted jar file: $jarFile", e)
+                     continue
+                 }
 
-                resolver.loadZipEntry(relativePath)?.let {
-                    readModuleDescriptor(input = it,
-                        readContext = readContext,
-                        pathResolver = this,
-                        dataLoader = dataLoader,
-                        includeBase = includeBase,
-                        readInto = readInto,
-                        locationSource = jarFile.toString())
-                    return true
-                }
-            }*/
+                 resolver.loadZipEntry(relativePath)?.let {
+                     readModuleDescriptor(input = it,
+                         readContext = readContext,
+                         pathResolver = this,
+                         dataLoader = dataLoader,
+                         includeBase = includeBase,
+                         readInto = readInto,
+                         locationSource = jarFile.toString())
+                     return true
+                 }
+             }*/
         }
         return false
     }

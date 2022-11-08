@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.ide.plugins
 
 import com.dingyi.myluaapp.openapi.dsl.plugin.actions.ActionsDslBuilder
+import com.dingyi.myluaapp.openapi.dsl.plugin.extension.ExtensionPointBuilder
 import com.dingyi.myluaapp.openapi.dsl.plugin.extension.ExtensionPointsDslBuilder
 import com.dingyi.myluaapp.openapi.dsl.plugin.extension.ExtensionsDslBuilder
 import com.dingyi.myluaapp.openapi.dsl.plugin.listener.ListenerDslBuilder
@@ -22,7 +23,7 @@ class RawPluginDescriptor {
     internal var name: String? = null
 
     @JvmField
-    internal val author: String? = null
+    internal var author: String? = null
 
 
     @JvmField
@@ -38,7 +39,7 @@ class RawPluginDescriptor {
     internal var minSdkVersion: Int? = null
 
     @JvmField
-    var listeners: ListenerDslBuilder? = null
+    var listeners: MutableList<ListenerDslBuilder>? = null
 
 
     @JvmField
@@ -46,10 +47,14 @@ class RawPluginDescriptor {
 
 
     @JvmField
-    var epNameToExtensions: ExtensionsDslBuilder? = null
+    var epNameToExtensions: List<ExtensionsDslBuilder>? = null
 
 
     @JvmField
-    var epNameToExtensionPoints: List<ExtensionPointsDslBuilder>? = null
+    var epNameToExtensionPoints: List<ExtensionPointBuilder>? = null
+
+
+    @JvmField
+    var applicationClassName: String? = null
 
 }

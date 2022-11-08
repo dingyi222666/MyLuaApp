@@ -6,18 +6,14 @@ import com.dingyi.myluaapp.ide.ui.android.bundle.AndroidBundle
 import com.dingyi.myluaapp.openapi.dsl.plugin.extension.ExtensionPointBuilder
 import com.dingyi.myluaapp.openapi.dsl.plugin.extension.ExtensionsDslBuilder
 import com.dingyi.myluaapp.openapi.extensions.ExtensionDescriptor
-import com.dingyi.myluaapp.openapi.extensions.ExtensionsArea
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.extensions.PluginId
 import com.dingyi.myluaapp.openapi.extensions.dsl.toExtensionDescriptor
 import com.dingyi.myluaapp.openapi.extensions.impl.ExtensionPointImpl
 import com.dingyi.myluaapp.plaform.util.plugins.DataLoader
 import org.jetbrains.annotations.ApiStatus
-import org.jetbrains.annotations.PropertyKey
 import java.io.File
-import java.io.IOException
 import java.nio.file.Path
-import java.time.ZoneOffset
 import java.util.Collections
 
 
@@ -28,7 +24,8 @@ private val LOG: Logger
 class PluginDescriptorImpl(
     raw: RawPluginDescriptor,
     val path: Path,
-    id: PluginId?
+    id: PluginId?,
+    val isBundled: Boolean = false
 ) : PluginDescriptor {
     val id: PluginId = id ?: PluginId.getId(
         raw.id ?: raw.name ?: throw RuntimeException("Nor id, neither name are specified")
@@ -58,8 +55,11 @@ class PluginDescriptorImpl(
 
     // extension point name -> list of extension descriptors
     val epNameToExtensions: Map<String, List<ExtensionDescriptor>>? =
-        raw.epNameToExtensions?.allImplementation
-            ?.mapValues { values -> values.value.map { it.toExtensionDescriptor() } }
+        mutableMapOf<String, List<ExtensionDescriptor>>().apply {
+            raw.epNameToExtensions?.map { extensionsDslBuilder ->
+                putAll(extensionsDslBuilder.allImplementation.mapValues { it.value.map { it.toExtensionDescriptor() } })
+            }
+        }
 
 
     @JvmField
@@ -153,7 +153,7 @@ class PluginDescriptorImpl(
              dependencies = pluginDependencies,
              dataLoader = dataLoader
          )
- */
+    */
         checkCompatibility(context)
     }
 
@@ -162,7 +162,7 @@ class PluginDescriptorImpl(
         /* if (isBundled || (sinceBuild == null && untilBuild == null)) {
              return
          }
- */
+    */
         val error = PluginManagerCore.checkBuildNumberCompatibility(
             this,
             context.result.productBuildNumber.get()
@@ -268,7 +268,7 @@ class PluginDescriptorImpl(
         return registeredCount
     }
 
-    override fun getDescription(): String{
+    override fun getDescription(): String {
         return description.toString()
     }
 
