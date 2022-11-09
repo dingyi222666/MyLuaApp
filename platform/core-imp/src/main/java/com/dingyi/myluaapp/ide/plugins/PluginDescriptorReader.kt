@@ -4,21 +4,13 @@ import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.ide.plugins.cl.DslLoaderClassLoader
 import com.dingyi.myluaapp.openapi.dsl.plugin.PluginConfig
 import com.dingyi.myluaapp.plaform.util.plugins.DataLoader
+import org.xmlpull.v1.XmlPullParser
 import java.io.ByteArrayInputStream
 import java.io.InputStream
-import java.io.Reader
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 
 
-/**
- * inputStream: InputStream,
- * readContext: DescriptorListLoadingContext,
- * pathResolver: PathResolver,
- * dataLoader: DataLoader,
- * readInto: RawPluginDescriptor?,
- * locationSource: String
- */
 
 fun readModuleDescriptor(
     input: InputStream?,
@@ -40,24 +32,98 @@ fun readModuleDescriptor(
 
     val systemClassLoader = getJavaClass<RawPluginDescriptor>().classLoader
 
-    descriptor = if (filePath == null) {
-        loadModuleDescriptor(
-            systemClassLoader,
-            mainClassName,
-            descriptor
-        )
+    val descriptorClassLoader = if (filePath == null) {
+        systemClassLoader
     } else {
-        loadModuleDescriptor(
-            DslLoaderClassLoader(
-                filePath.absolutePathString(),
-                systemClassLoader
-            ),
-            mainClassName, descriptor
+        DslLoaderClassLoader(
+            filePath.absolutePathString(),
+            systemClassLoader
         )
     }
 
 
-    TODO("Read android manifest file")
+    descriptor = loadModuleDescriptor(
+        descriptorClassLoader,
+        mainClassName,
+        descriptor
+    )
+
+
+    tryReadManifestFile(descriptor, dataLoader)
+
+
+    return descriptor
+
+}
+
+
+private fun tryReadManifestFile(descriptor: RawPluginDescriptor, dataLoader: DataLoader) {
+
+    val androidManifestSource = dataLoader.load("AndroidManifest")
+
+    //create xml block instance
+    val blockClass = Class.forName("android.content.res.XmlBlock")
+    val blockConstructor = blockClass.getDeclaredConstructor(ByteArray::class.java)
+    blockConstructor.isAccessible = true
+    val block = blockConstructor.newInstance(androidManifestSource)
+
+    //create xml parser
+
+    val pullParser: XmlPullParser =
+        blockClass.getDeclaredMethod("newParser")
+            .apply {
+                isAccessible = true
+            }
+            .invoke(block) as XmlPullParser
+
+    var applicationClass = ""
+
+    var packageName = ""
+
+    var eventType = pullParser.eventType
+
+
+
+    while (eventType != XmlPullParser.END_DOCUMENT) {
+
+        when (eventType) {
+            XmlPullParser.START_TAG -> {
+                when (pullParser.name) {
+                    "application" -> {
+                        for (i in 0 until pullParser.attributeCount) {
+                            val attributeName = pullParser.getAttributeName(i)
+                            if (attributeName == "name") {
+                                applicationClass = pullParser.getAttributeValue(i)
+                                break
+                            }
+                        }
+                    }
+
+                    "manifest" -> {
+                        for (i in 0 until pullParser.attributeCount) {
+                            val attributeName = pullParser.getAttributeName(i)
+                            if (attributeName == "package") {
+                                packageName = pullParser.getAttributeValue(i)
+                                break
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        eventType = pullParser.next()
+    }
+
+
+    if (applicationClass.startsWith(".")) {
+        applicationClass = packageName + applicationClass
+    }
+
+    if (applicationClass.isNotEmpty()) {
+        descriptor.applicationClassName = applicationClass
+    }
 
 
 }
@@ -88,11 +154,11 @@ private fun loadModuleDescriptor(
             id = config.id
         }
 
+    } else {
+        error("")
     }
 
-    //TODO: load error
-    error("")
-
+    return rawPluginDescriptor
 }
 
 fun readModuleDescriptor(
