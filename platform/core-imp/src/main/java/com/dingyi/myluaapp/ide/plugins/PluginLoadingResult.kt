@@ -170,6 +170,6 @@ class PluginLoadingResult(
         val list = ArrayList<PluginDescriptorImpl>(2)
         list.add(existingDescriptor)
         list.add(descriptor)
-        duplicateModuleMap!!.put(id, list)
+        duplicateModuleMap?.put(id, list)
     }
 }

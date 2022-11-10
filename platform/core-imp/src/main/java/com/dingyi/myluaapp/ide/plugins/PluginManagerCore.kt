@@ -2,20 +2,23 @@ package com.dingyi.myluaapp.ide.plugins
 
 
 import com.dingyi.myluaapp.diagnostic.Logger
+import com.dingyi.myluaapp.diagnostic.PluginException
+import com.dingyi.myluaapp.ide.plugins.cl.PluginAwareClassLoader
 import com.dingyi.myluaapp.ide.ui.android.bundle.AndroidBundle
+import com.dingyi.myluaapp.openapi.application.ApplicationInfo
 import com.dingyi.myluaapp.openapi.application.PathManager
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.extensions.PluginId
 import com.dingyi.myluaapp.openapi.project.Project
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.openapi.util.Pair
-import com.intellij.openapi.util.io.FileUtilRt
 import com.intellij.openapi.util.text.HtmlChunk
 import com.intellij.util.ArrayUtil
 import com.intellij.util.ArrayUtilRt
 import com.intellij.util.ReflectionUtil
 import com.intellij.util.containers.ContainerUtil
 import com.intellij.util.execution.ParametersListUtil
+import com.intellij.util.graph.CachingSemiGraph
 import com.intellij.util.graph.DFSTBuilder
 import com.intellij.util.graph.GraphGenerator
 import com.intellij.util.graph.InboundSemiGraph
@@ -53,27 +56,27 @@ import java.util.stream.Stream
 // Prefer to use only JDK classes. Any post start-up functionality should be placed in PluginManager class.
 object PluginManagerCore {
     @NonNls
-    val ASSETS: String = "META-INF/"
+    val ASSETS = "META-INF/"
 
-    const val CORE_PLUGIN_ID: String = "com.dingyi.myluaapp"
-    const val CORE_ID = PluginId.getId(CORE_PLUGIN_ID)
-    const val JAVA_PLUGIN_ID = PluginId.getId("com.dingyi.myluaapp.java")
-    const val JAVA_MODULE_ID: PluginId = PluginId.getId("com.dingyi.myluapp.modules.java")
-    const val PLUGIN_DSL: String = "plugin.init"
-    const val PLUGIN_DSL_PATH: String = ASSETS + PLUGIN_DSL
-    const val ALL_MODULES_MARKER: PluginId = PluginId.getId("com.dingyi.myluapp.modules.all")
-    const val MODULE_DEPENDENCY_PREFIX: String = "com.dingyi.myluapp.module"
-    const val SPECIAL_IDEA_PLUGIN_ID: PluginId = PluginId.getId("MyLuaApp CORE")
-    const val PROPERTY_PLUGIN_PATH: String = "plugin.path"
-
-    @NonNls
-    val DISABLE: String = "disable"
+    const val CORE_PLUGIN_ID = "com.dingyi.myluaapp"
+    val CORE_ID = PluginId.getId(CORE_PLUGIN_ID)
+    val JAVA_PLUGIN_ID = PluginId.getId("com.dingyi.myluaapp.java")
+    val JAVA_MODULE_ID = PluginId.getId("com.dingyi.myluapp.modules.java")
+    const val PLUGIN_DSL = "plugin.init"
+    val PLUGIN_DSL_PATH = ASSETS + PLUGIN_DSL
+    val ALL_MODULES_MARKER = PluginId.getId("com.dingyi.myluapp.modules.all")
+    val MODULE_DEPENDENCY_PREFI = "com.dingyi.myluapp.module"
+    val SPECIAL_IDEA_PLUGIN_ID = PluginId.getId("MyLuaApp CORE")
+    const val PROPERTY_PLUGIN_PATH = "plugin.path"
 
     @NonNls
-    val ENABLE: String = "enable"
+    const val DISABLE = "disable"
 
     @NonNls
-    val EDIT: String = "edit"
+    const val ENABLE = "enable"
+
+    @NonNls
+    const val EDIT = "edit"
     private val IGNORE_DISABLED_PLUGINS: Boolean =
         java.lang.Boolean.getBoolean("idea.ignore.disabled.plugins")
     private val HAS_LOADED_CLASS_METHOD_TYPE: MethodType = MethodType.methodType(
@@ -83,10 +86,10 @@ object PluginManagerCore {
     private var brokenPluginVersions: Reference<Map<PluginId, Set<String?>>>? = null
 
     @Volatile
-    private var ourPlugins: Array<PluginDescriptorImpl>
+    private var ourPlugins: Array<PluginDescriptorImpl>? = null
 
     @Volatile
-    private var ourLoadedPlugins: List<PluginDescriptorImpl?>? = null
+    private var ourLoadedPlugins: List<PluginDescriptorImpl>? = null
     private var ourPluginLoadingErrors: Map<PluginId, Exception>? = null
     private var ourAdditionalLayoutMap: Map<String, Array<String>> = emptyMap()
 
@@ -127,7 +130,7 @@ object PluginManagerCore {
         private set
 
     @Volatile
-    private var descriptorListFuture: CompletableFuture<DescriptorListLoadingContext?>? = null
+    private var descriptorListFuture: CompletableFuture<DescriptorListLoadingContext>? = null
     private var ourBuildNumber: Int? = 114514
 
     /**
@@ -138,28 +141,28 @@ object PluginManagerCore {
      *
      * Do not call this method during bootstrap, should be called in a copy of PluginManager, loaded by PluginClassLoader.
      */
-    val plugins: Array<Any>
+    val plugins: Array<PluginDescriptor>
         get() {
-            val result: Array<PluginDescriptor> = ourPlugins
+            val result = ourPlugins as Array<PluginDescriptor>?
             if (result == null) {
                 loadAndInitializePlugins(null, null)
-                return ourPlugins
+                return ourPlugins as Array<PluginDescriptor>
             }
             return result
         }
-    val allPlugins: Collection<Any>
-        get() = Arrays.asList(*ourPlugins)
+    val allPlugins: Collection<PluginDescriptor>
+        get() = ourPlugins?.toList() ?: Collections.emptyList()
 
     /**
      * Returns descriptors of plugins which are successfully loaded into IDE. The result is sorted in a way that if each plugin comes after
      * the plugins it depends on.
      */
-    val loadedPlugins: List<Any?>
+    val loadedPlugins: List<PluginDescriptor>
         get() = getLoadedPlugins(null)
 
     @ApiStatus.Internal
-    fun getLoadedPlugins(coreClassLoader: ClassLoader?): List<PluginDescriptorImpl?> {
-        val result: List<PluginDescriptorImpl?>? = ourLoadedPlugins
+    fun getLoadedPlugins(coreClassLoader: ClassLoader?): List<PluginDescriptorImpl> {
+        val result: List<PluginDescriptorImpl>? = ourLoadedPlugins
         if (result == null) {
             loadAndInitializePlugins(null, coreClassLoader)
             return (ourLoadedPlugins)!!
@@ -196,22 +199,22 @@ object PluginManagerCore {
     @Synchronized
     fun doSetPlugins(value: Array<PluginDescriptorImpl>?) {
         ourPlugins = (value)!!
-        ourLoadedPlugins = if (value == null) null else Collections.unmodifiableList(
-            getOnlyEnabledPlugins(value)
+        ourLoadedPlugins = Collections.unmodifiableList(
+            getOnlyEnabledPlugins(value.toList())
         )
     }
 
-    fun isDisabled(pluginId8: PluginId): Boolean {
+    fun isDisabled(pluginId: PluginId): Boolean {
         return DisabledPluginsState.isDisabled(pluginId)
     }
 
     fun isBrokenPlugin(descriptor: PluginDescriptor): Boolean {
-        val pluginId: PluginId? = descriptor.getPluginId()
+        val pluginId = descriptor.getPluginId()
         if (pluginId == null) {
             return true
         }
         val set: Set<String?>? = getBrokenPluginVersions().get(pluginId)
-        return set != null && set.contains(descriptor.getVersion())
+        return set != null && set.contains(descriptor.version)
     }
 
     fun updateBrokenPlugins(brokenPlugins: Map<PluginId, Set<String?>>) {
@@ -259,7 +262,7 @@ object PluginManagerCore {
         if (Files.exists(updatedBrokenPluginFile)) {
             brokenPluginsStorage = updatedBrokenPluginFile
         } else {
-            brokenPluginsStorage = Paths.get(PathManager.getBinPath() + "/brokenPlugins.db")
+            brokenPluginsStorage = Paths.get(PathManager.configPath + "/brokenPlugins.db")
         }
         try {
             DataInputStream(
@@ -274,21 +277,19 @@ object PluginManagerCore {
                     return emptyMap<PluginId, Set<String?>>()
                 }
                 val count: Int = stream.readInt()
-                val result: MutableMap<PluginId, Set<String?>> =
+                val result: MutableMap<PluginId, Set<String>> =
                     HashMap<PluginId, Set<String>>(count)
                 for (i in 0 until count) {
                     val pluginId: PluginId = PluginId.getId(stream.readUTF())
                     val versions: Array<String?> =
                         arrayOfNulls(stream.readUnsignedShort())
                     for (j in versions.indices) {
-                        versions.get(j) = stream.readUTF()
+                        versions[j] = stream.readUTF()
                     }
-                    result.put(
-                        pluginId,
-                        if (versions.size == 1) setOf(versions.get(0)) else HashSet(
-                            Arrays.asList(*versions)
+                    result[pluginId] =
+                        if (versions.size == 1) setOf(versions.get(0).toString()) else HashSet(
+                            versions.filterNotNull()
                         )
-                    )
                 }
                 return result
             }
@@ -300,11 +301,10 @@ object PluginManagerCore {
     }
 
     @Throws(IOException::class)
-    fun writePluginsList(ids: Collection<PluginId?>, writer: Writer) {
-        val sortedIds: List<PluginId> = ArrayList<Any?>(ids)
-        sortedIds.sort(null)
+    fun writePluginsList(ids: Collection<PluginId>, writer: Writer) {
+        val sortedIds = ArrayList(ids).sorted()
         for (id: PluginId in sortedIds) {
-            writer.write(id.getIdString())
+            writer.write(id.idString)
             writer.write('\n'.code)
         }
     }
@@ -317,9 +317,9 @@ object PluginManagerCore {
         return DisabledPluginsState.setEnabledState(setOf(id), true)
     }
 
-    fun isModuleDependency(dependentPluginId: PluginId): Boolean {
+    /*fun isModuleDependency(dependentPluginId: PluginId): Boolean {
         return dependentPluginId.getIdString().startsWith(MODULE_DEPENDENCY_PREFIX)
-    }
+    }*/
 
     /**
      * This is an internal method, use [PluginException.createByClass] instead.
@@ -332,7 +332,7 @@ object PluginManagerCore {
         val classLoader: ClassLoader = pluginClass.classLoader
         val pluginId: PluginId?
         if (classLoader is PluginAwareClassLoader) {
-            pluginId = (classLoader as PluginAwareClassLoader).getPluginId()
+            pluginId = (classLoader as PluginAwareClassLoader).pluginId
         } else {
             pluginId = getPluginByClassName(pluginClass.name)
         }
@@ -341,17 +341,16 @@ object PluginManagerCore {
 
     fun getPluginByClassName(className: String): PluginId? {
         val id: PluginId? = getPluginOrPlatformByClassName(className)
-        return if ((id != null && !CORE_ID.equals(id))) id else null
+        return if ((id != null && CORE_ID != id)) id else null
     }
 
     fun getPluginOrPlatformByClassName(className: String): PluginId? {
-        val result: PluginDescriptor? = getPluginDescriptorOrPlatformByClassName(className)
-        return if (result == null) null else result.getPluginId()
+        return getPluginDescriptorOrPlatformByClassName(className)?.pluginId
     }
 
     @ApiStatus.Internal
     fun getPluginDescriptorOrPlatformByClassName(@NonNls className: String): PluginDescriptor? {
-        val loadedPlugins: List<PluginDescriptorImpl?>? = ourLoadedPlugins
+        val loadedPlugins: List<PluginDescriptorImpl>? = ourLoadedPlugins
         if (((loadedPlugins == null) ||
                     className.startsWith("java.") ||
                     className.startsWith("javax.") ||
@@ -362,8 +361,8 @@ object PluginManagerCore {
             return null
         }
         var result: PluginDescriptor? = null
-        for (o: PluginDescriptorImpl in loadedPlugins) {
-            val classLoader: ClassLoader = o.getPluginClassLoader()
+        for (o in loadedPlugins) {
+            val classLoader: ClassLoader = o.pluginClassLoader
             if (!hasLoadedClass(className, classLoader)) {
                 continue
             }
@@ -379,17 +378,18 @@ object PluginManagerCore {
                     className.startsWith("com.jetbrains.") || className.startsWith("org.jetbrains.") ||
                     className.startsWith("com.intellij.") || className.startsWith("org.intellij.") ||
                     className.startsWith("com.android.") ||
-                    className.startsWith("git4idea.") || className.startsWith("org.angularjs."))
+                    className.startsWith("git4idea.") || className.startsWith("org.angularjs.") ||
+                    className.startsWith("com.dingyi."))
         ) {
             return result
         }
 
         // otherwise we need to check plugins with use-idea-classloader="true"
-        var root: String? = null
-        for (o: PluginDescriptorImpl in loadedPlugins) {
-            if (!o.isUseIdeaClassLoader) {
+        /* var root: String? = null
+         for (o: PluginDescriptorImpl in loadedPlugins) {
+             *//*if (!o.isUseIdeaClassLoader) {
                 continue
-            }
+            }*//*
             if (root == null) {
                 root = PathManager.getResourceRoot(
                     result.getPluginClassLoader(),
@@ -403,17 +403,17 @@ object PluginManagerCore {
             if (root.startsWith(FileUtilRt.toSystemIndependentName(path.toString()))) {
                 return o
             }
-        }
+        }*/
         return null
     }
 
     private val updatedBrokenPluginFile: Path
-        private get() = Paths.get(PathManager.getConfigPath()).resolve("updatedBrokenPlugins.db")
+        private get() = Paths.get(PathManager.configPath).resolve("updatedBrokenPlugins.db")
 
     private fun hasLoadedClass(className: String, loader: ClassLoader): Boolean {
-        if (loader is UrlClassLoader) {
-            return (loader as UrlClassLoader).hasLoadedClass(className)
-        }
+        // if (loader is UrlClassLoader) {
+        //   return (loader as UrlClassLoader).hasLoadedClass(className)
+        //}
 
         // it can be an UrlClassLoader loaded by another class loader, so instanceof doesn't work
         var aClass: Class<*> = loader.javaClass
@@ -438,42 +438,42 @@ object PluginManagerCore {
      * classes without declaring explicit dependency on the Java module. This method is intended to add implicit dependency on the Java plugin
      * for such plugins to avoid breaking compatibility with them.
      */
-    fun getImplicitDependency(
-        descriptor: PluginDescriptorImpl,
-        javaDepGetter: Supplier<PluginDescriptorImpl?>
-    ): PluginDescriptorImpl? {
-        // skip our plugins as expected to be up-to-date whether bundled or not
-        if (descriptor.isBundled() || (VENDOR_JETBRAINS == descriptor.getVendor())) {
-            return null
-        }
-        val pluginId: PluginId = descriptor.getPluginId()
-        if (CORE_ID.equals(pluginId) ||
-            JAVA_PLUGIN_ID.equals(pluginId)
-        ) {
-            return null
-        }
-        val javaDep: PluginDescriptorImpl? = javaDepGetter.get()
-        if (javaDep == null) {
-            return null
-        }
+    /*   fun getImplicitDependency(
+           descriptor: PluginDescriptorImpl,
+           javaDepGetter: Supplier<PluginDescriptorImpl?>
+       ): PluginDescriptorImpl? {
+           // skip our plugins as expected to be up-to-date whether bundled or not
+           if (descriptor.isBundled() || (VENDOR_JETBRAINS == descriptor.getVendor())) {
+               return null
+           }
+           val pluginId: PluginId = descriptor.getPluginId()
+           if (CORE_ID.equals(pluginId) ||
+               JAVA_PLUGIN_ID.equals(pluginId)
+           ) {
+               return null
+           }
+           val javaDep: PluginDescriptorImpl? = javaDepGetter.get()
+           if (javaDep == null) {
+               return null
+           }
 
-        // If a plugin does not include any module dependency tags in its plugin.xml, it's assumed to be a legacy plugin
-        // and is loaded only in IntelliJ IDEA, so it may use classes from Java plugin.
-        return if (hasModuleDependencies(descriptor)) null else javaDep
-    }
+           // If a plugin does not include any module dependency tags in its plugin.xml, it's assumed to be a legacy plugin
+           // and is loaded only in IntelliJ IDEA, so it may use classes from Java plugin.
+           return if (hasModuleDependencies(descriptor)) null else javaDep
+       }*/
 
-    fun hasModuleDependencies(descriptor: PluginDescriptorImpl): Boolean {
-        for (dependency: PluginDependency in descriptor.pluginDependencies) {
-            val dependencyPluginId: PluginId = dependency.getPluginId()
-            if ((JAVA_PLUGIN_ID.equals(dependencyPluginId) ||
-                        JAVA_MODULE_ID.equals(dependencyPluginId) ||
-                        isModuleDependency(dependencyPluginId))
-            ) {
-                return true
-            }
-        }
-        return false
-    }
+    /*  fun hasModuleDependencies(descriptor: PluginDescriptorImpl): Boolean {
+          for (dependency: PluginDependency in descriptor.pluginDependencies) {
+              val dependencyPluginId: PluginId = dependency.getPluginId()
+              if ((JAVA_PLUGIN_ID.equals(dependencyPluginId) ||
+                          JAVA_MODULE_ID.equals(dependencyPluginId) ||
+                          isModuleDependency(dependencyPluginId))
+              ) {
+                  return true
+              }
+          }
+          return false
+      }*/
 
     @Synchronized
     fun invalidatePlugins() {
@@ -500,7 +500,7 @@ object PluginManagerCore {
                 }
                 disabledPlugins.add(pluginId)
                 target = disabled
-            } else if (descriptor.isBundled() || SPECIAL_IDEA_PLUGIN_ID.equals(pluginId)) {
+            } else if (/*descriptor.isBundled() ||*/ SPECIAL_IDEA_PLUGIN_ID.equals(pluginId)) {
                 target = bundled
             } else {
                 target = custom
@@ -518,10 +518,10 @@ object PluginManagerCore {
         }
         val logger: Logger = logger
         logger.info("Loaded bundled plugins: $bundled")
-        if (custom.length > 0) {
+        if (custom.isNotEmpty()) {
             logger.info("Loaded custom plugins: $custom")
         }
-        if (disabled.length > 0) {
+        if (disabled.isNotEmpty()) {
             logger.info("Disabled plugins: $disabled")
         }
     }
@@ -538,7 +538,7 @@ object PluginManagerCore {
     }
 
     private fun prepareLoadingPluginsErrorMessage(
-        pluginErrors: Map<PluginId, PluginLoadingError>,
+        pluginErrors: Map<PluginId, Exception>,
         globalErrors: List<Supplier<String>>,
         actions: List<Supplier<HtmlChunk>>
     ) {
@@ -549,60 +549,44 @@ object PluginManagerCore {
 
         // log includes all messages, not only those which need to be reported to the user
         val logMessage: String = "Problems found loading plugins:\n  " +
-                Stream.concat<String>(
-                    globalErrors.stream()
-                        .map({ obj: Supplier<String> -> obj.get() }),
-                    pluginErrors.entries.stream()
-                        .sorted(java.util.Map.Entry.comparingByKey<PluginId, PluginLoadingError>())
-                        .map(java.util.function.Function<Map.Entry<PluginId, PluginLoadingError>, Any> { e: Map.Entry<PluginId, PluginLoadingError> -> e.value.getInternalMessage() })
-                )
-                    .collect(Collectors.joining("\n  "))
-        if (isUnitTestMode || !java.awt.GraphicsEnvironment.isHeadless()) {
-            val errorsList: List<Supplier<HtmlChunk>> = Stream.concat(
-                globalErrors.stream().map({ message: Supplier<String> ->
-                    Supplier {
-                        HtmlChunk.text(
-                            message.get()
-                        )
-                    }
-                }),
-                pluginErrors.entries.stream()
-                    .sorted(java.util.Map.Entry.comparingByKey<PluginId, PluginLoadingError>()).map(
-                        java.util.function.Function<Map.Entry<PluginId, PluginLoadingError>, PluginLoadingError> { java.util.Map.Entry.value })
-                    .filter(PluginLoadingError::isNotifyUser)
-                    .map(java.util.function.Function { error: PluginLoadingError ->
-                        Supplier {
-                            HtmlChunk.text(
-                                error.getDetailedMessage()
-                            )
-                        }
-                    })
-            ).collect(Collectors.toList())
-            if (!errorsList.isEmpty()) {
-                registerPluginErrors(ContainerUtil.concat(errorsList, actions))
-            }
-            logger.warn(logMessage)
-        } else {
-            logger.error(logMessage)
-        }
+                globalErrors.map { it.get() } + pluginErrors.entries
+            .sortedWith { o1, o2 -> o1.key.compareTo(o2.key) }
+            .joinToString(postfix = "\n  ")
+
+        /* if (isUnitTestMode || !java.awt.GraphicsEnvironment.isHeadless()) {
+             val errorsList: List<Supplier<HtmlChunk>> = Stream.concat(
+                 globalErrors.stream().map({ message: Supplier<String> ->
+                     Supplier {
+                         HtmlChunk.text(
+                             message.get()
+                         )
+                     }
+                 }),
+                 pluginErrors.entries.stream()
+                     .sorted(java.util.Map.Entry.comparingByKey<PluginId, PluginLoadingError>()).map(
+                         java.util.function.Function<Map.Entry<PluginId, PluginLoadingError>, PluginLoadingError> { java.util.Map.Entry.value })
+                     .filter(PluginLoadingError::isNotifyUser)
+                     .map(java.util.function.Function { error: PluginLoadingError ->
+                         Supplier {
+                             HtmlChunk.text(
+                                 error.getDetailedMessage()
+                             )
+                         }
+                     })
+             ).collect(Collectors.toList())
+             if (!errorsList.isEmpty()) {
+                 registerPluginErrors(ContainerUtil.concat(errorsList, actions))
+             }
+             logger.warn(logMessage)
+         } else {*/
+        logger.error(logMessage)
+        //  }
     }
 
-    @NlsContexts.Label
-    fun getShortLoadingErrorMessage(pluginDescriptor: PluginDescriptor): String? {
-        val error: PluginLoadingError? =
-            ourPluginLoadingErrors!!.get(pluginDescriptor.getPluginId())
-        return if (error == null) null else error.getShortMessage()
-    }
 
-    fun getFirstDisabledDependency(pluginDescriptor: PluginDescriptor): PluginId? {
-        val error: PluginLoadingError? =
-            ourPluginLoadingErrors!!.get(pluginDescriptor.getPluginId())
-        return if (error == null) null else error.disabledDependency
-    }
-
-    fun createPluginIdGraph(
-        descriptors: Collection<PluginDescriptorImpl?>,
-        idToDescriptorMap: Map<PluginId?, PluginDescriptorImpl?>,
+    /*fun createPluginIdGraph(
+        descriptors: Collection<PluginDescriptorImpl>,
+        idToDescriptorMap: Map<PluginId, PluginDescriptorImpl>,
         withOptional: Boolean
     ): CachingSemiGraph<PluginDescriptorImpl> {
         val hasAllModules: Boolean = idToDescriptorMap.containsKey(ALL_MODULES_MARKER)
@@ -614,7 +598,7 @@ object PluginManagerCore {
             }
         val uniqueCheck: MutableSet<PluginDescriptorImpl> = HashSet<PluginDescriptorImpl>()
         val `in`: MutableMap<PluginDescriptorImpl, List<PluginDescriptorImpl>> =
-            HashMap<PluginDescriptorImpl, List<PluginDescriptorImpl>>(descriptors.size)
+            HashMap(descriptors.size)
         for (descriptor: PluginDescriptorImpl in descriptors) {
             val list: List<PluginDescriptorImpl> = getDirectDependencies(
                 descriptor,
@@ -628,163 +612,163 @@ object PluginManagerCore {
                 `in`[descriptor] = list
             }
         }
-        return CachingSemiGraph(descriptors, `in`)
-    }
+        return CachingSemiGraph.cache(descriptors, `in`)
+    }*/
 
-    private fun getDirectDependencies(
-        rootDescriptor: PluginDescriptorImpl,
-        idToDescriptorMap: Map<PluginId?, PluginDescriptorImpl?>,
-        withOptional: Boolean,
-        hasAllModules: Boolean,
-        javaDep: Supplier<PluginDescriptorImpl?>,
-        uniqueCheck: MutableSet<PluginDescriptorImpl>
-    ): List<PluginDescriptorImpl> {
-        val dependencies: List<PluginDependency> = rootDescriptor.pluginDependencies
-        val implicitDep: PluginDescriptorImpl? =
-            if (hasAllModules) getImplicitDependency(rootDescriptor, javaDep) else null
-        var capacity: Int = dependencies.size + rootDescriptor.incompatibilities.size()
-        if (!withOptional) {
-            for (dependency: PluginDependency in dependencies) {
-                if (dependency.isOptional()) {
-                    capacity--
-                }
-            }
-        }
-        if (capacity == 0) {
-            return if (implicitDep == null) emptyList<PluginDescriptorImpl>() else listOf<PluginDescriptorImpl>(
-                implicitDep
-            )
-        }
-        uniqueCheck.clear()
-        val plugins: MutableList<PluginDescriptorImpl> =
-            ArrayList<PluginDescriptorImpl>(capacity + (if (implicitDep == null) 0 else 1))
-        if (implicitDep != null) {
-            if (rootDescriptor === implicitDep) {
-                logger.error("Plugin $rootDescriptor depends on self")
-            } else {
-                uniqueCheck.add(implicitDep)
-                plugins.add(implicitDep)
-            }
-        }
-        for (dependency: PluginDependency in dependencies) {
-            if (!withOptional && dependency.isOptional()) {
-                continue
-            }
+    /* private fun getDirectDependencies(
+         rootDescriptor: PluginDescriptorImpl,
+         idToDescriptorMap: Map<PluginId?, PluginDescriptorImpl?>,
+         withOptional: Boolean,
+         hasAllModules: Boolean,
+         javaDep: Supplier<PluginDescriptorImpl?>,
+         uniqueCheck: MutableSet<PluginDescriptorImpl>
+     ): List<PluginDescriptorImpl> {
+         val dependencies: List<PluginDependency> = rootDescriptor.pluginDependencies
+         val implicitDep: PluginDescriptorImpl? =
+             if (hasAllModules) getImplicitDependency(rootDescriptor, javaDep) else null
+         var capacity: Int = dependencies.size + rootDescriptor.incompatibilities.size()
+         if (!withOptional) {
+             for (dependency: PluginDependency in dependencies) {
+                 if (dependency.isOptional()) {
+                     capacity--
+                 }
+             }
+         }
+         if (capacity == 0) {
+             return if (implicitDep == null) emptyList<PluginDescriptorImpl>() else listOf<PluginDescriptorImpl>(
+                 implicitDep
+             )
+         }
+         uniqueCheck.clear()
+         val plugins: MutableList<PluginDescriptorImpl> =
+             ArrayList<PluginDescriptorImpl>(capacity + (if (implicitDep == null) 0 else 1))
+         if (implicitDep != null) {
+             if (rootDescriptor === implicitDep) {
+                 logger.error("Plugin $rootDescriptor depends on self")
+             } else {
+                 uniqueCheck.add(implicitDep)
+                 plugins.add(implicitDep)
+             }
+         }
+         for (dependency: PluginDependency in dependencies) {
+             if (!withOptional && dependency.isOptional()) {
+                 continue
+             }
 
-            // check for missing optional dependency
-            val dep: PluginDescriptorImpl? = idToDescriptorMap.get(dependency.getPluginId())
-            // if 'dep' refers to a module we need to check the real plugin containing this module only if it's still enabled,
-            // otherwise the graph will be inconsistent
-            if (dep == null) {
-                continue
-            }
+             // check for missing optional dependency
+             val dep: PluginDescriptorImpl? = idToDescriptorMap.get(dependency.getPluginId())
+             // if 'dep' refers to a module we need to check the real plugin containing this module only if it's still enabled,
+             // otherwise the graph will be inconsistent
+             if (dep == null) {
+                 continue
+             }
 
-            // ultimate plugin it is combined plugin, where some included XML can define dependency on ultimate explicitly and for now not clear,
-            // can be such requirements removed or not
-            if (rootDescriptor === dep) {
-                if (!CORE_ID.equals(rootDescriptor.getPluginId())) {
-                    logger.error("Plugin $rootDescriptor depends on self")
-                }
-            } else if (uniqueCheck.add(dep)) {
-                plugins.add(dep)
-            }
-        }
-        for (moduleId: PluginId in rootDescriptor.incompatibilities) {
-            val dep: PluginDescriptorImpl? = idToDescriptorMap.get(moduleId)
-            if (dep != null && uniqueCheck.add(dep)) {
-                plugins.add(dep)
-            }
-        }
-        return plugins
-    }
+             // ultimate plugin it is combined plugin, where some included XML can define dependency on ultimate explicitly and for now not clear,
+             // can be such requirements removed or not
+             if (rootDescriptor === dep) {
+                 if (!CORE_ID.equals(rootDescriptor.getPluginId())) {
+                     logger.error("Plugin $rootDescriptor depends on self")
+                 }
+             } else if (uniqueCheck.add(dep)) {
+                 plugins.add(dep)
+             }
+         }
+         for (moduleId: PluginId in rootDescriptor.incompatibilities) {
+             val dep: PluginDescriptorImpl? = idToDescriptorMap.get(moduleId)
+             if (dep != null && uniqueCheck.add(dep)) {
+                 plugins.add(dep)
+             }
+         }
+         return plugins
+     }
 
-    private fun checkPluginCycles(
-        descriptors: List<PluginDescriptorImpl?>,
-        idToDescriptorMap: Map<PluginId?, PluginDescriptorImpl?>,
-        errors: MutableList<Supplier<String>>
-    ) {
-        val graph: CachingSemiGraph<PluginDescriptorImpl> =
-            createPluginIdGraph(descriptors, idToDescriptorMap, true)
-        val builder: DFSTBuilder<PluginDescriptorImpl> =
-            DFSTBuilder(GraphGenerator.generate<Any>(graph))
-        if (builder.isAcyclic()) {
-            return
-        }
-        for (component: Collection<PluginDescriptorImpl> in builder.getComponents()) {
-            if (component.size < 2) {
-                continue
-            }
-            for (descriptor: PluginDescriptor in component) {
-                descriptor.setEnabled(false)
-            }
-            val pluginsString: String = component.stream()
-                .map(java.util.function.Function<PluginDescriptorImpl, Any> { it: PluginDescriptorImpl -> ("'" + it.getName()).toString() + "'" })
-                .collect(
-                    Collectors.joining(", ")
-                )
-            errors.add(
-                message(
-                    "plugin.loading.error.plugins.cannot.be.loaded.because.they.form.a.dependency.cycle",
-                    pluginsString
-                )
-            )
-            val detailedMessage: StringBuilder = StringBuilder()
-            val pluginToString: java.util.function.Function<PluginDescriptorImpl, String> =
-                java.util.function.Function<PluginDescriptorImpl, String> { plugin: PluginDescriptorImpl ->
-                    (("id = " + plugin.getPluginId()
-                        .getIdString()).toString() + " (" + plugin.getName()).toString() + ")"
-                }
-            detailedMessage.append("Detected plugin dependencies cycle details (only related dependencies are included):\n")
-            component.stream()
-                .map(java.util.function.Function<PluginDescriptorImpl, Pair<Any, String?>> { p: PluginDescriptorImpl ->
-                    Pair.create(
-                        p,
-                        pluginToString.apply(p)
-                    )
-                })
-                .sorted(
-                    Comparator.comparing(
-                        { p: Pair<Any, String?> -> p.second },
-                        java.lang.String.CASE_INSENSITIVE_ORDER
-                    )
-                )
-                .forEach({ p: Pair<Any, String?> ->
-                    detailedMessage.append("  ").append(p.getSecond()).append(" depends on:\n")
-                    ContainerUtil.toCollection(Iterable<T> {
-                        graph.getIn(
-                            p.first
-                        )
-                    })
-                        .stream()
-                        .filter(Predicate<T> { dep: T -> component.contains(dep) })
-                        .map(pluginToString)
-                        .sorted(java.lang.String.CASE_INSENSITIVE_ORDER)
-                        .forEach(Consumer<R> { dep: R? ->
-                            detailedMessage.append("    ").append(dep).append("\n")
-                        })
-                })
-            logger.info(detailedMessage.toString())
-        }
-    }
-
+     private fun checkPluginCycles(
+         descriptors: List<PluginDescriptorImpl?>,
+         idToDescriptorMap: Map<PluginId?, PluginDescriptorImpl?>,
+         errors: MutableList<Supplier<String>>
+     ) {
+         val graph: CachingSemiGraph<PluginDescriptorImpl> =
+             createPluginIdGraph(descriptors, idToDescriptorMap, true)
+         val builder: DFSTBuilder<PluginDescriptorImpl> =
+             DFSTBuilder(GraphGenerator.generate<Any>(graph))
+         if (builder.isAcyclic()) {
+             return
+         }
+         for (component: Collection<PluginDescriptorImpl> in builder.getComponents()) {
+             if (component.size < 2) {
+                 continue
+             }
+             for (descriptor: PluginDescriptor in component) {
+                 descriptor.setEnabled(false)
+             }
+             val pluginsString: String = component.stream()
+                 .map(java.util.function.Function<PluginDescriptorImpl, Any> { it: PluginDescriptorImpl -> ("'" + it.getName()).toString() + "'" })
+                 .collect(
+                     Collectors.joining(", ")
+                 )
+             errors.add(
+                 message(
+                     "plugin.loading.error.plugins.cannot.be.loaded.because.they.form.a.dependency.cycle",
+                     pluginsString
+                 )
+             )
+             val detailedMessage: StringBuilder = StringBuilder()
+             val pluginToString: java.util.function.Function<PluginDescriptorImpl, String> =
+                 java.util.function.Function<PluginDescriptorImpl, String> { plugin: PluginDescriptorImpl ->
+                     (("id = " + plugin.getPluginId()
+                         .getIdString()).toString() + " (" + plugin.getName()).toString() + ")"
+                 }
+             detailedMessage.append("Detected plugin dependencies cycle details (only related dependencies are included):\n")
+             component.stream()
+                 .map(java.util.function.Function<PluginDescriptorImpl, Pair<Any, String?>> { p: PluginDescriptorImpl ->
+                     Pair.create(
+                         p,
+                         pluginToString.apply(p)
+                     )
+                 })
+                 .sorted(
+                     Comparator.comparing(
+                         { p: Pair<Any, String?> -> p.second },
+                         java.lang.String.CASE_INSENSITIVE_ORDER
+                     )
+                 )
+                 .forEach({ p: Pair<Any, String?> ->
+                     detailedMessage.append("  ").append(p.getSecond()).append(" depends on:\n")
+                     ContainerUtil.toCollection(Iterable<T> {
+                         graph.getIn(
+                             p.first
+                         )
+                     })
+                         .stream()
+                         .filter(Predicate<T> { dep: T -> component.contains(dep) })
+                         .map(pluginToString)
+                         .sorted(java.lang.String.CASE_INSENSITIVE_ORDER)
+                         .forEach(Consumer<R> { dep: R? ->
+                             detailedMessage.append("    ").append(dep).append("\n")
+                         })
+                 })
+             logger.info(detailedMessage.toString())
+         }
+     }
+ */
     private fun prepareLoadingPluginsErrorMessage(
         disabledIds: Map<PluginId, String>,
         disabledRequiredIds: Set<PluginId>,
-        idMap: Map<PluginId?, PluginDescriptor?>,
-        pluginErrors: Map<PluginId, PluginLoadingError>,
+        idMap: Map<PluginId, PluginDescriptor>,
+        pluginErrors: Map<PluginId, Exception>,
         globalErrors: List<Supplier<String>>
     ) {
         val actions: MutableList<Supplier<HtmlChunk>> = ArrayList()
         if (!disabledIds.isEmpty()) {
-            val nameToDisable: @NlsSafe String?
+            val nameToDisable: String?
             if (disabledIds.size == 1) {
                 val id: PluginId = disabledIds.keys.iterator().next()
                 nameToDisable =
-                    if (idMap.containsKey(id)) idMap.get(id).getName() else id.getIdString()
+                    if (idMap.containsKey(id)) idMap[id]?.name else id.idString
             } else {
                 nameToDisable = null
             }
-            actions.add(Supplier {
+            /*actions.add(Supplier {
                 HtmlChunk.link(
                     DISABLE,
                     CoreBundle.message(
@@ -816,7 +800,7 @@ object PluginManagerCore {
                     EDIT,
                     CoreBundle.message("link.text.open.plugin.manager")
                 )
-            })
+            })*/
         }
         prepareLoadingPluginsErrorMessage(pluginErrors, globalErrors, actions)
     }
@@ -827,63 +811,41 @@ object PluginManagerCore {
         val pluginIds: Set<PluginId>? = if (enabled) ourPluginsToEnable else ourPluginsToDisable
         ourPluginsToEnable = null
         ourPluginsToDisable = null
-        val applied: Boolean = pluginIds != null
-        if (applied) {
-            val pluginIdMap: Map<PluginId?, PluginDescriptorImpl?> = buildPluginIdMap()
+        val applied = pluginIds != null
+        if (pluginIds != null) {
+            val pluginIdMap: Map<PluginId, PluginDescriptorImpl> = buildPluginIdMap()
             for (pluginId: PluginId? in pluginIds) {
-                val descriptor: PluginDescriptor? = pluginIdMap.get(pluginId)
-                if (descriptor != null) {
-                    descriptor.setEnabled(enabled)
-                }
+                val descriptor = pluginIdMap.get(pluginId)
+
+                descriptor?.setEnabled(enabled)
+
             }
             DisabledPluginsState.setEnabledState(pluginIds, enabled)
         }
         return applied
     }
 
-    // separate method to avoid exposing of DescriptorListLoadingContext class
-    fun scheduleDescriptorLoading() {
-        orScheduleLoading
-    }
-
-    @get:Synchronized
-    private val orScheduleLoading: CompletableFuture<Any?>
-        private get() {
-            var future: CompletableFuture<DescriptorListLoadingContext?>? = descriptorListFuture
-            if (future != null) {
-                return future
-            }
-            future = CompletableFuture.supplyAsync<DescriptorListLoadingContext?>(
-                Supplier<DescriptorListLoadingContext?> {
-                    val activity: Activity =
-                        StartUpMeasurer.startActivity(
-                            "plugin descriptor loading",
-                            ActivityCategory.DEFAULT
-                        )
-                    val context: DescriptorListLoadingContext =
-                        PluginDescriptorLoader.loadDescriptors(
-                            isUnitTestMode,
-                            isRunningFromSources
-                        )
-                    activity.end()
-                    context
-                }, ForkJoinPool.commonPool()
-            )
-            descriptorListFuture = future
-            return (future)!!
+    /*
+        // separate method to avoid exposing of DescriptorListLoadingContext class
+        fun scheduleDescriptorLoading() {
+            orScheduleLoading
         }
 
+
+        */
     /**
      * Think twice before use and get approve from core team. Returns enabled plugins only.
-     */
+     *//*
+
     @get:ApiStatus.Internal
     val enabledPluginRawList: CompletableFuture<List<Any>>
         get() = orScheduleLoading.thenApply(
             java.util.function.Function<DescriptorListLoadingContext?, List<PluginDescriptorImpl>> { it: DescriptorListLoadingContext? -> it.result.getEnabledPlugins() })
+*/
 
     @ApiStatus.Internal
     fun initPlugins(coreClassLoader: ClassLoader): CompletionStage<List<PluginDescriptorImpl>> {
-        var future: CompletableFuture<DescriptorListLoadingContext?>? = descriptorListFuture
+        var future: CompletableFuture<DescriptorListLoadingContext>? = descriptorListFuture
         if (future == null) {
             future = CompletableFuture.completedFuture(null)
         }
@@ -946,64 +908,65 @@ object PluginManagerCore {
     }
 
     // no need to log error - ApplicationInfo is required in production in any case, so, will be logged if really needed
-    val buildNumber: BuildNumber
+    val buildNumber: Int
         get() {
-            var result: BuildNumber? = ourBuildNumber
-            if (result == null) {
-                result = BuildNumber.fromPluginsCompatibleBuild()
-                if (result == null) {
-                    if (isUnitTestMode) {
-                        result = BuildNumber.currentVersion()
-                    } else {
-                        try {
-                            result = ApplicationInfoImpl.getShadowInstance().getApiVersionAsNumber()
-                        } catch (ignore: RuntimeException) {
-                            // no need to log error - ApplicationInfo is required in production in any case, so, will be logged if really needed
-                            result = BuildNumber.currentVersion()
-                        }
-                    }
-                }
-                ourBuildNumber = result
-            }
-            return result
+            return ApplicationInfo.instance.build
+            /* var result: BuildNumber? = ourBuildNumber
+             if (result == null) {
+                 result = BuildNumber.fromPluginsCompatibleBuild()
+                 if (result == null) {
+                     if (isUnitTestMode) {
+                         result = BuildNumber.currentVersion()
+                     } else {
+                         try {
+                             result = ApplicationInfoImpl.getShadowInstance().getApiVersionAsNumber()
+                         } catch (ignore: RuntimeException) {
+                             // no need to log error - ApplicationInfo is required in production in any case, so, will be logged if really needed
+                             result = BuildNumber.currentVersion()
+                         }
+                     }
+                 }
+                 ourBuildNumber = result
+             }
+             return result*/
         }
 
     private fun disableIncompatiblePlugins(
-        descriptors: List<PluginDescriptorImpl?>,
-        idMap: Map<PluginId?, PluginDescriptorImpl?>,
-        errors: MutableMap<PluginId, PluginLoadingError>
+        descriptors: List<PluginDescriptorImpl>,
+        idMap: Map<PluginId, PluginDescriptorImpl>,
+        errors: MutableMap<PluginId, Exception>
     ) {
         val isNonBundledPluginDisabled: Boolean = ourDisableNonBundledPlugins
         if (isNonBundledPluginDisabled) {
             logger.info("Running with disableThirdPartyPlugins argument, third-party plugins will be disabled")
         }
-        val selectedIds: String? = System.getProperty("idea.load.plugins.id")
-        val selectedCategory: String? = System.getProperty("idea.load.plugins.category")
+        /*  val selectedIds: String? = System.getProperty("idea.load.plugins.id")
+          val selectedCategory: String? = System.getProperty("idea.load.plugins.category") */
         val coreDescriptor: PluginDescriptorImpl? = idMap.get(CORE_ID)
-        var explicitlyEnabled: MutableSet<PluginDescriptorImpl?>? = null
-        if (selectedIds != null) {
-            val set: MutableSet<PluginId> = HashSet<PluginId>()
-            for (it: String in selectedIds.split(",".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray()) {
-                set.add(PluginId.getId(it))
-            }
-            set.addAll(ApplicationInfoImpl.getShadowInstance().getEssentialPluginsIds())
-            explicitlyEnabled = LinkedHashSet<PluginDescriptorImpl>(set.size)
-            for (id: PluginId in set) {
-                val descriptor: PluginDescriptorImpl? = idMap.get(id)
-                if (descriptor != null) {
-                    explicitlyEnabled!!.add(descriptor)
-                }
-            }
-        } else if (selectedCategory != null) {
-            explicitlyEnabled = LinkedHashSet<PluginDescriptorImpl?>()
-            for (descriptor: PluginDescriptorImpl in descriptors) {
-                if ((selectedCategory == descriptor.getCategory())) {
-                    explicitlyEnabled!!.add(descriptor)
-                }
-            }
-        }
-        if (explicitlyEnabled != null) {
+        /*  var explicitlyEnabled: MutableSet<PluginDescriptorImpl?>? = null*/
+        /*   if (selectedIds != null) {
+               val set: MutableSet<PluginId> = HashSet<PluginId>()
+               for (it: String in selectedIds.split(",".toRegex()).dropLastWhile { it.isEmpty() }
+                   .toTypedArray()) {
+                   set.add(PluginId.getId(it))
+               }
+               set.addAll(ApplicationInfo.instance.getEssentialPluginsIds())
+               explicitlyEnabled = LinkedHashSet<PluginDescriptorImpl>(set.size)
+               for (id: PluginId in set) {
+                   val descriptor: PluginDescriptorImpl? = idMap.get(id)
+                   if (descriptor != null) {
+                       explicitlyEnabled!!.add(descriptor)
+                   }
+               }
+           } else if (selectedCategory != null) {
+               explicitlyEnabled = LinkedHashSet<PluginDescriptorImpl?>()
+               for (descriptor: PluginDescriptorImpl in descriptors) {
+                   if ((selectedCategory == descriptor.getCategory())) {
+                       explicitlyEnabled!!.add(descriptor)
+                   }
+               }
+           }*/
+        /*if (explicitlyEnabled != null) {
             // add all required dependencies
             val finalExplicitlyEnabled: MutableSet<PluginDescriptorImpl?> = explicitlyEnabled
             val depProcessed: MutableSet<PluginDescriptor?> = HashSet<PluginDescriptor?>()
@@ -1014,7 +977,7 @@ object PluginManagerCore {
                         FileVisitResult.CONTINUE
                     })
             }
-        }
+        }*/
         val brokenPluginVersions: Map<PluginId, Set<String?>> = getBrokenPluginVersions()
         val shouldLoadPlugins: Boolean =
             java.lang.Boolean.parseBoolean(System.getProperty("idea.load.plugins", "true"))
@@ -1025,7 +988,7 @@ object PluginManagerCore {
             val set: Set<String?>? = brokenPluginVersions.get(descriptor.getPluginId())
             if (set != null && set.contains(descriptor.getVersion())) {
                 descriptor.setEnabled(false)
-                errors[descriptor.getPluginId()] = PluginLoadingError(
+                /*errors[descriptor.getPluginId()] =Exception(
                     descriptor,
                     message(
                         "plugin.loading.error.long.marked.as.broken",
@@ -1033,8 +996,8 @@ object PluginManagerCore {
                         descriptor.getVersion()
                     ),
                     message("plugin.loading.error.short.marked.as.broken")
-                )
-            } else if (explicitlyEnabled != null) {
+                )*/
+            }/* else if (explicitlyEnabled != null) {
                 if (!explicitlyEnabled.contains(descriptor)) {
                     descriptor.setEnabled(false)
                     logger.info(
@@ -1042,28 +1005,28 @@ object PluginManagerCore {
                                 (if (selectedIds != null) "is not in 'idea.load.plugins.id' system property" else "category doesn't match 'idea.load.plugins.category' system property"))
                     )
                 }
-            } else if (!shouldLoadPlugins) {
+            }*/ else if (!shouldLoadPlugins) {
                 descriptor.setEnabled(false)
-                errors[descriptor.getPluginId()] = PluginLoadingError(
-                    descriptor,
-                    message(
-                        "plugin.loading.error.long.plugin.loading.disabled",
-                        descriptor.getName()
-                    ),
-                    message("plugin.loading.error.short.plugin.loading.disabled")
-                )
-            } else if (isNonBundledPluginDisabled && !descriptor.isBundled()) {
+                /* errors[descriptor.getPluginId()] = PluginLoadingError(
+                     descriptor,
+                     message(
+                         "plugin.loading.error.long.plugin.loading.disabled",
+                         descriptor.getName()
+                     ),
+                     message("plugin.loading.error.short.plugin.loading.disabled")
+                 )*/
+            } else if (isNonBundledPluginDisabled /*&& !descriptor.isBundled()*/) {
                 descriptor.setEnabled(false)
-                errors[descriptor.getPluginId()] = PluginLoadingError(
-                    descriptor,
-                    message(
-                        "plugin.loading.error.long.custom.plugin.loading.disabled",
-                        descriptor.getName()
-                    ),
-                    message("plugin.loading.error.short.custom.plugin.loading.disabled"),
-                    false,
-                    null
-                )
+                /* errors[descriptor.getPluginId()] = PluginLoadingError(
+                     descriptor,
+                     message(
+                         "plugin.loading.error.long.custom.plugin.loading.disabled",
+                         descriptor.getName()
+                     ),
+                     message("plugin.loading.error.short.custom.plugin.loading.disabled"),
+                     false,
+                     null
+                 )*/
             }
         }
     }
@@ -1072,7 +1035,7 @@ object PluginManagerCore {
         return !isIncompatible(descriptor)
     }
 
-    fun isCompatible(descriptor: PluginDescriptor, buildNumber: BuildNumber?): Boolean {
+    fun isCompatible(descriptor: PluginDescriptor, buildNumber: Int): Boolean {
         return !isIncompatible(descriptor, buildNumber)
     }
 
@@ -1080,8 +1043,8 @@ object PluginManagerCore {
         return isIncompatible(descriptor, buildNumber)
     }
 
-    fun isIncompatible(descriptor: PluginDescriptor, buildNumber: BuildNumber?): Boolean {
-        var buildNumber: BuildNumber? = buildNumber
+    fun isIncompatible(descriptor: PluginDescriptor, buildNumber: Int?): Boolean {
+        var buildNumber = buildNumber
         if (buildNumber == null) {
             buildNumber = PluginManagerCore.buildNumber
         }
@@ -1104,19 +1067,21 @@ object PluginManagerCore {
             )
         }
 
+        return null
+
     }
 
-    private fun checkEssentialPluginsAreAvailable(idMap: Map<PluginId?, PluginDescriptorImpl?>) {
+    private fun checkEssentialPluginsAreAvailable(idMap: Map<PluginId, PluginDescriptorImpl>) {
         val required: List<PluginId> =
-            ApplicationInfoImpl.getShadowInstance().getEssentialPluginsIds()
-        var missing: MutableList<String?>? = null
-        for (id: PluginId in required) {
-            val descriptor: PluginDescriptorImpl? = idMap.get(id)
-            if (descriptor == null || !descriptor.isEnabled()) {
+            ApplicationInfo.instance.getEssentialPluginsIds()
+        var missing: MutableList<String>? = null
+        for (id in required) {
+            val descriptor: PluginDescriptorImpl? = idMap[id]
+            if (descriptor == null || !descriptor.isEnabled) {
                 if (missing == null) {
                     missing = ArrayList()
                 }
-                missing.add(id.getIdString())
+                missing.add(id.idString)
             }
         }
         if (missing != null) {
@@ -1130,44 +1095,47 @@ object PluginManagerCore {
         checkEssentialPlugins: Boolean
     ): PluginManagerState {
         val loadingResult: PluginLoadingResult = context.result
-        val pluginErrors: MutableMap<PluginId, PluginLoadingError> =
-            HashMap<Any?, Any?>(loadingResult.`getPluginErrors$intellij_platform_core_impl`())
-        val globalErrors: MutableList<Supplier<String>> = loadingResult.getGlobalErrors()
+        val pluginErrors: MutableMap<PluginId, Exception> =
+            loadingResult.getPluginErrors().toMutableMap()
+        val globalErrors: MutableList<Supplier<String>> =
+            loadingResult.getGlobalErrors().toMutableList()
+
         if (loadingResult.duplicateModuleMap != null) {
             for (entry: Map.Entry<PluginId?, List<PluginDescriptorImpl?>> in loadingResult.duplicateModuleMap.entrySet()) {
                 globalErrors.add(Supplier {
-                    CoreBundle.message(
-                        "plugin.loading.error.module.declared.by.multiple.plugins", entry.key,
-                        entry.value.stream().map<Any>(PluginDescriptorImpl::toString)
-                            .collect(Collectors.joining("\n  "))
+                    AndroidBundle.coreBundle.message(
+                        com.dingyi.myluaapp.ide.core.R.string.plugin_loading_error_module_declared_by_multiple_plugins,
+                        entry.key,
+                        entry.value.map { it.toString() }
+                            .joinToString { "$it \n " }
+                        //.collect(Collectors.joining("\n  "))
                     )
                 })
             }
         }
-        val idMap: Map<PluginId?, PluginDescriptorImpl?> = loadingResult.idMap
+        val idMap: Map<PluginId, PluginDescriptorImpl> = loadingResult.idMap
         val coreDescriptor: PluginDescriptorImpl? = idMap.get(CORE_ID)
         if (checkEssentialPlugins && coreDescriptor == null) {
             throw EssentialPluginMissingException(
                 listOf<String>(
-                    CORE_ID.toString() + " (platform prefix: " + System.getProperty(
-                        PlatformUtils.PLATFORM_PREFIX_KEY
-                    ) + ")"
+                    CORE_ID.toString()
                 )
             )
         }
-        val descriptors: List<PluginDescriptorImpl?> = loadingResult.getEnabledPlugins()
+        val descriptors: List<PluginDescriptorImpl> = loadingResult.getEnabledPlugins()
+        val arrayDescriptors = descriptors.toTypedArray()
         disableIncompatiblePlugins(descriptors, idMap, pluginErrors)
-        checkPluginCycles(descriptors, idMap, globalErrors)
+        //checkPluginCycles(descriptors, idMap, globalErrors)
 
         // topological sort based on required dependencies only
-        val sortedRequired: Array<PluginDescriptorImpl> = getTopologicallySorted(
+        /*val sortedRequired: Array<PluginDescriptorImpl> = getTopologicallySorted(
             createPluginIdGraph(descriptors, idMap, false)
-        )
+        )*/
         val enabledPluginIds: MutableSet<PluginId> = LinkedHashSet<PluginId>()
         val enabledModuleIds: MutableSet<PluginId> = LinkedHashSet<PluginId>()
         val disabledIds: MutableMap<PluginId, String> = LinkedHashMap<PluginId, String>()
         val disabledRequiredIds: MutableSet<PluginId> = LinkedHashSet<PluginId>()
-        for (descriptor: PluginDescriptorImpl in sortedRequired) {
+        for (descriptor: PluginDescriptorImpl in descriptors) {
             val wasEnabled: Boolean = descriptor.isEnabled()
             if (wasEnabled && computePluginEnabled(
                     descriptor,
@@ -1180,7 +1148,7 @@ object PluginManagerCore {
                 )
             ) {
                 enabledPluginIds.add(descriptor.getPluginId())
-                enabledModuleIds.addAll(descriptor.modules)
+                //enabledModuleIds.addAll(descriptor.modules)
             } else {
                 descriptor.setEnabled(false)
                 if (wasEnabled) {
@@ -1197,16 +1165,16 @@ object PluginManagerCore {
         )
 
         // topological sort based on all (required and optional) dependencies
-        val graph: CachingSemiGraph<PluginDescriptorImpl?> =
+        /*val graph: CachingSemiGraph<PluginDescriptorImpl?> =
             createPluginIdGraph(Arrays.asList(*sortedRequired), idMap, true)
-        val sortedAll: Array<PluginDescriptorImpl> = getTopologicallySorted(graph)
-        val enabledPlugins: List<PluginDescriptorImpl> = getOnlyEnabledPlugins(sortedAll)
-        for (plugin: PluginDescriptorImpl in enabledPlugins) {
-            checkOptionalDescriptors(plugin.pluginDependencies, idMap)
-        }
+        val sortedAll: Array<PluginDescriptorImpl> = getTopologicallySorted(graph)*/
+        val enabledPlugins: List<PluginDescriptorImpl> = getOnlyEnabledPlugins(descriptors)
+        /* for (plugin: PluginDescriptorImpl in enabledPlugins) {
+             checkOptionalDescriptors(plugin.pluginDependencies, idMap)
+         }*/
         val additionalLayoutMap: Map<String, Array<String>> = loadAdditionalLayoutMap()
         ourAdditionalLayoutMap = additionalLayoutMap
-        val classLoaderConfigurator: ClassLoaderConfigurator = ClassLoaderConfigurator(
+        val classLoaderConfigurator = ClassLoaderConfigurator(
             context.usePluginClassLoader, coreLoader, idMap,
             additionalLayoutMap
         )
@@ -1215,9 +1183,9 @@ object PluginManagerCore {
             checkEssentialPluginsAreAvailable(idMap)
         }
         val effectiveDisabledIds: Set<PluginId> =
-            if (disabledIds.isEmpty()) emptySet<PluginId>() else HashSet<Any?>(disabledIds.keys)
+            if (disabledIds.isEmpty()) emptySet<PluginId>() else HashSet(disabledIds.keys)
         return PluginManagerState(
-            sortedAll,
+            arrayDescriptors,
             enabledPlugins,
             disabledRequiredIds,
             effectiveDisabledIds,
@@ -1225,103 +1193,103 @@ object PluginManagerCore {
         )
     }
 
-    private fun checkOptionalDescriptors(
-        pluginDependencies: List<PluginDependency>,
-        idMap: Map<PluginId?, PluginDescriptorImpl?>
-    ) {
-        for (dependency: PluginDependency in pluginDependencies) {
-            val subDescriptor: PluginDescriptorImpl? = dependency.subDescriptor
-            if (subDescriptor == null || dependency.isDisabledOrBroken) {
-                continue
-            }
-            val dependencyDescriptor: PluginDescriptorImpl? =
-                idMap.get(dependency.getPluginId())
-            if (dependencyDescriptor == null || !dependencyDescriptor.isEnabled()) {
-                dependency.isDisabledOrBroken = true
-                continue
-            }
+    /* private fun checkOptionalDescriptors(
+         pluginDependencies: List<PluginDependency>,
+         idMap: Map<PluginId?, PluginDescriptorImpl?>
+     ) {
+         for (dependency: PluginDependency in pluginDependencies) {
+             val subDescriptor: PluginDescriptorImpl? = dependency.subDescriptor
+             if (subDescriptor == null || dependency.isDisabledOrBroken) {
+                 continue
+             }
+             val dependencyDescriptor: PluginDescriptorImpl? =
+                 idMap.get(dependency.getPluginId())
+             if (dependencyDescriptor == null || !dependencyDescriptor.isEnabled()) {
+                 dependency.isDisabledOrBroken = true
+                 continue
+             }
 
-            // check that plugin doesn't depend on unavailable plugin
-            val childDependencies: List<PluginDependency> = subDescriptor.pluginDependencies
-            if (!checkChildDeps(childDependencies, idMap)) {
-                dependency.isDisabledOrBroken = true
-            }
-        }
-    }
+             // check that plugin doesn't depend on unavailable plugin
+             val childDependencies: List<PluginDependency> = subDescriptor.pluginDependencies
+             if (!checkChildDeps(childDependencies, idMap)) {
+                 dependency.isDisabledOrBroken = true
+             }
+         }
+     }*/
 
     // multiple dependency condition is not supported, so,
     // jsp-javaee.xml depends on com.intellij.javaee.web, and included file in turn define jsp-css.xml that depends on com.intellij.css
     // that's why nesting level is more than one
-    private fun checkChildDeps(
-        childDependencies: List<PluginDependency>,
-        idMap: Map<PluginId?, PluginDescriptorImpl?>
-    ): Boolean {
-        for (dependency: PluginDependency in childDependencies) {
-            if (dependency.isDisabledOrBroken) {
-                if (dependency.isOptional()) {
-                    continue
-                }
-                return false
-            }
-            val dependentDescriptor: PluginDescriptorImpl? = idMap.get(dependency.getPluginId())
-            if (dependentDescriptor == null || !dependentDescriptor.isEnabled()) {
-                dependency.isDisabledOrBroken = true
-                if (dependency.isOptional()) {
-                    continue
-                }
-                return false
-            }
-            if (dependency.subDescriptor != null) {
-                val list: List<PluginDependency> = dependency.subDescriptor.pluginDependencies
-                if (!checkChildDeps(list, idMap)) {
-                    dependency.isDisabledOrBroken = true
-                    if (dependency.isOptional()) {
-                        continue
-                    }
-                    return false
-                }
-            }
-        }
-        return true
-    }
+    /* private fun checkChildDeps(
+         childDependencies: List<PluginDependency>,
+         idMap: Map<PluginId?, PluginDescriptorImpl?>
+     ): Boolean {
+         for (dependency: PluginDependency in childDependencies) {
+             if (dependency.isDisabledOrBroken) {
+                 if (dependency.isOptional()) {
+                     continue
+                 }
+                 return false
+             }
+             val dependentDescriptor: PluginDescriptorImpl? = idMap.get(dependency.getPluginId())
+             if (dependentDescriptor == null || !dependentDescriptor.isEnabled()) {
+                 dependency.isDisabledOrBroken = true
+                 if (dependency.isOptional()) {
+                     continue
+                 }
+                 return false
+             }
+             if (dependency.subDescriptor != null) {
+                 val list: List<PluginDependency> = dependency.subDescriptor.pluginDependencies
+                 if (!checkChildDeps(list, idMap)) {
+                     dependency.isDisabledOrBroken = true
+                     if (dependency.isOptional()) {
+                         continue
+                     }
+                     return false
+                 }
+             }
+         }
+         return true
+     }*/
 
-    fun getTopologicallySorted(graph: InboundSemiGraph<PluginDescriptorImpl?>): Array<PluginDescriptorImpl> {
-        val requiredOnlyGraph: DFSTBuilder<PluginDescriptorImpl> = DFSTBuilder<Node>(
-            GraphGenerator.generate(graph)
-        )
-        val sortedRequired: Array<PluginDescriptorImpl> =
-            graph.getNodes().toArray(arrayOfNulls<PluginDescriptorImpl>(0))
-        val comparator: Comparator<PluginDescriptorImpl> = requiredOnlyGraph.comparator()
-        // there is circular reference between core and implementation-detail plugin, as not all such plugins extracted from core,
-        // so, ensure that core plugin is always first (otherwise not possible to register actions - parent group not defined)
-        Arrays.sort(sortedRequired,
-            Comparator<T> { o1: T, o2: T ->
-                if (CORE_ID.equals(o1.getPluginId())) -1 else if (CORE_ID.equals(
-                        o2.getPluginId()
-                    )
-                ) 1 else comparator.compare(o1, o2)
-            })
-        return sortedRequired
-    }
+    /* fun getTopologicallySorted(graph: InboundSemiGraph<PluginDescriptorImpl?>): Array<PluginDescriptorImpl> {
+         val requiredOnlyGraph: DFSTBuilder<PluginDescriptorImpl> = DFSTBuilder<Node>(
+             GraphGenerator.generate(graph)
+         )
+         val sortedRequired: Array<PluginDescriptorImpl> =
+             graph.getNodes().toArray(arrayOfNulls<PluginDescriptorImpl>(0))
+         val comparator: Comparator<PluginDescriptorImpl> = requiredOnlyGraph.comparator()
+         // there is circular reference between core and implementation-detail plugin, as not all such plugins extracted from core,
+         // so, ensure that core plugin is always first (otherwise not possible to register actions - parent group not defined)
+         Arrays.sort(sortedRequired,
+             Comparator<T> { o1: T, o2: T ->
+                 if (CORE_ID.equals(o1.getPluginId())) -1 else if (CORE_ID.equals(
+                         o2.getPluginId()
+                     )
+                 ) 1 else comparator.compare(o1, o2)
+             })
+         return sortedRequired
+     }*/
 
     @ApiStatus.Internal
-    fun buildPluginIdMap(descriptors: List<PluginDescriptorImpl?>): Map<PluginId?, PluginDescriptorImpl?> {
-        val idMap: MutableMap<PluginId?, PluginDescriptorImpl?> =
+    fun buildPluginIdMap(descriptors: List<PluginDescriptorImpl>): Map<PluginId, PluginDescriptorImpl> {
+        val idMap: MutableMap<PluginId?, PluginDescriptorImpl> =
             HashMap<PluginId, PluginDescriptorImpl>(descriptors.size)
         var duplicateMap: MutableMap<PluginId, MutableList<PluginDescriptorImpl>>? = null
         for (descriptor: PluginDescriptorImpl in descriptors) {
-            var newDuplicateMap: MutableMap<PluginId, MutableList<PluginDescriptorImpl>>? =
+            var newDuplicateMap: MutableMap<PluginId, MutableList<PluginDescriptorImpl>> =
                 checkAndPut(descriptor, descriptor.getPluginId(), idMap, duplicateMap)
             if (newDuplicateMap != null) {
                 duplicateMap = newDuplicateMap
                 continue
             }
-            for (module: PluginId in descriptor.modules) {
-                newDuplicateMap = checkAndPut(descriptor, module, idMap, duplicateMap)
-                if (newDuplicateMap != null) {
-                    duplicateMap = newDuplicateMap
-                }
-            }
+            /* for (module: PluginId in descriptor.modules) {
+                 newDuplicateMap = checkAndPut(descriptor, module, idMap, duplicateMap)
+                 if (newDuplicateMap != null) {
+                     duplicateMap = newDuplicateMap
+                 }
+             }*/
         }
         return idMap
     }
@@ -1354,7 +1322,7 @@ object PluginManagerCore {
         val list: MutableList<PluginDescriptorImpl> = ArrayList<PluginDescriptorImpl>()
         list.add(existingDescriptor)
         list.add(descriptor)
-        duplicateMap!![id] = list
+        duplicateMap[id] = list
         return duplicateMap
     }
 
@@ -1362,37 +1330,38 @@ object PluginManagerCore {
         descriptor: PluginDescriptorImpl,
         loadedPluginIds: Set<PluginId>,
         loadedModuleIds: Set<PluginId>,
-        idMap: Map<PluginId?, PluginDescriptorImpl?>,
+        idMap: Map<PluginId, PluginDescriptorImpl>,
         disabledRequiredIds: MutableSet<PluginId>,
         disabledPlugins: Set<PluginId>,
-        errors: MutableMap<PluginId, PluginLoadingError>
+        errors: MutableMap<PluginId, Exception>
     ): Boolean {
         if (CORE_ID.equals(descriptor.getPluginId())) {
             return true
         }
-        val notifyUser: Boolean = !descriptor.isImplementationDetail()
-        var result: Boolean = true
-        for (incompatibleId: PluginId in descriptor.incompatibilities) {
-            if (!loadedModuleIds.contains(incompatibleId) || disabledPlugins.contains(incompatibleId)) {
-                continue
-            }
-            result = false
-            val presentableName: String = incompatibleId.getIdString()
-            errors[descriptor.getPluginId()] = PluginLoadingError(
-                descriptor,
-                message(
-                    "plugin.loading.error.long.ide.contains.conflicting.module",
-                    descriptor.getName(), presentableName
-                ),
-                message(
-                    "plugin.loading.error.short.ide.contains.conflicting.module",
-                    presentableName
-                ),
-                notifyUser,
-                null
-            )
-        }
-        for (dependency: PluginDependency in descriptor.pluginDependencies) {
+        return descriptor.isEnabled
+        /*  val notifyUser: Boolean = !descriptor.isImplementationDetail()
+          var result: Boolean = true
+          for (incompatibleId: PluginId in descriptor.incompatibilities) {
+              if (!loadedModuleIds.contains(incompatibleId) || disabledPlugins.contains(incompatibleId)) {
+                  continue
+              }
+              result = false
+              val presentableName: String = incompatibleId.getIdString()
+              errors[descriptor.getPluginId()] = PluginLoadingError(
+                  descriptor,
+                  message(
+                      "plugin.loading.error.long.ide.contains.conflicting.module",
+                      descriptor.getName(), presentableName
+                  ),
+                  message(
+                      "plugin.loading.error.short.ide.contains.conflicting.module",
+                      presentableName
+                  ),
+                  notifyUser,
+                  null
+              )
+          }*/
+        /*for (dependency: PluginDependency in descriptor.pluginDependencies) {
             val depId: PluginId = dependency.getPluginId()
             if (dependency.isOptional() || loadedPluginIds.contains(depId) || loadedModuleIds.contains(
                     depId
@@ -1454,22 +1423,22 @@ object PluginManagerCore {
                     dep.getPluginId()
                 )
             }
-        }
-        return result
+        }*/
+        //return false
     }
 
-    @Nls
-    private fun message(
-        key: String,
-        vararg params: Any
-    ): Supplier<String> {
-        return object : Supplier<String> {
-            override fun get(): String {
-                return CoreBundle.message(key, params)
-            }
-        }
-    }
-
+    /* @Nls
+     private fun message(
+         key: String,
+         vararg params: Any
+     ): Supplier<String> {
+         return object : Supplier<String> {
+             override fun get(): String {
+                 return AndroidBundle.message(key, params)
+             }
+         }
+     }
+ */
     @Nls
     private fun message(
         key: Int,
@@ -1485,43 +1454,43 @@ object PluginManagerCore {
         coreLoader: ClassLoader?
     ) {
         var context: DescriptorListLoadingContext? = context
-        var coreLoader: ClassLoader? = coreLoader
-        if (coreLoader == null) {
-            val callerClass: Class<*>? = ReflectionUtil.findCallerClass(1)
-            assert(callerClass != null)
-            coreLoader = callerClass!!.classLoader
-        }
+        var coreLoader: ClassLoader = coreLoader ?: this::javaClass.get().classLoader
+        // if (coreLoader == null) {
+        //val callerClass: Class<*> = ReflectionUtil.findCallerClass(1)
+        //assert(callerClass != null)
+        //coreLoader = callerClass?.classLoader
+        //   }
         try {
             if (context == null) {
-                context = PluginDescriptorLoader.loadDescriptors(
-                    isUnitTestMode,
-                    isRunningFromSources
+                context = loadDescriptors(
+                    /* isUnitTestMode,*/
+                    isRunningFromSources == true
                 )
             }
-            val activity: Activity =
-                StartUpMeasurer.startActivity("plugin initialization", ActivityCategory.DEFAULT)
+            /*val activity: Activity =
+                StartUpMeasurer.startActivity("plugin initialization", ActivityCategory.DEFAULT)*/
             val initResult: PluginManagerState = initializePlugins(
                 context,
-                (coreLoader)!!, !isUnitTestMode
+                (coreLoader), !isUnitTestMode
             )
             ourPlugins = initResult.sortedPlugins
             val result: PluginLoadingResult = context.result
             if (!result.incompletePlugins.isEmpty()) {
-                val oldSize: Int = initResult.sortedPlugins.length
+                val oldSize: Int = initResult.sortedPlugins.size
                 val all: Array<PluginDescriptorImpl> = Arrays.copyOf(
                     initResult.sortedPlugins,
-                    oldSize + result.incompletePlugins.size()
+                    oldSize + result.incompletePlugins.size
                 )
-                ArrayUtil.copy(result.incompletePlugins.values(), all, oldSize)
+                ArrayUtil.copy(result.incompletePlugins.values, all, oldSize)
                 ourPlugins = all
             }
             ourPluginsToDisable = initResult.effectiveDisabledIds
             ourPluginsToEnable = initResult.disabledRequiredIds
             ourLoadedPlugins = initResult.sortedEnabledPlugins
             ourShadowedBundledPlugins = result.shadowedBundledIds
-            activity.end()
-            activity.setDescription("plugin count: " + ourLoadedPlugins!!.size)
-            logPlugins(initResult.sortedPlugins, result.incompletePlugins.values())
+            //activity.end()
+            //  activity.setDescription("plugin count: " + ourLoadedPlugins!!.size)
+            logPlugins(initResult.sortedPlugins, result.incompletePlugins.values)
         } catch (e: RuntimeException) {
             logger.error(e)
             throw e
@@ -1546,23 +1515,23 @@ object PluginManagerCore {
         return null
     }
 
-    fun findPluginByModuleDependency(id: PluginId): PluginDescriptor? {
-        for (descriptor: PluginDescriptorImpl in ourPlugins) {
-            if (descriptor.modules.contains(id)) {
-                return descriptor
-            }
-        }
-        return null
-    }
+    /*  fun findPluginByModuleDependency(id: PluginId): PluginDescriptor? {
+          for (descriptor: PluginDescriptorImpl in ourPlugins) {
+              if (descriptor.modules.contains(id)) {
+                  return descriptor
+              }
+          }
+          return null
+      }*/
 
     fun isPluginInstalled(id: PluginId?): Boolean {
         return getPlugin(id) != null
     }
 
     @ApiStatus.Internal
-    fun buildPluginIdMap(): Map<PluginId?, PluginDescriptorImpl?> {
-        LoadingState.COMPONENTS_REGISTERED.checkOccurred()
-        return buildPluginIdMap(Arrays.asList(*ourPlugins))
+    fun buildPluginIdMap(): Map<PluginId, PluginDescriptorImpl> {
+        //LoadingState.COMPONENTS_REGISTERED.checkOccurred()
+        return buildPluginIdMap(ourPlugins?.toList() ?: Collections.emptyList())
     }
 
     /**
@@ -1573,7 +1542,7 @@ object PluginManagerCore {
      *
      * Returns `false` if processing was terminated because of [FileVisitResult.TERMINATE], and `true` otherwise.
      */
-    @ApiStatus.Internal
+    /*@ApiStatus.Internal
     fun processAllDependencies(
         rootDescriptor: PluginDescriptorImpl,
         withOptionalDeps: Boolean,
@@ -1585,77 +1554,79 @@ object PluginManagerCore {
             buildPluginIdMap(),
             consumer
         )
-    }
+    }*/
 
-    @ApiStatus.Internal
-    fun processAllDependencies(
-        rootDescriptor: PluginDescriptorImpl,
-        withOptionalDeps: Boolean,
-        idToMap: Map<PluginId?, PluginDescriptorImpl?>,
-        consumer: java.util.function.Function<in PluginDescriptor?, FileVisitResult>
-    ): Boolean {
-        return processAllDependencies(rootDescriptor,
-            withOptionalDeps,
-            idToMap,
-            HashSet<PluginDescriptor?>(),
-            BiFunction<PluginId, PluginDescriptorImpl?, FileVisitResult> { id: PluginId?, descriptor: PluginDescriptorImpl? ->
-                if (descriptor != null) consumer.apply(
-                    descriptor
-                ) else FileVisitResult.SKIP_SUBTREE
-            })
-    }
-
-    @ApiStatus.Internal
-    fun processAllDependencies(
-        rootDescriptor: PluginDescriptorImpl,
-        withOptionalDeps: Boolean,
-        idToMap: Map<PluginId?, PluginDescriptorImpl?>,
-        consumer: BiFunction<PluginId, PluginDescriptorImpl?, FileVisitResult>
-    ): Boolean {
-        return processAllDependencies(
-            rootDescriptor,
-            withOptionalDeps,
-            idToMap,
-            HashSet<PluginDescriptor?>(),
-            consumer
-        )
-    }
-
-    @ApiStatus.Internal
-    private fun processAllDependencies(
-        rootDescriptor: PluginDescriptorImpl,
-        withOptionalDeps: Boolean,
-        idToMap: Map<PluginId?, PluginDescriptorImpl?>,
-        depProcessed: MutableSet<PluginDescriptor?>,
-        consumer: BiFunction<PluginId, PluginDescriptorImpl?, FileVisitResult>
-    ): Boolean {
-        for (dependency: PluginDependency in rootDescriptor.pluginDependencies) {
-            if (!withOptionalDeps && dependency.isOptional()) {
-                continue
-            }
-            val descriptor: PluginDescriptorImpl? = idToMap.get(dependency.getPluginId())
-            val pluginId: PluginId =
-                if (descriptor == null) dependency.getPluginId() else descriptor.getPluginId()
-            when (consumer.apply(pluginId, descriptor)) {
-                FileVisitResult.TERMINATE -> return false
-                FileVisitResult.CONTINUE -> if (descriptor != null && depProcessed.add(descriptor)) {
-                    processAllDependencies(
-                        descriptor,
-                        withOptionalDeps,
-                        idToMap,
-                        depProcessed,
-                        consumer
-                    )
-                }
-
-                FileVisitResult.SKIP_SUBTREE -> {}
-                FileVisitResult.SKIP_SIBLINGS -> throw UnsupportedOperationException("FileVisitResult.SKIP_SIBLINGS is not supported")
-            }
+    /*
+        @ApiStatus.Internal
+        fun processAllDependencies(
+            rootDescriptor: PluginDescriptorImpl,
+            withOptionalDeps: Boolean,
+            idToMap: Map<PluginId?, PluginDescriptorImpl?>,
+            consumer: java.util.function.Function<in PluginDescriptor?, FileVisitResult>
+        ): Boolean {
+            return processAllDependencies(rootDescriptor,
+                withOptionalDeps,
+                idToMap,
+                HashSet<PluginDescriptor?>(),
+                BiFunction<PluginId, PluginDescriptorImpl?, FileVisitResult> { id: PluginId?, descriptor: PluginDescriptorImpl? ->
+                    if (descriptor != null) consumer.apply(
+                        descriptor
+                    ) else FileVisitResult.SKIP_SUBTREE
+                })
         }
-        return true
-    }
+    */
 
-    private fun getOnlyEnabledPlugins(sortedAll: Array<PluginDescriptorImpl>): List<PluginDescriptorImpl> {
+    /*  @ApiStatus.Internal
+      fun processAllDependencies(
+          rootDescriptor: PluginDescriptorImpl,
+          withOptionalDeps: Boolean,
+          idToMap: Map<PluginId?, PluginDescriptorImpl?>,
+          consumer: BiFunction<PluginId, PluginDescriptorImpl?, FileVisitResult>
+      ): Boolean {
+          return processAllDependencies(
+              rootDescriptor,
+              withOptionalDeps,
+              idToMap,
+              HashSet<PluginDescriptor?>(),
+              consumer
+          )
+      }*/
+    /*
+        @ApiStatus.Internal
+        private fun processAllDependencies(
+            rootDescriptor: PluginDescriptorImpl,
+            withOptionalDeps: Boolean,
+            idToMap: Map<PluginId?, PluginDescriptorImpl?>,
+            depProcessed: MutableSet<PluginDescriptor?>,
+            consumer: BiFunction<PluginId, PluginDescriptorImpl?, FileVisitResult>
+        ): Boolean {
+            for (dependency: PluginDependency in rootDescriptor.pluginDependencies) {
+                if (!withOptionalDeps && dependency.isOptional()) {
+                    continue
+                }
+                val descriptor: PluginDescriptorImpl? = idToMap.get(dependency.getPluginId())
+                val pluginId: PluginId =
+                    if (descriptor == null) dependency.getPluginId() else descriptor.getPluginId()
+                when (consumer.apply(pluginId, descriptor)) {
+                    FileVisitResult.TERMINATE -> return false
+                    FileVisitResult.CONTINUE -> if (descriptor != null && depProcessed.add(descriptor)) {
+                        processAllDependencies(
+                            descriptor,
+                            withOptionalDeps,
+                            idToMap,
+                            depProcessed,
+                            consumer
+                        )
+                    }
+
+                    FileVisitResult.SKIP_SUBTREE -> {}
+                    FileVisitResult.SKIP_SIBLINGS -> throw UnsupportedOperationException("FileVisitResult.SKIP_SIBLINGS is not supported")
+                }
+            }
+            return true
+        }*/
+
+    private fun getOnlyEnabledPlugins(sortedAll: List<PluginDescriptorImpl>): List<PluginDescriptorImpl> {
         val enabledPlugins: MutableList<PluginDescriptorImpl> =
             ArrayList<PluginDescriptorImpl>(sortedAll.size)
         for (descriptor: PluginDescriptorImpl in sortedAll) {

@@ -9,7 +9,7 @@ import com.dingyi.myluaapp.openapi.extensions.PluginId
  */
 abstract class ApplicationInfo {
 
-    abstract val build: String?
+    abstract val build: Int
 
 
     /**
@@ -18,6 +18,7 @@ abstract class ApplicationInfo {
     abstract fun isEssentialPlugin( pluginId: String): Boolean
 
     abstract fun isEssentialPlugin( pluginId: PluginId): Boolean
+    abstract fun getEssentialPluginsIds(): List<PluginId>
 
     companion object {
         val instance: ApplicationInfo

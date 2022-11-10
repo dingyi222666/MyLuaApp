@@ -2,4 +2,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="plugin_loading_error_long_incompatible">=Plugin \'%1$s\' (version \'%2$s\') is not compatible with the current version of the IDE, because it requires build %3$s or newer but the current build is %4$s</string>
     <string name="plugin_loading_error_text_file_contains_invalid_plugin_descriptor">File \'%1$s\' contains invalid plugin descriptor</string>
+    <string name="plugin_loading_error_module_declared_by_multiple_plugins">Module %1$s is declared by multiple plugins:\n  %2$s</string>
 </resources>

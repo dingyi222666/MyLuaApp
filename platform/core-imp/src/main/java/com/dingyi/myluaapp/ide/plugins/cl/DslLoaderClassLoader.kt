@@ -10,18 +10,18 @@ class DslLoaderClassLoader(
 
 
     val allowLoadClasses = mutableListOf(
-        "java.lang.*",
-        "kotlin.*",
-        "com.dingyi.myluapp.*",
-        "com.android.*"
-    ).map { it.toRegex() }.toMutableList()
+        "java.lang.",
+        "kotlin.",
+        "com.dingyi.myluapp.",
+        "com.android."
+    )
 
 
     override fun loadClass(name: String, resolve: Boolean): Class<*>? {
         val superClass = super.loadClass(name, resolve)
 
         val allowLoadClass = allowLoadClasses.count {
-            it.matches(name)
+            it.startsWith(name)
         } > 0
 
         if (!allowLoadClass) {
@@ -34,7 +34,7 @@ class DslLoaderClassLoader(
 
 
     fun addAllowLoadClass(className: String) {
-        allowLoadClasses.add(className.toRegex())
+        allowLoadClasses.add(className)
     }
 
 }

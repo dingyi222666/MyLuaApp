@@ -134,7 +134,7 @@ object DisabledPluginsState {
 
     fun trySaveDisabledPlugins(pluginIds: Collection<PluginId>): Boolean {
         return trySaveDisabledPlugins(
-            PathManager.configPath.resolve(DISABLED_PLUGINS_FILENAME),
+            Paths.get("file://" + PathManager.configPath + "/" + DISABLED_PLUGINS_FILENAME),
             pluginIds,
             true
         )
