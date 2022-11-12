@@ -12,9 +12,9 @@ interface PluginAwareClassLoader {
     val pluginId: PluginId
     val instanceId: Int
 
-    val backgroundTime: Long
+   /* val backgroundTime: Long*/
     val loadedClassCount: Long
-    val files: Collection<Path>
+  /*  val files: Collection<Path>*/
 
     @get:MagicConstant(intValues = [ACTIVE.toLong(), UNLOAD_IN_PROGRESS.toLong()])
     val state: Int

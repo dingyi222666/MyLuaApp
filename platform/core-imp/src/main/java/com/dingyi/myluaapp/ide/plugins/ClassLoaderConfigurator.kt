@@ -1,13 +1,8 @@
 package com.dingyi.myluaapp.ide.plugins
 
 
-import com.intellij.diagnostic.PluginException
-import com.intellij.ide.plugins.cl.PluginClassLoader
-import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.extensions.PluginId
-import com.intellij.util.lang.ClassPath
-import com.intellij.util.lang.UrlClassLoader
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet
+
+import com.dingyi.myluaapp.openapi.extensions.PluginId
 import org.jetbrains.annotations.ApiStatus
 import java.io.IOException
 import java.lang.invoke.MethodHandles
@@ -21,10 +16,10 @@ import java.util.*
 class ClassLoaderConfigurator(
     private val usePluginClassLoader: Boolean /* grab classes from platform loader only if nothing is found in any of plugin dependencies */,
     private val coreLoader: ClassLoader,
-    val idMap: Map<PluginId, IdeaPluginDescriptorImpl>,
+    val idMap: Map<PluginId,PluginDescriptorImpl>,
     private val additionalLayoutMap: Map<String, Array<String>>) {
 
-    private var javaDep: Optional<IdeaPluginDescriptorImpl>? = null
+    private var javaDep: Optional<PluginDescriptorImpl>? = null
 
     // temporary set to produce arrays (avoid allocation for each plugin)
     // set to remove duplicated classloaders

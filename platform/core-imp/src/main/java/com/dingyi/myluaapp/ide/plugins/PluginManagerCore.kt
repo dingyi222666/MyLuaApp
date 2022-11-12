@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.ide.plugins
 
 
+import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.diagnostic.Logger
 import com.dingyi.myluaapp.diagnostic.PluginException
 import com.dingyi.myluaapp.ide.plugins.cl.PluginAwareClassLoader
@@ -845,17 +846,17 @@ object PluginManagerCore {
 
     @ApiStatus.Internal
     fun initPlugins(coreClassLoader: ClassLoader): CompletionStage<List<PluginDescriptorImpl>> {
-        var future: CompletableFuture<DescriptorListLoadingContext>? = descriptorListFuture
-        if (future == null) {
-            future = CompletableFuture.completedFuture(null)
-        }
-        return future.thenApply<List<PluginDescriptorImpl>>(java.util.function.Function<DescriptorListLoadingContext, List<PluginDescriptorImpl?>?> { context: DescriptorListLoadingContext? ->
+        val future: CompletableFuture<DescriptorListLoadingContext> = descriptorListFuture ?:
+        /* if (future == null) {
+             future =*/ CompletableFuture.completedFuture(null)
+        /* }*/
+        return future.thenApply { context: DescriptorListLoadingContext? ->
             loadAndInitializePlugins(context, coreClassLoader)
             ourLoadedPlugins
-        })
+        }
     }
 
-    private fun loadAdditionalLayoutMap(): Map<String, Array<String>> {
+  /*  private fun loadAdditionalLayoutMap(): Map<String, Array<String>> {
         val fileWithLayout: Path? = if (usePluginClassLoader) Paths.get(
             PathManager.getSystemPath(),
             PlatformUtils.getPlatformPrefix() + ".txt"
@@ -887,7 +888,7 @@ object PluginManagerCore {
         } catch (ignored: Exception) {
         }
         return additionalLayoutMap
-    }
+    }*/
 
     /**
      * not used by plugin manager - only for dynamic plugin reloading.
@@ -896,7 +897,7 @@ object PluginManagerCore {
      */
     @ApiStatus.Internal
     fun createClassLoaderConfiguratorForDynamicPlugin(pluginDescriptor: PluginDescriptorImpl): ClassLoaderConfigurator {
-        val idMap: Map<PluginId?, PluginDescriptorImpl?> = buildPluginIdMap(
+        val idMap = buildPluginIdMap(
             ContainerUtil.concat(
                 getLoadedPlugins(null), listOf(pluginDescriptor)
             )
@@ -1006,7 +1007,7 @@ object PluginManagerCore {
                     )
                 }
             }*/ else if (!shouldLoadPlugins) {
-                descriptor.setEnabled(false)
+                descriptor.isEnabled = false
                 /* errors[descriptor.getPluginId()] = PluginLoadingError(
                      descriptor,
                      message(
@@ -1016,7 +1017,7 @@ object PluginManagerCore {
                      message("plugin.loading.error.short.plugin.loading.disabled")
                  )*/
             } else if (isNonBundledPluginDisabled /*&& !descriptor.isBundled()*/) {
-                descriptor.setEnabled(false)
+                descriptor.isEnabled = false
                 /* errors[descriptor.getPluginId()] = PluginLoadingError(
                      descriptor,
                      message(
@@ -1101,7 +1102,7 @@ object PluginManagerCore {
             loadingResult.getGlobalErrors().toMutableList()
 
         if (loadingResult.duplicateModuleMap != null) {
-            for (entry: Map.Entry<PluginId?, List<PluginDescriptorImpl?>> in loadingResult.duplicateModuleMap.entrySet()) {
+            for (entry in loadingResult.duplicateModuleMap.checkNotNull().entries) {
                 globalErrors.add(Supplier {
                     AndroidBundle.coreBundle.message(
                         com.dingyi.myluaapp.ide.core.R.string.plugin_loading_error_module_declared_by_multiple_plugins,
@@ -1274,11 +1275,11 @@ object PluginManagerCore {
 
     @ApiStatus.Internal
     fun buildPluginIdMap(descriptors: List<PluginDescriptorImpl>): Map<PluginId, PluginDescriptorImpl> {
-        val idMap: MutableMap<PluginId?, PluginDescriptorImpl> =
-            HashMap<PluginId, PluginDescriptorImpl>(descriptors.size)
+        val idMap: MutableMap<PluginId, PluginDescriptorImpl> =
+            HashMap(descriptors.size)
         var duplicateMap: MutableMap<PluginId, MutableList<PluginDescriptorImpl>>? = null
         for (descriptor: PluginDescriptorImpl in descriptors) {
-            var newDuplicateMap: MutableMap<PluginId, MutableList<PluginDescriptorImpl>> =
+            val newDuplicateMap =
                 checkAndPut(descriptor, descriptor.getPluginId(), idMap, duplicateMap)
             if (newDuplicateMap != null) {
                 duplicateMap = newDuplicateMap
@@ -1297,10 +1298,10 @@ object PluginManagerCore {
     private fun checkAndPut(
         descriptor: PluginDescriptorImpl,
         id: PluginId,
-        idMap: MutableMap<PluginId?, PluginDescriptorImpl?>,
+        idMap: MutableMap<PluginId, PluginDescriptorImpl>,
         duplicateMap: MutableMap<PluginId, MutableList<PluginDescriptorImpl>>?
     ): MutableMap<PluginId, MutableList<PluginDescriptorImpl>>? {
-        var duplicateMap: MutableMap<PluginId, MutableList<PluginDescriptorImpl>>? =
+        var duplicateMap =
             duplicateMap
         if (duplicateMap != null) {
             val duplicates: MutableList<PluginDescriptorImpl>? = duplicateMap.get(id)
@@ -1309,15 +1310,12 @@ object PluginManagerCore {
                 return duplicateMap
             }
         }
-        val existingDescriptor: PluginDescriptorImpl? = idMap.put(id, descriptor)
-        if (existingDescriptor == null) {
-            return null
-        }
+        val existingDescriptor: PluginDescriptorImpl = idMap.put(id, descriptor) ?: return null
 
         // if duplicated, both are removed
         idMap.remove(id)
         if (duplicateMap == null) {
-            duplicateMap = LinkedHashMap<PluginId, MutableList<PluginDescriptorImpl>>()
+            duplicateMap = LinkedHashMap()
         }
         val list: MutableList<PluginDescriptorImpl> = ArrayList<PluginDescriptorImpl>()
         list.add(existingDescriptor)

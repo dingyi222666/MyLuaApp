@@ -1,6 +1,8 @@
 package com.dingyi.myluaapp.ide.android.cl
 
 import dalvik.system.DexClassLoader
+import java.net.URL
+import java.util.Enumeration
 
 open class AndroidClassLoader(
     dexPath: String,
@@ -10,10 +12,8 @@ open class AndroidClassLoader(
 ) : DexClassLoader(dexPath, optimizedDirectory, librarySearchPath, parent) {
 
     init {
-
         getParentClassLoaderAsAndroidClassLoader()?.addClassLoader(this)
     }
-
 
 
     fun getParentClassLoaderAsAndroidClassLoader(): AndroidParentClassLoader? {
@@ -23,20 +23,16 @@ open class AndroidClassLoader(
         return null
     }
 
-    public override fun loadClass(name: String, resolve: Boolean): Class<*>? {
-        var loadedClass = findLoadedClass(name)
 
-        if (loadedClass != null) {
-            return loadedClass
-        }
+    public override fun findClass(name: String?): Class<*>? {
+        return super.findClass(name)
+    }
+    public override fun findResource(name: String?): URL? {
+        return super.findResource(name)
+    }
 
-        //
-        loadedClass = super.findClass(name)
-
-
-        return loadedClass
-
-
+    public override fun findResources(name: String?): Enumeration<URL>? {
+        return super.findResources(name)
     }
 
 
