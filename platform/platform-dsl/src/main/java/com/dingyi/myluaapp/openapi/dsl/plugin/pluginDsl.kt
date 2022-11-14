@@ -14,6 +14,9 @@ import com.dingyi.myluaapp.openapi.dsl.plugin.service.services
 
 
 class PluginDslBuilder internal constructor() {
+
+    var packagePrefix: String? = null
+
     var version: String = ""
 
     var minSdkVersion = 0
@@ -22,7 +25,6 @@ class PluginDslBuilder internal constructor() {
 
 
     var description: String = ""
-
 
 
     lateinit var id: String
@@ -58,7 +60,8 @@ fun plugin(name: String, block: PluginDslBuilder.() -> Unit): PluginDslBuilder {
         }
         .also(block)
 }
-fun test()  {
+
+fun test() {
     plugin("JavaPlugin") {
         version = "114514"
         author = "dingyi"

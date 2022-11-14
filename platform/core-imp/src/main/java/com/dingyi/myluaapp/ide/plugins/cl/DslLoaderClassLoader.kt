@@ -30,11 +30,7 @@ class DslLoaderClassLoader(
 
 
     override fun loadClass(name: String, resolve: Boolean): Class<*>? {
-        if (mustBeLoadedByPlatform(name)) {
-            return Class.forName(name)
-        }
 
-        val superClass = super.loadClass(name, resolve)
 
         val allowLoadClass = allowLoadClasses.count {
             it.startsWith(name)
@@ -44,7 +40,12 @@ class DslLoaderClassLoader(
             return null
         }
 
-        return superClass
+        if (mustBeLoadedByPlatform(name)) {
+            return Class.forName(name)
+        }
+
+        return super.loadClass(name, resolve)
+
 
     }
 

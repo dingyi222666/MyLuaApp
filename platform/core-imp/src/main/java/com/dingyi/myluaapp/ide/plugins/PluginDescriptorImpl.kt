@@ -32,6 +32,7 @@ class PluginDescriptorImpl(
     )
     private val name = raw.name ?: id?.idString ?: raw.id
 
+    @JvmField val packagePrefix = raw.`package`
 
     @Volatile
     private var description: String? = raw.description

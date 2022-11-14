@@ -152,6 +152,7 @@ private fun loadModuleDescriptor(
             epNameToExtensions = config.extensions
             epNameToExtensionPoints = config.extensionPoints.allExtensionPointBuilder
             id = config.id
+            `package` = config.packagePrefix
         }
 
     } else {

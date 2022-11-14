@@ -16,6 +16,8 @@ import java.time.LocalDate
 @ApiStatus.Internal
 class RawPluginDescriptor {
 
+    var `package`: String? = null
+
     @JvmField
     var id: String? = null
 
