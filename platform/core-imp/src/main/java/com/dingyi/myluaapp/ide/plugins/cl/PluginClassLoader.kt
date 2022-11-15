@@ -451,7 +451,7 @@ class PluginClassLoader(
 
         /*    private val isParallelCapable: Boolean = registerAsParallelCapable()*/
         private var logStream: Writer? = null
-        private val instanceIdProducer = AtomicInteger()
+        val instanceIdProducer = AtomicInteger()
         private val parentListCacheIdCounter = AtomicInteger()
         private var KOTLIN_STDLIB_CLASSES_USED_IN_SIGNATURES: Set<String>? = null
 

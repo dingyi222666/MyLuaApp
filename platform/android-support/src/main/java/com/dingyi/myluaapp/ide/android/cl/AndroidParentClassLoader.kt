@@ -7,7 +7,7 @@ open class AndroidParentClassLoader(
     parent: ClassLoader = getSystemClassLoader()
 ) : ClassLoader(parent) {
 
-    private val allChildClassLoader = mutableListOf<AndroidClassLoader>()
+    private val allChildClassLoader = mutableListOf<BaseClassLoader>()
 
 
 
@@ -92,7 +92,7 @@ open class AndroidParentClassLoader(
     }
 
 
-    fun addClassLoader(androidClassLoader: AndroidClassLoader) {
+    fun addClassLoader(androidClassLoader: BaseClassLoader) {
         synchronized(this) {
             allChildClassLoader.add(androidClassLoader)
         }

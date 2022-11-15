@@ -21,7 +21,7 @@ class ListenerDslBuilder internal constructor( val level: Level) {
 }
 
 
-class ListenerImplementationBuilder() {
+class ListenerImplementationBuilder {
     var targetClass: Any = ""
     var topic: String = ""
 }

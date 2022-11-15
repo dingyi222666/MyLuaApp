@@ -1,6 +1,6 @@
 package com.dingyi.myluaapp.openapi.application
 
-import com.android.tools.build.bundletool.model.BundleModule.LIB_DIRECTORY
+import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import kotlin.io.path.pathString
 
 
@@ -11,6 +11,8 @@ object PathManager {
 
     lateinit var configPath: String
 
+    lateinit var pluginLibraryDir: String
+
     private var ourPluginsPath: String? = null
 
     private const val PLUGINS_DIRECTORY = "plugins"
@@ -18,6 +20,7 @@ object PathManager {
     private const val CONFIG_DIR = "config"
 
     private const val LIB_DIRECTORY = "lib"
+
 
     init {
 
@@ -27,6 +30,12 @@ object PathManager {
         } ?: error("load home path failed")
 
         configPath = "$homePath/$CONFIG_DIR"
+
+        val appFilesDir = ApplicationManager
+            .getAndroidApplication().filesDir.toPath().parent
+
+        pluginLibraryDir = appFilesDir.resolve("pluginLibs").pathString
+
 
     }
 
@@ -46,6 +55,10 @@ object PathManager {
 
     fun getLibPath(): String {
         return "$homePath/$LIB_DIRECTORY"
+    }
+
+    fun getPluginLibPath(descriptor: PluginDescriptor): String {
+        return "$pluginLibraryDir/${descriptor.pluginId.idString}"
     }
 
 

@@ -9,7 +9,7 @@ open class AndroidClassLoader(
     optimizedDirectory: String?,
     librarySearchPath: String?,
     parent: ClassLoader
-) : DexClassLoader(dexPath, optimizedDirectory, librarySearchPath, parent) {
+) : DexClassLoader(dexPath, optimizedDirectory, librarySearchPath, parent),BaseClassLoader {
 
     init {
         getParentClassLoaderAsAndroidClassLoader()?.addClassLoader(this)

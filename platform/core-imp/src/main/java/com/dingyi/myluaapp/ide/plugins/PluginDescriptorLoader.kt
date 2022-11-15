@@ -455,7 +455,7 @@ private fun loadBundledDescriptorsAndDescriptorsFromDir(
         locationSource = null
     )
     val descriptor = PluginDescriptorImpl(
-        raw = raw, path = Paths.get(PathManager.getLibPath()),/* isBundled = true,*/
+        raw = raw, path = Paths.get("???"),/* isBundled = true,*/
         id = null,
         isBundled = true
     )
@@ -696,7 +696,7 @@ private class LoadDescriptorsFromDirAction(
                                     pathResolver = PluginPathResolver.DEFAULT_PATH_RESOLVER
                                 )
                             } else if (file.fileName.toString()
-                                    .endsWith(".jar", ignoreCase = true)
+                                    .endsWith(".mpk", ignoreCase = true)
                             ) {
                                 return loadDescriptorFromMpk(
                                     file = file,
