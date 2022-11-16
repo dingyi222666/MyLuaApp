@@ -856,39 +856,6 @@ object PluginManagerCore {
         }
     }
 
-  /*  private fun loadAdditionalLayoutMap(): Map<String, Array<String>> {
-        val fileWithLayout: Path? = if (usePluginClassLoader) Paths.get(
-            PathManager.getSystemPath(),
-            PlatformUtils.getPlatformPrefix() + ".txt"
-        ) else null
-        if (fileWithLayout == null || !Files.exists(fileWithLayout)) {
-            return emptyMap()
-        }
-        val additionalLayoutMap: MutableMap<String, Array<String>> = LinkedHashMap()
-        try {
-            Files.newBufferedReader(fileWithLayout).use { bufferedReader ->
-                var line: String
-                while ((bufferedReader.readLine().also { line = it }) != null) {
-                    val parameters: List<String> =
-                        ParametersListUtil.parse(line.trim { it <= ' ' })
-                    if (parameters.size < 2) {
-                        continue
-                    }
-                    additionalLayoutMap.put(
-                        parameters.get(0),
-                        ArrayUtilRt.toStringArray(
-                            parameters.subList(
-                                1,
-                                parameters.size
-                            )
-                        )
-                    )
-                }
-            }
-        } catch (ignored: Exception) {
-        }
-        return additionalLayoutMap
-    }*/
 
     /**
      * not used by plugin manager - only for dynamic plugin reloading.
@@ -904,7 +871,7 @@ object PluginManagerCore {
         )
         return ClassLoaderConfigurator(
             true,
-            PluginManagerCore::class.java.classLoader, idMap, ourAdditionalLayoutMap
+            PluginManagerCore::class.java.classLoader, idMap/*, ourAdditionalLayoutMap*/
         )
     }
 
@@ -1173,11 +1140,11 @@ object PluginManagerCore {
         /* for (plugin: PluginDescriptorImpl in enabledPlugins) {
              checkOptionalDescriptors(plugin.pluginDependencies, idMap)
          }*/
-        val additionalLayoutMap: Map<String, Array<String>> = loadAdditionalLayoutMap()
-        ourAdditionalLayoutMap = additionalLayoutMap
+        /* val additionalLayoutMap: Map<String, Array<String>> = loadAdditionalLayoutMap()
+         ourAdditionalLayoutMap = additionalLayoutMap*/
         val classLoaderConfigurator = ClassLoaderConfigurator(
-            context.usePluginClassLoader, coreLoader, idMap,
-            additionalLayoutMap
+            true, coreLoader, idMap
+            /* additionalLayoutMap*/
         )
         enabledPlugins.forEach(classLoaderConfigurator::configure)
         if (checkEssentialPlugins) {

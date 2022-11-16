@@ -16,6 +16,7 @@ import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
 import java.nio.file.Path
 import java.util.*
+import kotlin.io.path.pathString
 
 @ApiStatus.Internal
 class ClassLoaderConfigurator(
@@ -155,6 +156,20 @@ private fun createPluginClassLoader(
         val pluginLibraryPath = PathManager
             .getPluginLibPath(descriptor).toFile()
 
+        if (!pluginLibraryPath.isDirectory) {
+            unpackLibrary(descriptor)
+        }
+
+        PluginClassLoader(
+            parent = parentLoader,
+            optimizedDirectory = descriptor.path.resolve("lib/optimizedDir").pathString,
+            librarySearchPath = pluginLibraryPath.canonicalPath,
+            pluginRoot = descriptor.pluginPath,
+            coreLoader = coreLoader,
+            resolveScopeManager = null,
+            packagePrefix = descriptor.packagePrefix,
+            pluginDescriptor = descriptor
+        )
 
     } else {
         SystemClassLoader(
@@ -163,6 +178,11 @@ private fun createPluginClassLoader(
     }
 
 
+}
+
+
+private fun unpackLibrary(descriptor: PluginDescriptorImpl) {
+    //TODO native library
 }
 
 
@@ -211,6 +231,7 @@ private fun collectPackagePrefixes(
 
 private fun addPackageByClassNameIfNeeded(name: String, packagePrefixes: MutableList<String>) {
     for (packagePrefix in packagePrefixes) {
+
         if (name.startsWith(packagePrefix)) {
             return
         }
