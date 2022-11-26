@@ -71,7 +71,7 @@ fun Context.installApk(apkPath: String) {
     val intent = Intent(Intent.ACTION_VIEW)
     val data = FileProvider.getUriForFile(this, packageName, file);
     intent.apply {
-        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION;/*给目标设置一个临时授权*/
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         setDataAndType(data, "application/vnd.android.package-archive");

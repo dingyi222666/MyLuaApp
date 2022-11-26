@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.util.messages.imp
 
+import com.dingyi.myluaapp.openapi.extensions.PluginId
 import com.dingyi.myluaapp.util.messages.ListenerDescriptor
 import com.dingyi.myluaapp.util.messages.MessageBusOwner
 import com.dingyi.myluaapp.util.messages.Topic
@@ -10,6 +11,7 @@ import com.intellij.util.containers.ContainerUtil
 import org.jetbrains.annotations.TestOnly
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
+import java.util.Collections
 import java.util.function.Predicate
 
 
@@ -19,6 +21,11 @@ private val EMPTY_MAP = HashMap<String, MutableList<ListenerDescriptor>>()
 open class CompositeMessageBus : MessageBusImpl, MessageBusEx {
     private val childBuses = ContainerUtil.createLockFreeCopyOnWriteList<MessageBusImpl>()
 
+
+    private var topicClassToListenerDescriptor: MutableMap<String, MutableList<ListenerDescriptor>> =
+        Collections.emptyMap()
+
+
     constructor(owner: MessageBusOwner, parentBus: CompositeMessageBus) : super(owner, parentBus)
 
     // root message bus constructor
@@ -26,6 +33,22 @@ open class CompositeMessageBus : MessageBusImpl, MessageBusEx {
 
 
     override fun hasChildren() = !childBuses.isEmpty()
+
+    /**
+     * Must be a concurrent map, because remove operation may be concurrently performed (synchronized only per topic).
+     */
+    override fun setLazyListeners(map: MutableMap<String, MutableList<ListenerDescriptor>>) {
+        if (topicClassToListenerDescriptor === emptyMap<String, MutableList<ListenerDescriptor>>()) {
+            topicClassToListenerDescriptor = map
+        } else {
+            topicClassToListenerDescriptor.putAll(map)
+            // adding project level listener for app level topic is not recommended, but supported
+            if (rootBus != this) {
+                rootBus.subscriberCache.clear()
+            }
+            subscriberCache.clear()
+        }
+    }
 
     fun addChild(bus: MessageBusImpl) {
         childrenListChanged(this)
@@ -63,21 +86,128 @@ open class CompositeMessageBus : MessageBusImpl, MessageBusEx {
         )
     }
 
-    override fun doComputeSubscribers(topic: Topic<*>, result: MutableList<Any>) {
-        /* if (subscribeLazyListeners) {
-             subscribeLazyListeners(topic)
-         }*/
 
-        super.doComputeSubscribers(topic, result)
+    override fun unsubscribeLazyListeners(
+        pluginId: PluginId,
+        listenerDescriptors: List<ListenerDescriptor>
+    ) {
+        topicClassToListenerDescriptor
+            .values
+            .removeIf { descriptors ->
+                if (descriptors.removeIf { descriptor ->
+                        descriptor.pluginDescriptor.pluginId == pluginId
+                    }) {
+                    return@removeIf descriptors.isEmpty()
+                }
+                false
+            }
+        if (listenerDescriptors.isEmpty() || subscribers.isEmpty()) {
+            return
+        }
+        val topicToDescriptors: MutableMap<String, MutableSet<String>> = HashMap()
+        for (descriptor in listenerDescriptors) {
+            topicToDescriptors.computeIfAbsent(
+                descriptor.topicClassName
+            ) { _: String -> HashSet() }.add(descriptor.listenerClassName)
+        }
+        var isChanged = false
+        var newSubscribers: MutableList<DescriptorBasedMessageBusConnection<*>>? = null
+        val connectionIterator = subscribers.iterator()
+        while (connectionIterator.hasNext()) {
+            val holder = connectionIterator.next() as? DescriptorBasedMessageBusConnection<*>
+                ?: continue
+
+            val connection: DescriptorBasedMessageBusConnection<Any> =
+                holder as DescriptorBasedMessageBusConnection<Any>
+            if (pluginId != connection.pluginId) {
+                continue
+            }
+            val listenerClassNames = topicToDescriptors[connection.topic.listenerClass.name]
+                ?: continue
+            val newHandlers: List<Any> = DescriptorBasedMessageBusConnection.computeNewHandlers(
+                connection.handlers,
+                listenerClassNames
+            ) ?: continue
+            isChanged = true
+            connectionIterator.remove()
+            if (!newHandlers.isEmpty()) {
+                if (newSubscribers == null) {
+                    newSubscribers = ArrayList()
+                }
+                newSubscribers.add(
+                    DescriptorBasedMessageBusConnection(
+                        pluginId,
+                        connection.topic,
+                        newHandlers
+                    )
+                )
+            }
+        }
+
+        // todo it means that order of subscribers is not preserved
+        // it is very minor requirement, but still, makes sense to comply it
+        if (newSubscribers != null) {
+            subscribers.addAll(newSubscribers)
+        }
+        if (isChanged) {
+            // we can check it more precisely, but for simplicity, just clear all
+            // adding project level listener for app level topic is not recommended, but supported
+            if (rootBus != this) {
+                rootBus.subscriberCache.clear()
+            }
+            subscriberCache.clear()
+        }
+    }
+
+    override fun doComputeSubscribers(
+        topic: Topic<*>,
+        result: MutableList<Any>,
+        subscribeLazyListeners: Boolean
+    ) {
+        if (subscribeLazyListeners) {
+            subscribeLazyListeners(topic as Topic<Any?>)
+        }
+
+        super.doComputeSubscribers(topic, result, subscribeLazyListeners)
 
         if (topic.broadcastDirection == BroadcastDirection.TO_CHILDREN) {
             for (childBus in childBuses) {
                 if (!childBus.isDisposed) {
-                    childBus.doComputeSubscribers(topic, result)
+                    childBus.doComputeSubscribers(topic, result, subscribeLazyListeners)
                 }
             }
         }
     }
+
+    private fun <L> subscribeLazyListeners(topic: Topic<L>) {
+        if (topic.listenerClass === Runnable::class.java) {
+            return
+        }
+        val listenerDescriptors =
+            topicClassToListenerDescriptor.remove(topic.listenerClass.name)
+                ?: return
+
+        // use linked hash map for repeatable results
+        val listenerMap: MutableMap<PluginId, MutableList<L>> = LinkedHashMap()
+        for (listenerDescriptor in listenerDescriptors) {
+            try {
+                listenerMap.computeIfAbsent(
+                    listenerDescriptor.pluginDescriptor.pluginId
+                ) { _: PluginId? -> ArrayList() }
+                    .add(owner.createListener(listenerDescriptor) as L)
+            } catch (e: Exception) {
+                //LOG.error("Cannot create listener", e)
+            }
+        }
+        listenerMap.forEach { (key: PluginId, listeners: List<L>) ->
+            subscribers.add(
+                DescriptorBasedMessageBusConnection(
+                    key, topic, listeners
+                )
+            )
+        }
+    }
+
 
     override fun notifyOnSubscriptionToTopicToChildren(topic: Topic<*>) {
         for (childBus in childBuses) {
@@ -180,7 +310,8 @@ private class ToDirectChildrenMessagePublisher<L>(
                 val result = mutableListOf<Any>()
                 childBus.doComputeSubscribers(
                     topic = topic1,
-                    result = result
+                    result = result,
+                    true
                 )
                 if (result.isEmpty()) {
                     ArrayUtilRt.EMPTY_OBJECT_ARRAY

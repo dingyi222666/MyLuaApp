@@ -1,12 +1,11 @@
 package com.dingyi.myluaapp.openapi.actions.internal
 
-import android.util.ArrayMap
 import com.dingyi.myluaapp.openapi.actions.ActionGroup
 import com.dingyi.myluaapp.openapi.actions.ActionManager
 import com.dingyi.myluaapp.openapi.actions.AnAction
 
 
-class DefaultActionManager : ActionManager {
+class ActionManagerImpl : ActionManager {
 
     private val myLock = Any()
     private val idToAction: MutableMap<String, AnAction> = LinkedHashMap()

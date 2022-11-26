@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.openapi.project
 
 import com.dingyi.myluaapp.openapi.service.ServiceRegistry
+import com.dingyi.myluaapp.util.messages.MessageBus
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
@@ -25,7 +26,6 @@ interface Project : ServiceRegistry {
     /**
      * @return a path to project file (see [.getProjectFile]) or `null` for default project.
      */
-    @Nullable
 
     @NonNls
     fun getProjectFilePath(): String?
@@ -36,8 +36,9 @@ interface Project : ServiceRegistry {
 
     fun isInitialized(): Boolean
 
-
     fun getServiceRegistry(): ServiceRegistry
+
+    fun getMessageBus():MessageBus
 
 
 }

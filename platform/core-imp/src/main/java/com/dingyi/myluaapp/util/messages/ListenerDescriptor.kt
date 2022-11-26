@@ -1,17 +1,10 @@
 package com.dingyi.myluaapp.util.messages
 
-class ListenerDescriptor(
-    listenerClassName: String,
-    topicClassName: String
-) {
+import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 
-    val listenerClassName: String
-    val topicClassName: String
+data class ListenerDescriptor(
+    val listenerClassName: String,
+    val topicClassName: String,
+    val pluginDescriptor: PluginDescriptor
 
-    init {
-
-        this.listenerClassName = listenerClassName
-        this.topicClassName = topicClassName
-
-    }
-}
+)

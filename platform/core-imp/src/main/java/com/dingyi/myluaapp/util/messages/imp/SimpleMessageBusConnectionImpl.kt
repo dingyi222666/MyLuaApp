@@ -53,8 +53,8 @@ internal class SimpleMessageBusConnectionImpl(bus: MessageBusImpl): SimpleMessag
         //bus?.notifyOnSubscription(topic)
     }
 
-    override fun collectHandlers(topic: Topic<*>, result: MutableList<Any>) {
-        val list = subscriptions.get()
+    override fun <L> collectHandlers(topic: Topic<L>, result: MutableList<L>) {
+        val list = subscriptions.get() as List<L>
         var i = 0
         val n = list.size
         while (i < n) {

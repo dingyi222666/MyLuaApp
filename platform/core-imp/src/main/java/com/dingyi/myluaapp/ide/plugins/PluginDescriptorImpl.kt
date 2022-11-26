@@ -41,7 +41,7 @@ class PluginDescriptorImpl(
 
     internal val author = raw.author
 
-    internal val minSdkVersion = raw.minSdkVersion
+     val minSdkVersion = raw.minSdkVersion
 
     init {
 
@@ -64,10 +64,10 @@ class PluginDescriptorImpl(
 
 
     @JvmField
-    internal val listeners = raw.listeners
+     val listeners = raw.listeners
 
     @JvmField
-    internal val services = raw.services
+     val services = raw.services
 
 
     private var isEnabled = true

@@ -15,7 +15,7 @@ class ClassExtensionPoint<T> :
     lateinit var implementationClass: String
 
 
-    override val implementationClassName: String?
+    override val implementationClassName: String
         get() = implementationClass
     override val key: String
         get() = forClass

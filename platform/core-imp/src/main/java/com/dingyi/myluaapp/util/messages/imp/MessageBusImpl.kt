@@ -33,7 +33,7 @@ open class MessageBusImpl : MessageBus {
     interface MessageHandlerHolder {
         val isDisposed: Boolean
 
-        fun collectHandlers(topic: Topic<*>, result: MutableList<Any>)
+        fun <L> collectHandlers(topic: Topic<L>, result: MutableList<L>)
 
         fun disconnectIfNeeded(predicate: Predicate<Class<*>>)
     }
@@ -108,7 +108,6 @@ open class MessageBusImpl : MessageBus {
         subscribers.add(connection)
         return connection
     }
-
 
 
     override fun <L : Any> syncPublisher(topic: Topic<L>): L {
@@ -200,18 +199,19 @@ open class MessageBusImpl : MessageBus {
     open fun doComputeSubscribers(
         topic: Topic<*>,
         result: MutableList<Any>,
+        subscribeLazyListeners: Boolean
     ) {
         // todo check that handler implements method (not a default implementation)
         for (subscriber in subscribers) {
             if (!subscriber.isDisposed) {
-                subscriber.collectHandlers(topic, result)
+                subscriber.collectHandlers(topic as Topic<Any>, result)
             }
         }
     }
 
     open fun computeSubscribers(topic: Topic<*>): Array<Any?> {
         val result = mutableListOf<Any>()
-        doComputeSubscribers(topic = topic, result = result)
+        doComputeSubscribers(topic = topic, result = result,true)
         return if (result.isEmpty()) ArrayUtilRt.EMPTY_OBJECT_ARRAY else result.toTypedArray()
     }
 

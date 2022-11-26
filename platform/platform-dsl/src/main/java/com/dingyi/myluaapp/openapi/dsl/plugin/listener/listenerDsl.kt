@@ -7,7 +7,7 @@ class ListenerDslBuilder internal constructor( val level: Level) {
     val allListener = mutableListOf<ListenerImplementationBuilder>()
 
     enum class Level {
-        Application, PROJECT
+        Application, Project
     }
 
 
@@ -24,6 +24,7 @@ class ListenerDslBuilder internal constructor( val level: Level) {
 class ListenerImplementationBuilder {
     var targetClass: Any = ""
     var topic: String = ""
+
 }
 
 fun listeners(

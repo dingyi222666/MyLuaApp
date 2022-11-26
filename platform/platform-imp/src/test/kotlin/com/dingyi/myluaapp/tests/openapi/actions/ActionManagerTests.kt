@@ -1,9 +1,8 @@
 package com.dingyi.myluaapp.tests.openapi.actions
 
-import com.dingyi.myluaapp.openapi.actions.ActionManager
 import com.dingyi.myluaapp.openapi.actions.AnAction
 import com.dingyi.myluaapp.openapi.actions.AnActionEvent
-import com.dingyi.myluaapp.openapi.actions.internal.DefaultActionManager
+import com.dingyi.myluaapp.openapi.actions.internal.ActionManagerImpl
 import org.junit.Test
 import org.junit.Assert.assertEquals
 
@@ -11,7 +10,7 @@ class ActionManagerTests {
 
     @Test
     fun actionManagerTestInsert() {
-        val manager = DefaultActionManager()
+        val manager = ActionManagerImpl()
         val action1 = Action1()
         manager.registerAction("test", action1)
 
@@ -20,7 +19,7 @@ class ActionManagerTests {
 
     @Test
     fun actionManagerTestReplace() {
-        val manager = DefaultActionManager()
+        val manager = ActionManagerImpl()
         val action1 = Action1()
         val action2 = Action2()
         manager.registerAction("test", action1)
@@ -33,7 +32,7 @@ class ActionManagerTests {
     }
     @Test
     fun actionManagerTestDelete() {
-        val manager = DefaultActionManager()
+        val manager = ActionManagerImpl()
         val action1 = Action1()
         manager.registerAction("test", action1)
 

@@ -5,7 +5,7 @@ import com.dingyi.myluaapp.openapi.actions.DataKey
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.UserDataHolderBase
 
-class DefaultDataContext:DataContext {
+class DataContextImpl:DataContext {
 
     private val userDataHolder = UserDataHolderBase()
 

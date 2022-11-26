@@ -63,6 +63,8 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
     private val ownServices: OwnServices
     private val displayName: String?
 
+    private val registration = DefaultServiceRegistration(this)
+
     private val _extensionArea by lazy { ExtensionsAreaImpl(this) }
 
     override val extensionArea: ExtensionsArea
@@ -102,7 +104,7 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
     }
 
     override fun asRegistration(): ServiceRegistration {
-        return DefaultServiceRegistration(this)
+        return registration
     }
 
 
@@ -533,7 +535,10 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
 
 
     override fun instantiateClass(serviceType: String, pluginDescriptor: PluginDescriptor): Any {
-        return instantiateClass(pluginDescriptor.classLoader.loadClass(serviceType),pluginDescriptor)
+        return instantiateClass(
+            pluginDescriptor.classLoader.loadClass(serviceType),
+            pluginDescriptor
+        )
     }
 
     override fun <T> instantiateClass(

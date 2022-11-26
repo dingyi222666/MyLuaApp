@@ -1419,7 +1419,7 @@ object PluginManagerCore {
         coreLoader: ClassLoader?
     ) {
         var context: DescriptorListLoadingContext? = context
-        var coreLoader: ClassLoader = coreLoader ?: this::javaClass.get().classLoader
+        val coreLoader: ClassLoader = coreLoader ?: this::javaClass.get().classLoader
         // if (coreLoader == null) {
         //val callerClass: Class<*> = ReflectionUtil.findCallerClass(1)
         //assert(callerClass != null)

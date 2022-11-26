@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.openapi.application
 
 import com.dingyi.myluaapp.openapi.service.ServiceRegistry
+import com.dingyi.myluaapp.util.messages.MessageBus
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -25,6 +26,9 @@ interface IDEApplication : ServiceRegistry {
      * Exits the application, showing the exit confirmation prompt if it is enabled.
      */
     fun exit()
+
+
+    fun getMessageBus():MessageBus
 
 
 }

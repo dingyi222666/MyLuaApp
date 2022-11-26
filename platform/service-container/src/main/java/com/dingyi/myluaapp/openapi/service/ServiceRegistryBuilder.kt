@@ -24,7 +24,6 @@ class ServiceRegistryBuilder private constructor() {
     }
 
     fun build(): ServiceRegistry {
-
         val registry = DefaultServiceRegistry(displayName, *parents.toTypedArray())
         for (provider in providers) {
             registry.addProvider(provider)

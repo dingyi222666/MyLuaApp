@@ -3,6 +3,7 @@ package com.dingyi.myluaapp.openapi.project
 
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
 import com.dingyi.myluaapp.openapi.service.get
+import com.dingyi.myluaapp.util.messages.Topic
 import java.io.IOException
 
 
@@ -32,12 +33,6 @@ abstract class ProjectManager {
      */
     abstract fun closeAndDispose(project: Project): Boolean
 
-/*    *//**
-     * Asynchronously reloads the specified project.
-     *
-     * @param project the project to reload.
-     *//*
-    abstract fun reloadProject(project: Project)*/
 
 
     companion object {
@@ -47,6 +42,13 @@ abstract class ProjectManager {
          */
         val instance: ProjectManager
             get() = ApplicationManager.getApplication().get()
+
+        @Topic.AppLevel
+        val TOPIC: Topic<ProjectManagerListener> = Topic(
+            ProjectManagerListener::class.java,
+            Topic.BroadcastDirection.TO_DIRECT_CHILDREN,
+            true
+        )
 
 
     }

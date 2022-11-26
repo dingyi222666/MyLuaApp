@@ -1,5 +1,7 @@
 package com.dingyi.myluaapp.util.messages.imp
 
+import com.dingyi.myluaapp.openapi.extensions.PluginId
+import com.dingyi.myluaapp.util.messages.ListenerDescriptor
 import com.dingyi.myluaapp.util.messages.MessageBus
 import org.jetbrains.annotations.TestOnly
 import java.util.function.Predicate
@@ -16,5 +18,13 @@ interface MessageBusEx : MessageBus {
     @TestOnly
     fun clearAllSubscriberCache()
 
+
+    fun unsubscribeLazyListeners(
+        pluginId: PluginId,
+        listenerDescriptors: List<ListenerDescriptor>
+    )
+
+
+    fun setLazyListeners(map: MutableMap<String, MutableList<ListenerDescriptor>>)
 
 }
