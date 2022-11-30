@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.openapi.actions
 
 import android.graphics.drawable.Drawable
+import com.dingyi.myluaapp.openapi.project.Project
 import java.util.function.Supplier
 
 
@@ -39,7 +40,9 @@ import java.util.function.Supplier
  * @see ActionPlaces
  */
 abstract class AnAction() {
-    private var mTemplatePresentation: Presentation? = null
+
+    private var myWorksInInjected: Boolean = true
+    private lateinit var mTemplatePresentation: Presentation
 
 
     constructor(icon: Drawable?) : this(Presentation.NULL_STRING, Presentation.NULL_STRING, icon)
@@ -62,7 +65,6 @@ abstract class AnAction() {
         icon
     )
 
-    @JvmOverloads
     constructor(
         dynamicText: Supplier<String?>,
         description: Supplier<String?>,
@@ -75,12 +77,20 @@ abstract class AnAction() {
         }
     }
 
+
+    /**
+     * Returns a template presentation that will be used
+     * as a template for created presentations.
+     *
+     * @return template presentation
+     */
+
     val templatePresentation: Presentation
         get() {
-            if (mTemplatePresentation == null) {
+            if (!this::mTemplatePresentation.isInitialized) {
                 mTemplatePresentation = createTemplatePresentation()
             }
-            return checkNotNull(mTemplatePresentation)
+            return mTemplatePresentation
         }
 
 
@@ -116,13 +126,56 @@ abstract class AnAction() {
     abstract fun actionPerformed(e: AnActionEvent)
 
 
-    fun beforeActionPerformedUpdate(e: AnActionEvent) {
-        update(e)
+    /*    fun beforeActionPerformedUpdate(e: AnActionEvent) {
+            update(e)
+        }*/
+
+
+    /**
+     * Enables automatic detection of injected fragments in editor. Values in DataContext, passed to the action, like EDITOR, PSI_FILE
+     * will refer to an injected fragment, if caret is currently positioned on it.
+     */
+    open fun setInjectedContext(worksInInjected: Boolean) {
+        myWorksInInjected = worksInInjected
+    }
+
+    open fun isInInjectedContext(): Boolean {
+        return myWorksInInjected
     }
 
     fun getTemplateText(): String? {
         return templatePresentation.getText()
     }
 
+
+    /**
+     * Same as [.update] but is calls immediately before actionPerformed() as final check guard.
+     * Default implementation delegates to [.update].
+     *
+     * @param e Carries information on the invocation place and data available
+     */
+    open fun beforeActionPerformedUpdate(e: AnActionEvent) {
+        val worksInInjected = isInInjectedContext()
+        e.setInjectedContext(worksInInjected)
+        update(e)
+        if (!e.presentation.isEnabled() && worksInInjected) {
+            e.setInjectedContext(false)
+            update(e)
+        }
+    }
+
+
+    open fun getEventProject(e: AnActionEvent): Project? {
+        return e.getData(CommonDataKeys.PROJECT)
+    }
+
+
+    override fun toString(): String {
+        return templatePresentation.toString()
+    }
+
+    companion object {
+        val EMPTY_ARRAY: Array<AnAction> = emptyArray()
+    }
 
 }

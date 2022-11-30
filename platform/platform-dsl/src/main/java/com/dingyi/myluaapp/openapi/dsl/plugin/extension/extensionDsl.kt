@@ -21,22 +21,20 @@ class ExtensionPointsDslBuilder internal constructor() {
 
 class ExtensionPointBuilder internal constructor(var name: String) {
 
-    val withAttributes = mutableMapOf<String, String>()
+
+    var isQualifiedName = false
 
     enum class Area {
         PROJECT, APPLICATION
     }
 
-    var beanClass: Any = ""
+    var beanClass: Any? = null
 
     var area = Area.PROJECT
 
 
-    var interfaceClass: Any = ""
+    var interfaceClass: Any? = null
 
-    infix fun String.withImplements(implement: String) {
-        withAttributes[this] = implement
-    }
 
 
 }
@@ -54,6 +52,7 @@ class ExtensionsDslBuilder internal constructor(var pluginId: String = "com.mylu
         allImplementation[this] = old
         return builder
     }
+
 
 
 }

@@ -321,7 +321,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
         }
     }
 
-    public final void processImplementations(boolean shouldBeSorted, @NotNull BiConsumer<? super Supplier<? extends @Nullable T>, ? super PluginDescriptor> consumer) {
+    public final void processImplementations(boolean shouldBeSorted, @NotNull BiConsumer<? super Supplier<? extends  T>, ? super PluginDescriptor> consumer) {
         if (isInReadOnlyMode()) {
             for (T extension : cachedExtensions) {
                 consumer.accept((Supplier<T>) () -> extension, pluginDescriptor /* doesn't matter for tests */);
@@ -343,7 +343,7 @@ public abstract class ExtensionPointImpl<T extends Object> implements ExtensionP
     }
 
     // null id means that instance was created and extension element cleared
-    public final void processIdentifiableImplementations(@NotNull BiConsumer<? super Supplier<? extends @Nullable T>, ? super @Nullable String> consumer) {
+    public final void processIdentifiableImplementations(@NotNull BiConsumer<? super Supplier<? extends  T>, ? super  String> consumer) {
         // do not use getThreadSafeAdapterList - no need to check that no listeners, because processImplementations is not a generic-purpose method
         for (ExtensionComponentAdapter adapter : getSortedAdapters()) {
             Supplier<T> supplier = () -> adapter.createInstance(componentManager);

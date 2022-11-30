@@ -6,6 +6,7 @@ import com.dingyi.myluaapp.ide.ui.android.bundle.AndroidBundle
 import com.dingyi.myluaapp.openapi.dsl.plugin.extension.ExtensionPointBuilder
 import com.dingyi.myluaapp.openapi.dsl.plugin.extension.ExtensionsDslBuilder
 import com.dingyi.myluaapp.openapi.extensions.ExtensionDescriptor
+import com.dingyi.myluaapp.openapi.extensions.ExtensionPointDescriptor
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.extensions.PluginId
 import com.dingyi.myluaapp.openapi.extensions.dsl.toExtensionDescriptor
@@ -55,12 +56,18 @@ class PluginDescriptorImpl(
     val actions = raw.actions
 
     // extension point name -> list of extension descriptors
-    val epNameToExtensions: Map<String, List<ExtensionDescriptor>>? =
+    val epNameToExtensions =
         mutableMapOf<String, List<ExtensionDescriptor>>().apply {
-            raw.epNameToExtensions?.map { extensionsDslBuilder ->
+            raw.epNameToExtensions?.forEach { extensionsDslBuilder ->
                 putAll(extensionsDslBuilder.allImplementation.mapValues { it.value.map { it.toExtensionDescriptor() } })
             }
         }
+
+    val epNameToExtensionPoints = mutableMapOf<String,List<ExtensionPointDescriptor>>().apply {
+        raw.epNameToExtensionPoints?.forEach { extensionPointBuilder ->
+           extensionPointBuilder
+        }
+    }
 
 
     @JvmField

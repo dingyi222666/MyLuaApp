@@ -134,7 +134,7 @@ class Presentation(text: Supplier<String?>) : Cloneable {
     }
 
 
-    override fun clone(): Presentation {
+    public override fun clone(): Presentation {
        return kotlin.runCatching {
             super.clone() as Presentation
         }.getOrThrow()

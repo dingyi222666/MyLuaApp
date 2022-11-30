@@ -10,7 +10,7 @@ import com.intellij.openapi.Disposable
 import java.util.function.Supplier
 
 
-interface JBTabs {
+interface Tabs {
     fun addTab(info: TabInfo, index: Int): TabInfo
     fun addTab(info: TabInfo): TabInfo
     fun removeTab(info: TabInfo): Boolean
@@ -26,22 +26,22 @@ interface JBTabs {
     val targetInfo: TabInfo
 
 
-    fun addListener(listener: TabsListener): JBTabs
-    fun addListener(listener: TabsListener, disposable: Disposable): JBTabs
-    fun setSelectionChangeHandler(handler: SelectionChangeHandler): JBTabs
+    fun addListener(listener: TabsListener): Tabs
+    fun addListener(listener: TabsListener, disposable: Disposable): Tabs
+    fun setSelectionChangeHandler(handler: SelectionChangeHandler): Tabs
     val component: AndroidTabView
 
 
     fun getIndexOf(tabInfo: TabInfo?): Int
 
-    fun setNavigationActionBinding(prevActiobId: String, nextActionId: String): JBTabs
-    fun setNavigationActionsEnabled(enabled: Boolean): JBTabs
-    fun setPopupGroup(popupGroup: ActionGroup, place: String, addNavigationGroup: Boolean): JBTabs
+    fun setNavigationActionBinding(prevActiobId: String, nextActionId: String): Tabs
+    fun setNavigationActionsEnabled(enabled: Boolean): Tabs
+    fun setPopupGroup(popupGroup: ActionGroup, place: String, addNavigationGroup: Boolean): Tabs
     fun setPopupGroup(
         popupGroup: Supplier<out ActionGroup>,
         place: String,
         addNavigationGroup: Boolean
-    ): JBTabs
+    ): Tabs
 
 
     interface SelectionChangeHandler {

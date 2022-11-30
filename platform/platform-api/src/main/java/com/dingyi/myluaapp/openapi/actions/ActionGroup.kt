@@ -6,9 +6,9 @@ import java.beans.PropertyChangeSupport
 import java.util.function.Supplier
 
 
-abstract class ActionGroup: AnAction {
+abstract class ActionGroup : AnAction {
 
-    constructor(): super()
+    constructor() : super()
 
     constructor(icon: Drawable?) : super(Presentation.NULL_STRING, Presentation.NULL_STRING, icon)
     constructor(dynamicText: Supplier<String?>) : super(
@@ -16,6 +16,12 @@ abstract class ActionGroup: AnAction {
         Presentation.NULL_STRING,
         null
     )
+
+    constructor(shortName: Supplier<String?>?, popup: Boolean) : this(
+        shortName ?: Presentation.NULL_STRING, null
+    ) {
+        setPopup(popup)
+    }
 
     @JvmOverloads
     constructor(
@@ -44,13 +50,14 @@ abstract class ActionGroup: AnAction {
         private val EMPTY_ARRAY = arrayOf<AnAction>()
 
         val EMPTY_GROUP = object : ActionGroup() {
-            override fun getChildren(e: AnActionEvent):  Array<AnAction> {
+
+            override fun getChildren(e: AnActionEvent?): Array<AnAction> {
                 return EMPTY_ARRAY
             }
         }
     }
 
-    private var mySecondaryActions =  mutableSetOf<AnAction>()
+    private var mySecondaryActions = mutableSetOf<AnAction>()
 
     /**
      * The actual value is a Boolean.
@@ -59,13 +66,10 @@ abstract class ActionGroup: AnAction {
     private val PROP_POPUP = "popup"
 
 
-
-
     /**
      * This method can be called in popup menus if [.canBePerformed] is `true`.
      */
     override fun actionPerformed(e: AnActionEvent) {}
-
 
 
     /**
@@ -121,12 +125,12 @@ abstract class ActionGroup: AnAction {
      *
      * @return An array representing children of this group. All returned children must be not `null`.
      */
-    abstract fun getChildren(e: AnActionEvent): Array<AnAction>
+    abstract fun getChildren(e: AnActionEvent?): Array<AnAction>
 
     open fun getChildren(
-         e: AnActionEvent,
-         actionManager: ActionManager
-    ):  Array<AnAction> {
+        e: AnActionEvent?,
+        actionManager: ActionManager
+    ): Array<AnAction> {
         return getChildren(e)
     }
 
@@ -137,7 +141,6 @@ abstract class ActionGroup: AnAction {
             mySecondaryActions.add(action)
         }
     }
-
 
 
     fun isPrimary(action: AnAction): Boolean {

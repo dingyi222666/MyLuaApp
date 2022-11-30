@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.openapi.actions.internal
 
+import com.dingyi.myluaapp.ide.plugins.PluginDescriptorImpl
 import com.dingyi.myluaapp.openapi.actions.ActionGroup
 import com.dingyi.myluaapp.openapi.actions.ActionManager
 import com.dingyi.myluaapp.openapi.actions.AnAction
@@ -34,10 +35,11 @@ class ActionManagerImpl : ActionManager {
         idToAction[actionId] = action
     }
 
-    /* override fun registerAction(actionId: String, action: AnAction, pluginId: Any) {
-         TODO("Not yet implemented")
-     }
- */
+    fun registerAction(descriptor:PluginDescriptorImpl) {
+        //TODO
+    }
+
+
     override fun unregisterAction(actionId: String) {
         val actionToRemove = idToAction.remove(actionId)
         if (actionToRemove != null) {
