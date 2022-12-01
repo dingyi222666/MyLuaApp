@@ -5,7 +5,6 @@ import com.dingyi.myluaapp.diagnostic.Logger
 import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.util.FunctionUtil
 import com.intellij.util.containers.ContainerUtil
-import java.util.Arrays
 import java.util.function.Supplier
 
 
@@ -248,6 +247,18 @@ open class DefaultActionGroup protected constructor(
         } else children.requireNoNulls()
     }
 
+    fun getChildActionsOrStubs(): Array<AnAction> {
+        // Mix sorted actions and pairs
+        val sortedSize = mySortedChildren.size
+        val children = arrayOfNulls<AnAction>(sortedSize/* + myPairs.size()*/)
+        for (i in 0 until sortedSize) {
+            children[i] = mySortedChildren[i]
+        }
+        /* for (i in 0 until myPairs.size()) {
+             children[i + sortedSize] = myPairs.get(i).first
+         }*/
+        return children.requireNoNulls()
+    }
 
     private fun unStub(
         actionManager: ActionManager,

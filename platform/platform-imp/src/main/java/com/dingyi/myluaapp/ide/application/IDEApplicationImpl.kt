@@ -12,10 +12,7 @@ import com.dingyi.myluaapp.openapi.project.Project
 import com.dingyi.myluaapp.openapi.service.get
 import com.dingyi.myluaapp.openapi.service.internal.DefaultServiceRegistry
 import com.dingyi.myluaapp.util.messages.ListenerDescriptor
-import com.dingyi.myluaapp.util.messages.MessageBus
-import com.dingyi.myluaapp.util.messages.MessageBusFactory
 import com.dingyi.myluaapp.util.messages.MessageBusOwner
-import com.dingyi.myluaapp.util.messages.imp.CompositeMessageBus
 import com.dingyi.myluaapp.util.messages.imp.MessageBusEx
 import com.dingyi.myluaapp.util.messages.imp.RootBus
 import com.intellij.openapi.Disposable
@@ -137,7 +134,7 @@ internal class IDEApplicationImpl : DefaultServiceRegistry("ApplicationServices"
             for ((name, descriptors) in plugin.epNameToExtensions) {
                 val point = extensionPoints.get(name) ?: continue
 
-                if (!descriptors.isEmpty()) {
+                if (descriptors.isNotEmpty()) {
                     point.registerExtensions(descriptors, plugin, listenerCallbacks)
                 }
 
@@ -145,8 +142,7 @@ internal class IDEApplicationImpl : DefaultServiceRegistry("ApplicationServices"
 
             //register actions
 
-
-            get<ActionManagerImpl>().registerAction(
+            get<ActionManagerImpl>().registerPluginAction(
                 plugin
             )
 

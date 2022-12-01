@@ -23,10 +23,10 @@ class ActionsDslBuilder internal constructor() {
 }
 
 class ActionDslBuilder internal constructor(var text: String) {
-    lateinit var id: String
+    var id: String? = null
     var targetClass: Any = ""
     var description = ""
-
+    var iconPath: String = ""
     val allAddGroups = mutableListOf<String>()
 
     fun addToGroup(id: String) {
@@ -35,14 +35,16 @@ class ActionDslBuilder internal constructor(var text: String) {
 }
 
 class ActionGroupDslBuilder internal constructor(var text: String) {
-    lateinit var id: String
+    var id: String = ""
+
+    var targetClass: Any = ""
 
     var description = ""
-
+    var iconPath: String = ""
     val allActions = mutableListOf<ActionDslBuilder>()
     val allAddGroups = mutableListOf<String>()
     val allActionGroups = mutableListOf<ActionGroupDslBuilder>()
-
+    var popup = false
     fun addToGroup(id: String) {
         allAddGroups.add(id)
     }

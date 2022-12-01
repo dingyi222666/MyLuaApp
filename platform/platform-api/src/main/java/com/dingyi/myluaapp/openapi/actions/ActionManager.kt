@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.openapi.actions
 
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
+import com.dingyi.myluaapp.openapi.extensions.PluginId
 
 
 /**
@@ -53,19 +54,19 @@ interface ActionManager {
      */
     fun registerAction(actionId: String, action: AnAction)
 
-/*    *//**
+/*
      * Registers the specified action with the specified id.
      *
      * @param actionId Id to associate with the action
      * @param action   Action to register
      * @param pluginId Identifier of the plugin owning the action. Used to show the actions in the
      * correct place under the "Plugins" node in the "Keymap" settings pane and similar dialogs.
-     *//*
+     */
     fun registerAction(
         actionId: String,
         action: AnAction,
-        pluginId: Any
-    )*/
+        pluginId: PluginId
+    )
 
     /**
      * Unregisters the action with the specified actionId. **If you're going to register another action with the same ID, use [.replaceAction]
