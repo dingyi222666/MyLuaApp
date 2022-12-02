@@ -197,7 +197,7 @@ fun loadDescriptorFromFileOrDir(
             pathResolver = pathResolver
         )
 
-        file.fileName.toString().endsWith(".jar", ignoreCase = true) -> {
+        file.fileName.toString().endsWith(".mpk", ignoreCase = true) -> {
             loadDescriptorFromMpk(
                 file = file,
                 fileName = pathName,
