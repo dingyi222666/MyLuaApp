@@ -41,6 +41,8 @@ dependencies {
     compileOnly(BuildConfig.Libs.Tools.intellij_platform_util)
     compileOnly(BuildConfig.Libs.AndroidX.appcompat)
     compileOnly(BuildConfig.Libs.Tools.commons_vfs)
+    implementation("org.lz4:lz4-java:1.8.0")
+    implementation("org.json:json:20220924")
     compileOnly(project(":platform-common"))
     compileOnly(project(":platform-api"))
     compileOnly(project(":platform-util"))
@@ -48,5 +50,7 @@ dependencies {
     compileOnly(project(":core-imp"))
     compileOnly(project(":service-container"))
     compileOnly(project(":extensions"))
+    testImplementation(project(":extensions"))
+    testImplementation(project(":platform-api"))
     testImplementation(BuildConfig.Libs.Default.junit)
 }

@@ -116,7 +116,7 @@ class ActionManagerImpl : ActionManager {
         targetList.forEach {
             when (it) {
                 is ActionDslBuilder -> processActionElement(it, plugin)
-                is ActionGroupDslBuilder ->processGroupElement(it,plugin)
+                is ActionGroupDslBuilder -> processGroupElement(it, plugin)
             }
         }
     }
@@ -213,8 +213,8 @@ class ActionManagerImpl : ActionManager {
 
 
             // process all group's children. There are other groups, actions, references and links
-            registerActionList(element.allActions,plugin)
-            registerActionList(element.allActionGroups,plugin)
+            registerActionList(element.allActions, plugin)
+            registerActionList(element.allActionGroups, plugin)
 
             group
         } catch (e: Exception) {
@@ -334,7 +334,7 @@ class ActionManagerImpl : ActionManager {
     }
 
     override fun registerAction(actionId: String, action: AnAction, pluginId: PluginId) {
-       registerAction(actionId, action)
+        registerAction(actionId, action)
         synchronized(myLock) {
             pluginToId.putValue(pluginId, actionId)
         }
@@ -353,6 +353,11 @@ class ActionManagerImpl : ActionManager {
                 idToIndex.remove(actionId)
             }
 
+
+            for ((_, value) in pluginToId.entrySet()) {
+                value.remove(actionId)
+            }
+
             if (removeFromGroups) {
                 /*   val customActionSchema: CustomActionsSchema =
                        ApplicationManager.getApplication().getServiceIfCreated(
@@ -368,21 +373,23 @@ class ActionManagerImpl : ActionManager {
                         continue
                     }
                     group.remove(actionToRemove!!, actionId)
-                    if (group !is ActionGroupStub) {
-                        //group can be used as a stub in other actions
-                        for (parentOfGroup in idToGroupId[groupId]) {
-                            val parentOfGroupAction =
-                                getActionOrStub(parentOfGroup) as DefaultActionGroup?
-                            if (parentOfGroupAction == null) {
-                                LOG.error("Trying to remove action $actionId from non-existing group $parentOfGroup")
-                                continue
-                            }
-                            for (stub in parentOfGroupAction.getChildActionsOrStubs()) {
-                                if (stub is ActionGroupStub && stub.id === groupId) {
-                                    stub.remove(actionToRemove, actionId)
-                                }
+                    if (group is ActionGroupStub) {
+                        continue
+                    }
+                    //group can be used as a stub in other actions
+                    for (parentOfGroup in idToGroupId[groupId]) {
+                        val parentOfGroupAction =
+                            getActionOrStub(parentOfGroup) as DefaultActionGroup?
+                        if (parentOfGroupAction == null) {
+                            LOG.error("Trying to remove action $actionId from non-existing group $parentOfGroup")
+                            continue
+                        }
+                        for (stub in parentOfGroupAction.getChildActionsOrStubs()) {
+                            if (stub is ActionGroupStub && stub.id === groupId) {
+                                stub.remove(actionToRemove, actionId)
                             }
                         }
+
                     }
                 }
             }
@@ -414,7 +421,7 @@ class ActionManagerImpl : ActionManager {
         if (oldAction != null) {
             unregisterAction(actionId, false)
         }
-        this.registerAction(actionId, newAction)
+        registerAction(actionId, newAction)
         synchronized(myLock) {
             if (oldIndex >= 0) {
                 idToIndex[actionId] = oldIndex

@@ -3,8 +3,14 @@
 package com.dingyi.myluaapp.ide.application
 
 import com.dingyi.myluaapp.diagnostic.Logger
+import com.dingyi.myluaapp.ide.ApplicationLoadListener
 import com.dingyi.myluaapp.ide.plugins.PluginManagerCore
-import com.dingyi.myluaapp.ide.startup.IdeStartup
+import com.dingyi.myluaapp.ide.startup.IdeStarter
+import com.dingyi.myluaapp.openapi.components.stateStore
+import com.intellij.diagnostic.LoadingState
+import com.intellij.diagnostic.StartUpMeasurer
+import com.intellij.openapi.application.PathManager
+import com.intellij.openapi.progress.ProcessCanceledException
 import com.intellij.util.ui.EDT
 
 import java.util.concurrent.CompletionStage
@@ -12,11 +18,10 @@ import java.util.concurrent.Executor
 import java.util.concurrent.ForkJoinPool
 
 
-@Suppress("SSBasedInspection")
 private val LOG = Logger.getInstance("#com.dingyi.myluaapp.idea.application.ApplicationLoader")
 
 fun initApplication(prepareUiFuture: CompletionStage<*>) {
-    val loadAndInitPluginFuture = PluginManagerCore.initPlugins(IdeStartup::class.java.classLoader)
+    val loadAndInitPluginFuture = PluginManagerCore.initPlugins(IdeStarter::class.java.classLoader)
 
 
     prepareUiFuture.thenComposeAsync({
@@ -27,7 +32,7 @@ fun initApplication(prepareUiFuture: CompletionStage<*>) {
                 app.registerComponents(plugins, null)
                 /*}*/
 
-                // startApp(app, IdeStarter(), initAppActivity, plugins, args)
+                 //startApp(app, IdeStarter(), initAppActivity, plugins, args)
 
             }
     },  { ForkJoinPool.commonPool().execute(it) })
@@ -36,5 +41,25 @@ fun initApplication(prepareUiFuture: CompletionStage<*>) {
             //StartupAbortedException.processException(it)
             null
         }
+
+}
+
+
+internal fun initConfigurationStore(app: IDEApplicationImpl) {
+    val configPath = PathManager.getConfigDir()
+    for (listener in ApplicationLoadListener.EP_NAME.iterable) {
+        try {
+            (listener ?: break).beforeApplicationLoaded(app, configPath)
+        }
+        catch (e: ProcessCanceledException) {
+            throw e
+        }
+        catch (e: Throwable) {
+            LOG.error(e)
+        }
+    }
+
+    // we set it after beforeApplicationLoaded call, because app store can depend on stream provider state
+    app.stateStore.setPath(configPath)
 
 }

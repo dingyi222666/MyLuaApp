@@ -1,6 +1,6 @@
 package com.dingyi.myluaapp.ide.startup
 
-class IdeStartup {
+class IdeStarter {
 
 
     fun main() {

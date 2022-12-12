@@ -22,7 +22,6 @@ open class BetterPrefixMatcher(private val myOriginal: PrefixMatcher, minMatchin
         myMinMatchingDegree = minMatchingDegree
     }
 
-
     protected open fun createCopy(original: PrefixMatcher, degree: Int): BetterPrefixMatcher {
         return BetterPrefixMatcher(original, degree)
     }

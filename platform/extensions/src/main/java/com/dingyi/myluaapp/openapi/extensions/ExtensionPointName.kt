@@ -122,7 +122,7 @@ class ExtensionPointName<T : Any>(@NonNls name: String) : BaseExtensionPointName
      * 1. Conditional iteration (no need to create all extensions if iteration will be stopped due to some condition).
      * 2. Iterated only once per application (no need to cache extension list internally).
      */
-    val iterable: Iterable<T>
+    val iterable: Iterable<T?>
         get() = getPointImpl(null)
 
     fun processWithPluginDescriptor(consumer: BiConsumer<in T, in PluginDescriptor>) {

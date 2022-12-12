@@ -2,8 +2,11 @@ package com.dingyi.myluaapp.openapi.vfs
 
 import com.dingyi.myluaapp.openapi.fileTypes.FileType
 import org.apache.commons.vfs2.FileObject
+import java.net.CacheRequest
 
 interface VirtualFile : FileObject {
+
+    val length:Int
 
     fun getFileType(): FileType
     fun findChild(name: String): VirtualFile?
@@ -13,6 +16,10 @@ interface VirtualFile : FileObject {
     fun getFileName() = name
 
 
-    override fun getParent():VirtualFile
-    abstract fun isValid(): Boolean
+    fun delete(requestor: Any, useDefaultDelete: Boolean = true)
+
+    override fun getParent(): VirtualFile
+    fun isValid(): Boolean
+
+    fun contentsToByteArray(): ByteArray
 }

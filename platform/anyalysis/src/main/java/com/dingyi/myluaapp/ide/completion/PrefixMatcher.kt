@@ -3,11 +3,10 @@ package com.dingyi.myluaapp.ide.completion
 import com.dingyi.myluaapp.openapi.progress.ProgressManager
 
 
-abstract class PrefixMatcher protected constructor( val prefix: String) {
+abstract class PrefixMatcher protected constructor(val prefix: String) {
 
 
     fun isStartMatch(element: CompletionElement): Boolean {
-
         return isStartMatch(element.getString())
 
     }
