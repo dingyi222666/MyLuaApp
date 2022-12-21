@@ -79,8 +79,7 @@ private class StateGetterImpl<S : Any, T : Any>(private val component: Persisten
             }
         }
 
-
-       // storage.archiveState(storageData, componentName, serializedStateAfterLoad)
+        storage.archiveState(storageData, componentName, serializedStateAfterLoad)
         return stateAfterLoad
     }
 }

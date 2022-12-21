@@ -2,11 +2,13 @@ package com.dingyi.myluaapp.openapi.service
 
 import com.dingyi.myluaapp.openapi.extensions.AreaInstance
 import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
+import com.dingyi.myluaapp.util.messages.MessageBus
+import com.dingyi.myluaapp.util.messages.MessageBusOwner
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.UserDataHolder
 
 
-interface ServiceRegistry : UserDataHolder, Disposable, AreaInstance {
+interface ServiceRegistry : UserDataHolder, Disposable, AreaInstance,MessageBusOwner {
     /**
      * Locates the service of the given type.
      *
@@ -63,6 +65,8 @@ interface ServiceRegistry : UserDataHolder, Disposable, AreaInstance {
     fun instantiateClass(serviceType: String, pluginDescriptor: PluginDescriptor): Any
 
     fun asRegistration(): ServiceRegistration
+
+    val messageBus:MessageBus
 
 
 }

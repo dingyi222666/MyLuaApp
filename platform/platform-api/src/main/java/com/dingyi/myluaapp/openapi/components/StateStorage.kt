@@ -1,5 +1,7 @@
 package com.dingyi.myluaapp.openapi.components
 
+import com.dingyi.myluaapp.configurationStore.SaveSessionProducer
+
 
 interface StateStorage {
     val isUseVfsForWrite: Boolean
@@ -14,5 +16,15 @@ interface StateStorage {
 
     fun hasState(componentName: String, reloadData: Boolean): Boolean
 
+
+    /**
+     * Returning `null` means that nothing to save.
+     */
+    fun createSaveSessionProducer(): SaveSessionProducer?
+
+    /**
+     * Get changed component names
+     */
+    fun analyzeExternalChangesAndUpdateIfNeeded(componentNames: MutableSet<in String>)
 
 }

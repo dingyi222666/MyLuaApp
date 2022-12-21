@@ -6,13 +6,13 @@ import com.dingyi.myluaapp.util.messages.MessageBusOwner
 import com.dingyi.myluaapp.util.messages.Topic
 import com.dingyi.myluaapp.util.messages.imp.MessageBusFactoryImpl
 import org.junit.Test
-import kotlin.concurrent.thread
 
 
 class MessageBusTest {
 
 
-    val rootMessageBus: MessageBus = MessageBusFactoryImpl.createRootBus(object : MessageBusOwner {
+    val rootMessageBus: MessageBus = MessageBusFactoryImpl.createRootBus(object :
+        com.dingyi.myluaapp.util.messages.MessageBusOwner {
         override val isDisposed: Boolean
             get() = false
 

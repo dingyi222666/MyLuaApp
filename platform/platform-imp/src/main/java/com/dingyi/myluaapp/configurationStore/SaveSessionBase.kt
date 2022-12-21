@@ -4,7 +4,8 @@ import com.intellij.openapi.util.WriteExternalException
 import org.json.JSONObject
 
 
-abstract class SaveSessionBase : SaveSessionProducer/*, SafeWriteRequestor, LargeFileWriteRequestor*/ {
+abstract class SaveSessionBase :
+    SaveSessionProducer/*, SafeWriteRequestor, LargeFileWriteRequestor*/ {
     final override fun setState(component: Any?, componentName: String, state: Any?) {
         if (state == null) {
             setSerializedState(componentName, null)
@@ -14,13 +15,11 @@ abstract class SaveSessionBase : SaveSessionProducer/*, SafeWriteRequestor, Larg
         val element: JSONObject?
         try {
             element = serializeState(state)
-        }
-        catch (e: WriteExternalException) {
-            //LOG.debug(e)
+        } catch (e: WriteExternalException) {
+            LOG.debug(e)
             return
-        }
-        catch (e: Throwable) {
-           // LOG.error("Unable to serialize $componentName state", e)
+        } catch (e: Throwable) {
+            LOG.error("Unable to serialize $componentName state", e)
             return
         }
 
@@ -37,7 +36,6 @@ internal fun serializeState(state: Any): JSONObject? {
         else -> return serialize(state)
     }
 }
-
 
 
 fun serialize(any: Any): JSONObject {

@@ -19,6 +19,6 @@ fun <T> deserializeState(stateElement: JSONObject?, stateClass: Class<T>, mergeI
 }
 
 
-private fun deserializeInto(stateElement: JSONObject?,mergeInto: Any?) {
- //TODO: deserializeInto
+fun deserializeInto(stateElement: JSONObject?,mergeInto: Any?) {
+   //TODO: deserializeInto
 }

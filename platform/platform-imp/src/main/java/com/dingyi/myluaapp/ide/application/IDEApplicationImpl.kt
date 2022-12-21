@@ -22,7 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
 internal class IDEApplicationImpl : DefaultServiceRegistry("ApplicationServices"), IDEApplication,
-    MessageBusOwner, Disposable {
+    Disposable {
 
     private val myLastDisposable = Disposer.newDisposable() // the last to be disposed
 
@@ -113,7 +113,6 @@ internal class IDEApplicationImpl : DefaultServiceRegistry("ApplicationServices"
                 }
             }
 
-
             //register extensionPoints
 
             val extensionPoints = HashMap(
@@ -152,7 +151,6 @@ internal class IDEApplicationImpl : DefaultServiceRegistry("ApplicationServices"
 
     }
 
-    override var isDisposed: Boolean = false
     override fun createListener(descriptor: ListenerDescriptor): Any {
         val targetClass = descriptor.pluginDescriptor.pluginClassLoader?.loadClass(
             descriptor
@@ -166,9 +164,7 @@ internal class IDEApplicationImpl : DefaultServiceRegistry("ApplicationServices"
 
     override fun dispose() {
         super.dispose()
-        isDisposed = true
     }
-
 
     private fun doProjectRegisterTask(task: RegisterTask) {
         allProjectRegisterTask.add(task)
@@ -177,4 +173,13 @@ internal class IDEApplicationImpl : DefaultServiceRegistry("ApplicationServices"
     fun interface RegisterTask {
         fun execute(project: Project)
     }
+
+    override fun runInThreadPool(block: () -> Unit) {
+        //TODO: runInThreadPool
+        block.invoke()
+    }
+
 }
+
+fun runInThreadPool(block: () -> Unit) = ApplicationManager.getApplication()
+    .runInThreadPool(block)

@@ -94,7 +94,7 @@ fun test() {
             extensionPoint("666") {
                 area = ExtensionPointBuilder.Area.APPLICATION
                 interfaceClass = "999"
-                "implementationClass" withImplements "jfdsfh"
+                //"implementationClass" withImplements "jfdsfh"
             }
         }
 

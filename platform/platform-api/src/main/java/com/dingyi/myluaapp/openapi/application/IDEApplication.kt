@@ -31,4 +31,5 @@ interface IDEApplication : ServiceRegistry {
     fun getMessageBus():MessageBus
 
 
+    fun runInThreadPool(block: () -> Unit)
 }

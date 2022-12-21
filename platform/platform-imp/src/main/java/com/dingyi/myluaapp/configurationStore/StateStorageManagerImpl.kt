@@ -3,16 +3,20 @@ package com.dingyi.myluaapp.configurationStore
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
 import com.dingyi.myluaapp.openapi.application.IDEApplication
 import com.dingyi.myluaapp.openapi.components.StateStorage
+import com.dingyi.myluaapp.openapi.components.StateStorageOperation
 import com.dingyi.myluaapp.openapi.components.Storage
 import com.dingyi.myluaapp.openapi.components.stateStore
 import com.dingyi.myluaapp.openapi.service.ServiceRegistry
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.io.FileUtilRt
 import com.intellij.util.ReflectionUtil
 import com.intellij.util.ThreeState
 import org.jetbrains.annotations.NonNls
+import java.io.File
 import java.nio.file.Path
 import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.read
 import kotlin.concurrent.write
 
 open class StateStorageManagerImpl(
@@ -94,6 +98,15 @@ open class StateStorageManagerImpl(
         return storage
     }
 
+    protected open fun createFileBasedStorage(path: Path,
+                                              collapsedPath: String): StateStorage {
+        val provider =
+            compoundStreamProvider
+
+        return MyFileStorage(this, path, collapsedPath, provider)
+    }
+
+
 
     companion object {
         private fun createDefaultVirtualTracker(componentManager: ServiceRegistry?): StorageVirtualFileTracker? {
@@ -102,7 +115,7 @@ open class StateStorageManagerImpl(
                     null
                 }
                 is IDEApplication -> {
-                    StorageVirtualFileTracker(componentManager.messageBus)
+                    StorageVirtualFileTracker((componentManager as IDEApplication).messageBus)
                 }
                 else -> {
                     val tracker = (ApplicationManager.getApplication().stateStore.storageManager as? StateStorageManagerImpl)?.virtualFileTracker
@@ -135,7 +148,13 @@ open class StateStorageManagerImpl(
         }
     }
 
-    protected open fun getMacroSubstitutor(fileSpec: String): PathMacroSubstitutor? = macroSubstitutor
+    protected open fun normalizeFileSpec(fileSpec: String): String {
+        val path = FileUtilRt.toSystemIndependentName(fileSpec)
+        // fileSpec for directory based storage could be erroneously specified as "name/"
+        return if (path.endsWith('/')) path.substring(0, path.length - 1) else path
+    }
+
+    //protected open fun getMacroSubstitutor(fileSpec: String): PathMacroSubstitutor? = macroSubstitutor
 
     override fun expandMacro(collapsedPath: String): Path {
         for ((key, value) in macros) {
@@ -151,6 +170,39 @@ open class StateStorageManagerImpl(
         throw IllegalStateException("Cannot resolve $collapsedPath in $macros")
     }
 
+    // storageCustomizer - to ensure that other threads will use fully constructed and configured storage (invoked under the same lock as created)
+    fun getOrCreateStorage(collapsedPath: String,
+                           storageClass: Class<out StateStorage> = StateStorage::class.java,
+                           exclusive: Boolean = false,
+                           storageCustomizer: (StateStorage.() -> Unit)? = null,
+                           storageCreator: StorageCreator? = null): StateStorage {
+        val normalizedCollapsedPath = normalizeFileSpec(collapsedPath)
+        val key = computeStorageKey(storageClass, normalizedCollapsedPath, collapsedPath, storageCreator)
+        val storage = storageLock.read { storages.get(key) } ?: return storageLock.write {
+            storages.getOrPut(key) {
+                val storage = when (storageCreator) {
+                    null -> createStateStorage(storageClass, normalizedCollapsedPath, exclusive)
+                    else -> storageCreator.create(this)
+                }
+                storageCustomizer?.let { storage.it() }
+                storage
+            }
+        }
+
+        storageCustomizer?.let { storage.it() }
+        return storage
+    }
+
+    private fun computeStorageKey(storageClass: Class<out StateStorage>, normalizedCollapsedPath: String, collapsedPath: String, storageCreator: StorageCreator?): String {
+        if (storageClass != StateStorage::class.java) {
+            return storageClass.name
+        }
+        if (normalizedCollapsedPath.isEmpty()) {
+            throw Exception("Normalized path is empty, raw path '$collapsedPath'")
+        }
+        return storageCreator?.key ?: normalizedCollapsedPath
+    }
+
     fun collapseMacro(path: String): String {
         for ((key, value) in macros) {
             @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
@@ -164,7 +216,7 @@ open class StateStorageManagerImpl(
 
     final override fun getOldStorage(component: Any, componentName: String, operation: StateStorageOperation): StateStorage? {
         val oldStorageSpec = getOldStorageSpec(component, componentName, operation) ?: return null
-        return getOrCreateStorage(oldStorageSpec, RoamingType.DEFAULT)
+        return getOrCreateStorage(oldStorageSpec)
     }
 
     protected open fun getOldStorageSpec(component: Any, componentName: String, operation: StateStorageOperation): String? = null
@@ -174,17 +226,13 @@ fun removeMacroIfStartsWith(path: String, macro: String): String {
     return path.removePrefix("$macro/")
 }
 
-@Suppress("DEPRECATION")
-internal val Storage.path: String
-    get() = if (value.isEmpty()) file else value
 
-internal fun getEffectiveRoamingType(roamingType: RoamingType, collapsedPath: String): RoamingType {
-    if (roamingType != RoamingType.DISABLED && (collapsedPath == StoragePathMacros.WORKSPACE_FILE || collapsedPath == StoragePathMacros.NON_ROAMABLE_FILE || isSpecialStorage(collapsedPath))) {
-        return RoamingType.DISABLED
-    }
-    else {
-        return roamingType
-    }
-}
 
 data class Macro(val key: String, var value: Path)
+
+
+val Path.systemIndependentPath: String
+    get() = toString().replace(File.separatorChar, '/')
+
+val Path.parentSystemIndependentPath: String
+    get() = parent!!.toString().replace(File.separatorChar, '/')

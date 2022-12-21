@@ -8,6 +8,9 @@ import com.dingyi.myluaapp.openapi.extensions.PluginDescriptor
 import com.dingyi.myluaapp.openapi.extensions.impl.ExtensionsAreaImpl
 import com.dingyi.myluaapp.openapi.service.*
 import com.dingyi.myluaapp.openapi.service.internal.TypeStringFormatter.format
+import com.dingyi.myluaapp.util.messages.ListenerDescriptor
+import com.dingyi.myluaapp.util.messages.MessageBus
+import com.dingyi.myluaapp.util.messages.MessageBusFactory
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.Key
@@ -26,6 +29,7 @@ import java.util.*
 
 open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceRegistry) :
     ServiceRegistry, ContainsServices {
+
 
     companion object {
 
@@ -67,8 +71,17 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
 
     private val _extensionArea by lazy { ExtensionsAreaImpl(this) }
 
+    private var _isDisposed = false
+
+    override val isDisposed: Boolean
+        get() = _isDisposed
+
     override val extensionArea: ExtensionsArea
         get() = _extensionArea
+
+    private val _messageBus: MessageBus
+    override val messageBus: MessageBus
+        get() = _messageBus
 
 
     private val targetUserDataHolder: UserDataHolder
@@ -81,9 +94,13 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
             this.allServices = ownServices
             //root area
             Extensions.setRootArea(_extensionArea)
+            _messageBus = MessageBusFactory.newMessageBus(this)
         } else {
             this.parentServices = setupParentServices(parents)
             this.allServices = CompositeServiceProvider(ownServices, parentServices)
+
+            _messageBus = MessageBusFactory.instance.createMessageBus(this, parents[0].messageBus)
+
         }
 
         targetUserDataHolder = kotlin.runCatching {
@@ -93,8 +110,17 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
         findProviderMethods(this)
     }
 
+    override fun createListener(descriptor: ListenerDescriptor): Any {
+        val targetClass = descriptor.pluginDescriptor.pluginClassLoader?.loadClass(
+            descriptor
+                .listenerClassName
+        )
+        // no inject
+        return targetClass?.newInstance() as Any
+    }
 
     override fun dispose() {
+        _isDisposed = true
         allServices.getAll(getJavaClass<Disposable>()).forEachRemaining {
             val instance = it.get()
             if (instance is Disposable) {
