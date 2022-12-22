@@ -5,9 +5,8 @@ import android.content.Context
 
 
 class AndroidBundle(
-    private val targetContext: Context
+    private val targetContext: Application
 ) {
-
 
     fun message(
         key: Int,

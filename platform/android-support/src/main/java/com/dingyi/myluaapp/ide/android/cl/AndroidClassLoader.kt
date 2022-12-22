@@ -14,8 +14,6 @@ open class AndroidClassLoader(
     init {
         getParentClassLoaderAsAndroidClassLoader()?.addClassLoader(this)
     }
-
-
     fun getParentClassLoaderAsAndroidClassLoader(): AndroidParentClassLoader? {
         if (parent is AndroidParentClassLoader) {
             return parent as AndroidParentClassLoader
@@ -34,6 +32,5 @@ open class AndroidClassLoader(
     public override fun findResources(name: String?): Enumeration<URL>? {
         return super.findResources(name)
     }
-
 
 }

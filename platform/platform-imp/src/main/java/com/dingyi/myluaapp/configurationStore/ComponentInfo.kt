@@ -42,6 +42,7 @@ private fun isUseSaveThreshold(storage: Storage): Boolean {
 
 abstract class ComponentInfo {
 
+    abstract val configurationSchemaKey: String?
     abstract val component: Any
     abstract val stateSpec: State?
 
@@ -60,7 +61,10 @@ abstract class ComponentInfo {
 
 internal class ComponentInfoImpl(override val component: Any, override val stateSpec: State?) :
     ComponentInfo() {
+
     override val isModificationTrackingSupported = false
+    override val configurationSchemaKey: String?
+        get() = component::class.java.name
 
     override val lastModificationCount: Long
         get() = -1
@@ -86,6 +90,9 @@ private class ComponentWithStateModificationTrackerInfo(
     override val currentModificationCount: Long
         get() = component.stateModificationCount
 
+    override val configurationSchemaKey: String?
+        get() = component::class.java.name
+
     override var lastModificationCount = currentModificationCount
 }
 
@@ -95,6 +102,9 @@ private class ComponentWithModificationTrackerInfo(
 ) : ModificationTrackerAwareComponentInfo() {
     override val currentModificationCount: Long
         get() = component.getModificationCount()
+
+    override val configurationSchemaKey: String?
+        get() = component::class.java.name
 
     override var lastModificationCount = currentModificationCount
 }

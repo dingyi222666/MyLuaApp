@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.configurationStore
 
+import com.dingyi.myluaapp.util.JSONSerializer
 import com.intellij.openapi.util.WriteExternalException
 import org.json.JSONObject
 
@@ -33,20 +34,7 @@ internal fun serializeState(state: Any): JSONObject? {
     @Suppress("DEPRECATION")
     when (state) {
         is JSONObject -> return state
-        else -> return serialize(state)
+        else -> return JSONSerializer.serialize(state)
     }
 }
 
-
-fun serialize(any: Any): JSONObject {
-    val json = JSONObject()
-    val clazz = any::class.java
-    val fields = clazz.declaredFields
-    for (field in fields) {
-        field.isAccessible = true
-        val name = field.name
-        val value = field.get(any)
-        json.put(name, value)
-    }
-    return json
-}

@@ -11,7 +11,7 @@ class AndroidTabView @JvmOverloads constructor(
 ) : TabLayout(context, attrs) {
 
 
-    @Deprecated("", ReplaceWith("newTab()"))
+    @Deprecated("", ReplaceWith("newTab(String)"))
     override fun newTab(): Tab {
         return super.newTab()
     }

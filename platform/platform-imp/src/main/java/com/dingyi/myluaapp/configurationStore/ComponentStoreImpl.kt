@@ -4,13 +4,20 @@ package com.dingyi.myluaapp.configurationStore
 
 
 import com.dingyi.myluaapp.diagnostic.Logger
+import com.dingyi.myluaapp.diagnostic.PluginException
 import com.dingyi.myluaapp.diagnostic.logger
+import com.dingyi.myluaapp.openapi.application.ApplicationManager
 import com.dingyi.myluaapp.openapi.components.PersistentStateComponent
 import com.dingyi.myluaapp.openapi.components.State
+import com.dingyi.myluaapp.openapi.components.StateStorage
 import com.dingyi.myluaapp.openapi.components.StateStorageOperation
 import com.dingyi.myluaapp.openapi.components.Storage
+import com.dingyi.myluaapp.openapi.components.StoragePathMacros
 import com.dingyi.myluaapp.openapi.components.impl.IComponentStore
+import com.dingyi.myluaapp.openapi.dsl.plugin.service.ServiceDslBuilder
+import com.dingyi.myluaapp.openapi.extensions.PluginId
 import com.dingyi.myluaapp.openapi.project.Project
+import com.intellij.util.ThreeState
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.annotations.TestOnly
 import java.io.IOException
@@ -72,7 +79,7 @@ abstract class ComponentStoreImpl : IComponentStore {
         (storageManager as? StateStorageManagerImpl)?.clearStorages()
     }
 
-    override fun initComponent(component: Any, serviceDescriptor: ServiceDescriptor?, pluginId: PluginId?) {
+    override fun initComponent(component: Any, serviceDescriptor: ServiceDslBuilder.ServiceImplBuilder?, pluginId: PluginId?) {
         var componentName = ""
         try {
             @Suppress("DEPRECATION")
@@ -86,7 +93,7 @@ abstract class ComponentStoreImpl : IComponentStore {
                         return
                     }
 
-                    val info = createComponentInfo(component, stateSpec, serviceDescriptor)
+                    val info = createComponentInfo(component, stateSpec)
                     initComponent(info, null, ThreeState.NO)
                 }
                 else {
@@ -94,7 +101,7 @@ abstract class ComponentStoreImpl : IComponentStore {
                     // still must be added to component list to support explicit save later
                     val info = doAddComponent(componentName, component, stateSpec, serviceDescriptor)
 
-                    if (!stateSpec.allowLoadInTests && !(loadPolicy == StateLoadPolicy.LOAD || (loadPolicy == StateLoadPolicy.LOAD_ONLY_DEFAULT && stateSpec.defaultStateAsResource))) {
+                    if (!(loadPolicy == StateLoadPolicy.LOAD || (loadPolicy == StateLoadPolicy.LOAD_ONLY_DEFAULT && stateSpec.defaultStateAsResource))) {
                         component.noStateLoaded()
                         component.initializeComponent()
                         return
@@ -104,9 +111,9 @@ abstract class ComponentStoreImpl : IComponentStore {
                         // if not service, so, component manager will check it later for all components
                         project?.let {
                             val app = ApplicationManager.getApplication()
-                            if (!app.isHeadlessEnvironment && !app.isUnitTestMode && it.isInitialized) {
+                           // if (!app.isHeadlessEnvironment && !app.isUnitTestMode && it.isInitialized) {
                                 notifyUnknownMacros(this, it, componentName)
-                            }
+                            //}
                         }
                     }
                 }
@@ -117,9 +124,7 @@ abstract class ComponentStoreImpl : IComponentStore {
                 initJdomExternalizable(component, componentName)
             }
         }
-        catch (e: ProcessCanceledException) {
-            throw e
-        }
+
         catch (e: Exception) {
             LOG.error(PluginException("Cannot init component state (componentName=$componentName, componentClass=${component.javaClass.simpleName})", e, pluginId))
         }

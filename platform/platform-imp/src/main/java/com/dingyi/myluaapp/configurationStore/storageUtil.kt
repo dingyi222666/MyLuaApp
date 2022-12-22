@@ -1,6 +1,9 @@
 package com.dingyi.myluaapp.configurationStore
 
+import com.dingyi.myluaapp.diagnostic.PluginException
 import com.dingyi.myluaapp.ide.application.runInThreadPool
+import com.dingyi.myluaapp.openapi.components.PersistentStateComponent
+import com.dingyi.myluaapp.openapi.components.State
 import com.dingyi.myluaapp.openapi.vfs.VirtualFile
 import com.dingyi.myluaapp.openapi.vfs.VirtualFileSystemManager
 import com.intellij.openapi.util.text.HtmlBuilder
@@ -37,5 +40,27 @@ fun getOrCreateVirtualFile(file: Path, requestor: StorageManagerFileWriteRequest
     }
 
     return checkNotNull( virtualFile)
+}
+
+fun <T> getStateSpec(persistentStateComponent: PersistentStateComponent<T>): State {
+    return getStateSpecOrError(persistentStateComponent.javaClass)
+}
+
+fun getStateSpecOrError(componentClass: Class<out PersistentStateComponent<*>>): State {
+    return getStateSpec(componentClass)
+        ?: throw PluginException("No @State annotation found in $componentClass", null)
+}
+
+fun getStateSpec(originalClass: Class<*>): State? {
+    var aClass = originalClass
+    while (true) {
+        val stateSpec = aClass.getAnnotation(State::class.java)
+        if (stateSpec != null) {
+            return stateSpec
+        }
+
+        aClass = aClass.superclass ?: break
+    }
+    return null
 }
 

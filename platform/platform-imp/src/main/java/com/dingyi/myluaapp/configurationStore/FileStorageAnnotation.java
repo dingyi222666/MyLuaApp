@@ -47,4 +47,9 @@ public class FileStorageAnnotation implements Storage {
     public Class<? extends Annotation> annotationType() {
         throw new UnsupportedOperationException("Method annotationType not implemented in " + getClass());
     }
+
+    @Override
+    public boolean exclusive() {
+        return false;
+    }
 }

@@ -36,5 +36,7 @@ annotation class Storage(
     /**
      * Is exportable (Export Settings dialog) regardless of roaming type.
      */
-    val exportable: Boolean = false
+    val exportable: Boolean = false,
+
+    val exclusive: Boolean = false
 )

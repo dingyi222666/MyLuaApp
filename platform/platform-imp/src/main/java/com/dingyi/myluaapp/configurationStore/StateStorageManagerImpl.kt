@@ -2,6 +2,7 @@ package com.dingyi.myluaapp.configurationStore
 
 import com.dingyi.myluaapp.openapi.application.ApplicationManager
 import com.dingyi.myluaapp.openapi.application.IDEApplication
+import com.dingyi.myluaapp.openapi.components.PersistentStateComponent
 import com.dingyi.myluaapp.openapi.components.StateStorage
 import com.dingyi.myluaapp.openapi.components.StateStorageOperation
 import com.dingyi.myluaapp.openapi.components.Storage
@@ -13,6 +14,7 @@ import com.intellij.openapi.util.io.FileUtilRt
 import com.intellij.util.ReflectionUtil
 import com.intellij.util.ThreeState
 import org.jetbrains.annotations.NonNls
+import org.json.JSONObject
 import java.io.File
 import java.nio.file.Path
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -43,7 +45,6 @@ open class StateStorageManagerImpl(
     }
 
 
-
     override fun removeStreamProvider(clazz: Class<out StreamProvider>) {
         compoundStreamProvider.providers.removeAll { clazz.isInstance(it) }
     }
@@ -55,39 +56,51 @@ open class StateStorageManagerImpl(
         else -> ThreeState.UNSURE // unsure because depends on stream provider state
     }
 
-    override fun getStateStorage(storageSpec: Storage): StateStorage {
-        TODO("Not yet implemented")
-    }
+    @Suppress("CAST_NEVER_SUCCEEDS")
+    final override fun getStateStorage(storageSpec: Storage) = getOrCreateStorage(
+        storageSpec.value,
+        storageSpec.storageClass.java,
+        storageSpec.exclusive,
+        storageCreator = storageSpec as? StorageCreator
+    )
+
+    open fun getFileBasedStorageConfiguration(fileSpec: String) = defaultFileBasedStorageConfiguration
 
 
     // overridden in upsource
-    protected open fun createStateStorage(storageClass: Class<out StateStorage>,
-                                          collapsedPath: String,
-                                          exclusive: Boolean = false): StateStorage {
+    protected open fun createStateStorage(
+        storageClass: Class<out StateStorage>,
+        collapsedPath: String,
+        exclusive: Boolean = false
+    ): StateStorage {
         if (storageClass != StateStorage::class.java) {
             val constructor = storageClass.constructors.first { it.parameterCount <= 3 }
             constructor.isAccessible = true
             if (constructor.parameterCount == 2) {
                 return constructor.newInstance(componentManager!!, this) as StateStorage
-            }
-            else {
-                return constructor.newInstance(collapsedPath, componentManager!!, this) as StateStorage
+            } else {
+                return constructor.newInstance(
+                    collapsedPath,
+                    componentManager!!,
+                    this
+                ) as StateStorage
             }
         }
 
         if (isUseVfsListener == ThreeState.UNSURE) {
-            isUseVfsListener = ThreeState.fromBoolean(!compoundStreamProvider.isApplicable(collapsedPath))
+            isUseVfsListener =
+                ThreeState.fromBoolean(!compoundStreamProvider.isApplicable(collapsedPath))
         }
 
         val filePath = expandMacro(collapsedPath)
-      /*  @Suppress("DEPRECATION")
-        if (stateSplitter != StateSplitter::class.java && stateSplitter != StateSplitterEx::class.java) {
-            val storage = createDirectoryBasedStorage(filePath, collapsedPath, ReflectionUtil.newInstance(stateSplitter))
-            if (storage is StorageVirtualFileTracker.TrackedStorage) {
-                virtualFileTracker?.put(filePath.systemIndependentPath, storage)
-            }
-            return storage
-        }*/
+        /*  @Suppress("DEPRECATION")
+          if (stateSplitter != StateSplitter::class.java && stateSplitter != StateSplitterEx::class.java) {
+              val storage = createDirectoryBasedStorage(filePath, collapsedPath, ReflectionUtil.newInstance(stateSplitter))
+              if (storage is StorageVirtualFileTracker.TrackedStorage) {
+                  virtualFileTracker?.put(filePath.systemIndependentPath, storage)
+              }
+              return storage
+          }*/
 
         val app = ApplicationManager.getApplication()
 
@@ -98,15 +111,57 @@ open class StateStorageManagerImpl(
         return storage
     }
 
-    protected open fun createFileBasedStorage(path: Path,
-                                              collapsedPath: String): StateStorage {
+    protected open fun createFileBasedStorage(
+        path: Path,
+        collapsedPath: String
+    ): StateStorage {
         val provider =
             compoundStreamProvider
 
         return MyFileStorage(this, path, collapsedPath, provider)
     }
 
+    // function must be pure and do not use anything outside of passed arguments
+    protected open fun beforeElementSaved(elements: MutableList<JSONObject>, rootAttributes: MutableMap<String, String>) {
+    }
 
+    protected open fun providerDataStateChanged(storage: FileBasedStorage, writer: DataWriter?, type: DataStateChanged) {
+    }
+
+    protected open fun beforeElementLoaded(element: JSONObject) {
+    }
+
+    protected open class MyFileStorage(
+        override val storageManager: StateStorageManagerImpl,
+        file: Path,
+        fileSpec: String,
+        provider: StreamProvider? = null
+    ) : FileBasedStorage(file, fileSpec), StorageVirtualFileTracker.TrackedStorage {
+
+        override val configuration: FileBasedStorageConfiguration
+            get() = storageManager.getFileBasedStorageConfiguration(fileSpec)
+
+        override fun beforeElementSaved(
+            elements: MutableList<JSONObject>,
+            rootAttributes: MutableMap<String, String>
+        ) {
+
+            storageManager.beforeElementSaved(elements, rootAttributes)
+
+            super.beforeElementSaved(elements, rootAttributes)
+        }
+
+        override fun beforeElementLoaded(element: JSONObject) {
+            storageManager.beforeElementLoaded(element)
+            super.beforeElementLoaded(element)
+        }
+
+        override fun providerDataStateChanged(writer: DataWriter?, type: DataStateChanged) {
+            storageManager.providerDataStateChanged(this, writer, type)
+            super.providerDataStateChanged(writer, type)
+        }
+
+    }
 
     companion object {
         private fun createDefaultVirtualTracker(componentManager: ServiceRegistry?): StorageVirtualFileTracker? {
@@ -114,12 +169,15 @@ open class StateStorageManagerImpl(
                 null -> {
                     null
                 }
+
                 is IDEApplication -> {
                     StorageVirtualFileTracker((componentManager as IDEApplication).messageBus)
                 }
+
                 else -> {
-                    val tracker = (ApplicationManager.getApplication().stateStore.storageManager as? StateStorageManagerImpl)?.virtualFileTracker
-                        ?: return null
+                    val tracker =
+                        (ApplicationManager.getApplication().stateStore.storageManager as? StateStorageManagerImpl)?.virtualFileTracker
+                            ?: return null
                     Disposer.register(componentManager, Disposable {
                         tracker.remove { it.storageManager.componentManager == componentManager }
                     })
@@ -135,8 +193,7 @@ open class StateStorageManagerImpl(
                 if (virtualFileTracker != null) {
                     clearVirtualFileTracker(virtualFileTracker)
                 }
-            }
-            finally {
+            } finally {
                 storages.clear()
             }
         }
@@ -162,7 +219,10 @@ open class StateStorageManagerImpl(
                 return value
             }
 
-            if (collapsedPath.length > (key.length + 2) && collapsedPath[key.length] == '/' && collapsedPath.startsWith(key)) {
+            if (collapsedPath.length > (key.length + 2) && collapsedPath[key.length] == '/' && collapsedPath.startsWith(
+                    key
+                )
+            ) {
                 return value.resolve(collapsedPath.substring(key.length + 1))
             }
         }
@@ -171,13 +231,16 @@ open class StateStorageManagerImpl(
     }
 
     // storageCustomizer - to ensure that other threads will use fully constructed and configured storage (invoked under the same lock as created)
-    fun getOrCreateStorage(collapsedPath: String,
-                           storageClass: Class<out StateStorage> = StateStorage::class.java,
-                           exclusive: Boolean = false,
-                           storageCustomizer: (StateStorage.() -> Unit)? = null,
-                           storageCreator: StorageCreator? = null): StateStorage {
+    fun getOrCreateStorage(
+        collapsedPath: String,
+        storageClass: Class<out StateStorage> = StateStorage::class.java,
+        exclusive: Boolean = false,
+        storageCustomizer: (StateStorage.() -> Unit)? = null,
+        storageCreator: StorageCreator? = null
+    ): StateStorage {
         val normalizedCollapsedPath = normalizeFileSpec(collapsedPath)
-        val key = computeStorageKey(storageClass, normalizedCollapsedPath, collapsedPath, storageCreator)
+        val key =
+            computeStorageKey(storageClass, normalizedCollapsedPath, collapsedPath, storageCreator)
         val storage = storageLock.read { storages.get(key) } ?: return storageLock.write {
             storages.getOrPut(key) {
                 val storage = when (storageCreator) {
@@ -193,7 +256,12 @@ open class StateStorageManagerImpl(
         return storage
     }
 
-    private fun computeStorageKey(storageClass: Class<out StateStorage>, normalizedCollapsedPath: String, collapsedPath: String, storageCreator: StorageCreator?): String {
+    private fun computeStorageKey(
+        storageClass: Class<out StateStorage>,
+        normalizedCollapsedPath: String,
+        collapsedPath: String,
+        storageCreator: StorageCreator?
+    ): String {
         if (storageClass != StateStorage::class.java) {
             return storageClass.name
         }
@@ -214,18 +282,25 @@ open class StateStorageManagerImpl(
         return normalizeFileSpec(path)
     }
 
-    final override fun getOldStorage(component: Any, componentName: String, operation: StateStorageOperation): StateStorage? {
+    final override fun getOldStorage(
+        component: Any,
+        componentName: String,
+        operation: StateStorageOperation
+    ): StateStorage? {
         val oldStorageSpec = getOldStorageSpec(component, componentName, operation) ?: return null
         return getOrCreateStorage(oldStorageSpec)
     }
 
-    protected open fun getOldStorageSpec(component: Any, componentName: String, operation: StateStorageOperation): String? = null
+    protected open fun getOldStorageSpec(
+        component: Any,
+        componentName: String,
+        operation: StateStorageOperation
+    ): String? = null
 }
 
 fun removeMacroIfStartsWith(path: String, macro: String): String {
     return path.removePrefix("$macro/")
 }
-
 
 
 data class Macro(val key: String, var value: Path)

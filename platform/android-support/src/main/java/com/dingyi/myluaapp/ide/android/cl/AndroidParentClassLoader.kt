@@ -8,9 +8,6 @@ open class AndroidParentClassLoader(
 ) : ClassLoader(parent) {
 
     private val allChildClassLoader = mutableListOf<BaseClassLoader>()
-
-
-
     public override fun loadClass(name: String, resolve: Boolean): Class<*> {
         val superClass = kotlin.runCatching { findClass(name) }.getOrNull()
         if (superClass != null) {

@@ -45,14 +45,13 @@ open class FileBasedStorage(
         }
     }
 
-    protected open val isUseXmlProlog = false
 
     final override val isUseVfsForWrite: Boolean
         get() = configuration.isUseVfsForWrite
 
     private val isUseUnixLineSeparator: Boolean
         // only ApplicationStore doesn't use xml prolog
-        get() = !isUseXmlProlog
+        get() = false
 
     // we never set io file to null
     fun setFile(virtualFile: VirtualFile?, ioFileIfChanged: Path?) {
@@ -106,8 +105,7 @@ open class FileBasedStorage(
                         this,
                         virtualFile,
                         dataWriter,
-                        lineSeparator,
-                        storage.isUseXmlProlog
+                        lineSeparator
                     )
                 }
 
@@ -265,8 +263,7 @@ internal fun writeFile(
     requestor: StorageManagerFileWriteRequestor,
     virtualFile: VirtualFile?,
     dataWriter: DataWriter,
-    lineSeparator: LineSeparator,
-    prependXmlProlog: Boolean
+    lineSeparator: LineSeparator
 ): VirtualFile {
     val file = if (cachedFile != null && (virtualFile == null || !virtualFile.isValid())) {
         getOrCreateVirtualFile(cachedFile, requestor)
@@ -285,7 +282,7 @@ internal fun writeFile(
         }
     }
 
-    doWrite(requestor, file, dataWriter, lineSeparator, prependXmlProlog)
+    doWrite(requestor, file, dataWriter, lineSeparator)
     return file
 }
 
@@ -302,7 +299,6 @@ private fun doWrite(
     file: VirtualFile,
     dataWriterOrByteArray: Any,
     lineSeparator: LineSeparator,
-    prependXmlProlog: Boolean
 ) {
     LOG.debug { "Save ${file.url}" }
 
@@ -314,12 +310,12 @@ private fun doWrite(
         }
         throw ReadOnlyModificationException(file, object : SaveSession {
             override fun save() {
-                doWrite(requestor, file, byteArray, lineSeparator, prependXmlProlog)
+                doWrite(requestor, file, byteArray, lineSeparator)
             }
         })
     }
 
-   runInThreadPool {
+    runInThreadPool {
         file.getOutputStream(requestor).use { output ->
             if (dataWriterOrByteArray is DataWriter) {
                 dataWriterOrByteArray.write(output, lineSeparator.separatorString)
