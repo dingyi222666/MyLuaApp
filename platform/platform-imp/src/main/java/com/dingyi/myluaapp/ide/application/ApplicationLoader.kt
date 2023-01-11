@@ -6,15 +6,9 @@ import com.dingyi.myluaapp.diagnostic.Logger
 import com.dingyi.myluaapp.ide.ApplicationLoadListener
 import com.dingyi.myluaapp.ide.plugins.PluginManagerCore
 import com.dingyi.myluaapp.ide.startup.IdeStarter
-import com.dingyi.myluaapp.openapi.components.stateStore
-import com.intellij.diagnostic.LoadingState
-import com.intellij.diagnostic.StartUpMeasurer
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.progress.ProcessCanceledException
-import com.intellij.util.ui.EDT
-
 import java.util.concurrent.CompletionStage
-import java.util.concurrent.Executor
 import java.util.concurrent.ForkJoinPool
 
 
@@ -60,6 +54,6 @@ internal fun initConfigurationStore(app: IDEApplicationImpl) {
     }
 
     // we set it after beforeApplicationLoaded call, because app store can depend on stream provider state
-    app.stateStore.setPath(configPath)
+    // app.stateStore.setPath(configPath)
 
 }
