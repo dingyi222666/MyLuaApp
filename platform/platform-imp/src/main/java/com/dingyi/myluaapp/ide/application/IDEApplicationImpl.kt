@@ -21,7 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
-internal class IDEApplicationImpl : DefaultServiceRegistry("ApplicationServices"), IDEApplication,
+class IDEApplicationImpl : DefaultServiceRegistry("ApplicationServices"), IDEApplication,
     Disposable {
 
     private val myLastDisposable = Disposer.newDisposable() // the last to be disposed

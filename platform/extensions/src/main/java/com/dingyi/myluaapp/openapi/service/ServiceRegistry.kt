@@ -8,7 +8,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.UserDataHolder
 
 
-interface ServiceRegistry : UserDataHolder, Disposable, AreaInstance,MessageBusOwner {
+interface ServiceRegistry : UserDataHolder, Disposable, AreaInstance, MessageBusOwner {
     /**
      * Locates the service of the given type.
      *
@@ -60,13 +60,21 @@ interface ServiceRegistry : UserDataHolder, Disposable, AreaInstance,MessageBusO
     /**
      * try Load class
      */
-    fun <T> instantiateClass(serviceType: Class<T>, pluginDescriptor: PluginDescriptor): T
+    fun <T:Any> instantiateClass(
+        serviceType: Class<T>,
+        pluginDescriptor: PluginDescriptor,
+        originServiceType: Class<Any>? = null,
+        putToServiceInstance: Boolean = false
+    ): T
 
-    fun instantiateClass(serviceType: String, pluginDescriptor: PluginDescriptor): Any
+    fun instantiateClass(
+        serviceType: String,
+        pluginDescriptor: PluginDescriptor
+    ): Any
 
     fun asRegistration(): ServiceRegistration
 
-    val messageBus:MessageBus
+    val messageBus: MessageBus
 
 
 }

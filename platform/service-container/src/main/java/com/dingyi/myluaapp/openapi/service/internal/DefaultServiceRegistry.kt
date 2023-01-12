@@ -1,6 +1,7 @@
 package com.dingyi.myluaapp.openapi.service.internal
 
 
+import com.dingyi.myluaapp.common.ktx.checkNotNull
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.openapi.extensions.Extensions
 import com.dingyi.myluaapp.openapi.extensions.ExtensionsArea
@@ -560,21 +561,25 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
     }
 
 
-    override fun instantiateClass(serviceType: String, pluginDescriptor: PluginDescriptor): Any {
+    override fun instantiateClass(
+        serviceType: String, pluginDescriptor: PluginDescriptor,
+    ): Any {
         return instantiateClass(
             pluginDescriptor.classLoader.loadClass(serviceType),
             pluginDescriptor
         )
     }
 
-    override fun <T> instantiateClass(
+    private fun <T : Any> instantiateClassImp(
         serviceType: Class<T>,
-        pluginDescriptor: PluginDescriptor
+        pluginDescriptor: PluginDescriptor,
+        originServiceType: Class<Any>? = null,
+        putToServiceInstance: Boolean = false
     ): T {
-
         if (serviceType.isInterface) {
             error("Cannot register an interface for construction.")
         }
+
         val match: Constructor<T> = InjectUtil.selectConstructor(serviceType) as Constructor<T>
         if (InjectUtil.isPackagePrivate(match.modifiers) || Modifier.isPrivate(match.modifiers)) {
             match.isAccessible = true
@@ -591,8 +596,26 @@ open class DefaultServiceRegistry(displayName: String?, vararg parents: ServiceR
             invokeArray[index] = availableService.get()
         }
 
-        return match.newInstance(invokeArray)
+        val instance = match.newInstance(invokeArray)
 
+        if (putToServiceInstance) {
+            ownServices.add(FixedInstanceService(this, originServiceType.checkNotNull(), instance))
+        }
+        return instance
+    }
+
+    override fun <T : Any> instantiateClass(
+        serviceType: Class<T>,
+        pluginDescriptor: PluginDescriptor,
+        originServiceType: Class<Any>?,
+        putToServiceInstance: Boolean,
+    ): T {
+        return instantiateClassImp(
+            serviceType,
+            pluginDescriptor,
+            originServiceType,
+            putToServiceInstance
+        )
     }
 
     override fun <T : Any?> getUserData(key: Key<T>): T? {
