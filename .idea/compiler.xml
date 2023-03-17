@@ -23,6 +23,7 @@
       <module name="MyLuaApp.platform-core-api" target="17" />
       <module name="MyLuaApp.platform-openapi" target="17" />
       <module name="MyLuaApp.platform-service-api" target="17" />
+      <module name="MyLuaApp.platform-service-impl" target="17" />
       <module name="MyLuaApp.plugin" target="17" />
       <module name="MyLuaApp.tm4e" target="11" />
       <module name="MyLuaApp.treeview" target="17" />

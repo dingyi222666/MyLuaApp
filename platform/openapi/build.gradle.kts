@@ -38,6 +38,5 @@ android {
 }
 
 dependencies {
-    compileOnly(BuildConfig.Libs.BuildTools.kotlin_compiler)
-    compileOnly(BuildConfig.Libs.AndroidX.appcompat)
+
 }

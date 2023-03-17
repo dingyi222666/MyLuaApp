@@ -27,6 +27,7 @@
             <option value="$PROJECT_DIR$/platform/core-api" />
             <option value="$PROJECT_DIR$/platform/openapi" />
             <option value="$PROJECT_DIR$/platform/service-api" />
+            <option value="$PROJECT_DIR$/platform/service-impl" />
             <option value="$PROJECT_DIR$/plugin" />
             <option value="$PROJECT_DIR$/treeview" />
           </set>

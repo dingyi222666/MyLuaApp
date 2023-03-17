@@ -38,5 +38,13 @@ android {
 }
 
 dependencies {
+    compileOnly(project(":platform-service-api"))
+    compileOnly(project(":platform-openapi"))
+    compileOnly(project(":platform-annotation"))
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("reflect"))
+    testImplementation(project(":platform-service-api"))
+    testImplementation(project(":platform-openapi"))
+    testImplementation(project(":platform-annotation"))
 
 }
