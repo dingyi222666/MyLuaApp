@@ -1,5 +1,6 @@
 package com.dingyi.myluaapp.openapi.service
 
+import androidx.annotation.CallSuper
 import com.dingyi.myluaapp.openapi.annotation.Inject
 import com.dingyi.myluaapp.openapi.annotation.ServiceScope
 import com.dingyi.myluaapp.openapi.util.Disposable
@@ -7,13 +8,16 @@ import com.dingyi.myluaapp.openapi.util.Disposer
 import java.lang.reflect.Constructor
 import java.lang.reflect.Modifier
 
+
 abstract class BaseServiceRegistry(parent: ServiceRegistry?) : ServiceRegistry {
 
     private var thisParent: ServiceRegistry? = parent
 
-    private var thisRoot: ServiceRegistry
+    private var thisRoot: ServiceRegistry = parent?.root ?: this
 
     private val services = mutableMapOf<Class<*>, Any>()
+
+    private val providers = mutableListOf<ServiceProvider>()
 
     override val parent: ServiceRegistry?
         get() = thisParent
@@ -22,9 +26,9 @@ abstract class BaseServiceRegistry(parent: ServiceRegistry?) : ServiceRegistry {
         get() = thisRoot
 
     init {
-        thisRoot = parent?.root ?: this
         services[ServiceRegistry::class.java] = this
     }
+
 
     override val scope: ServiceScope
         get() = ServiceScope.Application
@@ -38,10 +42,55 @@ abstract class BaseServiceRegistry(parent: ServiceRegistry?) : ServiceRegistry {
         services[serviceClass] = service
     }
 
+
     override fun <T> getService(serviceClass: Class<T>): T? {
-        return services[serviceClass] as? T
+        return getServiceImpl(serviceClass) as? T
     }
 
+    override fun <T> getProvider(providerClass: Class<T>): T? {
+        providers.forEach {
+            if (providerClass.isInstance(it)) {
+                return it as T
+            }
+        }
+        return null
+    }
+
+    override fun addProvider(provider: ServiceProvider) {
+        providers.add(provider)
+    }
+
+    private fun getServiceImpl(serviceClass: Class<*>, scope: ServiceScope = this.scope): Any? {
+        var service = services[serviceClass]
+        if (service != null) {
+            return service
+        }
+        service = loadServiceFromProvider(serviceClass)
+        if (service != null) {
+            services[serviceClass] = service
+            return service
+        }
+        return when {
+            scope == this.scope -> null
+            scope == ServiceScope.Project && parent?.scope == ServiceScope.Project -> parent?.getService(
+                serviceClass
+            )
+
+            scope == ServiceScope.Application -> root.getService(serviceClass)
+            else -> null
+        }
+    }
+
+
+    private fun loadServiceFromProvider(serviceClass: Class<*>): Any? {
+        providers.forEach {
+            val service = it.getService(serviceClass)
+            if (service != null) {
+                return service
+            }
+        }
+        return null
+    }
 
     override fun <T> createService(serviceClass: Class<T>): T? {
         return createService(serviceClass, serviceClass.classLoader) as? T
@@ -66,9 +115,9 @@ abstract class BaseServiceRegistry(parent: ServiceRegistry?) : ServiceRegistry {
 
     private fun injectServiceFields(instance: Any, injectClassLoader: ClassLoader) {
         val fields = instance.javaClass.declaredFields
-        val needInjectFields = fields.filter { it.isAnnotationPresent(Inject::class.java)  }
+        val needInjectFields = fields.filter { it.isAnnotationPresent(Inject::class.java) }
         needInjectFields.forEach {
-            var service = getService(it.type as Class<*>)
+            var service = getServiceImpl(it.type as Class<*>)
             if (service == null) {
                 service = createService(it.type as Class<*>, injectClassLoader)
             }
@@ -137,8 +186,6 @@ internal fun unpackClass(service: Any): Class<*> {
             if (interfaces.size == 1) {
                 result = interfaces.get(0) as Class<*>
             }
-
-
 
             if (Modifier.isAbstract(superClass.modifiers)) {
                 result = superClass as Class<Any>

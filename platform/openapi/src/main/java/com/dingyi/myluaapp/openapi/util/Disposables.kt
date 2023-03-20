@@ -166,7 +166,10 @@ object Disposer {
         if (parentDisposable === childDisposable) {
             throw IllegalArgumentException("Parent disposable is the same as child disposable")
         }
-        ourTree.register(parentDisposable, childDisposable)
+        val result = ourTree.tryRegister(parentDisposable, childDisposable)
+        if (!result) {
+            throw IllegalStateException("Already registered")
+        }
     }
 
     fun unregister(child: Disposable) {
