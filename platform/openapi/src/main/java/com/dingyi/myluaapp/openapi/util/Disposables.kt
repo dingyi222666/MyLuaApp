@@ -3,7 +3,7 @@ package com.dingyi.myluaapp.openapi.util
 
 // do not use lambda as a Disposable implementation, because each Disposable instance needs identity to be stored in Disposer hierarchy correctly
 @SuppressWarnings("InterfaceMayBeAnnotatedFunctional")
-interface Disposable {
+fun interface Disposable {
     /**
      * Usually not invoked directly, see class javadoc.
      */
