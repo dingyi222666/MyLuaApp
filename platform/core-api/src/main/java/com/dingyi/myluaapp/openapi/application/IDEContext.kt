@@ -1,7 +1,4 @@
 package com.dingyi.myluaapp.openapi.application
 
-
-interface IDEApplication : IDEContext {
-
-
+interface IDEContext {
 }

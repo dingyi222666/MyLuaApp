@@ -11,8 +11,6 @@ import com.dingyi.myluaapp.common.ktx.showSnackBar
 
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
 import com.dingyi.myluaapp.network.Apis
-import com.dingyi.myluaapp.plugin.api.project.Project
-import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.drake.net.Get
 import com.drake.net.utils.scopeNetLife
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +24,6 @@ import kotlinx.coroutines.withContext
 class MainViewModel : ViewModel() {
 
 
-
-    val projectList = MutableLiveData<List<Project>>()
 
 
     val poetry = MutableLiveData<String>()
@@ -52,18 +48,6 @@ class MainViewModel : ViewModel() {
 
     suspend fun refreshProjectList(binding: ActivityMainBinding) = withContext(Dispatchers.Main) {
         runCatching {
-
-            withContext(Dispatchers.IO) {
-                val (result, errorString) = PluginModule.getProjectService()
-                    .getAllProject()
-
-                projectList.postValue(result)
-
-                if (errorString.isNotEmpty()) {
-                    error(errorString)
-                }
-
-            }
 
         }.onFailure {
             System.err.println(it)

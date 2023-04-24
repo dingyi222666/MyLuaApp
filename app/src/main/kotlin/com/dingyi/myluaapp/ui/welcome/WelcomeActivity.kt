@@ -8,7 +8,6 @@ import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import com.dingyi.myluaapp.build.util.getSHA256
 import com.dingyi.myluaapp.common.ktx.Paths
 import com.dingyi.myluaapp.common.ktx.startActivity
 import com.dingyi.myluaapp.databinding.ActivityWelcomeBinding
@@ -70,7 +69,7 @@ class WelcomeActivity : AppCompatActivity() {
 
                             val targetPath = File(path, it.fileName.substring("assets/".length))
 
-                            if (targetPath.exists()) {
+                          /*  if (targetPath.exists()) {
                                 val targetPathHash = targetPath.inputStream().getSHA256()
                                 val zipFileHash = file.getInputStream(it).getSHA256()
 
@@ -90,19 +89,12 @@ class WelcomeActivity : AppCompatActivity() {
                                     viewBinding.title.text = "unzip:${it.fileName}"
                                 }
                                 file.extractFile(it, path, it.fileName.substring("assets/".length))
-                            }
+                            }*/
                         }
                     }
 
 
-                val pluginFile = File(Paths.assetsDir, "plugin")
 
-                val targetPath = File(Paths.pluginDir)
-
-                if (!targetPath.exists()) {
-                    pluginFile.copyRecursively(File(Paths.pluginDir), overwrite = true)
-                    pluginFile.deleteRecursively()
-                }
             }
 
 

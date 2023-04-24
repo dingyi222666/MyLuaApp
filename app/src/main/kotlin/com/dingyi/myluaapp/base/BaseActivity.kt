@@ -38,7 +38,6 @@ abstract class BaseActivity<V : ViewBinding, T : ViewModel> :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         themeManager.apply(this)
 
         setContentView(getViewBindingImp().root)

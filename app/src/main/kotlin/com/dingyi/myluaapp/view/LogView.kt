@@ -16,7 +16,6 @@ import java.io.File
 
 class LogView(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs) {
 
-
     init {
         val file = context.externalCacheDir?.parentFile?.run {
             File("$absolutePath/files/fonts/default.ttf")

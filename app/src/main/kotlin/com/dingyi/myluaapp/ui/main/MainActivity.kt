@@ -1,30 +1,19 @@
 package com.dingyi.myluaapp.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.dingyi.myluaapp.R
 import com.dingyi.myluaapp.base.BaseActivity
 import com.dingyi.myluaapp.common.ktx.getJavaClass
 import com.dingyi.myluaapp.common.ktx.startActivity
 import com.dingyi.myluaapp.databinding.ActivityMainBinding
-import com.dingyi.myluaapp.databinding.LayoutItemMainProjectBinding
-import com.dingyi.myluaapp.plugin.runtime.plugin.PluginModule
 import com.dingyi.myluaapp.ui.GeneralActivity
 import com.dingyi.myluaapp.ui.about.AboutFragment
-import com.dingyi.myluaapp.ui.editor.activity.EditorActivity
-import com.dingyi.myluaapp.ui.main.model.ProjectUiModel
-import com.dingyi.myluaapp.ui.newproject.NewProjectActivity
 import com.dingyi.myluaapp.ui.settings.SettingsFragment
-import com.drake.brv.utils.bindingAdapter
-import com.drake.brv.utils.linear
-import com.drake.brv.utils.setup
 import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
@@ -54,12 +43,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
         viewModel.refreshPoetry(this)
 
-
         initViewBinding()
         initData()
-
-        PluginModule.init()
-        PluginModule.loadAllPlugin()
 
 
     }
@@ -67,7 +52,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
 
     private fun initViewBinding() {
-        viewBinding.list
+       /* viewBinding.list
             .linear(orientation = LinearLayoutManager.VERTICAL)
             .setup {
                 addType<ProjectUiModel>(R.layout.layout_item_main_project)
@@ -90,19 +75,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                     )
 
                 }
-            }
+            }*/
     }
 
     override fun observeViewModel() {
         super.observeViewModel()
-        viewModel.projectList.observe(this) { projectList ->
-            projectList.map {
-                ProjectUiModel(it)
-            }.let {
-                viewBinding.list.bindingAdapter
-                    .models = it
-            }
-        }
+
 
         viewModel.poetry.observe(this) {
             supportActionBar?.subtitle = it
@@ -125,7 +103,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.main_action_menu_new_project -> {
-                startActivity<NewProjectActivity>()
+             //   startActivity<NewProjectActivity>()
             }
             R.id.main_action_menu_settings -> {
                 startActivity<GeneralActivity> {
@@ -148,6 +126,5 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        PluginModule.stop()
     }
 }

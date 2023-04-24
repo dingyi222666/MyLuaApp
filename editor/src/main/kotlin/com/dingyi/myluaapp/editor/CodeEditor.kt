@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
 
-import com.dingyi.myluaapp.editor.ktx.dp
+
 import io.github.rosemoe.sora.widget.CodeEditor
 import java.io.File
 
@@ -46,9 +46,9 @@ class CodeEditor(context: Context, attributeSet: AttributeSet?) :
             this@CodeEditor.typefaceLineNumber = Typeface.createFromFile(it)
         }
 
-        blockLineWidth = 1.dp * 0.4f
+        /*blockLineWidth = 1.dp * 0.4f
         dividerWidth = 1.dp * 0.4f
-        scrollBarSize = 2.dp
+        scrollBarSize = 2.dp*/
         tabWidth = 4
 
     }

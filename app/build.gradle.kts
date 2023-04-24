@@ -64,10 +64,7 @@ dependencies {
     implementation(project(":editor")) // editor
     implementation(project(":platform-common"))
     implementation(project(":core"))
-    implementation(project(":plugin"))
-    implementation(project(":treeview"))
-    implementation(project(":builder"))
-    implementation(project(":ide-api"))
+
 
     implementation(fileTree("dir" to "libs", "include" to arrayOf("*.jar")))//libs jar
 

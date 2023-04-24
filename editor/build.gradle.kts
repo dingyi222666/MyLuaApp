@@ -46,7 +46,7 @@ dependencies {
     implementation(BuildConfig.Libs.AndroidX.appcompat)
     implementation(BuildConfig.Libs.AndroidX.lifecycle_runtime)
     implementation(BuildConfig.Libs.Google.gson)
-    implementation(project(":ide-api"))
+
     implementation(project(":platform-common"))
 
     implementation(BuildConfig.Libs.Tools.lsp4j)

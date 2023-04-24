@@ -6,6 +6,7 @@ object ApplicationManager {
 
     fun setAndroidApplication(androidApplication: Application) {
         ApplicationManager.outAndroidApplication = androidApplication
+        
     }
 
     fun getAndroidApplication(): Application {
