@@ -159,8 +159,8 @@ class DisposableTreeWrapper(
 }
 
 object Disposer {
-    private val ourTree = DisposerTree()
 
+    private val ourTree = DisposerTree()
 
     fun register(parentDisposable: Disposable, childDisposable: Disposable) {
         if (parentDisposable === childDisposable) {

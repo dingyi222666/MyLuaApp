@@ -1,46 +1,88 @@
 package com.dingyi.myluaapp.openapi.command
 
-import com.intellij.openapi.util.Disposer
-import com.intellij.util.concurrency.AppExecutorUtil
-import java.util.concurrent.CompletableFuture
 
-interface ICommandEvent {
-    val commandId: String
-    val args: Array<Any>
-}
+import com.dingyi.myluaapp.openapi.service.ServiceRegistry
+import com.dingyi.myluaapp.openapi.util.Disposable
+import com.dingyi.myluaapp.openapi.util.Disposer
+import com.dingyi.myluaapp.openapi.util.Emitter
+import java.util.LinkedList
+
+data class ICommandEvent(
+    val commandId: String,
+    val args: CommandContext
+)
 
 interface ICommandService {
-    val onWillExecuteCommand: Event<ICommandEvent>
-    val onDidExecuteCommand: Event<ICommandEvent>
-    fun <T> executeCommand(commandId: String, vararg args: Any): CompletableFuture<T?>
+    val onWillExecuteCommand: Emitter<Unit, ICommandEvent>
+    val onDidExecuteCommand: Emitter<Unit, ICommandEvent>
+    fun executeCommand(commandId: String, context: CommandContext): CommandContext
 }
 
-interface ICommandHandler {
-    operator fun invoke(accessor: ServicesAccessor, vararg args: Any)
+fun interface ICommandHandler {
+    operator fun invoke(serviceRegistry: ServiceRegistry, context: CommandContext)
+
+    companion object {
+        fun create(f: (context: CommandContext) -> Unit): ICommandHandler {
+            return ICommandHandler { _, context -> f(context) }
+        }
+
+        fun create(f: () -> Unit): ICommandHandler {
+            return ICommandHandler { _, _ -> f() }
+        }
+    }
 }
 
-interface ICommand {
-    val id: String
+data class ICommand(
+    val id: String,
     val handler: ICommandHandler
-    val description: ICommandHandlerDescription?
+)
+
+
+typealias CommandListener = (commandId: String) -> Unit
+
+class CommandContext {
+    private val args = mutableListOf<Any?>()
+
+    var result: Any? = null
+
+    fun addArg(arg: Any?) {
+        args.add(arg)
+    }
+
+    fun addArgs(vararg args: Any?) {
+        this.args.addAll(args)
+    }
+
+    fun <T : Any> getArg(index: Int): T {
+        return args[index] as T
+    }
+
+    fun <T : Any> getArg(clazz: Class<T>): T {
+        return args.first { clazz.isInstance(it) } as T
+    }
+
+    fun <T : Any> getArgOrNull(clazz: Class<T>): T? {
+        return args.firstOrNull { clazz.isInstance(it) } as T?
+    }
+
+    fun <T : Any> getArgOrNull(index: Int): T? {
+        return args.getOrNull(index) as T?
+    }
+
+    fun <T> resultAs(): T {
+        return result as T
+    }
+
+
 }
 
-interface ICommandHandlerDescription {
-    val description: String
-    val args: List<ICommandArgumentDescription>
-    val returns: String?
-}
 
-interface ICommandArgumentDescription {
-    val name: String
-    val isOptional: Boolean
-    val description: String?
-    val constraint: TypeConstraint?
-    val schema: IJSONSchema?
+inline fun <reified T : Any> CommandContext.getArg(): T {
+    return this.getArg(T::class.java)
 }
 
 interface ICommandRegistry {
-    val onDidRegisterCommand: Event<String>
+    val onDidRegisterCommand: Emitter<Unit, CommandListener>
     fun registerCommand(idOrCommand: String, handler: ICommandHandler): Disposable
     fun registerCommand(command: ICommand): Disposable
     fun registerCommandAlias(oldId: String, newId: String): Disposable
@@ -48,50 +90,46 @@ interface ICommandRegistry {
     fun getCommands(): Map<String, ICommand>
 }
 
-val ICommandService._serviceBrand: Unit
-    get() = Unit
 
-val CommandsRegistry: ICommandRegistry = object : ICommandRegistry {
+object DefaultCommandRegistry : ICommandRegistry {
 
     private val commands = mutableMapOf<String, LinkedList<ICommand>>()
 
-    private val onDidRegisterCommand = Emitter<String>()
-    override val onDidRegisterCommand: Event<String> = onDidRegisterCommand.event
+    override val onDidRegisterCommand = Emitter<Unit, CommandListener>()
 
     override fun registerCommand(idOrCommand: String, handler: ICommandHandler): Disposable {
         if (idOrCommand.isEmpty()) {
             throw IllegalArgumentException("invalid command")
         }
-        return registerCommand(object : ICommand {
-            override val id: String = idOrCommand
-            override val handler: ICommandHandler = handler
-            override val description: ICommandHandlerDescription? = null
-        })
+        return registerCommand(
+            ICommand(
+                id = idOrCommand,
+                handler = handler
+            )
+        )
     }
 
     override fun registerCommand(command: ICommand): Disposable {
         if (command.id.isEmpty()) {
             throw IllegalArgumentException("invalid command")
         }
-        if (command.description != null) {
-            val constraints = command.description.args.map { it.constraint }
-            val actualHandler = command.handler
-            command.handler = { accessor, args ->
-                validateConstraints(args, constraints)
-                actualHandler(accessor, *args)
+        val commands = commands.getOrPut(command.id) { LinkedList() }
+        val ret = Disposer.newDisposable()
+        Disposer.register(ret) {
+            commands.remove(command)
+            if (commands.isEmpty()) {
+                this.commands.remove(command.id)
             }
         }
-        val commands = commands.getOrPut(command.id) { LinkedList() }
-        val removeFn = commands.unshift(command)
-        val ret = Disposer.newDisposable()
-        Disposer.register(ret, removeFn)
-        onDidRegisterCommand.fire(command.id)
+        onDidRegisterCommand.emit {
+            it(command.id)
+        }
         return ret
     }
 
     override fun registerCommandAlias(oldId: String, newId: String): Disposable {
-        return registerCommand(oldId) { accessor, args ->
-            accessor.get(ICommandService).executeCommand<Any?>(newId, *args)
+        return registerCommand(oldId) { services, context ->
+            services.getService(ICommandService::class.java)?.executeCommand(newId, context)
         }
     }
 
@@ -105,13 +143,3 @@ val CommandsRegistry: ICommandRegistry = object : ICommandRegistry {
     }
 }
 
-val NullCommandService: ICommandService = object : ICommandService {
-    override val _serviceBrand: Unit = Unit
-    override val onWillExecuteCommand: Event<ICommandEvent> = Event.None
-    override val onDidExecuteCommand: Event<ICommandEvent> = Event.None
-    override fun <T> executeCommand(commandId: String, vararg args: Any): CompletableFuture<T?> {
-        return CompletableFuture.completedFuture(null)
-    }
-}
-
-CommandsRegistry.registerCommand("noop") { }

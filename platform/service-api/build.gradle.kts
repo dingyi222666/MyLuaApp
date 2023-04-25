@@ -39,5 +39,5 @@ android {
 
 dependencies {
     compileOnly(project(":platform-annotation"))
-
+    compileOnly(project(":platform-openapi"))
 }
