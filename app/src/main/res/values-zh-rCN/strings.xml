@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyLuaApp</string>
+    <string name="main_menu_settings">设置</string>
+    <string name="main_menu_about">关于</string>
+</resources>

@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.dingyi.MyLuaApp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.dingyi.MyLuaApp"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 22
         versionName = "0.6.0(alpha)"
 
@@ -56,7 +56,12 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
+    implementation(libs.navigation)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.accompanist.navigation.animation)
     implementation(libs.ui.graphics)
+    implementation(libs.runtime.livedata)
+    implementation(libs.material.icons.extended)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     testImplementation(libs.junit)

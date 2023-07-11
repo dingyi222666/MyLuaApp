@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyLuaApp</string>
+    <string name="main_menu_settings">Settings</string>
+    <string name="main_menu_about">About</string>
 </resources>
