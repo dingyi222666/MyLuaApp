@@ -1,36 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="testRunner" value="GRADLE" />
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="18" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/build-tools" />
-            <option value="$PROJECT_DIR$/build-tools/build-api" />
-            <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/builder" />
-            <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/editor" />
-            <option value="$PROJECT_DIR$/ide-api" />
-            <option value="$PROJECT_DIR$/language-server" />
-            <option value="$PROJECT_DIR$/language-server/java" />
-            <option value="$PROJECT_DIR$/language-server/lua" />
-            <option value="$PROJECT_DIR$/platform/annotation" />
-            <option value="$PROJECT_DIR$/platform/common" />
-            <option value="$PROJECT_DIR$/platform/core-api" />
-            <option value="$PROJECT_DIR$/platform/extensions" />
-            <option value="$PROJECT_DIR$/platform/openapi" />
-            <option value="$PROJECT_DIR$/platform/service-api" />
-            <option value="$PROJECT_DIR$/platform/service-impl" />
-            <option value="$PROJECT_DIR$/plugin" />
-            <option value="$PROJECT_DIR$/treeview" />
           </set>
         </option>
       </GradleProjectSettings>

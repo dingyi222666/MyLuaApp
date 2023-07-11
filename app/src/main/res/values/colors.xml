@@ -7,23 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="theme_default_stroke_color">#E0E0E0</color>
-    <color name="theme_default_backgroundColor">#FFFFFFFF</color>
-    <color name="theme_default_colorPrimary">#FF009688</color>
-    <color name="theme_default_textColor">#FF000000</color>
-    <color name="theme_default_hintTextColor">#8E000000</color>
-    <color name="theme_default_imageColorFilter">#FF888888</color>
-    <color name="theme_default_cardBackgroundColor">#FFF0F0F0</color>
-    <color name="theme_default_errorMessageTextColor">#FFFFFFFF</color>
-    <color name="theme_default_listDividerLineColor">#FFEDEDED</color>
-    <color name="theme_default_errorMessageBackgroundColor">#FFE53935</color>
-    <color name="theme_default_rippleColor">#27000000</color>
-    <color name="theme_default_log_error_color">#FF5370</color>
-    <color name="theme_default_log_warn_color">#F8DA3F</color>
-    <color name="theme_default_log_info_color">#FF018786</color>
-    <color name="theme_default_log_click_color">#1E88E9</color>
-    <color name="theme_default_log_debug_color">#54CEE3</color>
-    <color name="theme_blue_colorPrimary">#1E88E5</color>
-    <color name="theme_white_rippleColor">#3fffffff</color>
-    <color name="transparent">#00000000</color>
+
+    <color name="ic_launcher_background">#47A69E</color>
 </resources>

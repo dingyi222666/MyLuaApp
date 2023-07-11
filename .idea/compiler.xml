@@ -1,37 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.8">
-      <module name="common.MyLuaApp.platform-common" target="17" />
-      <module name="MyLuaApp.AndroLua" target="11" />
-      <module name="MyLuaApp.androlua" target="11" />
-      <module name="MyLuaApp.app" target="17" />
-      <module name="MyLuaApp.builder-plugin-api" target="11" />
-      <module name="MyLuaApp.buildSrc" target="17" />
-      <module name="MyLuaApp.buildSrc.main" target="17" />
-      <module name="MyLuaApp.buildSrc.test" target="17" />
-      <module name="MyLuaApp.common" target="11" />
-      <module name="MyLuaApp.core" target="17" />
-      <module name="MyLuaApp.core-api" target="11" />
-      <module name="MyLuaApp.editor" target="17" />
-      <module name="MyLuaApp.language-server.java" target="17" />
-      <module name="MyLuaApp.LuaLibrary" target="11" />
-      <module name="MyLuaApp.platform-annotation" target="17" />
-      <module name="MyLuaApp.platform-common" target="11" />
-      <module name="MyLuaApp.platform-core-api" target="17" />
-      <module name="MyLuaApp.platform-extensions" target="17" />
-      <module name="MyLuaApp.platform-openapi" target="17" />
-      <module name="MyLuaApp.platform-service-api" target="17" />
-      <module name="MyLuaApp.platform-service-impl" target="17" />
-      <module name="MyLuaApp.tm4e" target="11" />
-      <module name="MyLuaApp2.buildSrc" target="11" />
-      <module name="MyLuaApp2.buildSrc.main" target="11" />
-      <module name="MyLuaApp2.buildSrc.test" target="11" />
-    </bytecodeTargetLevel>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="MyLuaApp.manifest-merger2" options="--add-exports java.xml/com.sun.org.apache.xerces.internal.jaxp=ALL-UNNAMED --add-exports java.xml/com.sun.org.apache.xml.internal.dtm=ALL-UNNAMED" />
-    </option>
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>
