@@ -1,3 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         google()
@@ -14,5 +18,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "MyLuaApp"
-include(":app")
- 
+include(
+    ":app", ":platform-api", ":platform-util", ":annotations"
+)
