@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.ui.resources
+package com.dingyi.MyLuaApp.ui.resource
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavHostController

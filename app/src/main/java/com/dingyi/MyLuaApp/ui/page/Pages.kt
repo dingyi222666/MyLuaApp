@@ -6,8 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.dingyi.MyLuaApp.ui.page.main.MainPage
-import com.dingyi.MyLuaApp.ui.resources.LocalNavController
-import com.dingyi.MyLuaApp.ui.resources.theme.MyLuaAppTheme
+import com.dingyi.MyLuaApp.ui.resource.LocalNavController
 
 sealed class Page(val route: String) {
     object Home : Page("home_page")

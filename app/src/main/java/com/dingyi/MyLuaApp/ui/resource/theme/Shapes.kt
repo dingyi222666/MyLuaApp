@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.ui.resources.theme
+package com.dingyi.MyLuaApp.ui.resource.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

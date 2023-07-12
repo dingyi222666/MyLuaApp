@@ -1,4 +1,4 @@
-package com.dingyi.MyLuaApp.ui.resources.theme
+package com.dingyi.MyLuaApp.ui.resource.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
