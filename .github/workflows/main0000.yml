@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ hamedgayou-11 ]
+    branches: [ hamedgayou-patch-11 ]
   pull_request:
-    branches: [ hamedgayou-11 ]
+    branches: [ hamedgayou-patch-11 ]
 
 jobs:
   build:
